@@ -71,6 +71,7 @@ public class TricycleRandom extends EnhancedRandom {
 	 * Creates a new TricycleRandom with a random state.
 	 */
 	public TricycleRandom () {
+		super();
 		stateA = EnhancedRandom.seedFromMath();
 		stateB = EnhancedRandom.seedFromMath();
 		stateC = EnhancedRandom.seedFromMath();
@@ -83,6 +84,7 @@ public class TricycleRandom extends EnhancedRandom {
 	 * @param seed any {@code long} value
 	 */
 	public TricycleRandom (long seed) {
+		super(seed);
 		setSeed(seed);
 	}
 
@@ -95,6 +97,7 @@ public class TricycleRandom extends EnhancedRandom {
 	 * @param stateC any {@code long} value
 	 */
 	public TricycleRandom (long stateA, long stateB, long stateC) {
+		super(stateA);
 		this.stateA = stateA;
 		this.stateB = stateB;
 		this.stateC = stateC;

@@ -57,6 +57,7 @@ public class MizuchiRandom extends EnhancedRandom {
 	 * Creates a new MizuchiRandom with a random state.
 	 */
 	public MizuchiRandom () {
+		super();
 		stateA = EnhancedRandom.seedFromMath();
 		stateB = EnhancedRandom.seedFromMath() | 1L;
 	}
@@ -68,6 +69,7 @@ public class MizuchiRandom extends EnhancedRandom {
 	 * @param seed any {@code long} value
 	 */
 	public MizuchiRandom (long seed) {
+		super(seed);
 		setSeed(seed);
 	}
 
@@ -80,6 +82,7 @@ public class MizuchiRandom extends EnhancedRandom {
 	 * @param stateB any {@code long} value; should be odd, otherwise this will add 1 to make it odd
 	 */
 	public MizuchiRandom (long stateA, long stateB) {
+		super(stateA);
 		this.stateA = stateA;
 		this.stateB = stateB | 1L;
 	}

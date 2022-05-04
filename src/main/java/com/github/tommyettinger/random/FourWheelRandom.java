@@ -71,6 +71,7 @@ public class FourWheelRandom extends EnhancedRandom {
 	 * Creates a new FourWheelRandom with a random state.
 	 */
 	public FourWheelRandom () {
+		super();
 		stateA = EnhancedRandom.seedFromMath();
 		stateB = EnhancedRandom.seedFromMath();
 		stateC = EnhancedRandom.seedFromMath();
@@ -84,6 +85,7 @@ public class FourWheelRandom extends EnhancedRandom {
 	 * @param seed any {@code long} value
 	 */
 	public FourWheelRandom (long seed) {
+		super(seed);
 		setSeed(seed);
 	}
 
@@ -97,6 +99,7 @@ public class FourWheelRandom extends EnhancedRandom {
 	 * @param stateD any {@code long} value
 	 */
 	public FourWheelRandom (long stateA, long stateB, long stateC, long stateD) {
+		super(stateA);
 		this.stateA = stateA;
 		this.stateB = stateB;
 		this.stateC = stateC;

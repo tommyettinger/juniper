@@ -54,6 +54,7 @@ public class RomuTrioRandom extends EnhancedRandom {
 	 * Creates a new RomuTrioRandom with a random state.
 	 */
 	public RomuTrioRandom () {
+		super();
 		stateA = EnhancedRandom.seedFromMath();
 		stateB = EnhancedRandom.seedFromMath();
 		stateC = EnhancedRandom.seedFromMath();
@@ -68,6 +69,7 @@ public class RomuTrioRandom extends EnhancedRandom {
 	 * @param seed any {@code long} value
 	 */
 	public RomuTrioRandom (long seed) {
+		super(seed);
 		setSeed(seed);
 	}
 
@@ -80,6 +82,7 @@ public class RomuTrioRandom extends EnhancedRandom {
 	 * @param stateC any {@code long} value
 	 */
 	public RomuTrioRandom (long stateA, long stateB, long stateC) {
+		super(stateA);
 		if ((stateA | stateB | stateC) == 0L)
 			stateC = -1L;
 		this.stateA = stateA;

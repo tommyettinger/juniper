@@ -119,6 +119,7 @@ public class LaserRandom extends EnhancedRandom {
 	 * any other invocation of this constructor.
 	 */
 	public LaserRandom () {
+		super();
 		stateA = (long)((Math.random() - 0.5) * 0x1p52) ^ (long)((Math.random() - 0.5) * 0x1p64);
 		stateB = (long)((Math.random() - 0.5) * 0x1p52) ^ (long)((Math.random() - 0.5) * 0x1p64) | 1L;
 	}
@@ -130,6 +131,7 @@ public class LaserRandom extends EnhancedRandom {
 	 * @see #setSeed(long)
 	 */
 	public LaserRandom (long seed) {
+		super(seed);
 		stateA = seed;
 		stateB = seed | 1L;
 	}
@@ -143,6 +145,7 @@ public class LaserRandom extends EnhancedRandom {
 	 * @param seedB any odd long will be used exactly to set stateB, otherwise, as with {@link #setStateB(long)}, it will be made odd
 	 */
 	public LaserRandom (final long seedA, final long seedB) {
+		super(seedA);
 		stateA = seedA;
 		stateB = seedB | 1L;
 	}

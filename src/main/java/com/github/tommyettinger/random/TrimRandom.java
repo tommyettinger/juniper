@@ -79,6 +79,7 @@ public class TrimRandom extends EnhancedRandom {
 	 * Creates a new TrimRandom with a random state.
 	 */
 	public TrimRandom () {
+		super();
 		stateA = EnhancedRandom.seedFromMath();
 		stateB = EnhancedRandom.seedFromMath();
 		stateC = EnhancedRandom.seedFromMath();
@@ -92,6 +93,7 @@ public class TrimRandom extends EnhancedRandom {
 	 * @param seed any {@code long} value
 	 */
 	public TrimRandom (long seed) {
+		super(seed);
 		setSeed(seed);
 	}
 
@@ -105,6 +107,7 @@ public class TrimRandom extends EnhancedRandom {
 	 * @param stateD any {@code long} value
 	 */
 	public TrimRandom (long stateA, long stateB, long stateC, long stateD) {
+		super(stateA);
 		this.stateA = stateA;
 		this.stateB = stateB;
 		this.stateC = stateC;
