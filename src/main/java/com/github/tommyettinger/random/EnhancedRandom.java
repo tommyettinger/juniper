@@ -28,6 +28,14 @@ import java.util.Random;
  */
 public abstract class EnhancedRandom extends Random {
 
+	public EnhancedRandom() {
+		super();
+	}
+
+	public EnhancedRandom(long seed) {
+		super(seed);
+	}
+
 	/**
 	 * Uses {@link Math#random()} to hastily put together a not-especially-uniform {@code long} value,
 	 * meant only to produce a seed when no seed was specified (the "I don't care" seed).

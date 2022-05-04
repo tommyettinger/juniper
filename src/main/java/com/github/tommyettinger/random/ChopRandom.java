@@ -80,6 +80,7 @@ public class ChopRandom extends EnhancedRandom {
 	 * @param seed any {@code long} value
 	 */
 	public ChopRandom (long seed) {
+		super(seed);
 		setSeed(seed);
 	}
 
@@ -93,6 +94,7 @@ public class ChopRandom extends EnhancedRandom {
 	 * @param stateD any {@code int} value
 	 */
 	public ChopRandom (int stateA, int stateB, int stateC, int stateD) {
+		super(stateA);
 		this.stateA = stateA;
 		this.stateB = stateB;
 		this.stateC = stateC;

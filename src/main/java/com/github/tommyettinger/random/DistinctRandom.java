@@ -76,6 +76,7 @@ public class DistinctRandom extends EnhancedRandom {
 	 * @param state any {@code long} value
 	 */
 	public DistinctRandom (long state) {
+		super(state);
 		this.state = state;
 	}
 
