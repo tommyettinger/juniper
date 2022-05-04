@@ -106,6 +106,11 @@ public class FourWheelRandom extends EnhancedRandom {
 		this.stateD = stateD;
 	}
 
+	@Override
+	public String getTag() {
+		return "FoWR";
+	}
+
 	/**
 	 * This generator has 4 {@code long} states, so this returns 4.
 	 *

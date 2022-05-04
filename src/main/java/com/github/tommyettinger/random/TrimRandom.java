@@ -114,6 +114,11 @@ public class TrimRandom extends EnhancedRandom {
 		this.stateD = stateD;
 	}
 
+	@Override
+	public String getTag() {
+		return "TrmR";
+	}
+
 	/**
 	 * This generator has 4 {@code long} states, so this returns 4.
 	 *

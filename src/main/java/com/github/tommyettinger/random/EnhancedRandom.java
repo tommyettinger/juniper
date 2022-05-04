@@ -37,6 +37,14 @@ public abstract class EnhancedRandom extends Random {
 	}
 
 	/**
+	 * Gets the tag used to identify this type of EnhancedRandom, as a String. This tag should be unique,
+	 * and for uniformity purposes, all tags used in this library are 4 characters long. User-defined tags
+	 * should have a different length.
+	 * @return a unique String identifier for this type of EnhancedRandom; usually 4 chars long.
+	 */
+	public abstract String getTag();
+
+	/**
 	 * Uses {@link Math#random()} to hastily put together a not-especially-uniform {@code long} value,
 	 * meant only to produce a seed when no seed was specified (the "I don't care" seed).
 	 *

@@ -103,6 +103,11 @@ public class TricycleRandom extends EnhancedRandom {
 		this.stateC = stateC;
 	}
 
+	@Override
+	public String getTag() {
+		return "TriR";
+	}
+
 	/**
 	 * This generator has 3 {@code long} states, so this returns 3.
 	 *

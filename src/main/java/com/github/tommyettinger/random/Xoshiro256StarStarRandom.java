@@ -106,6 +106,11 @@ public class Xoshiro256StarStarRandom extends EnhancedRandom {
 			this.stateD = 0x9E3779B97F4A7C15L;
 	}
 
+	@Override
+	public String getTag() {
+		return "XSSR";
+	}
+
 	/**
 	 * This generator has 4 {@code long} states, so this returns 4.
 	 *

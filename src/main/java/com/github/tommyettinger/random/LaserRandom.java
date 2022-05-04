@@ -150,6 +150,11 @@ public class LaserRandom extends EnhancedRandom {
 		stateB = seedB | 1L;
 	}
 
+	@Override
+	public String getTag() {
+		return "LasR";
+	}
+
 	/**
 	 * LaserRandom has two possible states, both {@code long}.
 	 * The second state (selection {@code 1}) is always an odd number, and if

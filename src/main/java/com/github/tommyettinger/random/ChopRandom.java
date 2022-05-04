@@ -101,6 +101,11 @@ public class ChopRandom extends EnhancedRandom {
 		this.stateD = stateD;
 	}
 
+	@Override
+	public String getTag() {
+		return "ChpR";
+	}
+
 	/**
 	 * This generator has 4 {@code int} states, so this returns 4.
 	 *

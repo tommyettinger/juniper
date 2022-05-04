@@ -87,6 +87,11 @@ public class MizuchiRandom extends EnhancedRandom {
 		this.stateB = stateB | 1L;
 	}
 
+	@Override
+	public String getTag() {
+		return "MizR";
+	}
+
 	/**
 	 * This generator has 2 {@code long} states, so this returns 2.
 	 *

@@ -90,6 +90,11 @@ public class RomuTrioRandom extends EnhancedRandom {
 		this.stateC = stateC;
 	}
 
+	@Override
+	public String getTag() {
+		return "RTrR";
+	}
+
 	/**
 	 * This generator has 3 {@code long} states, so this returns 3.
 	 *

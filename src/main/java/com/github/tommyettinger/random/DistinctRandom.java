@@ -80,6 +80,11 @@ public class DistinctRandom extends EnhancedRandom {
 		this.state = state;
 	}
 
+	@Override
+	public String getTag() {
+		return "DisR";
+	}
+
 	/**
 	 * This has one long state.
 	 *
