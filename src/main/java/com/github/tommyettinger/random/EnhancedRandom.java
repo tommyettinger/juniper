@@ -17,6 +17,7 @@
 
 package com.github.tommyettinger.random;
 
+import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.digital.BitConversion;
 
 import java.util.List;
@@ -1485,5 +1486,71 @@ public abstract class EnhancedRandom extends Random {
 			items[i] = items[ii];
 			items[ii] = temp;
 		}
+	}
+
+	/**
+	 * Serializes the current state of this EnhancedRandom to a String that can be used by
+	 * {@link #stringDeserialize(String)} to load this state at another time. This always uses
+	 * {@link Base#BASE16} for its conversions.
+	 * @return a String storing all data from the EnhancedRandom part of this generator
+	 */
+	public String stringSerialize() {
+		return stringSerialize(Base.BASE16);
+	}
+
+	/**
+	 * Serializes the current state of this EnhancedRandom to a String that can be used by
+	 * {@link #stringDeserialize(String)} to load this state at another time.
+	 * @param base which Base to use, from the "digital" library, such as {@link Base#BASE10}
+	 * @return a String storing all data from the EnhancedRandom part of this generator
+	 */
+	public String stringSerialize(Base base) {
+		StringBuilder ser = new StringBuilder(getTag());
+		ser.append('`');
+		if (getStateCount() > 0)
+		{
+			for (int i = 0; i < getStateCount() - 1; i++)
+			{
+				base.appendUnsigned(ser, getSelectedState(i)).append('~');
+			}
+			base.appendUnsigned(ser, getSelectedState(getStateCount() - 1));
+		}
+
+		ser.append('`');
+
+		return ser.toString();
+	}
+
+	/**
+	 * Given a String in the format produced by {@link #stringSerialize()}, this will attempt to set this EnhancedRandom
+	 * object to match the state in the serialized data. This only works if this EnhancedRandom is the same
+	 * implementation that was serialized. Always uses {@link Base#BASE16}. Returns this EnhancedRandom, after possibly
+	 * changing its state.
+	 * @param data a String probably produced by {@link #stringSerialize()}
+	 * @return this, after setting its state
+	 */
+	public EnhancedRandom stringDeserialize(String data) {
+		return stringDeserialize(data, Base.BASE16);
+	}
+
+	/**
+	 * Given a String in the format produced by {@link #stringSerialize(Base)}, and the same {@link Base} used by
+	 * the serialization, this will attempt to set this EnhancedRandom object to match the state in the serialized
+	 * data. This only works if this EnhancedRandom is the same implementation that was serialized, and also needs
+	 * the Bases to be identical. Returns this EnhancedRandom, after possibly changing its state.
+	 * @param data a String probably produced by {@link #stringSerialize(Base)}
+	 * @param base which Base to use, from the "digital" library, such as {@link Base#BASE10}
+	 * @return this, after setting its state
+	 */
+	public EnhancedRandom stringDeserialize(String data, Base base) {
+		if (getStateCount() > 0) {
+			int idx = data.indexOf('`');
+
+			for (int i = 0; i < getStateCount() - 1; i++)
+				setSelectedState(i, base.readLong(data, idx + 1, -1 + (idx = data.indexOf('~', idx + 1))));
+
+			setSelectedState(getStateCount() - 1, base.readLong(data, idx + 1, -1 + data.indexOf('`', idx + 1)));
+		}
+		return this;
 	}
 }
