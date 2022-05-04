@@ -2,10 +2,11 @@ package com.github.tommyettinger.random;
 
 import java.util.BitSet;
 import java.util.Random;
-import java.util.SplittableRandom;
 
 /**
- * Created by Tommy Ettinger on 9/23/2020.
+ * LaserRandom was one of the first EnhancedRandom types written here, so it was tested first.
+ * It also is implemented differently from other EnhancedRandom implementations, since it is meant
+ * to be copy-paste-able out of the library easily.
  */
 public class LaserRandomTest {
 	public static void main(String[] args) {
@@ -13,8 +14,6 @@ public class LaserRandomTest {
 		System.out.println("Consecutive seeds:");
 		System.out.println("\nRandom");
 		for(int i = 0; i < 50; i++) System.out.print(new Random(i).nextInt(upperBound) + " ");
-		System.out.println("\nSplittableRandom");
-		for(int i = 0; i < 50; i++) System.out.print(new SplittableRandom(i).nextInt(upperBound) + " ");
 		System.out.println("\nLaserRandom");
 		for(int i = 0; i < 50; i++) System.out.print(new LaserRandom(i).nextInt(upperBound) + " ");
 
@@ -22,9 +21,6 @@ public class LaserRandomTest {
 		System.out.println("\nRandom");
 		Random jur = new Random(10);
 		for(int i = 0; i < 50; i++) System.out.print(jur.nextInt(upperBound) + " ");
-		System.out.println("\nSplittableRandom");
-		SplittableRandom jusr = new SplittableRandom(10);
-		for(int i = 0; i < 50; i++) System.out.print(jusr.nextInt(upperBound) + " ");
 		System.out.println("\nLaserRandom");
 		LaserRandom lr = new LaserRandom(10);
 		for(int i = 0; i < 50; i++) System.out.print(lr.nextInt(upperBound) + " ");
@@ -32,17 +28,13 @@ public class LaserRandomTest {
 		System.out.println("\n\nWeird usage");
 		System.out.println("\nRandom");
 		jur = new Random(50);
-		jusr = new SplittableRandom(50);
 		lr.setState(50);
 		for(int i = 0; i < 50; i++) System.out.print((((jur.nextInt() & 0xFFFFFFFFL) * -2 >> 32) - (-2 >> 31)) + " ");
-		System.out.println("\nSplittableRandom");
-		for(int i = 0; i < 50; i++) System.out.print((((jusr.nextInt() & 0xFFFFFFFFL) * -2 >> 32) - (-2 >> 31)) + " ");
 		System.out.println("\nLaserRandom");
 		for(int i = 0; i < 50; i++) System.out.print(lr.nextSignedLong(-2L) + " ");
 
 		System.out.println("\n\nRepeat count:");
 		jur = new Random(100);
-		jusr = new SplittableRandom(100);
 		lr.setState(100);
 		int prev, count;
 		prev = -1;
@@ -51,12 +43,6 @@ public class LaserRandomTest {
 			if(prev == (prev = jur.nextInt(upperBound))) ++count;
 		}
 		System.out.println("\nRandom: " + count);
-		prev = -1;
-		count = 0;
-		for (int i = upperBound * 1000; i >= 0; i--) {
-			if(prev == (prev = jusr.nextInt(upperBound))) ++count;
-		}
-		System.out.println("\nSplittableRandom: " + count);
 		prev = -1;
 		count = 0;
 		for (int i = upperBound * 1000; i >= 0; i--) {
