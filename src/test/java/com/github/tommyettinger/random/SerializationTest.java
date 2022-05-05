@@ -20,7 +20,6 @@ public class SerializationTest {
         }
     }
 
-    @Ignore
     @Test
     public void testRead() {
         ChopRandom chop = new ChopRandom(-1L);

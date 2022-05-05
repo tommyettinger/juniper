@@ -1547,9 +1547,9 @@ public abstract class EnhancedRandom extends Random {
 			int idx = data.indexOf('`');
 
 			for (int i = 0; i < getStateCount() - 1; i++)
-				setSelectedState(i, base.readLong(data, idx + 1, -1 + (idx = data.indexOf('~', idx + 1))));
+				setSelectedState(i, base.readLong(data, idx + 1, (idx = data.indexOf('~', idx + 1))));
 
-			setSelectedState(getStateCount() - 1, base.readLong(data, idx + 1, -1 + data.indexOf('`', idx + 1)));
+			setSelectedState(getStateCount() - 1, base.readLong(data, idx + 1, data.indexOf('`', idx + 1)));
 		}
 		return this;
 	}
