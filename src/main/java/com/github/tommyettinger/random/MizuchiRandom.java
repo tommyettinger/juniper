@@ -128,8 +128,9 @@ public class MizuchiRandom extends EnhancedRandom {
 	public void setSelectedState (int selection, long value) {
 		if ((selection & 1) == 1) {
 			stateB = value | 1L;
+		} else {
+			stateA = value;
 		}
-		stateA = value;
 	}
 
 	/**
