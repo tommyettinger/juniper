@@ -21,6 +21,7 @@ public class Deserializer {
     public static void register(EnhancedRandom random){
         BY_TAG.put(random.getTag(), random);
     }
+
     static {
         register(new DistinctRandom(1));
         register(new LaserRandom(1, 2));
@@ -33,8 +34,17 @@ public class Deserializer {
         register(new FourWheelRandom(1, 2, 3, 4));
         register(new Xoshiro256StarStarRandom(1, 2, 3, 4));
     }
+
+    /**
+     * Gets a copy of the EnhancedRandom registered with the given tag, or null if this has nothing registered for the
+     * given tag.
+     * @param tag a non-null String that could be used as a tag for an EnhancedRandom registered with this class
+     * @return a new copy of the corresponding EnhancedRandom, or null if none was found
+     */
     public static EnhancedRandom get(String tag) {
-        return BY_TAG.get(tag).copy();
+        EnhancedRandom r = BY_TAG.get(tag);
+        if(r == null) return null;
+        return r.copy();
     }
 
     /**
