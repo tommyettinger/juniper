@@ -1,7 +1,7 @@
 package com.github.tommyettinger.random;
 
+import com.github.tommyettinger.digital.Base;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class SerializationTest {
@@ -42,4 +42,25 @@ public class SerializationTest {
             Assert.assertTrue(EnhancedRandom.areEqual(r, x));
         }
     }
+    @Test
+    public void testRoundTrip() {
+        ChopRandom chop = new ChopRandom(-1L);
+        DistinctRandom distinct = new DistinctRandom(-1L);
+        MizuchiRandom mizuchi = new MizuchiRandom(-1L);
+        TricycleRandom tricycle = new TricycleRandom(-1L);
+        TrimRandom trim = new TrimRandom(-1L);
+        EnhancedRandom[] all = new EnhancedRandom[]{chop, distinct, mizuchi, tricycle, trim};
+        Base base = Base.scrambledBase(new LaserRandom(123456789L));
+        for(EnhancedRandom r : all) {
+            String s = r.stringSerialize(base);
+            r.nextLong();
+            long rl = r.nextLong();
+            EnhancedRandom de = Deserializer.deserialize(s, base);
+            de.nextLong();
+            long dl = de.nextLong();
+            System.out.println(r + "  ,  " + de);
+            Assert.assertEquals(rl, dl);
+        }
+    }
+
 }
