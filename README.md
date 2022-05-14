@@ -21,6 +21,43 @@ GWT, and RoboVM.
 The name comes from my dog Juniper, who seems to have a deterministic, but
 seemingly-random, response to any new person she meets.
 
+## How to get it?
+
+With Gradle, the dependency (of the core module, if you have multiple) is:
+
+```groovy
+api "com.github.tommyettinger:juniper:0.0.1"
+```
+
+In a libGDX project that has a GWT/HTML backend, the `html/build.gradle` file
+should additionally have:
+
+```groovy
+api "com.github.tommyettinger:juniper:0.0.1:sources"
+```
+
+And the `GdxDefinition.gwt.xml` file should have:
+
+```xml
+<inherits name="juniper" />
+```
+
+It may also need, in that same file (if there are problems finding classes):
+
+```xml
+<inherits name="digital" />
+```
+
+If you don't use Gradle, then with Maven, the dependency is:
+
+```xml
+<dependency>
+  <groupId>com.github.tommyettinger</groupId>
+  <artifactId>juniper</artifactId>
+  <version>0.0.1</version>
+</dependency>
+```
+
 ## License
 
 [Apache License 2.0](LICENSE).
