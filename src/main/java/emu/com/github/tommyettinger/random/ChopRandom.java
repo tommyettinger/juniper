@@ -71,6 +71,11 @@ public class ChopRandom extends EnhancedRandom {
         this.stateD = stateD;
     }
 
+    @Override
+    public String getTag() {
+        return "ChpR";
+    }
+
     /**
      * This generator has 4 {@code int} states, so this returns 4.
      * @return 4 (four)
@@ -629,11 +634,6 @@ public class ChopRandom extends EnhancedRandom {
     }
 
     public String toString() {
-        return "ChopRandom{" +
-                   "stateA=0x" + Base.BASE16.unsigned(stateA) +
-                ", stateB=0x" + Base.BASE16.unsigned(stateB) +
-                ", stateC=0x" + Base.BASE16.unsigned(stateC) +
-                ", stateD=0x" + Base.BASE16.unsigned(stateD) +
-                "}";
+        return "ChopRandom{" + "stateA=" + (stateA) + ", stateB=" + (stateB) + ", stateC=" + (stateC) + ", stateD=" + (stateD) + "}";
     }
 }
