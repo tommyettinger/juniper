@@ -18,7 +18,7 @@ This library is compatible with Java 8 language level, but doesn't use any
 features from later than Java 7. This should allow it to be used on Android,
 GWT, and RoboVM.
 
-The name comes from my dog Juniper, who seems to have a deterministic, but
+The name comes from my dog Juniper, who appears to have a deterministic, but
 seemingly-random, response to any new person she meets.
 
 ### What are these generators?
@@ -64,20 +64,16 @@ api "com.github.tommyettinger:juniper:0.0.1"
 In a libGDX project that has a GWT/HTML backend, the `html/build.gradle` file
 should additionally have:
 
-```groovy
-api "com.github.tommyettinger:juniper:0.0.1:sources"
+```
+implementation "com.github.tommyettinger:digital:0.0.2:sources"
+implementation "com.github.tommyettinger:juniper:0.0.1:sources"
 ```
 
 And the `GdxDefinition.gwt.xml` file should have:
 
-```xml
-<inherits name="juniper" />
 ```
-
-It may also need, in that same file (if there are problems finding classes):
-
-```xml
 <inherits name="digital" />
+<inherits name="juniper" />
 ```
 
 If you don't use Gradle, then with Maven, the dependency is:
