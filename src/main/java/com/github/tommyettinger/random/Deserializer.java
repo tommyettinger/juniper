@@ -9,7 +9,13 @@ import java.util.HashMap;
  * The main way of using this is the {@link #deserialize(String)} (or {@link #deserialize(String, Base)}) method.
  * By default, all EnhancedRandom types in this library are registered by default, and can be deserialized.
  */
-public class Deserializer {
+public final class Deserializer {
+    /**
+     * Not instantiable.
+     */
+    private Deserializer() {
+    }
+
     private static final HashMap<String, EnhancedRandom> BY_TAG = new HashMap<>(16);
 
     /**

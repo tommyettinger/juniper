@@ -313,15 +313,15 @@ public class Xoshiro256StarStarRandom extends EnhancedRandom {
 		stateC ^= stateB; // StateC has b ^ b << 17;
 		stateC ^= stateC << 17;
 		stateC ^= stateC << 34; // StateC has b
-		long oc = stateB ^= stateA; // StateB has b ^ c
+		long bc = stateB ^= stateA; // StateB has b ^ c
 		stateC ^= stateB; // StateC has c;
 		stateB ^= stateC; // StateB has b;
-		stateD ^= stateB; // _d has d;
+		stateD ^= stateB; // StateD has d;
 
-		oc ^= oc << 17;
-		oc ^= oc << 34;
-		oc *= 5L;
-		return (oc << 7 | oc >>> 57) * 9L;
+		bc ^= bc << 17;
+		bc ^= bc << 34;
+		bc *= 5;
+		return (bc << 7 | bc >>> 57) * 9;
 	}
 
 	@Override
