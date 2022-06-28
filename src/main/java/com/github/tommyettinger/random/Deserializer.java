@@ -2,7 +2,11 @@ package com.github.tommyettinger.random;
 
 import com.github.tommyettinger.digital.Base;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Allows deserializing any type of EnhancedRandom by looking up its tag in a registry.
@@ -39,6 +43,7 @@ public final class Deserializer {
         register(new StrangerRandom(1, 2, 3, 4));
         register(new FourWheelRandom(1, 2, 3, 4));
         register(new Xoshiro256StarStarRandom(1, 2, 3, 4));
+        register(new Xoshiro128PlusPlusRandom(1, 2, 3, 4));
     }
 
     /**
@@ -85,6 +90,28 @@ public final class Deserializer {
         if(root == null)
             throw new RuntimeException("Tag in given data is invalid or unknown.");
         return root.copy().stringDeserialize(data, base);
+    }
 
+    /**
+     * Creates an unordered Set of all String tags Deserializer knows, and returns it.
+     * @return a Set of all String tags this knows
+     */
+    public static Set<String> copyTags() {
+        return new HashSet<>(BY_TAG.keySet());
+    }
+
+    /**
+     * Returns an unordered List of copies of the EnhancedRandom "prototype" objects this uses during
+     * deserialization. Each EnhancedRandom copy is seeded with {@code -1L} before it is put in the List.
+     * @return a List of copies of the EnhancedRandom instances this knows
+     */
+    public static List<EnhancedRandom> copyRandoms() {
+        ArrayList<EnhancedRandom> list = new ArrayList<>(BY_TAG.size());
+        for(EnhancedRandom e : BY_TAG.values()){
+            EnhancedRandom r = e.copy();
+            r.setSeed(-1L);
+            list.add(r);
+        }
+        return list;
     }
 }

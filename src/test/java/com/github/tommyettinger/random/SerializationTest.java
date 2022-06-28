@@ -4,15 +4,18 @@ import com.github.tommyettinger.digital.Base;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.List;
+
 public class SerializationTest {
     @Test
     public void testWrite() {
-        ChopRandom chop = new ChopRandom(-1L);
-        DistinctRandom distinct = new DistinctRandom(-1L);
-        MizuchiRandom mizuchi = new MizuchiRandom(-1L);
-        TricycleRandom tricycle = new TricycleRandom(-1L);
-        TrimRandom trim = new TrimRandom(-1L);
-        EnhancedRandom[] all = new EnhancedRandom[]{chop, distinct, mizuchi, tricycle, trim};
+//        ChopRandom chop = new ChopRandom(-1L);
+//        DistinctRandom distinct = new DistinctRandom(-1L);
+//        MizuchiRandom mizuchi = new MizuchiRandom(-1L);
+//        TricycleRandom tricycle = new TricycleRandom(-1L);
+//        TrimRandom trim = new TrimRandom(-1L);
+//        EnhancedRandom[] all = new EnhancedRandom[]{chop, distinct, mizuchi, tricycle, trim};
+        List<EnhancedRandom> all = Deserializer.copyRandoms();
         for(EnhancedRandom r : all) {
             String s = r.stringSerialize();
             System.out.println(s);
@@ -44,12 +47,13 @@ public class SerializationTest {
     }
     @Test
     public void testRoundTrip() {
-        ChopRandom chop = new ChopRandom(-1L);
-        DistinctRandom distinct = new DistinctRandom(-1L);
-        MizuchiRandom mizuchi = new MizuchiRandom(-1L);
-        TricycleRandom tricycle = new TricycleRandom(-1L);
-        TrimRandom trim = new TrimRandom(-1L);
-        EnhancedRandom[] all = new EnhancedRandom[]{chop, distinct, mizuchi, tricycle, trim};
+//        ChopRandom chop = new ChopRandom(-1L);
+//        DistinctRandom distinct = new DistinctRandom(-1L);
+//        MizuchiRandom mizuchi = new MizuchiRandom(-1L);
+//        TricycleRandom tricycle = new TricycleRandom(-1L);
+//        TrimRandom trim = new TrimRandom(-1L);
+//        EnhancedRandom[] all = new EnhancedRandom[]{chop, distinct, mizuchi, tricycle, trim};
+        List<EnhancedRandom> all = Deserializer.copyRandoms();
         Base base = Base.scrambledBase(new LaserRandom(123456789L));
         for(EnhancedRandom r : all) {
             String s = r.stringSerialize(base);
