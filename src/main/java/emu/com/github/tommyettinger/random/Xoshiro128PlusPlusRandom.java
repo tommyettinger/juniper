@@ -18,27 +18,6 @@
 package com.github.tommyettinger.random;
 
 /**
- * A random number generator that is optimized for performance on 32-bit machines and with Google Web Toolkit, this uses
- * no multiplication and is identical to the published xoshiro128++ algorithm when generating {@code int} values. When
- * generating {@code long} values, it is a little different. The trick this uses for generating 64-bit values is to
- * separately scramble states A and D to get the uppermost bits (this is what generating an int normally does), then to
- * scramble states B and C differently to get the lowermost bits. This means a call to {@link #nextLong()} advances the
- * state exactly as much as {@link #nextInt()}, which is an uncommon trait for mostly-32-bit-math generators.
- * <br>
- * The actual speed of this is going to vary wildly depending on the platform being benchmarked. On GWT, which is the
- * main place where the performance of a random number generator might actually be a bottleneck in a game, this performs
- * very well, especially when producing {@code long} values. On desktop platforms, it is faster at generating
- * {@code int} values than {@code long}, which is to be expected for a 32-bit generator, but not as fast as some other
- * generators, like {@link ChopRandom}.
- * <br>
- * Xoshiro128PlusPlusRandom has a guaranteed period of {@code pow(2, 128) - 1}. For {@code int} outputs only, it is
- * 3-dimensionally equidistributed. For {@code long} outputs, equidistribution is unknown. It passes 64TB of PractRand
- * testing without anomalies (generating 64-bit numbers), and passes 2 to the 57.32 bytes of ReMort testing without
- * suspect results. ReMort is a very challenging test to pass for long sequences, so this result is encouraging, even if
- * the p-values dipped low in the middle of testing (they got better).
- * <br>
- * This implements all optional methods in EnhancedRandom except {@link #skip(long)}.
- * <br>
  * Based on <a href="https://prng.di.unimi.it/xoshiro128plusplus.c">this public-domain code</a> by Vigna and Blackman.
  */
 public class Xoshiro128PlusPlusRandom extends EnhancedRandom {
@@ -64,7 +43,11 @@ public class Xoshiro128PlusPlusRandom extends EnhancedRandom {
 	 * Creates a new Xoshiro128PlusPlusRandom with a random state.
 	 */
 	public Xoshiro128PlusPlusRandom() {
-		this((int)EnhancedRandom.seedFromMath(), (int)EnhancedRandom.seedFromMath(), (int)EnhancedRandom.seedFromMath(), (int)EnhancedRandom.seedFromMath());
+		this(
+				(int)EnhancedRandom.seedFromMath(),
+				(int)EnhancedRandom.seedFromMath(),
+				(int)EnhancedRandom.seedFromMath(),
+				(int)EnhancedRandom.seedFromMath());
 	}
 
 	/**
@@ -322,7 +305,7 @@ public class Xoshiro128PlusPlusRandom extends EnhancedRandom {
 	@Override
 	public int nextInt () {
 		int result = (stateA + stateD);
-		result = (result << 7 | result >>> 25) + stateA;
+		result = (result << 7 | result >>> 25) + stateA | 0;
 		int t = stateB << 9;
 		stateC ^= stateA;
 		stateD ^= stateB;
@@ -335,27 +318,68 @@ public class Xoshiro128PlusPlusRandom extends EnhancedRandom {
 
 	@Override
 	public int nextInt (int bound) {
-		return (int)(bound * (nextInt() & 0xFFFFFFFFL) >> 32) & ~(bound >> 31);
+		int result = (stateA + stateD);
+		result = (result << 7 | result >>> 25) + stateA | 0;
+		int t = stateB << 9;
+		stateC ^= stateA;
+		stateD ^= stateB;
+		stateB ^= stateC;
+		stateA ^= stateD;
+		stateC ^= t;
+		stateD = (stateD << 11 | stateD >>> 21);
+		return (int)(bound * (result & 0xFFFFFFFFL) >> 32) & ~(bound >> 31);
 	}
 
 	@Override
 	public int nextSignedInt (int outerBound) {
-		outerBound = (int)(outerBound * (nextInt() & 0xFFFFFFFFL) >> 32);
+		int result = (stateA + stateD);
+		result = (result << 7 | result >>> 25) + stateA | 0;
+		int t = stateB << 9;
+		stateC ^= stateA;
+		stateD ^= stateB;
+		stateB ^= stateC;
+		stateA ^= stateD;
+		stateC ^= t;
+		stateD = (stateD << 11 | stateD >>> 21);
+		outerBound = (int)(outerBound * (result & 0xFFFFFFFFL) >> 32);
 		return outerBound + (outerBound >>> 31);
 	}
 
 	@Override
 	public void nextBytes (byte[] bytes) {
-		for (int i = 0; i < bytes.length; ) {for (int r = nextInt(), n = Math.min(bytes.length - i, 4); n-- > 0; r >>>= 8) {bytes[i++] = (byte)r;}}
+		for (int i = 0; i < bytes.length; ) {
+			int result = (stateA + stateD);
+			result = (result << 7 | result >>> 25) + stateA;
+			int t = stateB << 9;
+			stateC ^= stateA;
+			stateD ^= stateB;
+			stateB ^= stateC;
+			stateA ^= stateD;
+			stateC ^= t;
+			stateD = (stateD << 11 | stateD >>> 21);
+			for (int n = Math.min(bytes.length - i, 4); n-- > 0; result >>>= 8) {
+				bytes[i++] = (byte)result;
+			}
+		}
 	}
 
 	@Override
 	public long nextLong (long inner, long outer) {
-		final long rand = nextLong();
+		int h = (stateA + stateD);
+		h = (h << 7 | h >>> 25) + stateA;
+		int l = stateC - stateB;
+		l = (l << 13 | l >>> 19) + stateC;
+		int t = stateB << 9;
+		stateC ^= stateA;
+		stateD ^= stateB;
+		stateB ^= stateC;
+		stateA ^= stateD;
+		stateC ^= t;
+		stateD = (stateD << 11 | stateD >>> 21);
 		if (inner >= outer)
 			return inner;
-		final long randLow = rand & 0xFFFFFFFFL;
-		final long randHigh = rand >>> 32;
+		final long randLow = l & 0xFFFFFFFFL;
+		final long randHigh = h & 0xFFFFFFFFL;
 		final long bound = outer - inner;
 		final long boundLow = bound & 0xFFFFFFFFL;
 		final long boundHigh = (bound >>> 32);
@@ -370,9 +394,19 @@ public class Xoshiro128PlusPlusRandom extends EnhancedRandom {
 			inner = t + 1L;
 		}
 		final long bound = outer - inner;
-		final long rand = nextLong();
-		final long randLow = rand & 0xFFFFFFFFL;
-		final long randHigh = rand >>> 32;
+		int h = (stateA + stateD);
+		h = (h << 7 | h >>> 25) + stateA;
+		int l = stateC - stateB;
+		l = (l << 13 | l >>> 19) + stateC;
+		int t = stateB << 9;
+		stateC ^= stateA;
+		stateD ^= stateB;
+		stateB ^= stateC;
+		stateA ^= stateD;
+		stateC ^= t;
+		stateD = (stateD << 11 | stateD >>> 21);
+		final long randLow = l & 0xFFFFFFFFL;
+		final long randHigh = h & 0xFFFFFFFFL;
 		final long boundLow = bound & 0xFFFFFFFFL;
 		final long boundHigh = (bound >>> 32);
 		return inner + (randHigh * boundLow >>> 32) + (randLow * boundHigh >>> 32) + randHigh * boundHigh;
@@ -380,17 +414,44 @@ public class Xoshiro128PlusPlusRandom extends EnhancedRandom {
 
 	@Override
 	public boolean nextBoolean () {
-		return nextInt() < 0;
+		int result = (stateA + stateD);
+		result = (result << 7 | result >>> 25) + stateA | 0;
+		int t = stateB << 9;
+		stateC ^= stateA;
+		stateD ^= stateB;
+		stateB ^= stateC;
+		stateA ^= stateD;
+		stateC ^= t;
+		stateD = (stateD << 11 | stateD >>> 21);
+		return (result & 0x80000000) == 0x80000000;
 	}
 
 	@Override
 	public float nextFloat () {
-		return (nextInt() >>> 8) * 0x1p-24f;
+		int result = (stateA + stateD);
+		result = (result << 7 | result >>> 25) + stateA >>> 8;
+		int t = stateB << 9;
+		stateC ^= stateA;
+		stateD ^= stateB;
+		stateB ^= stateC;
+		stateA ^= stateD;
+		stateC ^= t;
+		stateD = (stateD << 11 | stateD >>> 21);
+		return result * 0x1p-24f;
 	}
 
 	@Override
 	public float nextInclusiveFloat () {
-		return (0x1000001L * (nextInt() & 0xFFFFFFFFL) >> 32) * 0x1p-24f;
+		int result = (stateA + stateD);
+		result = (result << 7 | result >>> 25) + stateA;
+		int t = stateB << 9;
+		stateC ^= stateA;
+		stateD ^= stateB;
+		stateB ^= stateC;
+		stateA ^= stateD;
+		stateC ^= t;
+		stateD = (stateD << 11 | stateD >>> 21);
+		return (0x1000001L * (result & 0xFFFFFFFFL) >> 32) * 0x1p-24f;
 	}
 
 	@Override
