@@ -6,16 +6,13 @@ package com.github.tommyettinger.random;
  * then interpolate between the hash results.
  */
 public class LineWobble {
+
     /**
      * A mix of the smooth transitions of a sine wave with (seeded) random peaks and valleys between -1.0 and
-     * 1.0 (both exclusive). The pattern this will produces will be completely different if the seed changes, and it is
+     * 1.0 (both exclusive). The pattern this will produce will be completely different if the seed changes, and it is
      * suitable for 1D noise. Uses a simple method of cubic interpolation between random values, where a random value is
      * used without modification when given an integer for {@code value}. Note that this uses a different type of
      * interpolation than a sine wave would, and the shape here uses cubic interpolation.
-     * <br>
-     * Performance note: HotSpot seems to be much more able to optimize wobble(long, float) than
-     * wobble(long, double), with the float version almost twice as fast after JIT warms up. On GWT, the
-     * reverse should be expected because floats must be emulated there.
      * @param seed a long seed that will determine the pattern of peaks and valleys this will generate as value changes; this should not change between calls
      * @param value a double that typically changes slowly, by less than 1.0, with direction changes at integer inputs
      * @return a pseudo-random double between -1.0 and 1.0 (both exclusive), smoothly changing with value
@@ -25,8 +22,9 @@ public class LineWobble {
         final long floor = value >= 0.0 ? (long) value : (long) value - 1L; // the closest long that is less than value
         // gets a random start and endpoint. there's a sequence of start and end values for each seed, and changing the
         // seed changes the start and end values unpredictably (so use the same seed for one curving line).
-        final double start = (((seed += floor * 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) * 0x0.fffffffffffffbp-63,
-                end = (((seed += 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) * 0x0.fffffffffffffbp-63;
+        final long z = seed + floor * 0x6C8E9CF570932BD5L;
+        final double start = ((z ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L) * 0x0.fffffffffffffbp-31,
+                end = ((z + 0x6C8E9CF570932BD5L ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L) * 0x0.fffffffffffffbp-31;
         // gets the fractional part of value
         value -= floor;
         // cubic interpolation to smooth the curve
@@ -37,14 +35,10 @@ public class LineWobble {
 
     /**
      * A mix of the smooth transitions of a sine wave with (seeded) random peaks and valleys between -1f and
-     * 1f (both exclusive). The pattern this will produces will be completely different if the seed changes, and it is
+     * 1f (both exclusive). The pattern this will produce will be completely different if the seed changes, and it is
      * suitable for 1D noise. Uses a simple method of cubic interpolation between random values, where a random value is
      * used without modification when given an integer for {@code value}. Note that this uses a different type of
      * interpolation than a sine wave would, and the shape here uses cubic interpolation.
-     * <br>
-     * Performance note: HotSpot seems to be much more able to optimize wobble(long, float) than
-     * wobble(long, double), with the float version almost twice as fast after JIT warms up. On GWT, the
-     * reverse should be expected because floats must be emulated there.
      * @param seed a long seed that will determine the pattern of peaks and valleys this will generate as value changes; this should not change between calls
      * @param value a float that typically changes slowly, by less than 2.0, with direction changes at integer inputs
      * @return a pseudo-random float between -1f and 1f (both exclusive), smoothly changing with value
@@ -52,8 +46,9 @@ public class LineWobble {
     public static float wobble(long seed, float value)
     {
         final long floor = value >= 0f ? (long) value : (long) value - 1L;
-        final float start = (((seed += floor * 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) * 0x0.ffffffp-63f,
-                end = (((seed += 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) * 0x0.ffffffp-63f;
+        final long z = seed + floor * 0x6C8E9CF570932BD5L;
+        final float start = ((z ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L) * 0x0.ffffffp-63f,
+                end = ((z + 0x6C8E9CF570932BD5L ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L) * 0x0.ffffffp-63f;
         value -= floor;
         value *= value * (3f - 2f * value);
         return (1f - value) * start + value * end;
@@ -67,12 +62,12 @@ public class LineWobble {
      * @param value a double that typically changes slowly, by less than 2.0, with direction changes at integer inputs
      * @return a pseudo-random double between -1.0 and 1.0 (both exclusive), smoothly changing with value
      */
-    public static double wobble(final int seed, double value)
+    public static double wobble(int seed, double value)
     {
         final int floor = value >= 0.0 ? (int) value : (int) value - 1;
-        int z = seed + floor;
-        final double start = (((z = (z ^ 0xD1B54A35) * 0x1D2BC3)) * ((z ^ z >>> 15) | 0xFFE00001) ^ z ^ z << 11) * 0x0.ffffffp-31,
-                end = (((z = (seed + floor + 1 ^ 0xD1B54A35) * 0x1D2BC3)) * ((z ^ z >>> 15) | 0xFFE00001) ^ z ^ z << 11) * 0x0.ffffffp-31;
+        int z = seed + floor * 0xBE56D;
+        final double start = ((z ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x0.fffffffffffffbp-31,
+                end = ((z + 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x0.fffffffffffffbp-31;
         value -= floor;
         value *= value * (3.0 - 2.0 * value);
         return (1.0 - value) * start + value * end;
@@ -86,12 +81,12 @@ public class LineWobble {
      * @param value a float that typically changes slowly, by less than 2.0, with direction changes at integer inputs
      * @return a pseudo-random float between -1f and 1f (both exclusive), smoothly changing with value
      */
-    public static float wobble(final int seed, float value)
+    public static float wobble(int seed, float value)
     {
         final int floor = value >= 0f ? (int) value : (int) value - 1;
-        int z = seed + floor;
-        final float start = (((z = (z ^ 0xD1B54A35) * 0x102473) ^ (z << 11 | z >>> 21) ^ (z << 19 | z >>> 13)) * ((z ^ z >>> 15) | 0xFFE00001) ^ z) * 0x0.ffffffp-31f,
-                end = (((z = (seed + floor + 1 ^ 0xD1B54A35) * 0x102473) ^ (z << 11 | z >>> 21) ^ (z << 19 | z >>> 13)) * ((z ^ z >>> 15) | 0xFFE00001) ^ z) * 0x0.ffffffp-31f;
+        int z = seed + floor * 0xBE56D;
+        final float start = ((z ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x0.ffffffp-31f,
+                end = ((z + 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x0.ffffffp-31f;
         value -= floor;
         value *= value * (3 - 2 * value);
         return (1 - value) * start + value * end;
@@ -112,8 +107,9 @@ public class LineWobble {
     public static float wobbleAngle(long seed, float value)
     {
         final long floor = value >= 0f ? (long) value : (long) value - 1L;
-        float start = (((seed += floor * 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L) >>> 1) * 0x0.ffffffp-62f,
-                end = (((seed += 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L) >>> 1) * 0x0.ffffffp-62f;
+        final long z = seed + floor * 0x6C8E9CF570932BD5L;
+        float start = (((z ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L) >>> 1) * 0x0.ffffffp-62f,
+                end = (((z + 0x6C8E9CF570932BD5L ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L) >>> 1) * 0x0.ffffffp-62f;
         value -= floor;
         value *= value * (3f - 2f * value);
         end = end - start + 1.5f;
@@ -137,8 +133,9 @@ public class LineWobble {
     public static float wobbleAngleDeg(long seed, float value)
     {
         final long floor = value >= 0f ? (long) value : (long) value - 1L;
-        float start = (((seed += floor * 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L) >>> 1) * 0x0.ffffffp-62f,
-                end = (((seed += 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L) >>> 1) * 0x0.ffffffp-62f;
+        final long z = seed + floor * 0x6C8E9CF570932BD5L;
+        float start = (((z ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L) >>> 1) * 0x0.ffffffp-62f,
+                end = (((z + 0x6C8E9CF570932BD5L ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L) >>> 1) * 0x0.ffffffp-62f;
         value -= floor;
         value *= value * (3f - 2f * value);
         end = end - start + 1.5f;
@@ -162,8 +159,9 @@ public class LineWobble {
     public static float wobbleAngleTurns(long seed, float value)
     {
         final long floor = value >= 0f ? (long) value : (long) value - 1L;
-        float start = (((seed += floor * 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L) >>> 1) * 0x0.ffffffp-62f,
-                end = (((seed += 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L) >>> 1) * 0x0.ffffffp-62f;
+        final long z = seed + floor * 0x6C8E9CF570932BD5L;
+        float start = (((z ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L) >>> 1) * 0x0.ffffffp-62f,
+                end = (((z + 0x6C8E9CF570932BD5L ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L) >>> 1) * 0x0.ffffffp-62f;
         value -= floor;
         value *= value * (3f - 2f * value);
         end = end - start + 1.5f;
