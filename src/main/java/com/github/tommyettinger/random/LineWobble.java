@@ -170,4 +170,81 @@ public class LineWobble {
         return (start - (long)start);
     }
 
+    /**
+     * A 1D "noise" method that produces smooth transitions like a sine wave, but also wrapping around at pi * 2 so this
+     * can be used to get smoothly-changing random angles. Has (seeded) random peaks and valleys where it
+     * slows its range of change, but can return any value from 0 to 6.283185307179586f, or pi * 2. The pattern this
+     * will produce will be completely different if the seed changes, and the value is expected to be something other
+     * than an angle, like time. Uses a simple method of cubic interpolation between random values, where a random value
+     * is used without modification when given an integer for {@code value}. Note that this uses a different type of
+     * interpolation than a sine wave would, and the shape here uses cubic interpolation.
+     * @param seed an int seed that will determine the pattern of peaks and valleys this will generate as value changes; this should not change between calls
+     * @param value a float that typically changes slowly, by less than 1.0, with possible direction changes at integer inputs
+     * @return a pseudo-random float between 0f and 6.283185307179586f (both inclusive), smoothly changing with value and wrapping
+     */
+    public static float wobbleAngle(int seed, float value)
+    {
+        final int floor = value >= 0f ? (int) value : (int) value - 1;
+        int z = seed + floor * 0xBE56D;
+        float start = (((z ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) >>> 1) * 0x0.ffffffp-30f,
+                end = (((z + 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) >>> 1) * 0x0.ffffffp-30f;
+        value -= floor;
+        value *= value * (3f - 2f * value);
+        end = end - start + 1.5f;
+        end -= (long)end + 0.5f;
+        start += end * value + 1;
+        return (start - (long)start) * 6.283185307179586f;
+    }
+
+    /**
+     * A 1D "noise" method that produces smooth transitions like a sine wave, but also wrapping around at 360.0 so this
+     * can be used to get smoothly-changing random angles. Has (seeded) random peaks and valleys where it
+     * slows its range of change, but can return any value from 0 to 360.0f . The pattern this
+     * will produce will be completely different if the seed changes, and the value is expected to be something other
+     * than an angle, like time. Uses a simple method of cubic interpolation between random values, where a random value
+     * is used without modification when given an integer for {@code value}. Note that this uses a different type of
+     * interpolation than a sine wave would, and the shape here uses cubic interpolation.
+     * @param seed an int seed that will determine the pattern of peaks and valleys this will generate as value changes; this should not change between calls
+     * @param value a float that typically changes slowly, by less than 1.0, with possible direction changes at integer inputs
+     * @return a pseudo-random float between 0f and 360.0f (both inclusive), smoothly changing with value and wrapping
+     */
+    public static float wobbleAngleDeg(int seed, float value)
+    {
+        final int floor = value >= 0f ? (int) value : (int) value - 1;
+        int z = seed + floor * 0xBE56D;
+        float start = (((z ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) >>> 1) * 0x0.ffffffp-30f,
+                end = (((z + 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) >>> 1) * 0x0.ffffffp-30f;
+        value -= floor;
+        value *= value * (3f - 2f * value);
+        end = end - start + 1.5f;
+        end -= (long)end + 0.5f;
+        start += end * value + 1;
+        return (start - (long)start) * 360.0f;
+    }
+
+    /**
+     * A 1D "noise" method that produces smooth transitions like a sine wave, but also wrapping around at 1.0
+     * so this can be used to get smoothly-changing random angles in turns. Has (seeded) random peaks and valleys where
+     * it slows its range of change, but can return any value from 0 to 1.0. The pattern this
+     * will produce will be completely different if the seed changes, and the value is expected to be something other
+     * than an angle, like time. Uses a simple method of cubic interpolation between random values, where a random value
+     * is used without modification when given an integer for {@code value}. Note that this uses a different type of
+     * interpolation than a sine wave would, and the shape here uses cubic interpolation.
+     * @param seed an int seed that will determine the pattern of peaks and valleys this will generate as value changes; this should not change between calls
+     * @param value a float that typically changes slowly, by less than 1.0, with possible direction changes at integer inputs
+     * @return a pseudo-random float between 0.0f and 1.0f (both inclusive), smoothly changing with value and wrapping
+     */
+    public static float wobbleAngleTurns(int seed, float value)
+    {
+        final int floor = value >= 0f ? (int) value : (int) value - 1;
+        int z = seed + floor * 0xBE56D;
+        float start = (((z ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) >>> 1) * 0x0.ffffffp-30f,
+                end = (((z + 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) >>> 1) * 0x0.ffffffp-30f;
+        value -= floor;
+        value *= value * (3f - 2f * value);
+        end = end - start + 1.5f;
+        end -= (long)end + 0.5f;
+        start += end * value + 1;
+        return (start - (long)start);
+    }
 }
