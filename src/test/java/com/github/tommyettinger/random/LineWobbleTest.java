@@ -1,0 +1,51 @@
+package com.github.tommyettinger.random;
+
+import org.junit.Test;
+
+public class LineWobbleTest {
+    @Test
+    public void testIntFloatWobble() {
+        int seed = 1234;
+        for (int i = 0; i < 256; i++) {
+            int len = Math.round((LineWobble.wobble(seed, i * 0x1p-5f) + 1) * 39);
+            for (int j = 0; j < len; j++) {
+                System.out.print('*');
+            }
+            System.out.println();
+        }
+    }
+    @Test
+    public void testIntDoubleWobble() {
+        int seed = 1234;
+        for (int i = 0; i < 256; i++) {
+            long len = Math.round((LineWobble.wobble(seed, i * 0x1p-5) + 1) * 39);
+            for (int j = 0; j < len; j++) {
+                System.out.print('*');
+            }
+            System.out.println();
+        }
+    }
+
+    @Test
+    public void testLongFloatWobble() {
+        long seed = 1234L;
+        for (int i = 0; i < 256; i++) {
+            int len = Math.round((LineWobble.wobble(seed, i * 0x1p-5f) + 1) * 39);
+            for (int j = 0; j < len; j++) {
+                System.out.print('*');
+            }
+            System.out.println();
+        }
+    }
+    @Test
+    public void testLongDoubleWobble() {
+        long seed = 1234L;
+        for (int i = 0; i < 256; i++) {
+            long len = Math.round((LineWobble.wobble(seed, i * 0x1p-5) + 1) * 39);
+            for (int j = 0; j < len; j++) {
+                System.out.print('*');
+            }
+            System.out.println();
+        }
+    }
+}
