@@ -35,7 +35,12 @@ package com.github.tommyettinger.random;
  * 3-dimensionally equidistributed. For {@code long} outputs, equidistribution is unknown. It passes 64TB of PractRand
  * testing without anomalies (generating 64-bit numbers), and passes 2 to the 57.32 bytes of ReMort testing without
  * suspect results. ReMort is a very challenging test to pass for long sequences, so this result is encouraging, even if
- * the p-values dipped low in the middle of testing (they got better).
+ * the p-values dipped low in the middle of testing (they got better). This generator can be seen as a "safer
+ * alternative" to {@link ChopRandom}, which is generally faster but has a lower minimum period and may have quality
+ * issues that haven't yet been discovered. The Xoshiro family of generators is generally well-researched and most flaws
+ * are already known and minor (with the PlusPlus scrambler, the only issue I know of is that this can't tolerate an
+ * all-zero state). The way this generates 64-bit longs from a 32-bit generator is new and hasn't been tested by anyone
+ * else, so it could have issues.
  * <br>
  * This implements all optional methods in EnhancedRandom except {@link #skip(long)}.
  * <br>

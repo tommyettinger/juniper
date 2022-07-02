@@ -47,7 +47,9 @@ raw speed. `com.github.tommyettinger.random.MizuchiRandom` is a simple PCG-style
 as a base and hashing the LCG's output before it returns it; Mizuchi has streams, like LaserRandom, but they are less correlated
 with each other than in LaserRandom. `com.github.tommyettinger.random.ChopRandom` is much like TrimRandom, but natively
 works on `int` states instead of `long`, so it has a shorter guaranteed period of 2 to the 32, but should be much faster
-when run on GWT (even when generating `long` values!).
+when run on GWT (even when generating `long` values!). `com.github.tommyettinger.random.Xoshiro128PlusPlusRandom` is a slightly-modified
+version of the 32-bit Xoshiro generator with the ++ scrambler; it has some optimizations so it can return `long` values more quickly, though
+it is still slower than ChopRandom.
 
 You may also want to use the `randomize()` methods in the `digital` dependency's `Hasher` class to make sequential
 values more random; this is essentially the approach used by DistinctRandom. A similar non-generator use of randomness
@@ -58,15 +60,15 @@ is available in `com.github.tommyettinger.random.LineWobble`; it provides 1D con
 With Gradle, the dependency (of the core module, if you have multiple) is:
 
 ```groovy
-api "com.github.tommyettinger:juniper:0.0.2"
+api "com.github.tommyettinger:juniper:0.0.3"
 ```
 
 In a libGDX project that has a GWT/HTML backend, the `html/build.gradle` file
 should additionally have:
 
 ```
-implementation "com.github.tommyettinger:digital:0.0.2:sources"
-implementation "com.github.tommyettinger:juniper:0.0.2:sources"
+implementation "com.github.tommyettinger:digital:0.0.3:sources"
+implementation "com.github.tommyettinger:juniper:0.0.3:sources"
 ```
 
 And the `GdxDefinition.gwt.xml` file should have:
@@ -82,7 +84,7 @@ If you don't use Gradle, then with Maven, the dependency is:
 <dependency>
   <groupId>com.github.tommyettinger</groupId>
   <artifactId>juniper</artifactId>
-  <version>0.0.2</version>
+  <version>0.0.3</version>
 </dependency>
 ```
 
