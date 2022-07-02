@@ -258,8 +258,8 @@ public class LineWobble {
      */
     private static float wobbleWrapped(int seed, float value, int modulus)
     {
-        final int floor = (int) value % modulus;
-        final float start = (((seed + floor) * 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x0.ffffffp-31f,
+        final int floor = (int) value;
+        final float start = (((seed + floor % modulus) * 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x0.ffffffp-31f,
                 end = (((seed + (floor + 1) % modulus) * 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x0.ffffffp-31f;
         value -= floor;
         value *= value * (3 - 2 * value);

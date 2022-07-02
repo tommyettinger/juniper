@@ -48,4 +48,16 @@ public class LineWobbleTest {
             System.out.println();
         }
     }
+    @Test
+    public void testLUTWobble() {
+        int seed = 12345;
+        float[] lut = LineWobble.generateLookupTable(seed, 256, 11, 4);
+        for (int i = 0; i < 264; i++) {
+            int len = Math.round((lut[i & 255] + 1) * 39);
+            for (int j = 0; j < len; j++) {
+                System.out.print('*');
+            }
+            System.out.println();
+        }
+    }
 }
