@@ -1,5 +1,7 @@
 package com.github.tommyettinger.random;
 
+import com.github.tommyettinger.digital.BitConversion;
+
 /**
  * Provides 1D noise methods that can be queried at any point on a line to get a continuous random value.
  * These each use some form of low-quality, high-speed unary hash on the floor and ceiling of a float or double value,
@@ -267,6 +269,24 @@ public class LineWobble {
     }
 
     /**
+     * Very similar to {@link #wobble(int, float)}, but only tolerates non-negative {@code value} and wraps value when
+     * it gets too close to {@code modulus}. Only used by {@link #generateLookupTable(int, int, int, int)} for now.
+     * @param seed an int seed that will determine the pattern of peaks and valleys this will generate as value changes; this should not change between calls
+     * @param value a non-negative float that typically changes slowly, by less than 2.0, with direction changes at integer inputs
+     * @param modulus where to wrap value if it gets too high; must be positive
+     * @return a pseudo-random float between 0f and 1f (both inclusive), smoothly changing with value
+     */
+    private static float wobbleWrappedTight(int seed, float value, int modulus)
+    {
+        final int floor = (int) value;
+        final float start = ((((seed + floor % modulus) * 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) >>> 1) * 0x1.0p-31f,
+                end = ((((seed + (floor + 1) % modulus) * 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) >>> 1) * 0x1.0p-31f;
+        value -= floor;
+        value *= value * (3 - 2 * value);
+        return (1 - value) * start + value * end;
+    }
+
+    /**
      * Creates a wrapping lookup table of {@code size} float items for a wobbling line, using a specific count of points
      * where the wobble can reach a peak or valley, a number of octaves to refine the wobble, and a seed.
      * @param seed an int seed that will determine the pattern of peaks and valleys this will generate as value changes
@@ -292,4 +312,41 @@ public class LineWobble {
         return table;
     }
 
+    /**
+     * Creates a wrapping lookup table of {@code size} float items for a wobbling line, using a specific count of points
+     * where the wobble can reach a peak or valley, a number of octaves to refine the wobble, and a seed. This also
+     * takes a shape and turning parameter that it uses to finish the lookup table by running every item through a call
+     * to {@link com.github.tommyettinger.digital.MathTools#barronSpline(float, float, float)}; this can be useful to
+     * change how the noise is distributed from slightly favoring extremes (the default) to preferring central values
+     * (when shape is between 0 and 1) or preferring more extreme values (when shape is more than 1).
+     * @param seed an int seed that will determine the pattern of peaks and valleys this will generate as value changes
+     * @param size how many items to have in the returned float array
+     * @param points  effectively, the frequency; how many possible peak/valley points will appear in the first octave
+     * @param octaves a positive int that adds more detail as it goes higher; cannot be more than 31
+     * @param shape   must be greater than or equal to 0; values greater than 1 are "normal interpolations"
+     * @param turning a value between 0.0 and 1.0, inclusive, where the shape changes
+     * @return the wrapping lookup table of float values between 0 and 1, both inclusive
+     */
+    public static float[] generateSplineLookupTable(int seed, int size, int points, int octaves, float shape, float turning) {
+        if(size <= 0) return new float[0];
+        float[] table = new float[size];
+        points = Math.min(Math.max(points, 1), size);
+        octaves = Math.min(Math.max(octaves, 1), 31);
+        int totalStrength = (1 << octaves) - 1;
+        float divisor = 1f / totalStrength;
+        float strength = Integer.highestOneBit(totalStrength) * divisor;
+        float frequency = (float)points / (float) size;
+        for (int o = 0; o < octaves; o++, strength *= 0.5f, frequency += frequency, seed = seed * 0xFAB ^ 0x4321ABCD) {
+            for (int i = 0; i < size; i++) {
+                table[i] += wobbleWrappedTight(seed, i * frequency, points) * strength;
+            }
+        }
+        for (int i = 0; i < size; i++) {
+            final float x = table[i];
+            final float d = turning - x;
+            final int f = BitConversion.floatToIntBits(d) >> 31, n = f | 1;
+            table[i] = ((turning * n - f) * (x + f)) / (Float.MIN_NORMAL - f + (x + shape * d) * n) - f;
+        }
+        return table;
+    }
 }
