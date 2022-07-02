@@ -247,4 +247,49 @@ public class LineWobble {
         start += end * value + 1;
         return (start - (long)start);
     }
+
+    /**
+     * Very similar to {@link #wobble(int, float)}, but only tolerates non-negative {@code value} and wraps value when
+     * it gets too close to {@code modulus}. Only used by {@link #generateLookupTable(int, int, int, int)} for now.
+     * @param seed an int seed that will determine the pattern of peaks and valleys this will generate as value changes; this should not change between calls
+     * @param value a non-negative float that typically changes slowly, by less than 2.0, with direction changes at integer inputs
+     * @param modulus where to wrap value if it gets too high; must be positive
+     * @return a pseudo-random float between -1f and 1f (both exclusive), smoothly changing with value
+     */
+    private static float wobbleWrapped(int seed, float value, int modulus)
+    {
+        final int floor = (int) value % modulus;
+        final float start = (((seed + floor) * 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x0.ffffffp-31f,
+                end = (((seed + (floor + 1) % modulus) * 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x0.ffffffp-31f;
+        value -= floor;
+        value *= value * (3 - 2 * value);
+        return (1 - value) * start + value * end;
+    }
+
+    /**
+     * Creates a wrapping lookup table of {@code size} float items for a wobbling line, using a specific count of points
+     * where the wobble can reach a peak or valley, a number of octaves to refine the wobble, and a seed.
+     * @param seed an int seed that will determine the pattern of peaks and valleys this will generate as value changes
+     * @param size how many items to have in the returned float array
+     * @param points effectively, the frequency; how many possible peak/valley points will appear in the first octave
+     * @param octaves a positive int that adds more detail as it goes higher; cannot be more than 31
+     * @return the wrapping lookup table of float values between -1 and 1
+     */
+    public static float[] generateLookupTable(int seed, int size, int points, int octaves) {
+        if(size <= 0) return new float[0];
+        float[] table = new float[size];
+        points = Math.min(Math.max(points, 1), size);
+        octaves = Math.min(Math.max(octaves, 1), 31);
+        int totalStrength = (1 << octaves) - 1;
+        float divisor = 1f / totalStrength;
+        float strength = Integer.highestOneBit(totalStrength) * divisor;
+        float frequency = (float)points / (float) size;
+        for (int o = 0; o < octaves; o++, strength *= 0.5f, frequency += frequency, seed = seed * 0xFAB ^ 0x4321ABCD) {
+            for (int i = 0; i < size; i++) {
+                table[i] += wobbleWrapped(seed, i * frequency, points) * strength;
+            }
+        }
+        return table;
+    }
+
 }

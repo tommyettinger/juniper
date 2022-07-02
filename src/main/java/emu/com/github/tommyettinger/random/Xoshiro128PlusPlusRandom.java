@@ -22,6 +22,7 @@ package com.github.tommyettinger.random;
  */
 public class Xoshiro128PlusPlusRandom extends EnhancedRandom {
 
+	private static final long LOW_MASK = 0xFFFFFFFFL;
 	/**
 	 * The first state; can be any int.
 	 */
@@ -255,7 +256,7 @@ public class Xoshiro128PlusPlusRandom extends EnhancedRandom {
 		stateA ^= stateD;
 		stateC ^= t;
 		stateD = (stateD << 11 | stateD >>> 21);
-		return (long) h << 32 ^ (l & 0xFFFFFFFFL);
+		return (long) h << 32 ^ (l & LOW_MASK);
 	}
 
 	@Override
@@ -284,7 +285,7 @@ public class Xoshiro128PlusPlusRandom extends EnhancedRandom {
 		pd = (pd << 7 | pd >>> 25) + pa;
 		pb = pc - pb;
 		pb = (pb << 13 | pb >>> 19) + pc;
-		return (long) pd << 32 ^ (pb & 0xFFFFFFFFL);
+		return (long) pd << 32 ^ (pb & LOW_MASK);
 
 	}
 
@@ -327,7 +328,7 @@ public class Xoshiro128PlusPlusRandom extends EnhancedRandom {
 		stateA ^= stateD;
 		stateC ^= t;
 		stateD = (stateD << 11 | stateD >>> 21);
-		return (int)(bound * (result & 0xFFFFFFFFL) >> 32) & ~(bound >> 31);
+		return (int)(bound * (result & LOW_MASK) >> 32) & ~(bound >> 31);
 	}
 
 	@Override
@@ -341,7 +342,7 @@ public class Xoshiro128PlusPlusRandom extends EnhancedRandom {
 		stateA ^= stateD;
 		stateC ^= t;
 		stateD = (stateD << 11 | stateD >>> 21);
-		outerBound = (int)(outerBound * (result & 0xFFFFFFFFL) >> 32);
+		outerBound = (int)(outerBound * (result & LOW_MASK) >> 32);
 		return outerBound + (outerBound >>> 31);
 	}
 
@@ -378,10 +379,10 @@ public class Xoshiro128PlusPlusRandom extends EnhancedRandom {
 		stateD = (stateD << 11 | stateD >>> 21);
 		if (inner >= outer)
 			return inner;
-		final long randLow = l & 0xFFFFFFFFL;
-		final long randHigh = h & 0xFFFFFFFFL;
+		final long randLow = l & LOW_MASK;
+		final long randHigh = h & LOW_MASK;
 		final long bound = outer - inner;
-		final long boundLow = bound & 0xFFFFFFFFL;
+		final long boundLow = bound & LOW_MASK;
 		final long boundHigh = (bound >>> 32);
 		return inner + (randHigh * boundLow >>> 32) + (randLow * boundHigh >>> 32) + randHigh * boundHigh;
 	}
@@ -405,9 +406,9 @@ public class Xoshiro128PlusPlusRandom extends EnhancedRandom {
 		stateA ^= stateD;
 		stateC ^= t;
 		stateD = (stateD << 11 | stateD >>> 21);
-		final long randLow = l & 0xFFFFFFFFL;
-		final long randHigh = h & 0xFFFFFFFFL;
-		final long boundLow = bound & 0xFFFFFFFFL;
+		final long randLow = l & LOW_MASK;
+		final long randHigh = h & LOW_MASK;
+		final long boundLow = bound & LOW_MASK;
 		final long boundHigh = (bound >>> 32);
 		return inner + (randHigh * boundLow >>> 32) + (randLow * boundHigh >>> 32) + randHigh * boundHigh;
 	}
@@ -451,7 +452,7 @@ public class Xoshiro128PlusPlusRandom extends EnhancedRandom {
 		stateA ^= stateD;
 		stateC ^= t;
 		stateD = (stateD << 11 | stateD >>> 21);
-		return (0x1000001L * (result & 0xFFFFFFFFL) >> 32) * 0x1p-24f;
+		return (0x1000001L * (result & LOW_MASK) >> 32) * 0x1p-24f;
 	}
 
 	@Override
