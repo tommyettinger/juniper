@@ -60,4 +60,16 @@ public class LineWobbleTest {
             System.out.println();
         }
     }
+    @Test
+    public void testSplineLUTWobble() {
+        int seed = 12345;
+        float[] lut = LineWobble.generateSplineLookupTable(seed, 256, 11, 4, 3f, 0.5f);
+        for (int i = 0; i < 264; i++) {
+            int len = Math.round((lut[i & 255]) * 79);
+            for (int j = 0; j < len; j++) {
+                System.out.print('*');
+            }
+            System.out.println();
+        }
+    }
 }
