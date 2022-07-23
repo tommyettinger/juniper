@@ -73,6 +73,13 @@ public class NormalDistribution extends Distribution {
         return sigma * sigma;
     }
 
+    /**
+     * Sets all parameters and returns true if they are valid, otherwise leaves parameters unchanged and returns false.
+     * @param a mu; must not be NaN
+     * @param b sigma; should be greater than 0.0
+     * @param c ignored
+     * @return true if the parameters given are valid and will be used
+     */
     @Override
     public boolean setParameters(double a, double b, double c) {
         if(!Double.isNaN(a) && b > 0.0){

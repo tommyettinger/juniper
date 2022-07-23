@@ -56,7 +56,7 @@ public class BetaDistribution extends Distribution {
 
     @Override
     public double getMedian() {
-        throw new UnsupportedOperationException("Median cannot be determined for a GammaDistribution.");
+        throw new UnsupportedOperationException("Median cannot be determined for a BetaDistribution.");
     }
 
     @Override
@@ -89,7 +89,13 @@ public class BetaDistribution extends Distribution {
     public double getVariance() {
         return (alpha * beta) / (MathTools.square(alpha + beta) * (alpha + beta + 1.0));
     }
-
+    /**
+     * Sets all parameters and returns true if they are valid, otherwise leaves parameters unchanged and returns false.
+     * @param a alpha; should be greater than 0.0
+     * @param b beta; should be greater than 0.0
+     * @param c ignored
+     * @return true if the parameters given are valid and will be used
+     */
     @Override
     public boolean setParameters(double a, double b, double c) {
         if(a > 0.0 && b > 0.0){

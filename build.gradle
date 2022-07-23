@@ -52,6 +52,7 @@ if(JavaVersion.current().isJava9Compatible()) {
         }
     }
 }
+
 idea.module.excludeDirs += [file("src/main/java/emu/")]
 [compileJava, compileTestJava, javadoc]*.exclude("emu")
 

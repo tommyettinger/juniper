@@ -5,40 +5,39 @@ import com.github.tommyettinger.random.EnhancedRandom;
 import com.github.tommyettinger.random.WhiskerRandom;
 
 /**
- * A two-parameter distribution with range between 0 and 1, both inclusive.
- * The graph for this can take many shapes, making it very versatile.
- * @see <a href="https://en.wikipedia.org/wiki/Kumaraswamy_distribution">Wikipedia's page on this distribution.</a>
+ * A two-parameter distribution with range from 0 to positive infinity.
+ * @see <a href="https://en.wikipedia.org/wiki/Beta_prime_distribution">Wikipedia's page on this distribution.</a>
  */
-public class KumaraswamyDistribution extends Distribution {
+public class BetaPrimeDistribution extends Distribution {
     private double alpha;
     private double beta;
 
     public double getAlpha() {
-        return 1.0 / alpha;
+        return alpha;
     }
 
     public double getBeta() {
-        return 1.0 / beta;
+        return beta;
     }
 
     /**
      * Uses a {@link WhiskerRandom}, alpha = 2.0, beta = 2.0 .
      */
-    public KumaraswamyDistribution() {
-        this(new WhiskerRandom(), 2.0, 2.0);
+    public BetaPrimeDistribution() {
+        this(new WhiskerRandom(), 1.0, 1.0);
     }
 
     /**
      * Uses a {@link WhiskerRandom} and the given alpha and beta.
      */
-    public KumaraswamyDistribution(double alpha, double beta) {
+    public BetaPrimeDistribution(double alpha, double beta) {
         this(new WhiskerRandom(), alpha, beta);
     }
 
     /**
      * Uses the given EnhancedRandom directly. Uses the given alpha and beta.
      */
-    public KumaraswamyDistribution(EnhancedRandom generator, double alpha, double beta)
+    public BetaPrimeDistribution(EnhancedRandom generator, double alpha, double beta)
     {
         this.generator = generator;
         if(!setParameters(alpha, beta, 0.0))
@@ -47,18 +46,17 @@ public class KumaraswamyDistribution extends Distribution {
 
     @Override
     public double getMaximum() {
-        return 1.0;
+        return Double.POSITIVE_INFINITY;
     }
 
     @Override
     public double getMean() {
-        double b = 1.0 / beta;
-        return (MathTools.factorial(alpha) * MathTools.gamma(b) * b) / MathTools.factorial(alpha + b);
+        return alpha / (beta - 1.0);
     }
 
     @Override
     public double getMedian() {
-        return Math.pow(1.0 - Math.pow(2.0, -beta), alpha);
+        throw new UnsupportedOperationException("Median cannot be determined for a BetaPrimeDistribution.");
     }
 
     @Override
@@ -68,28 +66,35 @@ public class KumaraswamyDistribution extends Distribution {
 
     @Override
     public double[] getMode() {
-        if (alpha <= 1.0 && beta <= 1.0 && (alpha == 1.0 && beta == 1.0))
-            return new double[] { Math.pow((1.0 / alpha - 1.0) / (1.0 / alpha / beta - 1.0), alpha) };
-        throw new UnsupportedOperationException("Mode cannot be determined for the given parameters.");
+        return new double[]{(alpha - 1.0) / (beta + 1.0)};
     }
 
     @Override
     public double getVariance() {
-        throw new UnsupportedOperationException("Variance is not supported.");
+        /*
+                        if (_beta > 2.0)
+                {
+                    return _alpha * (_alpha + _beta - 1.0) / (MathUtils.Square(_beta - 1.0) * (_beta - 2.0));
+                }
+
+         */
+        if(beta > 2.0)
+            return alpha * (alpha + beta - 1.0) / MathTools.square(beta - 1.0) * (beta - 2.0);
+        throw new UnsupportedOperationException("Variance cannot be determined for the given parameters.");
     }
 
     /**
      * Sets all parameters and returns true if they are valid, otherwise leaves parameters unchanged and returns false.
-     * @param a alpha; should be greater than 0.0
-     * @param b beta; should be greater than 0.0
+     * @param a alpha; should be greater than 1.0
+     * @param b beta; should be greater than 1.0
      * @param c ignored
      * @return true if the parameters given are valid and will be used
      */
     @Override
     public boolean setParameters(double a, double b, double c) {
-        if(a > 0.0 && b > 0.0){
-            alpha = 1.0 / a;
-            beta = 1.0 / b;
+        if(a > 1.0 && b > 1.0){
+            alpha = a;
+            beta = b;
             return true;
         }
         return false;
@@ -100,7 +105,10 @@ public class KumaraswamyDistribution extends Distribution {
         return sample(generator, alpha, beta);
     }
 
-    public static double sample(EnhancedRandom generator, double inverseAlpha, double inverseBeta) {
-        return Math.pow(1.0 - Math.pow(generator.nextExclusiveDouble(), inverseBeta), inverseAlpha);
+    public static double sample(EnhancedRandom generator, double alpha, double beta) {
+        double variate = BetaDistribution.sample(generator, alpha, beta);
+        double rev = 1.0 - variate;
+        return MathTools.isZero(rev, 0x1p-32) ? Double.POSITIVE_INFINITY : variate / rev;
+
     }
 }

@@ -76,6 +76,13 @@ public class GammaDistribution extends Distribution {
         return alpha / (beta * beta);
     }
 
+    /**
+     * Sets all parameters and returns true if they are valid, otherwise leaves parameters unchanged and returns false.
+     * @param a alpha; should be greater than 0.0
+     * @param b beta; should be greater than 0.0
+     * @param c ignored
+     * @return true if the parameters given are valid and will be used
+     */
     @Override
     public boolean setParameters(double a, double b, double c) {
         if(a > 0.0 && b > 0.0){
