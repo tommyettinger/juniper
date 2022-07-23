@@ -1,6 +1,7 @@
 package com.github.tommyettinger.random.distribution;
 
 import com.github.tommyettinger.random.EnhancedRandom;
+import com.github.tommyettinger.random.WhiskerRandom;
 
 /**
  * A two-parameter distribution with range between 0 and 1, both inclusive.
@@ -11,6 +12,37 @@ public class KumaraswamyDistribution extends Distribution {
     private double alpha;
     private double beta;
 
+    public double getAlpha() {
+        return 1.0 / alpha;
+    }
+
+    public double getBeta() {
+        return 1.0 / beta;
+    }
+
+    /**
+     * Uses a {@link WhiskerRandom}, alpha = 2.0, beta = 2.0 .
+     */
+    public KumaraswamyDistribution() {
+        this(new WhiskerRandom(), 2.0, 2.0);
+    }
+
+    /**
+     * Uses a {@link WhiskerRandom} and the given alpha and beta.
+     */
+    public KumaraswamyDistribution(double alpha, double beta) {
+        this(new WhiskerRandom(), alpha, beta);
+    }
+
+    /**
+     * Uses the given EnhancedRandom directly. Uses the given alpha and beta.
+     */
+    public KumaraswamyDistribution(EnhancedRandom generator, double alpha, double beta)
+    {
+        this.generator = generator;
+        if(!setParameters(alpha, beta, 0.0))
+            throw new IllegalArgumentException("Given alpha and/or beta are invalid.");
+    }
 
     //TODO: Switch these out for the ones in digital when they are available.
     /**
