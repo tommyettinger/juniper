@@ -24,18 +24,18 @@ seemingly-random, response to any new person she meets.
 ### What are these generators?
 
 Several high-quality and very-fast random number generators are here, such as `com.github.tommyettinger.random.LaserRandom`,
-`com.github.tommyettinger.random.TricycleRandom`, `com.github.tommyettinger.random.DistinctRandom`,
+`com.github.tommyettinger.random.TricycleRandom`, `com.github.tommyettinger.random.DistinctRandom`, `com.github.tommyettinger.random.WhiskerRandom`,
 `com.github.tommyettinger.random.FourWheelRandom` and `com.github.tommyettinger.random.TrimRandom`. These extend
 the abstract class `com.github.tommyettinger.random.EnhancedRandom`, and that extends `java.util.Random` for
-compatibility. LaserRandom has a good balance of features, speed,
-and quality, but other generators here make different tradeoffs. TricycleRandom and FourWheelRandom can be significantly faster
-but don't always produce very-random numbers right at the start of usage; FourWheelRandom is the fastest generator here on Java 16
-with HotSpot. DistinctRandom is very similar to JDK 8's SplittableRandom, without the splitting, and will produce every possible
+compatibility. LaserRandom has a good balance of features, speed, and quality, but other generators here make different
+tradeoffs. LaserRandom can jump to any point in its cycle (which is always length 2 to the 64) in constant time; DistinctRandom
+can also do this, but no other generators here can. TricycleRandom and FourWheelRandom can be quite fast, but don't always
+produce very-random numbers right at the start of usage; WhiskerRandom is much like FourWheelRandom in design, but is a
+little faster (it is the fastest generator here on Java 17 with HotSpot), and is a little more random at the start.
+DistinctRandom is very similar to JDK 8's SplittableRandom, without the splitting, and will produce every possible
 `long` with its `nextLong()` method before it ever repeats a returned value. TrimRandom is very close to FourWheelRandom
 in design and in speed, but has higher quality even without using any multiplication internally; it also offers a high
-guaranteed minimum period (2 to the 64) with a likely higher maximum period. Both DistinctRandom and
-LaserRandom support the `skip()` method, which allows skipping ahead or behind in the sequence of generated numbers, but
-TricycleRandom, FourWheelRandom, and TrimRandom do not allow skipping.
+guaranteed minimum period (2 to the 64) with a likely higher maximum period.
 
 There's also some other generators that you might want for other reasons.
 `com.github.tommyettinger.random.Xoshiro256StarStarRandom` isn't particularly fast, but is four-dimensionally equidistributed
@@ -48,8 +48,8 @@ as a base and hashing the LCG's output before it returns it; Mizuchi has streams
 with each other than in LaserRandom. `com.github.tommyettinger.random.ChopRandom` is much like TrimRandom, but natively
 works on `int` states instead of `long`, so it has a shorter guaranteed period of 2 to the 32, but should be much faster
 when run on GWT (even when generating `long` values!). `com.github.tommyettinger.random.Xoshiro128PlusPlusRandom` is a slightly-modified
-version of the 32-bit Xoshiro generator with the ++ scrambler; it has some optimizations so it can return `long` values more quickly, though
-it is still slower than ChopRandom.
+version of the 32-bit Xoshiro generator with the ++ scrambler; it has some optimizations so that it can return `long`
+values more quickly, though it is still slower than ChopRandom.
 
 You may also want to use the `randomize()` methods in the `digital` dependency's `Hasher` class to make sequential
 values more random; this is essentially the approach used by DistinctRandom. A similar non-generator use of randomness
