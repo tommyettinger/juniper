@@ -7,7 +7,7 @@ import com.github.tommyettinger.random.WhiskerRandom;
 /**
  * A two-parameter distribution with range between 0 and 1, both inclusive.
  * The graph for this can take many shapes, making it very versatile.
- * @see <a href="http://en.wikipedia.org/wiki/Kumaraswamy_distribution">Wikipedia's page on this distribution.</a>
+ * @see <a href="https://en.wikipedia.org/wiki/Kumaraswamy_distribution">Wikipedia's page on this distribution.</a>
  */
 public class KumaraswamyDistribution extends Distribution {
     private double alpha;

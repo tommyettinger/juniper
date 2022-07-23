@@ -5,7 +5,7 @@ import com.github.tommyettinger.random.WhiskerRandom;
 
 /**
  * A two-parameter distribution with infinite range, also called the Gaussian distribution.
- * @see <a href="http://en.wikipedia.org/wiki/Normal_distribution">Wikipedia's page on this distribution.</a>
+ * @see <a href="https://en.wikipedia.org/wiki/Normal_distribution">Wikipedia's page on this distribution.</a>
  */
 public class NormalDistribution extends Distribution {
     private double mu;
