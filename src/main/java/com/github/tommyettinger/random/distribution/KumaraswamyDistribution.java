@@ -1,5 +1,6 @@
 package com.github.tommyettinger.random.distribution;
 
+import com.github.tommyettinger.digital.MathTools;
 import com.github.tommyettinger.random.EnhancedRandom;
 import com.github.tommyettinger.random.WhiskerRandom;
 
@@ -44,36 +45,6 @@ public class KumaraswamyDistribution extends Distribution {
             throw new IllegalArgumentException("Given alpha and/or beta are invalid.");
     }
 
-    //TODO: Switch these out for the ones in digital when they are available.
-    /**
-     * A close approximation to the gamma function for positive doubles, using an algorithm by T. J. Stieltjes.
-     * <a href="http://www.luschny.de/math/factorial/approx/SimpleCases.html">Source here</a>. This is exactly
-     * equivalent to {@code MathExtras.factorial(x - 1.0)}.
-     * @param x a real number; should usually be positive
-     * @return the approximate gamma of the given x
-     */
-    public static double gamma(double x) {
-        return factorial(x - 1.0);
-    }
-
-    /**
-     * A close approximation to the factorial function for real numbers, using an algorithm by T. J. Stieltjes.
-     * This performs a variable number of multiplications that starts at 1 when x is between 5 and 6, and requires more
-     * multiplications the lower x goes (to potentially many if x is, for instance, -1000.0, which would need 1006
-     * multiplications per call). As such, you should try to call this mostly on x values that are positive or have a
-     * low magnitude. <a href="http://www.luschny.de/math/factorial/approx/SimpleCases.html">Source here</a>.
-     * @param x a real number; should not be both large and negative
-     * @return the generalized factorial of the given x
-     */
-    public static double factorial(double x) {
-        double y = x + 1.0, p = 1.0;
-        for (; y < 7; y++)
-            p *= y;
-        double r = Math.exp(y * Math.log(y) - y + 1.0 / (12.0 * y + 2.0 / (5.0 * y + 53.0 / (42.0 * y))));
-        if (x < 7.0) r /= p;
-        return r * Math.sqrt(Math.PI * 2.0 / y);
-    }
-
     @Override
     public double getMaximum() {
         return 1.0;
@@ -82,7 +53,7 @@ public class KumaraswamyDistribution extends Distribution {
     @Override
     public double getMean() {
         double b = 1.0 / beta;
-        return (factorial(alpha) * gamma(b) * b) / factorial(alpha + b);
+        return (MathTools.factorial(alpha) * MathTools.gamma(b) * b) / MathTools.factorial(alpha + b);
     }
 
     @Override
