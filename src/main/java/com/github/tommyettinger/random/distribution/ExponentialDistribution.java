@@ -1,6 +1,5 @@
 package com.github.tommyettinger.random.distribution;
 
-import com.github.tommyettinger.digital.MathTools;
 import com.github.tommyettinger.random.EnhancedRandom;
 import com.github.tommyettinger.random.WhiskerRandom;
 
