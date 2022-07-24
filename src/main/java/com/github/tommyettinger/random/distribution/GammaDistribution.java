@@ -56,7 +56,7 @@ public class GammaDistribution extends Distribution {
 
     @Override
     public double getMedian() {
-        throw new UnsupportedOperationException("Median cannot be determined for a GammaDistribution.");
+        throw new UnsupportedOperationException("Median is undefined.");
     }
 
     @Override

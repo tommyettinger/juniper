@@ -5,10 +5,10 @@ import com.github.tommyettinger.random.EnhancedRandom;
 import com.github.tommyettinger.random.WhiskerRandom;
 
 /**
- * A two-parameter distribution with range from 0 to positive infinity.
- * @see <a href="https://en.wikipedia.org/wiki/Beta_prime_distribution">Wikipedia's page on this distribution.</a>
+ * A two-parameter distribution with range from 0 exclusive to positive infinity.
+ * @see <a href="https://en.wikipedia.org/wiki/F-distribution">Wikipedia's page on this distribution.</a>
  */
-public class BetaPrimeDistribution extends Distribution {
+public class FisherSnedecorDistribution extends Distribution {
     private double alpha;
     private double beta;
 
@@ -21,23 +21,23 @@ public class BetaPrimeDistribution extends Distribution {
     }
 
     /**
-     * Uses a {@link WhiskerRandom}, alpha = 2.0, beta = 2.0 .
+     * Uses a {@link WhiskerRandom}, alpha = 1.0, beta = 1.0 .
      */
-    public BetaPrimeDistribution() {
+    public FisherSnedecorDistribution() {
         this(new WhiskerRandom(), 1.0, 1.0);
     }
 
     /**
      * Uses a {@link WhiskerRandom} and the given alpha and beta.
      */
-    public BetaPrimeDistribution(double alpha, double beta) {
+    public FisherSnedecorDistribution(double alpha, double beta) {
         this(new WhiskerRandom(), alpha, beta);
     }
 
     /**
      * Uses the given EnhancedRandom directly. Uses the given alpha and beta.
      */
-    public BetaPrimeDistribution(EnhancedRandom generator, double alpha, double beta)
+    public FisherSnedecorDistribution(EnhancedRandom generator, double alpha, double beta)
     {
         this.generator = generator;
         if(!setParameters(alpha, beta, 0.0))
@@ -51,7 +51,9 @@ public class BetaPrimeDistribution extends Distribution {
 
     @Override
     public double getMean() {
-        return alpha / (beta - 1.0);
+        if (beta > 2)
+            return beta / (beta - 2.0);
+        throw new UnsupportedOperationException("Mean cannot be determined for the given parameters.");
     }
 
     @Override
@@ -66,33 +68,30 @@ public class BetaPrimeDistribution extends Distribution {
 
     @Override
     public double[] getMode() {
-        return new double[]{(alpha - 1.0) / (beta + 1.0)};
+        if (alpha > 2.0)
+        {
+            return new double[] { (alpha - 2.0) / alpha * beta / (beta + 2.0) };
+        }
+        throw new UnsupportedOperationException("Mode cannot be determined for the given parameters.");
     }
 
     @Override
     public double getVariance() {
-        /*
-                        if (_beta > 2.0)
-                {
-                    return _alpha * (_alpha + _beta - 1.0) / (MathUtils.Square(_beta - 1.0) * (_beta - 2.0));
-                }
-
-         */
-        if(beta > 2.0)
-            return alpha * (alpha + beta - 1.0) / MathTools.square(beta - 1.0) * (beta - 2.0);
+        if(beta > 4)
+            return 2.0 * MathTools.square(beta) * (alpha + beta - 2.0) / alpha/ MathTools.square(beta - 2.0) / (beta - 4.0);
         throw new UnsupportedOperationException("Variance cannot be determined for the given parameters.");
     }
 
     /**
      * Sets all parameters and returns true if they are valid, otherwise leaves parameters unchanged and returns false.
-     * @param a alpha; should be greater than 1.0
-     * @param b beta; should be greater than 1.0
+     * @param a alpha; should be greater than 0.0
+     * @param b beta; should be greater than 0.0
      * @param c ignored
      * @return true if the parameters given are valid and will be used
      */
     @Override
     public boolean setParameters(double a, double b, double c) {
-        if(a > 1.0 && b > 1.0){
+        if(a > 0.0 && b > 0.0){
             alpha = a;
             beta = b;
             return true;
@@ -106,9 +105,7 @@ public class BetaPrimeDistribution extends Distribution {
     }
 
     public static double sample(EnhancedRandom generator, double alpha, double beta) {
-        double variate = BetaDistribution.sample(generator, alpha, beta);
-        double rev = 1.0 - variate;
-        return MathTools.isZero(rev, 0x1p-32) ? Double.POSITIVE_INFINITY : variate / rev;
-
+        double x = BetaDistribution.sample(generator, alpha * 0.5, beta * 0.5);
+        return (beta * x) / (alpha * (1.0 - x));
     }
 }

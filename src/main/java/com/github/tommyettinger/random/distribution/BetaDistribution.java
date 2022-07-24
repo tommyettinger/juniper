@@ -56,7 +56,7 @@ public class BetaDistribution extends Distribution {
 
     @Override
     public double getMedian() {
-        throw new UnsupportedOperationException("Median cannot be determined for a BetaDistribution.");
+        throw new UnsupportedOperationException("Median is undefined.");
     }
 
     @Override
