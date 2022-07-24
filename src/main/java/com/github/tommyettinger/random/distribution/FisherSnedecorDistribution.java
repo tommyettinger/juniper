@@ -78,7 +78,7 @@ public class FisherSnedecorDistribution extends Distribution {
     @Override
     public double getVariance() {
         if(beta > 4)
-            return 2.0 * MathTools.square(beta) * (alpha + beta - 2.0) / alpha/ MathTools.square(beta - 2.0) / (beta - 4.0);
+            return 2.0 * MathTools.square(beta) * (alpha + beta - 2.0) / alpha / MathTools.square(beta - 2.0) / (beta - 4.0);
         throw new UnsupportedOperationException("Variance cannot be determined for the given parameters.");
     }
 
@@ -91,7 +91,7 @@ public class FisherSnedecorDistribution extends Distribution {
      */
     @Override
     public boolean setParameters(double a, double b, double c) {
-        if(a > 0.0 && b > 0.0){
+        if(a > 0.0 && b > 0.0) {
             alpha = a;
             beta = b;
             return true;
