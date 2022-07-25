@@ -1,14 +1,13 @@
 package com.github.tommyettinger.random.distribution;
 
-import com.github.tommyettinger.digital.MathTools;
 import com.github.tommyettinger.random.EnhancedRandom;
 import com.github.tommyettinger.random.WhiskerRandom;
 
 /**
  * A two-parameter distribution with infinite range.
- * @see <a href="https://en.wikipedia.org/wiki/Laplace_distribution">Wikipedia's page on this distribution.</a>
+ * @see <a href="https://en.wikipedia.org/wiki/Generalized_extreme_value_distribution">Wikipedia's page on this distribution.</a>
  */
-public class LaplaceDistribution extends Distribution {
+public class FisherTippettDistribution extends Distribution {
     private double alpha;
     private double mu;
 
@@ -23,21 +22,21 @@ public class LaplaceDistribution extends Distribution {
     /**
      * Uses a {@link WhiskerRandom}, alpha = 1.0, mu = 0.0 .
      */
-    public LaplaceDistribution() {
+    public FisherTippettDistribution() {
         this(new WhiskerRandom(), 1.0, 1.0);
     }
 
     /**
      * Uses a {@link WhiskerRandom} and the given alpha and mu.
      */
-    public LaplaceDistribution(double alpha, double mu) {
+    public FisherTippettDistribution(double alpha, double mu) {
         this(new WhiskerRandom(), alpha, mu);
     }
 
     /**
      * Uses the given EnhancedRandom directly. Uses the given alpha and mu.
      */
-    public LaplaceDistribution(EnhancedRandom generator, double alpha, double mu)
+    public FisherTippettDistribution(EnhancedRandom generator, double alpha, double mu)
     {
         this.generator = generator;
         if(!setParameters(alpha, mu, 0.0))
@@ -51,12 +50,12 @@ public class LaplaceDistribution extends Distribution {
 
     @Override
     public double getMean() {
-        return mu;
+        return mu + alpha * 0.577215664901532860606512090082402431042159335;
     }
 
     @Override
     public double getMedian() {
-        return mu;
+        return mu - alpha * -0.36651292058166435;
     }
 
     @Override
@@ -71,7 +70,7 @@ public class LaplaceDistribution extends Distribution {
 
     @Override
     public double getVariance() {
-        return 2.0 * alpha * alpha;
+        return ((Math.PI * Math.PI) / 6.0) * alpha * alpha;
     }
 
     /**
@@ -97,8 +96,6 @@ public class LaplaceDistribution extends Distribution {
     }
 
     public static double sample(EnhancedRandom generator, double alpha, double mu) {
-        double rand = 0.5 - generator.nextExclusiveDouble();
-        double tmp = MathTools.isZero(rand, 0x1p-32) ? Double.NEGATIVE_INFINITY : Math.log(2.0 * Math.abs(rand));
-        return mu - alpha * Math.signum(rand) * tmp;
+        return mu - alpha * Math.log(-Math.log(1.0 - generator.nextExclusiveDouble()));
     }
 }
