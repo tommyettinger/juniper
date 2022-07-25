@@ -10,7 +10,7 @@ import com.github.tommyettinger.random.WhiskerRandom;
 public class ExponentialDistribution extends Distribution {
     private double lambda;
 
-    public double getAlpha() {
+    public double getLambda() {
         return 1.0 / lambda;
     }
 
