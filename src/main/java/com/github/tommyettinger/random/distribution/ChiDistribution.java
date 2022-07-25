@@ -71,7 +71,7 @@ public class ChiDistribution extends Distribution {
 
     /**
      * Sets all parameters and returns true if they are valid, otherwise leaves parameters unchanged and returns false.
-     * @param a alpha; will be cast to an int, and should be greater than 1
+     * @param a alpha; will be cast to an int, and should be greater than or equal to 1
      * @param b ignored
      * @param c ignored
      * @return true if the parameters given are valid and will be used
