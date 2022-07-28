@@ -26,12 +26,11 @@ package com.github.tommyettinger.random;
  * up, including on Graal but not counting Semeru JDKs (which seem to be generally slower for all microbenchmarks).
  * <br>
  * Testing performed should be sufficient, but more can always be done; this passes at least 64TB of PractRand without
- * issues. This has been tested with Remortality, but not to the hundreds-of-PB threshold that FourWheelRandom required
- * to fail, so it could still fail that test after an absurd amount of data has been tested. {@link StrangerRandom} is
- * probably stronger, but not as fast; {@link TrimRandom} is possibly stronger and offers a guaranteed minimum period of
- * 2 to the 64, but isn't as fast.
+ * issues. This has been tested with Remortality, and it passes over 179 PB of that test without any suspect results.
+ * {@link StrangerRandom} is not as fast; {@link TrimRandom} offers a guaranteed minimum period of 2 to the 64, but
+ * isn't as fast, and may have statistical issues with some initial seeds sooner than it would with others.
  * <br>
- * The algorithm used here has four states purely to exploit instruction-level parallelism; it isn't trying to extend the
+ * The algorithm used here has four states just to exploit instruction-level parallelism; it isn't trying to extend the
  * period of the generator beyond about 2 to the 64 (the expected bare minimum, though some cycles will likely be much
  * longer). There's a complex tangle of dependencies across the four states, but it is possible to invert the generator
  * given a full 256-bit state; this is vital for its period and quality.
@@ -43,6 +42,9 @@ package com.github.tommyettinger.random;
  * <br>
  * This implements all optional methods in EnhancedRandom except {@link #skip(long)}; it does implement
  * {@link #previousLong()} without using skip().
+ * <br>
+ * This is called WhiskerRandom because one of my cats would not let me finish this without giving him some attention.
+ * The cat in question has very long whiskers, and is also very nimble.
  */
 public class WhiskerRandom extends EnhancedRandom {
 	@Override

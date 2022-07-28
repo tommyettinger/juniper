@@ -28,10 +28,10 @@ package com.github.tommyettinger.random;
  * rather than {@link #setState(long, long, long, long)}, because if you give similar states to the latter, it tends to
  * produce severely flawed output on at least the low-order bits. This can't happen with setSeed().
  * <br>
- * The main reasons you could prefer this generator to the typically-faster {@link FourWheelRandom} are:
+ * The main reasons you could prefer this generator to the typically-faster {@link WhiskerRandom} are:
  * <ul>
  *     <li>This generator is 4D equidistributed, so groups of four coordinates will always be unique.</li>
- *     <li>This generator is well-studied and appeared in a paper.</li>
+ *     <li>This generator is well-studied and appeared in a peer-reviewed paper.</li>
  *     <li>You will never use Java 16, and if you use Java 17, you would rather use the implementation in the JDK there.</li>
  *     <li>You need a regular structure to the generated numbers, with guarantees about that structure.</li>
  * </ul>

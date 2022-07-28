@@ -24,12 +24,11 @@ package com.github.tommyettinger.random;
  * <br>
  * The actual speed of this is going to vary wildly depending on the platform being benchmarked. It's hard to find a
  * faster high-quality way to generate long values on GWT (this is, surprisingly, faster than generators like
- * {@link FourWheelRandom} on GWT at generating either int or long values, while this is likely half the speed of
- * FourWheelRandom when generating long values on Java 17 HotSpot). ChopRandom has a guaranteed minimum period of 2 to
- * the 32, and is very likely to have a much longer period for almost all initial states.
+ * {@link FourWheelRandom} or {@link WhiskerRandom} on GWT at generating either int or long values, while this is likely
+ * half the speed of FourWheelRandom when generating long values on Java 17 HotSpot). ChopRandom has a guaranteed
+ * minimum period of 2 to the 32, and is very likely to have a much longer period for almost all initial states.
  * <br>
- * This cannot be considered stable yet, and may change as tests run longer. It already passes 32TB of PractRand testing
- * without anomalies.
+ * This generator can be stable. It passes 64TB of PractRand testing without anomalies.
  * <br>
  * The algorithm used here has four states purely to exploit instruction-level parallelism; one state is a counter (this
  * gives the guaranteed minimum period of 2 to the 32), and the others combine the values of the four states across three

@@ -18,13 +18,15 @@
 package com.github.tommyettinger.random;
 
 /**
- * A random number generator that acts as a counterpart to {@link FourWheelRandom} by guaranteeing a slightly longer period
- * and potentially being faster in some situations because it uses no multiplication. Like FourWheelRandom, this has four
- * {@code long} states, and is quite fast on desktop platforms (FourWheelRandom is about 25% faster, but both are very good).
- * It can be considered stable, like the other EnhancedRandom implementations here. I've tested this more than any other
- * generator I've written; it passes 64TB of PractRand, 5PB of hwd, and an absolutely massive amount of another test, remortality,
- * run on a GPU using CUDA. This last test was run while it was still a work in progress, but this class passed over 300PB after
- * over 500 hours.
+ * A random number generator that acts as a counterpart to {@link WhiskerRandom} by guaranteeing a slightly longer period
+ * and potentially being faster in some situations because it uses no multiplication. In practice, {@link TrimRandom}
+ * accomplishes the same goals and is faster, so this is mostly useful as a hedge in case major issues are found with
+ * other generators. Like FourWheelRandom, this has four {@code long} states, and is quite fast on desktop platforms
+ * (FourWheelRandom is about 25% faster, and WhiskerRandom is about 30% faster, but all three are much faster than the
+ * Java 17 java.util.random family of generators). It can be considered stable, like the other EnhancedRandom
+ * implementations here. I've tested this more than any other generator I've written; it passes 64TB of PractRand, 5PB
+ * of hwd, and an absolutely massive amount of another test, remortality, run on a GPU using CUDA. This last test was
+ * run while it was still a work in progress, but this class passed over 300PB after over 500 hours.
  * <br>
  * The reason this has undergone so much testing is that it is built on top of some of the weakest random number generators
  * out there -- two interleaved 64-bit two-step xorshift generators, and some simple chaotic generators that incorporate the
