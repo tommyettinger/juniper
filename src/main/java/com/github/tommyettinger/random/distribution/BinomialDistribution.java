@@ -4,7 +4,7 @@ import com.github.tommyettinger.random.EnhancedRandom;
 import com.github.tommyettinger.random.WhiskerRandom;
 
 /**
- * A two-parameter distribution with range from 0 (inclusive) to positive infinity.
+ * A two-parameter discrete distribution with integer range from 0 (inclusive) to beta (inclusive).
  * @see <a href="https://en.wikipedia.org/wiki/Binomial_distribution">Wikipedia's page on this distribution.</a>
  */
 public class BinomialDistribution extends Distribution {
