@@ -14,6 +14,11 @@ public class StudentsTDistribution extends Distribution {
         return nu;
     }
 
+    @Override
+    public double getParameterA() {
+        return nu;
+    }
+
     /**
      * Uses a {@link WhiskerRandom}, nu = 1.0 .
      */

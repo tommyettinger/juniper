@@ -19,6 +19,16 @@ public class LognormalDistribution extends Distribution {
         return sigma;
     }
 
+    @Override
+    public double getParameterA() {
+        return mu;
+    }
+
+    @Override
+    public double getParameterB() {
+        return sigma;
+    }
+
     /**
      * Uses a {@link WhiskerRandom}, mu = 0.0, sigma = 1.0 .
      */

@@ -15,6 +15,11 @@ public class PoissonDistribution extends Distribution {
         return lambda;
     }
 
+    @Override
+    public double getParameterA() {
+        return lambda;
+    }
+
     /**
      * Uses a {@link WhiskerRandom}, lambda = 1.0 .
      */

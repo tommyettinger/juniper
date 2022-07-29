@@ -15,6 +15,11 @@ public class ChiSquareDistribution extends Distribution {
         return alpha;
     }
 
+    @Override
+    public double getParameterA() {
+        return alpha;
+    }
+
     /**
      * Uses a {@link WhiskerRandom}, alpha = 1.0 .
      */

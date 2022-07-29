@@ -19,6 +19,16 @@ public class BinomialDistribution extends Distribution {
         return beta;
     }
 
+    @Override
+    public double getParameterA() {
+        return alpha;
+    }
+
+    @Override
+    public double getParameterB() {
+        return beta;
+    }
+
     /**
      * Uses a {@link WhiskerRandom}, alpha = 0.5, beta = 1 .
      */

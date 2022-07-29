@@ -20,6 +20,16 @@ public class LaplaceDistribution extends Distribution {
         return mu;
     }
 
+    @Override
+    public double getParameterA() {
+        return alpha;
+    }
+
+    @Override
+    public double getParameterB() {
+        return mu;
+    }
+
     /**
      * Uses a {@link WhiskerRandom}, alpha = 1.0, mu = 0.0 .
      */

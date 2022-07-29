@@ -20,6 +20,16 @@ public class ContinuousUniformDistribution extends Distribution {
         return beta;
     }
 
+    @Override
+    public double getParameterA() {
+        return alpha;
+    }
+
+    @Override
+    public double getParameterB() {
+        return beta;
+    }
+
     /**
      * Uses a {@link WhiskerRandom}, alpha = 0.0, beta = 1.0 .
      */

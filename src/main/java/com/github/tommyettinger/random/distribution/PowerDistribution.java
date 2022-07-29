@@ -20,6 +20,16 @@ public class PowerDistribution extends Distribution {
         return 1.0 / beta;
     }
 
+    @Override
+    public double getParameterA() {
+        return 1.0 / alpha;
+    }
+
+    @Override
+    public double getParameterB() {
+        return 1.0 / beta;
+    }
+
     /**
      * Uses a {@link WhiskerRandom}, alpha = 1.0, beta = 1.0 .
      */

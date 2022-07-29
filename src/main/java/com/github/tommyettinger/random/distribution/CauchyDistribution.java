@@ -20,6 +20,16 @@ public class CauchyDistribution extends Distribution {
         return gamma;
     }
 
+    @Override
+    public double getParameterA() {
+        return alpha;
+    }
+
+    @Override
+    public double getParameterB() {
+        return gamma;
+    }
+
     /**
      * Uses a {@link WhiskerRandom}, alpha = 1.0, gamma = 1.0 .
      */

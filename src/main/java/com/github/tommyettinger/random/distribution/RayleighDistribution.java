@@ -14,6 +14,11 @@ public class RayleighDistribution extends Distribution {
         return 1.0 / sigma;
     }
 
+    @Override
+    public double getParameterA() {
+        return sigma;
+    }
+
     /**
      * Uses a {@link WhiskerRandom}, sigma = 1.0 .
      */

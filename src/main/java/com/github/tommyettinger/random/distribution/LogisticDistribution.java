@@ -20,6 +20,16 @@ public class LogisticDistribution extends Distribution {
         return sigma;
     }
 
+    @Override
+    public double getParameterA() {
+        return mu;
+    }
+
+    @Override
+    public double getParameterB() {
+        return sigma;
+    }
+
     /**
      * Uses a {@link WhiskerRandom}, mu = 1.0, sigma = 1.0 .
      */

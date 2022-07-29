@@ -14,6 +14,11 @@ public class ExponentialDistribution extends Distribution {
         return 1.0 / lambda;
     }
 
+    @Override
+    public double getParameterA() {
+        return 1.0 / lambda;
+    }
+
     /**
      * Uses a {@link WhiskerRandom}, lambda = 1.0 .
      */

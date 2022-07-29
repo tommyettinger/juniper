@@ -20,6 +20,16 @@ public class BetaDistribution extends Distribution {
         return beta;
     }
 
+    @Override
+    public double getParameterA() {
+        return alpha;
+    }
+
+    @Override
+    public double getParameterB() {
+        return beta;
+    }
+
     /**
      * Uses a {@link WhiskerRandom}, alpha = 1.0, beta = 1.0 .
      */

@@ -19,6 +19,16 @@ public class ErlangDistribution extends Distribution {
         return lambda;
     }
 
+    @Override
+    public double getParameterA() {
+        return alpha;
+    }
+
+    @Override
+    public double getParameterB() {
+        return lambda;
+    }
+
     /**
      * Uses a {@link WhiskerRandom}, alpha = 1, lambda = 1.0 .
      */
