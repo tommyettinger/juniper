@@ -1,7 +1,7 @@
 package com.github.tommyettinger.random;
 
 import com.github.tommyettinger.digital.Base;
-import com.github.tommyettinger.random.distribution.Distribution;
+import com.github.tommyettinger.random.distribution.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -57,6 +57,35 @@ public final class Deserializer {
         register(new Xoshiro256StarStarRandom(1, 2, 3, 4));
         register(new Xoshiro128PlusPlusRandom(1, 2, 3, 4));
         register(new WhiskerRandom(1, 2, 3, 4));
+
+        final WhiskerRandom random = new WhiskerRandom(-1, -2, -3, -4);
+        register(new BernoulliDistribution(random, 0.5));
+        register(new BetaDistribution(random, 1.0, 1.0));
+        register(new BetaPrimeDistribution(random, 2.0, 2.0));
+        register(new BinomialDistribution(random, 0.5, 1));
+        register(new CauchyDistribution(random, 1.0, 1.0));
+        register(new ChiDistribution(random, 1));
+        register(new ChiSquareDistribution(random, 1));
+        register(new ContinuousUniformDistribution(random, 0.0, 1.0));
+        register(new DiscreteUniformDistribution(random, 0, 1));
+        register(new ErlangDistribution(random, 1, 1.0));
+        register(new ExponentialDistribution(random, 1.0));
+        register(new FisherSnedecorDistribution(random, 1.0, 1.0));
+        register(new FisherTippettDistribution(random, 1.0, 0.0));
+        register(new GammaDistribution(random, 1.0, 1.0));
+        register(new GeometricDistribution(random, 0.5));
+        register(new KumaraswamyDistribution(random, 2.0, 2.0));
+        register(new LaplaceDistribution(random, 1.0, 0.0));
+        register(new LogisticDistribution(random, 1.0, 1.0));
+        register(new LognormalDistribution(random, 0.0, 1.0));
+        register(new NormalDistribution(random, 0.0, 1.0));
+        register(new ParetoDistribution(random, 1.0, 1.0));
+        register(new PoissonDistribution(random, 1.0));
+        register(new PowerDistribution(random, 1.0, 1.0));
+        register(new RayleighDistribution(random, 1.0));
+        register(new StudentsTDistribution(random, 1.0));
+        register(new TriangularDistribution(random, 0.0, 1.0, 0.5));
+        register(new WeibullDistribution(random, 1.0, 1.0));
     }
 
     /**
@@ -152,8 +181,8 @@ public final class Deserializer {
     }
 
     /**
-     * Creates an unordered Set of all String tags Deserializer knows, and returns it.
-     * @return a Set of all String tags this knows
+     * Creates an unordered Set of all String tags for EnhancedRandom types Deserializer knows, and returns it.
+     * @return a Set of all String tags for EnhancedRandom types this knows
      */
     public static Set<String> copyTags() {
         return new HashSet<>(RANDOM_BY_TAG.keySet());

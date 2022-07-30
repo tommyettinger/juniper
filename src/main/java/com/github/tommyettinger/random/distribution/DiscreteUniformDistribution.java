@@ -49,14 +49,14 @@ public class DiscreteUniformDistribution extends Distribution {
     /**
      * Uses a {@link WhiskerRandom} and the given alpha and beta.
      */
-    public DiscreteUniformDistribution(double alpha, double beta) {
+    public DiscreteUniformDistribution(int alpha, int beta) {
         this(new WhiskerRandom(), alpha, beta);
     }
 
     /**
      * Uses the given EnhancedRandom directly. Uses the given alpha and beta.
      */
-    public DiscreteUniformDistribution(EnhancedRandom generator, double alpha, double beta)
+    public DiscreteUniformDistribution(EnhancedRandom generator, int alpha, int beta)
     {
         this.generator = generator;
         if(!setParameters(alpha, beta, 0.0))
