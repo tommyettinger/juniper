@@ -1,5 +1,6 @@
 package com.github.tommyettinger.random.distribution;
 
+import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.random.EnhancedRandom;
 
 /**
@@ -103,4 +104,65 @@ public abstract class Distribution {
     public double getParameterC() {
         return 0.0;
     }
+
+    /**
+     * Serializes the current state of this Distribution to a String that can be used by
+     * {@link #stringDeserialize(String)} to load this state at another time. This always uses
+     * {@link Base#BASE16} for its conversions.
+     * @return a String storing all data from the Distribution part of this generator
+     */
+    public String stringSerialize() {
+        return stringSerialize(Base.BASE16);
+    }
+
+    /**
+     * Serializes the current generator and parameters of this Distribution to a String that can be used by
+     * {@link #stringDeserialize(String)} to load this Distribution at another time.
+     * @param base which Base to use, from the "digital" library, such as {@link Base#BASE10}
+     * @return a String storing the current generator and parameters of this Distribution
+     */
+    public String stringSerialize(Base base) {
+        StringBuilder ser = new StringBuilder(getTag());
+        ser.append(generator.stringSerialize(base));
+        base.appendSigned(ser, getParameterA());
+        ser.append('`');
+        base.appendSigned(ser, getParameterB());
+        ser.append('`');
+        base.appendSigned(ser, getParameterC());
+        ser.append('`');
+        return ser.toString();
+    }
+
+    /**
+     * Given a String in the format produced by {@link #stringSerialize()}, this will attempt to set this Distribution
+     * object to match the state in the serialized data. This only works if this Distribution is the same
+     * implementation that was serialized, and also needs the EnhancedRandom types used by the generator to be
+     * identical. Always uses {@link Base#BASE16}. Returns this Distribution, after possibly
+     * changing its parameters and generator.
+     * @param data a String probably produced by {@link #stringSerialize()}
+     * @return this, after setting its state
+     */
+    public Distribution stringDeserialize(String data) {
+        return stringDeserialize(data, Base.BASE16);
+    }
+
+    /**
+     * Given a String in the format produced by {@link #stringSerialize(Base)}, and the same {@link Base} used by
+     * the serialization, this will attempt to set this Distribution object to match the state in the serialized
+     * data. This only works if this Distribution is the same implementation that was serialized, and also needs
+     * the Bases to be identical and the EnhancedRandom types used by the generator to be identical. Returns this
+     * Distribution, after possibly changing its parameters and generator.
+     * @param data a String probably produced by {@link #stringSerialize(Base)}
+     * @param base which Base to use, from the "digital" library, such as {@link Base#BASE10}
+     * @return this, after setting its state
+     */
+    public Distribution stringDeserialize(String data, Base base) {
+        int idx = data.indexOf('`');
+        generator.stringDeserialize(data.substring(idx, idx = data.indexOf('`', idx + 1) + 1), base);
+        setParameters(base.readDouble(data, idx + 1, (idx = data.indexOf('`', idx + 1))),
+                base.readDouble(data, idx + 1, (idx = data.indexOf('`', idx + 1))),
+                base.readDouble(data, idx + 1, (data.indexOf('`', idx + 1))));
+        return this;
+    }
+
 }
