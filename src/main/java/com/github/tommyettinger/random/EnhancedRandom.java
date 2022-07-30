@@ -886,6 +886,22 @@ public abstract class EnhancedRandom extends Random {
 	}
 
 	/**
+	 * Returns the next pseudorandom, Gaussian ("normally") distributed {@code double}
+	 * value with the specified mean and standard deviation from this random number generator's sequence.
+	 * <br>
+	 * This defaults to simply returning {@code mean + stddev * nextGaussian()}.
+	 *
+	 * @param mean the mean of the Gaussian distribution to be drawn from
+	 * @param stddev the standard deviation (square root of the variance)
+	 *        of the Gaussian distribution to be drawn from
+	 *
+	 * @return a Gaussian distributed {@code double} with the specified mean and standard deviation
+	 */
+	public double nextGaussian(double mean, double stddev) {
+		return mean + stddev * nextGaussian();
+	}
+
+	/**
 	 * Optional; advances or rolls back the {@code EnhancedRandom}' state without actually generating each number.
 	 * Skips forward or backward a number of steps specified by advance, where a step is equal to one call to
 	 * {@link #nextLong()}, and returns the random number produced at that step. Negative numbers can be used to

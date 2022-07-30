@@ -58,7 +58,7 @@ public final class Deserializer {
         register(new Xoshiro128PlusPlusRandom(1, 2, 3, 4));
         register(new WhiskerRandom(1, 2, 3, 4));
 
-        final WhiskerRandom random = new WhiskerRandom(-1, -2, -3, -4);
+        final EnhancedRandom random = new TrimRandom(0L, 0L, 0L, 0L);
         register(new BernoulliDistribution(random, 0.5));
         register(new BetaDistribution(random, 1.0, 1.0));
         register(new BetaPrimeDistribution(random, 2.0, 2.0));
@@ -199,6 +199,29 @@ public final class Deserializer {
             EnhancedRandom r = e.copy();
             r.setSeed(-1L);
             list.add(r);
+        }
+        return list;
+    }
+
+    /**
+     * Creates an unordered Set of all String tags for Distribution types Deserializer knows, and returns it.
+     * @return a Set of all String tags for Distribution types this knows
+     */
+    public static Set<String> copyDistributionTags() {
+        return new HashSet<>(DIST_BY_TAG.keySet());
+    }
+
+    /**
+     * Returns an unordered List of copies of the Distribution "prototype" objects this uses during
+     * deserialization. Each Distribution copy's generator is seeded with {@code -1L} before it is put in the List.
+     * @return a List of copies of the Distribution instances this knows
+     */
+    public static List<Distribution> copyDistributions() {
+        ArrayList<Distribution> list = new ArrayList<>(DIST_BY_TAG.size());
+        for(Distribution v : DIST_BY_TAG.values()){
+            Distribution d = v.copy();
+            d.generator.setSeed(-1L);
+            list.add(d);
         }
         return list;
     }

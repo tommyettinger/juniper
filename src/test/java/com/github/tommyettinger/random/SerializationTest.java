@@ -1,6 +1,7 @@
 package com.github.tommyettinger.random;
 
 import com.github.tommyettinger.digital.Base;
+import com.github.tommyettinger.random.distribution.Distribution;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -64,6 +65,15 @@ public class SerializationTest {
             long dl = de.nextLong();
             System.out.println(r + "  ,  " + de);
             Assert.assertEquals(rl, dl);
+        }
+    }
+    @Test
+    public void testWriteDist() {
+        List<Distribution> all = Deserializer.copyDistributions();
+        for(Distribution d : all) {
+            String s = d.stringSerialize();
+            System.out.println(s);
+            Assert.assertTrue(s.startsWith(d.getTag()));
         }
     }
 

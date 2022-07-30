@@ -128,7 +128,7 @@ public abstract class Distribution {
      * @return a String storing the current generator and parameters of this Distribution
      */
     public String stringSerialize(Base base) {
-        StringBuilder ser = new StringBuilder(getTag());
+        StringBuilder ser = new StringBuilder(getTag()).append('~');
         ser.append(generator.stringSerialize(base));
         base.appendSigned(ser, getParameterA());
         ser.append('`');
@@ -163,7 +163,7 @@ public abstract class Distribution {
      * @return this, after setting its state
      */
     public Distribution stringDeserialize(String data, Base base) {
-        int idx = data.indexOf('`');
+        int idx = data.indexOf('~');
         generator = Deserializer.deserialize(data.substring(idx, idx = data.indexOf('`', idx + 1) + 1), base);
         setParameters(base.readDouble(data, idx + 1, (idx = data.indexOf('`', idx + 1))),
                 base.readDouble(data, idx + 1, (idx = data.indexOf('`', idx + 1))),
