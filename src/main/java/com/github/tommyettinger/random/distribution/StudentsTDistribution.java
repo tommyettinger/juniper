@@ -11,6 +11,12 @@ public class StudentsTDistribution extends Distribution {
     public String getTag() {
         return "StudentsT";
     }
+
+    @Override
+    public Distribution copy() {
+        return new StudentsTDistribution(generator.copy(), nu);
+    }
+
     private double nu;
 
     public double getNu() {

@@ -11,6 +11,12 @@ public class TriangularDistribution extends Distribution {
     public String getTag() {
         return "Triangular";
     }
+
+    @Override
+    public Distribution copy() {
+        return new TriangularDistribution(generator.copy(), alpha, beta, gamma);
+    }
+
     private double alpha;
     private double beta;
     private double gamma;

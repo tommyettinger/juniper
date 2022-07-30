@@ -12,6 +12,12 @@ public class PowerDistribution extends Distribution {
     public String getTag() {
         return "Power";
     }
+
+    @Override
+    public Distribution copy() {
+        return new PowerDistribution(generator.copy(), alpha, beta);
+    }
+
     private double alpha;
     private double beta;
 

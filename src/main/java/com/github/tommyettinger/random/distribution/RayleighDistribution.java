@@ -11,6 +11,12 @@ public class RayleighDistribution extends Distribution {
     public String getTag() {
         return "Rayleigh";
     }
+
+    @Override
+    public Distribution copy() {
+        return new RayleighDistribution(generator.copy(), sigma);
+    }
+
     private double sigma;
 
     public double getSigma() {

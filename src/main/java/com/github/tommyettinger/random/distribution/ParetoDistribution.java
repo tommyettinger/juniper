@@ -12,6 +12,12 @@ public class ParetoDistribution extends Distribution {
     public String getTag() {
         return "Pareto";
     }
+
+    @Override
+    public Distribution copy() {
+        return new ParetoDistribution(generator.copy(), alpha, beta);
+    }
+
     private double alpha;
     private double beta;
 

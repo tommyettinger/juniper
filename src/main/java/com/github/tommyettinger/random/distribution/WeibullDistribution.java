@@ -12,6 +12,12 @@ public class WeibullDistribution extends Distribution {
     public String getTag() {
         return "Weibull";
     }
+
+    @Override
+    public Distribution copy() {
+        return new WeibullDistribution(generator.copy(), alpha, lambda);
+    }
+
     private double alpha;
     private double lambda;
 

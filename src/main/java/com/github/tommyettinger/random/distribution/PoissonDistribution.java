@@ -12,6 +12,12 @@ public class PoissonDistribution extends Distribution {
     public String getTag() {
         return "Poisson";
     }
+
+    @Override
+    public Distribution copy() {
+        return new PoissonDistribution(generator.copy(), lambda);
+    }
+
     private double lambda;
 
     public double getLambda() {
