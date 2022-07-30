@@ -1031,6 +1031,7 @@ public abstract class EnhancedRandom extends Random {
 	 * Both of the arguments should implement {@link #getSelectedState(int)}, or this
 	 * will throw an UnsupportedOperationException. This can be useful for comparing
 	 * EnhancedRandom classes that do not implement equals(), for whatever reason.
+	 * This returns true if both arguments are null, but false if only one is null.
 	 *
 	 * @param left  an EnhancedRandom to compare for equality
 	 * @param right another EnhancedRandom to compare for equality
@@ -1039,6 +1040,8 @@ public abstract class EnhancedRandom extends Random {
 	public static boolean areEqual (EnhancedRandom left, EnhancedRandom right) {
 		if (left == right)
 			return true;
+		if(left == null || right == null)
+			return false;
 		if (left.getClass() != right.getClass())
 			return false;
 
@@ -1527,9 +1530,9 @@ public abstract class EnhancedRandom extends Random {
 		{
 			for (int i = 0; i < getStateCount() - 1; i++)
 			{
-				base.appendUnsigned(ser, getSelectedState(i)).append('~');
+				base.appendSigned(ser, getSelectedState(i)).append('~');
 			}
-			base.appendUnsigned(ser, getSelectedState(getStateCount() - 1));
+			base.appendSigned(ser, getSelectedState(getStateCount() - 1));
 		}
 
 		ser.append('`');

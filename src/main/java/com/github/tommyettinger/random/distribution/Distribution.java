@@ -171,4 +171,16 @@ public abstract class Distribution {
         return this;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Distribution that = (Distribution) o;
+
+        return EnhancedRandom.areEqual(generator, that.generator)
+                && getParameterA() == that.getParameterA()
+                && getParameterB() == that.getParameterB()
+                && getParameterC() == that.getParameterC();
+    }
 }
