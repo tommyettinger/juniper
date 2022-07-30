@@ -8,6 +8,9 @@ import com.github.tommyettinger.random.WhiskerRandom;
  * @see <a href="https://en.wikipedia.org/wiki/Triangular_distribution">Wikipedia's page on this distribution.</a>
  */
 public class TriangularDistribution extends Distribution {
+    public String getTag() {
+        return "Triangular";
+    }
     private double alpha;
     private double beta;
     private double gamma;

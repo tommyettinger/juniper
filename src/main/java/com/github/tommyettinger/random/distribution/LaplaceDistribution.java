@@ -9,6 +9,9 @@ import com.github.tommyettinger.random.WhiskerRandom;
  * @see <a href="https://en.wikipedia.org/wiki/Laplace_distribution">Wikipedia's page on this distribution.</a>
  */
 public class LaplaceDistribution extends Distribution {
+    public String getTag() {
+        return "Laplace";
+    }
     private double alpha;
     private double mu;
 

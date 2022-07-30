@@ -8,6 +8,9 @@ import com.github.tommyettinger.random.WhiskerRandom;
  * @see <a href="https://en.wikipedia.org/wiki/Erlang_distribution">Wikipedia's page on this distribution.</a>
  */
 public class ErlangDistribution extends Distribution {
+    public String getTag() {
+        return "Erlang";
+    }
     private int alpha;
     private double lambda;
 

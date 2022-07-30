@@ -9,6 +9,9 @@ import com.github.tommyettinger.random.WhiskerRandom;
  * @see <a href="https://en.wikipedia.org/wiki/Continuous_uniform_distribution">Wikipedia's page on this distribution.</a>
  */
 public class ContinuousUniformDistribution extends Distribution {
+    public String getTag() {
+        return "ContinuousUniform";
+    }
     private double alpha;
     private double beta;
 

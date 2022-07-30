@@ -8,6 +8,9 @@ import com.github.tommyettinger.random.WhiskerRandom;
  * @see <a href="https://en.wikipedia.org/wiki/Binomial_distribution">Wikipedia's page on this distribution.</a>
  */
 public class BinomialDistribution extends Distribution {
+    public String getTag() {
+        return "Binomial";
+    }
     private double alpha;
     private int beta;
 

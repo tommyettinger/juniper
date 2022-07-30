@@ -8,6 +8,9 @@ import com.github.tommyettinger.random.WhiskerRandom;
  * @see <a href="https://en.wikipedia.org/wiki/Log-normal_distribution">Wikipedia's page on this distribution.</a>
  */
 public class LognormalDistribution extends Distribution {
+    public String getTag() {
+        return "Lognormal";
+    }
     private double mu;
     private double sigma;
 

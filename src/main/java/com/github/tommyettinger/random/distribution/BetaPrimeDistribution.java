@@ -9,6 +9,9 @@ import com.github.tommyettinger.random.WhiskerRandom;
  * @see <a href="https://en.wikipedia.org/wiki/Beta_prime_distribution">Wikipedia's page on this distribution.</a>
  */
 public class BetaPrimeDistribution extends Distribution {
+    public String getTag() {
+        return "BetaPrime";
+    }
     private double alpha;
     private double beta;
 

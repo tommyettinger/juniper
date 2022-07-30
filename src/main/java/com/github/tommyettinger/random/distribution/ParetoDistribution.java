@@ -9,6 +9,9 @@ import com.github.tommyettinger.random.WhiskerRandom;
  * @see <a href="https://en.wikipedia.org/wiki/Pareto_distribution">Wikipedia's page on this distribution.</a>
  */
 public class ParetoDistribution extends Distribution {
+    public String getTag() {
+        return "Pareto";
+    }
     private double alpha;
     private double beta;
 

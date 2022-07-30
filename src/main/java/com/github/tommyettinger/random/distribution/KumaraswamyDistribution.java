@@ -10,6 +10,9 @@ import com.github.tommyettinger.random.WhiskerRandom;
  * @see <a href="https://en.wikipedia.org/wiki/Kumaraswamy_distribution">Wikipedia's page on this distribution.</a>
  */
 public class KumaraswamyDistribution extends Distribution {
+    public String getTag() {
+        return "Kumaraswamy";
+    }
     private double alpha;
     private double beta;
 

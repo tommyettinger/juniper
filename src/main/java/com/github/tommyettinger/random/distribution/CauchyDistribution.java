@@ -9,6 +9,9 @@ import com.github.tommyettinger.random.WhiskerRandom;
  * @see <a href="https://en.wikipedia.org/wiki/Cauchy_distribution">Wikipedia's page on this distribution.</a>
  */
 public class CauchyDistribution extends Distribution {
+    public String getTag() {
+        return "Cauchy";
+    }
     private double alpha;
     private double gamma;
 

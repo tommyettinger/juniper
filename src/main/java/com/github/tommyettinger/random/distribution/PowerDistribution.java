@@ -9,6 +9,9 @@ import com.github.tommyettinger.random.WhiskerRandom;
  * @see <a href="https://www.xycoon.com/power.htm">Xycoon's page on this distribution.</a>
  */
 public class PowerDistribution extends Distribution {
+    public String getTag() {
+        return "Power";
+    }
     private double alpha;
     private double beta;
 

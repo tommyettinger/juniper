@@ -8,6 +8,9 @@ import com.github.tommyettinger.random.WhiskerRandom;
  * @see <a href="https://en.wikipedia.org/wiki/Geometric_distribution">Wikipedia's page on this distribution.</a>
  */
 public class GeometricDistribution extends Distribution {
+    public String getTag() {
+        return "Geometric";
+    }
     private double alpha;
 
     public double getAlpha() {

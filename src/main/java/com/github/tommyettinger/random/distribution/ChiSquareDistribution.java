@@ -9,6 +9,9 @@ import com.github.tommyettinger.random.WhiskerRandom;
  * @see <a href="https://en.wikipedia.org/wiki/Chi-squared_distribution">Wikipedia's page on this distribution.</a>
  */
 public class ChiSquareDistribution extends Distribution {
+    public String getTag() {
+        return "ChiSquare";
+    }
     private int alpha;
 
     public int getAlpha() {

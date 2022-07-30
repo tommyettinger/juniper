@@ -9,6 +9,9 @@ import com.github.tommyettinger.random.WhiskerRandom;
  * @see <a href="https://en.wikipedia.org/wiki/Logistic_distribution">Wikipedia's page on this distribution.</a>
  */
 public class LogisticDistribution extends Distribution {
+    public String getTag() {
+        return "Logistic";
+    }
     private double mu;
     private double sigma;
 

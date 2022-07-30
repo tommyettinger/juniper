@@ -68,6 +68,13 @@ public abstract class Distribution {
     public abstract double nextDouble();
 
     /**
+     * Gets the tag used to identify this type of Distribution, as a String. This tag should be unique. Unlike the
+     * tags for EnhancedRandom types, the names here can vary in length.
+     * @return a unique String identifier for this type of Distribution; must be non-null, can be any non-zero length
+     */
+    public abstract String getTag();
+
+    /**
      * Gets the value of parameter "A" as a double. This corresponds to parameter "A" in
      * {@link #setParameters(double, double, double)}; it is usually called by some other name in the generator, and may
      * not be stored as a double internally.

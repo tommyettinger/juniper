@@ -8,6 +8,9 @@ import com.github.tommyettinger.random.WhiskerRandom;
  * @see <a href="https://en.wikipedia.org/wiki/Student%27s_t-distribution">Wikipedia's page on this distribution.</a>
  */
 public class StudentsTDistribution extends Distribution {
+    public String getTag() {
+        return "StudentsT";
+    }
     private double nu;
 
     public double getNu() {
@@ -27,14 +30,14 @@ public class StudentsTDistribution extends Distribution {
     }
 
     /**
-     * Uses a {@link WhiskerRandom} and the given lambda.
+     * Uses a {@link WhiskerRandom} and the given nu.
      */
     public StudentsTDistribution(double nu) {
         this(new WhiskerRandom(), nu);
     }
 
     /**
-     * Uses the given EnhancedRandom directly. Uses the given lambda.
+     * Uses the given EnhancedRandom directly. Uses the given nu.
      */
     public StudentsTDistribution(EnhancedRandom generator, double nu)
     {

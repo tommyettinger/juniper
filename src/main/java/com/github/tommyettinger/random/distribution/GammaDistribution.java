@@ -9,6 +9,9 @@ import com.github.tommyettinger.random.WhiskerRandom;
  * @see <a href="https://en.wikipedia.org/wiki/Gamma_distribution">Wikipedia's page on this distribution.</a>
  */
 public class GammaDistribution extends Distribution {
+    public String getTag() {
+        return "Gamma";
+    }
     private double alpha;
     private double beta;
 

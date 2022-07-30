@@ -8,6 +8,9 @@ import com.github.tommyettinger.random.WhiskerRandom;
  * @see <a href="https://en.wikipedia.org/wiki/Normal_distribution">Wikipedia's page on this distribution.</a>
  */
 public class NormalDistribution extends Distribution {
+    public String getTag() {
+        return "Normal";
+    }
     private double mu;
     private double sigma;
 

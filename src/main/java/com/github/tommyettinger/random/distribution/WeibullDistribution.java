@@ -9,6 +9,9 @@ import com.github.tommyettinger.random.WhiskerRandom;
  * @see <a href="https://en.wikipedia.org/wiki/Weibull_distribution">Wikipedia's page on this distribution.</a>
  */
 public class WeibullDistribution extends Distribution {
+    public String getTag() {
+        return "Weibull";
+    }
     private double alpha;
     private double lambda;
 

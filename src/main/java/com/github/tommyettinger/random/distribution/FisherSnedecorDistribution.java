@@ -9,6 +9,9 @@ import com.github.tommyettinger.random.WhiskerRandom;
  * @see <a href="https://en.wikipedia.org/wiki/F-distribution">Wikipedia's page on this distribution.</a>
  */
 public class FisherSnedecorDistribution extends Distribution {
+    public String getTag() {
+        return "FisherSnedecor";
+    }
     private double alpha;
     private double beta;
 

@@ -8,6 +8,9 @@ import com.github.tommyettinger.random.WhiskerRandom;
  * @see <a href="https://en.wikipedia.org/wiki/Generalized_extreme_value_distribution">Wikipedia's page on this distribution.</a>
  */
 public class FisherTippettDistribution extends Distribution {
+    public String getTag() {
+        return "FisherTippett";
+    }
     private double alpha;
     private double mu;
 

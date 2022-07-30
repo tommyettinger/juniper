@@ -9,6 +9,9 @@ import com.github.tommyettinger.random.WhiskerRandom;
  * @see <a href="https://en.wikipedia.org/wiki/Poisson_distribution">Wikipedia's page on this distribution.</a>
  */
 public class PoissonDistribution extends Distribution {
+    public String getTag() {
+        return "Poisson";
+    }
     private double lambda;
 
     public double getLambda() {

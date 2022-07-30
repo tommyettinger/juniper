@@ -8,6 +8,9 @@ import com.github.tommyettinger.random.WhiskerRandom;
  * @see <a href="https://en.wikipedia.org/wiki/Exponential_distribution">Wikipedia's page on this distribution.</a>
  */
 public class ExponentialDistribution extends Distribution {
+    public String getTag() {
+        return "Exponential";
+    }
     private double lambda;
 
     public double getLambda() {

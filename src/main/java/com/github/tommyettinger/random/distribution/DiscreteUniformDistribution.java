@@ -9,6 +9,9 @@ import com.github.tommyettinger.random.WhiskerRandom;
  * @see <a href="http://en.wikipedia.org/wiki/Uniform_distribution_%28discrete%29">Wikipedia's page on this distribution.</a>
  */
 public class DiscreteUniformDistribution extends Distribution {
+    public String getTag() {
+        return "DiscreteUniform";
+    }
     private int alpha;
     private int beta;
 
