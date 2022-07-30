@@ -11,6 +11,12 @@ public class BinomialDistribution extends Distribution {
     public String getTag() {
         return "Binomial";
     }
+
+    @Override
+    public Distribution copy() {
+        return new BinomialDistribution(generator.copy(), alpha, beta);
+    }
+
     private double alpha;
     private int beta;
 

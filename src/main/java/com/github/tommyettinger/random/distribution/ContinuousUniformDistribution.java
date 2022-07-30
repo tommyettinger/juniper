@@ -12,6 +12,12 @@ public class ContinuousUniformDistribution extends Distribution {
     public String getTag() {
         return "ContinuousUniform";
     }
+
+    @Override
+    public Distribution copy() {
+        return new ContinuousUniformDistribution(generator.copy(), alpha, beta);
+    }
+
     private double alpha;
     private double beta;
 

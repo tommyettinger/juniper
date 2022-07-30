@@ -12,6 +12,12 @@ public class ChiDistribution extends Distribution {
     public String getTag() {
         return "Chi";
     }
+
+    @Override
+    public Distribution copy() {
+        return new ChiDistribution(generator.copy(), alpha);
+    }
+
     private int alpha;
 
     public int getAlpha() {

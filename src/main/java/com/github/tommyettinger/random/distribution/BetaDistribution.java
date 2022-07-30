@@ -12,6 +12,12 @@ public class BetaDistribution extends Distribution {
     public String getTag() {
         return "Beta";
     }
+
+    @Override
+    public Distribution copy() {
+        return new BetaDistribution(generator.copy(), alpha, beta);
+    }
+
     private double alpha;
     private double beta;
 

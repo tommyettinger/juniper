@@ -12,6 +12,12 @@ public class CauchyDistribution extends Distribution {
     public String getTag() {
         return "Cauchy";
     }
+
+    @Override
+    public Distribution copy() {
+        return new CauchyDistribution(generator.copy(), alpha, gamma);
+    }
+
     private double alpha;
     private double gamma;
 

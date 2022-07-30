@@ -12,6 +12,12 @@ public class DiscreteUniformDistribution extends Distribution {
     public String getTag() {
         return "DiscreteUniform";
     }
+
+    @Override
+    public Distribution copy() {
+        return new DiscreteUniformDistribution(generator.copy(), alpha, beta);
+    }
+
     private int alpha;
     private int beta;
 

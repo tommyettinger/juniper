@@ -12,6 +12,11 @@ public class BernoulliDistribution extends Distribution {
         return "Bernoulli";
     }
 
+    @Override
+    public Distribution copy() {
+        return new BernoulliDistribution(generator.copy(), alpha);
+    }
+
     private double alpha;
 
     public double getAlpha() {

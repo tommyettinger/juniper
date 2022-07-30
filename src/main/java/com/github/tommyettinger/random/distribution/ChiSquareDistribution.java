@@ -12,6 +12,12 @@ public class ChiSquareDistribution extends Distribution {
     public String getTag() {
         return "ChiSquare";
     }
+
+    @Override
+    public Distribution copy() {
+        return new ChiSquareDistribution(generator.copy(), alpha);
+    }
+
     private int alpha;
 
     public int getAlpha() {
