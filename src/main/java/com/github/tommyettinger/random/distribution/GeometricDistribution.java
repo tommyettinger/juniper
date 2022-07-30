@@ -11,6 +11,12 @@ public class GeometricDistribution extends Distribution {
     public String getTag() {
         return "Geometric";
     }
+
+    @Override
+    public Distribution copy() {
+        return new GeometricDistribution(generator.copy(), alpha);
+    }
+
     private double alpha;
 
     public double getAlpha() {

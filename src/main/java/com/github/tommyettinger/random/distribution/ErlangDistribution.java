@@ -11,6 +11,12 @@ public class ErlangDistribution extends Distribution {
     public String getTag() {
         return "Erlang";
     }
+
+    @Override
+    public Distribution copy() {
+        return new ErlangDistribution(generator.copy(), alpha, lambda);
+    }
+
     private int alpha;
     private double lambda;
 

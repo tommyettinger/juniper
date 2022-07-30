@@ -12,6 +12,12 @@ public class LaplaceDistribution extends Distribution {
     public String getTag() {
         return "Laplace";
     }
+
+    @Override
+    public Distribution copy() {
+        return new LaplaceDistribution(generator.copy(), alpha, mu);
+    }
+
     private double alpha;
     private double mu;
 

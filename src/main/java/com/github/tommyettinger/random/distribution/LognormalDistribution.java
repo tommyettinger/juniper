@@ -11,6 +11,12 @@ public class LognormalDistribution extends Distribution {
     public String getTag() {
         return "Lognormal";
     }
+
+    @Override
+    public Distribution copy() {
+        return new LognormalDistribution(generator.copy(), mu, sigma);
+    }
+
     private double mu;
     private double sigma;
 

@@ -11,6 +11,12 @@ public class FisherTippettDistribution extends Distribution {
     public String getTag() {
         return "FisherTippett";
     }
+
+    @Override
+    public Distribution copy() {
+        return new FisherTippettDistribution(generator.copy(), alpha, mu);
+    }
+
     private double alpha;
     private double mu;
 

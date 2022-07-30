@@ -12,6 +12,12 @@ public class LogisticDistribution extends Distribution {
     public String getTag() {
         return "Logistic";
     }
+
+    @Override
+    public Distribution copy() {
+        return new LogisticDistribution(generator.copy(), mu, sigma);
+    }
+
     private double mu;
     private double sigma;
 

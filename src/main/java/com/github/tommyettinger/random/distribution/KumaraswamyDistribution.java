@@ -13,6 +13,12 @@ public class KumaraswamyDistribution extends Distribution {
     public String getTag() {
         return "Kumaraswamy";
     }
+
+    @Override
+    public Distribution copy() {
+        return new KumaraswamyDistribution(generator.copy(), alpha, beta);
+    }
+
     private double alpha;
     private double beta;
 

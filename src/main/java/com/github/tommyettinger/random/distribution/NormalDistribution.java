@@ -11,6 +11,12 @@ public class NormalDistribution extends Distribution {
     public String getTag() {
         return "Normal";
     }
+
+    @Override
+    public Distribution copy() {
+        return new NormalDistribution(generator.copy(), mu, sigma);
+    }
+
     private double mu;
     private double sigma;
 

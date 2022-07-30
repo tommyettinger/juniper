@@ -12,6 +12,12 @@ public class FisherSnedecorDistribution extends Distribution {
     public String getTag() {
         return "FisherSnedecor";
     }
+
+    @Override
+    public Distribution copy() {
+        return new FisherSnedecorDistribution(generator.copy(), alpha, beta);
+    }
+
     private double alpha;
     private double beta;
 

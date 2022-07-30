@@ -11,6 +11,12 @@ public class ExponentialDistribution extends Distribution {
     public String getTag() {
         return "Exponential";
     }
+
+    @Override
+    public Distribution copy() {
+        return new ExponentialDistribution(generator.copy(), lambda);
+    }
+
     private double lambda;
 
     public double getLambda() {
