@@ -4,6 +4,7 @@
 	<source path="" />
 	<inherits name="com.badlogic.gdx.backends.gdx_backends_gwt" />
 	<inherits name="com.github.tommyettinger.DistributorDemo" />
+	<inherits name="formic" />
 	<inherits name="digital" />
 	<inherits name="juniper" />
 	<entry-point class="com.github.tommyettinger.gwt.GwtLauncher" />
