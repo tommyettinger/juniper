@@ -9,12 +9,14 @@ public class DistributorDemo extends Game {
     public static final int SCREEN_HEIGHT = 520;
 
     private BetaScreen beta;
+    private ExponentialScreen exponential;
     private Screen[] screens;
     private int screenIndex;
     @Override
     public void create() {
         beta = new BetaScreen(this);
-        screens = new Screen[]{beta};
+        exponential = new ExponentialScreen(this);
+        screens = new Screen[]{beta, exponential};
         screenIndex = 0;
         setScreen(screens[screenIndex]);
     }
