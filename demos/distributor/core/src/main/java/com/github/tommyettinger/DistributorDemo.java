@@ -2,6 +2,7 @@ package com.github.tommyettinger;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
+import com.github.tommyettinger.random.distribution.ParetoDistribution;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class DistributorDemo extends Game {
@@ -10,13 +11,15 @@ public class DistributorDemo extends Game {
 
     private BetaScreen beta;
     private ExponentialScreen exponential;
+    private ParetoScreen pareto;
     private Screen[] screens;
     private int screenIndex;
     @Override
     public void create() {
         beta = new BetaScreen(this);
         exponential = new ExponentialScreen(this);
-        screens = new Screen[]{beta, exponential};
+        pareto = new ParetoScreen(this);
+        screens = new Screen[]{beta, exponential, pareto};
         screenIndex = 0;
         setScreen(screens[screenIndex]);
     }
