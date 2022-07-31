@@ -163,9 +163,9 @@ public abstract class Distribution {
      * @return this, after setting its state
      */
     public Distribution stringDeserialize(String data, Base base) {
-        int idx = data.indexOf('~');
-        generator = Deserializer.deserialize(data.substring(idx, idx = data.indexOf('`', idx + 1) + 1), base);
-        setParameters(base.readDouble(data, idx + 1, (idx = data.indexOf('`', idx + 1))),
+        int idx = data.indexOf('~') + 1;
+        generator = Deserializer.deserialize(data.substring(idx, idx = data.indexOf('`', data.indexOf('`', idx + 1) + 1) + 1), base);
+        setParameters(base.readDouble(data, idx, (idx = data.indexOf('`', idx + 1))),
                 base.readDouble(data, idx + 1, (idx = data.indexOf('`', idx + 1))),
                 base.readDouble(data, idx + 1, (data.indexOf('`', idx + 1))));
         return this;

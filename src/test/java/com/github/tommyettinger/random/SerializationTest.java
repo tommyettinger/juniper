@@ -76,5 +76,25 @@ public class SerializationTest {
             Assert.assertTrue(s.startsWith(d.getTag()));
         }
     }
+    @Test
+    public void testRoundTripDist() {
+        List<Distribution> all = Deserializer.copyDistributions();
+        List<EnhancedRandom> randoms = Deserializer.copyRandoms();
+        WhiskerRandom rand = new WhiskerRandom(123456789L);
+        Base base = Base.BASE10;
+                //Base.scrambledBase(new LaserRandom(123456789L));
+        for(Distribution r : all) {
+            r.generator = rand.randomElement(randoms).copy();
+            r.generator.setSeed(rand.nextLong());
+            String s = r.stringSerialize(base);
+            r.nextDouble();
+            double rl = r.nextDouble();
+            Distribution de = Deserializer.deserializeDistribution(s, base);
+            System.out.println(s + "   " + de.stringSerialize(base));
+            de.nextDouble();
+            double dl = de.nextDouble();
+            Assert.assertEquals(rl, dl, 0x1p-32);
+        }
+    }
 
 }
