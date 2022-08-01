@@ -18,6 +18,12 @@ This library is compatible with Java 8 language level, but doesn't use any
 features from later than Java 7. This should allow it to be used on Android,
 GWT, and RoboVM.
 
+You can preview what some distributions look like
+[on this page](https://tommyettinger.github.io/juniper/distributor/). It uses
+[libGDX](https://libgdx.com/) to compile to a webpage while still working if
+run as a desktop application, and several parts of this library have been
+tailored to fit as many libGDX target platforms as possible. 
+
 The name comes from my dog Juniper, who appears to have a deterministic, but
 seemingly-random, response to any new person she meets.
 
@@ -60,15 +66,15 @@ is available in `com.github.tommyettinger.random.LineWobble`; it provides 1D con
 With Gradle, the dependency (of the core module, if you have multiple) is:
 
 ```groovy
-api "com.github.tommyettinger:juniper:0.0.3"
+api "com.github.tommyettinger:juniper:0.1.0"
 ```
 
 In a libGDX project that has a GWT/HTML backend, the `html/build.gradle` file
 should additionally have:
 
 ```
-implementation "com.github.tommyettinger:digital:0.0.3:sources"
-implementation "com.github.tommyettinger:juniper:0.0.3:sources"
+implementation "com.github.tommyettinger:digital:0.1.0:sources"
+implementation "com.github.tommyettinger:juniper:0.0.4:sources"
 ```
 
 And the `GdxDefinition.gwt.xml` file should have:
@@ -84,7 +90,7 @@ If you don't use Gradle, then with Maven, the dependency is:
 <dependency>
   <groupId>com.github.tommyettinger</groupId>
   <artifactId>juniper</artifactId>
-  <version>0.0.3</version>
+  <version>0.1.0</version>
 </dependency>
 ```
 
