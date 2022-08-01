@@ -9,19 +9,15 @@ public class DistributorDemo extends Game {
     public static final int SCREEN_WIDTH = 512;
     public static final int SCREEN_HEIGHT = 520;
 
-    private BetaScreen beta;
-    private ExponentialScreen exponential;
-    private ParetoScreen pareto;
-    private PowerScreen power;
     private Screen[] screens;
     private int screenIndex;
     @Override
     public void create() {
-        beta = new BetaScreen(this);
-        exponential = new ExponentialScreen(this);
-        pareto = new ParetoScreen(this);
-        power = new PowerScreen(this);
-        screens = new Screen[]{beta, exponential, pareto, power};
+        screens = new Screen[]{
+                new BetaScreen(this), new CauchyScreen(this),
+                new ExponentialScreen(this), new ParetoScreen(this),
+                new PowerScreen(this)
+        };
         screenIndex = 0;
         setScreen(screens[screenIndex]);
     }
