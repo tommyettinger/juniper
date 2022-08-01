@@ -12,6 +12,7 @@ public class DistributorDemo extends Game {
     private BetaScreen beta;
     private ExponentialScreen exponential;
     private ParetoScreen pareto;
+    private PowerScreen power;
     private Screen[] screens;
     private int screenIndex;
     @Override
@@ -19,7 +20,8 @@ public class DistributorDemo extends Game {
         beta = new BetaScreen(this);
         exponential = new ExponentialScreen(this);
         pareto = new ParetoScreen(this);
-        screens = new Screen[]{beta, exponential, pareto};
+        power = new PowerScreen(this);
+        screens = new Screen[]{beta, exponential, pareto, power};
         screenIndex = 0;
         setScreen(screens[screenIndex]);
     }
