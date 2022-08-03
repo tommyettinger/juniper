@@ -73,6 +73,11 @@ task superDev(type: GwtSuperDev) {
 		gwt.modules = gwt.devModules
 	}
 }
+
+//// We delete the (temporary) war/ folder because if any extra files get into it, problems occur.
+//// The war/ folder shouldn't be committed to version control.
+clean.delete += [file("war")]
+
 //String outputPath = "build/dist/"
 String outputPath = "../../../docs/${appName}"
 
