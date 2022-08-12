@@ -5,6 +5,7 @@ import com.github.tommyettinger.random.distribution.Distribution;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SerializationTest {
@@ -79,7 +80,9 @@ public class SerializationTest {
     @Test
     public void testRoundTripDist() {
         List<Distribution> all = Deserializer.copyDistributions();
-        List<EnhancedRandom> randoms = Deserializer.copyRandoms();
+        ArrayList<EnhancedRandom> randoms = Deserializer.copyRandoms();
+        // we can't nest a DistributedRandom, with its own Distribution. as the generator and sanely deserialize.
+        randoms.removeIf(r -> "DsrR".equals(r.getTag()));
         WhiskerRandom rand = new WhiskerRandom(123456789L);
         Base base = Base.BASE10;
                 //Base.scrambledBase(new LaserRandom(123456789L));

@@ -86,6 +86,8 @@ public final class Deserializer {
         register(new StudentsTDistribution(random, 1.0));
         register(new TriangularDistribution(random, 0.0, 1.0, 0.5));
         register(new WeibullDistribution(random, 1.0, 1.0));
+
+        register(new DistributedRandom(1));
     }
 
     /**
@@ -184,7 +186,7 @@ public final class Deserializer {
      * Creates an unordered Set of all String tags for EnhancedRandom types Deserializer knows, and returns it.
      * @return a Set of all String tags for EnhancedRandom types this knows
      */
-    public static Set<String> copyTags() {
+    public static HashSet<String> copyTags() {
         return new HashSet<>(RANDOM_BY_TAG.keySet());
     }
 
@@ -193,7 +195,7 @@ public final class Deserializer {
      * deserialization. Each EnhancedRandom copy is seeded with {@code -1L} before it is put in the List.
      * @return a List of copies of the EnhancedRandom instances this knows
      */
-    public static List<EnhancedRandom> copyRandoms() {
+    public static ArrayList<EnhancedRandom> copyRandoms() {
         ArrayList<EnhancedRandom> list = new ArrayList<>(RANDOM_BY_TAG.size());
         for(EnhancedRandom e : RANDOM_BY_TAG.values()){
             EnhancedRandom r = e.copy();
@@ -207,7 +209,7 @@ public final class Deserializer {
      * Creates an unordered Set of all String tags for Distribution types Deserializer knows, and returns it.
      * @return a Set of all String tags for Distribution types this knows
      */
-    public static Set<String> copyDistributionTags() {
+    public static HashSet<String> copyDistributionTags() {
         return new HashSet<>(DIST_BY_TAG.keySet());
     }
 
@@ -216,7 +218,7 @@ public final class Deserializer {
      * deserialization. Each Distribution copy's generator is seeded with {@code 1L} before it is put in the List.
      * @return a List of copies of the Distribution instances this knows
      */
-    public static List<Distribution> copyDistributions() {
+    public static ArrayList<Distribution> copyDistributions() {
         ArrayList<Distribution> list = new ArrayList<>(DIST_BY_TAG.size());
         for(Distribution v : DIST_BY_TAG.values()){
             Distribution d = v.copy();
