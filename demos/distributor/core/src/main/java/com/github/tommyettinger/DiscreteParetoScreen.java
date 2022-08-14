@@ -13,8 +13,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.UIUtils;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.github.tommyettinger.random.ChopRandom;
 import com.github.tommyettinger.random.distribution.DiscreteParetoDistribution;
-import com.github.tommyettinger.random.distribution.ParetoDistribution;
 import text.formic.Stringf;
 
 import java.util.Arrays;
@@ -33,7 +33,7 @@ public class DiscreteParetoScreen extends ScreenAdapter {
     public void show() {
         font = new BitmapFont(Gdx.files.internal("Cozette.fnt"));
         font.setColor(Color.BLACK);
-        dist = new DiscreteParetoDistribution((int) a, b);
+        dist = new DiscreteParetoDistribution(new ChopRandom(), (int) a, b);
         batch = new SpriteBatch();
         viewport = new ScreenViewport();
         renderer = new ImmediateModeRenderer20(512 * 3, false, true, 0);
@@ -93,8 +93,9 @@ public class DiscreteParetoScreen extends ScreenAdapter {
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        font.draw(batch, Stringf.format("DiscreteParetoDistribution with A=%1.3f, B=%1.3f; median=%1.3f", a, b,
-                dist.getMedian()), 64, 522, 256+128, Align.center, true);
+        font.draw(batch, Stringf.format("DiscreteParetoDistribution with A=%1.3f, B=%1.3f; median=%1.3f at %d FPS",
+                        a, b, dist.getMedian(), Gdx.graphics.getFramesPerSecond()),
+                64, 522, 256+128, Align.center, true);
         font.draw(batch, "Lower parameters A/B/C by holding a, b, or c;\nhold Shift and A/B/C to raise.", 64, 500, 256+128, Align.center, true);
         batch.end();
 

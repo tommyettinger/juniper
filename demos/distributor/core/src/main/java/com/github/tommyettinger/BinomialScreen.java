@@ -13,8 +13,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.UIUtils;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.github.tommyettinger.random.ChopRandom;
 import com.github.tommyettinger.random.distribution.BinomialDistribution;
-import com.github.tommyettinger.random.distribution.PowerDistribution;
 import text.formic.Stringf;
 
 import java.util.Arrays;
@@ -33,7 +33,7 @@ public class BinomialScreen extends ScreenAdapter {
     public void show() {
         font = new BitmapFont(Gdx.files.internal("Cozette.fnt"));
         font.setColor(Color.BLACK);
-        dist = new BinomialDistribution(0.5, 16);
+        dist = new BinomialDistribution(new ChopRandom(), 0.5, 16);
         batch = new SpriteBatch();
         viewport = new ScreenViewport();
         renderer = new ImmediateModeRenderer20(512 * 3, false, true, 0);
@@ -68,7 +68,7 @@ public class BinomialScreen extends ScreenAdapter {
         if (Gdx.input.isKeyPressed(Input.Keys.C)) c += (UIUtils.shift() ? 0.5 : -0.5) * Gdx.graphics.getDeltaTime();
         dist.setParameters(a, b, c);
         Arrays.fill(amounts, 0);
-        for (int i = 0; i < 0x40000; i++) {
+        for (int i = 0; i < 0x4000; i++) {
             int m = (int) (dist.nextDouble());
             if(m >= 0 && m < 16)
                 amounts[m]++;
@@ -81,7 +81,7 @@ public class BinomialScreen extends ScreenAdapter {
             renderer.color(color);
             renderer.vertex(x, 0, 0);
             renderer.color(color);
-            renderer.vertex(x, (amounts[x >>> 5] >> 7), 0);
+            renderer.vertex(x, (amounts[x >>> 5] >> 3), 0);
         }
         for (int j = 8; j < 520; j += 32) {
             renderer.color(-0x1.7677e8p125F); // CW Bright Red
@@ -93,8 +93,9 @@ public class BinomialScreen extends ScreenAdapter {
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        font.draw(batch, Stringf.format("BinomialDistribution with A=%1.3f, B=%1.3f; mean=%1.3f", a, b,
-                dist.getMean()), 64, 522, 256+128, Align.center, true);
+        font.draw(batch, Stringf.format("BinomialDistribution with A=%1.3f, B=%1.3f; mean=%1.3f at %d FPS",
+                        a, b, dist.getMean(), Gdx.graphics.getFramesPerSecond()),
+                64, 522, 256+128, Align.center, true);
         font.draw(batch, "Lower parameter A by holding a;\nhold Shift and A to raise.", 64, 500, 256+128, Align.center, true);
         batch.end();
     }

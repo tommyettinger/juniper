@@ -2,7 +2,6 @@ package com.github.tommyettinger;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
-import com.github.tommyettinger.random.distribution.ParetoDistribution;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class DistributorDemo extends Game {

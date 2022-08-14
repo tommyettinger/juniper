@@ -13,7 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.UIUtils;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.github.tommyettinger.random.distribution.BetaDistribution;
+import com.github.tommyettinger.random.ChopRandom;
 import com.github.tommyettinger.random.distribution.PowerDistribution;
 import text.formic.Stringf;
 
@@ -33,7 +33,7 @@ public class PowerScreen extends ScreenAdapter {
     public void show() {
         font = new BitmapFont(Gdx.files.internal("Cozette.fnt"));
         font.setColor(Color.BLACK);
-        dist = new PowerDistribution(a, b);
+        dist = new PowerDistribution(new ChopRandom(), a, b);
         batch = new SpriteBatch();
         viewport = new ScreenViewport();
         renderer = new ImmediateModeRenderer20(512 * 3, false, true, 0);
@@ -93,8 +93,9 @@ public class PowerScreen extends ScreenAdapter {
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        font.draw(batch, Stringf.format("PowerDistribution with A=%1.3f, B=%1.3f; mean=%1.3f", a, b,
-                dist.getMean()), 64, 522, 256+128, Align.center, true);
+        font.draw(batch, Stringf.format("PowerDistribution with A=%1.3f, B=%1.3f; mean=%1.3f at %d FPS",
+                        a, b, dist.getMean(), Gdx.graphics.getFramesPerSecond()),
+                64, 522, 256+128, Align.center, true);
         font.draw(batch, "Lower parameters A/B/C by holding a, b, or c;\nhold Shift and A/B/C to raise.", 64, 500, 256+128, Align.center, true);
         batch.end();
 

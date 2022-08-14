@@ -9,23 +9,15 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.UIUtils;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.github.tommyettinger.random.ChopRandom;
 import com.github.tommyettinger.random.distribution.BetaDistribution;
 import text.formic.Stringf;
 
 import java.util.Arrays;
-
-import static com.badlogic.gdx.Gdx.input;
 
 public class BetaScreen extends ScreenAdapter {
     private BetaDistribution dist;
@@ -41,7 +33,7 @@ public class BetaScreen extends ScreenAdapter {
     public void show() {
         font = new BitmapFont(Gdx.files.internal("Cozette.fnt"));
         font.setColor(Color.BLACK);
-        dist = new BetaDistribution(a, b);
+        dist = new BetaDistribution(new ChopRandom(), a, b);
         batch = new SpriteBatch();
         viewport = new ScreenViewport();
         renderer = new ImmediateModeRenderer20(512 * 3, false, true, 0);
@@ -101,8 +93,9 @@ public class BetaScreen extends ScreenAdapter {
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        font.draw(batch, Stringf.format("BetaDistribution with A=%1.3f, B=%1.3f; mean=%1.3f", a, b,
-                dist.getMean()), 64, 522, 256+128, Align.center, true);
+        font.draw(batch, Stringf.format("BetaDistribution with A=%1.3f, B=%1.3f; mean=%1.3f at %d FPS", a, b,
+                dist.getMean(), Gdx.graphics.getFramesPerSecond()),
+                64, 522, 256+128, Align.center, true);
         font.draw(batch, "Lower parameters A/B/C by holding a, b, or c;\nhold Shift and A/B/C to raise.", 64, 500, 256+128, Align.center, true);
         batch.end();
 
