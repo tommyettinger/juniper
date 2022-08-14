@@ -6,8 +6,6 @@ import com.github.tommyettinger.random.distribution.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 /**
  * Allows deserializing any type of EnhancedRandom by looking up its tag in a registry.
@@ -67,6 +65,7 @@ public final class Deserializer {
         register(new ChiDistribution(random, 1));
         register(new ChiSquareDistribution(random, 1));
         register(new ContinuousUniformDistribution(random, 0.0, 1.0));
+        register(new DiscreteParetoDistribution(random, 1, 1.0));
         register(new DiscreteUniformDistribution(random, 0, 1));
         register(new ErlangDistribution(random, 1, 1.0));
         register(new ExponentialDistribution(random, 1.0));
@@ -87,7 +86,7 @@ public final class Deserializer {
         register(new TriangularDistribution(random, 0.0, 1.0, 0.5));
         register(new WeibullDistribution(random, 1.0, 1.0));
 
-        register(new DistributedRandom(1));
+        register(new DistributedRandom(1, 2, 3, 4));
     }
 
     /**

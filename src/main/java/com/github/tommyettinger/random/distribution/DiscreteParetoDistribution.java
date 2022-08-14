@@ -29,7 +29,7 @@ public class DiscreteParetoDistribution extends Distribution {
     }
 
     public double getBeta() {
-        return beta;
+        return 1.0/beta;
     }
 
     @Override
@@ -39,11 +39,11 @@ public class DiscreteParetoDistribution extends Distribution {
 
     @Override
     public double getParameterB() {
-        return beta;
+        return 1.0/beta;
     }
 
     /**
-     * Uses a {@link WhiskerRandom}, alpha = 1.0, beta = 1.0 .
+     * Uses a {@link WhiskerRandom}, alpha = 1, beta = 1.0 .
      */
     public DiscreteParetoDistribution() {
         this(new WhiskerRandom(), 1, 1.0);
@@ -73,14 +73,16 @@ public class DiscreteParetoDistribution extends Distribution {
 
     @Override
     public double getMean() {
-        if (beta > 1.0)
-            return alpha * beta / (beta - 1.0);
+        if (beta > 1.0) {
+            final double b = 1.0/beta;
+            return alpha * b / (b - 1.0);
+        }
         throw new UnsupportedOperationException("Mean cannot be determined for the given parameters.");
     }
 
     @Override
     public double getMedian() {
-        return alpha * Math.pow(2.0, 1.0 / beta);
+        return alpha * Math.pow(2.0, beta);
     }
 
     @Override
@@ -95,8 +97,10 @@ public class DiscreteParetoDistribution extends Distribution {
 
     @Override
     public double getVariance() {
-        if(beta > 2.0)
-            return beta * alpha * alpha / MathTools.square(beta - 1.0) * (beta - 2.0);
+        if(beta < 0.5) {
+            final double b = 1.0 / beta;
+            return b * alpha * alpha / (MathTools.square(b - 1.0) * (b - 2.0));
+        }
         throw new UnsupportedOperationException("Variance cannot be determined for the given parameters.");
     }
 
@@ -111,7 +115,7 @@ public class DiscreteParetoDistribution extends Distribution {
     public boolean setParameters(double a, double b, double c) {
         if(a >= 1.0 && b > 0.0){
             alpha = (int)a;
-            beta = b;
+            beta = 1.0/b;
             return true;
         }
         return false;
@@ -122,7 +126,7 @@ public class DiscreteParetoDistribution extends Distribution {
         return sample(generator, alpha, beta);
     }
 
-    public static double sample(EnhancedRandom generator, double alpha, double beta) {
-        return (int)(alpha * Math.exp(ExponentialDistribution.sample(generator, beta)));
+    public static double sample(EnhancedRandom generator, double alpha, double inverseBeta) {
+        return (int)(alpha / Math.pow(generator.nextExclusiveDouble(), inverseBeta));
     }
 }
