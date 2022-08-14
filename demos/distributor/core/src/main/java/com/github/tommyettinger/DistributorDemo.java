@@ -16,7 +16,7 @@ public class DistributorDemo extends Game {
         screens = new Screen[]{
                 new BetaScreen(this), new CauchyScreen(this),
                 new ExponentialScreen(this), new ParetoScreen(this),
-                new PowerScreen(this)
+                new PowerScreen(this), new BinomialScreen(this)
         };
         screenIndex = 0;
         setScreen(screens[screenIndex]);
