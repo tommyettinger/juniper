@@ -5,7 +5,7 @@ import com.github.tommyettinger.random.EnhancedRandom;
 import com.github.tommyettinger.random.WhiskerRandom;
 
 /**
- * A two-parameter distribution with range from 0 to positive infinity.
+ * A two-parameter distribution with range from {@link #getAlpha()} to positive infinity.
  * @see <a href="https://en.wikipedia.org/wiki/Pareto_distribution">Wikipedia's page on this distribution.</a>
  */
 public class ParetoDistribution extends Distribution {
@@ -26,7 +26,7 @@ public class ParetoDistribution extends Distribution {
     }
 
     public double getBeta() {
-        return beta;
+        return 1.0/beta;
     }
 
     @Override
@@ -36,7 +36,7 @@ public class ParetoDistribution extends Distribution {
 
     @Override
     public double getParameterB() {
-        return beta;
+        return 1.0/beta;
     }
 
     /**
@@ -70,14 +70,16 @@ public class ParetoDistribution extends Distribution {
 
     @Override
     public double getMean() {
-        if (beta > 1.0)
-            return alpha * beta / (beta - 1.0);
+        if (beta > 1.0) {
+            final double b = 1.0/beta;
+            return alpha * b / (b - 1.0);
+        }
         throw new UnsupportedOperationException("Mean cannot be determined for the given parameters.");
     }
 
     @Override
     public double getMedian() {
-        return alpha * Math.pow(2.0, 1.0 / beta);
+        return alpha * Math.pow(2.0, beta);
     }
 
     @Override
@@ -92,8 +94,10 @@ public class ParetoDistribution extends Distribution {
 
     @Override
     public double getVariance() {
-        if(beta > 2.0)
-            return beta * alpha * alpha / MathTools.square(beta - 1.0) * (beta - 2.0);
+        if(beta < 0.5) {
+            final double b = 1.0 / beta;
+            return b * alpha * alpha / (MathTools.square(b - 1.0) * (b - 2.0));
+        }
         throw new UnsupportedOperationException("Variance cannot be determined for the given parameters.");
     }
 
@@ -108,7 +112,7 @@ public class ParetoDistribution extends Distribution {
     public boolean setParameters(double a, double b, double c) {
         if(a > 0.0 && b > 0.0){
             alpha = a;
-            beta = b;
+            beta = 1.0/b;
             return true;
         }
         return false;
@@ -119,7 +123,7 @@ public class ParetoDistribution extends Distribution {
         return sample(generator, alpha, beta);
     }
 
-    public static double sample(EnhancedRandom generator, double alpha, double beta) {
-        return alpha * Math.exp(ExponentialDistribution.sample(generator, beta));
+    public static double sample(EnhancedRandom generator, double alpha, double inverseBeta) {
+        return alpha / Math.pow(generator.nextExclusiveDouble(), inverseBeta);
     }
 }

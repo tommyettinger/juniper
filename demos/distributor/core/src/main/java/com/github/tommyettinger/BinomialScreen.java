@@ -21,7 +21,7 @@ import java.util.Arrays;
 
 public class BinomialScreen extends ScreenAdapter {
     private BinomialDistribution dist;
-    private double a = 1.0, b = 16.0, c = 1.0;
+    private double a = 0.5, b = 16.0, c = 1.0;
     private SpriteBatch batch;
     private ImmediateModeRenderer20 renderer;
     private final int[] amounts = new int[512];
@@ -81,7 +81,7 @@ public class BinomialScreen extends ScreenAdapter {
             renderer.color(color);
             renderer.vertex(x, 0, 0);
             renderer.color(color);
-            renderer.vertex(x, (amounts[x >>> 5] >> 2), 0);
+            renderer.vertex(x, (amounts[x >>> 5] >> 7), 0);
         }
         for (int j = 8; j < 520; j += 32) {
             renderer.color(-0x1.7677e8p125F); // CW Bright Red
