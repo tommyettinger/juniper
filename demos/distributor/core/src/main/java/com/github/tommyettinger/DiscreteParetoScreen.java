@@ -66,12 +66,12 @@ public class DiscreteParetoScreen extends ScreenAdapter {
         if (Gdx.input.isKeyPressed(Input.Keys.A)) a += (UIUtils.shift() ? 0.5 : -0.5) * Gdx.graphics.getDeltaTime();
         if (Gdx.input.isKeyPressed(Input.Keys.B)) b += (UIUtils.shift() ? 0.5 : -0.5) * Gdx.graphics.getDeltaTime();
         if (Gdx.input.isKeyPressed(Input.Keys.C)) c += (UIUtils.shift() ? 0.5 : -0.5) * Gdx.graphics.getDeltaTime();
-        dist.setParameters(a * 32.0, b, c);
+        dist.setParameters(a, b, c);
         Arrays.fill(amounts, 0);
         for (int i = 0; i < 0x40000; i++) {
-            int m = (int) (dist.nextDouble() - dist.getAlpha());
-            if(m >= 0 && m < 128 - (int)a)
-                amounts[m+(int)a]++;
+            int m = (int) (dist.nextDouble());
+            if(m >= 0 && m < 128)
+                amounts[m]++;
         }
         renderer.begin(camera.combined, GL20.GL_LINES);
         for (int x = 0; x < 512; x++) {
