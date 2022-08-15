@@ -94,6 +94,21 @@ public class DistributedRandom extends EnhancedRandom {
         reduction = ReductionMode.FRACTION;
     }
 
+    /**
+     * Creates a DistributedRandom that follows a ContinuousUniformDistribution, limiting its results using
+     * {@link ReductionMode#FRACTION}, and uses a direct reference to the given EnhancedRandom. You can copy the
+     * EnhancedRandom if you want it to change independently of the original EnhancedRandom, using
+     * {@link EnhancedRandom#copy()}. This is probably not very useful on its own, since you will probably want to
+     * change the distribution (using {@link #setDistribution(Distribution)}), and that also changes the EnhancedRandom
+     * that was assigned here.
+     * @param random referenced directly; if you don't want this, use a {@link EnhancedRandom#copy()}
+     */
+    public DistributedRandom(EnhancedRandom random) {
+        if(random == null) random = new WhiskerRandom();
+        distribution = new ContinuousUniformDistribution(random, 0.0, 1.0);
+        reduction = ReductionMode.FRACTION;
+    }
+
     public DistributedRandom(long stateA, long stateB, long stateC, long stateD) {
         distribution = new ContinuousUniformDistribution(new WhiskerRandom(stateA, stateB, stateC, stateD), 0.0, 1.0);
         reduction = ReductionMode.FRACTION;
@@ -108,6 +123,21 @@ public class DistributedRandom extends EnhancedRandom {
     public DistributedRandom(Distribution distribution, ReductionMode reductionMode, long seed) {
         this.distribution = distribution.copy();
         distribution.generator.setSeed(seed);
+        if(reductionMode != null) reduction = reductionMode;
+        else reduction = ReductionMode.FRACTION;
+    }
+
+    /**
+     * Creates a DistributedRandom that follows the given Distribution (copied), limiting its results using the given
+     * ReductionMode, and uses a direct reference to the given EnhancedRandom. You can copy the EnhancedRandom if you
+     * want it to change independently of the original EnhancedRandom, using {@link EnhancedRandom#copy()}.
+     * @param distribution a Distribution that will be copied; the copy's generator will be reassigned.
+     * @param reductionMode how to reduce values outside the 0 to 1 range, as an enum constant
+     * @param random referenced directly; if you don't want this, use a {@link EnhancedRandom#copy()}
+     */
+    public DistributedRandom(Distribution distribution, ReductionMode reductionMode, EnhancedRandom random) {
+        this.distribution = distribution.copy();
+        if(random != null) distribution.generator = random;
         if(reductionMode != null) reduction = reductionMode;
         else reduction = ReductionMode.FRACTION;
     }
