@@ -5,16 +5,19 @@ import com.github.tommyettinger.random.WhiskerRandom;
 
 /**
  * A two-parameter distribution with range from 0 (exclusive) to positive infinity.
+ * <br>
+ * This was previously capitalized differently, as "LognormalDistribution" instead of "LogNormalDistribution". The
+ * {@link #getTag()} was also different, and was "Lognormal" instead of "LogNormal".
  * @see <a href="https://en.wikipedia.org/wiki/Log-normal_distribution">Wikipedia's page on this distribution.</a>
  */
-public class LognormalDistribution extends Distribution {
+public class LogNormalDistribution extends Distribution {
     public String getTag() {
-        return "Lognormal";
+        return "LogNormal";
     }
 
     @Override
     public Distribution copy() {
-        return new LognormalDistribution(generator.copy(), mu, sigma);
+        return new LogNormalDistribution(generator.copy(), mu, sigma);
     }
 
     private double mu;
@@ -41,21 +44,21 @@ public class LognormalDistribution extends Distribution {
     /**
      * Uses a {@link WhiskerRandom}, mu = 0.0, sigma = 1.0 .
      */
-    public LognormalDistribution() {
+    public LogNormalDistribution() {
         this(new WhiskerRandom(), 0.0, 1.0);
     }
 
     /**
      * Uses a {@link WhiskerRandom} and the given mu and sigma.
      */
-    public LognormalDistribution(double mu, double sigma) {
+    public LogNormalDistribution(double mu, double sigma) {
         this(new WhiskerRandom(), mu, sigma);
     }
 
     /**
      * Uses the given EnhancedRandom directly. Uses the given mu and sigma.
      */
-    public LognormalDistribution(EnhancedRandom generator, double mu, double sigma)
+    public LogNormalDistribution(EnhancedRandom generator, double mu, double sigma)
     {
         this.generator = generator;
         if(!setParameters(mu, sigma, 0.0))
