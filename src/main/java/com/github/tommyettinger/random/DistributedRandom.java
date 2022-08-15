@@ -32,23 +32,47 @@ public class DistributedRandom extends EnhancedRandom {
      * on 0.0 and exclusive on 1.0 .
      */
     public enum ReductionMode {
+        /**
+         * Gets one distributed double, gets the portion after the decimal point, and only uses that.
+         */
         FRACTION {
             @Override
-            public double applyAsDouble(double n) {
+            public double applyAsDouble(Distribution dist) {
+                final double n = dist.nextDouble();
                 return n - Math.floor(n);
             }
         },
+        /**
+         * Gets one distributed double and clamps it to 0.0 if it is less than 0.0, or to 0.9999999999999999 if it is
+         * 0.9999999999999999 or greater, then uses that.
+         */
         CLAMP {
             @Override
-            public double applyAsDouble(double n) {
-                return Math.min(Math.max(n, 0.0), 0.9999999999999999);
+            public double applyAsDouble(Distribution dist) {
+                return Math.min(Math.max(dist.nextDouble(), 0.0), 0.9999999999999999);
+            }
+        },
+        /**
+         * Repeatedly attempts to get one distributed double, check if it is between 0.0 inclusive and 1.0 exclusive,
+         * and either return it if it is within range or get another distributed double and try again.
+         * This is not guaranteed to complete for all distributions! While this can be the most correct ReductionMode
+         * for some distributions, use it with caution. Make sure the {@link Distribution#getMinimum()} and
+         * {@link Distribution#getMaximum()} allow results to be returned between 0 and 1.
+         */
+        REJECT {
+            @Override
+            public double applyAsDouble(Distribution dist) {
+                double n;
+                while ((n = dist.nextDouble()) < 0.0 || n >= 1.0) {
+                }
+                return n;
             }
         };
 
         ReductionMode() {
         }
 
-        public abstract double applyAsDouble(double n);
+        public abstract double applyAsDouble(Distribution dist);
     }
     private static final ReductionMode[] MODES = ReductionMode.values();
     @Override
@@ -75,24 +99,23 @@ public class DistributedRandom extends EnhancedRandom {
         reduction = ReductionMode.FRACTION;
     }
 
-    public DistributedRandom(Distribution distribution, boolean useClamping) {
+    public DistributedRandom(Distribution distribution, ReductionMode reductionMode) {
         this.distribution = distribution.copy();
-        if(useClamping) reduction = ReductionMode.CLAMP;
+        if(reductionMode != null) reduction = reductionMode;
         else reduction = ReductionMode.FRACTION;
     }
 
-    public DistributedRandom(Distribution distribution, boolean useClamping, long seed) {
+    public DistributedRandom(Distribution distribution, ReductionMode reductionMode, long seed) {
         this.distribution = distribution.copy();
         distribution.generator.setSeed(seed);
-        if(useClamping) reduction = ReductionMode.CLAMP;
+        if(reductionMode != null) reduction = reductionMode;
         else reduction = ReductionMode.FRACTION;
-
     }
 
-    public DistributedRandom(Distribution distribution, boolean useClamping, long stateA, long stateB, long stateC, long stateD) {
+    public DistributedRandom(Distribution distribution, ReductionMode reductionMode, long stateA, long stateB, long stateC, long stateD) {
         this.distribution = distribution.copy();
         this.distribution.generator = new WhiskerRandom(stateA, stateB, stateC, stateD);
-        if(useClamping) reduction = ReductionMode.CLAMP;
+        if(reductionMode != null) reduction = reductionMode;
         else reduction = ReductionMode.FRACTION;
     }
 
@@ -105,13 +128,6 @@ public class DistributedRandom extends EnhancedRandom {
             this.reduction = reduction;
     }
 
-    public boolean isClamping() {
-        return reduction == ReductionMode.CLAMP;
-    }
-    public void useClamping(boolean useClamping) {
-        if(useClamping) reduction = ReductionMode.CLAMP;
-        else reduction = ReductionMode.FRACTION;
-    }
     @Override
     public long nextLong() {
         return (distribution.generator.getSelectedState(0) >>> 52) | ((long)(nextDouble() * 0x1p52) << 12);
@@ -124,7 +140,7 @@ public class DistributedRandom extends EnhancedRandom {
 
     @Override
     public double nextDouble() {
-        return reduction.applyAsDouble(distribution.nextDouble());
+        return reduction.applyAsDouble(distribution);
     }
 
     @Override
@@ -188,7 +204,7 @@ public class DistributedRandom extends EnhancedRandom {
 
     @Override
     public DistributedRandom copy() {
-        return new DistributedRandom(distribution, reduction == ReductionMode.CLAMP);
+        return new DistributedRandom(distribution, reduction);
     }
 
     @Override
@@ -262,7 +278,7 @@ public class DistributedRandom extends EnhancedRandom {
     @Override
     public DistributedRandom stringDeserialize(String data, Base base) {
         int idx = data.indexOf('`');
-        useClamping(base.readInt(data, idx + 1, (idx = data.indexOf('~', idx + 1))) != 0);
+        setReduction(MODES[base.readInt(data, idx + 1, (idx = data.indexOf('~', idx + 1)))]);
         distribution = Deserializer.deserializeDistribution(data.substring(idx + 1), base);
         return this;
     }
