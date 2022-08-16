@@ -3,6 +3,10 @@ Java pseudo-random number generation code with minimal dependencies.
 
 ![Juniper the Dog](docs/Juniper_Dog.png)
 
+## JavaDocs
+
+[JavaDocs are hosted here](https://tommyettinger.github.io/juniper/apidocs/).
+
 ## What is it?
 
 Juniper provides a superset of the features of `java.util.Random` with an
@@ -66,7 +70,7 @@ is available in `com.github.tommyettinger.random.LineWobble`; it provides 1D con
 With Gradle, the dependency (of the core module, if you have multiple) is:
 
 ```groovy
-api "com.github.tommyettinger:juniper:0.1.0"
+api "com.github.tommyettinger:juniper:0.1.1"
 ```
 
 In a libGDX project that has a GWT/HTML backend, the `html/build.gradle` file
@@ -74,7 +78,7 @@ should additionally have:
 
 ```
 implementation "com.github.tommyettinger:digital:0.1.0:sources"
-implementation "com.github.tommyettinger:juniper:0.0.4:sources"
+implementation "com.github.tommyettinger:juniper:0.1.1:sources"
 ```
 
 And the `GdxDefinition.gwt.xml` file should have:
@@ -90,7 +94,7 @@ If you don't use Gradle, then with Maven, the dependency is:
 <dependency>
   <groupId>com.github.tommyettinger</groupId>
   <artifactId>juniper</artifactId>
-  <version>0.1.0</version>
+  <version>0.1.1</version>
 </dependency>
 ```
 
