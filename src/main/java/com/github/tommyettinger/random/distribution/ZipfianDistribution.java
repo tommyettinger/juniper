@@ -38,6 +38,10 @@ public class ZipfianDistribution extends Distribution {
         return zeta;
     }
 
+    public void setZeta(double zeta) {
+        this.zeta = zeta;
+    }
+
     @Override
     public double getParameterA() {
         return alpha;
@@ -138,9 +142,13 @@ public class ZipfianDistribution extends Distribution {
 
     /**
      * Sets all parameters and returns true if they are valid, otherwise leaves parameters unchanged and returns false.
+     * Note, if you pass a negative value for {@code c}, you must call {@link #setZeta(double)} and provide a value for
+     * zeta before you generate any doubles. Typically, when {@code a} is very large, zeta takes a long time to process,
+     * so you might want to calculate it once, store the result of {@link #getZeta()}, and set it on later runs after
+     * passing a negative {@code c} here.
      * @param a alpha; should be an int or long greater than 0
-     * @param b skew; should be greater than or equal to 0.0
-     * @param c if negative, the (challenging) zeta value will not be calculated; otherwise ignored
+     * @param b skew; should be greater than or equal to 0.0 and less than 1.0
+     * @param c if negative, the (challenging) zeta value will not be calculated here; otherwise ignored
      * @return true if the parameters given are valid and will be used
      */
     @Override

@@ -297,7 +297,7 @@ public class DistributedRandom extends EnhancedRandom {
      */
     @Override
     public String stringSerialize(Base base) {
-        return getTag() + "`" + reduction.ordinal() + "~" + distribution.stringSerialize(base);
+        return getTag() + "`" + base.signed(reduction.ordinal()) + "~" + distribution.stringSerialize(base);
     }
 
     /**
