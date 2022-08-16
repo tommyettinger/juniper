@@ -65,7 +65,6 @@ public final class Deserializer {
         register(new ChiDistribution(random, 1));
         register(new ChiSquareDistribution(random, 1));
         register(new ContinuousUniformDistribution(random, 0.0, 1.0));
-        register(new DiscreteParetoDistribution(random, 1, 1.0));
         register(new DiscreteUniformDistribution(random, 0, 1));
         register(new ErlangDistribution(random, 1, 1.0));
         register(new ExponentialDistribution(random, 1.0));
