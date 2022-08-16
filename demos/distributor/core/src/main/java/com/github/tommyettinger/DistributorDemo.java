@@ -13,9 +13,8 @@ public class DistributorDemo extends Game {
     @Override
     public void create() {
         screens = new Screen[]{
-                new BetaScreen(this), new CauchyScreen(this),
-                new ExponentialScreen(this), new ParetoScreen(this),
-                new ZipfianScreen(this),
+                new BetaScreen(this), new CauchyScreen(this), new LogCauchyScreen(this),
+                new ExponentialScreen(this), new ParetoScreen(this), new ZipfianScreen(this),
                 new PowerScreen(this), new BinomialScreen(this)
         };
         screenIndex = 0;
