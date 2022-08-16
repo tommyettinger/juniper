@@ -85,7 +85,7 @@ public final class Deserializer {
         register(new StudentsTDistribution(random, 1.0));
         register(new TriangularDistribution(random, 0.0, 1.0, 0.5));
         register(new WeibullDistribution(random, 1.0, 1.0));
-        register(new ZipfianDistribution(random, 16L, 1.0));
+        register(new ZipfianDistribution(random, 2L, 1.0, 1.5));
 
         register(new DistributedRandom(1, 2, 3, 4));
     }

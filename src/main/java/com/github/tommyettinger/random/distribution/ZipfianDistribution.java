@@ -18,7 +18,7 @@ public class ZipfianDistribution extends Distribution {
 
     @Override
     public Distribution copy() {
-        return new ZipfianDistribution(generator.copy(), alpha, skew);
+        return new ZipfianDistribution(generator.copy(), alpha, skew, zeta);
     }
 
     private long alpha;
@@ -72,6 +72,26 @@ public class ZipfianDistribution extends Distribution {
             throw new IllegalArgumentException("Given alpha and/or skew are invalid.");
     }
 
+    /**
+     * Uses the given EnhancedRandom directly. Uses the given alpha, skew, and precalculated zeta.
+     * Because this does not calculate zeta directly, it may be faster if you already know {@link #getZeta()}.
+     */
+    public ZipfianDistribution(EnhancedRandom generator, long alpha, double skew, double zeta)
+    {
+        this.generator = generator;
+        if(!setParameters(alpha, skew, -1.0))
+            throw new IllegalArgumentException("Given alpha and/or skew are invalid.");
+        else
+            this.zeta = zeta;
+    }
+
+    /**
+     * Gets the nth generalized harmonic number (with n equal to limit) with the given s (as skew).
+     * @see <a href="https://en.wikipedia.org/wiki/Generalized_harmonic_number">Harmonic numbers on Wikipedia</a>.
+     * @param limit N in the formula (a long), or how many values are in the sequence this processes
+     * @param skew s in the formula (a non-negative double), or how skewed this is away from Zipf's Law
+     * @return the Nth generalized harmonic number with the given skew, where N equals limit
+     */
     public static double harmonic(long limit, double skew) {
         double result = 1.0;
         for (long i = 2L; i <= limit; i++) {
@@ -118,17 +138,19 @@ public class ZipfianDistribution extends Distribution {
 
     /**
      * Sets all parameters and returns true if they are valid, otherwise leaves parameters unchanged and returns false.
-     * @param a alpha; should be greater than 0.0
-     * @param b skew; should be greater than 0.0
-     * @param c ignored
+     * @param a alpha; should be an int or long greater than 0
+     * @param b skew; should be greater than or equal to 0.0
+     * @param c if negative, the (challenging) zeta value will not be calculated; otherwise ignored
      * @return true if the parameters given are valid and will be used
      */
     @Override
     public boolean setParameters(double a, double b, double c) {
-        if(a >= 1.0 && b > 0.0){
+        if(a >= 1.0 && b >= 0.0){
             alpha = (long) a;
             skew = b;
-            zeta = harmonic(alpha, skew);
+            if(c >= 0) {
+                zeta = harmonic(alpha, skew);
+            }
             zetaTwoSkew = 1.0 + Math.pow(0.5, skew);
             return true;
         }
