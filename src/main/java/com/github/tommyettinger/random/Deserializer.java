@@ -1,6 +1,7 @@
 package com.github.tommyettinger.random;
 
 import com.github.tommyettinger.digital.Base;
+import com.github.tommyettinger.digital.MathTools;
 import com.github.tommyettinger.random.distribution.*;
 
 import java.util.ArrayList;
@@ -85,7 +86,7 @@ public final class Deserializer {
         register(new StudentsTDistribution(random, 1.0));
         register(new TriangularDistribution(random, 0.0, 1.0, 0.5));
         register(new WeibullDistribution(random, 1.0, 1.0));
-        register(new ZipfianDistribution(random, 2L, 1.0, 1.5));
+        register(new ZipfianDistribution(random, 2L, 0.5, 1.0 + 0.5 * MathTools.ROOT2_D));
 
         register(new DistributedRandom(1, 2, 3, 4));
     }

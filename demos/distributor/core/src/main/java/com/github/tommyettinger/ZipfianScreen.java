@@ -14,14 +14,14 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.github.tommyettinger.random.ChopRandom;
-import com.github.tommyettinger.random.distribution.DiscreteParetoDistribution;
+import com.github.tommyettinger.random.distribution.ZipfianDistribution;
 import text.formic.Stringf;
 
 import java.util.Arrays;
 
-public class DiscreteParetoScreen extends ScreenAdapter {
-    private DiscreteParetoDistribution dist;
-    private double a = 1, b = 1.0, c = 1.0;
+public class ZipfianScreen extends ScreenAdapter {
+    private ZipfianDistribution dist;
+    private double a = 16, b = 0.5, c = 1.0;
     private SpriteBatch batch;
     private ImmediateModeRenderer20 renderer;
     private final int[] amounts = new int[512];
@@ -33,14 +33,14 @@ public class DiscreteParetoScreen extends ScreenAdapter {
     public void show() {
         font = new BitmapFont(Gdx.files.internal("Cozette.fnt"));
         font.setColor(Color.BLACK);
-        dist = new DiscreteParetoDistribution(new ChopRandom(), (int) a, b);
+        dist = new ZipfianDistribution(new ChopRandom(), (long) a, b);
         batch = new SpriteBatch();
         viewport = new ScreenViewport();
         renderer = new ImmediateModeRenderer20(512 * 3, false, true, 0);
     }
     private final DistributorDemo mainGame;
 
-    public DiscreteParetoScreen(DistributorDemo main){
+    public ZipfianScreen(DistributorDemo main){
         mainGame = main;
     }
 
@@ -66,11 +66,12 @@ public class DiscreteParetoScreen extends ScreenAdapter {
         if (Gdx.input.isKeyPressed(Input.Keys.A)) a += (UIUtils.shift() ? 0.5 : -0.5) * Gdx.graphics.getDeltaTime();
         if (Gdx.input.isKeyPressed(Input.Keys.B)) b += (UIUtils.shift() ? 0.5 : -0.5) * Gdx.graphics.getDeltaTime();
         if (Gdx.input.isKeyPressed(Input.Keys.C)) c += (UIUtils.shift() ? 0.5 : -0.5) * Gdx.graphics.getDeltaTime();
-        dist.setParameters(a, b, c);
+        if(b < 1.0)
+            dist.setParameters(a, b, 0.0);
         Arrays.fill(amounts, 0);
         for (int i = 0; i < 0x40000; i++) {
             int m = (int) (dist.nextDouble());
-            if(m >= 0 && m < 128)
+            if(m >= 0 && m < 32)
                 amounts[m]++;
         }
         renderer.begin(camera.combined, GL20.GL_LINES);
@@ -81,7 +82,7 @@ public class DiscreteParetoScreen extends ScreenAdapter {
             renderer.color(color);
             renderer.vertex(x, 0, 0);
             renderer.color(color);
-            renderer.vertex(x, (amounts[x >> 2] >> 4), 0);
+            renderer.vertex(x, (amounts[x >> 4] >> 6), 0);
         }
         for (int j = 8; j < 520; j += 32) {
             renderer.color(-0x1.7677e8p125F); // CW Bright Red
@@ -93,8 +94,8 @@ public class DiscreteParetoScreen extends ScreenAdapter {
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        font.draw(batch, Stringf.format("DiscreteParetoDistribution with A=%1.3f, B=%1.3f; median=%1.3f at %d FPS",
-                        a, b, dist.getMedian(), Gdx.graphics.getFramesPerSecond()),
+        font.draw(batch, Stringf.format("ZipfianDistribution with A=%1.3f, B=%1.3f, zeta=%2.6f; at %d FPS",
+                        a, b, dist.getZeta(), Gdx.graphics.getFramesPerSecond()),
                 64, 522, 256+128, Align.center, true);
         font.draw(batch, "Lower parameters A/B/C by holding a, b, or c;\nhold Shift and A/B/C to raise.", 64, 500, 256+128, Align.center, true);
         batch.end();

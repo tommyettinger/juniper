@@ -49,10 +49,10 @@ public class ZipfianDistribution extends Distribution {
     }
 
     /**
-     * Uses a {@link WhiskerRandom}, alpha = 16, skew = 1.0 .
+     * Uses a {@link WhiskerRandom}, alpha = 16, skew = 0.5 .
      */
     public ZipfianDistribution() {
-        this(new WhiskerRandom(), 16, 1.0);
+        this(new WhiskerRandom(), 16, 0.5);
     }
 
     /**
@@ -145,7 +145,7 @@ public class ZipfianDistribution extends Distribution {
      */
     @Override
     public boolean setParameters(double a, double b, double c) {
-        if(a >= 1.0 && b >= 0.0){
+        if(a >= 1.0 && b >= 0.0 && b < 1.0){
             alpha = (long) a;
             skew = b;
             if(c >= 0) {
