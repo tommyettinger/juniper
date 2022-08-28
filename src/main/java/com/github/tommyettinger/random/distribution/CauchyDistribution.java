@@ -14,7 +14,7 @@ public class CauchyDistribution extends Distribution {
     }
 
     @Override
-    public Distribution copy() {
+    public CauchyDistribution copy() {
         return new CauchyDistribution(generator.copy(), alpha, gamma);
     }
 

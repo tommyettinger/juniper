@@ -14,7 +14,7 @@ public class BetaPrimeDistribution extends Distribution {
     }
 
     @Override
-    public Distribution copy() {
+    public BetaPrimeDistribution copy() {
         return new BetaPrimeDistribution(generator.copy(), alpha, beta);
     }
 

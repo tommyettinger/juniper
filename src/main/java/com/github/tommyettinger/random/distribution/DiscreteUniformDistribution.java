@@ -14,7 +14,7 @@ public class DiscreteUniformDistribution extends Distribution {
     }
 
     @Override
-    public Distribution copy() {
+    public DiscreteUniformDistribution copy() {
         return new DiscreteUniformDistribution(generator.copy(), alpha, beta);
     }
 

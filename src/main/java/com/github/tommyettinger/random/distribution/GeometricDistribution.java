@@ -13,7 +13,7 @@ public class GeometricDistribution extends Distribution {
     }
 
     @Override
-    public Distribution copy() {
+    public GeometricDistribution copy() {
         return new GeometricDistribution(generator.copy(), alpha);
     }
 

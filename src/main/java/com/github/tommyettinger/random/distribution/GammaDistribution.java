@@ -14,7 +14,7 @@ public class GammaDistribution extends Distribution {
     }
 
     @Override
-    public Distribution copy() {
+    public GammaDistribution copy() {
         return new GammaDistribution(generator.copy(), alpha, beta);
     }
 

@@ -14,7 +14,7 @@ public class FisherSnedecorDistribution extends Distribution {
     }
 
     @Override
-    public Distribution copy() {
+    public FisherSnedecorDistribution copy() {
         return new FisherSnedecorDistribution(generator.copy(), alpha, beta);
     }
 

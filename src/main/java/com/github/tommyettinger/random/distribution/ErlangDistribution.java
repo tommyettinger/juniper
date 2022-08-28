@@ -13,7 +13,7 @@ public class ErlangDistribution extends Distribution {
     }
 
     @Override
-    public Distribution copy() {
+    public ErlangDistribution copy() {
         return new ErlangDistribution(generator.copy(), alpha, lambda);
     }
 

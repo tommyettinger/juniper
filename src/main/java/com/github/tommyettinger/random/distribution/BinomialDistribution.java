@@ -13,7 +13,7 @@ public class BinomialDistribution extends Distribution {
     }
 
     @Override
-    public Distribution copy() {
+    public BinomialDistribution copy() {
         return new BinomialDistribution(generator.copy(), alpha, beta);
     }
 

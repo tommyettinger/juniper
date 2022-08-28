@@ -14,7 +14,7 @@ public class ChiDistribution extends Distribution {
     }
 
     @Override
-    public Distribution copy() {
+    public ChiDistribution copy() {
         return new ChiDistribution(generator.copy(), alpha);
     }
 

@@ -14,7 +14,7 @@ public class ContinuousUniformDistribution extends Distribution {
     }
 
     @Override
-    public Distribution copy() {
+    public ContinuousUniformDistribution copy() {
         return new ContinuousUniformDistribution(generator.copy(), alpha, beta);
     }
 

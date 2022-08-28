@@ -13,7 +13,7 @@ public class FisherTippettDistribution extends Distribution {
     }
 
     @Override
-    public Distribution copy() {
+    public FisherTippettDistribution copy() {
         return new FisherTippettDistribution(generator.copy(), alpha, mu);
     }
 

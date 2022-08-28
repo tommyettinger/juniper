@@ -14,7 +14,7 @@ public class ChiSquareDistribution extends Distribution {
     }
 
     @Override
-    public Distribution copy() {
+    public ChiSquareDistribution copy() {
         return new ChiSquareDistribution(generator.copy(), alpha);
     }
 
