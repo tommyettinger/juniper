@@ -13,7 +13,7 @@ public class NormalDistribution extends Distribution {
     }
 
     @Override
-    public Distribution copy() {
+    public NormalDistribution copy() {
         return new NormalDistribution(generator.copy(), mu, sigma);
     }
 

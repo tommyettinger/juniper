@@ -14,7 +14,7 @@ public class LaplaceDistribution extends Distribution {
     }
 
     @Override
-    public Distribution copy() {
+    public LaplaceDistribution copy() {
         return new LaplaceDistribution(generator.copy(), alpha, mu);
     }
 

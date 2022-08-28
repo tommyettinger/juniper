@@ -13,7 +13,7 @@ public class StudentsTDistribution extends Distribution {
     }
 
     @Override
-    public Distribution copy() {
+    public StudentsTDistribution copy() {
         return new StudentsTDistribution(generator.copy(), nu);
     }
 

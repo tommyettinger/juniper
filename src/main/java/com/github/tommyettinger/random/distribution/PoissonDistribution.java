@@ -14,7 +14,7 @@ public class PoissonDistribution extends Distribution {
     }
 
     @Override
-    public Distribution copy() {
+    public PoissonDistribution copy() {
         return new PoissonDistribution(generator.copy(), lambda);
     }
 

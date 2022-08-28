@@ -17,7 +17,7 @@ public class ZipfianDistribution extends Distribution {
     }
 
     @Override
-    public Distribution copy() {
+    public ZipfianDistribution copy() {
         return new ZipfianDistribution(generator.copy(), alpha, skew, zeta);
     }
 

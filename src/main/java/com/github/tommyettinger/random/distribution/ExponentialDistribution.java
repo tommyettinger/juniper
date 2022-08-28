@@ -14,7 +14,7 @@ public class ExponentialDistribution extends Distribution {
 
     @Override
     public Distribution copy() {
-        return new ExponentialDistribution(generator.copy(), lambda);
+        return new ExponentialDistribution(generator.copy(), 1.0/lambda);
     }
 
     private double lambda;

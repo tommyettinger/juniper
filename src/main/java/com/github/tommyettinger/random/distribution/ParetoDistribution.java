@@ -14,8 +14,8 @@ public class ParetoDistribution extends Distribution {
     }
 
     @Override
-    public Distribution copy() {
-        return new ParetoDistribution(generator.copy(), alpha, beta);
+    public ParetoDistribution copy() {
+        return new ParetoDistribution(generator.copy(), alpha, 1.0/beta);
     }
 
     private double alpha;

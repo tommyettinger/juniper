@@ -14,7 +14,7 @@ public class LogisticDistribution extends Distribution {
     }
 
     @Override
-    public Distribution copy() {
+    public LogisticDistribution copy() {
         return new LogisticDistribution(generator.copy(), mu, sigma);
     }
 

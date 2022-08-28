@@ -14,8 +14,8 @@ public class PowerDistribution extends Distribution {
     }
 
     @Override
-    public Distribution copy() {
-        return new PowerDistribution(generator.copy(), alpha, beta);
+    public PowerDistribution copy() {
+        return new PowerDistribution(generator.copy(), 1.0/alpha, 1.0/beta);
     }
 
     private double alpha;

@@ -14,7 +14,7 @@ public class WeibullDistribution extends Distribution {
     }
 
     @Override
-    public Distribution copy() {
+    public WeibullDistribution copy() {
         return new WeibullDistribution(generator.copy(), alpha, lambda);
     }
 

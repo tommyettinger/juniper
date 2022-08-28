@@ -15,8 +15,8 @@ public class KumaraswamyDistribution extends Distribution {
     }
 
     @Override
-    public Distribution copy() {
-        return new KumaraswamyDistribution(generator.copy(), alpha, beta);
+    public KumaraswamyDistribution copy() {
+        return new KumaraswamyDistribution(generator.copy(), 1.0/alpha, 1.0/beta);
     }
 
     private double alpha;

@@ -16,7 +16,7 @@ public class LogNormalDistribution extends Distribution {
     }
 
     @Override
-    public Distribution copy() {
+    public LogNormalDistribution copy() {
         return new LogNormalDistribution(generator.copy(), mu, sigma);
     }
 

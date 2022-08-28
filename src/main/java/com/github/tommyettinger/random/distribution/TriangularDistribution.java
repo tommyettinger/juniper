@@ -13,7 +13,7 @@ public class TriangularDistribution extends Distribution {
     }
 
     @Override
-    public Distribution copy() {
+    public TriangularDistribution copy() {
         return new TriangularDistribution(generator.copy(), alpha, beta, gamma);
     }
 

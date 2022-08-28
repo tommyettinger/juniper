@@ -15,7 +15,7 @@ public class LogCauchyDistribution extends Distribution {
     }
 
     @Override
-    public Distribution copy() {
+    public LogCauchyDistribution copy() {
         return new LogCauchyDistribution(generator.copy(), mu, sigma);
     }
 

@@ -13,7 +13,7 @@ public class RayleighDistribution extends Distribution {
     }
 
     @Override
-    public Distribution copy() {
+    public RayleighDistribution copy() {
         return new RayleighDistribution(generator.copy(), sigma);
     }
 

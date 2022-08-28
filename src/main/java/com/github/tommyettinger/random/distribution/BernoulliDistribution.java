@@ -13,7 +13,7 @@ public class BernoulliDistribution extends Distribution {
     }
 
     @Override
-    public Distribution copy() {
+    public BernoulliDistribution copy() {
         return new BernoulliDistribution(generator.copy(), alpha);
     }
 
