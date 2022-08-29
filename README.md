@@ -61,24 +61,49 @@ when run on GWT (even when generating `long` values!). `com.github.tommyettinger
 version of the 32-bit Xoshiro generator with the ++ scrambler; it has some optimizations so that it can return `long`
 values more quickly, though it is still slower than ChopRandom.
 
+A nice quality of the `EnhancedRandom` values here is that they can be serialized to Strings easily and in a consistent
+format, and deserialized to the appropriate class given a serialized String from any generator. You can use the
+`EnhancedRandom.stringSerialize()` method (which optionally takes a `Base`, so you can write hexadecimal numbers, base64
+numbers, or normal base 10 numbers) to write a serialized String. You can use the `Deserializer.deserialize()` method
+(which also optionally takes a `Base`, and it must be the same used to write the String) to read an `EnhancedRandom`
+back. It will have the `EnhancedRandom` type as far as the compiler can tell, but it will use the correct implementation
+to match the generator that was serialized.
+
 You may also want to use the `randomize()` methods in the `digital` dependency's `Hasher` class to make sequential
 values more random; this is essentially the approach used by DistinctRandom. A similar non-generator use of randomness
 is available in `com.github.tommyettinger.random.LineWobble`; it provides 1D continuous noise, or a wobbly line.
+
+## Did I hear about distributions here?
+
+This library now has quite a lot of statistical distributions, each a subclass of `Distribution`. Each one holds an
+`EnhancedRandom` and one to three parameters, and produces `double` values when requested via `nextDouble()`. The
+minimum and maximum results a Distribution can produce vary, and can be retrieved with its `getMinimum()` and
+`getMaximum()` methods. There are also methods to retrieve mean, median, mode, and variance when they can be calculated;
+these methods can throw an Exception if not supported.
+
+`Distribution` values can be serialized like `EnhancedRandom` ones to Strings, and can be deserialized with
+`Deserializer.deserializeDistribution()`. The serialized state preserves the `EnhancedRandom` implementation and state,
+as well as the `Distribution` implementation and parameters.
+
+You can use `DistributedRandom` to get some `Distribution` types to distribute across all the types an `EnhancedRandom`
+can produce, instead of just `double`. This only really works for numbers distributed between 0.0 and 1.0, so
+`DistributedRandom` provides various ways to reduce the range of a distribution like a `NormalDistribution` or
+`ExponentialDistribution` so only the valid range is used.
 
 ## How to get it?
 
 With Gradle, the dependency (of the core module, if you have multiple) is:
 
 ```groovy
-api "com.github.tommyettinger:juniper:0.1.1"
+api "com.github.tommyettinger:juniper:0.1.3"
 ```
 
 In a libGDX project that has a GWT/HTML backend, the `html/build.gradle` file
 should additionally have:
 
 ```
-implementation "com.github.tommyettinger:digital:0.1.0:sources"
-implementation "com.github.tommyettinger:juniper:0.1.1:sources"
+implementation "com.github.tommyettinger:digital:0.1.1:sources"
+implementation "com.github.tommyettinger:juniper:0.1.3:sources"
 ```
 
 And the `GdxDefinition.gwt.xml` file should have:
@@ -94,9 +119,11 @@ If you don't use Gradle, then with Maven, the dependency is:
 <dependency>
   <groupId>com.github.tommyettinger</groupId>
   <artifactId>juniper</artifactId>
-  <version>0.1.1</version>
+  <version>0.1.3</version>
 </dependency>
 ```
+
+There are also releases here on GitHub if you don't use any project management tool.
 
 ## License
 
