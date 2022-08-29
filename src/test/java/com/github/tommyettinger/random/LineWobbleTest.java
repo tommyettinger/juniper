@@ -48,6 +48,29 @@ public class LineWobbleTest {
             System.out.println();
         }
     }
+
+    @Test
+    public void testIntAngleWobble() {
+        int seed = 1234;
+        for (int i = 0; i < 256; i++) {
+            long len = Math.round((LineWobble.wobbleAngleTurns(seed, i * 0x1p-5f)) * 79);
+            for (int j = 0; j < len; j++) {
+                System.out.print('*');
+            }
+            System.out.println();
+        }
+    }
+    @Test
+    public void testLongAngleWobble() {
+        long seed = 1234L;
+        for (int i = 0; i < 256; i++) {
+            long len = Math.round((LineWobble.wobbleAngleTurns(seed, i * 0x1p-5f)) * 79);
+            for (int j = 0; j < len; j++) {
+                System.out.print('*');
+            }
+            System.out.println();
+        }
+    }
     @Test
     public void testLUTWobble() {
         int seed = 12345;

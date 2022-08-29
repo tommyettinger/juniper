@@ -114,8 +114,8 @@ public class LineWobble {
         long floor = (long) value;
         if(value < floor) --floor;
         final long z = seed + floor * 0x6C8E9CF570932BD5L;
-        float start = (((z ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L) >>> 1) * 0x0.ffffffp-62f,
-                end = (((z + 0x6C8E9CF570932BD5L ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L) >>> 1) * 0x0.ffffffp-62f;
+        float start = (((z ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L) >>> 1) * 0x1p-63f,
+                end = (((z + 0x6C8E9CF570932BD5L ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L) >>> 1) * 0x1p-63f;
         value -= floor;
         value *= value * (3f - 2f * value);
         end = end - start + 1.5f;
@@ -141,8 +141,8 @@ public class LineWobble {
         long floor = (long) value;
         if(value < floor) --floor;
         final long z = seed + floor * 0x6C8E9CF570932BD5L;
-        float start = (((z ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L) >>> 1) * 0x0.ffffffp-62f,
-                end = (((z + 0x6C8E9CF570932BD5L ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L) >>> 1) * 0x0.ffffffp-62f;
+        float start = (((z ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L) >>> 1) * 0x1p-63f,
+                end = (((z + 0x6C8E9CF570932BD5L ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L) >>> 1) * 0x1p-63f;
         value -= floor;
         value *= value * (3f - 2f * value);
         end = end - start + 1.5f;
@@ -168,8 +168,8 @@ public class LineWobble {
         long floor = (long) value;
         if(value < floor) --floor;
         final long z = seed + floor * 0x6C8E9CF570932BD5L;
-        float start = (((z ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L) >>> 1) * 0x0.ffffffp-62f,
-                end = (((z + 0x6C8E9CF570932BD5L ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L) >>> 1) * 0x0.ffffffp-62f;
+        float start = (((z ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L) >>> 1) * 0x1p-63f,
+                end = (((z + 0x6C8E9CF570932BD5L ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L) >>> 1) * 0x1p-63f;
         value -= floor;
         value *= value * (3f - 2f * value);
         end = end - start + 1.5f;
@@ -195,8 +195,8 @@ public class LineWobble {
         int floor = (int) value;
         if(value < floor) --floor;
         int z = seed + floor * 0xBE56D;
-        float start = (((z ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) >>> 1) * 0x0.ffffffp-30f,
-                end = (((z + 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) >>> 1) * 0x0.ffffffp-30f;
+        float start = (((z ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) >>> 1) * 0x1p-31f,
+                end = (((z + 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) >>> 1) * 0x1p-31f;
         value -= floor;
         value *= value * (3f - 2f * value);
         end = end - start + 1.5f;
@@ -222,8 +222,8 @@ public class LineWobble {
         int floor = (int) value;
         if(value < floor) --floor;
         int z = seed + floor * 0xBE56D;
-        float start = (((z ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) >>> 1) * 0x0.ffffffp-30f,
-                end = (((z + 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) >>> 1) * 0x0.ffffffp-30f;
+        float start = (((z ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) >>> 1) * 0x1p-31f,
+                end = (((z + 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) >>> 1) * 0x1p-31f;
         value -= floor;
         value *= value * (3f - 2f * value);
         end = end - start + 1.5f;
@@ -249,8 +249,8 @@ public class LineWobble {
         int floor = (int) value;
         if(value < floor) --floor;
         int z = seed + floor * 0xBE56D;
-        float start = (((z ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) >>> 1) * 0x0.ffffffp-30f,
-                end = (((z + 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) >>> 1) * 0x0.ffffffp-30f;
+        float start = (((z ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) >>> 1) * 0x1p-31f,
+                end = (((z + 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) >>> 1) * 0x1p-31f;
         value -= floor;
         value *= value * (3f - 2f * value);
         end = end - start + 1.5f;
