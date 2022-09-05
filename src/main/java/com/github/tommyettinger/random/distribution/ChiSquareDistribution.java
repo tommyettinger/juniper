@@ -30,7 +30,7 @@ public class ChiSquareDistribution extends Distribution {
     }
 
     /**
-     * Uses a {@link WhiskerRandom}, alpha = 1.0 .
+     * Uses a {@link WhiskerRandom}, alpha = 1 .
      */
     public ChiSquareDistribution() {
         this(new WhiskerRandom(), 1);

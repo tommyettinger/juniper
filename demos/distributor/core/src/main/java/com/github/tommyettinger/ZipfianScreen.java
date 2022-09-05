@@ -19,9 +19,10 @@ import text.formic.Stringf;
 
 import java.util.Arrays;
 
+import static com.github.tommyettinger.DistributorDemo.*;
+
 public class ZipfianScreen extends ScreenAdapter {
     private ZipfianDistribution dist;
-    private double a = 16, b = 0.5, c = 1.0;
     private SpriteBatch batch;
     private ImmediateModeRenderer20 renderer;
     private final int[] amounts = new int[512];
@@ -33,7 +34,11 @@ public class ZipfianScreen extends ScreenAdapter {
     public void show() {
         font = new BitmapFont(Gdx.files.internal("Cozette.fnt"));
         font.setColor(Color.BLACK);
-        dist = new ZipfianDistribution(new ChopRandom(), (long) a, b);
+        try {
+            dist = new ZipfianDistribution(new ChopRandom(), (long) a, b);
+        }catch (IllegalArgumentException ignored) {
+            dist = new ZipfianDistribution(new ChopRandom(), 16L, 0.5);
+        }
         batch = new SpriteBatch();
         viewport = new ScreenViewport();
         renderer = new ImmediateModeRenderer20(512 * 3, false, true, 0);
@@ -63,7 +68,7 @@ public class ZipfianScreen extends ScreenAdapter {
         ScreenUtils.clear(1f, 1f, 1f, 1f);
         Camera camera = viewport.getCamera();
         camera.update();
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) a += (UIUtils.shift() ? 0.5 : -0.5) * Gdx.graphics.getDeltaTime();
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) a += (UIUtils.shift() ? 2.5 : -2.5) * Gdx.graphics.getDeltaTime();
         if (Gdx.input.isKeyPressed(Input.Keys.B)) b += (UIUtils.shift() ? 0.5 : -0.5) * Gdx.graphics.getDeltaTime();
         if (Gdx.input.isKeyPressed(Input.Keys.C)) c += (UIUtils.shift() ? 0.5 : -0.5) * Gdx.graphics.getDeltaTime();
         if(b < 1.0)

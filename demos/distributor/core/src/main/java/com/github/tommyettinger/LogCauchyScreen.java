@@ -18,10 +18,10 @@ import com.github.tommyettinger.random.distribution.LogCauchyDistribution;
 import text.formic.Stringf;
 
 import java.util.Arrays;
+import static com.github.tommyettinger.DistributorDemo.*;
 
 public class LogCauchyScreen extends ScreenAdapter {
     private LogCauchyDistribution dist;
-    private double a = 0.0, b = 1.0, c = 1.0;
     private SpriteBatch batch;
     private ImmediateModeRenderer20 renderer;
     private final int[] amounts = new int[512];
@@ -33,7 +33,11 @@ public class LogCauchyScreen extends ScreenAdapter {
     public void show() {
         font = new BitmapFont(Gdx.files.internal("Cozette.fnt"));
         font.setColor(Color.BLACK);
-        dist = new LogCauchyDistribution(new ChopRandom(), a, b);
+        try  {
+            dist = new LogCauchyDistribution(new ChopRandom(), a, b);
+        } catch (IllegalArgumentException ignored) {
+            dist = new LogCauchyDistribution(new ChopRandom(), 0.0, 1.0);
+        }
         batch = new SpriteBatch();
         viewport = new ScreenViewport();
         renderer = new ImmediateModeRenderer20(512 * 3, false, true, 0);

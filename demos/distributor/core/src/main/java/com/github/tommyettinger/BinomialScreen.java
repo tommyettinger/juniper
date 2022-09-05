@@ -18,10 +18,10 @@ import com.github.tommyettinger.random.distribution.BinomialDistribution;
 import text.formic.Stringf;
 
 import java.util.Arrays;
+import static com.github.tommyettinger.DistributorDemo.*;
 
 public class BinomialScreen extends ScreenAdapter {
     private BinomialDistribution dist;
-    private double a = 0.5, b = 16.0, c = 1.0;
     private SpriteBatch batch;
     private ImmediateModeRenderer20 renderer;
     private final int[] amounts = new int[512];
@@ -33,7 +33,11 @@ public class BinomialScreen extends ScreenAdapter {
     public void show() {
         font = new BitmapFont(Gdx.files.internal("Cozette.fnt"));
         font.setColor(Color.BLACK);
-        dist = new BinomialDistribution(new ChopRandom(), 0.5, 16);
+        try  {
+            dist = new BinomialDistribution(new ChopRandom(), a, (int)b);
+        } catch (IllegalArgumentException ignored) {
+            dist = new BinomialDistribution(new ChopRandom(), 0.5, 1);
+        }
         batch = new SpriteBatch();
         viewport = new ScreenViewport();
         renderer = new ImmediateModeRenderer20(512 * 3, false, true, 0);
@@ -64,7 +68,7 @@ public class BinomialScreen extends ScreenAdapter {
         Camera camera = viewport.getCamera();
         camera.update();
         if (Gdx.input.isKeyPressed(Input.Keys.A)) a += (UIUtils.shift() ? 0.5 : -0.5) * Gdx.graphics.getDeltaTime();
-//        if (Gdx.input.isKeyPressed(Input.Keys.B)) b += (UIUtils.shift() ? 0.5 : -0.5) * Gdx.graphics.getDeltaTime();
+        if (Gdx.input.isKeyPressed(Input.Keys.B)) b += (UIUtils.shift() ? 2.5 : -2.5) * Gdx.graphics.getDeltaTime();
         if (Gdx.input.isKeyPressed(Input.Keys.C)) c += (UIUtils.shift() ? 0.5 : -0.5) * Gdx.graphics.getDeltaTime();
         dist.setParameters(a, b, c);
         Arrays.fill(amounts, 0);

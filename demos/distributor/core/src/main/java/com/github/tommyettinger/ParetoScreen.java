@@ -19,9 +19,10 @@ import text.formic.Stringf;
 
 import java.util.Arrays;
 
+import static com.github.tommyettinger.DistributorDemo.*;
+
 public class ParetoScreen extends ScreenAdapter {
     private ParetoDistribution dist;
-    private double a = 0.5, b = 1.0, c = 1.0;
     private SpriteBatch batch;
     private ImmediateModeRenderer20 renderer;
     private final int[] amounts = new int[512];
@@ -33,7 +34,11 @@ public class ParetoScreen extends ScreenAdapter {
     public void show() {
         font = new BitmapFont(Gdx.files.internal("Cozette.fnt"));
         font.setColor(Color.BLACK);
-        dist = new ParetoDistribution(new ChopRandom(), a, b);
+        try  {
+            dist = new ParetoDistribution(new ChopRandom(), a, b);
+        } catch (IllegalArgumentException ignored) {
+            dist = new ParetoDistribution(new ChopRandom(), 1.0, 1.0);
+        }
         batch = new SpriteBatch();
         viewport = new ScreenViewport();
         renderer = new ImmediateModeRenderer20(512 * 3, false, true, 0);

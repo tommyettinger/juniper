@@ -10,6 +10,7 @@ public class DistributorDemo extends Game {
 
     private Screen[] screens;
     private int screenIndex;
+    public static double a = 1.0, b = 1.0, c = 1.0;
     @Override
     public void create() {
         screens = new Screen[]{

@@ -19,9 +19,10 @@ import text.formic.Stringf;
 
 import java.util.Arrays;
 
+import static com.github.tommyettinger.DistributorDemo.*;
+
 public class PowerScreen extends ScreenAdapter {
     private PowerDistribution dist;
-    private double a = 1.0, b = 1.0, c = 1.0;
     private SpriteBatch batch;
     private ImmediateModeRenderer20 renderer;
     private final int[] amounts = new int[512];
@@ -33,7 +34,11 @@ public class PowerScreen extends ScreenAdapter {
     public void show() {
         font = new BitmapFont(Gdx.files.internal("Cozette.fnt"));
         font.setColor(Color.BLACK);
-        dist = new PowerDistribution(new ChopRandom(), a, b);
+        try  {
+            dist = new PowerDistribution(new ChopRandom(), a, b);
+        } catch (IllegalArgumentException ignored) {
+            dist = new PowerDistribution(new ChopRandom(), 1.0, 1.0);
+        }
         batch = new SpriteBatch();
         viewport = new ScreenViewport();
         renderer = new ImmediateModeRenderer20(512 * 3, false, true, 0);
@@ -98,7 +103,6 @@ public class PowerScreen extends ScreenAdapter {
                 64, 522, 256+128, Align.center, true);
         font.draw(batch, "Lower parameters A/B/C by holding a, b, or c;\nhold Shift and A/B/C to raise.", 64, 500, 256+128, Align.center, true);
         batch.end();
-
     }
 
     @Override
