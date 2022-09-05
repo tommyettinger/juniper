@@ -19,8 +19,8 @@ public class Lwjgl3Launcher {
 		configuration.setTitle("Distributor");
 		configuration.setWindowedMode(DistributorDemo.SCREEN_WIDTH, DistributorDemo.SCREEN_HEIGHT);
 		configuration.setIdleFPS(60);
-		configuration.setForegroundFPS(60);
-		configuration.useVsync(true);
+		configuration.setForegroundFPS(0);
+		configuration.useVsync(false);
 		configuration.disableAudio(true);
 		configuration.setWindowIcon("libgdx128.png", "libgdx64.png", "libgdx32.png", "libgdx16.png");
 		return configuration;
