@@ -100,7 +100,10 @@ public class BinomialScreen extends ScreenAdapter {
         font.draw(batch, Stringf.format("BinomialDistribution with A=%1.3f, B=%1.3f; mean=%1.3f at %d FPS",
                         a, b, dist.getMean(), Gdx.graphics.getFramesPerSecond()),
                 64, 522, 256+128, Align.center, true);
-        font.draw(batch, "Lower parameter A by holding a;\nhold Shift and A to raise.", 64, 500, 256+128, Align.center, true);
+        font.draw(batch, "Lower parameter A by holding a;\nhold Shift and A to raise.", 64, 500-6, 256+128, Align.center, true);
+        font.draw(batch,
+                "a – alpha; should be greater than or equal to 0.0 and less than or equal to 1.0\n" +
+                        "b – beta; will be cast to an int, and should be greater or equal to 0", 64, 500-32, 256+128, Align.center, true);
         batch.end();
     }
 

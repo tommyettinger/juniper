@@ -100,7 +100,10 @@ public class LogCauchyScreen extends ScreenAdapter {
         font.draw(batch, Stringf.format("LogCauchyDistribution with A=%1.3f, B=%1.3f; median=%1.3f at %d FPS",
                         a, b, dist.getMedian(), Gdx.graphics.getFramesPerSecond()),
                 64, 522, 256+128, Align.center, true);
-        font.draw(batch, "Lower parameters A/B/C by holding a, b, or c;\nhold Shift and A/B/C to raise.", 64, 500, 256+128, Align.center, true);
+        font.draw(batch, "Lower parameters A/B/C by holding a, b, or c;\nhold Shift and A/B/C to raise.", 64, 500-6, 256+128, Align.center, true);
+        font.draw(batch,
+                        "a – mu; must not be NaN\n" +
+                        "b – sigma; should be greater than 0.0", 64, 500-32, 256+128, Align.center, true);
         batch.end();
 
     }

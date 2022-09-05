@@ -102,7 +102,10 @@ public class ZipfianScreen extends ScreenAdapter {
         font.draw(batch, Stringf.format("ZipfianDistribution with A=%1.3f, B=%1.3f, zeta=%2.6f; at %d FPS",
                         a, b, dist.getZeta(), Gdx.graphics.getFramesPerSecond()),
                 64, 522, 256+128, Align.center, true);
-        font.draw(batch, "Lower parameters A/B/C by holding a, b, or c;\nhold Shift and A/B/C to raise.", 64, 500, 256+128, Align.center, true);
+        font.draw(batch, "Lower parameters A/B/C by holding a, b, or c;\nhold Shift and A/B/C to raise.", 64, 500-6, 256+128, Align.center, true);
+        font.draw(batch,
+                "a – alpha; should be an int or long greater than 0\n" +
+                "b – skew; should be greater than or equal to 0.0", 64, 500-32, 256+128, Align.center, true);
         batch.end();
 
     }
