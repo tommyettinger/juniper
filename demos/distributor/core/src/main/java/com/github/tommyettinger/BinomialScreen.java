@@ -24,7 +24,8 @@ public class BinomialScreen extends ScreenAdapter {
     private BinomialDistribution dist;
     private SpriteBatch batch;
     private ImmediateModeRenderer20 renderer;
-    private final int[] amounts = new int[512];
+    private final long[] amounts = new long[512];
+    private long iterations = 0L;
     private BitmapFont font;
     private ScreenViewport viewport;
 
@@ -41,6 +42,8 @@ public class BinomialScreen extends ScreenAdapter {
         batch = new SpriteBatch();
         viewport = new ScreenViewport();
         renderer = new ImmediateModeRenderer20(512 * 3, false, true, 0);
+        Arrays.fill(amounts, 0);
+        iterations = 0;
     }
     private final DistributorDemo mainGame;
 
@@ -67,12 +70,24 @@ public class BinomialScreen extends ScreenAdapter {
         ScreenUtils.clear(1f, 1f, 1f, 1f);
         Camera camera = viewport.getCamera();
         camera.update();
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) a += (UIUtils.shift() ? 0.5 : -0.5) * Gdx.graphics.getDeltaTime();
-        if (Gdx.input.isKeyPressed(Input.Keys.B)) b += (UIUtils.shift() ? 2.5 : -2.5) * Gdx.graphics.getDeltaTime();
-        if (Gdx.input.isKeyPressed(Input.Keys.C)) c += (UIUtils.shift() ? 0.5 : -0.5) * Gdx.graphics.getDeltaTime();
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+            a += (UIUtils.shift() ? 0.5 : -0.5) * Gdx.graphics.getDeltaTime();
+            Arrays.fill(amounts, 0);
+            iterations = 0;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.B)) {
+            b += (UIUtils.shift() ? 2.5 : -2.5) * Gdx.graphics.getDeltaTime();
+            Arrays.fill(amounts, 0);
+            iterations = 0;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.C)) {
+            c += (UIUtils.shift() ? 0.5 : -0.5) * Gdx.graphics.getDeltaTime();
+            Arrays.fill(amounts, 0);
+            iterations = 0;
+        }
+        iterations += 1;
         dist.setParameters(a, b, c);
-        Arrays.fill(amounts, 0);
-        for (int i = 0; i < 0x4000; i++) {
+        for (int i = 0; i < 0x800; i++) {
             int m = (int) (dist.nextDouble());
             if(m >= 0 && m < 16)
                 amounts[m]++;
@@ -85,7 +100,7 @@ public class BinomialScreen extends ScreenAdapter {
             renderer.color(color);
             renderer.vertex(x, 0, 0);
             renderer.color(color);
-            renderer.vertex(x, (amounts[x >>> 5] >> 3), 0);
+            renderer.vertex(x, (amounts[x >>> 5] / iterations), 0);
         }
         for (int j = 8; j < 520; j += 32) {
             renderer.color(-0x1.7677e8p125F); // CW Bright Red
