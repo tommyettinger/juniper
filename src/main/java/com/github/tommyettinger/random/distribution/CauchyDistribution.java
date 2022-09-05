@@ -116,6 +116,6 @@ public class CauchyDistribution extends Distribution {
     }
 
     public static double sample(EnhancedRandom generator, double alpha, double gamma) {
-        return alpha + gamma * TrigTools.tanTurns(0.5 * (generator.nextExclusiveDouble() - 0.5));
+        return alpha + gamma * Math.tan(Math.PI * (generator.nextExclusiveDouble() - 0.5));
     }
 }
