@@ -63,6 +63,11 @@ public class CauchyScreen extends ScreenAdapter {
             mainGame.nextScreen();
             return;
         }
+        else if(Gdx.input.isKeyJustPressed(Input.Keys.SLASH))
+        {
+            mainGame.setScreen(mainGame.alternateCauchy);
+            return;
+        }
         else if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             Gdx.app.exit();
             return;

@@ -9,13 +9,15 @@ public class DistributorDemo extends Game {
     public static final int SCREEN_HEIGHT = 520;
 
     private Screen[] screens;
+    public Screen alternateCauchy;
     private int screenIndex;
     public static double a = 1.0, b = 1.0, c = 1.0;
     @Override
     public void create() {
+        alternateCauchy = new CauchyAlternateScreen(this);
         screens = new Screen[]{
                 new BetaScreen(this), new KumaraswamyScreen(this),
-                new CauchyAlternateScreen(this), new CauchyScreen(this), new LogCauchyScreen(this),
+                new CauchyScreen(this), new LogCauchyScreen(this),
                 new ErlangScreen(this), new ExponentialScreen(this), new ParetoScreen(this), new PowerScreen(this),
                 new BinomialScreen(this), new ZipfianScreen(this),
         };

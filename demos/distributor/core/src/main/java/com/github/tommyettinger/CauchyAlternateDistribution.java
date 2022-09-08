@@ -122,19 +122,7 @@ public class CauchyAlternateDistribution extends Distribution {
         return alpha + gamma * tan(TrigTools.PI_D * (generator.nextExclusiveDouble() - 0.5));
     }
 
-    /**
-     * A tan approximation based on <a href="https://math.stackexchange.com/a/4453027">this Stack Exchange answer</a>.
-     * @param x any double for which tan() is mathematically defined
-     * @return an approximation of tan()
-     */
-    public static double tan(double x) {
-        x *= (1.0 / TrigTools.PI_D);
-        x += 0.5;
-        x -= Math.floor(x) + 0.5;
-        x *= TrigTools.PI_D;
-        final double x2 = x * x, x4 = x2 * x2;
-        return x * ((0.0010582010582010583) * x4 - (0.1111111111111111) * x2 + 1.0)
-                / ((0.015873015873015872) * x4 - (0.4444444444444444) * x2 + 1);
-//        return x * ((1.0/945.0) * x4 - (1.0/9.0) * x2 + 1.0) / ((1.0/63.0) * x4 - (4.0/9.0) * x2 + 1);
-    }
-}
+    public static double tan(double radians) {
+        final int idx = (int) (radians * TrigTools.TABLE_SIZE / TrigTools.PI2_D) & TrigTools.TABLE_MASK;
+        return TrigTools.SIN_TABLE_D[idx] / TrigTools.SIN_TABLE_D[idx + TrigTools.SIN_TO_COS & TrigTools.TABLE_MASK];
+    }}

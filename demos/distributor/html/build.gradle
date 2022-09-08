@@ -32,6 +32,7 @@ dependencies {
 	implementation "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion"
 	implementation "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion:sources"
 	implementation 'com.github.tommyettinger:formic:0.1.4:sources'
+	implementation "com.github.tommyettinger:digital:$digitalVersion:sources"
 	implementation "com.github.tommyettinger:juniper:$juniperVersion:sources"
 	implementation "com.github.tommyettinger:digital:0.0.4:sources"
 }
