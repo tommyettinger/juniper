@@ -79,7 +79,10 @@ This library now has quite a lot of statistical distributions, each a subclass o
 `EnhancedRandom` and one to three parameters, and produces `double` values when requested via `nextDouble()`. The
 minimum and maximum results a Distribution can produce vary, and can be retrieved with its `getMinimum()` and
 `getMaximum()` methods. There are also methods to retrieve mean, median, mode, and variance when they can be calculated;
-these methods can throw an Exception if not supported.
+these methods can throw an Exception if not supported. All parameters are set at once for all generators, and if they
+have valid values, `setParameters()` will return true and store the parameters it can use. Only `TriangularDistribution`
+uses parameter C (along with A and B), but the rest use either parameter A only or both A and B. The documentation for
+`setParameters()` on a distribution should describe what the constraints are on each parameter.
 
 `Distribution` values can be serialized like `EnhancedRandom` ones to Strings, and can be deserialized with
 `Deserializer.deserializeDistribution()`. The serialized state preserves the `EnhancedRandom` implementation and state,
@@ -95,15 +98,15 @@ can produce, instead of just `double`. This only really works for numbers distri
 With Gradle, the dependency (of the core module, if you have multiple) is:
 
 ```groovy
-api "com.github.tommyettinger:juniper:0.1.3"
+api "com.github.tommyettinger:juniper:0.1.4"
 ```
 
 In a libGDX project that has a GWT/HTML backend, the `html/build.gradle` file
 should additionally have:
 
 ```
-implementation "com.github.tommyettinger:digital:0.1.1:sources"
-implementation "com.github.tommyettinger:juniper:0.1.3:sources"
+implementation "com.github.tommyettinger:digital:0.1.2:sources"
+implementation "com.github.tommyettinger:juniper:0.1.4:sources"
 ```
 
 And the `GdxDefinition.gwt.xml` file should have:
@@ -119,7 +122,7 @@ If you don't use Gradle, then with Maven, the dependency is:
 <dependency>
   <groupId>com.github.tommyettinger</groupId>
   <artifactId>juniper</artifactId>
-  <version>0.1.3</version>
+  <version>0.1.4</version>
 </dependency>
 ```
 
