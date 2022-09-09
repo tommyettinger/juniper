@@ -16,7 +16,7 @@ public class DistributorDemo extends Game {
     public void create() {
         alternateCauchy = new CauchyAlternateScreen(this);
         screens = new Screen[]{
-                new BetaScreen(this), new KumaraswamyScreen(this),
+                new BetaScreen(this), new KumaraswamyScreen(this), new LumpScreen(this),
                 new CauchyScreen(this), new LogCauchyScreen(this),
                 new ErlangScreen(this), new ExponentialScreen(this), new ParetoScreen(this), new PowerScreen(this),
                 new BinomialScreen(this), new ZipfianScreen(this),

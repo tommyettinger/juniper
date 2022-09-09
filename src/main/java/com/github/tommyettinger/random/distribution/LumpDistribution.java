@@ -10,7 +10,7 @@ import com.github.tommyettinger.random.WhiskerRandom;
  * calculate them, that would be appreciated.
  * <br>
  * The idea for this was first implemented <a href="https://github.com/yellowstonegames/SquidLib">in SquidLib</a>
- * as TweakRNG.
+ * as TweakRNG. This has changed and no longer has 4 spikes, but still acts the same with how it can be tweaked.
  */
 public class LumpDistribution extends Distribution {
     public String getTag() {
@@ -128,7 +128,7 @@ public class LumpDistribution extends Distribution {
     }
 
     public static double sample(EnhancedRandom generator, double alpha, double beta) {
-        return TrigTools.atan2Turns(generator.nextExclusiveDouble() - 0.5 - alpha,
-                generator.nextExclusiveDouble() - 0.5 + beta);
+        return TrigTools.atan2Turns(generator.nextGaussian(-alpha, 1.0),
+                generator.nextGaussian(beta, 1.0));
     }
 }
