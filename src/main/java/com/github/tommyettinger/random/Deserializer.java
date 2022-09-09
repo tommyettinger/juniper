@@ -78,6 +78,7 @@ public final class Deserializer {
         register(new LogisticDistribution(random, 1.0, 1.0));
         register(new LogCauchyDistribution(random, 0.0, 1.0));
         register(new LogNormalDistribution(random, 0.0, 1.0));
+        register(new LumpDistribution(random, 0.0, 0.25));
         register(new NormalDistribution(random, 0.0, 1.0));
         register(new ParetoDistribution(random, 1.0, 1.0));
         register(new PoissonDistribution(random, 1.0));
