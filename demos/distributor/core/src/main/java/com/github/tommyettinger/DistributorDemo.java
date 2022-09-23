@@ -2,6 +2,7 @@ package com.github.tommyettinger;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
+import com.github.tommyettinger.random.GoldenQuasiRandom;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class DistributorDemo extends Game {
@@ -12,6 +13,7 @@ public class DistributorDemo extends Game {
     public Screen alternateCauchy;
     private int screenIndex;
     public static double a = 1.0, b = 1.0, c = 1.0;
+    public GoldenQuasiRandom random = new GoldenQuasiRandom();
     @Override
     public void create() {
         alternateCauchy = new CauchyAlternateScreen(this);

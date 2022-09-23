@@ -13,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.UIUtils;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.github.tommyettinger.random.ChopRandom;
 import text.formic.Stringf;
 
 import java.util.Arrays;
@@ -35,9 +34,9 @@ public class CauchyAlternateScreen extends ScreenAdapter {
         font = new BitmapFont(Gdx.files.internal("Cozette.fnt"));
         font.setColor(Color.BLACK);
         try  {
-            dist = new CauchyAlternateDistribution(new ChopRandom(), a, b);
+            dist = new CauchyAlternateDistribution(mainGame.random, a, b);
         } catch (IllegalArgumentException ignored) {
-            dist = new CauchyAlternateDistribution(new ChopRandom(), 0.0, 1.0);
+            dist = new CauchyAlternateDistribution(mainGame.random, 0.0, 1.0);
         }
         batch = new SpriteBatch();
         viewport = new ScreenViewport();

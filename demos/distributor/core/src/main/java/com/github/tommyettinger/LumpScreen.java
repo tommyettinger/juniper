@@ -13,8 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.UIUtils;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.github.tommyettinger.digital.TrigTools;
-import com.github.tommyettinger.random.ChopRandom;
 import com.github.tommyettinger.random.distribution.LumpDistribution;
 import text.formic.Stringf;
 
@@ -37,9 +35,9 @@ public class LumpScreen extends ScreenAdapter {
         font = new BitmapFont(Gdx.files.internal("Cozette.fnt"));
         font.setColor(Color.BLACK);
         try  {
-            dist = new LumpDistribution(new ChopRandom(), a, b);
+            dist = new LumpDistribution(mainGame.random, a, b);
         } catch (IllegalArgumentException ignored) {
-            dist = new LumpDistribution(new ChopRandom(), 0.0, 0.25);
+            dist = new LumpDistribution(mainGame.random, 0.0, 0.25);
         }
         batch = new SpriteBatch();
         viewport = new ScreenViewport();

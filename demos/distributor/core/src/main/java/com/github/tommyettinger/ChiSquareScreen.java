@@ -13,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.UIUtils;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.github.tommyettinger.random.ChopRandom;
 import com.github.tommyettinger.random.distribution.ChiSquareDistribution;
 import text.formic.Stringf;
 
@@ -36,9 +35,9 @@ public class ChiSquareScreen extends ScreenAdapter {
         font = new BitmapFont(Gdx.files.internal("Cozette.fnt"));
         font.setColor(Color.BLACK);
         try  {
-            dist = new ChiSquareDistribution(new ChopRandom(), (int)a);
+            dist = new ChiSquareDistribution(mainGame.random, (int)a);
         } catch (IllegalArgumentException ignored) {
-            dist = new ChiSquareDistribution(new ChopRandom(), 1);
+            dist = new ChiSquareDistribution(mainGame.random, 1);
         }
         batch = new SpriteBatch();
         viewport = new ScreenViewport();

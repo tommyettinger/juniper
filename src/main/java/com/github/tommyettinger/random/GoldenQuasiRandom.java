@@ -182,19 +182,28 @@ public class GoldenQuasiRandom extends EnhancedRandom {
 
 	@Override
 	public double nextExclusiveDouble () {
-		final long bits = nextLong();
-		return BitConversion.longBitsToDouble(1022L - Long.numberOfLeadingZeros(bits) << 52 | bits >>> 12);
+		final double n = (nextLong() >>> 11) * 0x1.0p-53;
+		return n == 0.0 ? 0x1.0p-54 : n;
 	}
 
 	@Override
 	public float nextExclusiveFloat() {
-		final long bits = nextLong();
-		return BitConversion.intBitsToFloat(126 - Long.numberOfLeadingZeros(bits) << 23 | (int)(bits >>> 41));
+		final float n = (nextLong() >>> 40) * 0x1p-24f;
+		return n == 0.0 ? 0x1p-25f : n;
 	}
 
 	@Override
 	public double nextGaussian() {
-		return probit(nextExclusiveDouble());
+		return probit(nextDouble());
+
+//		// from the docs for nextGaussian()
+//		double v1, v2, s;
+//		do {
+//			v1 = 2.0 * nextDouble() - 1.0;   // between -1.0 and 1.0
+//			v2 = 2.0 * nextDouble() - 1.0;   // between -1.0 and 1.0
+//			s = v1 * v1 + v2 * v2;
+//		} while (s >= 1 || s == 0);
+//		return v1 * Math.sqrt(-2 * Math.log(s) / s);
 	}
 
 	@Override

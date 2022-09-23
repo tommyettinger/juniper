@@ -2,6 +2,7 @@ package com.github.tommyettinger;
 
 import com.github.tommyettinger.digital.TrigTools;
 import com.github.tommyettinger.random.EnhancedRandom;
+import com.github.tommyettinger.random.GoldenQuasiRandom;
 import com.github.tommyettinger.random.WhiskerRandom;
 import com.github.tommyettinger.random.distribution.Distribution;
 
@@ -44,14 +45,14 @@ public class CauchyAlternateDistribution extends Distribution {
      * Uses a {@link WhiskerRandom}, alpha = 1.0, gamma = 1.0 .
      */
     public CauchyAlternateDistribution() {
-        this(new WhiskerRandom(), 1.0, 1.0);
+        this(new GoldenQuasiRandom(), 1.0, 1.0);
     }
 
     /**
      * Uses a {@link WhiskerRandom} and the given alpha and gamma.
      */
     public CauchyAlternateDistribution(double alpha, double gamma) {
-        this(new WhiskerRandom(), alpha, gamma);
+        this(new GoldenQuasiRandom(), alpha, gamma);
     }
 
     /**

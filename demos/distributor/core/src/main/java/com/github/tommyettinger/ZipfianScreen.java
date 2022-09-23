@@ -13,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.UIUtils;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.github.tommyettinger.random.ChopRandom;
 import com.github.tommyettinger.random.distribution.ZipfianDistribution;
 import text.formic.Stringf;
 
@@ -36,9 +35,9 @@ public class ZipfianScreen extends ScreenAdapter {
         font = new BitmapFont(Gdx.files.internal("Cozette.fnt"));
         font.setColor(Color.BLACK);
         try {
-            dist = new ZipfianDistribution(new ChopRandom(), (long) a, b);
+            dist = new ZipfianDistribution(mainGame.random, (long) a, b);
         }catch (IllegalArgumentException ignored) {
-            dist = new ZipfianDistribution(new ChopRandom(), 16L, 0.5);
+            dist = new ZipfianDistribution(mainGame.random, 16L, 0.5);
         }
         batch = new SpriteBatch();
         viewport = new ScreenViewport();

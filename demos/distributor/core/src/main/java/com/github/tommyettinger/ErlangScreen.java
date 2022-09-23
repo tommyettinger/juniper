@@ -13,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.UIUtils;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.github.tommyettinger.random.ChopRandom;
 import com.github.tommyettinger.random.distribution.ErlangDistribution;
 import text.formic.Stringf;
 
@@ -36,9 +35,9 @@ public class ErlangScreen extends ScreenAdapter {
         font = new BitmapFont(Gdx.files.internal("Cozette.fnt"));
         font.setColor(Color.BLACK);
         try {
-            dist = new ErlangDistribution(new ChopRandom(), (int) a, b);
+            dist = new ErlangDistribution(mainGame.random, (int) a, b);
         }catch (IllegalArgumentException ignored) {
-            dist = new ErlangDistribution(new ChopRandom(), 1, 1.0);
+            dist = new ErlangDistribution(mainGame.random, 1, 1.0);
         }
         batch = new SpriteBatch();
         viewport = new ScreenViewport();

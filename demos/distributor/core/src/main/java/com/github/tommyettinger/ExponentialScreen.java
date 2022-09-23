@@ -13,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.UIUtils;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.github.tommyettinger.random.ChopRandom;
 import com.github.tommyettinger.random.distribution.ExponentialDistribution;
 import text.formic.Stringf;
 
@@ -35,9 +34,9 @@ public class ExponentialScreen extends ScreenAdapter {
         font = new BitmapFont(Gdx.files.internal("Cozette.fnt"));
         font.setColor(Color.BLACK);
         try  {
-            dist = new ExponentialDistribution(new ChopRandom(), a);
+            dist = new ExponentialDistribution(mainGame.random, a);
         } catch (IllegalArgumentException ignored) {
-            dist = new ExponentialDistribution(new ChopRandom(), 1.0);
+            dist = new ExponentialDistribution(mainGame.random, 1.0);
         }
         batch = new SpriteBatch();
         viewport = new ScreenViewport();
