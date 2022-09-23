@@ -128,7 +128,7 @@ public class LumpDistribution extends Distribution {
     }
 
     public static double sample(EnhancedRandom generator, double alpha, double beta) {
-        return TrigTools.atan2Turns(generator.nextGaussian(-alpha, 1.0),
-                generator.nextGaussian(beta, 1.0));
+        return TrigTools.atan2Turns(generator.nextGaussian() - alpha,
+                generator.nextGaussian() + beta);
     }
 }
