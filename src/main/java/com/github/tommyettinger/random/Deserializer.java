@@ -59,6 +59,7 @@ public final class Deserializer {
         register(new WhiskerRandom(1, 2, 3, 4));
 
         final EnhancedRandom random = new DistinctRandom(0L);
+        register(new ArcsineDistribution(random, 0.0, 1.0));
         register(new BernoulliDistribution(random, 0.5));
         register(new BetaDistribution(random, 1.0, 1.0));
         register(new BetaPrimeDistribution(random, 2.0, 2.0));
