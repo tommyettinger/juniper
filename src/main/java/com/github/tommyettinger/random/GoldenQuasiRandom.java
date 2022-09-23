@@ -18,6 +18,8 @@
 package com.github.tommyettinger.random;
 
 import com.github.tommyettinger.digital.BitConversion;
+import com.github.tommyettinger.digital.Hasher;
+import com.github.tommyettinger.digital.MathTools;
 
 import java.util.Random;
 
@@ -41,9 +43,11 @@ import java.util.Random;
 public class GoldenQuasiRandom extends EnhancedRandom {
 
 	/**
-	 * The only state variable; can be any {@code long}.
+	 * The only long state variable; can be any {@code long}.
 	 */
 	public long state;
+
+	public double dState;
 
 	/**
 	 * Creates a new GoldenQuasiRandom with a random state.
@@ -60,6 +64,7 @@ public class GoldenQuasiRandom extends EnhancedRandom {
 	public GoldenQuasiRandom(long state) {
 		super(state);
 		this.state = state;
+		dState = Hasher.randomize3Double(state);
 	}
 
 	@Override
@@ -181,8 +186,14 @@ public class GoldenQuasiRandom extends EnhancedRandom {
 	}
 
 	@Override
+	public double nextDouble() {
+		dState -= MathTools.PSI_D;
+		return (dState -= (int)dState);
+	}
+
+	@Override
 	public double nextExclusiveDouble () {
-		final double n = (nextLong() >>> 11) * 0x1.0p-53;
+		final double n = nextDouble();
 		return n == 0.0 ? 0x1.0p-54 : n;
 	}
 
@@ -195,15 +206,7 @@ public class GoldenQuasiRandom extends EnhancedRandom {
 	@Override
 	public double nextGaussian() {
 		return probit(nextDouble());
-
-//		// from the docs for nextGaussian()
-//		double v1, v2, s;
-//		do {
-//			v1 = 2.0 * nextDouble() - 1.0;   // between -1.0 and 1.0
-//			v2 = 2.0 * nextDouble() - 1.0;   // between -1.0 and 1.0
-//			s = v1 * v1 + v2 * v2;
-//		} while (s >= 1 || s == 0);
-//		return v1 * Math.sqrt(-2 * Math.log(s) / s);
+//		return probit(Hasher.randomize3Double(nextLong()));
 	}
 
 	@Override
