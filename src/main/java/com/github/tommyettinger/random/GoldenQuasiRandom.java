@@ -17,9 +17,7 @@
 
 package com.github.tommyettinger.random;
 
-import com.github.tommyettinger.digital.BitConversion;
 import com.github.tommyettinger.digital.Hasher;
-import com.github.tommyettinger.digital.MathTools;
 
 import java.util.Random;
 
@@ -28,14 +26,21 @@ import java.util.Random;
  * way to produce random-seeming numbers with a high distance between one number and the next. This has a period of
  * 2 to the 64. It does not pass any tests for randomness.
  * <br>
- * Other useful traits of this generator are that it has exactly one {@code long} of state, that all values are
+ * Useful traits of this generator are that it has exactly one {@code long} of state, that all values are
  * permitted for that state, and that you can {@link #skip(long)} the state forwards or backwards in constant time.
- * It is also extremely fast, though it shouldn't be compared to pseudo-random number generators.
+ * It is also extremely fast, though it shouldn't be compared to pseudo-random number generators. It implements
+ * {@link #nextGaussian()} and its overload specially; these methods advance the state differently and don't return
+ * quasi-random output (it's much closer to pseudo-random, and is similar to {@link DistinctRandom}'s approach). The
+ * Gaussian methods needed this treatment because anything that requested multiple Gaussian-distributed variables each
+ * time it produced one output (such as a Chi or Beta distribution) would have extremely noticeable, severe artifacts.
+ * Because there's always a strong separation between subsequent results of {@link #nextDouble()}, that made the
+ * Gaussian doubles have large gaps in their output range, because some combinations were impossible.
  * <br>
  * This class is an {@link EnhancedRandom} from jdkgdxds and is also a JDK {@link Random} as a result.
  * <br>
- * Unlike the multiple-state generators here, GoldenQuasiRandom tolerates being given sequential seeds and/or states, and
- * in fact doesn't randomize the seed when given one with {@link #setSeed(long)}.
+ * This doesn't randomize the seed when given one with {@link #setSeed(long)}, and it doesn't do anything else to
+ * randomize the output, so sequential seeds will produce extremely similar sequences. You can randomize sequential
+ * seeds using something like {@link Hasher#randomize3(long)}, if you want random starting points.
  * <br>
  * This implements all methods from {@link EnhancedRandom}, including the optional {@link #skip(long)} and
  * {@link #previousLong()} methods.
@@ -46,8 +51,6 @@ public class GoldenQuasiRandom extends EnhancedRandom {
 	 * The only long state variable; can be any {@code long}.
 	 */
 	public long state;
-
-	public double dState;
 
 	/**
 	 * Creates a new GoldenQuasiRandom with a random state.
@@ -64,7 +67,6 @@ public class GoldenQuasiRandom extends EnhancedRandom {
 	public GoldenQuasiRandom(long state) {
 		super(state);
 		this.state = state;
-		dState = Hasher.randomize3Double(state);
 	}
 
 	@Override
@@ -186,14 +188,8 @@ public class GoldenQuasiRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public double nextDouble() {
-		dState -= MathTools.PSI_D;
-		return (dState -= (int)dState);
-	}
-
-	@Override
 	public double nextExclusiveDouble () {
-		final double n = nextDouble();
+		final double n = (nextLong() >>> 11) * 0x1p-53;
 		return n == 0.0 ? 0x1.0p-54 : n;
 	}
 
@@ -205,8 +201,10 @@ public class GoldenQuasiRandom extends EnhancedRandom {
 
 	@Override
 	public double nextGaussian() {
-		return probit(nextDouble());
-//		return probit(Hasher.randomize3Double(nextLong()));
+//		return super.nextGaussian();
+//		return probit(nextDouble());
+		return probit(Hasher.randomize3Double(++state));
+//		return probit(((state & 0x1FFF_FFFFF_FFFFFL) ^ nextLong() >>> 11) * 0x1p-53);
 	}
 
 	@Override

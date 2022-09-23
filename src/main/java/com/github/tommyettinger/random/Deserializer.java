@@ -45,6 +45,7 @@ public final class Deserializer {
 
     static {
         register(new DistinctRandom(1));
+        register(new GoldenQuasiRandom(1));
         register(new LaserRandom(1, 2));
         register(new MizuchiRandom(1, 2));
         register(new RomuTrioRandom(1, 2, 3));
