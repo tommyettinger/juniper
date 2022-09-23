@@ -117,7 +117,26 @@ public class ArcsineDistribution extends Distribution {
     }
 
     public static double sample(EnhancedRandom generator, double alpha, double beta) {
-        double s = TrigTools.sinTurns(0.25 * generator.nextExclusiveDouble());
+        double s = sinQuarterTurns(generator.nextExclusiveDouble());
         return alpha + (beta - alpha) * s * s;
     }
+    /**
+     * A variation on {@link Math#sin(double)} that takes its input as a fraction of a quarter-turn instead of in
+     * radians; one quarter-turn is equal to 90 degrees or 0.5*PI radians.
+     * <br>
+     * The technique for sine approximation is mostly from
+     * <a href="https://web.archive.org/web/20080228213915/http://devmaster.net/forums/showthread.php?t=5784">this archived DevMaster thread</a>,
+     * with credit to "Nick". Changes have been made to accelerate wrapping from any double to the valid input range.
+     * @param quarterTurns an angle as a fraction of a quarter-turn as a double, with 0.5 here equivalent to PI/8.0 radians in {@link Math#sin(double)}
+     * @return the sine of the given angle, as a double between -1.0 and 1.0 (both inclusive)
+     */
+    private static double sinQuarterTurns(double quarterTurns)
+    {
+//        quarterTurns *= 4.0; // not needed for this specific case
+        final long floor = ((long) Math.floor(quarterTurns)) & -2L;
+        quarterTurns -= floor;
+        quarterTurns *= 2.0 - quarterTurns;
+        return quarterTurns * (-0.775 - 0.225 * quarterTurns) * ((floor & 2L) - 1L);
+    }
+
 }
