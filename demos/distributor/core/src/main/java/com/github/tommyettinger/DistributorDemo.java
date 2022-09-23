@@ -21,7 +21,7 @@ public class DistributorDemo extends Game {
                 new BetaScreen(this), new KumaraswamyScreen(this), new LumpScreen(this),
                 new NormalScreen(this), new CauchyScreen(this), new LogCauchyScreen(this),
                 new ErlangScreen(this), new ExponentialScreen(this), new ParetoScreen(this), new PowerScreen(this),
-                new ChiScreen(this), new ChiSquareScreen(this),
+                new ChiScreen(this), new ChiSquareScreen(this), new ArcsineScreen(this),
                 new BinomialScreen(this), new ZipfianScreen(this),
         };
         screenIndex = 0;
