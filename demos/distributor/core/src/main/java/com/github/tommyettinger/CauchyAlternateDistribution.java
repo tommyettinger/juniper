@@ -1,10 +1,8 @@
 package com.github.tommyettinger;
 
-import com.github.tommyettinger.digital.MathTools;
 import com.github.tommyettinger.digital.TrigTools;
 import com.github.tommyettinger.random.EnhancedRandom;
 import com.github.tommyettinger.random.WhiskerRandom;
-import com.github.tommyettinger.random.distribution.CauchyDistribution;
 import com.github.tommyettinger.random.distribution.Distribution;
 
 /**
@@ -13,12 +11,12 @@ import com.github.tommyettinger.random.distribution.Distribution;
  */
 public class CauchyAlternateDistribution extends Distribution {
     public String getTag() {
-        return "Cauchy";
+        return "CauchyAlternate";
     }
 
     @Override
-    public CauchyDistribution copy() {
-        return new CauchyDistribution(generator.copy(), alpha, gamma);
+    public CauchyAlternateDistribution copy() {
+        return new CauchyAlternateDistribution(generator.copy(), alpha, gamma);
     }
 
     private double alpha;
