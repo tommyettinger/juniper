@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.UIUtils;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.github.tommyettinger.digital.TrigTools;
 import com.github.tommyettinger.random.distribution.ArcsineDistribution;
 import text.formic.Stringf;
 
@@ -20,11 +21,11 @@ import java.util.Arrays;
 
 import static com.github.tommyettinger.DistributorDemo.*;
 
-public class ArcsineScreen extends ScreenAdapter {
+public class ArcsineAlternateScreen extends ScreenAdapter {
     private ArcsineDistribution dist;
     private SpriteBatch batch;
     private ImmediateModeRenderer20 renderer;
-    private final long[] amounts = new long[512];
+    private final long[] amounts = new long[512], altAmounts = new long[512];
     private long iterations = 0L;
     private BitmapFont font;
     private ScreenViewport viewport;
@@ -41,13 +42,14 @@ public class ArcsineScreen extends ScreenAdapter {
         }
         batch = new SpriteBatch();
         viewport = new ScreenViewport();
-        renderer = new ImmediateModeRenderer20(512 * 3, false, true, 0);
+        renderer = new ImmediateModeRenderer20(512 * 5, false, true, 0);
         Arrays.fill(amounts, 0);
+        Arrays.fill(altAmounts, 0);
         iterations = 0;
     }
     private final DistributorDemo mainGame;
 
-    public ArcsineScreen(DistributorDemo main){
+    public ArcsineAlternateScreen(DistributorDemo main){
         mainGame = main;
     }
 
@@ -65,7 +67,8 @@ public class ArcsineScreen extends ScreenAdapter {
         }
         else if(Gdx.input.isKeyJustPressed(Input.Keys.SLASH))
         {
-            mainGame.setScreen(mainGame.alternateArcsine);
+            mainGame.nextScreen();
+            mainGame.previousScreen();
             return;
         }
         else if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
@@ -78,29 +81,34 @@ public class ArcsineScreen extends ScreenAdapter {
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             a += (UIUtils.shift() ? 0.5 : -0.5) * Gdx.graphics.getDeltaTime();
             Arrays.fill(amounts, 0);
+            Arrays.fill(altAmounts, 0);
             iterations = 0;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.B)) {
             b += (UIUtils.shift() ? 0.5 : -0.5) * Gdx.graphics.getDeltaTime();
             Arrays.fill(amounts, 0);
+            Arrays.fill(altAmounts, 0);
             iterations = 0;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.C)) {
             c += (UIUtils.shift() ? 0.5 : -0.5) * Gdx.graphics.getDeltaTime();
             Arrays.fill(amounts, 0);
+            Arrays.fill(altAmounts, 0);
             iterations = 0;
         }
         iterations += 1;
         dist.setParameters(a, b, c);
         for (int i = 0; i < 0x10000; i++) {
 //            double s = sinQuarterTurns(dist.generator.nextExclusiveDouble());
-////            double s = Math.sin(TrigTools.HALF_PI_D * dist.generator.nextExclusiveDouble());
-//            int m = (int) (
-//                    (dist.getAlpha() + (dist.getBeta() - dist.getAlpha()) * s * s)
-//             * 128 + 256);
             int m = (int) (dist.nextDouble() * 128 + 256);
             if(m >= 0 && m < 512)
                 amounts[m]++;
+            double s = Math.sin(TrigTools.HALF_PI_D * dist.generator.nextExclusiveDouble());
+            m = (int) (
+                    (dist.getAlpha() + (dist.getBeta() - dist.getAlpha()) * s * s)
+                            * 128 + 256);
+            if(m >= 0 && m < 512)
+                altAmounts[m]++;
         }
         renderer.begin(camera.combined, GL20.GL_LINES);
         for (int x = 0; x < 512; x++) {
@@ -111,6 +119,13 @@ public class ArcsineScreen extends ScreenAdapter {
             renderer.vertex(x, 0, 0);
             renderer.color(color);
             renderer.vertex(x, (amounts[x] / iterations), 0);
+            color = (x & 63) == 0
+                    ? -0x1.92e676p125F // Aurora Maidenhair Fern
+                    : -0x1.af1eaep125F; // Aurora Kelly Green
+            renderer.color(color);
+            renderer.vertex(x, (altAmounts[x] / iterations) - 0.75f, 0);
+            renderer.color(color);
+            renderer.vertex(x, (altAmounts[x] / iterations) + 0.75f, 0);
         }
         for (int j = 8; j < 520; j += 32) {
             renderer.color(-0x1.7677e8p125F); // CW Bright Red
@@ -128,7 +143,8 @@ public class ArcsineScreen extends ScreenAdapter {
         font.draw(batch, "Lower parameters A/B/C by holding a, b, or c;\nhold Shift and A/B/C to raise.", 64, 500-6, 256+128, Align.center, true);
         font.draw(batch,
                 "a – alpha; must be less than b\n" +
-                        "b – beta; must be greater than a", 64, 500-32, 256+128, Align.center, true);
+                        "b – beta; must be greater than a\n" +
+                        "The green line is the most accurate.", 64, 500-32, 256+128, Align.center, true);
         batch.end();
 
     }

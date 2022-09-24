@@ -11,13 +11,14 @@ public class DistributorDemo extends Game {
     public static final int SCREEN_HEIGHT = 520;
 
     private Screen[] screens;
-    public Screen alternateCauchy;
+    public Screen alternateCauchy, alternateArcsine;
     private int screenIndex;
     public static double a = 1.0, b = 1.0, c = 1.0;
     public EnhancedRandom random = new GoldenQuasiRandom();
     @Override
     public void create() {
         alternateCauchy = new CauchyAlternateScreen(this);
+        alternateArcsine = new ArcsineAlternateScreen(this);
         screens = new Screen[]{
                 new BetaScreen(this), new KumaraswamyScreen(this), new LumpScreen(this),
                 new NormalScreen(this), new CauchyScreen(this), new LogCauchyScreen(this),
