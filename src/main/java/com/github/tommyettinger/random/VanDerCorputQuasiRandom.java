@@ -22,14 +22,15 @@ import com.github.tommyettinger.digital.Hasher;
 import java.util.Random;
 
 /**
- * Not actually a pseudo-random number generator, but a quasi-random number generator, this is an extremely simple
+ * Not actually a pseudo-random number generator, but a quasi-random number generator, this is a simple
  * way to produce random-seeming numbers with a high distance between one number and the next. This has a period of
- * 2 to the 64. It does not pass any tests for randomness. This is simply a counter with a specific large increment:
- * 2 to the 64 divided by the golden ratio.
+ * 2 to the 64. It does not pass any tests for randomness. It is comparable to {@link GoldenQuasiRandom}; it is slightly
+ * slower, but may have some useful qualities.
+ * This uses the base-2 <a href="https://en.wikipedia.org/wiki/Van_der_Corput_sequence">van der Corput Sequence</a>.
  * <br>
  * Useful traits of this generator are that it has exactly one {@code long} of state, that all values are
  * permitted for that state, and that you can {@link #skip(long)} the state forwards or backwards in constant time.
- * It is also extremely fast, though it shouldn't be compared to pseudo-random number generators. It implements
+ * The results of {@link #nextLong()} will alternate positive and negative longs. It implements
  * {@link #nextGaussian()} and its overload specially; these methods advance the state differently and don't return
  * quasi-random output (it's much closer to pseudo-random, and is similar to {@link DistinctRandom}'s approach). The
  * Gaussian methods needed this treatment because anything that requested multiple Gaussian-distributed variables each
@@ -46,7 +47,7 @@ import java.util.Random;
  * This implements all methods from {@link EnhancedRandom}, including the optional {@link #skip(long)} and
  * {@link #previousLong()} methods.
  */
-public class GoldenQuasiRandom extends EnhancedRandom {
+public class VanDerCorputQuasiRandom extends EnhancedRandom {
 
 	/**
 	 * The only long state variable; can be any {@code long}.
@@ -54,18 +55,18 @@ public class GoldenQuasiRandom extends EnhancedRandom {
 	public long state;
 
 	/**
-	 * Creates a new GoldenQuasiRandom with a random state.
+	 * Creates a new VanDerCorputQuasiRandom with a random state.
 	 */
-	public GoldenQuasiRandom() {
+	public VanDerCorputQuasiRandom() {
 		this(EnhancedRandom.seedFromMath());
 	}
 
 	/**
-	 * Creates a new GoldenQuasiRandom with the given state; all {@code long} values are permitted.
+	 * Creates a new VanDerCorputQuasiRandom with the given state; all {@code long} values are permitted.
 	 *
 	 * @param state any {@code long} value
 	 */
-	public GoldenQuasiRandom(long state) {
+	public VanDerCorputQuasiRandom(long state) {
 		super(state);
 		this.state = state;
 	}
@@ -143,7 +144,7 @@ public class GoldenQuasiRandom extends EnhancedRandom {
 
 	@Override
 	public long nextLong () {
-		return  (state += 0x9E3779B97F4A7C15L);
+		return Long.reverse(++state);
 	}
 
 	/**
@@ -159,17 +160,17 @@ public class GoldenQuasiRandom extends EnhancedRandom {
 	 */
 	@Override
 	public long skip (long advance) {
-		return  (state += 0x9E3779B97F4A7C15L * advance);
+		return Long.reverse(state += advance);
 	}
 
 	@Override
 	public long previousLong () {
-		return (state -= 0x9E3779B97F4A7C15L);
+		return Long.reverse(--state);
 	}
 
 	@Override
 	public int next (int bits) {
-		return (int) ((state += 0x9E3779B97F4A7C15L) >>> 64 - bits);
+		return (int) (Long.reverse(++state) >>> 64 - bits);
 	}
 
 	@Override
@@ -209,8 +210,8 @@ public class GoldenQuasiRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public GoldenQuasiRandom copy () {
-		return new GoldenQuasiRandom(state);
+	public VanDerCorputQuasiRandom copy () {
+		return new VanDerCorputQuasiRandom(state);
 	}
 
 	@Override
@@ -220,13 +221,13 @@ public class GoldenQuasiRandom extends EnhancedRandom {
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		GoldenQuasiRandom that = (GoldenQuasiRandom)o;
+		VanDerCorputQuasiRandom that = (VanDerCorputQuasiRandom)o;
 
 		return state == that.state;
 	}
 
 	@Override
 	public String toString () {
-		return "GoldenQuasiRandom{state=" + (state) + "L}";
+		return "VanDerCorputQuasiRandom{state=" + (state) + "L}";
 	}
 }
