@@ -25,7 +25,7 @@ public class ArcsineAlternateScreen extends ScreenAdapter {
     private ArcsineDistribution dist;
     private SpriteBatch batch;
     private ImmediateModeRenderer20 renderer;
-    private final long[] amounts = new long[512], altAmounts = new long[512];
+    private final long[] amounts = new long[512], altAmounts = new long[512], badAmounts = new long[512];
     private long iterations = 0L;
     private BitmapFont font;
     private ScreenViewport viewport;
@@ -42,9 +42,10 @@ public class ArcsineAlternateScreen extends ScreenAdapter {
         }
         batch = new SpriteBatch();
         viewport = new ScreenViewport();
-        renderer = new ImmediateModeRenderer20(512 * 5, false, true, 0);
+        renderer = new ImmediateModeRenderer20(512 * 7, false, true, 0);
         Arrays.fill(amounts, 0);
         Arrays.fill(altAmounts, 0);
+        Arrays.fill(badAmounts, 0);
         iterations = 0;
     }
     private final DistributorDemo mainGame;
@@ -82,18 +83,21 @@ public class ArcsineAlternateScreen extends ScreenAdapter {
             a += (UIUtils.shift() ? 0.5 : -0.5) * Gdx.graphics.getDeltaTime();
             Arrays.fill(amounts, 0);
             Arrays.fill(altAmounts, 0);
+            Arrays.fill(badAmounts, 0);
             iterations = 0;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.B)) {
             b += (UIUtils.shift() ? 0.5 : -0.5) * Gdx.graphics.getDeltaTime();
             Arrays.fill(amounts, 0);
             Arrays.fill(altAmounts, 0);
+            Arrays.fill(badAmounts, 0);
             iterations = 0;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.C)) {
             c += (UIUtils.shift() ? 0.5 : -0.5) * Gdx.graphics.getDeltaTime();
             Arrays.fill(amounts, 0);
             Arrays.fill(altAmounts, 0);
+            Arrays.fill(badAmounts, 0);
             iterations = 0;
         }
         iterations += 1;
@@ -109,6 +113,12 @@ public class ArcsineAlternateScreen extends ScreenAdapter {
                             * 128 + 256);
             if(m >= 0 && m < 512)
                 altAmounts[m]++;
+            s = TrigTools.sin(TrigTools.HALF_PI_D * dist.generator.nextExclusiveDouble());
+            m = (int) (
+                    (dist.getAlpha() + (dist.getBeta() - dist.getAlpha()) * s * s)
+                            * 128 + 256);
+            if(m >= 0 && m < 512)
+                badAmounts[m]++;
         }
         renderer.begin(camera.combined, GL20.GL_LINES);
         for (int x = 0; x < 512; x++) {
@@ -120,12 +130,19 @@ public class ArcsineAlternateScreen extends ScreenAdapter {
             renderer.color(color);
             renderer.vertex(x, (amounts[x] / iterations), 0);
             color = (x & 63) == 0
-                    ? -0x1.92e676p125F // Aurora Maidenhair Fern
+                    ? -0x1.92e676p125F  // Aurora Maidenhair Fern
                     : -0x1.af1eaep125F; // Aurora Kelly Green
             renderer.color(color);
             renderer.vertex(x, (altAmounts[x] / iterations) - 0.75f, 0);
             renderer.color(color);
             renderer.vertex(x, (altAmounts[x] / iterations) + 0.75f, 0);
+            color = (x & 63) == 0
+                    ? -0x1.14ddb4p125F  // Aurora Dry Pepper
+                    : -0x1.1479fep125F; // Aurora Fusion Red
+            renderer.color(color);
+            renderer.vertex(x, (badAmounts[x] / iterations) - 0.75f, 0);
+            renderer.color(color);
+            renderer.vertex(x, (badAmounts[x] / iterations) + 0.75f, 0);
         }
         for (int j = 8; j < 520; j += 32) {
             renderer.color(-0x1.7677e8p125F); // CW Bright Red
