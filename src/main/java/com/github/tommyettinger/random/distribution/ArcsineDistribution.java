@@ -1,6 +1,5 @@
 package com.github.tommyettinger.random.distribution;
 
-import com.github.tommyettinger.digital.TrigTools;
 import com.github.tommyettinger.random.EnhancedRandom;
 import com.github.tommyettinger.random.WhiskerRandom;
 
@@ -125,18 +124,24 @@ public class ArcsineDistribution extends Distribution {
      * radians; one quarter-turn is equal to 90 degrees or 0.5*PI radians.
      * <br>
      * The technique for sine approximation is mostly from
-     * <a href="https://web.archive.org/web/20080228213915/http://devmaster.net/forums/showthread.php?t=5784">this archived DevMaster thread</a>,
-     * with credit to "Nick". Changes have been made to accelerate wrapping from any double to the valid input range.
+     * <a href="https://math.stackexchange.com/a/3886664">This Stack Exchange answer by WimC</a>.
+     * Changes have been made to accelerate wrapping from any double to the valid input range.
      * @param quarterTurns an angle as a fraction of a quarter-turn as a double, with 0.5 here equivalent to PI/8.0 radians in {@link Math#sin(double)}
      * @return the sine of the given angle, as a double between -1.0 and 1.0 (both inclusive)
      */
     private static double sinQuarterTurns(double quarterTurns)
     {
 //        quarterTurns *= 4.0; // not needed for this specific case
-        final long floor = ((long) Math.floor(quarterTurns)) & -2L;
-        quarterTurns -= floor;
-        quarterTurns *= 2.0 - quarterTurns;
-        return quarterTurns * (-0.775 - 0.225 * quarterTurns) * ((floor & 2L) - 1L);
+//        final long floor = ((long) Math.floor(quarterTurns)) & -2L;
+//        quarterTurns -= floor;
+//        quarterTurns *= 2.0 - quarterTurns;
+//        return quarterTurns * (-0.775 - 0.225 * quarterTurns) * ((floor & 2L) - 1L);
+
+//        quarterTurns *= 4.0; // not needed for this specific case
+        final long ceil = (long) Math.ceil(quarterTurns) & -2L;
+        quarterTurns -= ceil;
+        final double x2 = quarterTurns * quarterTurns, x3 = quarterTurns * x2;
+        return (((11 * quarterTurns - 3 * x3) / (7 + x2)) * (1 - (ceil & 2)));
     }
 
 }

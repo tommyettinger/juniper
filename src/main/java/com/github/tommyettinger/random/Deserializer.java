@@ -46,6 +46,7 @@ public final class Deserializer {
     static {
         register(new DistinctRandom(1));
         register(new GoldenQuasiRandom(1));
+        register(new VanDerCorputQuasiRandom(1));
         register(new LaserRandom(1, 2));
         register(new MizuchiRandom(1, 2));
         register(new RomuTrioRandom(1, 2, 3));
@@ -89,7 +90,7 @@ public final class Deserializer {
         register(new StudentsTDistribution(random, 1.0));
         register(new TriangularDistribution(random, 0.0, 1.0, 0.5));
         register(new WeibullDistribution(random, 1.0, 1.0));
-        register(new ZipfianDistribution(random, 2L, 0.5, 1.0 + 0.5 * MathTools.ROOT2_D));
+        register(new ZipfianDistribution(random, 2L, 0.5, 1.0 + 0.5 * MathTools.ROOT2_D)); // precalculated zeta
 
         register(new DistributedRandom(1, 2, 3, 4));
     }
