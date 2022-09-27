@@ -217,6 +217,43 @@ public abstract class EnhancedRandom extends Random {
 	}
 
 	/**
+	 * Sets each state variable to {@code stateA}, {@code stateB}, {@code stateC}, or
+	 * {@code stateD}, alternating. This uses {@link #setSelectedState(int, long)} to
+	 * set the values. If there is one state variable ({@link #getStateCount()} is 1),
+	 * then this only sets that state variable to stateA. If there are two state
+	 * variables, the first is set to stateA, and the second to stateB. With three
+	 * state variables, the first is set to stateA, the second to stateB, and the third
+	 * to stateC. With four state variables, the first is set to stateA, the second to
+	 * stateB, the third to stateC, and the fourth to stateD. If there are more, it
+	 * reuses stateA, then stateB, then stateC, then stateD, then stateA, and so on
+	 * until all variables are set.
+	 *
+	 * @param stateA the long value to use for states at index 0, 5, 10, 15...
+	 * @param stateB the long value to use for states at index 1, 6, 11, 16...
+	 * @param stateC the long value to use for states at index 2, 7, 12, 17...
+	 * @param stateD the long value to use for states at index 3, 8, 13, 18...
+	 * @param stateE the long value to use for states at index 4, 9, 14, 19...
+	 */
+	public void setState (long stateA, long stateB, long stateC, long stateD, long stateE) {
+		final int c = getStateCount();
+		for (int i = 0; i < c; i += 5) {
+			setSelectedState(i, stateA);
+		}
+		for (int i = 1; i < c; i += 5) {
+			setSelectedState(i, stateB);
+		}
+		for (int i = 2; i < c; i += 5) {
+			setSelectedState(i, stateC);
+		}
+		for (int i = 3; i < c; i += 5) {
+			setSelectedState(i, stateD);
+		}
+		for (int i = 4; i < c; i += 5) {
+			setSelectedState(i, stateE);
+		}
+	}
+
+	/**
 	 * Sets all state variables to alternating values chosen from {@code states}. If states is empty,
 	 * then this does nothing, and leaves the current generator unchanged. This works for
 	 * generators with any {@link #getStateCount()}, but may allocate an array if states is
@@ -996,7 +1033,8 @@ public abstract class EnhancedRandom extends Random {
 	 * excluded from the inputs (if 0.0 is an input, the result is {@code 38.5}). A chief advantage of using this with
 	 * a random number generator is that it only requires one random double to obtain one Gaussian value;
 	 * {@link java.util.Random#nextGaussian()} generates at least two random doubles for each two Gaussian values, but
-	 * may rarely require much more random generation.
+	 * may rarely require much more random generation. Note that this method isn't used by default for
+	 * {@link #nextGaussian()}, because it uses a very different approximation that is faster but less precise.
 	 * <br>
 	 * This can be used both as an optimization for generating Gaussian random values, and as a way of generating
 	 * Gaussian values that match a pattern present in the inputs (which you could have by using a sub-random sequence

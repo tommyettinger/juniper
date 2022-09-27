@@ -94,7 +94,7 @@ public class PasarRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Creates a new PasarRandom with the given four states; all {@code long} values are permitted.
+	 * Creates a new PasarRandom with the given five states; all {@code long} values are permitted.
 	 * These states will be used verbatim.
 	 *
 	 * @param stateA any {@code long} value
@@ -261,7 +261,7 @@ public class PasarRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Sets the state completely to the given four state variables.
+	 * Sets the state completely to the given five state variables.
 	 * This is the same as calling {@link #setStateA(long)}, {@link #setStateB(long)},
 	 * {@link #setStateC(long)}, {@link #setStateD(long)}, and {@link #setStateE(long)} as a group.
 	 *
@@ -271,6 +271,7 @@ public class PasarRandom extends EnhancedRandom {
 	 * @param stateD the fourth state; can be any long
 	 * @param stateE the fifth state; can be any long
 	 */
+	@Override
 	public void setState (long stateA, long stateB, long stateC, long stateD, long stateE) {
 		this.stateA = stateA;
 		this.stateB = stateB;
