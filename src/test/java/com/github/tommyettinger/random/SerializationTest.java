@@ -19,6 +19,7 @@ public class SerializationTest {
 //        EnhancedRandom[] all = new EnhancedRandom[]{chop, distinct, mizuchi, tricycle, trim};
         List<EnhancedRandom> all = Deserializer.copyRandoms();
         for(EnhancedRandom r : all) {
+            r.setSeed(-1L);
             String s = r.stringSerialize();
             System.out.println(s);
             Assert.assertTrue(s.startsWith(r.getTag()));
@@ -32,13 +33,15 @@ public class SerializationTest {
         MizuchiRandom mizuchi = new MizuchiRandom(-1L);
         TricycleRandom tricycle = new TricycleRandom(-1L);
         TrimRandom trim = new TrimRandom(-1L);
-        EnhancedRandom[] all = new EnhancedRandom[]{chop, distinct, mizuchi, tricycle, trim};
+        PasarRandom pasar = new PasarRandom(-1L);
+        EnhancedRandom[] all = new EnhancedRandom[]{chop, distinct, mizuchi, tricycle, trim, pasar};
         String[] serialized = new String[]{
                 "ChpR`-361951A2~-1AB901CD~-2D8237BC~-373C0F56`",
                 "DisR`-1`",
                 "MizR`87164D5C9E6AE5E~67B862BCE546FE33`",
                 "TriR`87164D5C9E6AE5E~67B862BCE546FE33~329AE2C1D27DC844`",
                 "TrmR`507BEC21852B4AD5~69383448E8617609~AF8413DE7AD4B52A~96C7CBB7179E89F6`",
+                "PasR`-1~-69383448E861760A~-507BEC21852B4AD6~69383448E8617609~507BEC21852B4AD5`",
         };
         int idx = 0;
         for(String s : serialized){
@@ -81,7 +84,7 @@ public class SerializationTest {
     public void testRoundTripDist() {
         List<Distribution> all = Deserializer.copyDistributions();
         ArrayList<EnhancedRandom> randoms = Deserializer.copyRandoms();
-        // we can't nest a DistributedRandom, with its own Distribution. as the generator and sanely deserialize.
+        // we can't nest a DistributedRandom, with its own Distribution, as the generator and sanely deserialize.
         randoms.removeIf(r -> "DsrR".equals(r.getTag()));
         WhiskerRandom rand = new WhiskerRandom(123456789L);
         Base base = Base.BASE10;

@@ -58,6 +58,7 @@ public final class Deserializer {
         register(new Xoshiro256StarStarRandom(1, 2, 3, 4));
         register(new Xoshiro128PlusPlusRandom(1, 2, 3, 4));
         register(new WhiskerRandom(1, 2, 3, 4));
+        register(new PasarRandom(1, 2, 3, 4, 5));
 
         final EnhancedRandom random = new DistinctRandom(0L);
         register(new ArcsineDistribution(random, 0.0, 1.0));
