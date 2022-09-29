@@ -26,7 +26,7 @@ public class DistributorDemo extends Game {
                 new ChiScreen(this), new ChiSquareScreen(this), new ArcsineScreen(this),
                 new BinomialScreen(this), new ZipfianScreen(this),
         };
-        screenIndex = 0;
+        screenIndex = 2;
         setScreen(screens[screenIndex]);
     }
     public void nextScreen(){

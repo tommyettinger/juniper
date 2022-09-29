@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 </dl>
 <dl class="notes">
 <dt>Direct Known Subclasses:</dt>
-<dd><code><a href="ChopRandom.html" title="class in com.github.tommyettinger.random">ChopRandom</a></code>, <code><a href="DistinctRandom.html" title="class in com.github.tommyettinger.random">DistinctRandom</a></code>, <code><a href="DistributedRandom.html" title="class in com.github.tommyettinger.random">DistributedRandom</a></code>, <code><a href="FourWheelRandom.html" title="class in com.github.tommyettinger.random">FourWheelRandom</a></code>, <code><a href="GoldenQuasiRandom.html" title="class in com.github.tommyettinger.random">GoldenQuasiRandom</a></code>, <code><a href="LaserRandom.html" title="class in com.github.tommyettinger.random">LaserRandom</a></code>, <code><a href="MizuchiRandom.html" title="class in com.github.tommyettinger.random">MizuchiRandom</a></code>, <code><a href="RomuTrioRandom.html" title="class in com.github.tommyettinger.random">RomuTrioRandom</a></code>, <code><a href="StrangerRandom.html" title="class in com.github.tommyettinger.random">StrangerRandom</a></code>, <code><a href="TricycleRandom.html" title="class in com.github.tommyettinger.random">TricycleRandom</a></code>, <code><a href="TrimRandom.html" title="class in com.github.tommyettinger.random">TrimRandom</a></code>, <code><a href="WhiskerRandom.html" title="class in com.github.tommyettinger.random">WhiskerRandom</a></code>, <code><a href="Xoshiro128PlusPlusRandom.html" title="class in com.github.tommyettinger.random">Xoshiro128PlusPlusRandom</a></code>, <code><a href="Xoshiro256StarStarRandom.html" title="class in com.github.tommyettinger.random">Xoshiro256StarStarRandom</a></code></dd>
+<dd><code><a href="ChopRandom.html" title="class in com.github.tommyettinger.random">ChopRandom</a></code>, <code><a href="DistinctRandom.html" title="class in com.github.tommyettinger.random">DistinctRandom</a></code>, <code><a href="DistributedRandom.html" title="class in com.github.tommyettinger.random">DistributedRandom</a></code>, <code><a href="FourWheelRandom.html" title="class in com.github.tommyettinger.random">FourWheelRandom</a></code>, <code><a href="GoldenQuasiRandom.html" title="class in com.github.tommyettinger.random">GoldenQuasiRandom</a></code>, <code><a href="LaserRandom.html" title="class in com.github.tommyettinger.random">LaserRandom</a></code>, <code><a href="MizuchiRandom.html" title="class in com.github.tommyettinger.random">MizuchiRandom</a></code>, <code><a href="PasarRandom.html" title="class in com.github.tommyettinger.random">PasarRandom</a></code>, <code><a href="RomuTrioRandom.html" title="class in com.github.tommyettinger.random">RomuTrioRandom</a></code>, <code><a href="StrangerRandom.html" title="class in com.github.tommyettinger.random">StrangerRandom</a></code>, <code><a href="TricycleRandom.html" title="class in com.github.tommyettinger.random">TricycleRandom</a></code>, <code><a href="TrimRandom.html" title="class in com.github.tommyettinger.random">TrimRandom</a></code>, <code><a href="VanDerCorputQuasiRandom.html" title="class in com.github.tommyettinger.random">VanDerCorputQuasiRandom</a></code>, <code><a href="WhiskerRandom.html" title="class in com.github.tommyettinger.random">WhiskerRandom</a></code>, <code><a href="Xoshiro128PlusPlusRandom.html" title="class in com.github.tommyettinger.random">Xoshiro128PlusPlusRandom</a></code>, <code><a href="Xoshiro256StarStarRandom.html" title="class in com.github.tommyettinger.random">Xoshiro256StarStarRandom</a></code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name type-name-label">EnhancedRandom</span>
@@ -552,135 +552,145 @@ loadScripts(document, 'script');</script>
  <code>stateD</code>, alternating.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setWith(com.github.tommyettinger.random.EnhancedRandom)" class="member-name-link">setWith</a><wbr>(<a href="EnhancedRandom.html" title="class in com.github.tommyettinger.random">EnhancedRandom</a>&nbsp;other)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setState(long,long,long,long,long)" class="member-name-link">setState</a><wbr>(long&nbsp;stateA,
+ long&nbsp;stateB,
+ long&nbsp;stateC,
+ long&nbsp;stateD,
+ long&nbsp;stateE)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Sets each state variable to <code>stateA</code>, <code>stateB</code>, <code>stateC</code>, or
+ <code>stateD</code>, alternating.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setWith(com.github.tommyettinger.random.EnhancedRandom)" class="member-name-link">setWith</a><wbr>(<a href="EnhancedRandom.html" title="class in com.github.tommyettinger.random">EnhancedRandom</a>&nbsp;other)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Similar to <a href="#copy()"><code>copy()</code></a>, but fills this EnhancedRandom with the state of another EnhancedRandom, usually
  (but not necessarily) one of the same type.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#shuffle(boolean%5B%5D)" class="member-name-link">shuffle</a><wbr>(boolean[]&nbsp;items)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Shuffles the given array in-place pseudo-randomly, using this to determine how to shuffle.</div>
-</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#shuffle(boolean%5B%5D,int,int)" class="member-name-link">shuffle</a><wbr>(boolean[]&nbsp;items,
- int&nbsp;offset,
- int&nbsp;length)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#shuffle(boolean%5B%5D)" class="member-name-link">shuffle</a><wbr>(boolean[]&nbsp;items)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Shuffles a section of the given array in-place pseudo-randomly, using this to determine how to shuffle.</div>
+<div class="block">Shuffles the given array in-place pseudo-randomly, using this to determine how to shuffle.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#shuffle(char%5B%5D)" class="member-name-link">shuffle</a><wbr>(char[]&nbsp;items)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Shuffles the given array in-place pseudo-randomly, using this to determine how to shuffle.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#shuffle(char%5B%5D,int,int)" class="member-name-link">shuffle</a><wbr>(char[]&nbsp;items,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#shuffle(boolean%5B%5D,int,int)" class="member-name-link">shuffle</a><wbr>(boolean[]&nbsp;items,
  int&nbsp;offset,
  int&nbsp;length)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Shuffles a section of the given array in-place pseudo-randomly, using this to determine how to shuffle.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#shuffle(char%5B%5D)" class="member-name-link">shuffle</a><wbr>(char[]&nbsp;items)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Shuffles the given array in-place pseudo-randomly, using this to determine how to shuffle.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#shuffle(double%5B%5D)" class="member-name-link">shuffle</a><wbr>(double[]&nbsp;items)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Shuffles the given array in-place pseudo-randomly, using this to determine how to shuffle.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#shuffle(double%5B%5D,int,int)" class="member-name-link">shuffle</a><wbr>(double[]&nbsp;items,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#shuffle(char%5B%5D,int,int)" class="member-name-link">shuffle</a><wbr>(char[]&nbsp;items,
  int&nbsp;offset,
  int&nbsp;length)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Shuffles a section of the given array in-place pseudo-randomly, using this to determine how to shuffle.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#shuffle(double%5B%5D)" class="member-name-link">shuffle</a><wbr>(double[]&nbsp;items)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Shuffles the given array in-place pseudo-randomly, using this to determine how to shuffle.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#shuffle(float%5B%5D)" class="member-name-link">shuffle</a><wbr>(float[]&nbsp;items)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Shuffles the given array in-place pseudo-randomly, using this to determine how to shuffle.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#shuffle(float%5B%5D,int,int)" class="member-name-link">shuffle</a><wbr>(float[]&nbsp;items,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#shuffle(double%5B%5D,int,int)" class="member-name-link">shuffle</a><wbr>(double[]&nbsp;items,
  int&nbsp;offset,
  int&nbsp;length)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Shuffles a section of the given array in-place pseudo-randomly, using this to determine how to shuffle.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#shuffle(float%5B%5D)" class="member-name-link">shuffle</a><wbr>(float[]&nbsp;items)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Shuffles the given array in-place pseudo-randomly, using this to determine how to shuffle.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#shuffle(int%5B%5D)" class="member-name-link">shuffle</a><wbr>(int[]&nbsp;items)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Shuffles the given array in-place pseudo-randomly, using this to determine how to shuffle.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#shuffle(int%5B%5D,int,int)" class="member-name-link">shuffle</a><wbr>(int[]&nbsp;items,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#shuffle(float%5B%5D,int,int)" class="member-name-link">shuffle</a><wbr>(float[]&nbsp;items,
  int&nbsp;offset,
  int&nbsp;length)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Shuffles a section of the given array in-place pseudo-randomly, using this to determine how to shuffle.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#shuffle(int%5B%5D)" class="member-name-link">shuffle</a><wbr>(int[]&nbsp;items)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Shuffles the given array in-place pseudo-randomly, using this to determine how to shuffle.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#shuffle(long%5B%5D)" class="member-name-link">shuffle</a><wbr>(long[]&nbsp;items)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Shuffles the given array in-place pseudo-randomly, using this to determine how to shuffle.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#shuffle(long%5B%5D,int,int)" class="member-name-link">shuffle</a><wbr>(long[]&nbsp;items,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#shuffle(int%5B%5D,int,int)" class="member-name-link">shuffle</a><wbr>(int[]&nbsp;items,
  int&nbsp;offset,
  int&nbsp;length)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Shuffles a section of the given array in-place pseudo-randomly, using this to determine how to shuffle.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#shuffle(long%5B%5D)" class="member-name-link">shuffle</a><wbr>(long[]&nbsp;items)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Shuffles the given array in-place pseudo-randomly, using this to determine how to shuffle.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#shuffle(short%5B%5D)" class="member-name-link">shuffle</a><wbr>(short[]&nbsp;items)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Shuffles the given array in-place pseudo-randomly, using this to determine how to shuffle.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#shuffle(short%5B%5D,int,int)" class="member-name-link">shuffle</a><wbr>(short[]&nbsp;items,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#shuffle(long%5B%5D,int,int)" class="member-name-link">shuffle</a><wbr>(long[]&nbsp;items,
  int&nbsp;offset,
  int&nbsp;length)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Shuffles a section of the given array in-place pseudo-randomly, using this to determine how to shuffle.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#shuffle(T%5B%5D)" class="member-name-link">shuffle</a><wbr>(T[]&nbsp;items)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#shuffle(short%5B%5D)" class="member-name-link">shuffle</a><wbr>(short[]&nbsp;items)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Shuffles the given array in-place pseudo-randomly, using this to determine how to shuffle.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#shuffle(short%5B%5D,int,int)" class="member-name-link">shuffle</a><wbr>(short[]&nbsp;items,
+ int&nbsp;offset,
+ int&nbsp;length)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Shuffles a section of the given array in-place pseudo-randomly, using this to determine how to shuffle.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#shuffle(T%5B%5D,int,int)" class="member-name-link">shuffle</a><wbr>(T[]&nbsp;items,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#shuffle(T%5B%5D)" class="member-name-link">shuffle</a><wbr>(T[]&nbsp;items)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Shuffles the given array in-place pseudo-randomly, using this to determine how to shuffle.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#shuffle(T%5B%5D,int,int)" class="member-name-link">shuffle</a><wbr>(T[]&nbsp;items,
  int&nbsp;offset,
  int&nbsp;length)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Shuffles a section of the given array in-place pseudo-randomly, using this to determine how to shuffle.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>long</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#skip(long)" class="member-name-link">skip</a><wbr>(long&nbsp;advance)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>long</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#skip(long)" class="member-name-link">skip</a><wbr>(long&nbsp;advance)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Optional; advances or rolls back the <code>EnhancedRandom</code>' state without actually generating each number.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="EnhancedRandom.html" title="class in com.github.tommyettinger.random">EnhancedRandom</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#stringDeserialize(java.lang.String)" class="member-name-link">stringDeserialize</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;data)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="EnhancedRandom.html" title="class in com.github.tommyettinger.random">EnhancedRandom</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#stringDeserialize(java.lang.String)" class="member-name-link">stringDeserialize</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;data)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Given a String in the format produced by <a href="#stringSerialize()"><code>stringSerialize()</code></a>, this will attempt to set this EnhancedRandom
  object to match the state in the serialized data.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="EnhancedRandom.html" title="class in com.github.tommyettinger.random">EnhancedRandom</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#stringDeserialize(java.lang.String,com.github.tommyettinger.digital.Base)" class="member-name-link">stringDeserialize</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;data,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="EnhancedRandom.html" title="class in com.github.tommyettinger.random">EnhancedRandom</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#stringDeserialize(java.lang.String,com.github.tommyettinger.digital.Base)" class="member-name-link">stringDeserialize</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;data,
  com.github.tommyettinger.digital.Base&nbsp;base)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Given a String in the format produced by <a href="#stringSerialize(com.github.tommyettinger.digital.Base)"><code>stringSerialize(Base)</code></a>, and the same <code>Base</code> used by
  the serialization, this will attempt to set this EnhancedRandom object to match the state in the serialized
  data.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#stringSerialize()" class="member-name-link">stringSerialize</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#stringSerialize()" class="member-name-link">stringSerialize</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Serializes the current state of this EnhancedRandom to a String that can be used by
  <a href="#stringDeserialize(java.lang.String)"><code>stringDeserialize(String)</code></a> to load this state at another time.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#stringSerialize(com.github.tommyettinger.digital.Base)" class="member-name-link">stringSerialize</a><wbr>(com.github.tommyettinger.digital.Base&nbsp;base)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#stringSerialize(com.github.tommyettinger.digital.Base)" class="member-name-link">stringSerialize</a><wbr>(com.github.tommyettinger.digital.Base&nbsp;base)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Serializes the current state of this EnhancedRandom to a String that can be used by
  <a href="#stringDeserialize(java.lang.String)"><code>stringDeserialize(String)</code></a> to load this state at another time.</div>
 </div>
@@ -909,6 +919,34 @@ loadScripts(document, 'script');</script>
 <dd><code>stateB</code> - the long value to use for states at index 1, 5, 9, 13...</dd>
 <dd><code>stateC</code> - the long value to use for states at index 2, 6, 10, 14...</dd>
 <dd><code>stateD</code> - the long value to use for states at index 3, 7, 11, 15...</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="setState(long,long,long,long,long)">
+<h3>setState</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setState</span><wbr><span class="parameters">(long&nbsp;stateA,
+ long&nbsp;stateB,
+ long&nbsp;stateC,
+ long&nbsp;stateD,
+ long&nbsp;stateE)</span></div>
+<div class="block">Sets each state variable to <code>stateA</code>, <code>stateB</code>, <code>stateC</code>, or
+ <code>stateD</code>, alternating. This uses <a href="#setSelectedState(int,long)"><code>setSelectedState(int, long)</code></a> to
+ set the values. If there is one state variable (<a href="#getStateCount()"><code>getStateCount()</code></a> is 1),
+ then this only sets that state variable to stateA. If there are two state
+ variables, the first is set to stateA, and the second to stateB. With three
+ state variables, the first is set to stateA, the second to stateB, and the third
+ to stateC. With four state variables, the first is set to stateA, the second to
+ stateB, the third to stateC, and the fourth to stateD. If there are more, it
+ reuses stateA, then stateB, then stateC, then stateD, then stateA, and so on
+ until all variables are set.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>stateA</code> - the long value to use for states at index 0, 5, 10, 15...</dd>
+<dd><code>stateB</code> - the long value to use for states at index 1, 6, 11, 16...</dd>
+<dd><code>stateC</code> - the long value to use for states at index 2, 7, 12, 17...</dd>
+<dd><code>stateD</code> - the long value to use for states at index 3, 8, 13, 18...</dd>
+<dd><code>stateE</code> - the long value to use for states at index 4, 9, 14, 19...</dd>
 </dl>
 </section>
 </li>
@@ -1834,7 +1872,8 @@ loadScripts(document, 'script');</script>
  excluded from the inputs (if 0.0 is an input, the result is <code>38.5</code>). A chief advantage of using this with
  a random number generator is that it only requires one random double to obtain one Gaussian value;
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Random.html#nextGaussian()" title="class or interface in java.util" class="external-link"><code>Random.nextGaussian()</code></a> generates at least two random doubles for each two Gaussian values, but
- may rarely require much more random generation.
+ may rarely require much more random generation. Note that this method isn't used by default for
+ <a href="#nextGaussian()"><code>nextGaussian()</code></a>, because it uses a very different approximation that is faster but less precise.
  <br>
  This can be used both as an optimization for generating Gaussian random values, and as a way of generating
  Gaussian values that match a pattern present in the inputs (which you could have by using a sub-random sequence

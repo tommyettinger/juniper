@@ -132,23 +132,33 @@ loadScripts(document, 'script');</script>
 <div class="block">A relatively-simple RNG that's similar to <a href="LaserRandom.html" title="class in com.github.tommyettinger.random"><code>LaserRandom</code></a> with less correlation between similar initial states,
  but without the ability to <a href="EnhancedRandom.html#skip(long)"><code>EnhancedRandom.skip(long)</code></a>.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="RomuTrioRandom.html" title="class in com.github.tommyettinger.random">RomuTrioRandom</a></div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="PasarRandom.html" title="class in com.github.tommyettinger.random">PasarRandom</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">Like WhiskerRandom, but this has a fifth state that runs like a counter, guaranteeing a minimum period of 2 to the
+ 64.</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="RomuTrioRandom.html" title="class in com.github.tommyettinger.random">RomuTrioRandom</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">A well-studied RNG that can be quite fast in some circumstances.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="StrangerRandom.html" title="class in com.github.tommyettinger.random">StrangerRandom</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="StrangerRandom.html" title="class in com.github.tommyettinger.random">StrangerRandom</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">A random number generator that acts as a counterpart to <a href="WhiskerRandom.html" title="class in com.github.tommyettinger.random"><code>WhiskerRandom</code></a> by guaranteeing a slightly longer period
  and potentially being faster in some situations because it uses no multiplication.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="TricycleRandom.html" title="class in com.github.tommyettinger.random">TricycleRandom</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="TricycleRandom.html" title="class in com.github.tommyettinger.random">TricycleRandom</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">An unusual RNG that's extremely fast on HotSpot JDK 16 and higher, and still fairly fast on earlier JDKs.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="TrimRandom.html" title="class in com.github.tommyettinger.random">TrimRandom</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="TrimRandom.html" title="class in com.github.tommyettinger.random">TrimRandom</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">A random number generator that is very fast on Java 16+, has both a very large probable period and a large guaranteed
  minimum period, and uses only add, bitwise-rotate, and XOR operations (no multiplication).</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="VanDerCorputQuasiRandom.html" title="class in com.github.tommyettinger.random">VanDerCorputQuasiRandom</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">Not actually a pseudo-random number generator, but a quasi-random number generator, this is a simple
+ way to produce random-seeming numbers with a high distance between one number and the next.</div>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="WhiskerRandom.html" title="class in com.github.tommyettinger.random">WhiskerRandom</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
