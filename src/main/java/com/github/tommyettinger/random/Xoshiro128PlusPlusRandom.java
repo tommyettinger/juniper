@@ -403,6 +403,71 @@ public class Xoshiro128PlusPlusRandom extends EnhancedRandom {
 		return new Xoshiro128PlusPlusRandom(stateA, stateB, stateC, stateD);
 	}
 
+	/**
+	 * Jumps extremely far in the generator's sequence, such that it requires {@code Math.pow(2, 64)} calls to leap() to
+	 * complete a cycle through the generator's entire sequence. This can be used to create over 18 quintillion
+	 * substreams of this generator's sequence, each with a period of {@code Math.pow(2, 64)}.
+	 * @return the result of what nextLong() would return if it was called at the state this jumped to
+	 */
+	public long leap()
+	{
+		int s0 = 0;
+		int s1 = 0;
+		int s2 = 0;
+		int s3 = 0;
+
+		for(int b = 0; b < 32; b++) {
+			if ((0x8764000b & 1 << b) != 0) {
+				s0 ^= stateA;
+				s1 ^= stateB;
+				s2 ^= stateC;
+				s3 ^= stateD;
+			}
+			nextInt();
+		}
+
+		for(int b = 0; b < 32; b++) {
+			if ((0xf542d2d3 & 1 << b) != 0) {
+				s0 ^= stateA;
+				s1 ^= stateB;
+				s2 ^= stateC;
+				s3 ^= stateD;
+			}
+			nextInt();
+		}
+
+		for(int b = 0; b < 32; b++) {
+			if ((0x6fa035c3 & 1 << b) != 0) {
+				s0 ^= stateA;
+				s1 ^= stateB;
+				s2 ^= stateC;
+				s3 ^= stateD;
+			}
+			nextInt();
+		}
+
+		for(int b = 0; b < 32; b++) {
+			if ((0x77f2db5b & 1 << b) != 0) {
+				s0 ^= stateA;
+				s1 ^= stateB;
+				s2 ^= stateC;
+				s3 ^= stateD;
+			}
+			nextInt();
+		}
+
+		stateA = s0;
+		stateB = s1;
+		stateC = s2;
+		stateD = s3;
+
+		s3 += s0;
+		s0 += (s3 << 7 | s3 >>> 25);
+		s1 = s2 - s1;
+		s2 += (s1 << 13 | s1 >>> 19);
+		return (long) s0 << 32 ^ (s2 & 0xFFFFFFFFL);
+	}
+
 	@Override
 	public boolean equals (Object o) {
 		if (this == o)
