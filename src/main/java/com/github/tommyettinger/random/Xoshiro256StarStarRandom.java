@@ -324,6 +324,72 @@ public class Xoshiro256StarStarRandom extends EnhancedRandom {
 		return (bc << 7 | bc >>> 57) * 9;
 	}
 
+	/**
+	 * Jumps extremely far in the generator's sequence, such that it requires {@code Math.pow(2, 64)} calls to leap() to
+	 * complete a cycle through the generator's entire sequence. This can be used to create over 18 quintillion
+	 * substreams of this generator's sequence, each with a period of {@code Math.pow(2, 192)}.
+	 * @return the result of what nextLong() would return if it was called at the state this jumped to
+	 */
+	public long leap()
+	{
+		long s0 = 0L;
+		long s1 = 0L;
+		long s2 = 0L;
+		long s3 = 0L;
+		for (long b = 0x76e15d3efefdcbbfL; b != 0L; b >>>= 1)
+		{
+			if ((1L & b) != 0L)
+			{
+				s0 ^= stateA;
+				s1 ^= stateB;
+				s2 ^= stateC;
+				s3 ^= stateD;
+			}
+			nextLong();
+		}
+		for (long b = 0xc5004e441c522fb3L; b != 0L; b >>>= 1)
+		{
+			if ((1L & b) != 0L)
+			{
+				s0 ^= stateA;
+				s1 ^= stateB;
+				s2 ^= stateC;
+				s3 ^= stateD;
+			}
+			nextLong();
+		}
+		for (long b = 0x77710069854ee241L; b != 0L; b >>>= 1)
+		{
+			if ((1L & b) != 0L)
+			{
+				s0 ^= stateA;
+				s1 ^= stateB;
+				s2 ^= stateC;
+				s3 ^= stateD;
+			}
+			nextLong();
+		}
+		for (long b = 0x39109bb02acbe635L; b != 0L; b >>>= 1)
+		{
+			if ((1L & b) != 0L)
+			{
+				s0 ^= stateA;
+				s1 ^= stateB;
+				s2 ^= stateC;
+				s3 ^= stateD;
+			}
+			nextLong();
+		}
+
+		stateA = s0;
+		stateB = s1;
+		stateC = s2;
+		stateD = s3;
+		final long t = s1 * 5;
+		return  (t << 7 | t >>> 57) * 9;
+	}
+
+
 	@Override
 	public Xoshiro256StarStarRandom copy () {
 		return new Xoshiro256StarStarRandom(stateA, stateB, stateC, stateD);
