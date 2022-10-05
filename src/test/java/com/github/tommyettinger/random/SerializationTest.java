@@ -60,10 +60,10 @@ public class SerializationTest {
 //        EnhancedRandom[] all = new EnhancedRandom[]{chop, distinct, mizuchi, tricycle, trim};
         List<EnhancedRandom> all = Deserializer.copyRandoms();
 //        Base base = Base.scrambledBase(new LaserRandom(123456789L));
-//        List<Base> bases = Base.values();
-//        for(Base base : bases) {
-        Base base = new Base("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'/!@#$%^&*()[]{}<>.?;|_=", false, ' ', '+', '-');
+        List<Base> bases = Base.values();
+        for(Base base : bases)
         {
+//        Base base = new Base("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'/!@#$%^&*()[]{}<>.?;|_=", false, ' ', '+', '-');
             for (EnhancedRandom r : all) {
                 String s = r.stringSerialize(base);
                 r.nextLong();

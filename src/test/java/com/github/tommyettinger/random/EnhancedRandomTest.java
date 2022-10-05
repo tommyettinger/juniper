@@ -171,6 +171,27 @@ public class EnhancedRandomTest {
 	}
 
 	@Test
+	public void testPasarPrevious() {
+		PasarRandom random = new PasarRandom(0L);
+		long n0 = random.nextLong();
+		long n1 = random.nextLong();
+		long n2 = random.nextLong();
+		long n3 = random.nextLong();
+		long n4 = random.nextLong();
+		long n5 = random.nextLong();
+		long p4 = random.previousLong();
+		long p3 = random.previousLong();
+		long p2 = random.previousLong();
+		long p1 = random.previousLong();
+		long p0 = random.previousLong();
+		Assert.assertEquals(n0, p0);
+		Assert.assertEquals(n1, p1);
+		Assert.assertEquals(n2, p2);
+		Assert.assertEquals(n3, p3);
+		Assert.assertEquals(n4, p4);
+	}
+
+	@Test
 	public void testDistinctBoundedLong() {
 		DistinctRandom random = new DistinctRandom(123L);
 		long inner = -0x7000000000000000L, outer = 0x7000000000000000L;
@@ -247,7 +268,7 @@ public class EnhancedRandomTest {
 				new LaserRandom(1), new MizuchiRandom(1), new RomuTrioRandom(1),
 				new StrangerRandom(1), new TricycleRandom(1), new TrimRandom(1),
 				new Xoshiro256StarStarRandom(1), new Xoshiro128PlusPlusRandom(1),
-				new WhiskerRandom((1))}) {
+				new WhiskerRandom(1), new PasarRandom(1)}) {
 			bits.set(0, 0x800000);
 			for (int i = 0; i < 0x10000000; i++) {
 				bits.clear((int) (gen.nextFloat() * 0x800000));
