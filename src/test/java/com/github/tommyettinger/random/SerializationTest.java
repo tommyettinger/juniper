@@ -59,16 +59,21 @@ public class SerializationTest {
 //        TrimRandom trim = new TrimRandom(-1L);
 //        EnhancedRandom[] all = new EnhancedRandom[]{chop, distinct, mizuchi, tricycle, trim};
         List<EnhancedRandom> all = Deserializer.copyRandoms();
-        Base base = Base.scrambledBase(new LaserRandom(123456789L));
-        for(EnhancedRandom r : all) {
-            String s = r.stringSerialize(base);
-            r.nextLong();
-            long rl = r.nextLong();
-            EnhancedRandom de = Deserializer.deserialize(s, base);
-            de.nextLong();
-            long dl = de.nextLong();
-            System.out.println(r + "  ,  " + de);
-            Assert.assertEquals(rl, dl);
+//        Base base = Base.scrambledBase(new LaserRandom(123456789L));
+//        List<Base> bases = Base.values();
+//        for(Base base : bases) {
+        Base base = new Base("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'/!@#$%^&*()[]{}<>.?;|_=", false, ' ', '+', '-');
+        {
+            for (EnhancedRandom r : all) {
+                String s = r.stringSerialize(base);
+                r.nextLong();
+                long rl = r.nextLong();
+                EnhancedRandom de = Deserializer.deserialize(s, base);
+                de.nextLong();
+                long dl = de.nextLong();
+                System.out.println(r + "  ,  " + de);
+                Assert.assertEquals("Failure with " + s + " and radix " + base.base, rl, dl);
+            }
         }
     }
     @Test
