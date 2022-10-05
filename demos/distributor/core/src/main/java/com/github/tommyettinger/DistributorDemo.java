@@ -1,7 +1,9 @@
 package com.github.tommyettinger;
 
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.*;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.utils.ScreenUtils;
+import com.github.tommyettinger.digital.BitConversion;
 import com.github.tommyettinger.random.EnhancedRandom;
 import com.github.tommyettinger.random.GoldenQuasiRandom;
 
@@ -17,6 +19,7 @@ public class DistributorDemo extends Game {
     public EnhancedRandom random = new GoldenQuasiRandom();
     @Override
     public void create() {
+        Gdx.app.setLogLevel(Application.LOG_ERROR);
         alternateCauchy = new CauchyAlternateScreen(this);
         alternateArcsine = new ArcsineAlternateScreen(this);
         screens = new Screen[]{
@@ -36,5 +39,24 @@ public class DistributorDemo extends Game {
     public void previousScreen(){
         screenIndex = (screenIndex + screens.length - 1) % screens.length;
         setScreen(screens[screenIndex]);
+    }
+
+    @Override
+    public void render() {
+        super.render();
+        if(Gdx.input.isKeyPressed(Input.Keys.COMMA)){
+            Color clear = Color.WHITE;
+            if(BitConversion.reversedLongBitsToDouble(0x6666665786666666L) != BitConversion.longBitsToDouble(Long.reverseBytes(0x6666665786666666L)))
+            {
+                clear = Color.RED;
+                Gdx.app.error("CONVERSION", BitConversion.reversedLongBitsToDouble(0x6666665786666666L) + " SHOULD BE " +  BitConversion.longBitsToDouble(Long.reverseBytes(0x6666665786666666L)));
+            }
+            else if(BitConversion.doubleToReversedLongBits(12.3456) != Long.reverseBytes(BitConversion.doubleToLongBits(12.3456)))
+            {
+                clear = Color.GOLD;
+                Gdx.app.error("CONVERSION", BitConversion.doubleToReversedLongBits(12.3456) + " SHOULD BE " +  Long.reverseBytes(BitConversion.doubleToLongBits(12.3456)));
+            }
+            ScreenUtils.clear(clear);
+        }
     }
 }
