@@ -69,12 +69,12 @@ public class NormalAlternateScreen extends ScreenAdapter {
         }
         else if(Gdx.input.isKeyJustPressed(Input.Keys.SEMICOLON))
         {
-            mode = (mode + 4) % 5;
+            mode = (mode + 5) % 6;
             return;
         }
         else if(Gdx.input.isKeyJustPressed(Input.Keys.APOSTROPHE))
         {
-            mode = (mode + 1) % 5;
+            mode = (mode + 1) % 6;
             return;
         }
         else if(Gdx.input.isKeyJustPressed(Input.Keys.SLASH))
@@ -143,6 +143,14 @@ public class NormalAlternateScreen extends ScreenAdapter {
             case 4:
                 for (int i = 0; i < 0x10000; i++) {
                     int m = (int) ((dist.getMu() + dist.getSigma() * winitzki(dist.generator.nextExclusiveDouble()))
+                            * 128 + 256);
+                    if (m >= 0 && m < 512)
+                        amounts[m]++;
+                }
+                break;
+            case 5:
+                for (int i = 0; i < 0x10000; i++) {
+                    int m = (int) ((dist.getMu() + dist.getSigma() * logit(dist.generator.nextExclusiveDouble()))
                             * 128 + 256);
                     if (m >= 0 && m < 512)
                         amounts[m]++;
@@ -318,7 +326,7 @@ public class NormalAlternateScreen extends ScreenAdapter {
         return mu + sigma * val;
     }
 
-    public double winitzki(double x) {
+    public static double winitzki(double x) {
 //        final double alpha = 0.140012;
         x = x + x - 1.0;
         final double iAlpha = 7.14224495043282;
@@ -326,5 +334,9 @@ public class NormalAlternateScreen extends ScreenAdapter {
         final double lg = Math.log(1.0 - x * x);
         final double big = lg * 0.5 + alphaPi2;
         return MathTools.ROOT2_D * Math.copySign(Math.sqrt(Math.sqrt(big * big - lg * iAlpha) - big), x);
+    }
+
+    public static double logit(double p) {
+        return 0.6266570686577501 * Math.log(p / (1.0 - p));
     }
 }
