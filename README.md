@@ -33,19 +33,23 @@ seemingly-random, response to any new person she meets.
 
 ### What are these generators?
 
-Several high-quality and very-fast random number generators are here, such as `com.github.tommyettinger.random.LaserRandom`,
-`com.github.tommyettinger.random.TricycleRandom`, `com.github.tommyettinger.random.DistinctRandom`, `com.github.tommyettinger.random.WhiskerRandom`,
+Several high-quality and very-fast random number generators are here, such as
+`com.github.tommyettinger.random.LaserRandom`,
+`com.github.tommyettinger.random.TricycleRandom`, `com.github.tommyettinger.random.DistinctRandom`,
+`com.github.tommyettinger.random.WhiskerRandom`, `com.github.tommyettinger.random.PasarRandom`,
 `com.github.tommyettinger.random.FourWheelRandom` and `com.github.tommyettinger.random.TrimRandom`. These extend
 the abstract class `com.github.tommyettinger.random.EnhancedRandom`, and that extends `java.util.Random` for
 compatibility. LaserRandom has a good balance of features, speed, and quality, but other generators here make different
-tradeoffs. LaserRandom can jump to any point in its cycle (which is always length 2 to the 64) in constant time; DistinctRandom
-can also do this, but no other generators here can. TricycleRandom and FourWheelRandom can be quite fast, but don't always
-produce very-random numbers right at the start of usage; WhiskerRandom is much like FourWheelRandom in design, but is a
-little faster (it is the fastest generator here on Java 17 with HotSpot), and is a little more random at the start.
-DistinctRandom is very similar to JDK 8's SplittableRandom, without the splitting, and will produce every possible
-`long` with its `nextLong()` method before it ever repeats a returned value. TrimRandom is very close to FourWheelRandom
-in design and in speed, but has higher quality even without using any multiplication internally; it also offers a high
-guaranteed minimum period (2 to the 64) with a likely higher maximum period.
+tradeoffs. LaserRandom can jump to any point in its cycle (which is always length 2 to the 64) in constant time;
+DistinctRandom can also do this, but no other generators here can. TricycleRandom and FourWheelRandom can be quite fast,
+but don't always produce very-random numbers right at the start of usage; WhiskerRandom is much like FourWheelRandom in
+design, but is a little faster (it is the fastest generator here on Java 17 with HotSpot), and is a little more random
+at the start. TrimRandom is very close to FourWheelRandom in design and in speed, but has higher quality even without
+using any multiplication internally; it also offers a high guaranteed minimum period (2 to the 64) with a likely higher
+maximum period. PasarRandom is mostly identical to WhiskerRandom, but instead of adding a constant in one place, it adds
+the current value of a simple counter; this gives it guarantee of a long minimum period and lets it `leap()`, but slows
+it down a bit. DistinctRandom is very similar to JDK 8's SplittableRandom, without the splitting, and will produce every
+possible `long` with its `nextLong()` method before it ever repeats a returned value.
 
 There's also some other generators that you might want for other reasons.
 `com.github.tommyettinger.random.Xoshiro256StarStarRandom` isn't particularly fast, but is four-dimensionally equidistributed
@@ -61,6 +65,14 @@ when run on GWT (even when generating `long` values!). `com.github.tommyettinger
 version of the 32-bit Xoshiro generator with the ++ scrambler; it has some optimizations so that it can return `long`
 values more quickly, though it is still slower than ChopRandom.
 
+Two quasi-random number generators are present here; these are designed for a different purpose than the other
+generators and don't pass statistical tests for randomness. They do converge much more quickly than a pseudo-random
+number generator when you request one number from them at a time and get an answer to some question by running many
+quasi-random trials. The quasi-random generators are `com.github.tommyettinger.random.GoldenQuasiRandom`, which uses a
+linear recurrence of 2 to the 64 divided by the golden ratio, and
+`com.github.tommyettinger.random.VanDerCorputQuasiRandom`, which uses the base-2 van der Corput sequence. Both do their
+job well enough (GoldenQuasiRandom is probably faster), but don't use either when you specifically need randomness.
+
 A nice quality of the `EnhancedRandom` values here is that they can be serialized to Strings easily and in a consistent
 format, and deserialized to the appropriate class given a serialized String from any generator. You can use the
 `EnhancedRandom.stringSerialize()` method (which optionally takes a `Base`, so you can write hexadecimal numbers, base64
@@ -68,6 +80,12 @@ numbers, or normal base 10 numbers) to write a serialized String. You can use th
 (which also optionally takes a `Base`, and it must be the same used to write the String) to read an `EnhancedRandom`
 back. It will have the `EnhancedRandom` type as far as the compiler can tell, but it will use the correct implementation
 to match the generator that was serialized.
+
+Some generators have the ability to `leap()` ahead many steps in their sequence, guaranteeing some span of values will
+not overlap with the next call to `leap()`. The Xoshiro generators have an exact-length leap that guarantees a
+non-overlapping span of either 2 to the 64 (Xoshiro128PlusPlusRandom) or 2 to the 192 (Xoshiro256StarStarRandom)
+generated values. Some generators with a counter (PasarRandom and TrimRandom) can jump an inexact length, but guarantee
+at least 2 to the 48 generated values without overlap (usually, the actual number is much higher).
 
 You may also want to use the `randomize()` methods in the `digital` dependency's `Hasher` class to make sequential
 values more random; this is essentially the approach used by DistinctRandom. A similar non-generator use of randomness
@@ -98,15 +116,15 @@ can produce, instead of just `double`. This only really works for numbers distri
 With Gradle, the dependency (of the core module, if you have multiple) is:
 
 ```groovy
-api "com.github.tommyettinger:juniper:0.1.4"
+api "com.github.tommyettinger:juniper:0.1.5"
 ```
 
 In a libGDX project that has a GWT/HTML backend, the `html/build.gradle` file
 should additionally have:
 
 ```
-implementation "com.github.tommyettinger:digital:0.1.2:sources"
-implementation "com.github.tommyettinger:juniper:0.1.4:sources"
+implementation "com.github.tommyettinger:digital:0.1.4:sources"
+implementation "com.github.tommyettinger:juniper:0.1.5:sources"
 ```
 
 And the `GdxDefinition.gwt.xml` file should have:
@@ -122,7 +140,7 @@ If you don't use Gradle, then with Maven, the dependency is:
 <dependency>
   <groupId>com.github.tommyettinger</groupId>
   <artifactId>juniper</artifactId>
-  <version>0.1.4</version>
+  <version>0.1.5</version>
 </dependency>
 ```
 
