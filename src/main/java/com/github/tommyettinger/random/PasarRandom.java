@@ -325,6 +325,25 @@ public class PasarRandom extends EnhancedRandom {
 		return new PasarRandom(stateA, stateB, stateC, stateD, stateE);
 	}
 
+	/**
+	 * Jumps extremely far in the generator's sequence, such that one call to leap() advances the state as many as
+	 * {@code Math.pow(2, 48)} calls to {@link #nextLong()}. This can be used to create 65536 substreams of this
+	 * generator's sequence, each with a period of at least {@code Math.pow(2, 48)} but likely much more.
+	 * @return the result of what nextLong() would return if it was called at the state this jumped to
+	 */
+	public long leap()
+	{
+		final long fa = stateA;
+		final long fb = stateB;
+		final long fc = stateC;
+		final long fd = stateD;
+		final long fe = stateE;
+		stateA = fe * 0xF1357AEA2E62A9C5L;
+		stateB = (fa << 44 | fa >>> 20);
+		stateC = fb + fd;
+		stateD = fd + 0x7C15000000000000L;
+		return stateE = fa ^ fc;
+	}
 	@Override
 	public boolean equals (Object o) {
 		if (this == o)
