@@ -1,11 +1,11 @@
 package com.github.tommyettinger;
 
-import com.badlogic.gdx.*;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.utils.ScreenUtils;
-import com.github.tommyettinger.digital.BitConversion;
+import com.badlogic.gdx.Application;
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
+import com.github.tommyettinger.random.ChopRandom;
 import com.github.tommyettinger.random.EnhancedRandom;
-import com.github.tommyettinger.random.GoldenQuasiRandom;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class DistributorDemo extends Game {
@@ -13,15 +13,16 @@ public class DistributorDemo extends Game {
     public static final int SCREEN_HEIGHT = 520;
 
     private Screen[] screens;
-    public Screen alternateCauchy, alternateArcsine;
+    public Screen alternateCauchy, alternateArcsine, alternateNormal;
     private int screenIndex;
     public static double a = 1.0, b = 1.0, c = 1.0;
-    public EnhancedRandom random = new GoldenQuasiRandom();
+    public EnhancedRandom random = new ChopRandom();
     @Override
     public void create() {
         Gdx.app.setLogLevel(Application.LOG_ERROR);
         alternateCauchy = new CauchyAlternateScreen(this);
         alternateArcsine = new ArcsineAlternateScreen(this);
+        alternateNormal = new NormalAlternateScreen(this);
         screens = new Screen[]{
                 new BetaScreen(this), new KumaraswamyScreen(this), new LumpScreen(this),
                 new NormalScreen(this), new CauchyScreen(this), new LogCauchyScreen(this),

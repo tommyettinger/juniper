@@ -13,7 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.UIUtils;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.github.tommyettinger.random.distribution.CauchyDistribution;
+import com.github.tommyettinger.random.EnhancedRandom;
 import com.github.tommyettinger.random.distribution.NormalDistribution;
 import text.formic.Stringf;
 
@@ -21,7 +21,7 @@ import java.util.Arrays;
 
 import static com.github.tommyettinger.DistributorDemo.*;
 
-public class NormalScreen extends ScreenAdapter {
+public class NormalAlternateScreen extends ScreenAdapter {
     private NormalDistribution dist;
     private SpriteBatch batch;
     private ImmediateModeRenderer20 renderer;
@@ -48,7 +48,7 @@ public class NormalScreen extends ScreenAdapter {
     }
     private final DistributorDemo mainGame;
 
-    public NormalScreen(DistributorDemo main){
+    public NormalAlternateScreen(DistributorDemo main){
         mainGame = main;
     }
 
@@ -66,7 +66,8 @@ public class NormalScreen extends ScreenAdapter {
         }
         else if(Gdx.input.isKeyJustPressed(Input.Keys.SLASH))
         {
-            mainGame.setScreen(mainGame.alternateNormal);
+            mainGame.nextScreen();
+            mainGame.previousScreen();
             return;
         }
         else if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
@@ -94,7 +95,8 @@ public class NormalScreen extends ScreenAdapter {
         iterations += 1;
         dist.setParameters(a, b, c);
         for (int i = 0; i < 0x10000; i++) {
-            int m = (int) (dist.nextDouble() * 128 + 256);
+            int m = (int) ((dist.getMu() + dist.getSigma() * EnhancedRandom.probit(dist.generator.nextExclusiveDouble()))
+                    * 128 + 256);
             if(m >= 0 && m < 512)
                 amounts[m]++;
         }
