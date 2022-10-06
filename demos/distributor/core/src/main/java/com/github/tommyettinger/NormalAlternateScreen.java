@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.UIUtils;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.github.tommyettinger.digital.MathTools;
 import com.github.tommyettinger.random.EnhancedRandom;
 import com.github.tommyettinger.random.distribution.NormalDistribution;
 import text.formic.Stringf;
@@ -68,12 +69,12 @@ public class NormalAlternateScreen extends ScreenAdapter {
         }
         else if(Gdx.input.isKeyJustPressed(Input.Keys.SEMICOLON))
         {
-            mode = (mode + 3) % 4;
+            mode = (mode + 4) % 5;
             return;
         }
         else if(Gdx.input.isKeyJustPressed(Input.Keys.APOSTROPHE))
         {
-            mode = (mode + 1) % 4;
+            mode = (mode + 1) % 5;
             return;
         }
         else if(Gdx.input.isKeyJustPressed(Input.Keys.SLASH))
@@ -139,6 +140,14 @@ public class NormalAlternateScreen extends ScreenAdapter {
                         amounts[m]++;
                 }
                 break;
+            case 4:
+                for (int i = 0; i < 0x10000; i++) {
+                    int m = (int) ((dist.getMu() + dist.getSigma() * winitzki(dist.generator.nextExclusiveDouble()))
+                            * 128 + 256);
+                    if (m >= 0 && m < 512)
+                        amounts[m]++;
+                }
+                break;
         }
         renderer.begin(camera.combined, GL20.GL_LINES);
         for (int x = 0; x < 512; x++) {
@@ -180,7 +189,7 @@ public class NormalAlternateScreen extends ScreenAdapter {
 
 
     // this seems about the same as the existing nextGaussian(), but needs two random longs.
-    double pop()
+    public double pop()
     {
         // Generate two 64-bit uniform random integers. These could
         // be passed in as parameters and/or the two values could
@@ -307,5 +316,15 @@ public class NormalAlternateScreen extends ScreenAdapter {
         }
 
         return mu + sigma * val;
+    }
+
+    public double winitzki(double x) {
+//        final double alpha = 0.140012;
+        x = x + x - 1.0;
+        final double iAlpha = 7.14224495043282;
+        final double alphaPi2 = 4.54689435453805;
+        final double lg = Math.log(1.0 - x * x);
+        final double big = lg * 0.5 + alphaPi2;
+        return MathTools.ROOT2_D * Math.copySign(Math.sqrt(Math.sqrt(big * big - lg * iAlpha) - big), x);
     }
 }
