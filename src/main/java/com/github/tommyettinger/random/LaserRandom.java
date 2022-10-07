@@ -37,7 +37,7 @@ import java.util.Random;
  * {@link #nextInclusiveDouble()}. There's {@link #nextGaussian()}, which is implemented differently from
  * java.util.Random and always advances the state once. This implements all optional methods in
  * EnhancedRandom, and implements almost all EnhancedRandom methods explicitly, which allows LaserRandom to
- * be copied more easily without depending on jdkgdxds (see below).
+ * be copied more easily without depending on juniper (see below).
  * <br>
  * Every method defined in this class advances the state by the same amount unless otherwise documented (only
  * {@link #nextTriangular()} and {@link #nextTriangular(float)} advance the state twice). The state can
@@ -83,12 +83,12 @@ import java.util.Random;
  * Random and also RandomXS128. LaserRandom is generally faster than RandomXS128, and can be over 3x faster
  * when running on OpenJ9 (generating over 3 billion random long values per second). If you copy this, the
  * only step you probably need to do is to remove {@code extends EnhancedRandom} from the class, since
- * almost all of EnhancedRandom consists of either default methods that this implements explicitly, or to
+ * almost all of EnhancedRandom consists of either parent methods that this overrides explicitly, or to
  * provide a common interface for pseudo-random number generators on the JVM. This class avoids using the
  * Override annotation specifically because copying the class and removing the EnhancedRandom implementation
  * would cause compile errors if Override annotations were present. If you do keep this class implementing
  * EnhancedRandom, then that permits some extra methods to come in via default implementations, like
- * nextExclusiveFloat() (which uses the BitConversion class here in jdkgdxds), minIntOf(), maxLongOf(), etc.
+ * nextExclusiveFloat() (which uses the BitConversion class here from digital), minIntOf(), maxLongOf(), etc.
  * <br>
  * You may want to compare this class with TricycleRandom and FourWheelRandom in the same package; both of
  * those have a larger state size (and should usually have a larger period), are usually faster, and also
@@ -736,41 +736,41 @@ public class LaserRandom extends EnhancedRandom {
 	 * normal distribution with mean {@code 0.0} and standard deviation
 	 * {@code 1.0}, is pseudorandomly generated and returned.
 	 * <p>
-	 * This uses an imperfect approximation, but one that is much faster than
-	 * the Box-Muller transform, Marsaglia Polar method, or a transform using the
-	 * probit function. Like earlier versions that used probit(), it requests
-	 * exactly one long from the generator's sequence (using {@link #nextLong()}).
-	 * This makes it different from code like java.util.Random's nextGaussian()
-	 * method, which can (rarely) fetch a higher number of random doubles.
-	 * <p>
-	 * This can't produce as extreme results in extremely-rare cases as methods
-	 * like Box-Muller and Marsaglia Polar can. All possible results are between
-	 * {@code -7.929080009460449} and {@code 7.929080009460449}, inclusive.
-	 * <p>
-	 * <a href="https://marc-b-reynolds.github.io/distribution/2021/03/18/CheapGaussianApprox.html">Credit
-	 * to Marc B. Reynolds</a> for coming up with this clever fusion of the
-	 * already-bell-curved bit count and a triangular distribution to smooth
-	 * it out. Using one random long instead of two is the contribution here.
-	 *
+	 * This uses an inverse transform sample method to generate its random
+	 * values, using a method called probit(). The algorithm used was
+	 * written by Peter John Acklam, and implemented by Sherali Karimov.
+	 * <a href="https://web.archive.org/web/20150910002142/http://home.online.no/~pjacklam/notes/invnorm/impl/karimov/StatUtil.java">Original source</a>.
+	 * <a href="https://web.archive.org/web/20151030215612/http://home.online.no/~pjacklam/notes/invnorm/">Information on the algorithm</a>.
+	 * As this is written, it can return a maximum result of 8.209536145151493,
+	 * and a minimum result of -38.5 . 38.5 only occurs 1 in every (2 to the 53)
+	 * calls, on average, and all other results are between -8.209536145151493
+	 * and 8.209536145151493 . Note, this implementation is different from the
+	 * one in EnhancedRandom only to permit copying this class more easily;
+	 * EnhancedRandom normally uses another class, Ziggurat, to more efficiently
+	 * generate normally-distributed doubles.
+	 * <br>
 	 * @return the next pseudorandom, Gaussian ("normally") distributed
 	 * {@code double} value with mean {@code 0.0} and standard deviation
 	 * {@code 1.0} from this random number generator's sequence
 	 */
 	public double nextGaussian () {
-		//// here, we want to only request one long from this LaserRandom.
-		//// because the bitCount() doesn't really care about the numerical value of its argument, only its Hamming weight,
-		//// we use the random long un-scrambled, and get the bit count of that.
-		//// for the later steps, we multiply the random long by a specific constant and get the difference of its halves.
-		//// 0xC6AC29E4C6AC29E5L is... OK, it's complicated. It needs to have almost-identical upper and lower halves, but
-		//// for reasons I don't currently understand, if the upper and lower halves are equal, then the min and max results
-		//// of the Gaussian aren't equally distant from 0. By using an upper half that is exactly 1 less than the lower
-		//// half, we get bounds of -7.929080009460449 to 7.929080009460449, returned when the RNG gives 0 and -1 resp.
-		//// because it only needs one floating-point operation, it is quite fast on a CPU.
-		//// this winds up being a very smooth Gaussian, as Marc B. Reynolds had it with two random longs.
-		long u = nextLong();
-		final long c = Long.bitCount(u) - 32L << 32;
-		u *= 0xC6AC29E4C6AC29E5L;
-		return 0x1.fb760cp-35 * (c + (u & 0xFFFFFFFFL) - (u >>> 32));
+		final double d = nextDouble();
+		if (d == 0) {
+			return -38.5;
+		} else if (d < 0.02425) {
+			final double q = Math.sqrt(-2.0 * Math.log(d));
+			return (((((-7.784894002430293e-03 * q + -3.223964580411365e-01) * q + -2.400758277161838e+00) * q + -2.549732539343734e+00) * q + 4.374664141464968e+00) * q + 2.938163982698783e+00) / (
+					(((7.784695709041462e-03 * q + 3.224671290700398e-01) * q + 2.445134137142996e+00) * q + 3.754408661907416e+00) * q + 1.0);
+		} else if (0.97575 < d) {
+			final double q = Math.sqrt(-2.0 * Math.log(1 - d));
+			return -(((((-7.784894002430293e-03 * q + -3.223964580411365e-01) * q + -2.400758277161838e+00) * q + -2.549732539343734e+00) * q + 4.374664141464968e+00) * q + 2.938163982698783e+00) / (
+					(((7.784695709041462e-03 * q + 3.224671290700398e-01) * q + 2.445134137142996e+00) * q + 3.754408661907416e+00) * q + 1.0);
+		} else {
+			final double q = d - 0.5;
+			final double r = q * q;
+			return (((((-3.969683028665376e+01 * r + 2.209460984245205e+02) * r + -2.759285104469687e+02) * r + 1.383577518672690e+02) * r + -3.066479806614716e+01) * r + 2.506628277459239e+00) * q / (
+					((((-5.447609879822406e+01 * r + 1.615858368580409e+02) * r + -1.556989798598866e+02) * r + 6.680131188771972e+01) * r + -1.328068155288572e+01) * r + 1.0);
+		}
 	}
 
 	/**

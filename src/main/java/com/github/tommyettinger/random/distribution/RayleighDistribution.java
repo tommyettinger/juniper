@@ -104,8 +104,8 @@ public class RayleighDistribution extends Distribution {
     }
 
     public static double sample(EnhancedRandom generator, double sigma) {
-        double n0 = generator.nextGaussian(0.0, sigma);
-        double n1 = generator.nextGaussian(0.0, sigma);
+        double n0 = generator.nextGaussian() * sigma;
+        double n1 = generator.nextGaussian() * sigma;
         return Math.sqrt(n0 * n0 + n1 * n1);
     }
 }

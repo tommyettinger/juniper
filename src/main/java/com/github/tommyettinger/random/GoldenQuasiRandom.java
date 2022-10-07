@@ -204,7 +204,7 @@ public class GoldenQuasiRandom extends EnhancedRandom {
 	public double nextGaussian() {
 //		return super.nextGaussian();
 //		return probit(nextDouble());
-		return probit(Hasher.randomize3Double(++state));
+		return Ziggurat.normal(Hasher.randomize3(state += 0x9E3779B97F4A7C15L));
 //		return probit(((state & 0x1FFF_FFFFF_FFFFFL) ^ nextLong() >>> 11) * 0x1p-53);
 	}
 
