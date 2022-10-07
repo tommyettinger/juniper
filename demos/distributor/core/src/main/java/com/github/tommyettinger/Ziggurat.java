@@ -86,7 +86,7 @@ public class Ziggurat {
              * normal distribution, as described by Marsaglia in 1964: */
             if (idx == 0) {
                 do {
-                    x = Math.log(1.0 - ((state += 0x9E3779B97F4A7C15L) & 0x1FFF_FFFFF_FFFFFL) * 0x1p-53) * 0x1p-8;
+                    x = Math.log(1.0 - ((state += 0x9E3779B97F4A7C15L) & 0x1FFF_FFFFF_FFFFFL) * 0x1p-53);
                     y = Math.log(1.0 - ((state += 0x9E3779B97F4A7C15L) & 0x1FFF_FFFFF_FFFFFL) * 0x1p-53);
                 } while (-(y + y) < x * x);
                 return state < 0L ?
@@ -94,7 +94,7 @@ public class Ziggurat {
                         R - x;
             }
 
-            /* Take a random x-coordinate U in between x[idx] and x[idx+1]
+            /* Take a random x-coordinate U in between TABLE[idx] and TABLE[idx+1]
              * and return x if U is inside the normal distribution,
              * otherwise, repeat the entire ziggurat method. */
             y = u * u;
