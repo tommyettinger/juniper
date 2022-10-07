@@ -22,6 +22,26 @@ import java.util.Arrays;
 
 import static com.github.tommyettinger.DistributorDemo.*;
 
+/**
+ * This has several modes, which can be switched using the j and k keys.
+ * <ol>
+ *     <li>Mode 0 uses EnhancedRandom.probit(), which is the fastest on GWT and doesn't have statistical issues, but is
+ *     considerably slower than some other modes on LWJGL3.</li>
+ *     <li>Mode 1 uses one of Marc B. Reynolds' cheap Gaussian approximations; it queries the RNG twice. It is slower
+ *     than Mode 2 and has statistical problems with its shape.</li>
+ *     <li>Mode 2 uses a customized cheap Gaussian approximations; it queries the RNG once. This is the current default;
+ *     it is fast on LWJGL3, but not especially fast on GWT, and has statistical problems with its shape.</li>
+ *     <li>Mode 3 uses a quantile for the normal distribution by Michael Simons, with a long history of ports. It looks
+ *     like Mode 0, but is slower.</li>
+ *     <li>Mode 4 uses an approximation for the inverse error function by Winitzki, from Wikipedia. It also looks like
+ *     Mode 0, and is also slower.</li>
+ *     <li>Mode 5 uses the logit function, which does not need an approximation, but doesn't exactly match probit. It
+ *     is also quite slow, surprisingly.</li>
+ *     <li>Mode 6 uses the Ziggurat method for generating normal-distributed variables. This is the fastest on LWJGL3,
+ *     and doesn't have any statistical issues (it isn't an approximation). It is slower than Mode 0 on GWT, but not
+ *     slower than anything else.</li>
+ * </ol>
+ */
 public class NormalAlternateScreen extends ScreenAdapter {
     private NormalDistribution dist;
     private SpriteBatch batch;
@@ -67,12 +87,12 @@ public class NormalAlternateScreen extends ScreenAdapter {
             mainGame.nextScreen();
             return;
         }
-        else if(Gdx.input.isKeyJustPressed(Input.Keys.SEMICOLON))
+        else if(Gdx.input.isKeyJustPressed(Input.Keys.J))
         {
             mode = (mode + 6) % 7;
             return;
         }
-        else if(Gdx.input.isKeyJustPressed(Input.Keys.APOSTROPHE))
+        else if(Gdx.input.isKeyJustPressed(Input.Keys.K))
         {
             mode = (mode + 1) % 7;
             return;
@@ -109,7 +129,7 @@ public class NormalAlternateScreen extends ScreenAdapter {
         dist.setParameters(a, b, c);
         switch (mode) {
             case 0:
-                for (int i = 0; i < 0x10000; i++) {
+                for (int i = 0; i < 0x20000; i++) {
                     int m = (int) ((dist.getMu() + dist.getSigma() * EnhancedRandom.probit(dist.generator.nextExclusiveDouble()))
                             * 128 + 256);
                     if (m >= 0 && m < 512)
@@ -117,7 +137,7 @@ public class NormalAlternateScreen extends ScreenAdapter {
                 }
                 break;
             case 1:
-                for (int i = 0; i < 0x10000; i++) {
+                for (int i = 0; i < 0x20000; i++) {
                     int m = (int) ((dist.getMu() + dist.getSigma() * pop())
                             * 128 + 256);
                     if (m >= 0 && m < 512)
@@ -125,7 +145,7 @@ public class NormalAlternateScreen extends ScreenAdapter {
                 }
                 break;
             case 2:
-                for (int i = 0; i < 0x10000; i++) {
+                for (int i = 0; i < 0x20000; i++) {
                     int m = (int) ((dist.nextDouble())
                             * 128 + 256);
                     if (m >= 0 && m < 512)
@@ -133,7 +153,7 @@ public class NormalAlternateScreen extends ScreenAdapter {
                 }
                 break;
             case 3:
-                for (int i = 0; i < 0x10000; i++) {
+                for (int i = 0; i < 0x20000; i++) {
                     int m = (int) (simons(dist.generator.nextExclusiveDouble(), dist.getMu(), dist.getSigma())
                             * 128 + 256);
                     if (m >= 0 && m < 512)
@@ -141,7 +161,7 @@ public class NormalAlternateScreen extends ScreenAdapter {
                 }
                 break;
             case 4:
-                for (int i = 0; i < 0x10000; i++) {
+                for (int i = 0; i < 0x20000; i++) {
                     int m = (int) ((dist.getMu() + dist.getSigma() * winitzki(dist.generator.nextExclusiveDouble()))
                             * 128 + 256);
                     if (m >= 0 && m < 512)
@@ -149,7 +169,7 @@ public class NormalAlternateScreen extends ScreenAdapter {
                 }
                 break;
             case 5:
-                for (int i = 0; i < 0x10000; i++) {
+                for (int i = 0; i < 0x20000; i++) {
                     int m = (int) ((dist.getMu() + dist.getSigma() * logit(dist.generator.nextExclusiveDouble()))
                             * 128 + 256);
                     if (m >= 0 && m < 512)
@@ -157,7 +177,7 @@ public class NormalAlternateScreen extends ScreenAdapter {
                 }
                 break;
             case 6:
-                for (int i = 0; i < 0x10000; i++) {
+                for (int i = 0; i < 0x20000; i++) {
                     int m = (int) ((dist.getMu() + dist.getSigma() * Ziggurat.normal(dist.generator))
                             * 128 + 256);
                     if (m >= 0 && m < 512)
