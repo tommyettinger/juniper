@@ -69,12 +69,12 @@ public class NormalAlternateScreen extends ScreenAdapter {
         }
         else if(Gdx.input.isKeyJustPressed(Input.Keys.SEMICOLON))
         {
-            mode = (mode + 5) % 6;
+            mode = (mode + 6) % 7;
             return;
         }
         else if(Gdx.input.isKeyJustPressed(Input.Keys.APOSTROPHE))
         {
-            mode = (mode + 1) % 6;
+            mode = (mode + 1) % 7;
             return;
         }
         else if(Gdx.input.isKeyJustPressed(Input.Keys.SLASH))
@@ -151,6 +151,14 @@ public class NormalAlternateScreen extends ScreenAdapter {
             case 5:
                 for (int i = 0; i < 0x10000; i++) {
                     int m = (int) ((dist.getMu() + dist.getSigma() * logit(dist.generator.nextExclusiveDouble()))
+                            * 128 + 256);
+                    if (m >= 0 && m < 512)
+                        amounts[m]++;
+                }
+                break;
+            case 6:
+                for (int i = 0; i < 0x10000; i++) {
+                    int m = (int) ((dist.getMu() + dist.getSigma() * Ziggurat.normal(dist.generator))
                             * 128 + 256);
                     if (m >= 0 && m < 512)
                         amounts[m]++;

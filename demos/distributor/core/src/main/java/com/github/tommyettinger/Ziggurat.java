@@ -47,7 +47,7 @@ public class Ziggurat {
         zig[DIST_NORMAL_ZIG_COUNT] = 0.0;
     }
 
-    public double normal(EnhancedRandom random) {
+    public static double normal(EnhancedRandom random) {
 
         double x, y, f0, f1, uf64;
         long u64 = random.nextLong();
