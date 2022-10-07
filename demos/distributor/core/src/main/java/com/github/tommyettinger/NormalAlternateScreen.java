@@ -178,7 +178,7 @@ public class NormalAlternateScreen extends ScreenAdapter {
                 break;
             case 6:
                 for (int i = 0; i < 0x20000; i++) {
-                    int m = (int) ((dist.getMu() + dist.getSigma() * Ziggurat.normal(dist.generator))
+                    int m = (int) ((dist.getMu() + dist.getSigma() * Ziggurat.normal(dist.generator.nextLong()))
                             * 128 + 256);
                     if (m >= 0 && m < 512)
                         amounts[m]++;
@@ -367,4 +367,52 @@ public class NormalAlternateScreen extends ScreenAdapter {
     public static double logit(double p) {
         return 0.6266570686577501 * Math.log(p / (1.0 - p));
     }
+
+    /**
+     * Returns the next pseudorandom, Gaussian ("normally") distributed
+     * {@code double} value with mean {@code 0.0} and standard
+     * deviation {@code 1.0} from this random number generator's sequence.
+     * <p>
+     * The general contract of {@code nextGaussian} is that one
+     * {@code double} value, chosen from (approximately) the usual
+     * normal distribution with mean {@code 0.0} and standard deviation
+     * {@code 1.0}, is pseudorandomly generated and returned.
+     * <p>
+     * This uses an imperfect approximation, but one that is much faster than
+     * the Box-Muller transform, Marsaglia Polar method, or a transform using the
+     * probit function. Like earlier versions that used probit(), it requests
+     * exactly one long from the generator's sequence (using {@link EnhancedRandom#nextLong()}).
+     * This makes it different from code like java.util.Random's nextGaussian()
+     * method, which can (rarely) fetch a higher number of random doubles.
+     * <p>
+     * This can't produce as extreme results in extremely-rare cases as methods
+     * like Box-Muller and Marsaglia Polar can. All possible results are between
+     * {@code -7.929080009460449} and {@code 7.929080009460449}, inclusive.
+     * <p>
+     * <a href="https://marc-b-reynolds.github.io/distribution/2021/03/18/CheapGaussianApprox.html">Credit
+     * to Marc B. Reynolds</a> for coming up with this clever fusion of the
+     * already-bell-curved bit count and a triangular distribution to smooth
+     * it out. Using one random long instead of two is the contribution here.
+     *
+     * @return the next pseudorandom, approximately Gaussian ("normally") distributed
+     * {@code double} value with mean {@code 0.0} and standard deviation
+     * {@code 1.0} from this random number generator's sequence
+     */
+    public double popSolo () {
+        //// here, we want to only request one long from this EnhancedRandom.
+        //// because the bitCount() doesn't really care about the numerical value of its argument, only its Hamming weight,
+        //// we use the random long un-scrambled, and get the bit count of that.
+        //// for the later steps, we multiply the random long by a specific constant and get the difference of its halves.
+        //// 0xC6AC29E4C6AC29E5L is... OK, it's complicated. It needs to have almost-identical upper and lower halves, but
+        //// for reasons I don't currently understand, if the upper and lower halves are equal, then the min and max results
+        //// of the Gaussian aren't equally distant from 0. By using an upper half that is exactly 1 less than the lower
+        //// half, we get bounds of -7.929080009460449 to 7.929080009460449, returned when the RNG gives 0 and -1 resp.
+        //// because it only needs one floating-point operation, it is quite fast on a CPU.
+        //// this winds up being a very smooth Gaussian, as Marc B. Reynolds had it with two random longs.
+        long u = dist.generator.nextLong();
+        final long c = Long.bitCount(u) - 32L << 32;
+        u *= 0xC6AC29E4C6AC29E5L;
+        return 0x1.fb760cp-35 * (c + (u & 0xFFFFFFFFL) - (u >>> 32));
+    }
+
 }
