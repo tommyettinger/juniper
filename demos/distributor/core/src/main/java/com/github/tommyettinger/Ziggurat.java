@@ -21,86 +21,91 @@
 
 package com.github.tommyettinger;
 
-import com.github.tommyettinger.random.EnhancedRandom;
-
 /**
- * From <a href="https://github.com/camel-cdr/cauldron/blob/main/cauldron/random.h">Cauldron</a>.
+ * An implementation of the Ziggurat method for generating normal-distributed random values. The Ziggurat method is not
+ * an approximation, but is faster than some simple approximations while having higher statistical quality.
+ * <br>
+ * From <a href="https://github.com/camel-cdr/cauldron/blob/7d5328441b1a1bc8143f627aebafe58b29531cb9/cauldron/random.h#L2013-L2265">Cauldron</a>,
+ * MIT-licensed. This in turn is based on Doornik's form of the Ziggurat method:
+ * <br>
+ *      Doornik, Jurgen A (2005):
+ *      "An improved ziggurat method to generate normal random samples."
+ *      University of Oxford: 77.
  */
 public class Ziggurat {
-    private static final int    DIST_NORMAL_ZIG_COUNT = 256;
-    private static final double DIST_NORMAL_ZIG_R     = 3.65415288536100716461;
-    private static final double DIST_NORMAL_ZIG_AREA  = 0.00492867323397465524494;
+    private static final int    TABLE_ITEMS = 256;
+    private static final double R           = 3.65415288536100716461;
+    private static final double AREA        = 0.00492867323397465524494;
 
-    private static final double[] zig = new double[257];
+    /**
+     * This is private because it shouldn't ever be changed after assignment, and has nearly no use outside this code.
+     */
+    private static final double[] TABLE = new double[257];
     static {
-        double f = Math.exp(-0.5 * DIST_NORMAL_ZIG_R * DIST_NORMAL_ZIG_R);
-        zig[0] = DIST_NORMAL_ZIG_AREA / f;
-        zig[1] = DIST_NORMAL_ZIG_R;
+        double f = Math.exp(-0.5 * R * R);
+        TABLE[0] = AREA / f;
+        TABLE[1] = R;
 
-        for (int i = 2; i < DIST_NORMAL_ZIG_COUNT; i++) {
-            double xx = Math.log(DIST_NORMAL_ZIG_AREA /
-                    zig[i - 1] + f);
-            zig[i] = Math.sqrt(-2 * xx);
+        for (int i = 2; i < TABLE_ITEMS; i++) {
+            double xx = Math.log(AREA /
+                    TABLE[i - 1] + f);
+            TABLE[i] = Math.sqrt(-2 * xx);
             f = Math.exp(xx);
         }
 
-        zig[DIST_NORMAL_ZIG_COUNT] = 0.0;
+        TABLE[TABLE_ITEMS] = 0.0;
     }
 
-    public static double normal(EnhancedRandom random) {
+    public static double normal(long state) {
 
-        double x, y, f0, f1, uf64;
-        long u64 = random.nextLong();
+        double x, y, f0, f1, u;
         int idx;
-//        union { uint64_t i; double f; } u;
 
         while (true) {
             /* To minimize calls to the rng we, use every bit for its own
              * purposes:
-             *    - The MANT_DIG most significant bits are used to generate
-             *      a random floating-point number
-             *    - The least significant bit is used to randomly set the
-             *      sign of the return value
-             *    - The second to the (DIST_NORMAL_ZIG_COUNT+1)th
-             *      least significant bit are used to generate a index in
-             *      the range [0,DIST_NORMAL_ZIG_COUNT)
-             *
-             * Since we can't rely on dist_uniformf adhering to this order,
-             * we define a custom conversion macro: */
+             *    - The 53 most significant bits are used to generate
+             *      a random floating-point number in the range [0.0,1.0).
+             *    - The most and the least significant bits, XORed, are used
+             *      to randomly set the sign of the return value.
+             *    - The second to the ninth least significant bit are used
+             *      to generate an index in the range [0,256).
+             */
+            idx = (int)((state >>> 1) & (TABLE_ITEMS - 1));
+            u = (state >>> 11) * 0x1p-53 * TABLE[idx];
 
-//            u64 = rand64(rng);
-            idx = (int)((u64 >>> 1) & (DIST_NORMAL_ZIG_COUNT - 1));
-            uf64 = (u64 >>> 11) * 0x1p-53 * zig[idx];
-
-            /* Take a random box (box[idx])
+            /* Take a random box from TABLE
              * and get the value of a random x-coordinate inside it.
-             * If it's also inside box[idx + 1] we already know to accept
+             * If it's also inside TABLE[idx + 1] we already know to accept
              * this value. */
-            if (uf64 < zig[idx + 1])
+            if (u < TABLE[idx + 1])
                 break;
 
             /* If our random box is at the bottom, we can't use the lookup
              * table and need to generate a variable for the trail of the
-             * normal distribution, as described in <21>: */
+             * normal distribution, as described by Marsaglia in 1964: */
             if (idx == 0) {
                 do {
-                    x = Math.log(1 - ((u64 += 0x9E3779B97F4A7C15L) & 0x1FFF_FFFFF_FFFFFL) * 0x1p-53) * 0x1p-8;
-                    y = Math.log(1 - ((u64 += 0x9E3779B97F4A7C15L) & 0x1FFF_FFFFF_FFFFFL) * 0x1p-53);
+                    x = Math.log(1.0 - ((state += 0x9E3779B97F4A7C15L) & 0x1FFF_FFFFF_FFFFFL) * 0x1p-53) * 0x1p-8;
+                    y = Math.log(1.0 - ((state += 0x9E3779B97F4A7C15L) & 0x1FFF_FFFFF_FFFFFL) * 0x1p-53);
                 } while (-(y + y) < x * x);
-                return u64 < 0L ?
-                        x - DIST_NORMAL_ZIG_R :
-                        DIST_NORMAL_ZIG_R - x;
+                return state < 0L ?
+                        x - R :
+                        R - x;
             }
 
             /* Take a random x-coordinate U in between x[idx] and x[idx+1]
-             * and return x if U is inside of the normal distribution,
+             * and return x if U is inside the normal distribution,
              * otherwise, repeat the entire ziggurat method. */
-            y = uf64 * uf64;
-            f0 = Math.exp(-0.5 * (zig[idx]     * zig[idx]     - y));
-            f1 = Math.exp(-0.5 * (zig[idx + 1] * zig[idx + 1] - y));
-            if (f1 + (((u64 += 0x9E3779B97F4A7C15L) & 0x1FFF_FFFFF_FFFFFL) * 0x1p-53) * (f0 - f1) < 1.0)
+            y = u * u;
+            f0 = Math.exp(-0.5 * (TABLE[idx]     * TABLE[idx]     - y));
+            f1 = Math.exp(-0.5 * (TABLE[idx + 1] * TABLE[idx + 1] - y));
+            if (f1 + (((state += 0x9E3779B97F4A7C15L) & 0x1FFF_FFFFF_FFFFFL) * 0x1p-53) * (f0 - f1) < 1.0)
                 break;
         }
-        return Math.copySign(uf64, u64 ^ u64 << 63);
+        /* Our low-order bits aren't necessarily very good if this has gone past the random-box stage, but our
+         * highest-order bit was also used to produce u if we hadn't gone past the random-box stage. XORing them should
+         * solve this quandary. */
+        return Math.copySign(u, state ^ state << 63);
     }
 }
