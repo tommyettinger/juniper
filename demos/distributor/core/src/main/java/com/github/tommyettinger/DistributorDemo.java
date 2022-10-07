@@ -4,8 +4,9 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.github.tommyettinger.random.ChopRandom;
 import com.github.tommyettinger.random.EnhancedRandom;
+import com.github.tommyettinger.random.GoldenQuasiRandom;
+import com.github.tommyettinger.random.VanDerCorputQuasiRandom;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class DistributorDemo extends Game {
@@ -16,7 +17,7 @@ public class DistributorDemo extends Game {
     public Screen alternateCauchy, alternateArcsine, alternateNormal;
     private int screenIndex;
     public static double a = 1.0, b = 1.0, c = 1.0;
-    public EnhancedRandom random = new ChopRandom();
+    public EnhancedRandom random = new VanDerCorputQuasiRandom();
     @Override
     public void create() {
         Gdx.app.setLogLevel(Application.LOG_ERROR);

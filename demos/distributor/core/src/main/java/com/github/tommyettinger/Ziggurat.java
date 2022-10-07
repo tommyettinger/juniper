@@ -104,8 +104,8 @@ public class Ziggurat {
                 break;
         }
         /* Our low-order bits aren't necessarily very good if this has gone past the random-box stage, but our
-         * highest-order bit was also used to produce u if we hadn't gone past the random-box stage. XORing them should
-         * solve this quandary. */
-        return Math.copySign(u, state ^ state << 63);
+         * highest-order bit was also used to produce u if we hadn't gone past the random-box stage. The parity of the
+         * state considers all bits equally, so it should work well here. */
+        return Math.copySign(u, Long.bitCount(state) << 31);//(state ^ (state << 32 | state >>> 32) ^ (state << 16 | state >>> 48)) * 0xF1357AEA2E62A9C5L
     }
 }

@@ -204,8 +204,8 @@ public class VanDerCorputQuasiRandom extends EnhancedRandom {
 	@Override
 	public double nextGaussian() {
 //		return super.nextGaussian();
-//		return probit(nextDouble());
-		return Ziggurat.normal(Hasher.randomize3(++state));
+		return probit(nextDouble());
+//		return Ziggurat.normal(Hasher.randomize3(++state));
 //		return probit(((state & 0x1FFF_FFFFF_FFFFFL) ^ nextLong() >>> 11) * 0x1p-53);
 	}
 
