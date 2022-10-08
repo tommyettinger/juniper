@@ -73,7 +73,7 @@ public class VanDerCorputQuasiRandom extends EnhancedRandom {
 
 	@Override
 	public String getTag() {
-		return "GoQR";
+		return "VCQR";
 	}
 
 	/**
