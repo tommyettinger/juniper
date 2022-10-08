@@ -111,12 +111,19 @@ can produce, instead of just `double`. This only really works for numbers distri
 `DistributedRandom` provides various ways to reduce the range of a distribution like a `NormalDistribution` or
 `ExponentialDistribution` so only the valid range is used.
 
+Juniper now uses the Ziggurat method to generate normal-distributed values. This is different from the Marsaglia Polar
+or Box-Muller methods that are more commonly-used (such as by the JDK), but Ziggurat seems to be faster in testing,
+sometimes significantly so, and doesn't require caching a result for later like the other two mentioned methods need.
+The Ziggurat method code here is derived from [Olaf Berstein's cauldron library](https://github.com/camel-cdr/cauldron/blob/7d5328441b1a1bc8143f627aebafe58b29531cb9/cauldron/random.h#L2013-L2265),
+which is MIT-licensed C++. Using Ziggurat should improve accuracy compared to versions before 0.1.6, which uses a fairly
+fast approximation based on bit counting (by [Marc B. Reynolds](https://marc-b-reynolds.github.io/distribution/2021/03/18/CheapGaussianApprox.html)).
+
 ## How to get it?
 
 With Gradle, the dependency (of the core module, if you have multiple) is:
 
 ```groovy
-api "com.github.tommyettinger:juniper:0.1.5"
+api "com.github.tommyettinger:juniper:0.1.6"
 ```
 
 In a libGDX project that has a GWT/HTML backend, the `html/build.gradle` file
@@ -124,7 +131,7 @@ should additionally have:
 
 ```
 implementation "com.github.tommyettinger:digital:0.1.4:sources"
-implementation "com.github.tommyettinger:juniper:0.1.5:sources"
+implementation "com.github.tommyettinger:juniper:0.1.6:sources"
 ```
 
 And the `GdxDefinition.gwt.xml` file should have:
@@ -140,7 +147,7 @@ If you don't use Gradle, then with Maven, the dependency is:
 <dependency>
   <groupId>com.github.tommyettinger</groupId>
   <artifactId>juniper</artifactId>
-  <version>0.1.5</version>
+  <version>0.1.6</version>
 </dependency>
 ```
 
