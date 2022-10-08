@@ -37,7 +37,7 @@ import java.util.Random;
  * Because there's always a strong separation between subsequent results of {@link #nextDouble()}, that made the
  * Gaussian doubles have large gaps in their output range, because some combinations were impossible.
  * <br>
- * This class is an {@link EnhancedRandom} from jdkgdxds and is also a JDK {@link Random} as a result.
+ * This class is an {@link EnhancedRandom} from juniper and is also a JDK {@link Random} as a result.
  * <br>
  * This doesn't randomize the seed when given one with {@link #setSeed(long)}, and it doesn't do anything else to
  * randomize the output, so sequential seeds will produce extremely similar sequences. You can randomize sequential
@@ -203,8 +203,8 @@ public class GoldenQuasiRandom extends EnhancedRandom {
 	@Override
 	public double nextGaussian() {
 //		return super.nextGaussian();
-		return probit(nextDouble());
-//		return Ziggurat.normal(Hasher.randomize3(state += 0x9E3779B97F4A7C15L));
+//		return probit(nextDouble());
+		return Ziggurat.normal(Hasher.randomize3(state += 0x9E3779B97F4A7C15L));
 //		return probit(((state & 0x1FFF_FFFFF_FFFFFL) ^ nextLong() >>> 11) * 0x1p-53);
 	}
 

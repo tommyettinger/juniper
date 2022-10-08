@@ -40,12 +40,12 @@ import java.util.Random;
  * permitted for that state, and that you can {@link #skip(long)} the state forwards or backwards in constant time.
  * It is also quite fast, though not as fast as {@link TricycleRandom} or {@link WhiskerRandom} on Java 16 or newer.
  * <br>
- * This class is an {@link EnhancedRandom} from jdkgdxds and is also a JDK {@link Random} as a result.
+ * This class is an {@link EnhancedRandom} from juniper and is also a JDK {@link Random} as a result.
  * It can often be used as a substitute for {@link LaserRandom}. LaserRandom has comparable speed, and supports many
  * streams, but if you want just one {@code long} of state, DistinctRandom is a better fit. For higher speed on Java
  * 16 or higher, HotSpot, you can use {@link TricycleRandom} or {@link WhiskerRandom} (WhiskerRandom is preferred
  * if you only target Java 16+). Those generators also should have a longer period than DistinctRandom except in
- * infinitesimally-rare cases. No other generators in jdkgdxds have the "distinct" quality this generator has.
+ * infinitesimally-rare cases. No other generators in juniper have the "distinct" quality this generator has.
  * <br>
  * Unlike the multiple-state generators here, DistinctRandom tolerates being given sequential seeds and/or states, and
  * in fact doesn't randomize the seed when given one with {@link #setSeed(long)}. This is the only generator here that

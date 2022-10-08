@@ -32,7 +32,7 @@ package com.github.tommyettinger.random;
  * <br>
  * The implementation here uses the algorithm from <a href="https://romu-random.org/">Romu-Random</a>, but bases its
  * implementation more closely on <a href="https://github.com/bgrainger/RomuRandom">this C# port</a>. The C# port by
- * Bradley Grainger is Apache 2.0 licensed, like jdkgdxds.
+ * Bradley Grainger is Apache 2.0 licensed, like juniper.
  */
 public class RomuTrioRandom extends EnhancedRandom {
 

@@ -22,8 +22,9 @@ package com.github.tommyettinger.random;
  * 64.
  * A fast generator that has five longs of state, with a huge probable period and a good minimum period guarantee.
  * This generator is extremely similar to {@link WhiskerRandom}; in fact, they are identical if the changing extra state
- * is replaced with a specific constant. This can't yet be considered stable, but has passed 179 petabytes of testing in
- * ReMortality and over 64 petabytes of BoolBin (another test that can run on huge amounts of generated data). This
+ * is replaced with a specific constant. This can be considered stable; it has passed 179 petabytes of testing in
+ * ReMortality and over 64 petabytes of BoolBin (another test that can run on huge amounts of generated data), plus 64TB
+ * of broad-spectrum testing in PractRand (one "unusual" anomaly here, but nothing recurring or systemic). This
  * generator is slower than WhiskerRandom, but on-par with {@link FourWheelRandom}, and unlike either of those, it
  * allows leaping through its state to guarantee a minimum distance between two generators.
  * <br>

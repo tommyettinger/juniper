@@ -25,7 +25,7 @@ import java.util.Random;
  * Not actually a pseudo-random number generator, but a quasi-random number generator, this is a simple
  * way to produce random-seeming numbers with a high distance between one number and the next. This has a period of
  * 2 to the 64. It does not pass any tests for randomness. It is comparable to {@link GoldenQuasiRandom}; it is slightly
- * slower, but may have some useful qualities.
+ * slower, but may be useful. For example, it alternates positive and negative values from {@link #nextLong()}.
  * This uses the base-2 <a href="https://en.wikipedia.org/wiki/Van_der_Corput_sequence">van der Corput Sequence</a>.
  * <br>
  * Useful traits of this generator are that it has exactly one {@code long} of state, that all values are
@@ -38,7 +38,7 @@ import java.util.Random;
  * Because there's always a strong separation between subsequent results of {@link #nextDouble()}, that made the
  * Gaussian doubles have large gaps in their output range, because some combinations were impossible.
  * <br>
- * This class is an {@link EnhancedRandom} from jdkgdxds and is also a JDK {@link Random} as a result.
+ * This class is an {@link EnhancedRandom} from juniper and is also a JDK {@link Random} as a result.
  * <br>
  * This doesn't randomize the seed when given one with {@link #setSeed(long)}, and it doesn't do anything else to
  * randomize the output, so sequential seeds will produce extremely similar sequences. You can randomize sequential
@@ -204,8 +204,8 @@ public class VanDerCorputQuasiRandom extends EnhancedRandom {
 	@Override
 	public double nextGaussian() {
 //		return super.nextGaussian();
-		return probit(nextDouble());
-//		return Ziggurat.normal(Hasher.randomize3(++state));
+//		return probit(nextDouble());
+		return Ziggurat.normal(Hasher.randomize3(++state));
 //		return probit(((state & 0x1FFF_FFFFF_FFFFFL) ^ nextLong() >>> 11) * 0x1p-53);
 	}
 
