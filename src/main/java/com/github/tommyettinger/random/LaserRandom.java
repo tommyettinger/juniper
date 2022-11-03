@@ -662,7 +662,13 @@ public class LaserRandom extends EnhancedRandom {
 	 * @return a double between 0.0, inclusive, and 1.0, inclusive
 	 */
 	public double nextInclusiveDouble () {
-		return nextLong(0x20000000000001L) * 0x1p-53;
+//		return nextLong(0x20000000000001L) * 0x1p-53;
+		final long rand = nextLong();
+		final long bound = 0x20000000000001L;
+		final long randLow = rand & 0xFFFFFFFFL;
+		final long randHigh = (rand >>> 32);
+		final long boundHigh = (bound >>> 32);
+		return ((randLow * boundHigh >>> 32) + randHigh * boundHigh) * 0x1p-53;
 	}
 
 	/**
@@ -699,7 +705,7 @@ public class LaserRandom extends EnhancedRandom {
 	 * @return a float between 0.0, inclusive, and 1.0, inclusive
 	 */
 	public float nextInclusiveFloat () {
-		return nextInt(0x1000001) * 0x1p-24f;
+		return (int)(0x1000001L * (nextLong() & 0xFFFFFFFFL) >> 32) * 0x1p-24f;
 	}
 
 	/**

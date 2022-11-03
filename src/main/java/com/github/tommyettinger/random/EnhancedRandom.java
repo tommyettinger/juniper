@@ -665,15 +665,21 @@ public abstract class EnhancedRandom extends Random {
 	}
 
 	/**
-	 * This is just like {@link #nextDouble()}, returning a double between 0 and 1, except that it is inclusive on both 0.0 and 1.0.
-	 * It returns 1.0 extremely rarely, 0.000000000000011102230246251565% of the time if there is no bias in the generator, but it
-	 * can happen. This uses {@link #nextLong(long)} internally, so it may have some bias towards or against specific
-	 * subtly-different results.
+	 * This is just like {@link #nextDouble()}, returning a double between 0 and 1, except that it is inclusive on both
+	 * 0.0 and 1.0. It returns 1.0 extremely rarely, 0.000000000000011102230246251565% of the time if there is no bias
+	 * in the generator, but it can happen. This uses similar code to {@link #nextLong(long)} internally, so it may have
+	 * some bias towards or against specific subtly-different results.
 	 *
 	 * @return a double between 0.0, inclusive, and 1.0, inclusive
 	 */
 	public double nextInclusiveDouble () {
-		return nextLong(0x20000000000001L) * 0x1p-53;
+//		return nextLong(0x20000000000001L) * 0x1p-53;
+		final long rand = nextLong();
+		final long bound = 0x20000000000001L;
+		final long randLow = rand & 0xFFFFFFFFL;
+		final long randHigh = (rand >>> 32);
+		final long boundHigh = (bound >>> 32);
+		return ((randLow * boundHigh >>> 32) + randHigh * boundHigh) * 0x1p-53;
 	}
 
 	/**
@@ -710,7 +716,7 @@ public abstract class EnhancedRandom extends Random {
 	 * @return a float between 0.0, inclusive, and 1.0, inclusive
 	 */
 	public float nextInclusiveFloat () {
-		return nextInt(0x1000001) * 0x1p-24f;
+		return (int)(0x1000001L * (nextLong() & 0xFFFFFFFFL) >> 32) * 0x1p-24f;
 	}
 
 	/**
@@ -742,11 +748,11 @@ public abstract class EnhancedRandom extends Random {
 	 * {@link #nextDouble()} if you use the bit-patterns of the returned doubles. This is a simplified version of
 	 * <a href="https://allendowney.com/research/rand/">this algorithm by Allen Downey</a>. This can return double
 	 * values between 2.710505431213761E-20 and 0.9999999999999999, or 0x1.0p-65 and 0x1.fffffffffffffp-1 in hex
-	 * notation. It cannot return 0 or 1. Most cases can instead use {@link #nextExclusiveDoubleEquidistant()}, which is
-	 * implemented more traditionally but may have different performance. This method can also return doubles that
-	 * are extremely close to 0, but can't return doubles that are as close to 1, due to limits of doubles.
-	 * However, nextExclusiveDoubleEquidistant() can return only a minimum value that is as distant from 0 as its maximum
-	 * value is distant from 1.
+	 * notation. It cannot return 0 or 1. Some cases can prefer {@link #nextExclusiveDoubleEquidistant()}, which is
+	 * implemented more traditionally but may have slower performance. This method can also return doubles that
+	 * are extremely close to 0, but can't return doubles that are as close to 1, due to how floating-point numbers
+	 * work. However, nextExclusiveDoubleEquidistant() can return only a minimum value that is as distant from 0 as its
+	 * maximum value is distant from 1.
 	 * <br>
 	 * To compare, nextDouble() and nextExclusiveDoubleEquidistant() are less likely to produce a "1" bit for their
 	 * lowest 5 bits of mantissa/significand (the least significant bits numerically, but potentially important
@@ -754,14 +760,15 @@ public abstract class EnhancedRandom extends Random {
 	 * mantissa. As for this method, it has approximately the same likelihood of producing a "1" bit for any
 	 * position in the mantissa.
 	 * <br>
-	 * The public implementation may have different performance characteristics than {@link #nextDouble()},
-	 * because this doesn't perform any floating-point multiplication or division, and instead assembles bits
-	 * obtained by one call to {@link #nextLong()}. This uses {@link BitConversion#longBitsToDouble(long)} and
-	 * {@link Long#numberOfTrailingZeros(long)}, both of which typically have optimized intrinsics on HotSpot,
-	 * and this is branchless and loopless, unlike the original algorithm by Allen Downey. When compared with
-	 * {@link #nextExclusiveDoubleEquidistant()}, this method performs better on at least HotSpot JVMs.
+	 * The implementation may have different performance characteristics than {@link #nextDouble()}, because this
+	 * doesn't perform any floating-point multiplication or division, and instead assembles bits obtained by one call to
+	 * {@link #nextLong()}. This uses {@link BitConversion#longBitsToDouble(long)} and
+	 * {@link Long#numberOfTrailingZeros(long)}, both of which typically have optimized intrinsics on HotSpot, and this
+	 * is branchless and loopless, unlike the original algorithm by Allen Downey. When compared with
+	 * {@link #nextExclusiveDoubleEquidistant()}, this method performs better on at least HotSpot JVMs. On GraalVM 17,
+	 * this is over twice as fast as nextExclusiveDoubleEquidistant().
 	 *
-	 * @return a random uniform double between 0 and 1 (both exclusive)
+	 * @return a random uniform double between 2.710505431213761E-20 and 0.9999999999999999 (both inclusive)
 	 */
 	public double nextExclusiveDouble () {
 		final long bits = nextLong();
@@ -772,11 +779,11 @@ public abstract class EnhancedRandom extends Random {
 	 * Gets a random double between 0.0 and 1.0, exclusive at both ends. This can return double
 	 * values between 1.1102230246251565E-16 and 0.9999999999999999, or 0x1.0p-53 and 0x1.fffffffffffffp-1 in hex
 	 * notation. It cannot return 0 or 1, and its minimum and maximum results are equally distant from 0 and from
-	 * 1, respectively. Some usages may prefer {@link #nextExclusiveDouble()}, which is
-	 * better-distributed if you consider the bit representation of the returned doubles, tends to perform
-	 * better, and can return doubles that much closer to 0 than this can.
+	 * 1, respectively. Many usages may prefer {@link #nextExclusiveDouble()}, which is better-distributed if you
+	 * consider the bit representation of the returned doubles, tends to perform better, and can return doubles that
+	 * much closer to 0 than this can.
 	 * <br>
-	 * The public implementation simply uses {@link #nextLong(long)} to get a uniformly-chosen long between 1 and
+	 * The implementation simply uses {@link #nextLong(long)} to get a uniformly-chosen long between 1 and
 	 * (2 to the 53) - 1, both inclusive, and multiplies it by (2 to the -53). Using larger values than (2 to the
 	 * 53) would cause issues with the double math.
 	 *
@@ -790,6 +797,7 @@ public abstract class EnhancedRandom extends Random {
 	 * Just like {@link #nextDouble(double)}, but this is exclusive on both 0.0 and {@code outerBound}.
 	 * Like {@link #nextExclusiveDouble()}, which this uses, this may have better bit-distribution of
 	 * double values, and it may also be better able to produce very small doubles when {@code outerBound} is large.
+	 * It should typically be a little faster than {@link #nextDouble(double)}.
 	 *
 	 * @param outerBound the outer exclusive bound; may be positive or negative
 	 * @return a double between 0.0, exclusive, and {@code outerBound}, exclusive
@@ -802,6 +810,7 @@ public abstract class EnhancedRandom extends Random {
 	 * Just like {@link #nextDouble(double, double)}, but this is exclusive on both {@code innerBound} and {@code outerBound}.
 	 * Like {@link #nextExclusiveDouble()}, which this uses,, this may have better bit-distribution of double values,
 	 * and it may also be better able to produce doubles close to innerBound when {@code outerBound - innerBound} is large.
+	 * It should typically be a little faster than {@link #nextDouble(double, double)}.
 	 *
 	 * @param innerBound the inner exclusive bound; may be positive or negative
 	 * @param outerBound the outer exclusive bound; may be positive or negative
@@ -822,12 +831,13 @@ public abstract class EnhancedRandom extends Random {
 	 * mantissa. As for this method, it has approximately the same likelihood of producing a "1" bit for any
 	 * position in the mantissa.
 	 * <br>
-	 * The public implementation may have different performance characteristics than {@link #nextFloat()},
+	 * The implementation may have different performance characteristics than {@link #nextFloat()},
 	 * because this doesn't perform any floating-point multiplication or division, and instead assembles bits
 	 * obtained by one call to {@link #nextLong()}. This uses {@link BitConversion#intBitsToFloat(int)} and
 	 * {@link Long#numberOfTrailingZeros(long)}, both of which typically have optimized intrinsics on HotSpot,
 	 * and this is branchless and loopless, unlike the original algorithm by Allen Downey. When compared with
-	 * {@link #nextExclusiveFloatEquidistant()}, this method performs better on at least HotSpot JVMs.
+	 * {@link #nextExclusiveFloatEquidistant()}, this method performs better on at least HotSpot JVMs. On GraalVM 17,
+	 * this is over twice as fast as nextExclusiveFloatEquidistant().
 	 *
 	 * @return a random uniform float between 0 and 1 (both exclusive)
 	 */
@@ -840,11 +850,11 @@ public abstract class EnhancedRandom extends Random {
 	 * Gets a random float between 0.0 and 1.0, exclusive at both ends. This can return float
 	 * values between 5.9604645E-8 and 0.99999994, or 0x1.0p-24 and 0x1.fffffep-1 in hex notation.
 	 * It cannot return 0 or 1, and its minimum and maximum results are equally distant from 0 and from
-	 * 1, respectively. Some usages may prefer {@link #nextExclusiveFloat()}, which is
+	 * 1, respectively. Most usages might prefer {@link #nextExclusiveFloat()}, which is
 	 * better-distributed if you consider the bit representation of the returned floats, tends to perform
 	 * better, and can return floats that much closer to 0 than this can.
 	 * <br>
-	 * The public implementation simply uses {@link #nextInt(int)} to get a uniformly-chosen int between 1 and
+	 * The implementation simply uses {@link #nextInt(int)} to get a uniformly-chosen int between 1 and
 	 * (2 to the 24) - 1, both inclusive, and multiplies it by (2 to the -24). Using larger values than (2 to the
 	 * 24) would cause issues with the float math.
 	 *
@@ -858,6 +868,7 @@ public abstract class EnhancedRandom extends Random {
 	 * Just like {@link #nextFloat(float)}, but this is exclusive on both 0.0 and {@code outerBound}.
 	 * Like {@link #nextExclusiveFloat()}, this may have better bit-distribution of float values, and
 	 * it may also be better able to produce very small floats when {@code outerBound} is large.
+	 * It should be a little faster than {@link #nextFloat(float)}.
 	 *
 	 * @param outerBound the outer exclusive bound; may be positive or negative
 	 * @return a float between 0.0, exclusive, and {@code outerBound}, exclusive
@@ -870,6 +881,7 @@ public abstract class EnhancedRandom extends Random {
 	 * Just like {@link #nextFloat(float, float)}, but this is exclusive on both {@code innerBound} and {@code outerBound}.
 	 * Like {@link #nextExclusiveFloat()}, this may have better bit-distribution of float values, and
 	 * it may also be better able to produce floats close to innerBound when {@code outerBound - innerBound} is large.
+	 * It should be a little faster than {@link #nextFloat(float, float)}.
 	 *
 	 * @param innerBound the inner exclusive bound; may be positive or negative
 	 * @param outerBound the outer exclusive bound; may be positive or negative
@@ -1017,7 +1029,7 @@ public abstract class EnhancedRandom extends Random {
 	 * as precise and can't produce as extreme min and max results in the extreme cases they should appear. If given
 	 * a typical uniform random {@code double} that's exclusive on 1.0, it won't produce a result higher than
 	 * {@code 8.209536145151493}, and will only produce results of at least {@code -8.209536145151493} if 0.0 is
-	 * excluded from the inputs (if 0.0 is an input, the result is {@code 38.5}). A chief advantage of using this with
+	 * excluded from the inputs (if 0.0 is an input, the result is {@code -38.5}). A chief advantage of using this with
 	 * a random number generator is that it only requires one random double to obtain one Gaussian value;
 	 * {@link java.util.Random#nextGaussian()} generates at least two random doubles for each two Gaussian values, but
 	 * may rarely require much more random generation. Note that this method isn't used by default for
@@ -1037,17 +1049,16 @@ public abstract class EnhancedRandom extends Random {
 		} else if (d < 0.02425) {
 			final double q = Math.sqrt(-2.0 * Math.log(d));
 			return (((((-7.784894002430293e-03 * q - 3.223964580411365e-01) * q - 2.400758277161838e+00) * q - 2.549732539343734e+00) * q + 4.374664141464968e+00) * q + 2.938163982698783e+00) / (
-				(((7.784695709041462e-03 * q + 3.224671290700398e-01) * q + 2.445134137142996e+00) * q + 3.754408661907416e+00) * q + 1.0);
+					(((7.784695709041462e-03 * q + 3.224671290700398e-01) * q + 2.445134137142996e+00) * q + 3.754408661907416e+00) * q + 1.0);
 		} else if (0.97575 < d) {
 			final double q = Math.sqrt(-2.0 * Math.log(1 - d));
 			return -(((((-7.784894002430293e-03 * q - 3.223964580411365e-01) * q - 2.400758277161838e+00) * q - 2.549732539343734e+00) * q + 4.374664141464968e+00) * q + 2.938163982698783e+00) / (
-				(((7.784695709041462e-03 * q + 3.224671290700398e-01) * q + 2.445134137142996e+00) * q + 3.754408661907416e+00) * q + 1.0);
-		} else {
-			final double q = d - 0.5;
-			final double r = q * q;
-			return (((((-3.969683028665376e+01 * r + 2.209460984245205e+02) * r - 2.759285104469687e+02) * r + 1.383577518672690e+02) * r - 3.066479806614716e+01) * r + 2.506628277459239e+00) * q / (
-				((((-5.447609879822406e+01 * r + 1.615858368580409e+02) * r - 1.556989798598866e+02) * r + 6.680131188771972e+01) * r - 1.328068155288572e+01) * r + 1.0);
+					(((7.784695709041462e-03 * q + 3.224671290700398e-01) * q + 2.445134137142996e+00) * q + 3.754408661907416e+00) * q + 1.0);
 		}
+		final double q = d - 0.5;
+		final double r = q * q;
+		return (((((-3.969683028665376e+01 * r + 2.209460984245205e+02) * r - 2.759285104469687e+02) * r + 1.383577518672690e+02) * r - 3.066479806614716e+01) * r + 2.506628277459239e+00) * q / (
+				((((-5.447609879822406e+01 * r + 1.615858368580409e+02) * r - 1.556989798598866e+02) * r + 6.680131188771972e+01) * r - 1.328068155288572e+01) * r + 1.0);
 	}
 
 	/**
