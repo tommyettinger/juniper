@@ -116,10 +116,7 @@ public class LogisticDistribution extends Distribution {
     }
 
     public static double sample(EnhancedRandom generator, double mu, double sigma) {
-        double u;
-        do {
-            u = generator.nextExclusiveDouble();
-        } while (MathTools.isZero(u * (1.0 - u), 0x1p-32));
+        final double u = generator.nextExclusiveDouble();
         return mu + sigma * Math.log(u / (1.0 - u));
     }
 }

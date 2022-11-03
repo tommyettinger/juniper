@@ -133,7 +133,7 @@ public class BetaDistribution extends Distribution {
     public static double sample(EnhancedRandom generator, double alpha, double beta) {
         double x = GammaDistribution.sample(generator, alpha, 1.0);
         double t;
-        do t = (x + GammaDistribution.sample(generator, beta, 1.0)); while (MathTools.isZero(t, 0x1p-24));
+        do t = (x + GammaDistribution.sample(generator, beta, 1.0)); while (MathTools.isZero(t, 0x1p-66));
         return x / t;
     }
 }

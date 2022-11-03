@@ -120,7 +120,7 @@ public class BetaPrimeDistribution extends Distribution {
     public static double sample(EnhancedRandom generator, double alpha, double beta) {
         double variate = BetaDistribution.sample(generator, alpha, beta);
         double rev = 1.0 - variate;
-        return MathTools.isZero(rev, 0x1p-32) ? Double.POSITIVE_INFINITY : variate / rev;
+        return MathTools.isZero(rev, 0x1p-66) ? Double.POSITIVE_INFINITY : variate / rev;
 
     }
 }

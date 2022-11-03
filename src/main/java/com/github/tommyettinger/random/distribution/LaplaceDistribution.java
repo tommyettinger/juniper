@@ -117,7 +117,7 @@ public class LaplaceDistribution extends Distribution {
 
     public static double sample(EnhancedRandom generator, double alpha, double mu) {
         double rand = 0.5 - generator.nextExclusiveDouble();
-        double tmp = MathTools.isZero(rand, 0x1p-32) ? Double.NEGATIVE_INFINITY : Math.log(2.0 * Math.abs(rand));
+        double tmp = MathTools.isZero(rand, 0x1p-66) ? Double.NEGATIVE_INFINITY : Math.log(2.0 * Math.abs(rand));
         return mu - alpha * Math.signum(rand) * tmp;
     }
 }
