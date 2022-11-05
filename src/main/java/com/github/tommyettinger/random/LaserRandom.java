@@ -657,12 +657,14 @@ public class LaserRandom extends EnhancedRandom {
 	 * This is just like {@link #nextDouble()}, returning a double between 0 and 1, except that it is inclusive on both 0.0 and 1.0.
 	 * It returns 1.0 extremely rarely, 0.000000000000011102230246251565% of the time if there is no bias in the generator, but it
 	 * can happen. This uses {@link #nextLong(long)} internally, so it may have some bias towards or against specific
-	 * subtly-different results.
+	 * subtly-different results. Other generators here use BitConversion and a very different algorithm, but this avoids
+	 * BitConversion so that it can be copied more easily.
 	 *
 	 * @return a double between 0.0, inclusive, and 1.0, inclusive
 	 */
 	public double nextInclusiveDouble () {
 //		return nextLong(0x20000000000001L) * 0x1p-53;
+
 		final long rand = nextLong();
 		final long bound = 0x20000000000001L;
 		final long randLow = rand & 0xFFFFFFFFL;

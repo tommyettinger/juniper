@@ -666,20 +666,25 @@ public abstract class EnhancedRandom extends Random {
 
 	/**
 	 * This is just like {@link #nextDouble()}, returning a double between 0 and 1, except that it is inclusive on both
-	 * 0.0 and 1.0. It returns 1.0 extremely rarely, 0.000000000000011102230246251565% of the time if there is no bias
-	 * in the generator, but it can happen. This uses similar code to {@link #nextLong(long)} internally, so it may have
-	 * some bias towards or against specific subtly-different results.
+	 * 0.0 and 1.0. It returns 1.0 extremely rarely, 0.000000000000011102230246251565404236316680908203125% of the time
+	 * if there is no bias in the generator, but it can happen. This uses similar code to {@link #nextExclusiveDouble()}
+	 * internally, and retains its quality of having approximately uniform distributions for every mantissa bit, unlike
+	 * most ways of generating random floating-point numbers.
 	 *
 	 * @return a double between 0.0, inclusive, and 1.0, inclusive
 	 */
 	public double nextInclusiveDouble () {
 //		return nextLong(0x20000000000001L) * 0x1p-53;
-		final long rand = nextLong();
-		final long bound = 0x20000000000001L;
-		final long randLow = rand & 0xFFFFFFFFL;
-		final long randHigh = (rand >>> 32);
-		final long boundHigh = (bound >>> 32);
-		return ((randLow * boundHigh >>> 32) + randHigh * boundHigh) * 0x1p-53;
+
+//		final long rand = nextLong();
+//		final long bound = 0x20000000000001L;
+//		final long randLow = rand & 0xFFFFFFFFL;
+//		final long randHigh = (rand >>> 32);
+//		final long boundHigh = (bound >>> 32);
+//		return ((randLow * boundHigh >>> 32) + randHigh * boundHigh) * 0x1p-53;
+
+		final long bits = nextLong();
+		return BitConversion.longBitsToDouble(1022L - Long.numberOfTrailingZeros(bits) << 52 | bits >>> 12) + 0x1p-12 - 0x1p-12;
 	}
 
 	/**
