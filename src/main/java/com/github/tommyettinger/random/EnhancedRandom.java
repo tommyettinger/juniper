@@ -712,16 +712,21 @@ public abstract class EnhancedRandom extends Random {
 	}
 
 	/**
-	 * This is just like {@link #nextFloat()}, returning a float between 0 and 1, except that it is inclusive on both 0.0 and 1.0.
-	 * It returns 1.0 rarely, 0.00000596046412226771% of the time if there is no bias in the generator, but it can happen. This method
-	 * has been tested by generating 268435456 (or 0x10000000) random ints with {@link #nextInt(int)}, and just before the end of that
-	 * it had generated every one of the 16777217 roughly-equidistant floats this is able to produce. Not all seeds and streams are
-	 * likely to accomplish that in the same time, or at all, depending on the generator.
+	 * This is just like {@link #nextFloat()}, returning a float between 0 and 1, except that it is inclusive on both
+	 * 0.0 and 1.0. It returns 1.0 rarely, 0.00000596046412226771% of the time if there is no bias in the generator, but
+	 * it can happen. This method does not return purely-equidistant floats, because there the resolution of possible
+	 * floats it can generate is higher as it approaches 0.0 . The smallest non-zero float this can return is
+	 * 5.421011E-20f (0x1p-64f in hex), and the largest non-one float this can return is 0.9999999f (0x1.fffffcp-1f in
+	 * hex). This uses nearly identical code to {@link #nextExclusiveFloat()}, but carefully adds and subtracts a small
+	 * number to force rounding at 0.0 and 1.0 . This retains the exclusive version's quality of having approximately
+	 * uniform distributions for every mantissa bit, unlike most ways of generating random floating-point numbers.
 	 *
 	 * @return a float between 0.0, inclusive, and 1.0, inclusive
 	 */
 	public float nextInclusiveFloat () {
-		return (int)(0x1000001L * (nextLong() & 0xFFFFFFFFL) >> 32) * 0x1p-24f;
+//		return (int)(0x1000001L * (nextLong() & 0xFFFFFFFFL) >> 32) * 0x1p-24f;
+		final long bits = nextLong();
+		return BitConversion.intBitsToFloat(126 - Long.numberOfTrailingZeros(bits) << 23 | (int)(bits >>> 41)) + 0x1p-22f - 0x1p-22f;
 	}
 
 	/**
