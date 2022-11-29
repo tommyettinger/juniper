@@ -71,16 +71,20 @@ public class Ziggurat {
         int idx;
 
         while (true) {
-            /* To minimize calls to the rng we, use every bit for its own
+            /* To minimize calls to the RNG, we use every bit for its own
              * purposes:
              *    - The 53 most significant bits are used to generate
              *      a random floating-point number in the range [0.0,1.0).
-             *    - The most and the least significant bits, XORed, are used
+             *    - The parity of the complete state is used
              *      to randomly set the sign of the return value.
-             *    - The second to the ninth least significant bit are used
+             *    - The first to the eighth least significant bits are used
              *      to generate an index in the range [0,256).
+             *    - If the random variable is in the trail, the state will
+             *      be modified instead of generating a new random number.
+             *      This could yield lower quality, but variables in the
+             *      trail are already exceedingly rare.
              */
-            idx = (int)((state >>> 1) & (TABLE_ITEMS - 1));
+            idx = (int)(state & (TABLE_ITEMS - 1));
             u = (state >>> 11) * 0x1p-53 * TABLE[idx];
 
             /* Take a random box from TABLE
@@ -95,16 +99,16 @@ public class Ziggurat {
              * normal distribution, as described by Marsaglia in 1964: */
             if (idx == 0) {
                 do {
-                    x = Math.log(1.0 - ((state += 0x9E3779B97F4A7C15L) & 0x1FFF_FFFFF_FFFFFL) * 0x1p-53);
-                    y = Math.log(1.0 - ((state += 0x9E3779B97F4A7C15L) & 0x1FFF_FFFFF_FFFFFL) * 0x1p-53);
+                    x = Math.log((((state += 0x9E3779B97F4A7C15L) & 0x1FFF_FFFFF_FFFFFL) + 1L) * 0x1p-53);
+                    y = Math.log((((state += 0x9E3779B97F4A7C15L) & 0x1FFF_FFFFF_FFFFFL) + 1L) * 0x1p-53);
                 } while (-(y + y) < x * x);
                 return state < 0L ?
                         x - R :
                         R - x;
             }
 
-            /* Take a random x-coordinate U in between TABLE[idx] and TABLE[idx+1]
-             * and return x if U is inside the normal distribution,
+            /* Take a random x-coordinate u in between TABLE[idx] and TABLE[idx+1]
+             * and return x if u is inside the normal distribution,
              * otherwise, repeat the entire ziggurat method. */
             y = u * u;
             f0 = Math.exp(-0.5 * (TABLE[idx]     * TABLE[idx]     - y));
