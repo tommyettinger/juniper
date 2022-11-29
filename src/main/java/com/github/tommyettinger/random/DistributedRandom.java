@@ -213,23 +213,33 @@ public class DistributedRandom extends EnhancedRandom {
     }
 
     /**
-     * This acts the same as {@link FourWheelRandom#nextExclusiveDoubleEquidistant()}; it does not use the optimizations
-     * from {@link FourWheelRandom#nextExclusiveDouble()}, because those aren't reasonable when distributed.
+     * This does not use the optimizations from {@link EnhancedRandom#nextExclusiveDouble()}, because those aren't
+     * reasonable when distributed.
      * @return a pseudo-random double between 0.0, exclusive, and 1.0, exclusive
      */
     @Override
     public double nextExclusiveDouble() {
-        return (nextLong(0x1FFFFFFFFFFFFFL) + 1L) * 0x1p-53;
+        return (reduction.applyAsDouble(distribution) + 0x1p-53) * 0x1.fffffffffffffp-1;
+    }
+
+    @Override
+    public double nextExclusiveSignedDouble() {
+        return Math.copySign((reduction.applyAsDouble(distribution) + 0x1p-53) * 0x1.fffffffffffffp-1, Long.bitCount(distribution.generator.getSelectedState(0) * 0x9E3779B97F4A7C15L) << 31);
     }
 
     /**
-     * This acts the same as {@link FourWheelRandom#nextExclusiveFloatEquidistant()}; it does not use the optimizations
-     * from {@link FourWheelRandom#nextExclusiveFloat()}, because those aren't reasonable when distributed.
+     * This acts the same as {@link EnhancedRandom#nextExclusiveFloatEquidistant()}; it does not use the optimizations
+     * from {@link EnhancedRandom#nextExclusiveFloat()}, because those aren't reasonable when distributed.
      * @return a pseudo-random float between 0.0, exclusive, and 1.0, exclusive
      */
     @Override
     public float nextExclusiveFloat() {
         return (nextInt(0xFFFFFF) + 1) * 0x1p-24f;
+    }
+
+    @Override
+    public float nextExclusiveSignedFloat() {
+        return Math.copySign((nextInt(0xFFFFFF) + 1) * 0x1p-24f, Long.bitCount(distribution.generator.getSelectedState(0) * 0x9E3779B97F4A7C15L) << 31);
     }
 
     @Override
