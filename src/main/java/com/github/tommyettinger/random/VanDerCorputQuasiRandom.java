@@ -175,30 +175,44 @@ public class VanDerCorputQuasiRandom extends EnhancedRandom {
 
 	@Override
 	public int nextInt() {
-		return (int) (nextLong() >>> 32);
+		return (int) (Long.reverse(++state) >>> 32);
 	}
 
 	@Override
 	public int nextInt(int bound) {
-		return (int)(bound * (nextLong() >>> 32) >> 32) & ~(bound >> 31);
+		return (int)(bound * (Long.reverse(++state) >>> 32) >> 32) & ~(bound >> 31);
 	}
 
 	@Override
 	public int nextSignedInt(int outerBound) {
-		outerBound = (int)(outerBound * (nextLong() >>> 32) >> 32);
+		outerBound = (int)(outerBound * (Long.reverse(++state) >>> 32) >> 32);
 		return outerBound + (outerBound >>> 31);
 	}
 
 	@Override
 	public double nextExclusiveDouble () {
-		final double n = (nextLong() >>> 11) * 0x1p-53;
+		final double n = (Long.reverse(++state) >>> 11) * 0x1p-53;
 		return n == 0.0 ? 0x1.0p-54 : n;
 	}
 
 	@Override
+	public double nextExclusiveSignedDouble() {
+		final long bits = Long.reverse(++state);
+		final double n = (bits >>> 11) * 0x1p-53;
+		return Math.copySign(n == 0.0 ? 0x1.0p-54 : n, bits << 54);
+	}
+
+	@Override
 	public float nextExclusiveFloat() {
-		final float n = (nextLong() >>> 40) * 0x1p-24f;
+		final float n = (Long.reverse(++state) >>> 40) * 0x1p-24f;
 		return n == 0.0 ? 0x1p-25f : n;
+	}
+
+	@Override
+	public float nextExclusiveSignedFloat() {
+		final long bits = Long.reverse(++state);
+		final float n = (bits >>> 40) * 0x1p-24f;
+		return Math.copySign(n == 0f ? 0x1p-25f : n, bits << 25);
 	}
 
 	@Override
