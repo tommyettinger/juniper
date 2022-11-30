@@ -192,6 +192,35 @@ public class EnhancedRandomTest {
 	}
 
 	@Test
+	public void testAcePrevious() {
+		AceRandom random = new AceRandom(0L);
+		long n0 = random.nextLong();
+		long n1 = random.nextLong();
+		long n2 = random.nextLong();
+		long n3 = random.nextLong();
+		long n4 = random.nextLong();
+		long n5 = random.nextLong();
+		long n6 = random.nextLong();
+		long p5 = random.previousLong();
+		long p4 = random.previousLong();
+		long p3 = random.previousLong();
+		long p2 = random.previousLong();
+		long p1 = random.previousLong();
+		long p0 = random.previousLong();
+		Assert.assertEquals(n0, p0);
+		Assert.assertEquals(n1, p1);
+		Assert.assertEquals(n2, p2);
+		Assert.assertEquals(n3, p3);
+		Assert.assertEquals(n4, p4);
+		Assert.assertEquals(n5, p5);
+//		System.out.println(n0 + " vs. " + p0);
+//		System.out.println(n1 + " vs. " + p1);
+//		System.out.println(n2 + " vs. " + p2);
+//		System.out.println(n3 + " vs. " + p3);
+//		System.out.println(n4 + " vs. " + p4);
+//		System.out.println(n5 + " vs. " + p5);
+	}
+	@Test
 	public void testDistinctBoundedLong() {
 		DistinctRandom random = new DistinctRandom(123L);
 		long inner = -0x7000000000000000L, outer = 0x7000000000000000L;
