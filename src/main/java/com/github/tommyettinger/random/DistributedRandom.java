@@ -222,6 +222,14 @@ public class DistributedRandom extends EnhancedRandom {
         return (reduction.applyAsDouble(distribution) + 0x1p-53) * 0x1.fffffffffffffp-1;
     }
 
+    /**
+     * This differs from the implementation used by other EnhancedRandom types in that the distribution applies to the
+     * {@code (0,1)} range as normal, but half the time this will negate that distribution, so it is on {@code (-1,0)}
+     * and the high and low ends are reversed. For example, if you use {@link ReductionMode#REJECT} on an
+     * {@link com.github.tommyettinger.random.distribution.ExponentialDistribution}, which normally has most of its
+     * results near 0 and few near 1, then the results will still have most near 0, few near 1, and equally few near -1.
+     * @return a random uniform double between -1 and 1 with a tiny hole around 0 (all exclusive)
+     */
     @Override
     public double nextExclusiveSignedDouble() {
         return Math.copySign((reduction.applyAsDouble(distribution) + 0x1p-53) * 0x1.fffffffffffffp-1, Long.bitCount(distribution.generator.getSelectedState(0) * 0x9E3779B97F4A7C15L) << 31);
@@ -237,6 +245,14 @@ public class DistributedRandom extends EnhancedRandom {
         return (nextInt(0xFFFFFF) + 1) * 0x1p-24f;
     }
 
+    /**
+     * This differs from the implementation used by other EnhancedRandom types in that the distribution applies to the
+     * {@code (0,1)} range as normal, but half the time this will negate that distribution, so it is on {@code (-1,0)}
+     * and the high and low ends are reversed. For example, if you use {@link ReductionMode#REJECT} on an
+     * {@link com.github.tommyettinger.random.distribution.ExponentialDistribution}, which normally has most of its
+     * results near 0 and few near 1, then the results will still have most near 0, few near 1, and equally few near -1.
+     * @return a random uniform float between -1 and 1 with a tiny hole around 0 (all exclusive)
+     */
     @Override
     public float nextExclusiveSignedFloat() {
         return Math.copySign((nextInt(0xFFFFFF) + 1) * 0x1p-24f, Long.bitCount(distribution.generator.getSelectedState(0) * 0x9E3779B97F4A7C15L) << 31);
