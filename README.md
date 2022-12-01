@@ -34,25 +34,48 @@ seemingly-random, response to any new person she meets.
 ### What are these generators?
 
 Several high-quality and very-fast random number generators are here, such as
-`com.github.tommyettinger.random.LaserRandom`,
+`com.github.tommyettinger.random.WhiskerRandom`,
 `com.github.tommyettinger.random.TricycleRandom`, `com.github.tommyettinger.random.DistinctRandom`,
-`com.github.tommyettinger.random.WhiskerRandom`, `com.github.tommyettinger.random.PasarRandom`,
+`com.github.tommyettinger.random.AceRandom`, `com.github.tommyettinger.random.PasarRandom`,
 `com.github.tommyettinger.random.FourWheelRandom` and `com.github.tommyettinger.random.TrimRandom`. These extend
 the abstract class `com.github.tommyettinger.random.EnhancedRandom`, and that extends `java.util.Random` for
-compatibility. LaserRandom has a good balance of features, speed, and quality, but other generators here make different
-tradeoffs. LaserRandom can jump to any point in its cycle (which is always length 2 to the 64) in constant time;
-DistinctRandom can also do this, but no other generators here can. TricycleRandom and FourWheelRandom can be quite fast,
-but don't always produce very-random numbers right at the start of usage; WhiskerRandom is much like FourWheelRandom in
-design, but is a little faster (it is the fastest generator here on Java 17 with HotSpot), and is a little more random
-at the start. TrimRandom is very close to FourWheelRandom in design and in speed, but has higher quality even without
-using any multiplication internally; it also offers a high guaranteed minimum period (2 to the 64) with a likely higher
-maximum period. PasarRandom is mostly identical to WhiskerRandom, but instead of adding a constant in one place, it adds
-the current value of a simple counter; this gives it guarantee of a long minimum period and lets it `leap()`, but slows
-it down a bit. DistinctRandom is very similar to JDK 8's SplittableRandom, without the splitting, and will produce every
-possible `long` with its `nextLong()` method before it ever repeats a returned value.
+compatibility. The simplest starting point is DistinctRandom; it is much like Java 8's SplittableRandom algorithm, but
+doesn't support splitting (since the possibility of low-quality splits is a major criticism of SplittableRandom), and
+otherwise uses the same style of code. It simply adds to a counter by a large constant, takes the current value of that
+counter, gets a unary hash of it using a similar algorithm to MurmurHash's finalizer step, and returns that.
+DistinctRandom is able to jump to any point in its cycle, which has a length of exactly 2 to the 64, in constant time.
+WhiskerRandom is often considerably faster than DistinctRandom (which is no slouch either), and generally has very high
+quality, but does not have a guaranteed cycle length -- a given seed could be found that has an unusually short cycle,
+which would reduce the usefulness of the generator. But, finding such a seed at random is so improbable for a generator
+with 256 bits of state that it can essentially be ignored as a weakness unless considering adversarial access (and you 
+**should not use** any of the generators here if that is the case, since none are cryptographically secure). TrimRandom
+is like WhiskerRandom, also with 256 bits of state, but promises a minimum period of 2 to the 64, and the maximum period
+is likely much higher. Trim isn't as fast as Whisker, and it seems to have questionable quality on some seeds, but only
+when using very stringent testing. PasarRandom and AceRandom are structured much like Whisker and Trim, but have five
+long states instead of four. Pasar uses multiplication, like Whisker, while Ace uses only add, rotate, XOR, and subtract
+operations. Ace can often be faster than Pasar, especially on Java 19 and newer, but can also be slower on older JVMs.
+Both of these have the same minimum period guarantee as Trim. All three of Trim, Pasar, and Whisker can `leap()` ahead
+in their subcycle and almost always into a different subcycle, which can be used to make non-overlapping sequences
+produced by different generators copied out from the same original parent. TricycleRandom and FourWheelRandom are
+somewhat older; Tricycle can sometimes be quite fast and has three long states, while FourWheel is extremely similar to
+Whisker, but not quite as fast.
 
-There's also some other generators that you might want for other reasons.
-`com.github.tommyettinger.random.Xoshiro256StarStarRandom` isn't particularly fast, but is four-dimensionally equidistributed
+Except for DistinctRandom, all of these mentioned generators are fast because they are designed to
+take advantage of ILP -- Instruction Level Parallelism. The idea here came from Mark Overton's Romu generators (see
+below for RomuTrioRandom), which also have their period separated into multiple distinct sub-cycles, and don't have a
+single known cycle length. Romu generators and the ones here operate on multiple states simultaneously, with minimal
+dependence on the rest of the states to generate the next value for a particular state. This way of generating numbers
+proves to be significantly faster than the fastest other generators can achieve, like the Xoshiro and Xoroshiro family,
+or anything based on a linear congruential generator (like java.util.Random or PCG-Random), because at their best, the
+generators here can update every state in parallel on the same processor core, without needing to wait for a previous
+operation to complete.
+
+There's also some other generators that you might want for other reasons. `com.github.tommyettinger.random.LaserRandom`
+is similar to DistinctRandom in terms of its features (it can skip to any point in its sequence in constant time). It
+also has each possible LaserRandom instance produce a different set of outputs over its full cycle, with some outputs
+produced twice and some not at all, but appending the outputs of all LaserRandom instances would contain every possible
+long exactly 2 to the 64 times. `com.github.tommyettinger.random.Xoshiro256StarStarRandom` isn't quite as fast, as the
+above generators, but is four-dimensionally equidistributed
 (this means every sequence of four `long` values will be produced with equal likelihood, except the four-zeroes sequence, which is
 never produced). `com.github.tommyettinger.random.StrangerRandom` is mostly useful if you anticipate running on unusual
 hardware, particularly some that doesn't support fast multiplication between `long`s (StrangerRandom doesn't use multiplication);

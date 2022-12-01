@@ -31,7 +31,7 @@ public class RangedTest {
                 Assert.assertTrue("Distribution failure for nextInt() with limit " + limit + " using " + r + ": " +
                                 ((double) min / (double) max),
                         (double) min / (double) max >= threshold);
-//                System.out.println("Distribution success for nextInt() with limit " + limit + " using " + r.getTag() + ": " +
+//                System.out.println("Success for nextInt() with limit " + limit + " using " + r.getTag() + ": " +
 //                        ((double) min / (double) max));
             }
         }

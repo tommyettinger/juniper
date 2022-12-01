@@ -310,6 +310,25 @@ public class AceRandom extends EnhancedRandom {
 		return (int) (stateE = fb - fc) >>> (32 - bits);
 	}
 
+	/**
+	 * Jumps extremely far in the generator's sequence, such that one call to leap() advances the state as many as
+	 * {@code Math.pow(2, 48)} calls to {@link #nextLong()}. This can be used to create 65536 substreams of this
+	 * generator's sequence, each with a period of at least {@code Math.pow(2, 48)} but likely much more.
+	 * @return the result of what nextLong() would return if it was called at the state this jumped to
+	 */
+	public long leap () {
+		final long fa = stateA;
+		final long fb = stateB;
+		final long fc = stateC;
+		final long fd = stateD;
+		final long fe = stateE;
+		stateA = fa + 0x7C15000000000000L;
+		stateB = fa ^ fe;
+		stateC = fb + fd;
+		stateD = (fc << 52 | fc >>> 12);
+		return stateE = fb - fc;
+	}
+
 	@Override
 	public AceRandom copy () {
 		return new AceRandom(stateA, stateB, stateC, stateD, stateE);
