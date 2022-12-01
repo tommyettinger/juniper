@@ -146,15 +146,15 @@ fast approximation based on bit counting (by [Marc B. Reynolds](https://marc-b-r
 With Gradle, the dependency (of the core module, if you have multiple) is:
 
 ```groovy
-api "com.github.tommyettinger:juniper:0.1.6"
+api "com.github.tommyettinger:juniper:0.1.7"
 ```
 
 In a libGDX project that has a GWT/HTML backend, the `html/build.gradle` file
 should additionally have:
 
 ```
-implementation "com.github.tommyettinger:digital:0.1.4:sources"
-implementation "com.github.tommyettinger:juniper:0.1.6:sources"
+implementation "com.github.tommyettinger:digital:0.1.5:sources"
+implementation "com.github.tommyettinger:juniper:0.1.7:sources"
 ```
 
 And the `GdxDefinition.gwt.xml` file should have:
@@ -170,7 +170,7 @@ If you don't use Gradle, then with Maven, the dependency is:
 <dependency>
   <groupId>com.github.tommyettinger</groupId>
   <artifactId>juniper</artifactId>
-  <version>0.1.6</version>
+  <version>0.1.7</version>
 </dependency>
 ```
 
