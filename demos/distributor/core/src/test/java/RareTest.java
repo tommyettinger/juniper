@@ -284,5 +284,70 @@ public class RareTest {
         }
         System.out.println("With seed " + SEED + " on RandomXS128.nextInt(), the count is " + sum + " and should be roughly 1000 .");
     }
+    /**
+     * With seed 6256645682390833673 on WhiskerRandom.nextLong(), the count is 1025 and should be roughly 1000 .
+     */
+    @Test
+    public void nextLongWhisker() {
+        WhiskerRandom random = new WhiskerRandom(SEED);
+        int sum = 0;
+        for (int i = 0; i < 1000000000; i++) {
+            if(random.nextLong(1000000) == 0)
+                ++sum;
+        }
+        System.out.println("With seed " + SEED + " on WhiskerRandom.nextLong(), the count is " + sum + " and should be roughly 1000 .");
+    }
+    /**
+     * With seed 6256645682390833673 on DistinctRandom.nextLong(), the count is 1003 and should be roughly 1000 .
+     */
+    @Test
+    public void nextLongDistinct() {
+        DistinctRandom random = new DistinctRandom(SEED);
+        int sum = 0;
+        for (int i = 0; i < 1000000000; i++) {
+            if(random.nextLong(1000000) == 0)
+                ++sum;
+        }
+        System.out.println("With seed " + SEED + " on DistinctRandom.nextLong(), the count is " + sum + " and should be roughly 1000 .");
+    }
+    /**
+     * With seed 6256645682390833673 on GoldenQuasiRandom.nextLong(), the count is 1000 and should be roughly 1000 .
+     */
+    @Test
+    public void nextLongGoldenQuasi() {
+        GoldenQuasiRandom random = new GoldenQuasiRandom(SEED);
+        int sum = 0;
+        for (int i = 0; i < 1000000000; i++) {
+            if(random.nextLong(1000000) == 0)
+                ++sum;
+        }
+        System.out.println("With seed " + SEED + " on GoldenQuasiRandom.nextLong(), the count is " + sum + " and should be roughly 1000 .");
+    }
+    /**
+     * With seed 6256645682390833673 on Random.nextLong(), the count is 987 and should be roughly 1000 .
+     */
+    @Test
+    public void nextLongJDK() {
+        Random random = new Random(SEED);
+        int sum = 0;
+        for (int i = 0; i < 1000000000; i++) {
+            if(random.nextLong(1000000) == 0)
+                ++sum;
+        }
+        System.out.println("With seed " + SEED + " on Random.nextLong(), the count is " + sum + " and should be roughly 1000 .");
+    }
+    /**
+     * With seed 6256645682390833673 on RandomXS128.nextLong(), the count is 1009 and should be roughly 1000 .
+     */
+    @Test
+    public void nextLongGDX() {
+        RandomXS128 random = new RandomXS128(SEED);
+        int sum = 0;
+        for (int i = 0; i < 1000000000; i++) {
+            if(random.nextLong(1000000) == 0)
+                ++sum;
+        }
+        System.out.println("With seed " + SEED + " on RandomXS128.nextLong(), the count is " + sum + " and should be roughly 1000 .");
+    }
 
 }
