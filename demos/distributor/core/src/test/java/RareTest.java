@@ -1,6 +1,7 @@
 import com.badlogic.gdx.math.RandomXS128;
 import com.github.tommyettinger.random.DistinctRandom;
 import com.github.tommyettinger.random.EnhancedRandom;
+import com.github.tommyettinger.random.GoldenQuasiRandom;
 import com.github.tommyettinger.random.WhiskerRandom;
 import org.junit.Test;
 
@@ -35,6 +36,19 @@ public class RareTest {
                 ++sum;
         }
         System.out.println("With seed " + SEED + " on DistinctRandom.nextFloat(), the count is " + sum + " and should be roughly 1000 .");
+    }
+    /**
+     * With seed 6256645682390833673 on GoldenQuasiRandom.nextFloat(), the count is 1014 and should be roughly 1000 .
+     */
+    @Test
+    public void nextFloatGoldenQuasi() {
+        GoldenQuasiRandom random = new GoldenQuasiRandom(SEED);
+        int sum = 0;
+        for (int i = 0; i < 1000000000; i++) {
+            if(random.nextFloat() < 1e-6f)
+                ++sum;
+        }
+        System.out.println("With seed " + SEED + " on GoldenQuasiRandom.nextFloat(), the count is " + sum + " and should be roughly 1000 .");
     }
     /**
      * With seed 6256645682390833673 on Random.nextFloat(), the count is 977 and should be roughly 1000 .
@@ -89,6 +103,19 @@ public class RareTest {
         System.out.println("With seed " + SEED + " on DistinctRandom.nextDouble(), the count is " + sum + " and should be roughly 1000 .");
     }
     /**
+     * With seed 6256645682390833673 on GoldenQuasiRandom.nextDouble(), the count is 1000 and should be roughly 1000 .
+     */
+    @Test
+    public void nextDoubleGoldenQuasi() {
+        GoldenQuasiRandom random = new GoldenQuasiRandom(SEED);
+        int sum = 0;
+        for (int i = 0; i < 1000000000; i++) {
+            if(random.nextDouble() < 1e-6f)
+                ++sum;
+        }
+        System.out.println("With seed " + SEED + " on GoldenQuasiRandom.nextDouble(), the count is " + sum + " and should be roughly 1000 .");
+    }
+    /**
      * With seed 6256645682390833673 on Random.nextDouble(), the count is 961 and should be roughly 1000 .
      */
     @Test
@@ -141,6 +168,19 @@ public class RareTest {
         System.out.println("With seed " + SEED + " on DistinctRandom.nextExclusiveFloat(), the count is " + sum + " and should be roughly 1000 .");
     }
     /**
+     * With seed 6256645682390833673 on GoldenQuasiRandom.nextExclusiveFloat(), the count is 1014 and should be roughly 1000 .
+     */
+    @Test
+    public void nextExclusiveFloatGoldenQuasi() {
+        GoldenQuasiRandom random = new GoldenQuasiRandom(SEED);
+        int sum = 0;
+        for (int i = 0; i < 1000000000; i++) {
+            if(random.nextExclusiveFloat() < 1e-6f)
+                ++sum;
+        }
+        System.out.println("With seed " + SEED + " on GoldenQuasiRandom.nextExclusiveFloat(), the count is " + sum + " and should be roughly 1000 .");
+    }
+    /**
      * With seed 6256645682390833673 on WhiskerRandom.nextExclusiveDouble(), the count is 1053 and should be roughly 1000 .
      */
     @Test
@@ -167,6 +207,19 @@ public class RareTest {
         System.out.println("With seed " + SEED + " on DistinctRandom.nextExclusiveDouble(), the count is " + sum + " and should be roughly 1000 .");
     }
     /**
+     * With seed 6256645682390833673 on GoldenQuasiRandom.nextExclusiveDouble(), the count is 1000 and should be roughly 1000 .
+     */
+    @Test
+    public void nextExclusiveDoubleGoldenQuasi() {
+        GoldenQuasiRandom random = new GoldenQuasiRandom(SEED);
+        int sum = 0;
+        for (int i = 0; i < 1000000000; i++) {
+            if(random.nextExclusiveDouble() < 1e-6f)
+                ++sum;
+        }
+        System.out.println("With seed " + SEED + " on GoldenQuasiRandom.nextExclusiveDouble(), the count is " + sum + " and should be roughly 1000 .");
+    }
+    /**
      * With seed 6256645682390833673 on WhiskerRandom.nextInt(), the count is 1032 and should be roughly 1000 .
      */
     @Test
@@ -191,6 +244,19 @@ public class RareTest {
                 ++sum;
         }
         System.out.println("With seed " + SEED + " on DistinctRandom.nextInt(), the count is " + sum + " and should be roughly 1000 .");
+    }
+    /**
+     * With seed 6256645682390833673 on GoldenQuasiRandom.nextInt(), the count is 1000 and should be roughly 1000 .
+     */
+    @Test
+    public void nextIntGoldenQuasi() {
+        GoldenQuasiRandom random = new GoldenQuasiRandom(SEED);
+        int sum = 0;
+        for (int i = 0; i < 1000000000; i++) {
+            if(random.nextInt(1000000) == 0)
+                ++sum;
+        }
+        System.out.println("With seed " + SEED + " on GoldenQuasiRandom.nextInt(), the count is " + sum + " and should be roughly 1000 .");
     }
     /**
      * With seed 6256645682390833673 on Random.nextInt(), the count is 1011 and should be roughly 1000 .
