@@ -112,4 +112,57 @@ public class RareTest {
         }
         System.out.println("With seed " + SEED + " on RandomXS128.nextDouble(), the count is " + sum + " and should be roughly 1000 .");
     }
+    /**
+     * With WhiskerRandom.nextExclusiveFloat(), the count is 1029 and should be roughly 1000 .
+     */
+    @Test
+    public void nextExclusiveFloatWhisker() {
+        WhiskerRandom random = new WhiskerRandom(SEED);
+        int sum = 0;
+        for (int i = 0; i < 1000000000; i++) {
+            if(random.nextExclusiveFloat() < 1e-6f)
+                ++sum;
+        }
+        System.out.println("With seed " + SEED + " on WhiskerRandom.nextExclusiveFloat(), the count is " + sum + " and should be roughly 1000 .");
+    }
+    /**
+     * With DistinctRandom.nextExclusiveFloat(), the count is 1015 and should be roughly 1000 .
+     */
+    @Test
+    public void nextExclusiveFloatDistinct() {
+        DistinctRandom random = new DistinctRandom(SEED);
+        int sum = 0;
+        for (int i = 0; i < 1000000000; i++) {
+            if(random.nextExclusiveFloat() < 1e-6f)
+                ++sum;
+        }
+        System.out.println("With seed " + SEED + " on DistinctRandom.nextExclusiveFloat(), the count is " + sum + " and should be roughly 1000 .");
+    }
+    /**
+     * With WhiskerRandom.nextExclusiveDouble(), the count is 1029 and should be roughly 1000 .
+     */
+    @Test
+    public void nextExclusiveDoubleWhisker() {
+        WhiskerRandom random = new WhiskerRandom(SEED);
+        int sum = 0;
+        for (int i = 0; i < 1000000000; i++) {
+            if(random.nextExclusiveDouble() < 1e-6f)
+                ++sum;
+        }
+        System.out.println("With seed " + SEED + " on WhiskerRandom.nextExclusiveDouble(), the count is " + sum + " and should be roughly 1000 .");
+    }
+    /**
+     * With DistinctRandom.nextExclusiveDouble(), the count is 1015 and should be roughly 1000 .
+     */
+    @Test
+    public void nextExclusiveDoubleDistinct() {
+        DistinctRandom random = new DistinctRandom(SEED);
+        int sum = 0;
+        for (int i = 0; i < 1000000000; i++) {
+            if(random.nextExclusiveDouble() < 1e-6f)
+                ++sum;
+        }
+        System.out.println("With seed " + SEED + " on DistinctRandom.nextExclusiveDouble(), the count is " + sum + " and should be roughly 1000 .");
+    }
+
 }
