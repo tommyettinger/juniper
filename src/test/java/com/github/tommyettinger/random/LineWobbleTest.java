@@ -72,6 +72,50 @@ public class LineWobbleTest {
         }
     }
     @Test
+    public void testLongFloatWrappingWobble() {
+        long seed = 123456;
+        for (int i = 0; i < 264; i++) {
+            int len = Math.round((LineWobble.wobbleWrapped(seed, i * 0x1p-5f, 8) + 1) * 39);
+            for (int j = 0; j < len; j++) {
+                System.out.print('*');
+            }
+            System.out.println();
+        }
+    }
+    @Test
+    public void testIntFloatWrappingWobble() {
+        int seed = 123456;
+        for (int i = 0; i < 264; i++) {
+            int len = Math.round((LineWobble.wobbleWrapped(seed, i * 0x1p-5f, 8) + 1) * 39);
+            for (int j = 0; j < len; j++) {
+                System.out.print('*');
+            }
+            System.out.println();
+        }
+    }
+    @Test
+    public void testLongFloatWrappingTightWobble() {
+        long seed = 123456;
+        for (int i = 0; i < 264; i++) {
+            int len = Math.round((LineWobble.wobbleWrappedTight(seed, i * 0x1p-5f, 8)) * 79);
+            for (int j = 0; j < len; j++) {
+                System.out.print('*');
+            }
+            System.out.println();
+        }
+    }
+    @Test
+    public void testIntFloatWrappingTightWobble() {
+        int seed = 123456;
+        for (int i = 0; i < 264; i++) {
+            int len = Math.round((LineWobble.wobbleWrappedTight(seed, i * 0x1p-5f, 8)) * 79);
+            for (int j = 0; j < len; j++) {
+                System.out.print('*');
+            }
+            System.out.println();
+        }
+    }
+    @Test
     public void testLUTWobble() {
         int seed = 12345;
         float[] lut = LineWobble.generateLookupTable(seed, 256, 11, 4);
