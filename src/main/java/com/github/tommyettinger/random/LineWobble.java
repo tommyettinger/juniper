@@ -260,14 +260,80 @@ public class LineWobble {
     }
 
     /**
-     * Very similar to {@link #wobble(int, float)}, but only tolerates non-negative {@code value} and wraps value when
-     * it gets too close to {@code modulus}. Only used by {@link #generateLookupTable(int, int, int, int)} for now.
+     * Very similar to {@link #wobble(long, float)}, but only tolerates non-negative {@code value} and wraps value when
+     * it gets too close to {@code modulus}. Could find various uses when wrapping is needed.
+     * One such potential use is for looping animations; if the modulus is set so that {@code value}
+     * equals {@code modulus} (or an integer multiple of it) exactly when the animation starts and ends, the animation
+     * will then loop seamlessly, at least for anything that depends on this method.
+     * <br>
+     * The wobble methods have a shape where they flatten out when {@code value} is an integer, so typically you should
+     * add a value smaller than 1 to value at each call if you want it to change smoothly. For the wrapped methods, the
+     * modulus is also the number of times the curve will flatten out over the course of a cycle.
+     * <br>
+     * Note that {@code wobbleWrapped(seed, 0, modulus)} and {@code wobbleWrapped(seed, modulus, modulus)}
+     * will produce the same value as long as modulus is positive (and not large enough to incur precision loss).
      * @param seed an int seed that will determine the pattern of peaks and valleys this will generate as value changes; this should not change between calls
      * @param value a non-negative float that typically changes slowly, by less than 2.0, with direction changes at integer inputs
      * @param modulus where to wrap value if it gets too high; must be positive
      * @return a pseudo-random float between -1f and 1f (both exclusive), smoothly changing with value
      */
-    private static float wobbleWrapped(int seed, float value, int modulus)
+    public static float wobbleWrapped(long seed, float value, int modulus)
+    {
+        final int floor = (int) value;
+        final float start = (((seed + floor % modulus) * 0x6C8E9CF570932BD5L ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L) * 0x0.ffffffp-63f,
+                end = (((seed + (floor + 1) % modulus) * 0x6C8E9CF570932BD5L ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L) * 0x0.ffffffp-63f;
+        value -= floor;
+        value *= value * (3 - 2 * value);
+        return (1 - value) * start + value * end;
+    }
+
+    /**
+     * Very similar to {@link #wobble(long, float)}, but only tolerates non-negative {@code value} and wraps value when
+     * it gets too close to {@code modulus}. Could find various uses when wrapping is needed. One such
+     * potential use is for looping animations; if the modulus is set so that {@code value} equals {@code modulus} (or
+     * an integer multiple of it) exactly when the animation starts and ends, the animation will then loop seamlessly,
+     * at least for anything that depends on this method.
+     * <br>
+     * The wobble methods have a shape where they flatten out when {@code value} is an integer, so typically you should
+     * add a value smaller than 1 to value at each call if you want it to change smoothly. For the wrapped methods, the
+     * modulus is also the number of times the curve will flatten out over the course of a cycle.
+     * <br>
+     * Note that {@code wobbleWrappedTight(seed, 0, modulus)} and {@code wobbleWrappedTight(seed, modulus, modulus)}
+     * will produce the same value as long as modulus is positive (and not large enough to incur precision loss).
+     * @param seed an int seed that will determine the pattern of peaks and valleys this will generate as value changes; this should not change between calls
+     * @param value a non-negative float that typically changes slowly, by less than 2.0, with direction changes at integer inputs
+     * @param modulus where to wrap value if it gets too high; must be positive
+     * @return a pseudo-random float between 0f and 1f (both inclusive), smoothly changing with value
+     */
+    public static float wobbleWrappedTight(long seed, float value, int modulus)
+    {
+        final int floor = (int) value;
+        final float start = (((seed + floor % modulus) * 0x6C8E9CF570932BD5L ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L) * 0x0.ffffffp-63f,
+                end = (((seed + (floor + 1) % modulus) * 0x6C8E9CF570932BD5L ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L) * 0x0.ffffffp-63f;
+        value -= floor;
+        value *= value * (3 - 2 * value);
+        return (1 - value) * start + value * end;
+    }
+
+    /**
+     * Very similar to {@link #wobble(int, float)}, but only tolerates non-negative {@code value} and wraps value when
+     * it gets too close to {@code modulus}. Used by {@link #generateLookupTable(int, int, int, int)}, but could find
+     * uses elsewhere. One such potential use is for looping animations; if the modulus is set so that {@code value}
+     * equals {@code modulus} (or an integer multiple of it) exactly when the animation starts and ends, the animation
+     * will then loop seamlessly, at least for anything that depends on this method.
+     * <br>
+     * The wobble methods have a shape where they flatten out when {@code value} is an integer, so typically you should
+     * add a value smaller than 1 to value at each call if you want it to change smoothly. For the wrapped methods, the
+     * modulus is also the number of times the curve will flatten out over the course of a cycle.
+     * <br>
+     * Note that {@code wobbleWrapped(seed, 0, modulus)} and {@code wobbleWrapped(seed, modulus, modulus)}
+     * will produce the same value as long as modulus is positive (and not large enough to incur precision loss).
+     * @param seed an int seed that will determine the pattern of peaks and valleys this will generate as value changes; this should not change between calls
+     * @param value a non-negative float that typically changes slowly, by less than 2.0, with direction changes at integer inputs
+     * @param modulus where to wrap value if it gets too high; must be positive
+     * @return a pseudo-random float between -1f and 1f (both exclusive), smoothly changing with value
+     */
+    public static float wobbleWrapped(int seed, float value, int modulus)
     {
         final int floor = (int) value;
         final float start = (((seed + floor % modulus) * 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x0.ffffffp-31f,
@@ -279,13 +345,24 @@ public class LineWobble {
 
     /**
      * Very similar to {@link #wobble(int, float)}, but only tolerates non-negative {@code value} and wraps value when
-     * it gets too close to {@code modulus}. Only used by {@link #generateLookupTable(int, int, int, int)} for now.
+     * it gets too close to {@code modulus}. Used by
+     * {@link #generateSplineLookupTable(int, int, int, int, float, float)}, but could find uses elsewhere. One such
+     * potential use is for looping animations; if the modulus is set so that {@code value} equals {@code modulus} (or
+     * an integer multiple of it) exactly when the animation starts and ends, the animation will then loop seamlessly,
+     * at least for anything that depends on this method.
+     * <br>
+     * The wobble methods have a shape where they flatten out when {@code value} is an integer, so typically you should
+     * add a value smaller than 1 to value at each call if you want it to change smoothly. For the wrapped methods, the
+     * modulus is also the number of times the curve will flatten out over the course of a cycle.
+     * <br>
+     * Note that {@code wobbleWrappedTight(seed, 0, modulus)} and {@code wobbleWrappedTight(seed, modulus, modulus)}
+     * will produce the same value as long as modulus is positive (and not large enough to incur precision loss).
      * @param seed an int seed that will determine the pattern of peaks and valleys this will generate as value changes; this should not change between calls
      * @param value a non-negative float that typically changes slowly, by less than 2.0, with direction changes at integer inputs
      * @param modulus where to wrap value if it gets too high; must be positive
      * @return a pseudo-random float between 0f and 1f (both inclusive), smoothly changing with value
      */
-    private static float wobbleWrappedTight(int seed, float value, int modulus)
+    public static float wobbleWrappedTight(int seed, float value, int modulus)
     {
         final int floor = (int) value;
         final float start = ((((seed + floor % modulus) * 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) >>> 1) * 0x1.0p-31f,
