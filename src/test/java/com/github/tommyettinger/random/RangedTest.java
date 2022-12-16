@@ -34,16 +34,24 @@ public class RangedTest {
             }
         }
     }
+
+    /**
+     * BUILD SUCCESSFUL in 2m 28s
+     * Or, with some minor GC cleanup,
+     * BUILD SUCCESSFUL in 2m 23s
+     */
     @Ignore // comment this out if you want to run this; it can take a little while
     @Test
     public void testLongRange() {
+        ArrayList<EnhancedRandom> randoms = Deserializer.copyRandoms();
         for (int limit = 2; limit <= 1024; limit++) {
             // we need to use tanh because manually calculating can give very wrong results for high limits.
-            double threshold = 1.91 - Math.tanh(limit);
+            double threshold = 1.9 - Math.tanh(limit);
             threshold *= threshold;
             System.out.println("Testing all EnhancedRandom using nextLong("+limit+") with threshold " + threshold);
-            ArrayList<EnhancedRandom> randoms = Deserializer.copyRandoms();
-            for (EnhancedRandom r : randoms) {
+            for (int c = 0; c < randoms.size(); c++) {
+                EnhancedRandom r = randoms.get(c);
+                r.setSeed(1L);
                 int[] buckets = new int[limit];
                 for (int i = limit << 11; i > 0; i--) {
                     buckets[(int)r.nextLong(limit)]++;
