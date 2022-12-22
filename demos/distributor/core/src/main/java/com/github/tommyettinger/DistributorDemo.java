@@ -26,7 +26,7 @@ public class DistributorDemo extends Game {
         alternateNormal = new NormalAlternateScreen(this);
         screens = new Screen[]{
                 new BetaScreen(this), new KumaraswamyScreen(this), new LumpScreen(this),
-                new NormalScreen(this), new CauchyScreen(this), new LogCauchyScreen(this),
+                new NormalScreen(this), new RaisedNormalScreen(this), new CauchyScreen(this), new LogCauchyScreen(this),
                 new ErlangScreen(this), new ExponentialScreen(this), new ParetoScreen(this), new PowerScreen(this),
                 new ChiScreen(this), new ChiSquareScreen(this), new ArcsineScreen(this),
                 new BinomialScreen(this), new ZipfianScreen(this),
