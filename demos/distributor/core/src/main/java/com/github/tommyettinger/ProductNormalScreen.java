@@ -20,9 +20,9 @@ import java.util.Arrays;
 
 import static com.github.tommyettinger.DistributorDemo.*;
 
-public class RaisedNormalScreen extends ScreenAdapter {
+public class ProductNormalScreen extends ScreenAdapter {
     private NormalDistribution dist;
-    private double power = 1;
+    private double dists = 1;
     private SpriteBatch batch;
     private ImmediateModeRenderer20 renderer;
     private final long[] amounts = new long[512];
@@ -40,7 +40,7 @@ public class RaisedNormalScreen extends ScreenAdapter {
         } catch (IllegalArgumentException ignored) {
             dist = new NormalDistribution(mainGame.random, 0.0, 1.0);
         }
-        power = Math.round(c);
+        dists = Math.max(c, 1);
         batch = new SpriteBatch();
         viewport = new ScreenViewport();
         renderer = new ImmediateModeRenderer20(512 * 3, false, true, 0);
@@ -49,7 +49,7 @@ public class RaisedNormalScreen extends ScreenAdapter {
     }
     private final DistributorDemo mainGame;
 
-    public RaisedNormalScreen(DistributorDemo main){
+    public ProductNormalScreen(DistributorDemo main){
         mainGame = main;
     }
 
@@ -86,12 +86,16 @@ public class RaisedNormalScreen extends ScreenAdapter {
             c += (UIUtils.shift() ? 0.5 : -0.5) * Gdx.graphics.getDeltaTime();
             Arrays.fill(amounts, 0);
             iterations = 0;
-            power = Math.round(c);
+            dists = Math.max(c, 1);
         }
         iterations += 1;
         dist.setParameters(a, b, c);
         for (int i = 0; i < 0x10000; i++) {
-            int m = (int) (Math.pow(dist.nextDouble(), power) * 128 + 256);
+            double md = dist.nextDouble();
+            for (int j = 1; j < dists; j++) {
+                md *= dist.nextDouble();
+            }
+            int m = (int) (md * 128 + 256);
             if(m >= 0 && m < 512)
                 amounts[m]++;
         }
@@ -115,14 +119,14 @@ public class RaisedNormalScreen extends ScreenAdapter {
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        font.draw(batch, Stringf.format("Raised NormalDistribution with A=%1.3f, B=%1.3f, C=%1.3f; median=%1.3f at %d FPS",
+        font.draw(batch, Stringf.format("Product of NormalDistribution s with A=%1.3f, B=%1.3f, C=%1.3f; median=%1.3f at %d FPS",
                 a, b, c, dist.getMedian(), Gdx.graphics.getFramesPerSecond()),
                 64, 522, 256+128, Align.center, true);
         font.draw(batch, "Lower parameters A/B/C by holding a, b, or c;\nhold Shift and A/B/C to raise.", 64, 500-6, 256+128, Align.center, true);
         font.draw(batch,
                 "a – mu; must not be NaN\n" +
                         "b – sigma; should be greater than 0.0\n" +
-                        "c - power; will be rounded to an int", 64, 500-32, 256+128, Align.center, true);
+                        "c - count; will be rounded to an int of at least 1", 64, 500-32, 256+128, Align.center, true);
         batch.end();
 
     }
