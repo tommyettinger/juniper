@@ -5,8 +5,8 @@
 	<inherits name="com.badlogic.gdx.backends.gdx_backends_gwt" />
 	<inherits name="com.github.tommyettinger.DistributorDemo" />
 	<inherits name="formic" />
-	<inherits name="digital" />
-	<inherits name="juniper" />
+	<inherits name="com.github.tommyettinger.digital" />
+	<inherits name="com.github.tommyettinger.juniper" />
 	<entry-point class="com.github.tommyettinger.gwt.GwtLauncher" />
 
 	<set-configuration-property name="gdx.assetpath" value="../assets" />

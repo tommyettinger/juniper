@@ -5,10 +5,10 @@
 <!-- To compile to Gwt, you need to reference this file in your master .gwt.xml
      file (usually called GdxDefinition.gwt.xml) as follows:
      
-     <inherits name="juniper" />
+     <inherits name="com.github.tommyettinger.juniper" />
   -->
 <module>
-    <inherits name="digital"/>
+    <inherits name="com.github.tommyettinger.digital"/>
     <super-source path="emu" />
-    <source path="com/github/tommyettinger/random" />
+    <source path="random" />
 </module>

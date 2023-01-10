@@ -44,13 +44,14 @@ if(JavaVersion.current().isJava9Compatible()) {
     }
 }
 
-idea.module.excludeDirs += [file("src/main/java/emu/")]
-[compileJava, compileTestJava, javadoc]*.exclude("emu")
+idea.module.excludeDirs += [file("src/main/java/com/github/tommyettinger/emu/")]
+[compileJava, compileTestJava, javadoc]*.exclude("com/github/tommyettinger/emu")
 
 // JavaDocs will be published inside the docs/ folder, which you can easily put on GitHub Pages in your repo settings.
 javadoc.destinationDir = file('docs/apidocs')
 
 jar {
+    duplicatesStrategy DuplicatesStrategy.EXCLUDE
     archiveBaseName.set(projectName)
     manifest {
         attributes 'Implementation-Title': projectName, 'Implementation-Version': archiveVersion
@@ -66,7 +67,7 @@ repositories {
     gradlePluginPortal()
     maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
     maven { url 'https://s01.oss.sonatype.org/content/repositories/snapshots/' }
-    maven { url 'https://jitpack.io' }
+//    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
