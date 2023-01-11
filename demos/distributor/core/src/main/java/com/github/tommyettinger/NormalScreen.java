@@ -33,14 +33,13 @@ public class NormalScreen extends ScreenAdapter {
 
     @Override
     public void show() {
-        font = new BitmapFont(Gdx.files.internal("Cozette.fnt"));
-        font.setColor(Color.BLACK);
+        font = mainGame.font;
         try  {
             dist = new NormalDistribution(mainGame.random, a, b);
         } catch (IllegalArgumentException ignored) {
             dist = new NormalDistribution(mainGame.random, 0.0, 1.0);
         }
-        batch = new SpriteBatch();
+        batch = mainGame.batch;
         viewport = new ScreenViewport();
         renderer = new ImmediateModeRenderer20(512 * 3, false, true, 0);
         Arrays.fill(amounts, 0);

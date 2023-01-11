@@ -32,14 +32,13 @@ public class ChiSquareScreen extends ScreenAdapter {
 
     @Override
     public void show() {
-        font = new BitmapFont(Gdx.files.internal("Cozette.fnt"));
-        font.setColor(Color.BLACK);
+        font = mainGame.font;
         try  {
             dist = new ChiSquareDistribution(mainGame.random, (int)a);
         } catch (IllegalArgumentException ignored) {
             dist = new ChiSquareDistribution(mainGame.random, 1);
         }
-        batch = new SpriteBatch();
+        batch = mainGame.batch;
         viewport = new ScreenViewport();
         renderer = new ImmediateModeRenderer20(512 * 3, false, true, 0);
         Arrays.fill(amounts, 0);

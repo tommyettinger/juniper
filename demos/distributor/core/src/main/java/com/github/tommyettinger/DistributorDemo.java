@@ -1,12 +1,12 @@
 package com.github.tommyettinger;
 
-import com.badlogic.gdx.Application;
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.*;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Align;
 import com.github.tommyettinger.random.ChopRandom;
 import com.github.tommyettinger.random.EnhancedRandom;
-import com.github.tommyettinger.random.VanDerCorputQuasiRandom;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class DistributorDemo extends Game {
@@ -18,9 +18,14 @@ public class DistributorDemo extends Game {
     private int screenIndex;
     public static double a = 1.0, b = 1.0, c = 1.0;
     public EnhancedRandom random = new ChopRandom();
+    public BitmapFont font;
+    public SpriteBatch batch;
     @Override
     public void create() {
         Gdx.app.setLogLevel(Application.LOG_ERROR);
+        font = new BitmapFont(Gdx.files.internal("Cozette.fnt"));
+        font.setColor(Color.BLACK);
+        batch = new SpriteBatch();
         alternateCauchy = new CauchyAlternateScreen(this);
         alternateArcsine = new ArcsineAlternateScreen(this);
         alternateNormal = new NormalAlternateScreen(this);
@@ -47,6 +52,12 @@ public class DistributorDemo extends Game {
     @Override
     public void render() {
         super.render();
+        if(Gdx.input.isKeyPressed(Input.Keys.COMMA)){
+            batch.begin();
+            font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0,
+                    Gdx.graphics.getBackBufferHeight() * 0.5f, Gdx.graphics.getBackBufferWidth(), Align.center, false);
+            batch.end();
+        }
 //        if(Gdx.input.isKeyPressed(Input.Keys.COMMA)){
 //            Color clear = Color.WHITE;
 //            if(BitConversion.doubleToReversedLongBits(12.3456) != Long.reverseBytes(BitConversion.doubleToLongBits(12.3456)))

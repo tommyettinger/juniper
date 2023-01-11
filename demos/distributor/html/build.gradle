@@ -3,7 +3,7 @@ buildscript {
 		mavenCentral()
 	}
 	dependencies {
-		classpath "org.gretty:gretty:3.0.9"
+		classpath "org.gretty:gretty:3.1.0"
 	}
 }
 apply plugin: "gwt"
@@ -29,8 +29,12 @@ gwt {
 dependencies {
 	implementation project(':core')
 	implementation "com.badlogicgames.gdx:gdx:$gdxVersion:sources"
-	implementation "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion"
-	implementation "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion:sources"
+//	implementation "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion"
+//	implementation "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion:sources"
+	implementation "com.github.tommyettinger:gdx-backend-gwt:1.1100.0"
+	implementation "com.github.tommyettinger:gdx-backend-gwt:1.1100.0:sources"
+	implementation "com.google.jsinterop:jsinterop-annotations:2.0.0:sources"
+
 	implementation 'com.github.tommyettinger:formic:0.1.4:sources'
 	implementation "com.github.tommyettinger:digital:$digitalVersion:sources"
 	implementation "com.github.tommyettinger:juniper:$juniperVersion:sources"
@@ -79,6 +83,7 @@ task superDev(type: GwtSuperDev) {
 clean.delete += [file("war")]
 
 //String outputPath = "build/dist/"
+//String outputPath = "../../../docs/${appName}-old"
 String outputPath = "../../../docs/${appName}"
 
 task dist(dependsOn: [clean, compileGwt]) {
