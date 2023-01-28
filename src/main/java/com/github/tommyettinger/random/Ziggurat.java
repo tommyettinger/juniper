@@ -21,6 +21,8 @@
 
 package com.github.tommyettinger.random;
 
+import com.github.tommyettinger.digital.Hasher;
+
 /**
  * An implementation of the Ziggurat method for generating normal-distributed random values. The Ziggurat method is not
  * an approximation, but is faster than some simple approximations while having higher statistical quality. This class
@@ -36,14 +38,22 @@ package com.github.tommyettinger.random;
  *      University of Oxford: 77.
  */
 public class Ziggurat {
+
+///min: -9.0347457179175180000000000
+///max: 9.0326725334797440000000000
     private static final int    TABLE_ITEMS = 256;
     private static final double R           = 3.65415288536100716461;
     private static final double AREA        = 0.00492867323397465524494;
+///min: -9.4194426797964610000000000
+///max: 9.4173694953586880000000000
+//    private static final int    TABLE_ITEMS = 1024;
+//    private static final double R           = 4.03884984723995;
+//    private static final double AREA        = 0.001226324646358456;
 
     /**
      * This is private because it shouldn't ever be changed after assignment, and has nearly no use outside this code.
      */
-    private static final double[] TABLE = new double[257];
+    private static final double[] TABLE = new double[TABLE_ITEMS+1];
     static {
         double f = Math.exp(-0.5 * R * R);
         TABLE[0] = AREA / f;
@@ -99,8 +109,8 @@ public class Ziggurat {
              * normal distribution, as described by Marsaglia in 1964: */
             if (idx == 0) {
                 do {
-                    x = Math.log((((state += 0x9E3779B97F4A7C15L) & 0x1FFF_FFFFF_FFFFFL) + 1L) * 0x1p-53);
-                    y = Math.log((((state += 0x9E3779B97F4A7C15L) & 0x1FFF_FFFFF_FFFFFL) + 1L) * 0x1p-53);
+                    x = Math.log(((Hasher.randomize3(state += 0x9E3779B97F4A7C15L) & 0x1FFF_FFFFF_FFFFFL) + 1L) * 0x1p-53);
+                    y = Math.log(((Hasher.randomize3(state += 0x9E3779B97F4A7C15L) & 0x1FFF_FFFFF_FFFFFL) + 1L) * 0x1p-53);
                 } while (-(y + y) < x * x);
                 return state < 0L ?
                         x - R :
