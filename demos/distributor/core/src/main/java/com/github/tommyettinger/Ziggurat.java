@@ -21,6 +21,8 @@
 
 package com.github.tommyettinger;
 
+import com.github.tommyettinger.digital.BitConversion;
+
 /**
  * An implementation of the Ziggurat method for generating normal-distributed random values. The Ziggurat method is not
  * an approximation, but is faster than some simple approximations while having higher statistical quality.
@@ -62,16 +64,20 @@ public class Ziggurat {
         int idx;
 
         while (true) {
-            /* To minimize calls to the rng we, use every bit for its own
+            /* To minimize calls to the RNG, we use every bit for its own
              * purposes:
              *    - The 53 most significant bits are used to generate
              *      a random floating-point number in the range [0.0,1.0).
-             *    - The most and the least significant bits, XORed, are used
+             *    - The parity of the complete state is used
              *      to randomly set the sign of the return value.
-             *    - The second to the ninth least significant bit are used
+             *    - The first to the eighth least significant bits are used
              *      to generate an index in the range [0,256).
+             *    - If the random variable is in the trail, the state will
+             *      be modified instead of generating a new random number.
+             *      This could yield lower quality, but variables in the
+             *      trail are already exceedingly rare.
              */
-            idx = (int)((state >>> 1) & (TABLE_ITEMS - 1));
+            idx = (int)(state & (TABLE_ITEMS - 1));
             u = (state >>> 11) * 0x1p-53 * TABLE[idx];
 
             /* Take a random box from TABLE
@@ -86,26 +92,26 @@ public class Ziggurat {
              * normal distribution, as described by Marsaglia in 1964: */
             if (idx == 0) {
                 do {
-                    x = Math.log(1.0 - ((state += 0x9E3779B97F4A7C15L) & 0x1FFF_FFFFF_FFFFFL) * 0x1p-53);
-                    y = Math.log(1.0 - ((state += 0x9E3779B97F4A7C15L) & 0x1FFF_FFFFF_FFFFFL) * 0x1p-53);
+                    x = Math.log(BitConversion.longBitsToDouble(1022L - Long.numberOfLeadingZeros((state = (state << 16 | state >>> 48) * 0xF1357AEA2E62A9C5L)) << 52 | (state & 0xF_FFFF_FFFF_FFFFL)));
+                    y = Math.log(BitConversion.longBitsToDouble(1022L - Long.numberOfLeadingZeros((state = (state << 16 | state >>> 48) * 0xF1357AEA2E62A9C5L)) << 52 | (state & 0xF_FFFF_FFFF_FFFFL)));
                 } while (-(y + y) < x * x);
-                return state < 0L ?
+                return (Long.bitCount(state) & 1L) == 0L ?
                         x - R :
                         R - x;
             }
 
-            /* Take a random x-coordinate U in between TABLE[idx] and TABLE[idx+1]
-             * and return x if U is inside the normal distribution,
+            /* Take a random x-coordinate u in between TABLE[idx] and TABLE[idx+1]
+             * and return x if u is inside the normal distribution,
              * otherwise, repeat the entire ziggurat method. */
             y = u * u;
             f0 = Math.exp(-0.5 * (TABLE[idx]     * TABLE[idx]     - y));
             f1 = Math.exp(-0.5 * (TABLE[idx + 1] * TABLE[idx + 1] - y));
-            if (f1 + (((state += 0x9E3779B97F4A7C15L) & 0x1FFF_FFFFF_FFFFFL) * 0x1p-53) * (f0 - f1) < 1.0)
+            if (f1 + BitConversion.longBitsToDouble(1022L - Long.numberOfLeadingZeros((state = (state << 16 | state >>> 48) * 0xF1357AEA2E62A9C5L)) << 52 | (state & 0xF_FFFF_FFFF_FFFFL)) * (f0 - f1) < 1.0)
                 break;
         }
         /* Our low-order bits aren't necessarily very good if this has gone past the random-box stage, but our
          * highest-order bit was also used to produce u if we hadn't gone past the random-box stage. The parity of the
          * state considers all bits equally, so it should work well here. */
-        return Math.copySign(u, Long.bitCount(state) << 31);//(state ^ (state << 32 | state >>> 32) ^ (state << 16 | state >>> 48)) * 0xF1357AEA2E62A9C5L
+        return Math.copySign(u, Long.bitCount(state) << 31);
     }
 }

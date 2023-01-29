@@ -129,7 +129,7 @@ public class NormalAlternateScreen extends ScreenAdapter {
         switch (mode) {
             case 0:
                 for (int i = 0; i < 0x20000; i++) {
-                    int m = (int) ((dist.getMu() + dist.getSigma() * EnhancedRandom.probit(dist.generator.nextExclusiveDouble()))
+                    int m = (int) ((dist.nextDouble())
                             * 128 + 256);
                     if (m >= 0 && m < 512)
                         amounts[m]++;
@@ -145,7 +145,7 @@ public class NormalAlternateScreen extends ScreenAdapter {
                 break;
             case 2:
                 for (int i = 0; i < 0x20000; i++) {
-                    int m = (int) ((dist.nextDouble())
+                    int m = (int) ((dist.getMu() + dist.getSigma() * EnhancedRandom.probit(dist.generator.nextExclusiveDouble()))
                             * 128 + 256);
                     if (m >= 0 && m < 512)
                         amounts[m]++;
@@ -169,7 +169,7 @@ public class NormalAlternateScreen extends ScreenAdapter {
                 break;
             case 5:
                 for (int i = 0; i < 0x20000; i++) {
-                    int m = (int) ((dist.getMu() + dist.getSigma() * logit(dist.generator.nextExclusiveDouble()))
+                    int m = (int) ((dist.getMu() + dist.getSigma() * marsagliaPolar())
                             * 128 + 256);
                     if (m >= 0 && m < 512)
                         amounts[m]++;
@@ -414,4 +414,13 @@ public class NormalAlternateScreen extends ScreenAdapter {
         return 0x1.fb760cp-35 * (c + (u & 0xFFFFFFFFL) - (u >>> 32));
     }
 
+    public double marsagliaPolar() {
+        double v1, v2, s;
+        do {
+            v1 = dist.generator.nextExclusiveSignedDouble();   // between -1.0 and 1.0
+            v2 = dist.generator.nextExclusiveSignedDouble();   // between -1.0 and 1.0
+            s = v1 * v1 + v2 * v2;
+        } while (s >= 1 || s == 0);
+        return v1 * Math.sqrt(-2 * Math.log(s) / s);
+    }
 }

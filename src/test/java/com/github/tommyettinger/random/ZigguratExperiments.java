@@ -81,10 +81,8 @@ public class ZigguratExperiments {
              * normal distribution, as described by Marsaglia in 1964: */
             if (idx == 0) {
                 do {
-                    x = Math.log(BitConversion.longBitsToDouble(1022L - Long.numberOfLeadingZeros((state = (state << rot | state >>> -rot) * 0xF1357AEA2E62A9C5L)) << 52 | (state & 0xF_FFFF_FFFF_FFFFL)));// * 0xD1342543DE82EF95L
-                    y = Math.log(BitConversion.longBitsToDouble(1022L - Long.numberOfLeadingZeros((state = (state << rot | state >>> -rot) * 0xF1357AEA2E62A9C5L)) << 52 | (state & 0xF_FFFF_FFFF_FFFFL)));// * 0xD1342543DE82EF95L
-//                    x = Math.log((((state = ~(state << rot | state >>> -rot) * 0xF1357AEA2E62A9C5L) & 0x1FFF_FFFFF_FFFFFL) + 1L) * 0x1p-53);
-//                    y = Math.log((((state = ~(state << rot | state >>> -rot) * 0xF1357AEA2E62A9C5L) & 0x1FFF_FFFFF_FFFFFL) + 1L) * 0x1p-53);
+                    x = Math.log(BitConversion.longBitsToDouble(1022L - Long.numberOfLeadingZeros((state = (state << rot | state >>> -rot) * 0xF1357AEA2E62A9C5L)) << 52 | (state & 0xF_FFFF_FFFF_FFFFL)));
+                    y = Math.log(BitConversion.longBitsToDouble(1022L - Long.numberOfLeadingZeros((state = (state << rot | state >>> -rot) * 0xF1357AEA2E62A9C5L)) << 52 | (state & 0xF_FFFF_FFFF_FFFFL)));
                 } while (-(y + y) < x * x);
                 return (Long.bitCount(state) & 1L) == 0L ?
                         x - R :
@@ -97,7 +95,7 @@ public class ZigguratExperiments {
             y = u * u;
             f0 = Math.exp(-0.5 * (TABLE[idx]     * TABLE[idx]     - y));
             f1 = Math.exp(-0.5 * (TABLE[idx + 1] * TABLE[idx + 1] - y));
-            if (f1 + (((state += 0x9E3779B97F4A7C15L) & 0x1FFF_FFFFF_FFFFFL) * 0x1p-53) * (f0 - f1) < 1.0)
+            if (f1 + BitConversion.longBitsToDouble(1022L - Long.numberOfLeadingZeros((state = (state << rot | state >>> -rot) * 0xF1357AEA2E62A9C5L)) << 52 | (state & 0xF_FFFF_FFFF_FFFFL)) * (f0 - f1) < 1.0)
                 break;
         }
         /* Our low-order bits aren't necessarily very good if this has gone past the random-box stage, but our
