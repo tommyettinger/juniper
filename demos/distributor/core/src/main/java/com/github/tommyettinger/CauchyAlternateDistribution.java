@@ -1,5 +1,6 @@
 package com.github.tommyettinger;
 
+import com.github.tommyettinger.digital.BitConversion;
 import com.github.tommyettinger.digital.TrigTools;
 import com.github.tommyettinger.random.EnhancedRandom;
 import com.github.tommyettinger.random.GoldenQuasiRandom;
@@ -118,10 +119,15 @@ public class CauchyAlternateDistribution extends Distribution {
     }
 
     public static double sample(EnhancedRandom generator, double alpha, double gamma) {
-        return alpha + gamma * tan(TrigTools.PI_D * (generator.nextExclusiveDouble() - 0.5));
+        final long bits = generator.nextLong();
+        // this is just like nextExclusiveDouble(), but uses a smaller exponent to avoid multiplying by 0.5f
+//        return alpha + gamma * TrigTools.tanSmootherTurns(BitConversion.longBitsToDouble(1021L - Long.numberOfTrailingZeros(bits) << 52 | bits >>> 12) - 0.25);
+        return alpha + gamma * Math.tan(TrigTools.PI_D * generator.nextExclusiveDouble() - TrigTools.HALF_PI_D);
+//        return alpha + gamma * TrigTools.tanTurns(0.25 * (generator.nextExclusiveSignedDouble()));
     }
 
-    public static double tan(double radians) {
-        final int idx = (int) (radians * TrigTools.TABLE_SIZE / TrigTools.PI2_D) & TrigTools.TABLE_MASK;
-        return TrigTools.SIN_TABLE_D[idx] / TrigTools.SIN_TABLE_D[idx + TrigTools.SIN_TO_COS & TrigTools.TABLE_MASK];
-    }}
+//    public static double tan(double radians) {
+//        final int idx = (int) (radians * TrigTools.TABLE_SIZE / TrigTools.PI2_D) & TrigTools.TABLE_MASK;
+//        return TrigTools.SIN_TABLE_D[idx] / TrigTools.SIN_TABLE_D[idx + TrigTools.SIN_TO_COS & TrigTools.TABLE_MASK];
+//    }
+}

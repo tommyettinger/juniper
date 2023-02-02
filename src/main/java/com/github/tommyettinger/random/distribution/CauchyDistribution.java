@@ -1,5 +1,6 @@
 package com.github.tommyettinger.random.distribution;
 
+import com.github.tommyettinger.digital.BitConversion;
 import com.github.tommyettinger.digital.TrigTools;
 import com.github.tommyettinger.random.EnhancedRandom;
 import com.github.tommyettinger.random.WhiskerRandom;
@@ -116,6 +117,8 @@ public class CauchyDistribution extends Distribution {
     }
 
     public static double sample(EnhancedRandom generator, double alpha, double gamma) {
-        return alpha + gamma * TrigTools.tanTurns(0.5 * generator.nextExclusiveDouble() - 0.25);
+        final long bits = generator.nextLong();
+        // this is just like nextExclusiveDouble(), but uses a smaller exponent to avoid multiplying by 0.5f .
+        return alpha + gamma * TrigTools.tanSmootherTurns(BitConversion.longBitsToDouble(1021L - Long.numberOfTrailingZeros(bits) << 52 | bits >>> 12) - 0.25);
     }
 }
