@@ -53,6 +53,8 @@ public class NormalAlternateScreen extends ScreenAdapter {
 
     private int mode = 0;
 
+    private static final int SMOOTHNESS = 4;
+    private static final int RUNS = 0x10000 * SMOOTHNESS;
 
     @Override
     public void show() {
@@ -124,11 +126,11 @@ public class NormalAlternateScreen extends ScreenAdapter {
             Arrays.fill(amounts, 0);
             iterations = 0;
         }
-        iterations += 1;
+        iterations += SMOOTHNESS;
         dist.setParameters(a, b, c);
         switch (mode) {
             case 0:
-                for (int i = 0; i < 0x20000; i++) {
+                for (int i = 0; i < RUNS; i++) {
                     int m = (int) ((dist.nextDouble())
                             * 128 + 256);
                     if (m >= 0 && m < 512)
@@ -136,7 +138,7 @@ public class NormalAlternateScreen extends ScreenAdapter {
                 }
                 break;
             case 1:
-                for (int i = 0; i < 0x20000; i++) {
+                for (int i = 0; i < RUNS; i++) {
                     int m = (int) ((dist.getMu() + dist.getSigma() * pop())
                             * 128 + 256);
                     if (m >= 0 && m < 512)
@@ -144,7 +146,7 @@ public class NormalAlternateScreen extends ScreenAdapter {
                 }
                 break;
             case 2:
-                for (int i = 0; i < 0x20000; i++) {
+                for (int i = 0; i < RUNS; i++) {
                     int m = (int) ((dist.getMu() + dist.getSigma() * EnhancedRandom.probit(dist.generator.nextExclusiveDouble()))
                             * 128 + 256);
                     if (m >= 0 && m < 512)
@@ -152,7 +154,7 @@ public class NormalAlternateScreen extends ScreenAdapter {
                 }
                 break;
             case 3:
-                for (int i = 0; i < 0x20000; i++) {
+                for (int i = 0; i < RUNS; i++) {
                     int m = (int) (simons(dist.generator.nextExclusiveDouble(), dist.getMu(), dist.getSigma())
                             * 128 + 256);
                     if (m >= 0 && m < 512)
@@ -160,7 +162,7 @@ public class NormalAlternateScreen extends ScreenAdapter {
                 }
                 break;
             case 4:
-                for (int i = 0; i < 0x20000; i++) {
+                for (int i = 0; i < RUNS; i++) {
                     int m = (int) ((dist.getMu() + dist.getSigma() * winitzki(dist.generator.nextExclusiveDouble()))
                             * 128 + 256);
                     if (m >= 0 && m < 512)
@@ -168,7 +170,7 @@ public class NormalAlternateScreen extends ScreenAdapter {
                 }
                 break;
             case 5:
-                for (int i = 0; i < 0x20000; i++) {
+                for (int i = 0; i < RUNS; i++) {
                     int m = (int) ((dist.getMu() + dist.getSigma() * marsagliaPolar())
                             * 128 + 256);
                     if (m >= 0 && m < 512)
@@ -176,7 +178,7 @@ public class NormalAlternateScreen extends ScreenAdapter {
                 }
                 break;
             case 6:
-                for (int i = 0; i < 0x20000; i++) {
+                for (int i = 0; i < RUNS; i++) {
                     int m = (int) ((dist.getMu() + dist.getSigma() * Ziggurat.normal(dist.generator.nextLong()))
                             * 128 + 256);
                     if (m >= 0 && m < 512)
@@ -204,7 +206,7 @@ public class NormalAlternateScreen extends ScreenAdapter {
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        font.draw(batch, Stringf.format("NormalAlternateDistribution with A=%1.3f, B=%1.3f; median=%1.3f at %d FPS, mode %d",
+        font.draw(batch, Stringf.format("NormalAlternateDistribution with A=%1.3f, B=%1.3f; median=%1.3f at %d FPS, mode %d (J or K to change)",
                 a, b, dist.getMedian(), Gdx.graphics.getFramesPerSecond(), mode),
                 64, 522, 256+128, Align.center, true);
         font.draw(batch, "Lower parameters A/B/C by holding a, b, or c;\nhold Shift and A/B/C to raise.", 64, 500-6, 256+128, Align.center, true);

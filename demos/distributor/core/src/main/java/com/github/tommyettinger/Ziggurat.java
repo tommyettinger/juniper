@@ -22,6 +22,8 @@
 package com.github.tommyettinger;
 
 import com.github.tommyettinger.digital.BitConversion;
+import com.github.tommyettinger.digital.Hasher;
+import com.github.tommyettinger.digital.MathTools;
 
 /**
  * An implementation of the Ziggurat method for generating normal-distributed random values. The Ziggurat method is not
@@ -92,10 +94,10 @@ public class Ziggurat {
              * normal distribution, as described by Marsaglia in 1964: */
             if (idx == 0) {
                 do {
-                    x = Math.log(BitConversion.longBitsToDouble(1022L - Long.numberOfLeadingZeros((state = (state << 16 | state >>> 48) * 0xF1357AEA2E62A9C5L)) << 52 | (state & 0xF_FFFF_FFFF_FFFFL)));
-                    y = Math.log(BitConversion.longBitsToDouble(1022L - Long.numberOfLeadingZeros((state = (state << 16 | state >>> 48) * 0xF1357AEA2E62A9C5L)) << 52 | (state & 0xF_FFFF_FFFF_FFFFL)));
+                    x = Math.log(MathTools.exclusiveDouble(state = state * 0xD1342543DE82EF95L + 0x9E3779B97F4A7C15L));
+                    y = Math.log(MathTools.exclusiveDouble(state = state * 0xD1342543DE82EF95L + 0x9E3779B97F4A7C15L));
                 } while (-(y + y) < x * x);
-                return (Long.bitCount(state) & 1L) == 0L ?
+                return state < 0L ?
                         x - R :
                         R - x;
             }
@@ -106,7 +108,7 @@ public class Ziggurat {
             y = u * u;
             f0 = Math.exp(-0.5 * (TABLE[idx]     * TABLE[idx]     - y));
             f1 = Math.exp(-0.5 * (TABLE[idx + 1] * TABLE[idx + 1] - y));
-            if (f1 + BitConversion.longBitsToDouble(1022L - Long.numberOfLeadingZeros((state = (state << 16 | state >>> 48) * 0xF1357AEA2E62A9C5L)) << 52 | (state & 0xF_FFFF_FFFF_FFFFL)) * (f0 - f1) < 1.0)
+            if (f1 + MathTools.exclusiveDouble(state = state * 0xD1342543DE82EF95L + 0x9E3779B97F4A7C15L) * (f0 - f1) < 1.0)
                 break;
         }
         /* Our low-order bits aren't necessarily very good if this has gone past the random-box stage, but our
