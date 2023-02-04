@@ -224,7 +224,7 @@ public class ZigguratExperiments {
          * state considers all bits equally, so it should work well here. */
         return Math.copySign(u, Long.bitCount(state) << 31);
     }
-    public static double normalNew(long state) {
+    public static double normalNewExcHash(long state) {
 
         double x, y, f0, f1, u;
         int idx;
@@ -461,6 +461,79 @@ public class ZigguratExperiments {
         return Math.copySign(u, Long.bitCount(state) << 31);
     }
 
+
+    //min: -8.1623012848106780000000000
+    //max: 7.8162386180139670000000000
+    public static double normalNew(long state) {
+        double x, y, f0, f1, u;
+        int idx;
+
+        while (true) {
+            /* To minimize calls to the RNG, we use every bit for its own
+             * purposes:
+             *    - The 53 most significant bits are used to generate
+             *      a random floating-point number in the range [0.0,1.0).
+             *    - The parity of the complete state is used
+             *      to randomly set the sign of the return value.
+             *    - The first to the eighth least significant bits are used
+             *      to generate an index in the range [0,256).
+             *    - The ninth least significant bit is treated as the sign
+             *      bit of the result, unless the result is in the trail.
+             *    - If the random variable is in the trail, the state will
+             *      be modified instead of generating a new random number.
+             *      This could yield lower quality, but variables in the
+             *      trail are already exceedingly rare.
+             */
+            idx = (int)(state & (TABLE_ITEMS - 1));
+            u = (state >>> 11) * 0x1p-53 * TABLE[idx];
+
+            /* Take a random box from TABLE
+             * and get the value of a random x-coordinate inside it.
+             * If it's also inside TABLE[idx + 1] we already know to accept
+             * this value. */
+            if (u < TABLE[idx + 1])
+                break;
+
+            /* If our random box is at the bottom, we can't use the lookup
+             * table and need to generate a variable for the trail of the
+             * normal distribution, as described by Marsaglia in 1964: */
+            if (idx == 0) {
+                /* If idx is 0, then the bottom 8 bits of state must all be 0,
+                 * and u must be on the larger side.
+                 * We randomize the state thoroughly with the MX3 unary hash
+                 * when this happens, which should be rare. */
+                state ^= 0xABC98388FB8FAC03L;
+                state ^= state >>> 32;
+                state *= 0xBEA225F9EB34556DL;
+                state ^= state >>> 29;
+                state *= 0xBEA225F9EB34556DL;
+                state ^= state >>> 32;
+                state *= 0xBEA225F9EB34556DL;
+                state ^= state >>> 29;
+                do {
+                    x = Math.log((((state = (state ^ state >>> 11) + 0x9E3779B97F4A7C15L) & 0x1FFF_FFFFF_FFFFFL) + 1L) * 0x1p-53);
+                    y = Math.log((((state = (state ^ state >>> 11) + 0x9E3779B97F4A7C15L) & 0x1FFF_FFFFF_FFFFFL) + 1L) * 0x1p-53);
+                } while (-(y + y) < x * x);
+                return (Long.bitCount(state) & 1L) == 0L ?
+                        x - R :
+                        R - x;
+            }
+
+            /* Take a random x-coordinate u in between TABLE[idx] and TABLE[idx+1]
+             * and return x if u is inside the normal distribution,
+             * otherwise, repeat the entire ziggurat method. */
+            y = u * u;
+            f0 = Math.exp(-0.5 * (TABLE[idx]     * TABLE[idx]     - y));
+            f1 = Math.exp(-0.5 * (TABLE[idx + 1] * TABLE[idx + 1] - y));
+            if (f1 + (((state = (state ^ state >>> 11) + 0x9E3779B97F4A7C15L) & 0x1FFF_FFFFF_FFFFFL) * 0x1p-53) * (f0 - f1) < 1.0)
+                break;
+        }
+        /* (Zero-indexed ) bits 8, 9, and 10 aren't used in the calculations for idx
+         * or u, so we use bit 9 as a sign bit here. */
+        return Math.copySign(u, 256L - (state & 512L));
+    }
+
+
     public static void main(String[] args) {
 //        for(long i : new long[]{0L, 1L, 2L, -1L, -2L, 127L, ~128L, ~256L, ~257L, ~512L, -254L, -255L, -256L,
 //                0xEF33D8025EF7E700L, 0xEF33D8025EF7E800L, 0xEF33D8025EF7E900L, }) {
@@ -469,14 +542,14 @@ public class ZigguratExperiments {
 //        for (long i = 1; i <= 256; i++) {
 //            System.out.printf("%d %<016X: %.20f %<A\n", -i << 8, Ziggurat.normal(-i << 8));
 //        }
-        for (int r = 1; r < 64; r++)
+//        for (int r = 1; r < 64; r++)
         {
 //            System.out.println("Rotation: " + r);
-            System.out.println("Shift: " + r);
+//            System.out.println("Shift: " + r);
             double mx = 0.0, mn = 0.0;
             long c = 0L;
-            for (int i = -0x80000000; i < 0x70000000; i++, c += 0xC6BC279692B5C323L) {
-                double z = normalWeird(c, r);
+            for (int i = -2000000000; i < 2000000000; i++, c += 0xC6BC279692B5C323L) {
+                double z = normalNew(c);
 //                double z = MathTools.probit(MathTools.exclusiveDouble(c));
                 mx = Math.max(mx, z);
                 mn = Math.min(mn, z);

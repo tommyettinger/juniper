@@ -21,15 +21,26 @@
 
 package com.github.tommyettinger.random;
 
-import com.github.tommyettinger.digital.BitConversion;
-import com.github.tommyettinger.digital.Hasher;
-
 /**
  * An implementation of the Ziggurat method for generating normal-distributed random values. The Ziggurat method is not
- * an approximation, but is faster than some simple approximations while having higher statistical quality. This class
- * defines only one public (static) method, {@link #normal(long)}, which expects to be given random longs directly. Any
- * usage of this class from outside this library is not especially likely, but it is public in case there is a need to
- * convert random longs into random normal-distributed values.
+ * an approximation, but is faster than some simple approximations while having higher statistical quality. This is not
+ * an ideal implementation; it cannot produce as wide of an output range when compared to normal-distributing methods
+ * that can use an arbitrarily large supply of random numbers, such as Marsaglia's Polar method. Unlike those methods,
+ * this only uses one long as its input. This will randomize its input if it reaches a condition that would normally
+ * require the Ziggurat algorithm to generate another random number. The internals are very sensitive to how this input
+ * randomization is performed, so <a href="https://github.com/jonmaiga/mx3/">the MX3 unary hash</a> is used in the
+ * relatively-rare case that this must return a value in the Gaussian's trail, and that should make some patterns in the
+ * input long less problematic.
+ * <br>
+ * Every bit in the input long may be used in some form, but the most important distinctions are between the bottom 8
+ * bits, which determine a "box" for where the output could be drawn from, the upper 53 bits, which form into a random
+ * double between 0 and 1, and bit 9 (or {@code (state & 512L)}), which is treated as a sign bit. If any of these bit
+ * ranges contains some value more often than other values that should be equally likely, it can manifest as an output
+ * defect. Further, generating values in the trail takes more time than other values, and that can happen most
+ * frequently when bits 0 through 7 of {@code state} are all 0.
+ * <br>
+ * The range this can produce is at least from -8.162301284810678 to 7.816238618013967, and is almost certainly larger
+ * (only 4 billion distinct inputs were tested, and there are over 18 quintillion inputs possible).
  * <br>
  * From <a href="https://github.com/camel-cdr/cauldron/blob/7d5328441b1a1bc8143f627aebafe58b29531cb9/cauldron/random.h#L2013-L2265">Cauldron</a>,
  * MIT-licensed. This in turn is based on Doornik's form of the Ziggurat method:
@@ -39,22 +50,14 @@ import com.github.tommyettinger.digital.Hasher;
  *      University of Oxford: 77.
  */
 public class Ziggurat {
-
-///min: -9.0347457179175180000000000
-///max: 9.0326725334797440000000000
     private static final int    TABLE_ITEMS = 256;
     private static final double R           = 3.65415288536100716461;
     private static final double AREA        = 0.00492867323397465524494;
-///min: -9.4194426797964610000000000
-///max: 9.4173694953586880000000000
-//    private static final int    TABLE_ITEMS = 1024;
-//    private static final double R           = 4.03884984723995;
-//    private static final double AREA        = 0.001226324646358456;
 
     /**
      * This is private because it shouldn't ever be changed after assignment, and has nearly no use outside this code.
      */
-    private static final double[] TABLE = new double[TABLE_ITEMS+1];
+    private static final double[] TABLE = new double[257];
     static {
         double f = Math.exp(-0.5 * R * R);
         TABLE[0] = AREA / f;
@@ -77,7 +80,6 @@ public class Ziggurat {
      * @return a normal-distributed double with mean (mu) 0.0 and standard deviation (sigma) 1.0
      */
     public static double normal(long state) {
-
         double x, y, f0, f1, u;
         int idx;
 
@@ -90,6 +92,8 @@ public class Ziggurat {
              *      to randomly set the sign of the return value.
              *    - The first to the eighth least significant bits are used
              *      to generate an index in the range [0,256).
+             *    - The ninth least significant bit is treated as the sign
+             *      bit of the result, unless the result is in the trail.
              *    - If the random variable is in the trail, the state will
              *      be modified instead of generating a new random number.
              *      This could yield lower quality, but variables in the
@@ -109,9 +113,21 @@ public class Ziggurat {
              * table and need to generate a variable for the trail of the
              * normal distribution, as described by Marsaglia in 1964: */
             if (idx == 0) {
+                /* If idx is 0, then the bottom 8 bits of state must all be 0,
+                 * and u must be on the larger side.
+                 * We randomize the state thoroughly with the MX3 unary hash
+                 * when this happens, which should be rare. */
+                state ^= 0xABC98388FB8FAC03L;
+                state ^= state >>> 32;
+                state *= 0xBEA225F9EB34556DL;
+                state ^= state >>> 29;
+                state *= 0xBEA225F9EB34556DL;
+                state ^= state >>> 32;
+                state *= 0xBEA225F9EB34556DL;
+                state ^= state >>> 29;
                 do {
-                    x = Math.log(BitConversion.longBitsToDouble(1022L - Long.numberOfLeadingZeros((state = (state << 16 | state >>> 48) * 0xF1357AEA2E62A9C5L)) << 52 | (state & 0xF_FFFF_FFFF_FFFFL)));
-                    y = Math.log(BitConversion.longBitsToDouble(1022L - Long.numberOfLeadingZeros((state = (state << 16 | state >>> 48) * 0xF1357AEA2E62A9C5L)) << 52 | (state & 0xF_FFFF_FFFF_FFFFL)));
+                    x = Math.log((((state = (state ^ state >>> 11) + 0x9E3779B97F4A7C15L) & 0x1FFF_FFFFF_FFFFFL) + 1L) * 0x1p-53);
+                    y = Math.log((((state = (state ^ state >>> 11) + 0x9E3779B97F4A7C15L) & 0x1FFF_FFFFF_FFFFFL) + 1L) * 0x1p-53);
                 } while (-(y + y) < x * x);
                 return (Long.bitCount(state) & 1L) == 0L ?
                         x - R :
@@ -124,12 +140,11 @@ public class Ziggurat {
             y = u * u;
             f0 = Math.exp(-0.5 * (TABLE[idx]     * TABLE[idx]     - y));
             f1 = Math.exp(-0.5 * (TABLE[idx + 1] * TABLE[idx + 1] - y));
-            if (f1 + BitConversion.longBitsToDouble(1022L - Long.numberOfLeadingZeros((state = (state << 16 | state >>> 48) * 0xF1357AEA2E62A9C5L)) << 52 | (state & 0xF_FFFF_FFFF_FFFFL)) * (f0 - f1) < 1.0)
+            if (f1 + (((state = (state ^ state >>> 11) + 0x9E3779B97F4A7C15L) & 0x1FFF_FFFFF_FFFFFL) * 0x1p-53) * (f0 - f1) < 1.0)
                 break;
         }
-        /* Our low-order bits aren't necessarily very good if this has gone past the random-box stage, but our
-         * highest-order bit was also used to produce u if we hadn't gone past the random-box stage. The parity of the
-         * state considers all bits equally, so it should work well here. */
-        return Math.copySign(u, Long.bitCount(state) << 31);
+        /* (Zero-indexed ) bits 8, 9, and 10 aren't used in the calculations for idx
+         * or u, so we use bit 9 as a sign bit here. */
+        return Math.copySign(u, 256L - (state & 512L));
     }
 }
