@@ -61,7 +61,6 @@ public class Ziggurat {
     }
 
     public static double normal(long state) {
-
         double x, y, f0, f1, u;
         int idx;
 
@@ -94,10 +93,10 @@ public class Ziggurat {
              * normal distribution, as described by Marsaglia in 1964: */
             if (idx == 0) {
                 do {
-                    x = Math.log(MathTools.exclusiveDouble(state = state * 0xD1342543DE82EF95L + 0x9E3779B97F4A7C15L));
-                    y = Math.log(MathTools.exclusiveDouble(state = state * 0xD1342543DE82EF95L + 0x9E3779B97F4A7C15L));
+                    x = Math.log((((state += 0x9E3779B97F4A7C15L) & 0x1FFF_FFFFF_FFFFFL) + 1L) * 0x1p-53);
+                    y = Math.log((((state += 0x9E3779B97F4A7C15L) & 0x1FFF_FFFFF_FFFFFL) + 1L) * 0x1p-53);
                 } while (-(y + y) < x * x);
-                return state < 0L ?
+                return (Long.bitCount(state) & 1L) == 0L ?
                         x - R :
                         R - x;
             }
@@ -108,7 +107,7 @@ public class Ziggurat {
             y = u * u;
             f0 = Math.exp(-0.5 * (TABLE[idx]     * TABLE[idx]     - y));
             f1 = Math.exp(-0.5 * (TABLE[idx + 1] * TABLE[idx + 1] - y));
-            if (f1 + MathTools.exclusiveDouble(state = state * 0xD1342543DE82EF95L + 0x9E3779B97F4A7C15L) * (f0 - f1) < 1.0)
+            if (f1 + (((state += 0x9E3779B97F4A7C15L) & 0x1FFF_FFFFF_FFFFFL) * 0x1p-53) * (f0 - f1) < 1.0)
                 break;
         }
         /* Our low-order bits aren't necessarily very good if this has gone past the random-box stage, but our
