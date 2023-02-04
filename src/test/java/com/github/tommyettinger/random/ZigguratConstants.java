@@ -62,7 +62,7 @@ public class ZigguratConstants {
         return Math.signum(x) * Math.sqrt(1.0 - Math.exp(-x2 * (4/Math.PI + a * x2) / (1.0 + a * x2)));
     }
 
-        private static double ziggurat_f(double x) {
+    private static double ziggurat_f(double x) {
         return Math.exp(-0.5 * x * x);
     }
 
@@ -75,7 +75,7 @@ public class ZigguratConstants {
     }
 
     public static void main(String[] args) {
-        int count = 1024;
+        int count = 256;
         double min = 0, max = 10, pmin, pmax, area, R;
         do {
             boolean tooBig = false;

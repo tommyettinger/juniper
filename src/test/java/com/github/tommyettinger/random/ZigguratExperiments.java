@@ -394,6 +394,73 @@ public class ZigguratExperiments {
         return Math.copySign(u, Long.bitCount(state) << 31);
     }
 
+    // without Hasher.randomize3():
+    //min: -8.0389007327294770000000000
+    //max: 7.4698881095789110000000000
+    // with Hasher.randomize3():
+    //min: -7.6199628904037020000000000
+    //max: 7.6418093708613710000000000
+    // with Shift: 11, (state ^ state >>> shift) + 0x9E3779B97F4A7C15L
+    //min: -8.1623012848106780000000000
+    //max: 7.8162386180139670000000000
+    public static double normalWeird(long state, int shift) {
+        double x, y, f0, f1, u;
+        int idx;
+
+        while (true) {
+            /* To minimize calls to the RNG, we use every bit for its own
+             * purposes:
+             *    - The 53 most significant bits are used to generate
+             *      a random floating-point number in the range [0.0,1.0).
+             *    - The parity of the complete state is used
+             *      to randomly set the sign of the return value.
+             *    - The first to the eighth least significant bits are used
+             *      to generate an index in the range [0,256).
+             *    - If the random variable is in the trail, the state will
+             *      be modified instead of generating a new random number.
+             *      This could yield lower quality, but variables in the
+             *      trail are already exceedingly rare.
+             */
+            idx = (int)(state & (TABLE_ITEMS - 1));
+            u = (state >>> 11) * 0x1p-53 * TABLE[idx];
+
+            /* Take a random box from TABLE
+             * and get the value of a random x-coordinate inside it.
+             * If it's also inside TABLE[idx + 1] we already know to accept
+             * this value. */
+            if (u < TABLE[idx + 1])
+                break;
+
+            /* If our random box is at the bottom, we can't use the lookup
+             * table and need to generate a variable for the trail of the
+             * normal distribution, as described by Marsaglia in 1964: */
+            if (idx == 0) {
+                state = Hasher.randomize3(state);
+                do {
+                    x = Math.log((((state = (state ^ state >>> shift) + 0x9E3779B97F4A7C15L) & 0x1FFF_FFFFF_FFFFFL) + 1L) * 0x1p-53);
+                    y = Math.log((((state = (state ^ state >>> shift) + 0x9E3779B97F4A7C15L) & 0x1FFF_FFFFF_FFFFFL) + 1L) * 0x1p-53);
+                } while (-(y + y) < x * x);
+                return (Long.bitCount(state) & 1L) == 0L ?
+                        x - R :
+                        R - x;
+            }
+
+            /* Take a random x-coordinate u in between TABLE[idx] and TABLE[idx+1]
+             * and return x if u is inside the normal distribution,
+             * otherwise, repeat the entire ziggurat method. */
+            y = u * u;
+            f0 = Math.exp(-0.5 * (TABLE[idx]     * TABLE[idx]     - y));
+            f1 = Math.exp(-0.5 * (TABLE[idx + 1] * TABLE[idx + 1] - y));
+            // state = state * 0xD1342543DE82EF95L + 1L
+            if (f1 + (((state = (state ^ state >>> shift) + 0x9E3779B97F4A7C15L) & 0x1FFF_FFFFF_FFFFFL) * 0x1p-53) * (f0 - f1) < 1.0)
+                break;
+        }
+        /* Our low-order bits aren't necessarily very good if this has gone past the random-box stage, but our
+         * highest-order bit was also used to produce u if we hadn't gone past the random-box stage. The parity of the
+         * state considers all bits equally, so it should work well here. */
+        return Math.copySign(u, Long.bitCount(state) << 31);
+    }
+
     public static void main(String[] args) {
 //        for(long i : new long[]{0L, 1L, 2L, -1L, -2L, 127L, ~128L, ~256L, ~257L, ~512L, -254L, -255L, -256L,
 //                0xEF33D8025EF7E700L, 0xEF33D8025EF7E800L, 0xEF33D8025EF7E900L, }) {
@@ -402,13 +469,14 @@ public class ZigguratExperiments {
 //        for (long i = 1; i <= 256; i++) {
 //            System.out.printf("%d %<016X: %.20f %<A\n", -i << 8, Ziggurat.normal(-i << 8));
 //        }
-//        for (int r = 1; r < 64; r++)
+        for (int r = 1; r < 64; r++)
         {
 //            System.out.println("Rotation: " + r);
+            System.out.println("Shift: " + r);
             double mx = 0.0, mn = 0.0;
             long c = 0L;
             for (int i = -0x80000000; i < 0x70000000; i++, c += 0xC6BC279692B5C323L) {
-                double z = normalLcg(c);
+                double z = normalWeird(c, r);
 //                double z = MathTools.probit(MathTools.exclusiveDouble(c));
                 mx = Math.max(mx, z);
                 mn = Math.min(mn, z);
