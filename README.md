@@ -18,9 +18,8 @@ without any anomalies considered worse than "unusual". Many have also undergone
 additional, significantly-more-strenuous testing on the GPU, and the generators
 that fail that testing only do so after at least 100PB of data is generated.
 
-This library is compatible with Java 8 language level, but doesn't use any
-features from later than Java 7. This should allow it to be used on Android,
-GWT, and RoboVM.
+This library is compatible with Java 7 language level and higher. This should
+allow it to be used on Android, GWT, and RoboVM.
 
 You can preview what some distributions look like
 [on this page](https://tommyettinger.github.io/juniper/distributor/). It uses
@@ -146,15 +145,15 @@ fast approximation based on bit counting (by [Marc B. Reynolds](https://marc-b-r
 With Gradle, the dependency (of the core module, if you have multiple) is:
 
 ```
-api "com.github.tommyettinger:juniper:0.1.8"
+api "com.github.tommyettinger:juniper:0.1.9"
 ```
 
 In a libGDX project that has a GWT/HTML backend, the `html/build.gradle` file
 should additionally have:
 
 ```
-implementation "com.github.tommyettinger:digital:0.1.7:sources"
-implementation "com.github.tommyettinger:juniper:0.1.8:sources"
+implementation "com.github.tommyettinger:digital:0.1.8:sources"
+implementation "com.github.tommyettinger:juniper:0.1.9:sources"
 ```
 
 And the `GdxDefinition.gwt.xml` file should have:
@@ -170,7 +169,7 @@ If you don't use Gradle, then with Maven, the dependency is:
 <dependency>
   <groupId>com.github.tommyettinger</groupId>
   <artifactId>juniper</artifactId>
-  <version>0.1.8</version>
+  <version>0.1.9</version>
 </dependency>
 ```
 
