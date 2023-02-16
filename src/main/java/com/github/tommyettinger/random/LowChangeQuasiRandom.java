@@ -87,6 +87,13 @@ public class LowChangeQuasiRandom extends EnhancedRandom {
     }
 
     @Override
+    public long previousLong() {
+        state ^= 1L << (choice >>> 58);
+        choice -= 0x9E3779B97F4A7C15L;
+        return state;
+    }
+
+    @Override
     public EnhancedRandom copy() {
         return new LowChangeQuasiRandom(state, choice);
     }
