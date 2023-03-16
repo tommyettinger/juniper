@@ -19,6 +19,7 @@ package com.github.tommyettinger.random;
 
 import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.digital.BitConversion;
+import com.github.tommyettinger.digital.MathTools;
 
 import java.util.List;
 import java.util.Random;
@@ -1108,6 +1109,37 @@ public abstract class EnhancedRandom extends Random {
 		final double r = q * q;
 		return (((((-3.969683028665376e+01 * r + 2.209460984245205e+02) * r - 2.759285104469687e+02) * r + 1.383577518672690e+02) * r - 3.066479806614716e+01) * r + 2.506628277459239e+00) * q / (
 				((((-5.447609879822406e+01 * r + 1.615858368580409e+02) * r - 1.556989798598866e+02) * r + 6.680131188771972e+01) * r - 1.328068155288572e+01) * r + 1.0);
+	}
+
+	/**
+	 * Attempts to improve the quality of a "gamma" increment for an additive sequence. This is stricter than the checks
+	 * in Java 8's SplittableRandom. The goal here is to make sure the gamma is "sufficiently random" to avoid patterns
+	 * when used as an increment. Examples of gamma values that aren't random enough include {@code 1L}, {@code 3L},
+	 * {@code 0xFFFFFFFFFFFFFFFFL}, {@code 0xAAAAAAAAAAAAAAABL}, and so on. It rejects any gamma value where any of four
+	 * bit counts are less than 24 or greater than 40. The values that have their bits counted are:
+	 * <ul>
+	 *     <li>The gamma itself,</li>
+	 *     <li>The Gray code of the gamma, defined as {@code (gamma ^ (gamma >>> 1))},</li>
+	 *     <li>The {@link MathTools#modularMultiplicativeInverse(long)} of the gamma,</li>
+	 *     <li>And the Gray code of the above inverse of the gamma.</li>
+	 * </ul>
+	 * If a gamma is rejected, this multiplies it by an LCG constant, 0xD1342543DE82EF95L, adds an increasing even
+	 * number (first 2, then 4, then 6, and so on) and tries again repeatedly. It returns the first gamma that wasn't
+	 * rejected, which could be the original gamma.
+	 *
+	 * @see <a href="https://www.pcg-random.org/posts/bugs-in-splitmix.html">This was informed by O'Neill's blog post about SplittableRandom's gamma.</a>
+	 * @param gamma any long, though almost always an odd number, that would be added as an increment in a sequence
+	 * @return gamma or a modification upon it such that its bits are "sufficiently random" to be a good increment
+	 */
+	public static long fixGamma(long gamma) {
+		long inverse = MathTools.modularMultiplicativeInverse(gamma |= 1L), add = 0L;
+		while (Math.abs(Long.bitCount(gamma) - 32) > 8
+				|| Math.abs(Long.bitCount(gamma ^ gamma >>> 1) - 32) > 8
+				|| Math.abs(Long.bitCount(inverse) - 32) > 8
+				|| Math.abs(Long.bitCount(inverse ^ inverse >>> 1) - 32) > 8) {
+			inverse = MathTools.modularMultiplicativeInverse(gamma = gamma * 0xD1342543DE82EF95L + (add += 2L));
+		}
+		return gamma;
 	}
 
 	/**
