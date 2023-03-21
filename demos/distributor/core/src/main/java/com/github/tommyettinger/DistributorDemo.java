@@ -5,8 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Align;
-import com.github.tommyettinger.random.ChopRandom;
-import com.github.tommyettinger.random.EnhancedRandom;
+import com.github.tommyettinger.random.*;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class DistributorDemo extends Game {
@@ -17,7 +16,10 @@ public class DistributorDemo extends Game {
     public Screen alternateCauchy, alternateArcsine, alternateNormal;
     private int screenIndex;
     public static double a = 1.0, b = 1.0, c = 1.0;
-    public EnhancedRandom random = new ChopRandom();
+    public EnhancedRandom[] randoms = new EnhancedRandom[]{new ChopRandom(), new RandomRandom(), new WhiskerRandom(),
+            new Xoshiro128PlusPlusRandom(), new GoldenQuasiRandom(), new LaserRandom(), new TrimRandom(), new DistinctRandom()};
+    public int randomIndex = 0;
+    public EnhancedRandom random = randoms[randomIndex];
     public BitmapFont font;
     public SpriteBatch batch;
     @Override
@@ -54,9 +56,17 @@ public class DistributorDemo extends Game {
         super.render();
         if(Gdx.input.isKeyPressed(Input.Keys.COMMA)){
             batch.begin();
-            font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0,
+            font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS using " + random.getClass(), 0,
                     Gdx.graphics.getBackBufferHeight() * 0.5f, Gdx.graphics.getBackBufferWidth(), Align.center, false);
             batch.end();
+        }
+        else if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_9)){
+            random = randoms[randomIndex = randomIndex + 7 & 7];
+            setScreen(screens[screenIndex]);
+        }
+        else if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_0)){
+            random = randoms[randomIndex = randomIndex + 1 & 7];
+            setScreen(screens[screenIndex]);
         }
 //        if(Gdx.input.isKeyPressed(Input.Keys.COMMA)){
 //            Color clear = Color.WHITE;

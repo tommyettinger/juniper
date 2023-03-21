@@ -7,6 +7,12 @@
 	<inherits name="formic" />
 	<inherits name="com.github.tommyettinger.digital" />
 	<inherits name="com.github.tommyettinger.juniper" />
+
+	<extend-configuration-property name="gdx.reflect.include" value="com.github.tommyettinger.random.*" />
+	<extend-configuration-property name="gdx.reflect.include" value="com.github.tommyettinger.random.distribution.*" />
+	<extend-configuration-property name="gdx.reflect.include" value="com.github.tommyettinger.RandomRandom" />
+
+
 	<entry-point class="com.github.tommyettinger.gwt.GwtLauncher" />
 
 	<set-configuration-property name="gdx.assetpath" value="../assets" />
