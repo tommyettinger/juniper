@@ -17,8 +17,9 @@ public class DistributorDemo extends Game {
     private int screenIndex;
     public static double a = 1.0, b = 1.0, c = 1.0;
     public EnhancedRandom[] randoms = new EnhancedRandom[]{new ChopRandom(), new RandomRandom(), new WhiskerRandom(),
-            new Xoshiro128PlusPlusRandom(), new GoldenQuasiRandom(), new LaserRandom(), new TrimRandom(), new DistinctRandom()};
-    public int randomIndex = 0;
+            new Xoshiro128PlusPlusRandom(), new LaserRandom(), new TrimRandom(), new DistinctRandom(),
+            new GoldenQuasiRandom(), new VanDerCorputQuasiRandom(), new LowChangeQuasiRandom()};
+    public int randomIndex = 7;
     public EnhancedRandom random = randoms[randomIndex];
     public BitmapFont font;
     public SpriteBatch batch;
@@ -39,7 +40,7 @@ public class DistributorDemo extends Game {
                 new ChiScreen(this), new ChiSquareScreen(this), new ArcsineScreen(this),
                 new BinomialScreen(this), new ZipfianScreen(this),
         };
-        screenIndex = 2;
+        screenIndex = 3;
         setScreen(screens[screenIndex]);
     }
     public void nextScreen(){
