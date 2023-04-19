@@ -23,13 +23,19 @@ import com.github.tommyettinger.digital.MathTools;
 import java.util.Random;
 
 /**
- * Not actually a pseudo-random number generator, but a quasi-random number generator, this is an extremely simple
- * way to produce random-seeming numbers with a high distance between one number and the next. This has a period of
- * 2 to the 64. It does not pass any tests for randomness. This is simply a counter with an increment of 1, that
- * uses the counter times one of several possible multipliers, which this cycles through.
+ * Not actually a pseudo-random number generator, but a quasi-random number generator, this is a fairly simple
+ * way to produce values that have some advantages of quasi-random numbers, but works better in some cases than
+ * {@link GoldenQuasiRandom}. GoldenQuasiRandom doesn't produce actually quasi-random numbers when generating Gaussian
+ * values; instead it produces pseudo-random numbers using an algorithm like {@link DistinctRandom}. If
+ * GoldenQuasiRandom did use its normal algorithm, it would cause severe artifacts when a tuple of Gaussian values was
+ * obtained -- while this class is similar in many ways to GoldenQuasiRandom, it doesn't have this tuple issue, and it
+ * does still produce quasi-random Gaussian values, more or less. This has a period of 2 to the 64.
+ * It does not pass any tests for randomness. This is simply a counter with an increment of 1, that
+ * uses the counter times one of 1024 possible multipliers, which this cycles through. The multipliers are the first
+ * 1024 items in {@link MathTools#GOLDEN_LONGS}.
  * <br>
- * Useful traits of this generator are that all values are permitted for the main state, that you can change the size of
- * the multiplier tuple to 1, 2, 4, 8, 16, or 32, and that you can {@link #skip(long)} the state forwards or backwards
+ * Useful traits of this generator are that all values are permitted for the main state, that it converges quickly when
+ * retrieving tuples of normal-distributed numbers, and that you can {@link #skip(long)} the state forwards or backwards
  * in constant time.
  * <br>
  * This class is an {@link EnhancedRandom} from juniper and is also a JDK {@link Random} as a result.
@@ -48,29 +54,25 @@ public class TupleQuasiRandom extends EnhancedRandom {
 	 */
 	public long state;
 
-	public int tupleSize;
+	private static final long MASK = 1023L;
 
-	private int index, shift;
+	private static final int shift = 10;
 
 	/**
 	 * Creates a new GoldenQuasiRandom with a random state.
 	 */
 	public TupleQuasiRandom() {
-		this(EnhancedRandom.seedFromMath(), 2);
+		this(EnhancedRandom.seedFromMath());
 	}
 
 	/**
 	 * Creates a new GoldenQuasiRandom with the given state; all {@code long} values are permitted.
 	 *
 	 * @param state any {@code long} value
-	 * @param tupleSize an int between 1 and 32, inclusive; will be rounded down to a lower power of two if not a power of two
 	 */
-	public TupleQuasiRandom(long state, int tupleSize) {
+	public TupleQuasiRandom(long state) {
 		super(state);
 		this.state = state;
-		this.tupleSize = Integer.highestOneBit(Math.min(Math.max(tupleSize, 1), 32));
-		index = (this.tupleSize * (this.tupleSize - 1) >>> 1);
-		shift = Integer.numberOfTrailingZeros(index) & -index >> 31;
 	}
 
 	@Override
@@ -79,42 +81,35 @@ public class TupleQuasiRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * This has one long state and one int state.
+	 * This has one long state.
 	 *
-	 * @return 2 (two)
+	 * @return 1 (one)
 	 */
 	@Override
 	public int getStateCount () {
-		return 2;
+		return 1;
 	}
 
 	/**
-	 * If selection is 0, this gets the main state, which can be any long value; otherwise it gets the tuple size.
+	 * This gets the main state's exact value, ignoring selection.
 	 *
-	 * @param selection if 0, returns the main state, otherwise the tuple size
-	 * @return the selected state's exact value
+	 * @param selection ignored
+	 * @return the main state's exact value
 	 */
 	@Override
 	public long getSelectedState (int selection) {
-		return selection == 0 ? state : tupleSize;
+		return state;
 	}
 
 	/**
-	 * If selection is 0, this sets the main state, which can be any long value; otherwise it sets the tuple size if
-	 * value is between 1 and 32, inclusive.
+	 * This always sets the main state, which can be any long value.
 	 *
-	 * @param selection if 0, this sets the main state, otherwise if value is a valid tuple size, it sets that
-	 * @param value     the exact value to use for the selected state; all longs are valid for the main state
+	 * @param selection ignored
+	 * @param value     the exact value to use for the main state; all longs are valid for the main state
 	 */
 	@Override
 	public void setSelectedState (int selection, long value) {
-		if(selection == 0)
-			state = value;
-		else if(value >= 1 && value <= 32) {
-			this.tupleSize = (int) Long.highestOneBit(value);
-			index = (this.tupleSize * (this.tupleSize - 1) >>> 1);
-			shift = Integer.numberOfTrailingZeros(index) & -index >> 31;
-		}
+		state = value;
 	}
 
 	/**
@@ -149,30 +144,9 @@ public class TupleQuasiRandom extends EnhancedRandom {
 		this.state = state;
 	}
 
-	/**
-	 * Sets each state variable to either {@code stateA} or {@code stateB}, alternating.
-	 * This uses {@link #setSelectedState(int, long)} to set the values. If there is one
-	 * state variable ({@link #getStateCount()} is 1), then this only sets that state
-	 * variable to stateA. If there are two state variables, the first is set to stateA,
-	 * and the second to stateB. If there are more, it reuses stateA, then stateB, then
-	 * stateA, and so on until all variables are set.
-	 *
-	 * @param stateA the long value to use for states at index 0, 2, 4, 6...
-	 * @param stateB the long value to use for states at index 1, 3, 5, 7...
-	 */
-	@Override
-	public void setState(long stateA, long stateB) {
-		state = stateA;
-		if(stateB >= 1 && stateB <= 32) {
-			this.tupleSize = (int) Long.highestOneBit(stateB);
-			index = (this.tupleSize * (this.tupleSize - 1) >>> 1);
-			shift = Integer.numberOfTrailingZeros(index) & -index >> 31;
-		}
-	}
-
 	@Override
 	public long nextLong () {
-		return ((++state >>> shift) *MathTools.GOLDEN_LONGS[index + (int)(state & tupleSize - 1)]);
+		return ((++state >>> shift) * MathTools.GOLDEN_LONGS[(int)(state & MASK)]);
 	}
 
 	/**
@@ -188,57 +162,57 @@ public class TupleQuasiRandom extends EnhancedRandom {
 	 */
 	@Override
 	public long skip (long advance) {
-		return (((state += advance) >>> shift) * MathTools.GOLDEN_LONGS[index + (int)(state & tupleSize - 1)]);
+		return (((state += advance) >>> shift) * MathTools.GOLDEN_LONGS[(int)(state & MASK)]);
 	}
 
 	@Override
 	public long previousLong () {
-		return ((--state >>> shift) * MathTools.GOLDEN_LONGS[index + (int)(state & tupleSize - 1)]);
+		return ((--state >>> shift) * MathTools.GOLDEN_LONGS[(int)(state & MASK)]);
 	}
 
 	@Override
 	public int next (int bits) {
-		return (int)(((++state >>> shift) *MathTools.GOLDEN_LONGS[index + (int)(state & tupleSize - 1)]) >>> 64 - bits);
+		return (int)(((++state >>> shift) * MathTools.GOLDEN_LONGS[(int)(state & MASK)]) >>> 64 - bits);
 	}
 
 	@Override
 	public int nextInt() {
-		return (int)(((++state >>> shift) *MathTools.GOLDEN_LONGS[index + (int)(state & tupleSize - 1)]) >>> 32);
+		return (int)(((++state >>> shift) * MathTools.GOLDEN_LONGS[(int)(state & MASK)]) >>> 32);
 	}
 
 	@Override
 	public int nextInt(int bound) {
-		return (int)(bound * (((++state >>> shift) *MathTools.GOLDEN_LONGS[index + (int)(state & tupleSize - 1)]) >>> 32) >> 32) & ~(bound >> 31);
+		return (int)(bound * (((++state >>> shift) * MathTools.GOLDEN_LONGS[(int)(state & MASK)]) >>> 32) >> 32) & ~(bound >> 31);
 	}
 
 	@Override
 	public int nextSignedInt(int outerBound) {
-		outerBound = (int)(outerBound * (((++state >>> shift) *MathTools.GOLDEN_LONGS[index + (int)(state & tupleSize - 1)]) >>> 32) >> 32);
+		outerBound = (int)(outerBound * (((++state >>> shift) * MathTools.GOLDEN_LONGS[(int)(state & MASK)]) >>> 32) >> 32);
 		return outerBound + (outerBound >>> 31);
 	}
 
 	@Override
 	public double nextExclusiveDouble () {
-		final double n = (((++state >>> shift) *MathTools.GOLDEN_LONGS[index + (int)(state & tupleSize - 1)]) >>> 11) * 0x1p-53;
+		final double n = (((++state >>> shift) * MathTools.GOLDEN_LONGS[(int)(state & MASK)]) >>> 11) * 0x1p-53;
 		return n == 0.0 ? 0x1.0p-54 : n;
 	}
 
 	@Override
 	public double nextExclusiveSignedDouble() {
-		final long bits = ((++state >>> shift) *MathTools.GOLDEN_LONGS[index + (int)(state & tupleSize - 1)]);
+		final long bits = ((++state >>> shift) * MathTools.GOLDEN_LONGS[(int)(state & MASK)]);
 		final double n = (bits >>> 11) * 0x1p-53;
 		return Math.copySign(n == 0.0 ? 0x1.0p-54 : n, bits << 54);
 	}
 
 	@Override
 	public float nextExclusiveFloat() {
-		final float n = (((++state >>> shift) *MathTools.GOLDEN_LONGS[index + (int)(state & tupleSize - 1)]) >>> 40) * 0x1p-24f;
+		final float n = (((++state >>> shift) * MathTools.GOLDEN_LONGS[(int)(state & MASK)]) >>> 40) * 0x1p-24f;
 		return n == 0f ? 0x1p-25f : n;
 	}
 
 	@Override
 	public float nextExclusiveSignedFloat() {
-		final long bits = ((++state >>> shift) *MathTools.GOLDEN_LONGS[index + (int)(state & tupleSize - 1)]);
+		final long bits = ((++state >>> shift) * MathTools.GOLDEN_LONGS[(int)(state & MASK)]);
 		final float n = (bits >>> 40) * 0x1p-24f;
 		return Math.copySign(n == 0f ? 0x1p-25f : n, bits << 25);
 	}
@@ -249,12 +223,12 @@ public class TupleQuasiRandom extends EnhancedRandom {
 //		return probit(nextDouble());
 //		return probit(((state & 0x1FFF_FFFFF_FFFFFL) ^ nextLong() >>> 11) * 0x1p-53);
 //		return Ziggurat.normal(Hasher.randomize3(state += 0x9E3779B97F4A7C15L));
-		return Ziggurat.normal((++state >>> shift) *MathTools.GOLDEN_LONGS[index + (int)(state & tupleSize - 1)]);
+		return Ziggurat.normal((++state >>> shift) * MathTools.GOLDEN_LONGS[(int)(state & MASK)]);
 	}
 
 	@Override
 	public TupleQuasiRandom copy () {
-		return new TupleQuasiRandom(state, tupleSize);
+		return new TupleQuasiRandom(state);
 	}
 
 	@Override
