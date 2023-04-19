@@ -243,6 +243,27 @@ public class EnhancedRandomTest {
 	}
 
 	@Test
+	public void testTuplePrevious() {
+		TupleQuasiRandom random = new TupleQuasiRandom(0L);
+		long n0 = random.nextLong();
+		long n1 = random.nextLong();
+		long n2 = random.nextLong();
+		long n3 = random.nextLong();
+		long n4 = random.nextLong();
+		long n5 = random.nextLong();
+		long p4 = random.previousLong();
+		long p3 = random.previousLong();
+		long p2 = random.previousLong();
+		long p1 = random.previousLong();
+		long p0 = random.previousLong();
+		Assert.assertEquals(n0, p0);
+		Assert.assertEquals(n1, p1);
+		Assert.assertEquals(n2, p2);
+		Assert.assertEquals(n3, p3);
+		Assert.assertEquals(n4, p4);
+	}
+
+	@Test
 	public void testVanDerCorputPrevious() {
 		VanDerCorputQuasiRandom random = new VanDerCorputQuasiRandom(0L);
 		long n0 = random.nextLong();
