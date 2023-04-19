@@ -18,8 +18,8 @@ public class DistributorDemo extends Game {
     public static double a = 1.0, b = 1.0, c = 1.0;
     public EnhancedRandom[] randoms = new EnhancedRandom[]{new ChopRandom(), new RandomRandom(), new WhiskerRandom(),
             new Xoshiro128PlusPlusRandom(), new LaserRandom(), new TrimRandom(), new DistinctRandom(),
-            new GoldenQuasiRandom(), new VanDerCorputQuasiRandom(), new LowChangeQuasiRandom()};
-    public int randomIndex = 7;
+            new GoldenQuasiRandom(), new VanDerCorputQuasiRandom(), new LowChangeQuasiRandom(), new TupleQuasiRandom(0, 2)};
+    public int randomIndex = 10;
     public EnhancedRandom random = randoms[randomIndex];
     public BitmapFont font;
     public SpriteBatch batch;
@@ -62,11 +62,11 @@ public class DistributorDemo extends Game {
             batch.end();
         }
         else if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_9)){
-            random = randoms[randomIndex = randomIndex + 7 & 7];
+            random = randoms[randomIndex = (randomIndex + randoms.length - 1) % randoms.length];
             setScreen(screens[screenIndex]);
         }
         else if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_0)){
-            random = randoms[randomIndex = randomIndex + 1 & 7];
+            random = randoms[randomIndex = (randomIndex + 1) % randoms.length];
             setScreen(screens[screenIndex]);
         }
 //        if(Gdx.input.isKeyPressed(Input.Keys.COMMA)){
