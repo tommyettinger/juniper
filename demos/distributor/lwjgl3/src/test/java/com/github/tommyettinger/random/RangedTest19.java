@@ -5,6 +5,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.BitSet;
 
 public class RangedTest19 {
     /**
@@ -42,4 +43,49 @@ public class RangedTest19 {
         }
     }
 
+    @Test
+    public void testHashOnZ(){
+        final BitSet all = new BitSet(0x1000000);
+        int card = 0;
+        int i = 0;
+        for (; i >= 0; i++) {
+            int x = Integer.compress(i, 0xAAAAAAAA);
+            int y = Integer.compress(i, 0x55555555);
+            //0xC13FA9A902A6328FL 0x91E10DA5C79E7B1DL
+            //0xC13FA9A9 0x91E10DA5
+            all.set(x * 0xC13FA9A9 + y * 0x91E10DA5 & 0x7FFFFFFF);
+            if(card == (card = all.cardinality())){
+                i = 0;
+                break;
+            }
+        }
+//        for (; i < 0; i++) {
+//            int x = Integer.compress(i, 0xAAAAAAAA);
+//            int y = Integer.compress(i, 0x55555555);
+//            all.set(x * 0xC13FA9A9 + y * 0x91E10DA5 & 0x7FFFFFFF);
+//            if(card == (card = all.cardinality())){
+//                break;
+//            }
+//        }
+        System.out.println("Generated " + card + " pairs before a collision.");
+    }
+
+    @Test
+    public void testHashOnGrid() {
+        final BitSet all = new BitSet(0x1000000);
+        int card = 0;
+        OUTER:
+        for (int x = 0; x < 0x800; x+=64) {
+            System.out.println("Finished row " + x);
+            for (int r = 0; r < 64; r++) {
+                for (int y = 0; y < 0x800; y++) {
+                    all.set((x+r) * 0xC13FA9A9 + y * 0x91E10DA5 & 0xFFFFFF);
+                    if (card == (card = all.cardinality())) {
+                        break OUTER;
+                    }
+                }
+            }
+        }
+        System.out.println("Generated " + card + " pairs before a collision.");
+    }
 }
