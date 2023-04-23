@@ -88,4 +88,34 @@ public class RangedTest19 {
         }
         System.out.println("Generated " + card + " pairs before a collision.");
     }
+
+    @Test
+    public void testHashOnZRaw() {
+        final long[] all = new long[1 << 26];
+        int i = 0;
+        for (; i >= 0; i++) {
+            int x = Integer.compress(i, 0xAAAAAAAA);
+            int y = Integer.compress(i, 0x55555555);
+            //0xC13FA9A902A6328FL 0x91E10DA5C79E7B1DL
+            //0xC13FA9A9 0x91E10DA5
+            int idx = (x * 0xC13FA9A9 + y * 0x91E10DA5),
+                    upper = idx >>> 6, lower = idx & 63;
+            if (all[upper] == (all[upper] |= 1L << lower)) {
+                System.out.println("Generated " + i + " pairs before a collision.");
+                return;
+            } else if ((i & 1023) == 0) System.out.println("Completed " + i + " pairs.");
+        }
+        for (; i < 0; i++) {
+            int x = Integer.compress(i, 0xAAAAAAAA);
+            int y = Integer.compress(i, 0x55555555);
+            int idx = (x * 0xC13FA9A9 + y * 0x91E10DA5),
+                    upper = idx >>> 6, lower = idx & 63;
+            if (all[upper] == (all[upper] |= 1L << lower)) {
+                System.out.println("Generated " + i + " pairs before a collision.");
+                return;
+            } else if ((i & 1023) == 0) System.out.println("Completed " + i + " pairs.");
+        }
+        System.out.println("Generated all pairs before any collision.");
+    }
+
 }
