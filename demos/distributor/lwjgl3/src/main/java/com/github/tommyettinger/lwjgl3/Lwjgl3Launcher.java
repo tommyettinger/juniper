@@ -4,6 +4,7 @@ package com.github.tommyettinger.lwjgl3;
 //import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 //import com.github.tommyettinger.DistributorDemo;
 
+import java.util.Arrays;
 import java.util.BitSet;
 
 /** Launches the desktop (LWJGL3) application. */
@@ -21,31 +22,43 @@ public class Lwjgl3Launcher {
 	 * @param args ignored
 	 */
 	public static void main(String[] args) {
-		final int[] all = new int[1 << 27];
-		int i = 0;
-		for (; i >= 0; i++) {
-			int x = Integer.compress(i, 0xAAAAAAAA);
-			int y = Integer.compress(i, 0x55555555);
-			//0xC13FA9A902A6328FL 0x91E10DA5C79E7B1DL
-			//0xC13FA9A9 0x91E10DA5
-			int idx = (x * 0xC13FA9A9 + y * 0x91E10DA5),
-					upper = idx >>> 5, lower = idx & 31;
-			if (all[upper] == (all[upper] |= 1 << lower)) {
-				System.out.println("Generated " + i + " pairs before a collision.");
-				return;
-			} else if ((i & 0x7FFF) == 0) System.out.println("Completed " + i + " pairs.");
+		final int[] all = new int[1 << 26];
+		PER_BIT:
+		for (int bits = 8; bits <= 30; bits += 2) {
+			int mask = (1 << bits) - 1;
+			int i = 0;
+			for (; i <= mask; i++) {
+				int x = Integer.compress(i, 0xAAAAAAAA);
+				int y = Integer.compress(i, 0x55555555);
+				//0xC13FA9A902A6328FL 0x91E10DA5C79E7B1DL
+				//0xC13FA9A9 0x91E10DA5
+//				int idx = (x * 0xC13FA9AD + y * 0x91E10DBF); // primes
+//				int idx = (x * 0xC13FA9A9 + y * 0x91E10DA5);
+//				int idx = (x * 0xC13FA9A9 ^ y * 0x91E10DA5); // xor, awful
+//				int idx = (x * 0xC13FA9A9 + y * 0x9E3779B9);
+				int idx = (x * 0xC13FA9AD + y * 0x9E3779B9);
+				idx &= mask;
+				int upper = idx >>> 5, lower = idx & 31;
+				if (all[upper] == (all[upper] |= 1 << lower)) {
+					System.out.println("With " + bits + " bits, generated " + i + " pairs before a collision.");
+					Arrays.fill(all, 0);
+					continue PER_BIT;
+				}
+//				else if ((i & 0xFFFF) == 0) System.out.println("With " + bits + " bits, completed " + i + " pairs.");
+			}
+
+//		for (; i < 0; i++) {
+//			int x = Integer.compress(i, 0xAAAAAAAA);
+//			int y = Integer.compress(i, 0x55555555);
+//			int idx = (x * 0xC13FA9A9 + y * 0x91E10DA5 >>> 1),
+//					upper = idx >>> 5, lower = idx & 31;
+//			if (all[upper] == (all[upper] |= 1 << lower)) {
+//				System.out.println("Generated " + i + " pairs before a collision.");
+//				return;
+//			} else if ((i & 1023) == 0) System.out.println("Completed " + i + " pairs.");
+//		}
+			System.out.println("With " + bits + " bits, generated all pairs before any collision.");
 		}
-		for (; i < 0; i++) {
-			int x = Integer.compress(i, 0xAAAAAAAA);
-			int y = Integer.compress(i, 0x55555555);
-			int idx = (x * 0xC13FA9A9 + y * 0x91E10DA5),
-					upper = idx >>> 5, lower = idx & 31;
-			if (all[upper] == (all[upper] |= 1 << lower)) {
-				System.out.println("Generated " + i + " pairs before a collision.");
-				return;
-			} else if ((i & 1023) == 0) System.out.println("Completed " + i + " pairs.");
-		}
-		System.out.println("Generated all pairs before any collision.");
 	}
 //
 //	/**
