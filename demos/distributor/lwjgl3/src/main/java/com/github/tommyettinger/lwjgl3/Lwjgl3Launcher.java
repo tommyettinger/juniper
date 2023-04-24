@@ -4,6 +4,8 @@ package com.github.tommyettinger.lwjgl3;
 //import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 //import com.github.tommyettinger.DistributorDemo;
 
+import com.github.tommyettinger.random.ChopRandom;
+
 import java.util.Arrays;
 import java.util.BitSet;
 
@@ -22,30 +24,53 @@ public class Lwjgl3Launcher {
 	 * @param args ignored
 	 */
 	public static void main(String[] args) {
-		final int[] all = new int[1 << 26];
-		PER_BIT:
-		for (int bits = 8; bits <= 30; bits += 2) {
-			int mask = (1 << bits) - 1;
-			int i = 0;
-			for (; i <= mask; i++) {
-				int x = Integer.compress(i, 0xAAAAAAAA);
-				int y = Integer.compress(i, 0x55555555);
-				//0xC13FA9A902A6328FL 0x91E10DA5C79E7B1DL
-				//0xC13FA9A9 0x91E10DA5
+		final int[] all = new int[1 << 11];
+//		final int[] primes =
+//				{
+//						3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97,
+//						101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193,
+//						197, 199, 211, 223, 227, 229, 233, 239, 241, 251
+//				};
+//		for (int p0 = 0; p0 < primes.length; p0++) {
+//			int m = primes[p0];
+//			for (int p1 = p0 + 1; p1 < primes.length; p1++) {
+//				int n = primes[p1] << 1;
+
+		//with mask=0xFFFF, use x * 18688 + y * 11085;
+		//with mask=0xFFFF, use x * 4447 + y * 5888;
+		//with mask=0x3FFFF, use x * 1111 + y * 1536;
+		int state = 1;
+		ChopRandom r0 = new ChopRandom(1);
+		ChopRandom r1 = new ChopRandom(-100);
+		for (int q = 0; q < 0x20000; q++) {
+//			int m = state = state * 229 + 0xDE4D & 0x1FFFF;
+//			int n = state = state * 229 + 0xDE4D & 0x1FFFF;
+			int m = r0.nextInt() & 0xFFFF, n = r1.nextInt() & 0xFFFF;
+			PER_BIT:
+			for (int bits = 16; bits <= 16; bits += 2) {
+				int mask = (1 << bits) - 1;
+				int i = 0;
+				for (; i <= mask; i++) {
+					int x = Integer.compress(i, 0xAAAAAAAA);
+					int y = Integer.compress(i, 0x55555555);
+					//0xC13FA9A902A6328FL 0x91E10DA5C79E7B1DL
+					//0xC13FA9A9 0x91E10DA5
 //				int idx = (x * 0xC13FA9AD + y * 0x91E10DBF); // primes
 //				int idx = (x * 0xC13FA9A9 + y * 0x91E10DA5);
 //				int idx = (x * 0xC13FA9A9 ^ y * 0x91E10DA5); // xor, awful
 //				int idx = (x * 0xC13FA9A9 + y * 0x9E3779B9);
-				int idx = (x * 0xC13FA9AD + y * 0x9E3779B9);
-				idx &= mask;
-				int upper = idx >>> 5, lower = idx & 31;
-				if (all[upper] == (all[upper] |= 1 << lower)) {
-					System.out.println("With " + bits + " bits, generated " + i + " pairs before a collision.");
-					Arrays.fill(all, 0);
-					continue PER_BIT;
-				}
+//				int idx = (x * 0xC13FA9AD + y * 0x9E3779B9);
+					int idx = (x * m + y * n);
+					idx &= mask;
+					int upper = idx >>> 5, lower = idx & 31;
+					if (all[upper] == (all[upper] |= 1 << lower)) {
+//						if(i >= 0x8000)
+//							System.out.println("With " + m + " " + n + ", generated " + i + " pairs before a collision.");
+						Arrays.fill(all, 0);
+						continue PER_BIT;
+					}
 //				else if ((i & 0xFFFF) == 0) System.out.println("With " + bits + " bits, completed " + i + " pairs.");
-			}
+				}
 
 //		for (; i < 0; i++) {
 //			int x = Integer.compress(i, 0xAAAAAAAA);
@@ -57,8 +82,11 @@ public class Lwjgl3Launcher {
 //				return;
 //			} else if ((i & 1023) == 0) System.out.println("Completed " + i + " pairs.");
 //		}
-			System.out.println("With " + bits + " bits, generated all pairs before any collision.");
+				Arrays.fill(all, 0);
+				System.out.println("With " + m + " " + n + ", generated all pairs before any collision!!!");
+			}
 		}
+//		}
 	}
 //
 //	/**
