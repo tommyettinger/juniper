@@ -57,10 +57,12 @@ public class Lwjgl3Launcher {
 					//0xC13FA9A9 0x91E10DA5
 //				int idx = (x * 0xC13FA9AD + y * 0x91E10DBF); // primes
 //				int idx = (x * 0xC13FA9A9 + y * 0x91E10DA5); // will avoid collisions if load factor is 0.25f or less
+//				int idx = (x * 0xC13FA9A9 + y * 0x9E3779BA);
 //				int idx = (x * 0xC13FA9A9 ^ y * 0x91E10DA5); // xor, awful
 //				int idx = (x * 0xC13FA9A9 + y * 0x9E3779B9);
 //				int idx = (x * 0xC13FA9AD + y * 0x9E3779B9);
-					int idx = (x * m + y * n);
+//					int idx = (x * m + y * n);
+					int idx = (x * m ^ y * n);
 //					int idx = y + ((x + y) * (x + y + 1) >>> 1); // Cantor pairing function
 //					int idx = y + ((x + y) * (x + y + 1) >> 1); // Cantor pairing function
 //					int idx = (x >= y ? x * (x + 2) - y : y * y + x); // Rosenberg-Strong pairing function
@@ -132,7 +134,7 @@ public class Lwjgl3Launcher {
 //	}
 }
 
-//// Random 20-bit multiplier pairs for a mask of 0xFFFF
+//// Random 20-bit multiplier pairs for a mask of 0xFFFF, using +
 
 //1001083 259328
 //911109 527616
@@ -385,7 +387,64 @@ public class Lwjgl3Launcher {
 //843008 1033751
 //193245 506112
 
-//// Random 20-bit multipliers for a mask of 0xFFFFF
+//// Random 20-bit multipliers for a mask of 0xFFFFF, using ^
+
+//560128 823779
+//214016 280661
+//726016 169071
+//776137 906240
+//734208 966197
+//478208 175881
+//293755 633856
+//683809 715776
+//345088 747231
+//750177 3072
+//462401 676864
+//787361 130048
+//678912 574587
+//356771 625664
+//1002496 506881
+//1041408 780693
+//113664 282823
+//352843 244736
+//472064 881325
+//801485 775168
+//314368 130723
+//881143 539648
+//254976 877855
+//268369 744448
+//979968 653357
+//249391 924672
+//996352 505401
+//727359 730112
+//910336 915215
+//999647 590848
+//337205 545792
+//648003 193536
+//683008 1016827
+//814699 7168
+//420864 839957
+//128000 844423
+//209920 270801
+//764807 822272
+//1016832 766325
+//297984 761045
+//852259 621568
+//474717 224256
+//168621 363520
+//223589 111616
+//745347 726016
+//29696 834659
+//128000 280057
+//480256 756215
+//938689 812032
+//488448 852695
+//435200 82923
+//928768 276761
+//156672 571697
+//535552 602295
+
+//// Random 20-bit multipliers for a mask of 0xFFFFF, using +
 
 //742001 878080
 //459863 394752
