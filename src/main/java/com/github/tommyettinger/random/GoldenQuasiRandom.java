@@ -164,7 +164,9 @@ public class GoldenQuasiRandom extends EnhancedRandom {
 
 	@Override
 	public long previousLong () {
-		return (state -= 0x9E3779B97F4A7C15L);
+		final long s = state;
+		state -= 0x9E3779B97F4A7C15L;
+		return s;
 	}
 
 	@Override

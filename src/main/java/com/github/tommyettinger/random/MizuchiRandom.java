@@ -204,7 +204,8 @@ public class MizuchiRandom extends EnhancedRandom {
 
 	@Override
 	public long previousLong () {
-		long z = (stateA = (stateA - stateB) * 0x09795DFF8024EB9DL);
+		long z = stateA;
+		stateA = (stateA - stateB) * 0x09795DFF8024EB9DL;
 		z = (z ^ z >>> 23 ^ z >>> 47) * 0xAEF17502108EF2D9L;
 		return z ^ z >>> 25;
 

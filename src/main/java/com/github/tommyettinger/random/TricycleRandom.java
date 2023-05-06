@@ -265,12 +265,11 @@ public class TricycleRandom extends EnhancedRandom {
 	public long previousLong () {
 		final long fa = stateA;
 		final long fb = stateB;
-		long fc = stateC - 0xC6BC279692B5C323L;
+		final long fc = stateC - 0xC6BC279692B5C323L;
 		stateC = 0x572B5EE77A54E3BDL * fa;
 		stateB = (fc >>> 41 | fc << 23);
 		stateA = fb ^ stateB ^ stateC;
-		fc = stateC - 0xC6BC279692B5C323L;
-		return stateB ^ 0x572B5EE77A54E3BDL * stateA ^ (fc >>> 41 | fc << 23);
+		return stateA;
 
 	}
 

@@ -301,7 +301,7 @@ public class TrimRandom extends EnhancedRandom {
 		t = (fa >>> 57 | fa << 7);
 		stateB = t ^ stateC;
 		stateA = fc - t;
-		return stateC;
+		return fc;
 	}
 
 	@Override

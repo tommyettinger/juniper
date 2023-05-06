@@ -347,10 +347,11 @@ public class StrangerRandom extends EnhancedRandom {
 		stateB = m;
 		stateC = t - fd + 0xC6BC279692B5C323L;
 		stateD = (fc >>> 39 | fc << 25);
-		t = m ^ m >>> 9;
-		t ^= t >>> 18;
-		t ^= t >>> 36;
-		return t - stateD + 0xC6BC279692B5C323L;
+		return stateC;
+//		t = m ^ m >>> 9;
+//		t ^= t >>> 18;
+//		t ^= t >>> 36;
+//		return t - stateD + 0xC6BC279692B5C323L;
 	}
 
 	@Override

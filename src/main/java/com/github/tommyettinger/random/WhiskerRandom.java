@@ -274,7 +274,8 @@ public class WhiskerRandom extends EnhancedRandom {
 		stateA = (fb >>> 44 | fb << 20);
 		stateB = fc - 0x9E3779B97F4A7C15L;
 		stateC = stateA ^ fd;
-		return stateD = fa * 0x781494A55DAAED0DL; // modular multiplicative inverse of 0xF1357AEA2E62A9C5L
+		stateD = fa * 0x781494A55DAAED0DL; // modular multiplicative inverse of 0xF1357AEA2E62A9C5L
+		return stateA ^ stateC;
 	}
 
 	@Override
