@@ -304,7 +304,8 @@ public class PasarRandom extends EnhancedRandom {
 		stateD -= 0x9E3779B97F4A7C15L;
 		stateB = fc - stateD;
 		stateC = fe ^ stateA;
-		return stateE = fa * 0x781494A55DAAED0DL;
+		stateE = fa * 0x781494A55DAAED0DL;
+		return fe;
 	}
 
 	@Override

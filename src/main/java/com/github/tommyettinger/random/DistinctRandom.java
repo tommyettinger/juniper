@@ -184,7 +184,8 @@ public class DistinctRandom extends EnhancedRandom {
 
 	@Override
 	public long previousLong () {
-		long x = (state -= 0x9E3779B97F4A7C15L);
+		long x = state;
+		state -= 0x9E3779B97F4A7C15L;
 		x ^= x >>> 27;
 		x *= 0x3C79AC492BA7B653L;
 		x ^= x >>> 33;

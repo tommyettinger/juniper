@@ -165,7 +165,7 @@ public class VanDerCorputQuasiRandom extends EnhancedRandom {
 
 	@Override
 	public long previousLong () {
-		return Long.reverse(--state);
+		return Long.reverse(state--);
 	}
 
 	@Override

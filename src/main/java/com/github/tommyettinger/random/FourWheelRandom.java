@@ -303,7 +303,7 @@ public class FourWheelRandom extends EnhancedRandom {
 		stateA = fb - 0xC6BC279692B5C323L;
 		stateB = (fc >>> 47 | fc << 17);
 		stateC = fd ^ stateB;
-		return 0x572B5EE77A54E3BDL * stateA;
+		return stateD;
 	}
 
 	@Override

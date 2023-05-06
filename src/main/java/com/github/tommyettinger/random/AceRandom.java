@@ -293,7 +293,8 @@ public class AceRandom extends EnhancedRandom {
 		stateC = (fd >>> 52 | fd << 12);
 		stateB = stateC + fe;
 		stateD = fc - stateB;
-		return stateE = fb ^ stateA;
+		stateE = fb ^ stateA;
+		return fe;
 	}
 
 	@Override

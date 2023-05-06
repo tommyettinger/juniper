@@ -803,8 +803,10 @@ public class LaserRandom extends EnhancedRandom {
 	}
 
 	public long previousLong () {
-		final long s = stateA -= 0xC6BC279692B5C323L;
-		final long z = (s ^ s >>> 31) * (stateB -= 0x9E3779B97F4A7C16L);
+		final long s = stateA;
+		final long z = (s ^ s >>> 31) * stateB;
+		stateA -= 0xC6BC279692B5C323L;
+		stateB -= 0x9E3779B97F4A7C16L;
 		return z ^ z >>> 26 ^ z >>> 6;
 	}
 
