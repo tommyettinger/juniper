@@ -167,7 +167,7 @@ public class TupleQuasiRandom extends EnhancedRandom {
 
 	@Override
 	public long previousLong () {
-		return ((--state >>> shift) * MathTools.GOLDEN_LONGS[(int)(state & MASK)]);
+		return ((state >>> shift) * MathTools.GOLDEN_LONGS[(int)(state-- & MASK)]);
 	}
 
 	@Override

@@ -17,190 +17,10 @@ public class EnhancedRandomTest {
 		long n1 = random.nextLong();
 		long n2 = random.nextLong();
 		long n3 = random.nextLong();
-		long p2 = random.previousLong();
-		long p1 = random.previousLong();
-		long p0 = random.previousLong();
-		Assert.assertEquals(n0, p0);
-		Assert.assertEquals(n1, p1);
-		Assert.assertEquals(n2, p2);
-	}
-	@Test
-	public void testLaserPrevious() {
-		LaserRandom random = new LaserRandom(123L);
-		long n0 = random.nextLong();
-		long n1 = random.nextLong();
-		long n2 = random.nextLong();
-		long n3 = random.nextLong();
-		long p2 = random.previousLong();
-		long p1 = random.previousLong();
-		long p0 = random.previousLong();
-		Assert.assertEquals(n0, p0);
-		Assert.assertEquals(n1, p1);
-		Assert.assertEquals(n2, p2);
-	}
-	@Test
-	public void testTricyclePrevious() {
-		TricycleRandom random = new TricycleRandom(123L);
-		long n0 = random.nextLong();
-		long n1 = random.nextLong();
-		long n2 = random.nextLong();
-		long n3 = random.nextLong();
-		long p2 = random.previousLong();
-		long p1 = random.previousLong();
-		long p0 = random.previousLong();
-		Assert.assertEquals(n0, p0);
-		Assert.assertEquals(n1, p1);
-		Assert.assertEquals(n2, p2);
-	}
-
-	@Test
-	public void testFourWheelPrevious() {
-		FourWheelRandom random = new FourWheelRandom(123L);
-		long n0 = random.nextLong();
-		long n1 = random.nextLong();
-		long n2 = random.nextLong();
-		long n3 = random.nextLong();
-		long p2 = random.previousLong();
-		long p1 = random.previousLong();
-		long p0 = random.previousLong();
-		Assert.assertEquals(n0, p0);
-		Assert.assertEquals(n1, p1);
-		Assert.assertEquals(n2, p2);
-	}
-
-	@Test
-	public void testTrimPrevious() {
-		TrimRandom random = new TrimRandom(0L);
-		long n0 = random.nextLong();
-		long n1 = random.nextLong();
-		long n2 = random.nextLong();
-		long n3 = random.nextLong();
-		long p2 = random.previousLong();
-		long p1 = random.previousLong();
-		long p0 = random.previousLong();
-		Assert.assertEquals(n0, p0);
-		Assert.assertEquals(n1, p1);
-		Assert.assertEquals(n2, p2);
-	}
-
-	@Test
-	public void testChopPrevious() {
-		ChopRandom random = new ChopRandom(0L);
-		long n0 = random.nextLong();
-		long n1 = random.nextLong();
-		long n2 = random.nextLong();
-		long n3 = random.nextLong();
-		long p2 = random.previousLong();
-		long p1 = random.previousLong();
-		long p0 = random.previousLong();
-		Assert.assertEquals(n0, p0);
-		Assert.assertEquals(n1, p1);
-		Assert.assertEquals(n2, p2);
-	}
-
-	@Test
-	public void testMizuchiPrevious() {
-		MizuchiRandom random = new MizuchiRandom(0L);
-		long n0 = random.nextLong();
-		long n1 = random.nextLong();
-		long n2 = random.nextLong();
-		long n3 = random.nextLong();
-		long p2 = random.previousLong();
-		long p1 = random.previousLong();
-		long p0 = random.previousLong();
-		Assert.assertEquals(n0, p0);
-		Assert.assertEquals(n1, p1);
-		Assert.assertEquals(n2, p2);
-	}
-
-	@Test
-	public void testStrangerPrevious() {
-		StrangerRandom random = new StrangerRandom(0L);
-		long n0 = random.nextLong();
-		long n1 = random.nextLong();
-		long n2 = random.nextLong();
-		long n3 = random.nextLong();
-		long p2 = random.previousLong();
-		long p1 = random.previousLong();
-		long p0 = random.previousLong();
-		Assert.assertEquals(n0, p0);
-		Assert.assertEquals(n1, p1);
-		Assert.assertEquals(n2, p2);
-	}
-
-	@Test
-	public void testXoshiro256StarStarPrevious() {
-		Xoshiro256StarStarRandom random = new Xoshiro256StarStarRandom(0L);
-		long n0 = random.nextLong();
-		long n1 = random.nextLong();
-		long n2 = random.nextLong();
-		long n3 = random.nextLong();
-		long n4 = random.nextLong();
-		long n5 = random.nextLong();
-		long p4 = random.previousLong();
-		long p3 = random.previousLong();
-		long p2 = random.previousLong();
-		long p1 = random.previousLong();
-		long p0 = random.previousLong();
-		Assert.assertEquals(n0, p0);
-		Assert.assertEquals(n1, p1);
-		Assert.assertEquals(n2, p2);
-		Assert.assertEquals(n3, p3);
-		Assert.assertEquals(n4, p4);
-	}
-
-	@Test
-	public void testWhiskerPrevious() {
-		WhiskerRandom random = new WhiskerRandom(0L);
-		long n0 = random.nextLong();
-		long n1 = random.nextLong();
-		long n2 = random.nextLong();
-		long n3 = random.nextLong();
-		long n4 = random.nextLong();
-		long n5 = random.nextLong();
-		long p4 = random.previousLong();
-		long p3 = random.previousLong();
-		long p2 = random.previousLong();
-		long p1 = random.previousLong();
-		long p0 = random.previousLong();
-		Assert.assertEquals(n0, p0);
-		Assert.assertEquals(n1, p1);
-		Assert.assertEquals(n2, p2);
-		Assert.assertEquals(n3, p3);
-		Assert.assertEquals(n4, p4);
-	}
-
-	@Test
-	public void testPasarPrevious() {
-		PasarRandom random = new PasarRandom(0L);
-		long n0 = random.nextLong();
-		long n1 = random.nextLong();
-		long n2 = random.nextLong();
-		long n3 = random.nextLong();
-		long n4 = random.nextLong();
-		long n5 = random.nextLong();
-		long p4 = random.previousLong();
-		long p3 = random.previousLong();
-		long p2 = random.previousLong();
-		long p1 = random.previousLong();
-		long p0 = random.previousLong();
-		Assert.assertEquals(n0, p0);
-		Assert.assertEquals(n1, p1);
-		Assert.assertEquals(n2, p2);
-		Assert.assertEquals(n3, p3);
-		Assert.assertEquals(n4, p4);
-	}
-
-	@Test
-	public void testAcePrevious() {
-		AceRandom random = new AceRandom(0L);
-		long n0 = random.nextLong();
-		long n1 = random.nextLong();
-		long n2 = random.nextLong();
-		long n3 = random.nextLong();
 		long n4 = random.nextLong();
 		long n5 = random.nextLong();
 		long n6 = random.nextLong();
+		long p6 = random.previousLong();
 		long p5 = random.previousLong();
 		long p4 = random.previousLong();
 		long p3 = random.previousLong();
@@ -213,12 +33,375 @@ public class EnhancedRandomTest {
 		Assert.assertEquals(n3, p3);
 		Assert.assertEquals(n4, p4);
 		Assert.assertEquals(n5, p5);
-//		System.out.println(n0 + " vs. " + p0);
-//		System.out.println(n1 + " vs. " + p1);
-//		System.out.println(n2 + " vs. " + p2);
-//		System.out.println(n3 + " vs. " + p3);
-//		System.out.println(n4 + " vs. " + p4);
-//		System.out.println(n5 + " vs. " + p5);
+		Assert.assertEquals(n6, p6);
+		long n = random.nextLong();
+		long np = random.previousLong();
+		long npn = random.nextLong();
+		long npnp = random.previousLong();
+		Assert.assertEquals(n, np);
+		Assert.assertEquals(np, npn);
+		Assert.assertEquals(npn, npnp);
+	}
+	@Test
+	public void testLaserPrevious() {
+		LaserRandom random = new LaserRandom(123L);
+		long n0 = random.nextLong();
+		long n1 = random.nextLong();
+		long n2 = random.nextLong();
+		long n3 = random.nextLong();
+		long n4 = random.nextLong();
+		long n5 = random.nextLong();
+		long n6 = random.nextLong();
+		long p6 = random.previousLong();
+		long p5 = random.previousLong();
+		long p4 = random.previousLong();
+		long p3 = random.previousLong();
+		long p2 = random.previousLong();
+		long p1 = random.previousLong();
+		long p0 = random.previousLong();
+		Assert.assertEquals(n0, p0);
+		Assert.assertEquals(n1, p1);
+		Assert.assertEquals(n2, p2);
+		Assert.assertEquals(n3, p3);
+		Assert.assertEquals(n4, p4);
+		Assert.assertEquals(n5, p5);
+		Assert.assertEquals(n6, p6);
+		long n = random.nextLong();
+		long np = random.previousLong();
+		long npn = random.nextLong();
+		long npnp = random.previousLong();
+		Assert.assertEquals(n, np);
+		Assert.assertEquals(np, npn);
+		Assert.assertEquals(npn, npnp);
+	}
+	@Test
+	public void testTricyclePrevious() {
+		TricycleRandom random = new TricycleRandom(123L);
+		long n0 = random.nextLong();
+		long n1 = random.nextLong();
+		long n2 = random.nextLong();
+		long n3 = random.nextLong();
+		long n4 = random.nextLong();
+		long n5 = random.nextLong();
+		long n6 = random.nextLong();
+		long p6 = random.previousLong();
+		long p5 = random.previousLong();
+		long p4 = random.previousLong();
+		long p3 = random.previousLong();
+		long p2 = random.previousLong();
+		long p1 = random.previousLong();
+		long p0 = random.previousLong();
+		Assert.assertEquals(n0, p0);
+		Assert.assertEquals(n1, p1);
+		Assert.assertEquals(n2, p2);
+		Assert.assertEquals(n3, p3);
+		Assert.assertEquals(n4, p4);
+		Assert.assertEquals(n5, p5);
+		Assert.assertEquals(n6, p6);
+		long n = random.nextLong();
+		long np = random.previousLong();
+		long npn = random.nextLong();
+		long npnp = random.previousLong();
+		Assert.assertEquals(n, np);
+		Assert.assertEquals(np, npn);
+		Assert.assertEquals(npn, npnp);
+	}
+
+	@Test
+	public void testFourWheelPrevious() {
+		FourWheelRandom random = new FourWheelRandom(123L);
+		long n0 = random.nextLong();
+		long n1 = random.nextLong();
+		long n2 = random.nextLong();
+		long n3 = random.nextLong();
+		long n4 = random.nextLong();
+		long n5 = random.nextLong();
+		long n6 = random.nextLong();
+		long p6 = random.previousLong();
+		long p5 = random.previousLong();
+		long p4 = random.previousLong();
+		long p3 = random.previousLong();
+		long p2 = random.previousLong();
+		long p1 = random.previousLong();
+		long p0 = random.previousLong();
+		Assert.assertEquals(n0, p0);
+		Assert.assertEquals(n1, p1);
+		Assert.assertEquals(n2, p2);
+		Assert.assertEquals(n3, p3);
+		Assert.assertEquals(n4, p4);
+		Assert.assertEquals(n5, p5);
+		Assert.assertEquals(n6, p6);
+		long n = random.nextLong();
+		long np = random.previousLong();
+		long npn = random.nextLong();
+		long npnp = random.previousLong();
+		Assert.assertEquals(n, np);
+		Assert.assertEquals(np, npn);
+		Assert.assertEquals(npn, npnp);
+	}
+
+	@Test
+	public void testTrimPrevious() {
+		TrimRandom random = new TrimRandom(0L);
+		long n0 = random.nextLong();
+		long n1 = random.nextLong();
+		long n2 = random.nextLong();
+		long n3 = random.nextLong();
+		long n4 = random.nextLong();
+		long n5 = random.nextLong();
+		long n6 = random.nextLong();
+		long p6 = random.previousLong();
+		long p5 = random.previousLong();
+		long p4 = random.previousLong();
+		long p3 = random.previousLong();
+		long p2 = random.previousLong();
+		long p1 = random.previousLong();
+		long p0 = random.previousLong();
+		Assert.assertEquals(n0, p0);
+		Assert.assertEquals(n1, p1);
+		Assert.assertEquals(n2, p2);
+		Assert.assertEquals(n3, p3);
+		Assert.assertEquals(n4, p4);
+		Assert.assertEquals(n5, p5);
+		Assert.assertEquals(n6, p6);
+		long n = random.nextLong();
+		long np = random.previousLong();
+		long npn = random.nextLong();
+		long npnp = random.previousLong();
+		Assert.assertEquals(n, np);
+		Assert.assertEquals(np, npn);
+		Assert.assertEquals(npn, npnp);
+	}
+
+	@Test
+	public void testChopPrevious() {
+		ChopRandom random = new ChopRandom(0L);
+		long n0 = random.nextLong();
+		long n1 = random.nextLong();
+		long n2 = random.nextLong();
+		long n3 = random.nextLong();
+		long n4 = random.nextLong();
+		long n5 = random.nextLong();
+		long n6 = random.nextLong();
+		long p6 = random.previousLong();
+		long p5 = random.previousLong();
+		long p4 = random.previousLong();
+		long p3 = random.previousLong();
+		long p2 = random.previousLong();
+		long p1 = random.previousLong();
+		long p0 = random.previousLong();
+		Assert.assertEquals(n0, p0);
+		Assert.assertEquals(n1, p1);
+		Assert.assertEquals(n2, p2);
+		Assert.assertEquals(n3, p3);
+		Assert.assertEquals(n4, p4);
+		Assert.assertEquals(n5, p5);
+		Assert.assertEquals(n6, p6);
+		long n = random.nextLong();
+		long np = random.previousLong();
+		long npn = random.nextLong();
+		long npnp = random.previousLong();
+		Assert.assertEquals(n, np);
+		Assert.assertEquals(np, npn);
+		Assert.assertEquals(npn, npnp);
+	}
+
+	@Test
+	public void testMizuchiPrevious() {
+		MizuchiRandom random = new MizuchiRandom(0L);
+		long n0 = random.nextLong();
+		long n1 = random.nextLong();
+		long n2 = random.nextLong();
+		long n3 = random.nextLong();
+		long n4 = random.nextLong();
+		long n5 = random.nextLong();
+		long n6 = random.nextLong();
+		long p6 = random.previousLong();
+		long p5 = random.previousLong();
+		long p4 = random.previousLong();
+		long p3 = random.previousLong();
+		long p2 = random.previousLong();
+		long p1 = random.previousLong();
+		long p0 = random.previousLong();
+		Assert.assertEquals(n0, p0);
+		Assert.assertEquals(n1, p1);
+		Assert.assertEquals(n2, p2);
+		Assert.assertEquals(n3, p3);
+		Assert.assertEquals(n4, p4);
+		Assert.assertEquals(n5, p5);
+		Assert.assertEquals(n6, p6);
+		long n = random.nextLong();
+		long np = random.previousLong();
+		long npn = random.nextLong();
+		long npnp = random.previousLong();
+		Assert.assertEquals(n, np);
+		Assert.assertEquals(np, npn);
+		Assert.assertEquals(npn, npnp);
+	}
+
+	@Test
+	public void testStrangerPrevious() {
+		StrangerRandom random = new StrangerRandom(0L);
+		long n0 = random.nextLong();
+		long n1 = random.nextLong();
+		long n2 = random.nextLong();
+		long n3 = random.nextLong();
+		long n4 = random.nextLong();
+		long n5 = random.nextLong();
+		long n6 = random.nextLong();
+		long p6 = random.previousLong();
+		long p5 = random.previousLong();
+		long p4 = random.previousLong();
+		long p3 = random.previousLong();
+		long p2 = random.previousLong();
+		long p1 = random.previousLong();
+		long p0 = random.previousLong();
+		Assert.assertEquals(n0, p0);
+		Assert.assertEquals(n1, p1);
+		Assert.assertEquals(n2, p2);
+		Assert.assertEquals(n3, p3);
+		Assert.assertEquals(n4, p4);
+		Assert.assertEquals(n5, p5);
+		Assert.assertEquals(n6, p6);
+		long n = random.nextLong();
+		long np = random.previousLong();
+		long npn = random.nextLong();
+		long npnp = random.previousLong();
+		Assert.assertEquals(n, np);
+		Assert.assertEquals(np, npn);
+		Assert.assertEquals(npn, npnp);
+	}
+
+	@Test
+	public void testXoshiro256StarStarPrevious() {
+		Xoshiro256StarStarRandom random = new Xoshiro256StarStarRandom(0L);
+		long n0 = random.nextLong();
+		long n1 = random.nextLong();
+		long n2 = random.nextLong();
+		long n3 = random.nextLong();
+		long n4 = random.nextLong();
+		long n5 = random.nextLong();
+		long n6 = random.nextLong();
+		long p6 = random.previousLong();
+		long p5 = random.previousLong();
+		long p4 = random.previousLong();
+		long p3 = random.previousLong();
+		long p2 = random.previousLong();
+		long p1 = random.previousLong();
+		long p0 = random.previousLong();
+		Assert.assertEquals(n0, p0);
+		Assert.assertEquals(n1, p1);
+		Assert.assertEquals(n2, p2);
+		Assert.assertEquals(n3, p3);
+		Assert.assertEquals(n4, p4);
+		Assert.assertEquals(n5, p5);
+		Assert.assertEquals(n6, p6);
+		long n = random.nextLong();
+		long np = random.previousLong();
+		long npn = random.nextLong();
+		long npnp = random.previousLong();
+		Assert.assertEquals(n, np);
+		Assert.assertEquals(np, npn);
+		Assert.assertEquals(npn, npnp);
+	}
+
+	@Test
+	public void testWhiskerPrevious() {
+		WhiskerRandom random = new WhiskerRandom(0L);
+		long n0 = random.nextLong();
+		long n1 = random.nextLong();
+		long n2 = random.nextLong();
+		long n3 = random.nextLong();
+		long n4 = random.nextLong();
+		long n5 = random.nextLong();
+		long n6 = random.nextLong();
+		long p6 = random.previousLong();
+		long p5 = random.previousLong();
+		long p4 = random.previousLong();
+		long p3 = random.previousLong();
+		long p2 = random.previousLong();
+		long p1 = random.previousLong();
+		long p0 = random.previousLong();
+		Assert.assertEquals(n0, p0);
+		Assert.assertEquals(n1, p1);
+		Assert.assertEquals(n2, p2);
+		Assert.assertEquals(n3, p3);
+		Assert.assertEquals(n4, p4);
+		Assert.assertEquals(n5, p5);
+		Assert.assertEquals(n6, p6);
+		long n = random.nextLong();
+		long np = random.previousLong();
+		long npn = random.nextLong();
+		long npnp = random.previousLong();
+		Assert.assertEquals(n, np);
+		Assert.assertEquals(np, npn);
+		Assert.assertEquals(npn, npnp);
+	}
+
+	@Test
+	public void testPasarPrevious() {
+		PasarRandom random = new PasarRandom(0L);
+		long n0 = random.nextLong();
+		long n1 = random.nextLong();
+		long n2 = random.nextLong();
+		long n3 = random.nextLong();
+		long n4 = random.nextLong();
+		long n5 = random.nextLong();
+		long n6 = random.nextLong();
+		long p6 = random.previousLong();
+		long p5 = random.previousLong();
+		long p4 = random.previousLong();
+		long p3 = random.previousLong();
+		long p2 = random.previousLong();
+		long p1 = random.previousLong();
+		long p0 = random.previousLong();
+		Assert.assertEquals(n0, p0);
+		Assert.assertEquals(n1, p1);
+		Assert.assertEquals(n2, p2);
+		Assert.assertEquals(n3, p3);
+		Assert.assertEquals(n4, p4);
+		Assert.assertEquals(n5, p5);
+		Assert.assertEquals(n6, p6);
+		long n = random.nextLong();
+		long np = random.previousLong();
+		long npn = random.nextLong();
+		long npnp = random.previousLong();
+		Assert.assertEquals(n, np);
+		Assert.assertEquals(np, npn);
+		Assert.assertEquals(npn, npnp);
+	}
+
+	@Test
+	public void testAcePrevious() {
+		AceRandom random = new AceRandom(0L);
+		long n0 = random.nextLong();
+		long n1 = random.nextLong();
+		long n2 = random.nextLong();
+		long n3 = random.nextLong();
+		long n4 = random.nextLong();
+		long n5 = random.nextLong();
+		long n6 = random.nextLong();
+		long p6 = random.previousLong();
+		long p5 = random.previousLong();
+		long p4 = random.previousLong();
+		long p3 = random.previousLong();
+		long p2 = random.previousLong();
+		long p1 = random.previousLong();
+		long p0 = random.previousLong();
+		Assert.assertEquals(n0, p0);
+		Assert.assertEquals(n1, p1);
+		Assert.assertEquals(n2, p2);
+		Assert.assertEquals(n3, p3);
+		Assert.assertEquals(n4, p4);
+		Assert.assertEquals(n5, p5);
+		Assert.assertEquals(n6, p6);
+		long n = random.nextLong();
+		long np = random.previousLong();
+		long npn = random.nextLong();
+		long npnp = random.previousLong();
+		Assert.assertEquals(n, np);
+		Assert.assertEquals(np, npn);
+		Assert.assertEquals(npn, npnp);
 	}
 
 	@Test
@@ -230,6 +413,9 @@ public class EnhancedRandomTest {
 		long n3 = random.nextLong();
 		long n4 = random.nextLong();
 		long n5 = random.nextLong();
+		long n6 = random.nextLong();
+		long p6 = random.previousLong();
+		long p5 = random.previousLong();
 		long p4 = random.previousLong();
 		long p3 = random.previousLong();
 		long p2 = random.previousLong();
@@ -240,17 +426,29 @@ public class EnhancedRandomTest {
 		Assert.assertEquals(n2, p2);
 		Assert.assertEquals(n3, p3);
 		Assert.assertEquals(n4, p4);
+		Assert.assertEquals(n5, p5);
+		Assert.assertEquals(n6, p6);
+		long n = random.nextLong();
+		long np = random.previousLong();
+		long npn = random.nextLong();
+		long npnp = random.previousLong();
+		Assert.assertEquals(n, np);
+		Assert.assertEquals(np, npn);
+		Assert.assertEquals(npn, npnp);
 	}
 
 	@Test
 	public void testTuplePrevious() {
-		TupleQuasiRandom random = new TupleQuasiRandom(0L);
+		TupleQuasiRandom random = new TupleQuasiRandom(1234567L);
 		long n0 = random.nextLong();
 		long n1 = random.nextLong();
 		long n2 = random.nextLong();
 		long n3 = random.nextLong();
 		long n4 = random.nextLong();
 		long n5 = random.nextLong();
+		long n6 = random.nextLong();
+		long p6 = random.previousLong();
+		long p5 = random.previousLong();
 		long p4 = random.previousLong();
 		long p3 = random.previousLong();
 		long p2 = random.previousLong();
@@ -261,6 +459,15 @@ public class EnhancedRandomTest {
 		Assert.assertEquals(n2, p2);
 		Assert.assertEquals(n3, p3);
 		Assert.assertEquals(n4, p4);
+		Assert.assertEquals(n5, p5);
+		Assert.assertEquals(n6, p6);
+		long n = random.nextLong();
+		long np = random.previousLong();
+		long npn = random.nextLong();
+		long npnp = random.previousLong();
+		Assert.assertEquals(n, np);
+		Assert.assertEquals(np, npn);
+		Assert.assertEquals(npn, npnp);
 	}
 
 	@Test
@@ -272,6 +479,9 @@ public class EnhancedRandomTest {
 		long n3 = random.nextLong();
 		long n4 = random.nextLong();
 		long n5 = random.nextLong();
+		long n6 = random.nextLong();
+		long p6 = random.previousLong();
+		long p5 = random.previousLong();
 		long p4 = random.previousLong();
 		long p3 = random.previousLong();
 		long p2 = random.previousLong();
@@ -282,6 +492,15 @@ public class EnhancedRandomTest {
 		Assert.assertEquals(n2, p2);
 		Assert.assertEquals(n3, p3);
 		Assert.assertEquals(n4, p4);
+		Assert.assertEquals(n5, p5);
+		Assert.assertEquals(n6, p6);
+		long n = random.nextLong();
+		long np = random.previousLong();
+		long npn = random.nextLong();
+		long npnp = random.previousLong();
+		Assert.assertEquals(n, np);
+		Assert.assertEquals(np, npn);
+		Assert.assertEquals(npn, npnp);
 	}
 
 	@Test
@@ -293,6 +512,9 @@ public class EnhancedRandomTest {
 		long n3 = random.nextLong();
 		long n4 = random.nextLong();
 		long n5 = random.nextLong();
+		long n6 = random.nextLong();
+		long p6 = random.previousLong();
+		long p5 = random.previousLong();
 		long p4 = random.previousLong();
 		long p3 = random.previousLong();
 		long p2 = random.previousLong();
@@ -303,6 +525,15 @@ public class EnhancedRandomTest {
 		Assert.assertEquals(n2, p2);
 		Assert.assertEquals(n3, p3);
 		Assert.assertEquals(n4, p4);
+		Assert.assertEquals(n5, p5);
+		Assert.assertEquals(n6, p6);
+		long n = random.nextLong();
+		long np = random.previousLong();
+		long npn = random.nextLong();
+		long npnp = random.previousLong();
+		Assert.assertEquals(n, np);
+		Assert.assertEquals(np, npn);
+		Assert.assertEquals(npn, npnp);
 	}
 
 
