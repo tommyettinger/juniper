@@ -977,6 +977,20 @@ public class LaserRandom extends EnhancedRandom {
 	/**
 	 * Shuffles the given array in-place pseudo-randomly, using this to determine how to shuffle.
 	 *
+	 * @param items a byte array; must be non-null
+	 */
+	public void shuffle (byte[] items) {
+		for (int i = items.length - 1; i > 0; i--) {
+			int ii = nextInt(i + 1);
+			byte temp = items[i];
+			items[i] = items[ii];
+			items[ii] = temp;
+		}
+	}
+
+	/**
+	 * Shuffles the given array in-place pseudo-randomly, using this to determine how to shuffle.
+	 *
 	 * @param items a double array; must be non-null
 	 */
 	public void shuffle (double[] items) {

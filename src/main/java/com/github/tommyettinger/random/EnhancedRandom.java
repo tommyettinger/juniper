@@ -1519,6 +1519,33 @@ public abstract class EnhancedRandom extends Random {
 	/**
 	 * Shuffles the given array in-place pseudo-randomly, using this to determine how to shuffle.
 	 *
+	 * @param items a byte array; must be non-null
+	 */
+	public void shuffle (byte[] items) {
+		shuffle(items, 0, items.length);
+	}
+
+	/**
+	 * Shuffles a section of the given array in-place pseudo-randomly, using this to determine how to shuffle.
+	 *
+	 * @param items  a byte array; must be non-null
+	 * @param offset the index of the first element of the array that can be shuffled
+	 * @param length the length of the section to shuffle
+	 */
+	public void shuffle (byte[] items, int offset, int length) {
+		offset = Math.min(Math.max(0, offset), items.length);
+		length = Math.min(items.length - offset, Math.max(0, length));
+		for (int i = offset + length - 1; i > offset; i--) {
+			int ii = nextInt(offset, i + 1);
+			byte temp = items[i];
+			items[i] = items[ii];
+			items[ii] = temp;
+		}
+	}
+
+	/**
+	 * Shuffles the given array in-place pseudo-randomly, using this to determine how to shuffle.
+	 *
 	 * @param items a double array; must be non-null
 	 */
 	public void shuffle (double[] items) {
