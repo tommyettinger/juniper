@@ -66,7 +66,7 @@ public abstract class EnhancedRandom extends Random {
 	 * {@code seed} after this, though it may. If this implementation has more
 	 * than one {@code long} of state, then the expectation is that none of
 	 * those state variables will be exactly equal to {@code seed} (almost all
-	 * of the time).
+	 * the time).
 	 *
 	 * @param seed the initial seed
 	 */

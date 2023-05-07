@@ -14,11 +14,18 @@ import java.util.Random;
 public class ReverseWrapper extends EnhancedRandom {
     public EnhancedRandom wrapped;
 
+    /**
+     * Creates a ReverseWrapper that wraps a DistinctRandom with a random seed.
+     */
     public ReverseWrapper() {
         super();
         wrapped = new DistinctRandom();
     }
 
+    /**
+     * Creates a ReverseWrapper that wraps a DistinctRandom created with {@link DistinctRandom#DistinctRandom(long)}.
+     * @param seed the seed that will be used for the wrapped DistinctRandom
+     */
     public ReverseWrapper(long seed) {
         super(seed);
         wrapped = new DistinctRandom(seed);
@@ -27,11 +34,20 @@ public class ReverseWrapper extends EnhancedRandom {
     /**
      * This does not copy {@code toWrap}, and uses a reference as-is, so this can be useful to reverse
      * some series of calls made earlier to toWrap in a forward direction.
-     * @param toWrap another EnhancedRandom, preferably not also a wrapper
+     * @param toWrap a non-null EnhancedRandom, preferably not also a wrapper
      */
     public ReverseWrapper(EnhancedRandom toWrap) {
         super(toWrap.getSelectedState(0));
         wrapped = toWrap;
+    }
+
+    /**
+     * The copy constructor.
+     * @param other a non-null ReverseWrapper; its {@link #getWrapped() wrapped EnhancedRandom} must also be non-null.
+     */
+    public ReverseWrapper(ReverseWrapper other) {
+        super(other.wrapped.getSelectedState(0));
+        wrapped = other.wrapped;
     }
 
     public EnhancedRandom getWrapped() {
@@ -81,7 +97,7 @@ public class ReverseWrapper extends EnhancedRandom {
      * {@code seed} after this, though it may. If this implementation has more
      * than one {@code long} of state, then the expectation is that none of
      * those state variables will be exactly equal to {@code seed} (almost all
-     * of the time).
+     * the time).
      *
      * @param seed the initial seed
      */
