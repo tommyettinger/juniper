@@ -1,5 +1,6 @@
 package com.github.tommyettinger.random;
 
+import com.github.tommyettinger.digital.ArrayTools;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -10,6 +11,7 @@ import java.util.BitSet;
  */
 public class EnhancedRandomTest {
 	private static final boolean PRINTING = true;
+
 	@Test
 	public void testDistinctPrevious() {
 		DistinctRandom random = new DistinctRandom(123L);
@@ -42,6 +44,7 @@ public class EnhancedRandomTest {
 		Assert.assertEquals(np, npn);
 		Assert.assertEquals(npn, npnp);
 	}
+
 	@Test
 	public void testLaserPrevious() {
 		LaserRandom random = new LaserRandom(123L);
@@ -74,6 +77,7 @@ public class EnhancedRandomTest {
 		Assert.assertEquals(np, npn);
 		Assert.assertEquals(npn, npnp);
 	}
+
 	@Test
 	public void testTricyclePrevious() {
 		TricycleRandom random = new TricycleRandom(123L);
@@ -618,6 +622,17 @@ public class EnhancedRandomTest {
 		Assert.assertEquals(output0, back0);
 		Assert.assertEquals(output1, back1);
 		Assert.assertEquals(output2, back2, Float.MIN_NORMAL);
+
+		String[] alphabet = ArrayTools.stringSpan(24);
+		String joined = String.join(", ", alphabet);
+		random.setSeed(12345);
+		random.shuffle(alphabet);
+//		System.out.println(String.join(", ", alphabet));
+		reverse.shuffle(alphabet);
+		String revJoined = String.join(", ", alphabet);
+		Assert.assertEquals(joined, revJoined);
+
+
 	}
 
 	public static void main(String[] args){

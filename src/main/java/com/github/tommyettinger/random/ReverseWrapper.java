@@ -254,6 +254,51 @@ public class ReverseWrapper extends EnhancedRandom {
     }
 
     /**
+     * Delegates to the {@link EnhancedRandom#nextLong()} method of the wrapped generator; this is the
+     * counterpart to how {@link #nextLong()} here delegates to the {@link EnhancedRandom#previousLong()}
+     * method of the wrapped generator.
+     *
+     * @return the previous number this would have produced with {@link #nextLong()}
+     */
+    @Override
+    public long previousLong() {
+        return wrapped.nextLong();
+    }
+
+    /**
+     * Delegates to the {@link EnhancedRandom#skip(long)} method if the wrapped generator, but passes it
+     * {@code -advance} instead of advance without changes. This makes it skip in the reverse direction.
+     *
+     * @param advance Number of future generations to skip over; can be negative to backtrack, 0 gets the most-recently-generated number
+     * @return the random long generated after skipping forward or backwards by {@code advance} numbers
+     */
+    @Override
+    public long skip(long advance) {
+        return wrapped.skip(-advance);
+    }
+
+    /**
+     * Shuffles a section of the given array in-place pseudo-randomly, using this to determine how to shuffle.
+     * Similarly to how {@link #nextLong()} uses the wrapped generator's {@link EnhancedRandom#previousLong()},
+     * this shuffles in reverse order. This allows you to shuffle an array using one of the wrapped generator's
+     * shuffle() methods, then later undo that shuffle by using a ReverseWrapper's shuffle method.
+     *
+     * @param items  an array of some reference type; must be non-null but may contain null items
+     * @param offset the index of the first element of the array that can be shuffled
+     * @param length the length of the section to shuffle
+     */
+    public <T> void shuffle (T[] items, int offset, int length) {
+        offset = Math.min(Math.max(0, offset), items.length);
+        length = Math.min(items.length - offset, Math.max(0, length));
+        for (int i = offset + 1, n = offset + length; i < n; i++) {
+            int ii = nextInt(offset, i + 1);
+            T temp = items[i];
+            items[i] = items[ii];
+            items[ii] = temp;
+        }
+    }
+
+    /**
      * Creates a new EnhancedRandom with identical states to this one, so if the same EnhancedRandom methods are
      * called on this object and its copy (in the same order), the same outputs will be produced. This is not
      * guaranteed to copy the inherited state of any parent class, so if you call methods that are
