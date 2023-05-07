@@ -503,6 +503,7 @@ public class ReverseWrapper extends EnhancedRandom {
      */
     @Override
     public EnhancedRandom stringDeserialize(String data, Base base) {
-        return Deserializer.deserialize(data.substring(data.indexOf('`')+1), base);
+        setWrapped(Deserializer.deserialize(data.substring(data.indexOf('`')+1), base));
+        return this;
     }
 }
