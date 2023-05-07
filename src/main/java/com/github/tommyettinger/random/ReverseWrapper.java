@@ -287,6 +287,174 @@ public class ReverseWrapper extends EnhancedRandom {
      * @param offset the index of the first element of the array that can be shuffled
      * @param length the length of the section to shuffle
      */
+    public void shuffle (long[] items, int offset, int length) {
+        offset = Math.min(Math.max(0, offset), items.length);
+        length = Math.min(items.length - offset, Math.max(0, length));
+        for (int i = offset + 1, n = offset + length; i < n; i++) {
+            int ii = nextInt(offset, i + 1);
+            long temp = items[i];
+            items[i] = items[ii];
+            items[ii] = temp;
+        }
+    }
+
+    /**
+     * Shuffles a section of the given array in-place pseudo-randomly, using this to determine how to shuffle.
+     * Similarly to how {@link #nextLong()} uses the wrapped generator's {@link EnhancedRandom#previousLong()},
+     * this shuffles in reverse order. This allows you to shuffle an array using one of the wrapped generator's
+     * shuffle() methods, then later undo that shuffle by using a ReverseWrapper's shuffle method.
+     *
+     * @param items  an array of some reference type; must be non-null but may contain null items
+     * @param offset the index of the first element of the array that can be shuffled
+     * @param length the length of the section to shuffle
+     */
+    public void shuffle (byte[] items, int offset, int length) {
+        offset = Math.min(Math.max(0, offset), items.length);
+        length = Math.min(items.length - offset, Math.max(0, length));
+        for (int i = offset + 1, n = offset + length; i < n; i++) {
+            int ii = nextInt(offset, i + 1);
+            byte temp = items[i];
+            items[i] = items[ii];
+            items[ii] = temp;
+        }
+    }
+
+    /**
+     * Shuffles a section of the given array in-place pseudo-randomly, using this to determine how to shuffle.
+     * Similarly to how {@link #nextLong()} uses the wrapped generator's {@link EnhancedRandom#previousLong()},
+     * this shuffles in reverse order. This allows you to shuffle an array using one of the wrapped generator's
+     * shuffle() methods, then later undo that shuffle by using a ReverseWrapper's shuffle method.
+     *
+     * @param items  an array of some reference type; must be non-null but may contain null items
+     * @param offset the index of the first element of the array that can be shuffled
+     * @param length the length of the section to shuffle
+     */
+    public void shuffle (int[] items, int offset, int length) {
+        offset = Math.min(Math.max(0, offset), items.length);
+        length = Math.min(items.length - offset, Math.max(0, length));
+        for (int i = offset + 1, n = offset + length; i < n; i++) {
+            int ii = nextInt(offset, i + 1);
+            int temp = items[i];
+            items[i] = items[ii];
+            items[ii] = temp;
+        }
+    }
+
+    /**
+     * Shuffles a section of the given array in-place pseudo-randomly, using this to determine how to shuffle.
+     * Similarly to how {@link #nextLong()} uses the wrapped generator's {@link EnhancedRandom#previousLong()},
+     * this shuffles in reverse order. This allows you to shuffle an array using one of the wrapped generator's
+     * shuffle() methods, then later undo that shuffle by using a ReverseWrapper's shuffle method.
+     *
+     * @param items  an array of some reference type; must be non-null but may contain null items
+     * @param offset the index of the first element of the array that can be shuffled
+     * @param length the length of the section to shuffle
+     */
+    public void shuffle (short[] items, int offset, int length) {
+        offset = Math.min(Math.max(0, offset), items.length);
+        length = Math.min(items.length - offset, Math.max(0, length));
+        for (int i = offset + 1, n = offset + length; i < n; i++) {
+            int ii = nextInt(offset, i + 1);
+            short temp = items[i];
+            items[i] = items[ii];
+            items[ii] = temp;
+        }
+    }
+
+    /**
+     * Shuffles a section of the given array in-place pseudo-randomly, using this to determine how to shuffle.
+     * Similarly to how {@link #nextLong()} uses the wrapped generator's {@link EnhancedRandom#previousLong()},
+     * this shuffles in reverse order. This allows you to shuffle an array using one of the wrapped generator's
+     * shuffle() methods, then later undo that shuffle by using a ReverseWrapper's shuffle method.
+     *
+     * @param items  an array of some reference type; must be non-null but may contain null items
+     * @param offset the index of the first element of the array that can be shuffled
+     * @param length the length of the section to shuffle
+     */
+    public void shuffle (float[] items, int offset, int length) {
+        offset = Math.min(Math.max(0, offset), items.length);
+        length = Math.min(items.length - offset, Math.max(0, length));
+        for (int i = offset + 1, n = offset + length; i < n; i++) {
+            int ii = nextInt(offset, i + 1);
+            float temp = items[i];
+            items[i] = items[ii];
+            items[ii] = temp;
+        }
+    }
+
+    /**
+     * Shuffles a section of the given array in-place pseudo-randomly, using this to determine how to shuffle.
+     * Similarly to how {@link #nextLong()} uses the wrapped generator's {@link EnhancedRandom#previousLong()},
+     * this shuffles in reverse order. This allows you to shuffle an array using one of the wrapped generator's
+     * shuffle() methods, then later undo that shuffle by using a ReverseWrapper's shuffle method.
+     *
+     * @param items  an array of some reference type; must be non-null but may contain null items
+     * @param offset the index of the first element of the array that can be shuffled
+     * @param length the length of the section to shuffle
+     */
+    public void shuffle (double[] items, int offset, int length) {
+        offset = Math.min(Math.max(0, offset), items.length);
+        length = Math.min(items.length - offset, Math.max(0, length));
+        for (int i = offset + 1, n = offset + length; i < n; i++) {
+            int ii = nextInt(offset, i + 1);
+            double temp = items[i];
+            items[i] = items[ii];
+            items[ii] = temp;
+        }
+    }
+
+    /**
+     * Shuffles a section of the given array in-place pseudo-randomly, using this to determine how to shuffle.
+     * Similarly to how {@link #nextLong()} uses the wrapped generator's {@link EnhancedRandom#previousLong()},
+     * this shuffles in reverse order. This allows you to shuffle an array using one of the wrapped generator's
+     * shuffle() methods, then later undo that shuffle by using a ReverseWrapper's shuffle method.
+     *
+     * @param items  an array of some reference type; must be non-null but may contain null items
+     * @param offset the index of the first element of the array that can be shuffled
+     * @param length the length of the section to shuffle
+     */
+    public void shuffle (boolean[] items, int offset, int length) {
+        offset = Math.min(Math.max(0, offset), items.length);
+        length = Math.min(items.length - offset, Math.max(0, length));
+        for (int i = offset + 1, n = offset + length; i < n; i++) {
+            int ii = nextInt(offset, i + 1);
+            boolean temp = items[i];
+            items[i] = items[ii];
+            items[ii] = temp;
+        }
+    }
+
+    /**
+     * Shuffles a section of the given array in-place pseudo-randomly, using this to determine how to shuffle.
+     * Similarly to how {@link #nextLong()} uses the wrapped generator's {@link EnhancedRandom#previousLong()},
+     * this shuffles in reverse order. This allows you to shuffle an array using one of the wrapped generator's
+     * shuffle() methods, then later undo that shuffle by using a ReverseWrapper's shuffle method.
+     *
+     * @param items  an array of some reference type; must be non-null but may contain null items
+     * @param offset the index of the first element of the array that can be shuffled
+     * @param length the length of the section to shuffle
+     */
+    public void shuffle (char[] items, int offset, int length) {
+        offset = Math.min(Math.max(0, offset), items.length);
+        length = Math.min(items.length - offset, Math.max(0, length));
+        for (int i = offset + 1, n = offset + length; i < n; i++) {
+            int ii = nextInt(offset, i + 1);
+            char temp = items[i];
+            items[i] = items[ii];
+            items[ii] = temp;
+        }
+    }
+
+    /**
+     * Shuffles a section of the given array in-place pseudo-randomly, using this to determine how to shuffle.
+     * Similarly to how {@link #nextLong()} uses the wrapped generator's {@link EnhancedRandom#previousLong()},
+     * this shuffles in reverse order. This allows you to shuffle an array using one of the wrapped generator's
+     * shuffle() methods, then later undo that shuffle by using a ReverseWrapper's shuffle method.
+     *
+     * @param items  an array of some reference type; must be non-null but may contain null items
+     * @param offset the index of the first element of the array that can be shuffled
+     * @param length the length of the section to shuffle
+     */
     public <T> void shuffle (T[] items, int offset, int length) {
         offset = Math.min(Math.max(0, offset), items.length);
         length = Math.min(items.length - offset, Math.max(0, length));

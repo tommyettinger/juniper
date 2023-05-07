@@ -112,7 +112,7 @@ public class LowChangeQuasiRandom extends EnhancedRandom {
     }
 
     @Override
-    public EnhancedRandom copy() {
+    public LowChangeQuasiRandom copy() {
         return new LowChangeQuasiRandom(state, choice);
     }
 
