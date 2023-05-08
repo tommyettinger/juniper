@@ -1,5 +1,7 @@
 package com.github.tommyettinger.random;
 
+import com.github.tommyettinger.digital.Base;
+
 import java.util.Random;
 
 /**
@@ -83,5 +85,115 @@ public class KnownSequenceRandom extends EnhancedRandom {
     @Override
     public KnownSequenceRandom copy() {
         return new KnownSequenceRandom(new LongSequence(known), index);
+    }
+
+    /**
+     * Returns 1, referring to the one state this changes on its own ({@link #index}).
+     * This does not include the potentially many values in the known sequence.
+     *
+     * @return one (1)
+     */
+    @Override
+    public int getStateCount() {
+        return 1;
+    }
+
+    /**
+     * Gets the current index/position in the known sequence.
+     *
+     * @param selection ignored
+     * @return the exact value of {@link #index}
+     */
+    @Override
+    public long getSelectedState(int selection) {
+        return index;
+    }
+
+    /**
+     * Sets the index/position in the known sequence, if {@code value} is at least equal to 0 and less than
+     * {@code known.size}. If value is outside that range, this can assign any value inside the range to
+     * the index. If {@code known.size} is 0 or less, this always assigns 0 to index (anticipating some change
+     * to the known sequence before it is used, hopefully).
+     *
+     * @param selection ignored
+     * @param value the value to use for index, if at least equal to 0 and less than {@code known.size}
+     */
+    @Override
+    public void setSelectedState(int selection, long value) {
+        if(known.size <= 0) index = 0;
+        else index = (int) (value & 0x7FFFFFFFL) %  known.size;
+
+    }
+
+    /**
+     * Sets the index/position in the known sequence, if {@code state} is at least equal to 0 and less than
+     * {@code known.size}. If state is outside that range, this can assign any value inside the range to
+     * the index. If {@code known.size} is 0 or less, this always assigns 0 to index (anticipating some change
+     * to the known sequence before it is used, hopefully).
+     *
+     * @param state the value to use for index, if at least equal to 0 and less than {@code known.size}
+     */
+    @Override
+    public void setState(long state) {
+        if(known.size <= 0) index = 0;
+        else index = (int) (state & 0x7FFFFFFFL) %  known.size;
+    }
+
+    /**
+     * Optional; moves the state to its previous value and returns the previous long that would have been produced by
+     * {@link #nextLong()}. This is often equivalent to calling {@link #skip(long)} with -1L, but not always; some
+     * generators can't efficiently skip long distances, but can step back by one value.
+     *
+     * <p>The public implementation calls {@link #skip(long)} with -1L, and if skip() has not been implemented
+     * differently, then it will throw an UnsupportedOperationException.
+     *
+     * @return the previous number this would have produced with {@link #nextLong()}
+     */
+    @Override
+    public long previousLong() {
+        final long r = known.get(index--);
+        if(index == -1) index = known.size - 1;
+        return r;
+    }
+
+    public StringBuilder appendSerialized(StringBuilder sb, Base base) {
+        sb.append(getTag()).append('`');
+        base.appendSigned(sb, index);
+        sb.append('~');
+        known.appendSerialized(sb, base);
+        return sb.append('`');
+    }
+    public StringBuilder appendSerialized(StringBuilder sb) {
+        return appendSerialized(sb, Base.BASE10);
+    }
+
+    /**
+     * Serializes the current state of this EnhancedRandom to a String that can be used by
+     * {@link #stringDeserialize(String)} to load this state at another time.
+     *
+     * @param base which Base to use, from the "digital" library, such as {@link Base#BASE10}
+     * @return a String storing all data from the EnhancedRandom part of this generator
+     */
+    @Override
+    public String stringSerialize(Base base) {
+        return appendSerialized(new StringBuilder(), base).toString();
+    }
+
+    /**
+     * Given a String in the format produced by {@link #stringSerialize(Base)}, and the same {@link Base} used by
+     * the serialization, this will attempt to set this EnhancedRandom object to match the state in the serialized
+     * data. This only works if this EnhancedRandom is the same implementation that was serialized, and also needs
+     * the Bases to be identical. Returns this EnhancedRandom, after possibly changing its state.
+     *
+     * @param data a String probably produced by {@link #stringSerialize(Base)}
+     * @param base which Base to use, from the "digital" library, such as {@link Base#BASE10}
+     * @return this, after setting its state
+     */
+    @Override
+    public KnownSequenceRandom stringDeserialize(String data, Base base) {
+        int tilde;
+        index = base.readInt(data, data.indexOf('`')+1, tilde = data.indexOf('~'));
+        known.stringDeserialize(data.substring(tilde+1), base);
+        return this;
     }
 }
