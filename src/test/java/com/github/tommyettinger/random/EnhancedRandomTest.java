@@ -631,8 +631,16 @@ public class EnhancedRandomTest {
 		reverse.shuffle(alphabet);
 		String revJoined = String.join(", ", alphabet);
 		Assert.assertEquals(joined, revJoined);
+	}
 
-
+	@Test
+	public void testKnownSequenceRandom() {
+		LongSequence toProduce = LongSequence.with(123L, 456L, -1L, 1L, 0L, 0L, 1000000000000L);
+		KnownSequenceRandom ksr = new KnownSequenceRandom(toProduce);
+		ksr.setState(1);
+		for (int i = 1; i < toProduce.size; i++) {
+			Assert.assertEquals(toProduce.get(i), ksr.nextLong());
+		}
 	}
 
 	public static void main(String[] args){

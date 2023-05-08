@@ -51,6 +51,7 @@ public class KnownSequenceRandom extends EnhancedRandom {
      */
     @Override
     public void setSeed(long position) {
+        if(known == null) return;
         index = (int) (position & 0x7FFFFFFFL) %  known.size;
     }
 

@@ -25,6 +25,12 @@ public class LongSequence {
         this.items = Arrays.copyOf(other.items, other.items.length);
         this.size = other.size;
     }
+
+    public LongSequence(long[] longs) {
+        items = Arrays.copyOf(longs, MathTools.nextPowerOfTwo(longs.length));
+        size = longs.length;
+    }
+
     /**
      * Gets the {@code long} item at {@code index}, which must be at least 0 and less than {@link #size}.
      * This does not do any bounds checking beyond a possible {@link ArrayIndexOutOfBoundsException} that will be
@@ -40,6 +46,10 @@ public class LongSequence {
     public void add(long item) {
         items[size++] = item;
         if(size == items.length) resize(items.length << 1);
+    }
+
+    public int size() {
+        return size;
     }
 
     protected void resize(int newCapacity) {
@@ -144,4 +154,14 @@ public class LongSequence {
     public LongSequence stringDeserialize(String data) {
         return stringDeserialize(data, Base.BASE10);
     }
+
+    public static LongSequence with(long item){
+        LongSequence seq = new LongSequence(2);
+        seq.add(item);
+        return seq;
+    }
+    public static LongSequence with(long... items){
+        return new LongSequence(items);
+    }
+
 }
