@@ -39,13 +39,18 @@ public class LongSequence {
 
     public void add(long item) {
         items[size++] = item;
-        if(size == items.length) resize();
+        if(size == items.length) resize(items.length << 1);
     }
 
-    protected void resize() {
-        int capacity = items.length, newCapacity = capacity << 1;
+    protected void resize(int newCapacity) {
+        int capacity = items.length;
+        newCapacity = MathTools.nextPowerOfTwo(newCapacity);
         if(newCapacity < capacity) throw new RuntimeException("Requested capacity is too large; cannot resize.");
         items = Arrays.copyOf(items, newCapacity);
+    }
+
+    public void clear() {
+        size = 0;
     }
 
     @Override
@@ -81,5 +86,62 @@ public class LongSequence {
     @Override
     public int hashCode() {
         return Hasher.hash(~size, items, 0, size);
+    }
+    protected static int count(final String source, final String search, final int startIndex, int endIndex) {
+        if (endIndex < 0)
+            endIndex = 0x7fffffff;
+        if (source.isEmpty() || search.isEmpty() || startIndex < 0 || startIndex >= endIndex)
+            return 0;
+        int amount = 0, idx = startIndex - 1;
+        while ((idx = source.indexOf(search, idx + 1)) >= 0 && idx < endIndex)
+            ++amount;
+        return amount;
+    }
+
+    public StringBuilder appendSerialized(StringBuilder sb, Base base) {
+        if (items.length == 0)
+            return sb;
+        base.appendSigned(sb, items[0]);
+        for (int i = 1; i < size; i++) {
+            sb.append("~");
+            base.appendSigned(sb, items[i]);
+        }
+        return sb;
+    }
+
+    public StringBuilder appendSerialized(StringBuilder sb) {
+        return appendSerialized(sb, Base.BASE10);
+    }
+
+    public String stringSerialize(Base base) {
+        return appendSerialized(new StringBuilder(), base).toString();
+    }
+
+    public String stringSerialize() {
+        return stringSerialize(Base.BASE10);
+    }
+
+    public LongSequence stringDeserialize(String data, Base base) {
+        clear();
+        int amount = count(data, "~", 0, data.length());
+        if (amount <= 0){
+            add(base.readLong(data, 0, data.length()));
+            return this;
+        }
+        resize(size = amount + 1);
+        int dl = 1, idx = -1, idx2;
+        for (int i = 0; i < amount; i++) {
+            items[i] = base.readLong(data, idx + dl, idx = data.indexOf('~', idx + dl));
+        }
+        if ((idx2 = data.indexOf('~', idx + dl)) < 0 || idx2 >= data.length()) {
+            items[amount] = base.readLong(data, idx + dl, data.length());
+        } else {
+            items[amount] = base.readLong(data, idx + dl, idx2);
+        }
+        return this;
+    }
+    
+    public LongSequence stringDeserialize(String data) {
+        return stringDeserialize(data, Base.BASE10);
     }
 }
