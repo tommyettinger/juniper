@@ -1,7 +1,13 @@
 package com.github.tommyettinger.random;
 
+import com.github.tommyettinger.digital.Base;
+
 import java.util.Random;
 
+/**
+ * Wraps another {@link EnhancedRandom} and stores every {@code long} it returns from {@link #nextLong()}
+ * in a LongSequence {@link #archive}.
+ */
 public class ArchivalWrapper extends EnhancedRandom {
     public EnhancedRandom wrapped;
     public LongSequence archive;
@@ -86,10 +92,18 @@ public class ArchivalWrapper extends EnhancedRandom {
      * Creates a copy of the current LongSequence {@link #archive} and returns it.
      * @return a copy of the current archive
      */
-    public LongSequence getSnapshot(){
+    public LongSequence getSnapshot() {
         return new LongSequence(archive);
     }
-    
+
+    /**
+     * Creates a {@link KnownSequenceRandom} that will repeat from a copy of the current {@link #archive}.
+     * @return a new KnownSequenceRandom that will use a copy of the current archive
+     */
+    public KnownSequenceRandom getRepeatableRandom() {
+        return new KnownSequenceRandom(new LongSequence(archive));
+    }
+
     /**
      * Gets the number of possible state variables that can be selected with
      * {@link #getSelectedState(int)} or {@link #setSelectedState(int, long)}.
@@ -248,5 +262,46 @@ public class ArchivalWrapper extends EnhancedRandom {
     @Override
     public void setState(long... states) {
         wrapped.setState(states);
+    }
+
+    public StringBuilder appendSerialized(StringBuilder sb, Base base) {
+        sb.append(getTag()).append('`');
+        sb.append(wrapped.stringSerialize(base));
+        archive.appendSerialized(sb, base);
+        return sb.append('`');
+    }
+
+    public StringBuilder appendSerialized(StringBuilder sb) {
+        return appendSerialized(sb, Base.BASE10);
+    }
+
+    /**
+     * Serializes the current state of this EnhancedRandom to a String that can be used by
+     * {@link #stringDeserialize(String)} to load this state at another time.
+     *
+     * @param base which Base to use, from the "digital" library, such as {@link Base#BASE10}
+     * @return a String storing all data from the EnhancedRandom part of this generator
+     */
+    @Override
+    public String stringSerialize(Base base) {
+        return appendSerialized(new StringBuilder(), base).toString();
+    }
+
+    /**
+     * Given a String in the format produced by {@link #stringSerialize(Base)}, and the same {@link Base} used by
+     * the serialization, this will attempt to set this EnhancedRandom object to match the state in the serialized
+     * data. This only works if this EnhancedRandom is the same implementation that was serialized, and also needs
+     * the Bases to be identical. Returns this EnhancedRandom, after possibly changing its state.
+     *
+     * @param data a String probably produced by {@link #stringSerialize(Base)}
+     * @param base which Base to use, from the "digital" library, such as {@link Base#BASE10}
+     * @return this, after setting its state
+     */
+    @Override
+    public ArchivalWrapper stringDeserialize(String data, Base base) {
+        int tick = data.indexOf('`');
+        wrapped = Deserializer.deserialize(data.substring(tick+1, tick = data.indexOf('`', data.indexOf('`', tick+1)+1)));
+        archive.stringDeserialize(data.substring(tick+1), base);
+        return this;
     }
 }
