@@ -1,5 +1,7 @@
 package com.github.tommyettinger.random;
 
+import com.github.tommyettinger.digital.Base;
+import com.github.tommyettinger.digital.Hasher;
 import com.github.tommyettinger.digital.MathTools;
 
 import java.util.Arrays;
@@ -46,5 +48,38 @@ public class LongSequence {
         items = Arrays.copyOf(items, newCapacity);
     }
 
+    @Override
+    public String toString() {
+        if (size <= 0)
+            return "[]";
+        StringBuilder sb = new StringBuilder(size << 4);
+        sb.append('[');
+        Base.BASE10.appendSigned(sb, items[0]);
+        for (int i = 1; i < size; i++) {
+            sb.append(", ");
+            Base.BASE10.appendSigned(sb, items[i]);
+        }
+        return sb.append(']').toString();
+    }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        LongSequence that = (LongSequence) o;
+
+        if (size != that.size) return false;
+        // We can't use Array.equals() unless it's the Java-9-or-later overload, since capacities could be different.
+        final long[] ti = that.items;
+        for (int i = 0; i < size; i++) {
+            if(items[i] != ti[i]) return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return Hasher.hash(~size, items, 0, size);
+    }
 }
