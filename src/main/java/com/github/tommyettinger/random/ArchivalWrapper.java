@@ -304,4 +304,30 @@ public class ArchivalWrapper extends EnhancedRandom {
         archive.stringDeserialize(data.substring(tick+1), base);
         return this;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ArchivalWrapper that = (ArchivalWrapper) o;
+
+        if (!wrapped.equals(that.wrapped)) return false;
+        return archive.equals(that.archive);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = wrapped.hashCode();
+        result = 31 * result + archive.hashCode();
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "ArchivalWrapper{" +
+                "wrapped=" + wrapped +
+                ", archive=" + archive +
+                '}';
+    }
 }

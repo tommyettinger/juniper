@@ -205,4 +205,22 @@ public class KnownSequenceRandom extends EnhancedRandom {
                 " in known=" + known +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        KnownSequenceRandom that = (KnownSequenceRandom) o;
+
+        if (index != that.index) return false;
+        return known.equals(that.known);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = known.hashCode();
+        result = 31 * result + index;
+        return result;
+    }
 }
