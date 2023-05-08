@@ -140,7 +140,7 @@ public class LongSequence {
         }
         return this;
     }
-    
+
     public LongSequence stringDeserialize(String data) {
         return stringDeserialize(data, Base.BASE10);
     }
