@@ -79,6 +79,7 @@ public final class Deserializer {
         register(new WhiskerRandom(1, 2, 3, 4));
         register(new PasarRandom(1, 2, 3, 4, 5));
         register(new AceRandom(1, 2, 3, 4, 5));
+        register(new KnownSequenceRandom(LongSequence.with(1337L, 42L, 23L, 666L)));
 
         final EnhancedRandom random = new DistinctRandom(0L);
         register(new ArcsineDistribution(random, 0.0, 1.0));

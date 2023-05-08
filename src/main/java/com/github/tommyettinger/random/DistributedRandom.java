@@ -339,4 +339,12 @@ public class DistributedRandom extends EnhancedRandom {
         distribution = Deserializer.deserializeDistribution(data.substring(idx + 1), base);
         return this;
     }
+
+    @Override
+    public String toString() {
+        return "DistributedRandom{" +
+                "distribution=" + distribution +
+                ", reduction=" + reduction +
+                '}';
+    }
 }

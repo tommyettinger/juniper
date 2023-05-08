@@ -97,30 +97,42 @@ public abstract class Distribution {
      * Gets the value of parameter "A" as a double. This corresponds to parameter "A" in
      * {@link #setParameters(double, double, double)}; it is usually called by some other name in the generator, and may
      * not be stored as a double internally.
+     * <br>
+     * This defaults to always returning {@link Double#NaN}, but any parameters a distribution actually uses should be
+     * overridden to return the actual parameter, which is almost certainly not going to be NaN. If a getParameter
+     * method returns NaN, you can generally safely assume that the parameter is not used by this distribution.
      * @return the value of parameter "A" as a double.
      */
     public double getParameterA() {
-        return 0.0;
+        return Double.NaN;
     }
 
     /**
      * Gets the value of parameter "B" as a double. This corresponds to parameter "B" in
      * {@link #setParameters(double, double, double)}; it is usually called by some other name in the generator, and may
      * not be stored as a double internally.
+     * <br>
+     * This defaults to always returning {@link Double#NaN}, but any parameters a distribution actually uses should be
+     * overridden to return the actual parameter, which is almost certainly not going to be NaN. If a getParameter
+     * method returns NaN, you can generally safely assume that the parameter is not used by this distribution.
      * @return the value of parameter "B" as a double.
      */
     public double getParameterB() {
-        return 0.0;
+        return Double.NaN;
     }
 
     /**
      * Gets the value of parameter "C" as a double. This corresponds to parameter "C" in
      * {@link #setParameters(double, double, double)}; it is usually called by some other name in the generator, and may
      * not be stored as a double internally.
+     * <br>
+     * This defaults to always returning {@link Double#NaN}, but any parameters a distribution actually uses should be
+     * overridden to return the actual parameter, which is almost certainly not going to be NaN. If a getParameter
+     * method returns NaN, you can generally safely assume that the parameter is not used by this distribution.
      * @return the value of parameter "C" as a double.
      */
     public double getParameterC() {
-        return 0.0;
+        return Double.NaN;
     }
 
     /**
@@ -199,5 +211,16 @@ public abstract class Distribution {
                 && getParameterA() == that.getParameterA()
                 && getParameterB() == that.getParameterB()
                 && getParameterC() == that.getParameterC();
+    }
+
+    @Override
+    public String toString() {
+        double a = getParameterA(), b = getParameterB(), c = getParameterC();
+        return "Distribution{" +
+                "generator=" + generator +
+                (a != a ? "" : ", parameterA=" + getParameterA()) +
+                (b != b ? "" : ", parameterB=" + getParameterB()) +
+                (c != c ? "" : ", parameterC=" + getParameterC()) +
+                '}';
     }
 }

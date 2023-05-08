@@ -197,4 +197,12 @@ public class KnownSequenceRandom extends EnhancedRandom {
         known.stringDeserialize(data.substring(tilde+1), base);
         return this;
     }
+
+    @Override
+    public String toString() {
+        return "KnownSequenceRandom{" +
+                "at index=" + index +
+                " in known=" + known +
+                '}';
+    }
 }
