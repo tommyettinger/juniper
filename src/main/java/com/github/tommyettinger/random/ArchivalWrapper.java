@@ -51,7 +51,8 @@ public class ArchivalWrapper extends EnhancedRandom {
      */
     @Override
     public void setSeed(long seed) {
-        wrapped.setSeed(seed);
+        if(wrapped != null)
+            wrapped.setSeed(seed);
     }
 
     /**
