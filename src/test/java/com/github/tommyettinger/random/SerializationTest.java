@@ -135,4 +135,21 @@ public class SerializationTest {
         Assert.assertEquals(output2, back2, Float.MIN_NORMAL);
     }
 
+    @Test
+    public void testArchivalWrapper() {
+        AceRandom random = new AceRandom(123);
+        ArchivalWrapper archive = new ArchivalWrapper(random);
+        LongSequence output = new LongSequence(100);
+        for (int i = 0; i < 100; i++) {
+            output.add(archive.nextLong(1000000));
+        }
+        String arcSer = archive.stringSerialize();
+        KnownSequenceRandom ksr = archive.getRepeatableRandom();
+        ArchivalWrapper archive2 = (ArchivalWrapper) Deserializer.deserialize(arcSer);
+        KnownSequenceRandom ksr2 = archive2.getRepeatableRandom();
+        for (int i = 0; i < 100; i++) {
+            Assert.assertEquals(ksr.nextLong(1000000), ksr2.nextLong(1000000));
+        }
+    }
+
 }

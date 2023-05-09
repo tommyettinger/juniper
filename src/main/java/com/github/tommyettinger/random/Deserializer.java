@@ -81,6 +81,9 @@ public final class Deserializer {
         register(new AceRandom(1, 2, 3, 4, 5));
         register(new KnownSequenceRandom(LongSequence.with(1337L, 42L, 23L, 666L)));
 
+        register(new ReverseWrapper(1));
+        register(new ArchivalWrapper(new DistinctRandom(1)));
+
         final EnhancedRandom random = new DistinctRandom(0L);
         register(new ArcsineDistribution(random, 0.0, 1.0));
         register(new BernoulliDistribution(random, 0.5));
@@ -225,6 +228,9 @@ public final class Deserializer {
     public static ArrayList<EnhancedRandom> copyRandoms() {
         ArrayList<EnhancedRandom> list = new ArrayList<>(RANDOM_BY_TAG.size());
         for(EnhancedRandom e : RANDOM_BY_TAG.values()){
+            // skip wrappers, hopefully
+            if(e.getTag().endsWith("W"))
+                continue;
             EnhancedRandom r = e.copy();
             r.setSeed(-1L);
             list.add(r);
