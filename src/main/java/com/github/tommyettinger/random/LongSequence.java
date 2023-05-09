@@ -8,6 +8,8 @@ import java.util.Arrays;
 
 /**
  * A very basic append-only list of {@code long} items.
+ * This is used to store the sequence of results used by a {@link KnownSequenceRandom}, and
+ * can be produced by an {@link ArchivalWrapper}.
  */
 public class LongSequence {
     public long[] items;
@@ -69,11 +71,7 @@ public class LongSequence {
             return "[]";
         StringBuilder sb = new StringBuilder(size << 4);
         sb.append('[');
-        Base.BASE10.appendSigned(sb, items[0]);
-        for (int i = 1; i < size; i++) {
-            sb.append(", ");
-            Base.BASE10.appendSigned(sb, items[i]);
-        }
+        Base.BASE10.appendJoined(sb, ", ", items, 0, size);
         return sb.append(']').toString();
     }
 
@@ -97,26 +95,9 @@ public class LongSequence {
     public int hashCode() {
         return Hasher.hash(~size, items, 0, size);
     }
-    protected static int count(final String source, final String search, final int startIndex, int endIndex) {
-        if (endIndex < 0)
-            endIndex = 0x7fffffff;
-        if (source.isEmpty() || search.isEmpty() || startIndex < 0 || startIndex >= endIndex)
-            return 0;
-        int amount = 0, idx = startIndex - 1;
-        while ((idx = source.indexOf(search, idx + 1)) >= 0 && idx < endIndex)
-            ++amount;
-        return amount;
-    }
 
     public StringBuilder appendSerialized(StringBuilder sb, Base base) {
-        if (items.length == 0)
-            return sb;
-        base.appendSigned(sb, items[0]);
-        for (int i = 1; i < size; i++) {
-            sb.append("~");
-            base.appendSigned(sb, items[i]);
-        }
-        return sb;
+        return base.appendJoined(sb, "~", items, 0, size);
     }
 
     public StringBuilder appendSerialized(StringBuilder sb) {
@@ -133,7 +114,7 @@ public class LongSequence {
 
     public LongSequence stringDeserialize(String data, Base base) {
         clear();
-        int amount = count(data, "~", 0, data.length());
+        int amount = Base.count(data, "~", 0, data.length());
         if (amount <= 0){
             add(base.readLong(data, 0, data.length()));
             return this;
