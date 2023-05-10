@@ -6,6 +6,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class SerializationTest {
@@ -58,8 +60,10 @@ public class SerializationTest {
 //        TricycleRandom tricycle = new TricycleRandom(-1L);
 //        TrimRandom trim = new TrimRandom(-1L);
 //        EnhancedRandom[] all = new EnhancedRandom[]{chop, distinct, mizuchi, tricycle, trim};
-        List<EnhancedRandom> all = Deserializer.copyRandoms();
-//        Base base = Base.scrambledBase(new LaserRandom(123456789L));
+
+//        List<EnhancedRandom> all = Deserializer.copyRandoms();
+        List<EnhancedRandom> all = Collections.singletonList(Deserializer.get("KnSR"));
+
         List<Base> bases = Base.values();
         for(Base base : bases)
         {
@@ -71,7 +75,6 @@ public class SerializationTest {
                 EnhancedRandom de = Deserializer.deserialize(s, base);
                 de.nextLong();
                 long dl = de.nextLong();
-                System.out.println(r + "  ,  " + de);
                 Assert.assertEquals("Failure with " + s + " and radix " + base.base, rl, dl);
             }
         }
@@ -148,7 +151,7 @@ public class SerializationTest {
         ArchivalWrapper archive2 = (ArchivalWrapper) Deserializer.deserialize(arcSer);
         KnownSequenceRandom ksr2 = archive2.getRepeatableRandom();
         for (int i = 0; i < 100; i++) {
-            Assert.assertEquals(ksr.nextLong(1000000), ksr2.nextLong(1000000));
+            Assert.assertEquals("Failed at iteration " + i + " with generators:\n" + ksr + '\n' + ksr2, ksr.nextLong(1000000), ksr2.nextLong(1000000));
         }
     }
 

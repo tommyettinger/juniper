@@ -130,6 +130,7 @@ public final class Deserializer {
     public static EnhancedRandom get(String tag) {
         EnhancedRandom r = RANDOM_BY_TAG.get(tag);
         if(r == null) return null;
+        r.setSeed(-1L);
         return r.copy();
     }
 
@@ -142,6 +143,7 @@ public final class Deserializer {
     public static Distribution getDistribution(String tag) {
         Distribution r = DIST_BY_TAG.get(tag);
         if(r == null) return null;
+        r.generator.setSeed(1L);
         return r.copy();
     }
 
