@@ -36,7 +36,8 @@ Several high-quality and very-fast random number generators are here, such as
 `com.github.tommyettinger.random.WhiskerRandom`,
 `com.github.tommyettinger.random.TricycleRandom`, `com.github.tommyettinger.random.DistinctRandom`,
 `com.github.tommyettinger.random.AceRandom`, `com.github.tommyettinger.random.PasarRandom`,
-`com.github.tommyettinger.random.FourWheelRandom` and `com.github.tommyettinger.random.TrimRandom`. These extend
+`com.github.tommyettinger.random.FourWheelRandom`, `com.github.tommyettinger.random.TrimRandom`, and
+`com.github.tommyettinger.random.ScruffRandom`. These extend
 the abstract class `com.github.tommyettinger.random.EnhancedRandom`, and that extends `java.util.Random` for
 compatibility. The simplest starting point is DistinctRandom; it is much like Java 8's SplittableRandom algorithm, but
 doesn't support splitting (since the possibility of low-quality splits is a major criticism of SplittableRandom), and
@@ -48,9 +49,10 @@ quality, but does not have a guaranteed cycle length -- a given seed could be fo
 which would reduce the usefulness of the generator. But, finding such a seed at random is so improbable for a generator
 with 256 bits of state that it can essentially be ignored as a weakness unless considering adversarial access (and you 
 **should not use** any of the generators here if that is the case, since none are cryptographically secure). TrimRandom
-is like WhiskerRandom, also with 256 bits of state, but promises a minimum period of 2 to the 64, and the maximum period
-is likely much higher. Trim isn't as fast as Whisker, and it seems to have questionable quality on some seeds, but only
-when using very stringent testing. PasarRandom and AceRandom are structured much like Whisker and Trim, but have five
+and ScruffRandom are both like WhiskerRandom, also with 256 bits of state, but each promises a minimum period of 2 to
+the 64, and the maximum period is likely much higher. Trim and ScruffRandom aren't quite as fast as Whisker, and Trim
+seems to have questionable quality on some seeds, but only when using very stringent testing (Scruff seems very robust).
+PasarRandom and AceRandom are structured much like Whisker and Trim, but have five
 long states instead of four. Pasar uses multiplication, like Whisker, while Ace uses only add, rotate, XOR, and subtract
 operations. Ace can often be faster than Pasar, especially on Java 19 and newer, but can also be slower on older JVMs.
 Both of these have the same minimum period guarantee as Trim. All three of Trim, Pasar, and Whisker can `leap()` ahead
@@ -106,8 +108,9 @@ to match the generator that was serialized.
 Some generators have the ability to `leap()` ahead many steps in their sequence, guaranteeing some span of values will
 not overlap with the next call to `leap()`. The Xoshiro generators have an exact-length leap that guarantees a
 non-overlapping span of either 2 to the 64 (Xoshiro128PlusPlusRandom) or 2 to the 192 (Xoshiro256StarStarRandom)
-generated values. Some generators with a counter (PasarRandom and TrimRandom) can jump an inexact length, but guarantee
-at least 2 to the 48 generated values without overlap (usually, the actual number is much higher).
+generated values. Some generators with a counter (PasarRandom, TrimRandom, AceRandom, WhiskerRandom, and ScruffRandom)
+can jump an inexact length, but guarantee at least 2 to the 48 generated values without overlap (usually, the actual
+number is much higher).
 
 You may also want to use the `randomize()` methods in the `digital` dependency's `Hasher` class to make sequential
 values more random; this is essentially the approach used by DistinctRandom. A similar non-generator use of randomness
@@ -140,20 +143,44 @@ The Ziggurat method code here is derived from [Olaf Berstein's cauldron library]
 which is MIT-licensed C++. Using Ziggurat should improve accuracy compared to versions before 0.1.6, which uses a fairly
 fast approximation based on bit counting (by [Marc B. Reynolds](https://marc-b-reynolds.github.io/distribution/2021/03/18/CheapGaussianApprox.html)).
 
+## Wrappers, now, too?
+
+There are a few types of random number generator that are wrappers around another generator. The simplest of these is
+`ReverseWrapper`, which calls `previousLong()` on its wrapped generator if you call `nextLong()`, or anything that uses
+`nextLong()`, on the `ReverseWrapper`. It also flips calls to `previousLong()` to call `nextLong()` in the same way.
+
+Though it isn't a wrapper, `KnownSeriesRandom` is important for using `ArchivalWrapper`. A `KnownSeriesRandom` isn't
+actually random, and does no pseudo-random steps -- it cycles through a given sequence in order as numbers are
+requested. These numbers are the outputs of `nextLong()`, which is used everywhere else (pretty much), so if you make
+the same calls to a `KnownSequenceRandom` as you did to another generator that produced the same numbers from its
+`nextLong()`, you will get the same outputs. To get those numbers, it's easiest to use an `ArchivalWrapper`. That
+wrapper goes around another `EnhancedRandom` object, and stores every `nextLong()` output in a `LongSequence` (which
+is just an append-only resizable `long[]`, though it can be `clear()`-ed to save space). You can use
+`ArchivalWrapper.getRepeatableRandom()` to get a `KnownSequenceRandom` that will repeat the outputs so-far of the
+`ArchivalWrapper` if you make the same calls. The calls don't have to be just `nextLong()`; as long as the sequence
+you're trying to replicate is also from an `ArchivalWrapper`, calling `nextInt(int)`, `nextExclusiveFloat()`, or almost
+any of the methods will work. `ArchivalWrapper` is useful for storing and reproducing bugs where a seed isn't sufficient
+(such as when the bug happens an hour into gameplay, and the seed is only used at the start). Be careful that you don't
+store too many outputs; some generators can easily exhaust the 2 billion item limit of an array in a few seconds, if
+generating non-stop.
+
+Honestly, there should probably be a way to stop an `ArchivalWrapper` from storing outputs temporarily, but there
+isn't yet in version 0.3.0 . *Coming soon!*
+
 ## How to get it?
 
 With Gradle, the dependency (of the core module, if you have multiple) is:
 
 ```
-api "com.github.tommyettinger:juniper:0.2.0"
+api "com.github.tommyettinger:juniper:0.3.0"
 ```
 
 In a libGDX project that has a GWT/HTML backend, the `html/build.gradle` file
 should additionally have:
 
 ```
-implementation "com.github.tommyettinger:digital:0.2.0:sources"
-implementation "com.github.tommyettinger:juniper:0.2.0:sources"
+implementation "com.github.tommyettinger:digital:0.3.2:sources"
+implementation "com.github.tommyettinger:juniper:0.3.0:sources"
 ```
 
 And the `GdxDefinition.gwt.xml` file should have:
@@ -169,7 +196,7 @@ If you don't use Gradle, then with Maven, the dependency is:
 <dependency>
   <groupId>com.github.tommyettinger</groupId>
   <artifactId>juniper</artifactId>
-  <version>0.2.0</version>
+  <version>0.3.0</version>
 </dependency>
 ```
 
