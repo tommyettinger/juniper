@@ -114,6 +114,44 @@ public class LineWobble {
         return (1 - value) * start + value * end;
     }
 
+
+    /**
+     * Sway smoothly using bicubic interpolation between 4 points (the two integers before t and the two after).
+     * This pretty much never produces steep changes between peaks and valleys; this may make it more useful for things
+     * like generating terrain that can be walked across in a side-scrolling game.
+     * @param seed any int
+     * @param t a distance traveled; should change by less than 1 between calls, and should be less than about 10000
+     * @return a smoothly-interpolated swaying value between -1 and 1, both exclusive
+     */
+    public static float bicubicWobble(int seed, float t)
+    {
+        // int fast floor, from libGDX
+        final int floor = ((int)(t + 0x1p14) - 0x4000);
+        // what we add here ensures that at the very least, the upper half will have some non-zero bits.
+        long s = seed + 0x9E3779B97F4A7C15L;
+        // fancy XOR-rotate-rotate is a way to mix bits both up and down without multiplication.
+        s = (s ^ (s << 21 | s >>> 43) ^ (s << 50 | s >>> 14)) + floor;
+        // we use a different technique here, relative to other wobble methods.
+        // to avoid frequent multiplication and replace it with addition by constants, we track 3 variables, each of
+        // which updates with a different large, negative long increment. when we want to get a result, we just XOR
+        // m, n, and o, and use only the upper bits (by multiplying by a tiny fraction).
+        final long m = s * 0xD1B54A32D192ED03L;
+        final long n = s * 0xABC98388FB8FAC03L;
+        final long o = s * 0x8CB92BA72F3D8DD7L;
+
+        //4.8186754E-20f == 0x0.FFFFFFp-63f * 0.4444444f; it gets about as close as we can go to 1.0
+        final float a = (m ^ n ^ o) * 4.8186754E-20f;
+        final float b = (m + 0xD1B54A32D192ED03L ^ n + 0xABC98388FB8FAC03L ^ o + 0x8CB92BA72F3D8DD7L) * 4.8186754E-20f;
+        final float c = (m + 0XA36A9465A325DA06L ^ n + 0X57930711F71F5806L ^ o + 0X1972574E5E7B1BAEL) * 4.8186754E-20f;
+        final float d = (m + 0X751FDE9874B8C709L ^ n + 0X035C8A9AF2AF0409L ^ o + 0XA62B82F58DB8A985L) * 4.8186754E-20f;
+
+        t -= floor;
+        // this is bicubic interpolation, inlined
+        final float p = (d - c) - (a - b);
+        return (t * (t * t * p + t * ((a - b) - p) + (c - a)) + b);
+    }
+
+
     /**
      * A 1D "noise" method that produces smooth transitions like a sine wave, but also wrapping around at pi * 2 so this
      * can be used to get smoothly-changing random angles. Has (seeded) random peaks and valleys where it
