@@ -152,4 +152,19 @@ public class LongSequence {
         return new LongSequence(items);
     }
 
+    /**
+     * This is a special single instance of a subclass of LongSequence; it doesn't store anything, and can't have its
+     * {@link #get(int)} method called. The {@link #add(long)} method does nothing here, and won't cause any memory to
+     * be allocated. This can be useful to assign to the {@link ArchivalWrapper#archive} field when you don't want it to
+     * do anything beyond a normal generator; then you can assign a "real" LongSequence when you want to start storing.
+     */
+    public static final LongSequence NO_OP = new LongSequence((LongSequence) null){
+        @Override
+        public void add(long item) {
+        }
+
+        @Override
+        protected void resize(int newCapacity) {
+        }
+    };
 }

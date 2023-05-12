@@ -6,7 +6,10 @@ import java.util.Random;
 
 /**
  * Wraps another {@link EnhancedRandom} and stores every {@code long} it returns from {@link #nextLong()}
- * in a LongSequence {@link #archive}.
+ * in a LongSequence {@link #archive}. If you don't want to store anymore, but still want the same state and other
+ * behavior of an ArchivalWrapper, you can assign {@link LongSequence#NO_OP} to the {@link #archive} field. This can be
+ * critical, because just generating numbers non-stop and storing all of them would exhaust most computers' available
+ * memory in minutes, if not seconds.
  */
 public class ArchivalWrapper extends EnhancedRandom {
     public EnhancedRandom wrapped;
