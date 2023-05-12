@@ -24,11 +24,15 @@ public class LongSequence {
     }
 
     public LongSequence(LongSequence other) {
+        // If the other LongSequence is null, then this is some special case and should be handled by a subclass.
+        if (other == null) return;
         this.items = Arrays.copyOf(other.items, other.items.length);
         this.size = other.size;
     }
 
     public LongSequence(long[] longs) {
+        // If the given long[] is null, then this is some special case and should be handled by a subclass.
+        if (longs == null) return;
         items = Arrays.copyOf(longs, MathTools.nextPowerOfTwo(longs.length));
         size = longs.length;
     }
@@ -85,6 +89,7 @@ public class LongSequence {
         if (size != that.size) return false;
         // We can't use Array.equals() unless it's the Java-9-or-later overload, since capacities could be different.
         final long[] ti = that.items;
+        if(items == null || ti == null) return false;
         for (int i = 0; i < size; i++) {
             if(items[i] != ti[i]) return false;
         }
@@ -97,6 +102,7 @@ public class LongSequence {
     }
 
     public StringBuilder appendSerialized(StringBuilder sb, Base base) {
+        if(items == null) return sb;
         return base.appendJoined(sb, "~", items, 0, size);
     }
 
@@ -114,6 +120,7 @@ public class LongSequence {
 
     public LongSequence stringDeserialize(String data, Base base) {
         clear();
+        if(data == null || data.isEmpty()) return this;
         int amount = Base.count(data, "~", 0, data.length());
         if (amount <= 0){
             add(base.readLong(data, 0, data.length()));
