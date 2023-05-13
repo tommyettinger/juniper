@@ -57,4 +57,40 @@ public class ArchivalTest {
             }
         }
     }
+    @Test
+    public void testNoOpArchive() {
+        ArrayList<EnhancedRandom> randoms = Deserializer.copyRandoms();
+        for(EnhancedRandom random : randoms) {
+            ArchivalWrapper archival = new ArchivalWrapper(random);
+            LongSequence backup = new LongSequence();
+            for (int i = 0; i < 20; i++) {
+                long n = archival.nextLong(1000000000000L);
+                backup.add(n);
+            }
+            LongSequence original = archival.archive;
+            archival.archive = LongSequence.NO_OP;
+            for (int i = 0; i < 20; i++) {
+                // Just advance the state; do not store the result.
+                archival.nextLong(1000000000000L);
+            }
+            archival.archive = original;
+            for (int i = 0; i < 20; i++) {
+                long n = archival.nextLong(1000000000000L);
+                backup.add(n);
+            }
+            KnownSequenceRandom ksr = archival.getRepeatableRandom();
+            for (int i = 0; i < 20; i++) {
+                long n = ksr.nextLong(1000000000000L);
+                Assert.assertEquals(n, backup.get(i));
+            }
+            for (int i = 0; i < 20; i++) {
+                // In between the two stored groups of 20 longs, we have 20 non-stored longs.
+                ksr.nextLong(1000000000000L);
+            }
+            for (int i = 0; i < 20; i++) {
+                long n = ksr.nextLong(1000000000000L);
+                Assert.assertEquals(n, backup.get(i));
+            }
+        }
+    }
 }
