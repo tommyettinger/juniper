@@ -69,6 +69,10 @@ public class LongSequence {
         size = 0;
     }
 
+    public LongSequence copy(){
+        return new LongSequence(this);
+    }
+
     @Override
     public String toString() {
         if (size <= 0)
@@ -165,6 +169,15 @@ public class LongSequence {
 
         @Override
         protected void resize(int newCapacity) {
+        }
+
+        /**
+         * A special case for copy(); this only returns this NO_OP LongSequence, not a copy.
+         * @return this NO_OP LongSequence
+         */
+        @Override
+        public LongSequence copy() {
+            return this;
         }
     };
 }

@@ -85,7 +85,7 @@ public class KnownSequenceRandom extends EnhancedRandom {
      */
     @Override
     public KnownSequenceRandom copy() {
-        return new KnownSequenceRandom(new LongSequence(known), index);
+        return new KnownSequenceRandom(known.copy(), index);
     }
 
     /**

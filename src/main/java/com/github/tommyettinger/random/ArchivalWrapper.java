@@ -89,7 +89,7 @@ public class ArchivalWrapper extends EnhancedRandom {
      */
     @Override
     public ArchivalWrapper copy() {
-        return new ArchivalWrapper(wrapped.copy(), new LongSequence(archive));
+        return new ArchivalWrapper(wrapped.copy(), archive.copy());
     }
 
     /**
@@ -97,7 +97,7 @@ public class ArchivalWrapper extends EnhancedRandom {
      * @return a copy of the current archive
      */
     public LongSequence getSnapshot() {
-        return new LongSequence(archive);
+        return archive.copy();
     }
 
     /**
@@ -105,7 +105,7 @@ public class ArchivalWrapper extends EnhancedRandom {
      * @return a new KnownSequenceRandom that will use a copy of the current archive
      */
     public KnownSequenceRandom getRepeatableRandom() {
-        return new KnownSequenceRandom(new LongSequence(archive));
+        return new KnownSequenceRandom(archive.copy());
     }
 
     /**
