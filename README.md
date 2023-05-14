@@ -164,15 +164,17 @@ any of the methods will work. `ArchivalWrapper` is useful for storing and reprod
 store too many outputs; some generators can easily exhaust the 2 billion item limit of an array in a few seconds, if
 generating non-stop.
 
-Honestly, there should probably be a way to stop an `ArchivalWrapper` from storing outputs temporarily, but there
-isn't yet in version 0.3.0 . *Coming soon!*
+You can pause an `ArchivalWrapper` by calling its `pauseStorage()` method; this returns the current LongSequence, so you
+can resume from this point at a later time. Just call `setArchive()` with what `pauseStorage()` returned, and you're
+back to the state before `pauseStorage()` was called, though the random number generator is probably in a different
+state. This uses `LongSequence.NO_OP`, a constant, always-empty LongSequence, to avoid storing anything.
 
 ## How to get it?
 
 With Gradle, the dependency (of the core module, if you have multiple) is:
 
 ```
-api "com.github.tommyettinger:juniper:0.3.0"
+api "com.github.tommyettinger:juniper:0.3.1"
 ```
 
 In a libGDX project that has a GWT/HTML backend, the `html/build.gradle` file
@@ -180,7 +182,7 @@ should additionally have:
 
 ```
 implementation "com.github.tommyettinger:digital:0.3.2:sources"
-implementation "com.github.tommyettinger:juniper:0.3.0:sources"
+implementation "com.github.tommyettinger:juniper:0.3.1:sources"
 ```
 
 And the `GdxDefinition.gwt.xml` file should have:
@@ -196,7 +198,7 @@ If you don't use Gradle, then with Maven, the dependency is:
 <dependency>
   <groupId>com.github.tommyettinger</groupId>
   <artifactId>juniper</artifactId>
-  <version>0.3.0</version>
+  <version>0.3.1</version>
 </dependency>
 ```
 
