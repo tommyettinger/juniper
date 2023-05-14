@@ -109,6 +109,26 @@ public class ArchivalWrapper extends EnhancedRandom {
     }
 
     /**
+     * Makes this ArchivalWrapper stop storing generated random numbers, and returns the current {@link LongSequence}
+     * this had before pausing. To resume where you started, call {@link #setArchive(LongSequence)} with what this
+     * returned.
+     * @return the LongSequence this used before pausing; this can be used to resume later from this point
+     */
+    public LongSequence pauseStorage(){
+        LongSequence prior = archive;
+        archive = LongSequence.NO_OP;
+        return prior;
+    }
+
+    public LongSequence getArchive() {
+        return archive;
+    }
+
+    public void setArchive(LongSequence archive) {
+        this.archive = archive;
+    }
+
+    /**
      * Gets the number of possible state variables that can be selected with
      * {@link #getSelectedState(int)} or {@link #setSelectedState(int, long)}.
      * This defaults to returning 0, making no state variable available for
