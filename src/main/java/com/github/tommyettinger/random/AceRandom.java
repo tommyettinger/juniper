@@ -171,13 +171,14 @@ public class AceRandom extends EnhancedRandom {
 	 */
 	@Override
 	public void setSeed (long seed) {
+		seed ^= 0xEFA239AADFF080FFL; // somewhat-arbitrary choice from the array in MathTools.GOLDEN_LONGS
 		stateA = seed;
 		seed ^= seed >>> 32;
-		seed *= 0xbea225f9eb34556dL;
+		seed *= 0xBEA225F9EB34556DL;
 		seed ^= seed >>> 29;
-		seed *= 0xbea225f9eb34556dL;
+		seed *= 0xBEA225F9EB34556DL;
 		seed ^= seed >>> 32;
-		seed *= 0xbea225f9eb34556dL;
+		seed *= 0xBEA225F9EB34556DL;
 		seed ^= seed >>> 29;
 		stateB = seed;
 		stateC = seed ^ ~0xC6BC279692B5C323L;

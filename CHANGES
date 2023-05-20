@@ -1,0 +1,13 @@
+[0.3.2] [SNAPSHOT]
+- [SEED BREAKING CHANGE] AceRandom and ScruffRandom's `setSeed(long)` method now have much less correlation between the seed and the first few outputs of the generator. This does change the results of `setSeed(long)` and the constructor with one long that calls it.
+- [BREAKING CHANGE] TupleQuasiRandom now uses a Weyl sequence (the same as GoldenQuasiRandom) instead of a simple counter that only adds 1. This changes all results, especially with small seeds.
+
+
+[0.3.1]
+- Added ReverseWrapper, which wraps another generator and makes calls to nextLong() become calls to previousLong() and vice versa.
+- Added LongSequence, KnownSequenceRandom, and ArchivalWrapper, which are all closely-related.
+- Added ScruffRandom, which has 256 bits of state, a guaranteed minimum period of 2 to the 64, and is quite fast/high-quality. It does use multiplication, like WhiskerRandom.
+- Added TupleQuasiRandom, which cycles through 1024 different multipliers that it applies to the upper bits of a counter. I am not sure what it might be useful for just yet.
+
+[The Before Times]
+- Lots of stuff.

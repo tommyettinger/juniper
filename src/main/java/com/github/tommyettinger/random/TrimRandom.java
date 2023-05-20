@@ -193,11 +193,11 @@ public class TrimRandom extends EnhancedRandom {
 	 */
 	public void setSeed(long seed) {
 		seed ^= seed >>> 32;
-		seed *= 0xbea225f9eb34556dL;
+		seed *= 0xBEA225F9EB34556DL;
 		seed ^= seed >>> 29;
-		seed *= 0xbea225f9eb34556dL;
+		seed *= 0xBEA225F9EB34556DL;
 		seed ^= seed >>> 32;
-		seed *= 0xbea225f9eb34556dL;
+		seed *= 0xBEA225F9EB34556DL;
 		seed ^= seed >>> 29;
 		stateA = seed ^ 0xC6BC279692B5C323L;
 		stateB = ~seed;
