@@ -146,7 +146,7 @@ public class TupleQuasiRandom extends EnhancedRandom {
 
 	@Override
 	public long nextLong () {
-		return ((++state >>> shift) * MathTools.GOLDEN_LONGS[(int)(state & MASK)]);
+		return (((state += 0x9E3779B97F4A7C15L) >>> shift) * MathTools.GOLDEN_LONGS[(int)(state & MASK)]);
 	}
 
 	/**
@@ -162,57 +162,59 @@ public class TupleQuasiRandom extends EnhancedRandom {
 	 */
 	@Override
 	public long skip (long advance) {
-		return (((state += advance) >>> shift) * MathTools.GOLDEN_LONGS[(int)(state & MASK)]);
+		return (((state += advance * 0x9E3779B97F4A7C15L) >>> shift) * MathTools.GOLDEN_LONGS[(int)(state & MASK)]);
 	}
 
 	@Override
 	public long previousLong () {
-		return ((state >>> shift) * MathTools.GOLDEN_LONGS[(int)(state-- & MASK)]);
+		final long result = ((state >>> shift) * MathTools.GOLDEN_LONGS[(int)(state & MASK)]);
+		state -= 0x9E3779B97F4A7C15L;
+		return result;
 	}
 
 	@Override
 	public int next (int bits) {
-		return (int)(((++state >>> shift) * MathTools.GOLDEN_LONGS[(int)(state & MASK)]) >>> 64 - bits);
+		return (int)((((state += 0x9E3779B97F4A7C15L) >>> shift) * MathTools.GOLDEN_LONGS[(int)(state & MASK)]) >>> 64 - bits);
 	}
 
 	@Override
 	public int nextInt() {
-		return (int)(((++state >>> shift) * MathTools.GOLDEN_LONGS[(int)(state & MASK)]) >>> 32);
+		return (int)((((state += 0x9E3779B97F4A7C15L) >>> shift) * MathTools.GOLDEN_LONGS[(int)(state & MASK)]) >>> 32);
 	}
 
 	@Override
 	public int nextInt(int bound) {
-		return (int)(bound * (((++state >>> shift) * MathTools.GOLDEN_LONGS[(int)(state & MASK)]) >>> 32) >> 32) & ~(bound >> 31);
+		return (int)(bound * ((((state += 0x9E3779B97F4A7C15L) >>> shift) * MathTools.GOLDEN_LONGS[(int)(state & MASK)]) >>> 32) >> 32) & ~(bound >> 31);
 	}
 
 	@Override
 	public int nextSignedInt(int outerBound) {
-		outerBound = (int)(outerBound * (((++state >>> shift) * MathTools.GOLDEN_LONGS[(int)(state & MASK)]) >>> 32) >> 32);
+		outerBound = (int)(outerBound * ((((state += 0x9E3779B97F4A7C15L) >>> shift) * MathTools.GOLDEN_LONGS[(int)(state & MASK)]) >>> 32) >> 32);
 		return outerBound + (outerBound >>> 31);
 	}
 
 	@Override
 	public double nextExclusiveDouble () {
-		final double n = (((++state >>> shift) * MathTools.GOLDEN_LONGS[(int)(state & MASK)]) >>> 11) * 0x1p-53;
+		final double n = ((((state += 0x9E3779B97F4A7C15L) >>> shift) * MathTools.GOLDEN_LONGS[(int)(state & MASK)]) >>> 11) * 0x1p-53;
 		return n == 0.0 ? 0x1.0p-54 : n;
 	}
 
 	@Override
 	public double nextExclusiveSignedDouble() {
-		final long bits = ((++state >>> shift) * MathTools.GOLDEN_LONGS[(int)(state & MASK)]);
+		final long bits = (((state += 0x9E3779B97F4A7C15L) >>> shift) * MathTools.GOLDEN_LONGS[(int)(state & MASK)]);
 		final double n = (bits >>> 11) * 0x1p-53;
 		return Math.copySign(n == 0.0 ? 0x1.0p-54 : n, bits << 54);
 	}
 
 	@Override
 	public float nextExclusiveFloat() {
-		final float n = (((++state >>> shift) * MathTools.GOLDEN_LONGS[(int)(state & MASK)]) >>> 40) * 0x1p-24f;
+		final float n = ((((state += 0x9E3779B97F4A7C15L) >>> shift) * MathTools.GOLDEN_LONGS[(int)(state & MASK)]) >>> 40) * 0x1p-24f;
 		return n == 0f ? 0x1p-25f : n;
 	}
 
 	@Override
 	public float nextExclusiveSignedFloat() {
-		final long bits = ((++state >>> shift) * MathTools.GOLDEN_LONGS[(int)(state & MASK)]);
+		final long bits = (((state += 0x9E3779B97F4A7C15L) >>> shift) * MathTools.GOLDEN_LONGS[(int)(state & MASK)]);
 		final float n = (bits >>> 40) * 0x1p-24f;
 		return Math.copySign(n == 0f ? 0x1p-25f : n, bits << 25);
 	}
@@ -223,7 +225,7 @@ public class TupleQuasiRandom extends EnhancedRandom {
 //		return probit(nextDouble());
 //		return probit(((state & 0x1FFF_FFFFF_FFFFFL) ^ nextLong() >>> 11) * 0x1p-53);
 //		return Ziggurat.normal(Hasher.randomize3(state += 0x9E3779B97F4A7C15L));
-		return Ziggurat.normal((++state >>> shift) * MathTools.GOLDEN_LONGS[(int)(state & MASK)]);
+		return Ziggurat.normal(((state += 0x9E3779B97F4A7C15L) >>> shift) * MathTools.GOLDEN_LONGS[(int)(state & MASK)]);
 	}
 
 	@Override
