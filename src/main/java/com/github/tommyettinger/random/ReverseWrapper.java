@@ -518,7 +518,7 @@ public class ReverseWrapper extends EnhancedRandom {
      * @return this, after setting its state
      */
     @Override
-    public EnhancedRandom stringDeserialize(String data, Base base) {
+    public ReverseWrapper stringDeserialize(String data, Base base) {
         setWrapped(Deserializer.deserialize(data.substring(data.indexOf('`')+1), base));
         return this;
     }

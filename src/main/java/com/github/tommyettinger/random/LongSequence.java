@@ -59,9 +59,8 @@ public class LongSequence {
     }
 
     protected void resize(int newCapacity) {
-        int capacity = items.length;
         newCapacity = MathTools.nextPowerOfTwo(newCapacity);
-        if(newCapacity < capacity) throw new RuntimeException("Requested capacity is too large; cannot resize.");
+        if(newCapacity < 0) throw new RuntimeException("Requested capacity is too large; cannot resize.");
         items = Arrays.copyOf(items, newCapacity);
     }
 
