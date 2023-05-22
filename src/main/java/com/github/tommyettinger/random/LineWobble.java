@@ -65,8 +65,7 @@ public class LineWobble {
      */
     public static float wobble(long seed, float value)
     {
-        long floor = (long) value;
-        if(value < floor) --floor;
+        final int floor = ((int)(value + 0x1p14) - 0x4000);
         final long z = seed + floor * 0x6C8E9CF570932BD5L;
         final float start = ((z ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L) * 0x0.ffffffp-63f,
                 end = ((z + 0x6C8E9CF570932BD5L ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L) * 0x0.ffffffp-63f;
@@ -104,8 +103,7 @@ public class LineWobble {
      */
     public static float wobble(int seed, float value)
     {
-        int floor = (int) value;
-        if(value < floor) --floor;
+        final int floor = ((int)(value + 0x1p14) - 0x4000);
         int z = seed + floor * 0xBE56D;
         final float start = ((z ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x0.ffffffp-31f,
                 end = ((z + 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x0.ffffffp-31f;
@@ -166,17 +164,16 @@ public class LineWobble {
      */
     public static float wobbleAngle(long seed, float value)
     {
-        long floor = (long) value;
-        if(value < floor) --floor;
+        final int floor = ((int)(value + 0x1p14) - 0x4000);
         final long z = seed + floor * 0x6C8E9CF570932BD5L;
         float start = (((z ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L) >>> 1) * 0x1p-63f,
                 end = (((z + 0x6C8E9CF570932BD5L ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L) >>> 1) * 0x1p-63f;
         value -= floor;
         value *= value * (3f - 2f * value);
         end = end - start + 1.5f;
-        end -= (long)end + 0.5f;
+        end -= (int)end + 0.5f;
         start += end * value + 1;
-        return (start - (long)start) * 6.283185307179586f;
+        return (start - (int)start) * 6.283185307179586f;
     }
 
     /**
@@ -193,17 +190,16 @@ public class LineWobble {
      */
     public static float wobbleAngleDeg(long seed, float value)
     {
-        long floor = (long) value;
-        if(value < floor) --floor;
+        final int floor = ((int)(value + 0x1p14) - 0x4000);
         final long z = seed + floor * 0x6C8E9CF570932BD5L;
         float start = (((z ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L) >>> 1) * 0x1p-63f,
                 end = (((z + 0x6C8E9CF570932BD5L ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L) >>> 1) * 0x1p-63f;
         value -= floor;
         value *= value * (3f - 2f * value);
         end = end - start + 1.5f;
-        end -= (long)end + 0.5f;
+        end -= (int)end + 0.5f;
         start += end * value + 1;
-        return (start - (long)start) * 360.0f;
+        return (start - (int)start) * 360.0f;
     }
 
     /**
@@ -220,17 +216,16 @@ public class LineWobble {
      */
     public static float wobbleAngleTurns(long seed, float value)
     {
-        long floor = (long) value;
-        if(value < floor) --floor;
+        final int floor = ((int)(value + 0x1p14) - 0x4000);
         final long z = seed + floor * 0x6C8E9CF570932BD5L;
         float start = (((z ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L) >>> 1) * 0x1p-63f,
                 end = (((z + 0x6C8E9CF570932BD5L ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L) >>> 1) * 0x1p-63f;
         value -= floor;
         value *= value * (3f - 2f * value);
         end = end - start + 1.5f;
-        end -= (long)end + 0.5f;
+        end -= (int)end + 0.5f;
         start += end * value + 1;
-        return (start - (long)start);
+        return (start - (int)start);
     }
 
     /**
@@ -247,17 +242,24 @@ public class LineWobble {
      */
     public static float wobbleAngle(int seed, float value)
     {
-        int floor = (int) value;
-        if(value < floor) --floor;
+        // int fast floor, from libGDX
+        final int floor = ((int)(value + 0x1p14) - 0x4000);
+        // the above is equivalent to the following for floats between -16384 and 2147467263:
+//        int floor = (int) value;
+//        if(value < floor) --floor;
+        // gets roughly-random values for the start and end, involving the seed also.
         int z = seed + floor * 0xBE56D;
         float start = (((z ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) >>> 1) * 0x1p-31f,
                 end = (((z + 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) >>> 1) * 0x1p-31f;
+
         value -= floor;
+        // makes the changes smoother by slowing down near start or end.
         value *= value * (3f - 2f * value);
+        // lerpAngle code
         end = end - start + 1.5f;
-        end -= (long)end + 0.5f;
+        end -= (int)end + 0.5f;
         start += end * value + 1;
-        return (start - (long)start) * 6.283185307179586f;
+        return (start - (int)start) * 6.283185307179586f;
     }
 
     /**
@@ -274,17 +276,16 @@ public class LineWobble {
      */
     public static float wobbleAngleDeg(int seed, float value)
     {
-        int floor = (int) value;
-        if(value < floor) --floor;
+        final int floor = ((int)(value + 0x1p14) - 0x4000);
         int z = seed + floor * 0xBE56D;
         float start = (((z ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) >>> 1) * 0x1p-31f,
                 end = (((z + 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) >>> 1) * 0x1p-31f;
         value -= floor;
         value *= value * (3f - 2f * value);
         end = end - start + 1.5f;
-        end -= (long)end + 0.5f;
+        end -= (int)end + 0.5f;
         start += end * value + 1;
-        return (start - (long)start) * 360.0f;
+        return (start - (int)start) * 360.0f;
     }
 
     /**
@@ -301,17 +302,16 @@ public class LineWobble {
      */
     public static float wobbleAngleTurns(int seed, float value)
     {
-        int floor = (int) value;
-        if(value < floor) --floor;
+        final int floor = ((int)(value + 0x1p14) - 0x4000);
         int z = seed + floor * 0xBE56D;
         float start = (((z ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) >>> 1) * 0x1p-31f,
                 end = (((z + 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) >>> 1) * 0x1p-31f;
         value -= floor;
         value *= value * (3f - 2f * value);
         end = end - start + 1.5f;
-        end -= (long)end + 0.5f;
+        end -= (int)end + 0.5f;
         start += end * value + 1;
-        return (start - (long)start);
+        return (start - (int)start);
     }
 
     /**
