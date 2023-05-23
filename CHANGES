@@ -1,3 +1,6 @@
+[0.3.3]
+- Fixed deserialization for ZipfianDistribution and made it use double for its alpha parameter (since it could only be set by giving a double).
+
 [0.3.2]
 - [SEED BREAKING CHANGE] AceRandom and ScruffRandom's `setSeed(long)` method now have much less correlation between the seed and the first few outputs of the generator. This does change the results of `setSeed(long)` and the constructor with one long that calls it.
 - [BREAKING CHANGE] TupleQuasiRandom now uses a Weyl sequence (the same as GoldenQuasiRandom) instead of a simple counter that only adds 1. This changes all results, especially with small seeds.
