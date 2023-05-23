@@ -26,7 +26,7 @@ import com.github.tommyettinger.random.WhiskerRandom;
  * <br>
  * This gets some formulas from <a href="https://github.com/ekg/dirtyzipf">dirtyzipf</a>, which is MIT-licensed.
  * It doesn't share any code.
- * @see <a href="https://en.wikipedia.org/wiki/Zipf%27s_law">Wikipedia's page on the Zipfian distribution</a>.
+ * See <a href="https://en.wikipedia.org/wiki/Zipf%27s_law">Wikipedia's page on the Zipfian distribution</a>.
  */
 public class ZipfianDistribution extends Distribution {
     public String getTag() {
@@ -108,7 +108,7 @@ public class ZipfianDistribution extends Distribution {
 
     /**
      * Gets the nth generalized harmonic number (with n equal to limit) with the given s (as skew).
-     * @see <a href="https://en.wikipedia.org/wiki/Generalized_harmonic_number">Harmonic numbers on Wikipedia</a>.
+     * See <a href="https://en.wikipedia.org/wiki/Generalized_harmonic_number">Harmonic numbers on Wikipedia</a>.
      * @param limit N in the formula (a long), or how many values are in the sequence this processes
      * @param skew s in the formula (a non-negative double), or how skewed this is away from Zipf's Law
      * @return the Nth generalized harmonic number with the given skew, where N equals limit
@@ -173,7 +173,7 @@ public class ZipfianDistribution extends Distribution {
         if(a >= 1.0 && b >= 0.0 && b < 1.0){
             alpha = (long) a;
             skew = b;
-            if(c >= 0) {
+            if(c != c || c >= 0) { // if c is NaN or non-negative, then this calculates zeta
                 zeta = harmonic((long)alpha, skew);
             }
             zetaTwoSkew = 1.0 + Math.pow(0.5, skew);
