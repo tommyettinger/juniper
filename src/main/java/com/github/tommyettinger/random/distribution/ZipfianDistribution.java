@@ -35,15 +35,15 @@ public class ZipfianDistribution extends Distribution {
 
     @Override
     public ZipfianDistribution copy() {
-        return new ZipfianDistribution(generator.copy(), alpha, skew, zeta);
+        return new ZipfianDistribution(generator.copy(), (long)alpha, skew, zeta);
     }
 
-    private long alpha;
+    private double alpha;
     private double skew;
 
     private double zeta, zetaTwoSkew;
 
-    public long getAlpha() {
+    public double getAlpha() {
         return alpha;
     }
 
@@ -129,7 +129,7 @@ public class ZipfianDistribution extends Distribution {
     @Override
     public double getMean() {
         if (skew > 1.0) {
-            return harmonic(alpha, skew - 1.0) / zeta;
+            return harmonic((long) alpha, skew - 1.0) / zeta;
         }
         throw new UnsupportedOperationException("Mean cannot be determined for the given parameters.");
     }
@@ -152,7 +152,7 @@ public class ZipfianDistribution extends Distribution {
     @Override
     public double getVariance() {
         if(skew > 2.0) {
-            return harmonic(alpha, skew - 2.0) / zeta - MathTools.square(harmonic(alpha, skew - 1.0)) / (zeta * zeta);
+            return harmonic((long)alpha, skew - 2.0) / zeta - MathTools.square(harmonic((long)alpha, skew - 1.0)) / (zeta * zeta);
         }
         throw new UnsupportedOperationException("Variance cannot be determined for the given parameters.");
     }
@@ -174,7 +174,7 @@ public class ZipfianDistribution extends Distribution {
             alpha = (long) a;
             skew = b;
             if(c >= 0) {
-                zeta = harmonic(alpha, skew);
+                zeta = harmonic((long)alpha, skew);
             }
             zetaTwoSkew = 1.0 + Math.pow(0.5, skew);
             return true;
@@ -187,7 +187,7 @@ public class ZipfianDistribution extends Distribution {
         return sample(generator, alpha, skew, zeta, zetaTwoSkew);
     }
 
-    public static double sample(EnhancedRandom generator, long alpha, double skew, double zeta, double zetaTwoSkew) {
+    public static double sample(EnhancedRandom generator, double alpha, double skew, double zeta, double zetaTwoSkew) {
         double over = 1.0 / (1.0 - skew);
         double eta = (1 - Math.pow(2.0 / alpha, 1.0 - skew)) / (1 - zetaTwoSkew / zeta);
         double u = generator.nextExclusiveDouble();
