@@ -325,7 +325,7 @@ public class ArchivalWrapper extends EnhancedRandom {
     public ArchivalWrapper stringDeserialize(String data, Base base) {
         int tick = data.indexOf('`');
         wrapped = Deserializer.deserialize(data.substring(tick+1, (tick = data.indexOf('`', data.indexOf('`', tick+1)+1)) + 1), base);
-        archive.stringDeserialize(data.substring(tick+1), base);
+        archive.stringDeserialize(data.substring(tick+1, data.indexOf('`', tick+1)), base);
         return this;
     }
 

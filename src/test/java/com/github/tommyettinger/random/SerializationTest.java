@@ -6,7 +6,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -149,10 +148,29 @@ public class SerializationTest {
         String arcSer = archive.stringSerialize();
         KnownSequenceRandom ksr = archive.getRepeatableRandom();
         ArchivalWrapper archive2 = (ArchivalWrapper) Deserializer.deserialize(arcSer);
+        Assert.assertEquals(archive, archive2);
         KnownSequenceRandom ksr2 = archive2.getRepeatableRandom();
         for (int i = 0; i < 100; i++) {
             Assert.assertEquals("Failed at iteration " + i + " with generators:\n" + ksr + '\n' + ksr2, ksr.nextLong(1000000), ksr2.nextLong(1000000));
         }
     }
+    @Test
+    public void testArchivalWrapper2() {
+
+        ArchivalWrapper archive = new ArchivalWrapper(new DistinctRandom(-12345L));
+
+        String arcSer = archive.stringSerialize(Base.BASE10);
+
+        ArchivalWrapper data2 = new ArchivalWrapper();
+        data2.stringDeserialize(arcSer, Base.BASE10);
+//        System.out.println("data...");
+//        System.out.println(archive);
+//        System.out.println("vs. data2...");
+//        System.out.println(data2);
+        Assert.assertEquals(archive.nextInt(), data2.nextInt());
+        Assert.assertEquals(archive.nextLong(), data2.nextLong());
+        Assert.assertEquals(archive, data2);
+    }
+
 
 }
