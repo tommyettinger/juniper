@@ -207,10 +207,16 @@ public abstract class Distribution {
 
         Distribution that = (Distribution) o;
 
-        return EnhancedRandom.areEqual(generator, that.generator)
-                && getParameterA() == that.getParameterA()
-                && getParameterB() == that.getParameterB()
-                && getParameterC() == that.getParameterC();
+        if(!EnhancedRandom.areEqual(generator, that.generator))
+            return false;
+        double p = getParameterA(), t = that.getParameterA();
+        if(!Double.isNaN(p) && !Double.isNaN(t) && p != t) return false;
+        p = getParameterB();
+        t = that.getParameterB();
+        if(!Double.isNaN(p) && !Double.isNaN(t) && p != t) return false;
+        p = getParameterC();
+        t = that.getParameterC();
+        return Double.isNaN(p) || Double.isNaN(t) || p == t;
     }
 
     @Override
