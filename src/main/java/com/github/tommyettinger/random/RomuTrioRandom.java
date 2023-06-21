@@ -23,7 +23,7 @@ package com.github.tommyettinger.random;
  * three {@code long} states, which must never all be 0 but otherwise have no known restrictions.
  * <br>
  * RomuTrioRandom implements all optional methods in EnhancedRandom except
- * {@link #skip(long)} or {@link #previousLong()}.
+ * {@link #skip(long)}. It implements {@link #previousLong()} without using skip().
  * <br>
  * It is strongly recommended that you seed this with {@link #setSeed(long)} instead of
  * {@link #setState(long, long, long)}, because if you give sequential seeds to both setSeed() and setState(), the
@@ -251,6 +251,16 @@ public class RomuTrioRandom extends EnhancedRandom {
 		stateB = (stateB << 12 | stateB >>> 52);
 		stateC = (stateC << 44 | stateC >>> 20);
 		return fa;
+	}
+
+	@Override
+	public long previousLong() {
+		long fc = (stateC << 20 | stateC >>> 44);
+		long fb = (stateB << 52 | stateB >>> 12);
+		stateC = stateA * 0x43D68ED20CD1FA63L; // modular multiplicative inverse
+		stateB = stateC - fc;
+		stateA = stateB - fb;
+		return stateA;
 	}
 
 	@Override
