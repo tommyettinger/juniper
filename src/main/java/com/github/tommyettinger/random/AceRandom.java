@@ -25,9 +25,19 @@ package com.github.tommyettinger.random;
  * quite as fast as Whisker on older JDKs. Whisker doesn't have a guaranteed minimum period, though, and this is
  * usually faster than {@link PasarRandom}, another 5-state generator with a minimum period of 2 to the 64. The maximum
  * and/or expected periods for both PasarRandom and AceRandom are far larger than they would need to be, even if run for
- * decades on current hardware. The minimum period alone would take multiple years to exhaust if using a CPU, much less
+ * decades on current hardware. The minimum period alone would take multiple years to exhaust if using a CPU, let alone
  * to find that particular cycle with the shortest period. Running on a fast GPU would take less time, but still an
  * impractically long time.
+ * <br>
+ * An unexpected advantage AceRandom has over PasarRandom and WhiskerRandom is that if many generators of each of those
+ * types have their states assigned with small and/or repeated values, AceRandom looks clearly better. AceRandom only
+ * has non-random patterns briefly as it escapes the non-random initial state, then returns to typical uncorrelated
+ * white noise. On the other hand, PasarRandom and WhiskerRandom will alternate between two different patterns - if the
+ * small states were assigned using x and y positions on a grid, then the patterns will be horizontal or vertical
+ * stripes. {@link ScruffRandom} can also show stripe artifacts, typically on every third generation if given a very
+ * non-random initial state. The reason AceRandom does better probably has to do with how it mixes its five states more
+ * than the others - WhiskerRandom and ScruffRandom each only mix one pair of states per generation, and PasarRandom
+ * only mixes two pairs of states, but AceRandom mixes three pairs.
  * <br>
  * The name comes from the 52 cards (excluding jokers, but including aces) in a standard playing card deck, since this
  * uses a left rotation by exactly 52 as one of its critical components. Rotations by anything else I tried didn't pass
@@ -171,19 +181,19 @@ public class AceRandom extends EnhancedRandom {
 	 */
 	@Override
 	public void setSeed (long seed) {
-		seed ^= 0xEFA239AADFF080FFL; // somewhat-arbitrary choice from the array in MathTools.GOLDEN_LONGS
-		stateA = seed;
+		seed = (seed ^ 0x1C69B3F74AC4AE35L) * 0x3C79AC492BA7B653L; // an XLCG
+		stateA = seed ^ ~0xC6BC279692B5C323L;
 		seed ^= seed >>> 32;
+		stateB = seed ^ 0xD3833E804F4C574BL;
+		seed *= 0xBEA225F9EB34556DL;                               // MX3 unary hash
+		seed ^= seed >>> 29;
+		stateC = seed ^ ~0xD3833E804F4C574BL;                      // updates are spread across the MX3 hash
+		seed *= 0xBEA225F9EB34556DL;
+		seed ^= seed >>> 32;
+		stateD = seed ^ 0xC6BC279692B5C323L;;
 		seed *= 0xBEA225F9EB34556DL;
 		seed ^= seed >>> 29;
-		seed *= 0xBEA225F9EB34556DL;
-		seed ^= seed >>> 32;
-		seed *= 0xBEA225F9EB34556DL;
-		seed ^= seed >>> 29;
-		stateB = seed;
-		stateC = seed ^ ~0xC6BC279692B5C323L;
-		stateD = ~seed;
-		stateE = seed ^ 0xC6BC279692B5C323L;
+		stateE = seed;
 	}
 
 	public long getStateA () {
