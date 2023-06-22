@@ -30,6 +30,8 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.github.tommyettinger.digital.BitConversion;
 import com.github.tommyettinger.random.experimental.*;
 
+import java.util.ArrayList;
+
 import static com.badlogic.gdx.Input.Keys.*;
 import static com.badlogic.gdx.graphics.GL20.GL_POINTS;
 
@@ -67,21 +69,18 @@ public class CorrelationVisualizer extends ApplicationAdapter {
         }
         return g;
     }
-    private static final EnhancedRandom[][][] randoms = new EnhancedRandom[][][]{
-            makeGrid(new LaserRandom(1, 1)),
-            makeGrid(new MizuchiRandom(1, 1)),
-            makeGrid(new TricycleRandom(1, 1, 1)),
-            makeGrid(new FourWheelRandom(1, 1, 1, 1)),
-            makeGrid(new TrimRandom(1, 1, 1, 1)),
-            makeGrid(new WhiskerRandom(1, 1, 1, 1)),
-            makeGrid(new ScruffRandom(1, 1, 1, 1)),
-            makeGrid(new ScarfRandom(1, 1, 1, 1)),
-            makeGrid(new PasarRandom(1, 1, 1, 1, 1)),
-            makeGrid(new AceRandom(1, 1, 1, 1, 1)),
-            makeGrid(new SplurgeRandom(1, 1)),
-            makeGrid(new SportyRandom(1, 1)),
-            makeGrid(new SpoonRandom(1, 1)),
-            makeGrid(new SpritzRandom(1, 1)),
+
+    private static final EnhancedRandom[][][] randoms;
+    static {
+        ArrayList<EnhancedRandom> rl = Deserializer.copyRandoms();
+        rl.add(new SplurgeRandom(1, 1));
+        rl.add(new SportyRandom(1, 1));
+        rl.add(new SpoonRandom(1, 1));
+        rl.add(new SpritzRandom(1, 1));
+        randoms = new EnhancedRandom[rl.size()][][];
+        for (int i = 0; i < randoms.length; i++) {
+            randoms[i] = makeGrid(rl.get(i));
+        }
     };
     int currentRandom = 0, randomCount = randoms.length;
     int currentMode = 0, modeCount = 3;
