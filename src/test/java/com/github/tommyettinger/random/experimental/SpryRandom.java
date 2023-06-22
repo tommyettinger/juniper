@@ -21,10 +21,10 @@ import com.github.tommyettinger.random.EnhancedRandom;
 
 /**
  */
-public class SpritzRandom extends EnhancedRandom {
+public class SpryRandom extends EnhancedRandom {
 	@Override
 	public String getTag() {
-		return "StzR";
+		return "SryR";
 	}
 
 	/**
@@ -47,7 +47,7 @@ public class SpritzRandom extends EnhancedRandom {
 	/**
 	 * Creates a new SpritzRandom with a random state.
 	 */
-	public SpritzRandom() {
+	public SpryRandom() {
 		stateA = EnhancedRandom.seedFromMath();
 		stateB = EnhancedRandom.seedFromMath();
 		stateC = EnhancedRandom.seedFromMath();
@@ -60,7 +60,7 @@ public class SpritzRandom extends EnhancedRandom {
 	 *
 	 * @param seed any {@code long} value
 	 */
-	public SpritzRandom(long seed) {
+	public SpryRandom(long seed) {
 		setSeed(seed);
 	}
 
@@ -71,7 +71,7 @@ public class SpritzRandom extends EnhancedRandom {
 	 * @param stateA any {@code long} value
 	 * @param stateB any {@code long} value
 	 */
-	public SpritzRandom(long stateA, long stateB) {
+	public SpryRandom(long stateA, long stateB) {
 		this.stateA = stateA;
 		this.stateB = stateB;
 		this.stateC = 1L;
@@ -87,7 +87,7 @@ public class SpritzRandom extends EnhancedRandom {
 	 * @param stateC any {@code long} value
 	 * @param stateD any {@code long} value
 	 */
-	public SpritzRandom(long stateA, long stateB, long stateC, long stateD) {
+	public SpryRandom(long stateA, long stateB, long stateC, long stateD) {
 		this.stateA = stateA;
 		this.stateB = stateB;
 		this.stateC = stateC;
@@ -161,13 +161,13 @@ public class SpritzRandom extends EnhancedRandom {
 	public void setSeed (long seed) {
 		seed ^= seed >>> 32;
 		stateA = seed ^ 0xC6BC279692B5C323L;
-		seed *= 0xbea225f9eb34556dL;
+		seed *= 0xBEA225F9EB34556DL;
 		seed ^= seed >>> 29;
 		stateB = seed ^ ~0xD3833E804F4C574BL;
-		seed *= 0xbea225f9eb34556dL;
+		seed *= 0xBEA225F9EB34556DL;
 		seed ^= seed >>> 32;
 		stateC = seed ^ 0xD3833E804F4C574BL;
-		seed *= 0xbea225f9eb34556dL;
+		seed *= 0xBEA225F9EB34556DL;
 		seed ^= seed >>> 29;
 		stateD = seed ^ ~0xC6BC279692B5C323L;
 	}
@@ -264,12 +264,14 @@ public class SpritzRandom extends EnhancedRandom {
 		final long b = (stateB += 0xBBE0563303A4615FL);
 		final long c = (stateC += 0xA0F2EC75A1FE1575L);
 		final long d = (stateD += 0x89E182857D9ED689L);
-		long x = a + (b << 17 | b >>> 47) + (c << 31 | c >>> 33) + (d << 49 | d >>> 15);
-		x ^= x >>> 27;
+		long x = a;
+		x = b ^ (x << 17 | x >>> 47);
 		x *= 0x3C79AC492BA7B653L;
-		x ^= x >>> 33;
+		x = c ^ (x << 31 | x >>> 33);
 		x *= 0x1C69B3F74AC4AE35L;
-		return x ^ x >>> 27;
+		x = d ^ (x << 49 | x >>> 15);
+		x *= 0xBEA225F9EB34556DL;
+		return x ^ x >>> 30;
 	}
 
 	@Override
@@ -282,12 +284,14 @@ public class SpritzRandom extends EnhancedRandom {
 		stateB -= 0xBBE0563303A4615FL;
 		stateC -= 0xA0F2EC75A1FE1575L;
 		stateD -= 0x89E182857D9ED689L;
-		long x = a + (b << 17 | b >>> 47) + (c << 31 | c >>> 33) + (d << 49 | d >>> 15);
-		x ^= x >>> 27;
+		long x = a;
+		x = b ^ (x << 17 | x >>> 47);
 		x *= 0x3C79AC492BA7B653L;
-		x ^= x >>> 33;
+		x = c ^ (x << 31 | x >>> 33);
 		x *= 0x1C69B3F74AC4AE35L;
-		return x ^ x >>> 27;
+		x = d ^ (x << 49 | x >>> 15);
+		x *= 0xBEA225F9EB34556DL;
+		return x ^ x >>> 30;
 	}
 
 	@Override
@@ -296,12 +300,14 @@ public class SpritzRandom extends EnhancedRandom {
 		final long b = (stateB += 0xBBE0563303A4615FL * advance);
 		final long c = (stateC += 0xA0F2EC75A1FE1575L * advance);
 		final long d = (stateD += 0x89E182857D9ED689L * advance);
-		long x = a + (b << 17 | b >>> 47) + (c << 31 | c >>> 33) + (d << 49 | d >>> 15);
-		x ^= x >>> 27;
+		long x = a;
+		x = b ^ (x << 17 | x >>> 47);
 		x *= 0x3C79AC492BA7B653L;
-		x ^= x >>> 33;
+		x = c ^ (x << 31 | x >>> 33);
 		x *= 0x1C69B3F74AC4AE35L;
-		return x ^ x >>> 27;
+		x = d ^ (x << 49 | x >>> 15);
+		x *= 0xBEA225F9EB34556DL;
+		return x ^ x >>> 30;
 	}
 
 	@Override
@@ -310,17 +316,19 @@ public class SpritzRandom extends EnhancedRandom {
 		final long b = (stateB += 0xBBE0563303A4615FL);
 		final long c = (stateC += 0xA0F2EC75A1FE1575L);
 		final long d = (stateD += 0x89E182857D9ED689L);
-		long x = a + (b << 17 | b >>> 47) + (c << 31 | c >>> 33) + (d << 49 | d >>> 15);
-		x ^= x >>> 27;
+		long x = a;
+		x = b ^ (x << 17 | x >>> 47);
 		x *= 0x3C79AC492BA7B653L;
-		x ^= x >>> 33;
+		x = c ^ (x << 31 | x >>> 33);
 		x *= 0x1C69B3F74AC4AE35L;
-		return (int)(x ^ x >>> 27) >>> (32 - bits);
+		x = d ^ (x << 49 | x >>> 15);
+		x *= 0xBEA225F9EB34556DL;
+		return (int)(x ^ x >>> 30) >>> (32 - bits);
 	}
 
 	@Override
-	public SpritzRandom copy () {
-		return new SpritzRandom(stateA, stateB, stateC, stateD);
+	public SpryRandom copy () {
+		return new SpryRandom(stateA, stateB, stateC, stateD);
 	}
 
 	@Override
@@ -330,7 +338,7 @@ public class SpritzRandom extends EnhancedRandom {
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		SpritzRandom that = (SpritzRandom)o;
+		SpryRandom that = (SpryRandom)o;
 
 		return stateA == that.stateA && stateB == that.stateB && stateC == that.stateC && stateD == that.stateD;
 	}
