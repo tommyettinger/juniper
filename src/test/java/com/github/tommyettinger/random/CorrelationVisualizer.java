@@ -39,9 +39,9 @@ import static com.badlogic.gdx.graphics.GL20.GL_POINTS;
  */
 public class CorrelationVisualizer extends ApplicationAdapter {
 
-    private String title = "";
+    public static String title = "";
     private ImmediateModeRenderer20 renderer;
-    private static final int width = 256, height = 256;
+    public static final int width = 256, height = 256;
     private static final float[][] previousGrid = new float[width][height];
     public static EnhancedRandom[][] makeGrid(EnhancedRandom base){
         EnhancedRandom[][] g = new EnhancedRandom[width][height];
@@ -70,7 +70,7 @@ public class CorrelationVisualizer extends ApplicationAdapter {
         return g;
     }
 
-    private static final EnhancedRandom[][][] randoms;
+    public static final EnhancedRandom[][][] randoms;
     static {
         ArrayList<EnhancedRandom> rl = Deserializer.copyRandoms();
         rl.add(new SplurgeRandom(1, 1));
@@ -83,8 +83,10 @@ public class CorrelationVisualizer extends ApplicationAdapter {
             randoms[i] = makeGrid(rl.get(i));
         }
     };
-    int currentRandom = 0, randomCount = randoms.length;
-    int currentMode = 0, modeCount = 3;
+    public int currentRandom = 0;
+    public static int randomCount = randoms.length;
+    public int currentMode = 0;
+    public static int modeCount = 3;
 
     public static void refreshGrid() {
         for (int i = 0, n = randoms.length; i < n; i++) {
