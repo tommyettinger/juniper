@@ -43,8 +43,10 @@ import static com.github.tommyettinger.random.CorrelationVisualizer.*;
 public class FFTVisualizer extends ApplicationAdapter {
 
     public static int randomCount = randoms.length;
+    public static int modeCount = 2;
     private int currentRandom = 0;
     private int currentMode = 0;
+    private int selectedBit = 0;
     private Viewport view;
     private boolean keepGoing = true;
     private ImmediateModeRenderer20 renderer;
@@ -93,7 +95,23 @@ public class FFTVisualizer extends ApplicationAdapter {
                         currentRandom = ((currentRandom + (UIUtils.shift() ? randomCount - 1 : 1)) % randomCount);
                         refreshGrid();
                         title = randoms[currentRandom][0][0].getClass().getSimpleName()
-                                + " on mode " + currentMode;
+                                + " on mode " + currentMode + " selecting bit " + selectedBit;
+                        System.out.println(title);
+                        if (!keepGoing) putMap();
+                        break;
+                    case LEFT:
+                        currentRandom = ((currentRandom + randomCount - 1) % randomCount);
+                        refreshGrid();
+                        title = randoms[currentRandom][0][0].getClass().getSimpleName()
+                                + " on mode " + currentMode + " selecting bit " + selectedBit;
+                        System.out.println(title);
+                        if (!keepGoing) putMap();
+                        break;
+                    case RIGHT:
+                        currentRandom = ((currentRandom + 1) % randomCount);
+                        refreshGrid();
+                        title = randoms[currentRandom][0][0].getClass().getSimpleName()
+                                + " on mode " + currentMode + " selecting bit " + selectedBit;
                         System.out.println(title);
                         if (!keepGoing) putMap();
                         break;
@@ -101,7 +119,23 @@ public class FFTVisualizer extends ApplicationAdapter {
                         currentMode = ((currentMode + (UIUtils.shift() ? modeCount - 1 : 1)) % modeCount);
                         refreshGrid();
                         title = randoms[currentRandom][0][0].getClass().getSimpleName()
-                                + " on mode " + currentMode;
+                                + " on mode " + currentMode + " selecting bit " + selectedBit;
+                        System.out.println(title);
+                        if (!keepGoing) putMap();
+                        break;
+                    case UP: // mode
+                        selectedBit = (selectedBit + 1 & 63);
+                        refreshGrid();
+                        title = randoms[currentRandom][0][0].getClass().getSimpleName()
+                                + " on mode " + currentMode + " selecting bit " + selectedBit;
+                        System.out.println(title);
+                        if (!keepGoing) putMap();
+                        break;
+                    case DOWN: // mode
+                        selectedBit = (selectedBit - 1 & 63);
+                        refreshGrid();
+                        title = randoms[currentRandom][0][0].getClass().getSimpleName()
+                                + " on mode " + currentMode + " selecting bit " + selectedBit;
                         System.out.println(title);
                         if (!keepGoing) putMap();
                         break;
@@ -136,17 +170,7 @@ public class FFTVisualizer extends ApplicationAdapter {
             case 1:
                 for (int x = 0; x < width; x++) {
                     for (int y = 0; y < height; y++) {
-                        bt = -((int) randoms[currentRandom][x][y].nextLong() & 1) >>> 24;
-                        real[x][y] = bt * I255;
-                        renderer.color(previousGrid[x][y] = basicPrepare(bt));
-                        renderer.vertex(x, y, 0);
-                    }
-                }
-                break;
-            case 2:
-                for (int x = 0; x < width; x++) {
-                    for (int y = 0; y < height; y++) {
-                        bt = -(int) (randoms[currentRandom][x][y].nextLong() >>> 63) >>> 24;
+                        bt = (int) (-(randoms[currentRandom][x][y].nextLong() & 1L << selectedBit) >> 56) & 255;
                         real[x][y] = bt * I255;
                         renderer.color(previousGrid[x][y] = basicPrepare(bt));
                         renderer.vertex(x, y, 0);
