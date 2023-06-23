@@ -265,13 +265,13 @@ public class SpryRandom extends EnhancedRandom {
 		final long c = (stateC += 0xA0F2EC75A1FE1575L);
 		final long d = (stateD += 0x89E182857D9ED689L);
 		long x = a;
-		x = b ^ (x << 17 | x >>> 47);
+		x = b ^ (x << 34 | x >>> 30);
 		x *= 0x3C79AC492BA7B653L;
 		x = c ^ (x << 31 | x >>> 33);
 		x *= 0x1C69B3F74AC4AE35L;
-		x = d ^ (x << 49 | x >>> 15);
+		x = d ^ (x << 30 | x >>> 34);
 		x *= 0xBEA225F9EB34556DL;
-		return x ^ x >>> 30;
+		return x ^ x >>> 31;
 	}
 
 	@Override
@@ -285,13 +285,13 @@ public class SpryRandom extends EnhancedRandom {
 		stateC -= 0xA0F2EC75A1FE1575L;
 		stateD -= 0x89E182857D9ED689L;
 		long x = a;
-		x = b ^ (x << 17 | x >>> 47);
+		x = b ^ (x << 34 | x >>> 30);
 		x *= 0x3C79AC492BA7B653L;
 		x = c ^ (x << 31 | x >>> 33);
 		x *= 0x1C69B3F74AC4AE35L;
-		x = d ^ (x << 49 | x >>> 15);
+		x = d ^ (x << 30 | x >>> 34);
 		x *= 0xBEA225F9EB34556DL;
-		return x ^ x >>> 30;
+		return x ^ x >>> 31;
 	}
 
 	@Override
@@ -301,13 +301,13 @@ public class SpryRandom extends EnhancedRandom {
 		final long c = (stateC += 0xA0F2EC75A1FE1575L * advance);
 		final long d = (stateD += 0x89E182857D9ED689L * advance);
 		long x = a;
-		x = b ^ (x << 17 | x >>> 47);
+		x = b ^ (x << 34 | x >>> 30);
 		x *= 0x3C79AC492BA7B653L;
 		x = c ^ (x << 31 | x >>> 33);
 		x *= 0x1C69B3F74AC4AE35L;
-		x = d ^ (x << 49 | x >>> 15);
+		x = d ^ (x << 30 | x >>> 34);
 		x *= 0xBEA225F9EB34556DL;
-		return x ^ x >>> 30;
+		return x ^ x >>> 31;
 	}
 
 	@Override
@@ -317,13 +317,13 @@ public class SpryRandom extends EnhancedRandom {
 		final long c = (stateC += 0xA0F2EC75A1FE1575L);
 		final long d = (stateD += 0x89E182857D9ED689L);
 		long x = a;
-		x = b ^ (x << 17 | x >>> 47);
+		x = b ^ (x << 34 | x >>> 30);
 		x *= 0x3C79AC492BA7B653L;
 		x = c ^ (x << 31 | x >>> 33);
 		x *= 0x1C69B3F74AC4AE35L;
-		x = d ^ (x << 49 | x >>> 15);
+		x = d ^ (x << 30 | x >>> 34);
 		x *= 0xBEA225F9EB34556DL;
-		return (int)(x ^ x >>> 30) >>> (32 - bits);
+		return (int)(x ^ x >>> 31) >>> (32 - bits);
 	}
 
 	@Override

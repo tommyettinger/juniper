@@ -170,7 +170,7 @@ public class FFTVisualizer extends ApplicationAdapter {
             case 1:
                 for (int x = 0; x < width; x++) {
                     for (int y = 0; y < height; y++) {
-                        bt = (int) (-(randoms[currentRandom][x][y].nextLong() & 1L << selectedBit) >> 56) & 255;
+                        bt = (int) (-(randoms[currentRandom][x][y].nextLong() & 1L << selectedBit) >> 63) & 255;
                         real[x][y] = bt * I255;
                         renderer.color(previousGrid[x][y] = basicPrepare(bt));
                         renderer.vertex(x, y, 0);
