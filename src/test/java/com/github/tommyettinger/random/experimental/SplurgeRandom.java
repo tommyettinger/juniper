@@ -269,7 +269,7 @@ public class SplurgeRandom extends EnhancedRandom {
 		c += b ^ (b << 17 | b >>> 47) ^ (b << 34 | b >>> 30);
 		d += c ^ (c <<  5 | c >>> 59) ^ (c << 58 | c >>>  6);
 		a += d ^ (d << 47 | d >>> 17) ^ (d << 38 | d >>> 26);
-		return a;
+		return (a ^ (a << 44 | a >>> 20) ^ (a << 21 | a >>> 43));
 	}
 
 	@Override
@@ -286,7 +286,7 @@ public class SplurgeRandom extends EnhancedRandom {
 		c += b ^ (b << 17 | b >>> 47) ^ (b << 34 | b >>> 30);
 		d += c ^ (c <<  5 | c >>> 59) ^ (c << 58 | c >>>  6);
 		a += d ^ (d << 47 | d >>> 17) ^ (d << 38 | d >>> 26);
-		return a;
+		return (a ^ (a << 44 | a >>> 20) ^ (a << 21 | a >>> 43));
 	}
 
 	@Override
@@ -299,7 +299,7 @@ public class SplurgeRandom extends EnhancedRandom {
 		c += b ^ (b << 17 | b >>> 47) ^ (b << 34 | b >>> 30);
 		d += c ^ (c <<  5 | c >>> 59) ^ (c << 58 | c >>>  6);
 		a += d ^ (d << 47 | d >>> 17) ^ (d << 38 | d >>> 26);
-		return a;
+		return (a ^ (a << 44 | a >>> 20) ^ (a << 21 | a >>> 43));
 	}
 
 	@Override
@@ -312,7 +312,7 @@ public class SplurgeRandom extends EnhancedRandom {
 		c += b ^ (b << 17 | b >>> 47) ^ (b << 34 | b >>> 30);
 		d += c ^ (c <<  5 | c >>> 59) ^ (c << 58 | c >>>  6);
 		a += d ^ (d << 47 | d >>> 17) ^ (d << 38 | d >>> 26);
-		return (int)a >>> (32 - bits);
+		return (int)(a ^ (a << 44 | a >>> 20) ^ (a << 21 | a >>> 43)) >>> (32 - bits);
 	}
 
 	@Override
