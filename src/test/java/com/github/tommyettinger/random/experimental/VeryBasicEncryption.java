@@ -63,11 +63,11 @@ public class VeryBasicEncryption {
 
         // The following uses the XEX cipher in the most rudimentary way possible.
         // I am going to be quite surprised if this turns out to be secure in the way I have implemented it.
-        for (int i = 0; i < len; i++) {
+        for (int i = len - 1; i >= 0; i--) {
             target[i] ^= random.nextLong();
         }
         random.shuffle(target, 0, len);
-        for (int i = 0; i < len; i++) {
+        for (int i = len - 1; i >= 0; i--) {
             target[i] ^= random.nextLong();
         }
         return random.wrapped.stringSerialize(Base.SIMPLE64);

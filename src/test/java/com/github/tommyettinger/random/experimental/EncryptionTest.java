@@ -24,8 +24,8 @@ public class EncryptionTest {
         System.out.println(enc2);
         System.out.println(new String(data, StandardCharsets.UTF_8) + " Really?");
         System.out.println(new String(decoded, StandardCharsets.UTF_8) + " OK, dear.");
-//        Assert.assertArrayEquals(data, decoded);
-//        Assert.assertEquals(encKeys, enc2);
+        Assert.assertArrayEquals(data, decoded);
+        Assert.assertEquals(encKeys, enc2);
     }
 
 }
