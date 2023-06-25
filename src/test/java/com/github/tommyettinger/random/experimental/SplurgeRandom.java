@@ -160,17 +160,17 @@ public class SplurgeRandom extends EnhancedRandom {
 	 */
 	@Override
 	public void setSeed (long seed) {
+		seed ^= seed >>> 32;
 		stateA = seed ^ 0xC6BC279692B5C323L;
-		stateB = seed ^ ~0xC6BC279692B5C323L;
-		seed ^= seed >>> 32;
-		seed *= 0xbea225f9eb34556dL;
+		seed *= 0xBEA225F9EB34556DL;
 		seed ^= seed >>> 29;
-		seed *= 0xbea225f9eb34556dL;
+		stateB = seed ^ ~0xD3833E804F4C574BL;
+		seed *= 0xBEA225F9EB34556DL;
 		seed ^= seed >>> 32;
-		seed *= 0xbea225f9eb34556dL;
+		stateC = seed ^ 0xD3833E804F4C574BL;
+		seed *= 0xBEA225F9EB34556DL;
 		seed ^= seed >>> 29;
-		stateC = ~seed;
-		stateD = seed;
+		stateD = seed ^ ~0xC6BC279692B5C323L;
 	}
 
 	public long getStateA () {

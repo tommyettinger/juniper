@@ -168,17 +168,17 @@ public class SportyRandom extends EnhancedRandom {
 	 */
 	@Override
 	public void setSeed (long seed) {
+		seed ^= seed >>> 32;
 		stateA = seed ^ 0xC6BC279692B5C323L;
-		stateB = (seed ^ ~0xC6BC279692B5C323L) | 1L;
-		seed ^= seed >>> 32;
-		seed *= 0xbea225f9eb34556dL;
+		seed *= 0xBEA225F9EB34556DL;
 		seed ^= seed >>> 29;
-		seed *= 0xbea225f9eb34556dL;
+		stateB = (seed ^ ~0xD3833E804F4C574BL) | 1L;
+		seed *= 0xBEA225F9EB34556DL;
 		seed ^= seed >>> 32;
-		seed *= 0xbea225f9eb34556dL;
+		stateC = (seed ^ 0xD3833E804F4C574BL) | 1L;
+		seed *= 0xBEA225F9EB34556DL;
 		seed ^= seed >>> 29;
-		stateC = ~seed | 1L;
-		stateD = seed | 1L;
+		stateD = (seed ^ ~0xC6BC279692B5C323L) | 1L;
 	}
 
 	public long getStateA () {
