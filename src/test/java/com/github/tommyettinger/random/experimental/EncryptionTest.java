@@ -45,5 +45,40 @@ public class EncryptionTest {
         Assert.assertArrayEquals(data, snippet);
         Assert.assertEquals(encKeys, enc2);
     }
+    @Test
+    public void testRoundTripChar() {
+        char[] data = "Oh, so now you think you're a cryptographer, do you now?".toCharArray();
+        int len = data.length;
+        char[] encoded = new char[len], decoded = new char[len];
+        String encKeys = new AceRandom(123456789L).stringSerialize(Base.SIMPLE64);
+        String decKeys = VeryBasicEncryption.encrypt(data, encoded, encKeys);
+        System.out.println();
+        System.out.println(encoded);
+        System.out.println();
+        String enc2 =    VeryBasicEncryption.decrypt(encoded, decoded, decKeys);
+        System.out.println(String.valueOf(data) + " Really?");
+        System.out.println(String.valueOf(decoded) + " OK, dear.");
+        Assert.assertArrayEquals(data, decoded);
+        Assert.assertEquals(encKeys, enc2);
+    }
+
+    @Test
+    public void testWorstCase() {
+        char[] data = "MAD".toCharArray();
+        int len = data.length;
+        char[] encoded = new char[len], decoded = new char[len];
+        String encKeys = new AceRandom(0L, 0L, 0L, 0L, 0L).stringSerialize(Base.SIMPLE64);
+        System.out.println(encKeys);
+        String decKeys = VeryBasicEncryption.encrypt(data, encoded, encKeys);
+        System.out.println(decKeys);
+        System.out.println();
+        System.out.println(encoded);
+        System.out.println();
+        String enc2 =    VeryBasicEncryption.decrypt(encoded, decoded, decKeys);
+        System.out.println(String.valueOf(data) + ". Billie, why are you mad?");
+        System.out.println(String.valueOf(decoded) + ". Are you mad at me because I washed your toy?");
+        Assert.assertArrayEquals(data, decoded);
+        Assert.assertEquals(encKeys, enc2);
+    }
 
 }
