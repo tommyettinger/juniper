@@ -137,11 +137,10 @@ public class SpeckCipher {
 
     public static void encryptCBC(long k1, long k2, long k3, long k4, long iv1, long iv2,
                            long[] plaintext, int plainOffset, long[] ciphertext, int cipherOffset, int textLength) {
-        int blocks = textLength >> 4, i = 0;
-        // This will probably be needed when encrypting byte arrays and not long arrays.
-//        final int blockSize = 16;
-//        byte padding = (byte) (blockSize - (textLength - blocks * blockSize));
-//        if(padding == 0) padding = blockSize;
+        int blocks = textLength + 1 >> 1, i = 0;
+        final int blockSize = 16;
+        long padding = (blockSize - (((long)textLength << 3) - (long) blocks * blockSize));
+        if(padding == 0) padding = blockSize;
         long[] kx = expandKey(k1, k2, k3, k4);
         long last0 = iv2, last1 = iv1;
         do {
@@ -152,9 +151,14 @@ public class SpeckCipher {
             cipherOffset+=2;
             i++;
         } while(i < blocks);
-        last0 ^= 0x1010101010101010L;
-        last1 ^= 0x1010101010101010L;
-        encrypt(kx, last0, last1, null, 0, ciphertext, cipherOffset);
+//        long b = blockSize - 1;
+//        for (; b >= 8 && blockSize - padding <= b; b--) {
+//            last1 ^= padding << (b - 8 << 3);
+//        }
+//        for (; b >= 0; b--) {
+//            last0 ^= padding << (b << 3);
+//        }
+//        encrypt(kx, last0, last1, null, 0, ciphertext, cipherOffset);
 
     }
 
@@ -203,8 +207,7 @@ size_t speck_128_256_cbc_encrypt(uint64_t k1, uint64_t k2, uint64_t k3, uint64_t
 
     public static void decryptCBC(long k1, long k2, long k3, long k4, long iv1, long iv2,
                            long[] plaintext, int plainOffset, long[] ciphertext, int cipherOffset, int textLength) {
-        int blocks = textLength >> 4, i = 0;
-        // This will probably be needed when encrypting byte arrays and not long arrays.
+        int blocks = textLength + 1 >> 1, i = 0;
 //        final int blockSize = 16;
 //        byte padding = (byte) (blockSize - (textLength - blocks * blockSize));
 //        if(padding == 0) padding = blockSize;

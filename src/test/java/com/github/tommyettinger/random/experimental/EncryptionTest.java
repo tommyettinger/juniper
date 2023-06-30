@@ -84,19 +84,20 @@ public class EncryptionTest {
     @Test
     public void testSpeck() {
         long k1 = 12, k2 = 34, k3 = 56, k4 = 78, iv1 = 1234567890987654321L, iv2 = -98765432123456789L;
-        long[] plain = new long[]{0, 1, 1, 2, 3, 5, 8, 13, 21, 34};
-        long[] cipher = new long[plain.length + 2];
+        long[] plain = new long[]{0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 0};
+        long[] cipher = new long[plain.length];
+        Arrays.fill(cipher, -1);
         System.out.println("ENCRYPT");
         System.out.println("plain before : " + Base.BASE10.join(", ", plain));
         System.out.println("cipher before: " + Base.BASE10.join(", ", cipher));
-        SpeckCipher.encryptCBC(k1, k2, k3, k4, iv1, iv2, plain, 0, cipher, 0, plain.length);
+        SpeckCipher.encryptCBC(k1, k2, k3, k4, iv1, iv2, plain, 0, cipher, 0, 11);
         System.out.println("plain after  : " + Base.BASE10.join(", ", plain));
         System.out.println("cipher after : " + Base.BASE10.join(", ", cipher));
         System.out.println("DECRYPT");
-        Arrays.fill(plain, 0);
+        Arrays.fill(plain, -1);
         System.out.println("plain before : " + Base.BASE10.join(", ", plain));
         System.out.println("cipher before: " + Base.BASE10.join(", ", cipher));
-        SpeckCipher.decryptCBC(k1, k2, k3, k4, iv1, iv2, plain, 0, cipher, 0, plain.length);
+        SpeckCipher.decryptCBC(k1, k2, k3, k4, iv1, iv2, plain, 0, cipher, 0, 11);
         System.out.println("plain after  : " + Base.BASE10.join(", ", plain));
         System.out.println("cipher after : " + Base.BASE10.join(", ", cipher));
 
