@@ -1,5 +1,7 @@
 package com.github.tommyettinger.random.experimental;
 
+import java.util.Arrays;
+
 /**
  * This is probably a bad idea to use; not only do I have very little faith in my implementation's accuracy, even
  * an accurate implementation would be specified by The United States of America's NSA, making it untrustworthy.
@@ -67,16 +69,22 @@ public class SpeckCipher {
 
     public static void encrypt(long[] key, long last0, long last1, long[] plaintext, int plainOffset, long[] ciphertext, int cipherOffset) {
         if(ciphertext == null || key == null || key.length < 34
-                || (plaintext != null && plaintext.length - plainOffset < 2)
+//                || (plaintext != null && plaintext.length - plainOffset < 2)
                 || ciphertext.length - cipherOffset < 2)
             throw new IllegalArgumentException("Invalid encryption arguments");
         long b0, b1;
         if(plaintext == null){
             b0 = last0;
             b1 = last1;
-        } else {
+        } else if(plaintext.length - plainOffset >= 2) {
             b0 = plaintext[plainOffset + 1] ^ last1;
             b1 = plaintext[plainOffset] ^ last0;
+        } else if(plaintext.length - plainOffset >= 1) {
+            b0 = last1;
+            b1 = plaintext[plainOffset] ^ last0;
+        } else {
+            b0 = last1;
+            b1 = last0;
         }
         for (int i = 0; i < 34; i++) {
             b1 = (b1 << 56 | b1 >>> 8) + b0 ^ key[i];
@@ -102,7 +110,7 @@ public class SpeckCipher {
 
     public static void decrypt(long[] key, long[] plaintext, int plainOffset, long[] ciphertext, int cipherOffset) {
         if(plaintext == null || ciphertext == null || key == null || key.length < 34
-                || plaintext.length - plainOffset < 2
+//                || plaintext.length - plainOffset < 2
                 || ciphertext.length - cipherOffset < 2)
             throw new IllegalArgumentException("Invalid decryption arguments");
         long b0, b1, item;
@@ -115,7 +123,8 @@ public class SpeckCipher {
             b1 = (item << 8 | item >>> 56);
         }
         plaintext[plainOffset] = b1;
-        plaintext[plainOffset + 1] = b0;
+        if(plainOffset + 1 < plaintext.length)
+            plaintext[plainOffset + 1] = b0;
     }
 
     /*
@@ -140,7 +149,8 @@ public class SpeckCipher {
         int blocks = textLength + 1 >> 1, i = 0;
         final int blockSize = 16;
         long padding = (blockSize - (((long)textLength << 3) - (long) blocks * blockSize));
-        if(padding == 0) padding = blockSize;
+//        if(padding == 0)
+//            padding = blockSize;
         long[] kx = expandKey(k1, k2, k3, k4);
         long last0 = iv2, last1 = iv1;
         do {
@@ -216,7 +226,8 @@ size_t speck_128_256_cbc_encrypt(uint64_t k1, uint64_t k2, uint64_t k3, uint64_t
         do {
             decrypt(kx, plaintext, plainOffset, ciphertext, cipherOffset);
             plaintext[plainOffset] ^= last0;
-            plaintext[plainOffset + 1] ^= last1;
+            if(plainOffset + 1 < textLength)
+                plaintext[plainOffset + 1] ^= last1;
             last0 = ciphertext[cipherOffset];
             last1 = ciphertext[cipherOffset + 1];
             plainOffset += 2;
