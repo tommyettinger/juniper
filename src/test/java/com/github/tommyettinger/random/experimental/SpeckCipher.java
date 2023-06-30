@@ -38,7 +38,7 @@ public class SpeckCipher {
             k[c] = tk[0];
         }
         return k;
-
+    }
         /*
   uint64_t * speck_expand_key_128_256(uint64_t k1, uint64_t k2, uint64_t k3, uint64_t k4)
   {
@@ -63,5 +63,31 @@ public class SpeckCipher {
       return k;
   }
          */
+
+
+    public long[] encrypt(long[] key, long[] plaintext, long[] ciphertext) {
+        long b0 = plaintext[1], b1 = plaintext[0];
+        for (int i = 0; i < 34; i++) {
+            b1 = (b1 << 56 | b1 >>> 8) + b0 ^ key[i];
+            b0 = (b0 << 3 | b0 >>> 61) ^ b1;
+        }
+        ciphertext[0] = b1;
+        ciphertext[1] = b0;
+        return ciphertext;
     }
+        /*
+    uint64_t b[2];
+    b[0] = pt[1];
+    b[1] = pt[0];
+
+    for (i=0; i<34; i++)
+    {
+        b[1] = (RR(b[1], 8, 64) + b[0]) ^ k[i];
+        b[0] = RL(b[0], 3, 64) ^ b[1];
+    }
+
+    ct[0] = b[1];
+    ct[1] = b[0];
+         */
+
 }
