@@ -65,7 +65,7 @@ public class SpeckCipher {
          */
 
 
-    public void encrypt(long[] key, long last0, long last1, long[] plaintext, int plainOffset, long[] ciphertext, int cipherOffset) {
+    public static void encrypt(long[] key, long last0, long last1, long[] plaintext, int plainOffset, long[] ciphertext, int cipherOffset) {
         if(ciphertext == null || key == null || key.length < 34
                 || (plaintext != null && plaintext.length - plainOffset < 2)
                 || ciphertext.length - cipherOffset < 2)
@@ -100,7 +100,7 @@ public class SpeckCipher {
     ct[1] = b[0];
          */
 
-    public void decrypt(long[] key, long[] plaintext, int plainOffset, long[] ciphertext, int cipherOffset) {
+    public static void decrypt(long[] key, long[] plaintext, int plainOffset, long[] ciphertext, int cipherOffset) {
         if(plaintext == null || ciphertext == null || key == null || key.length < 34
                 || plaintext.length - plainOffset < 2
                 || ciphertext.length - cipherOffset < 2)
@@ -135,7 +135,7 @@ public class SpeckCipher {
     pt[1] = b[0];
      */
 
-    public void encryptCBC(long k1, long k2, long k3, long k4, long iv1, long iv2,
+    public static void encryptCBC(long k1, long k2, long k3, long k4, long iv1, long iv2,
                            long[] plaintext, int plainOffset, long[] ciphertext, int cipherOffset, int textLength) {
         int blocks = textLength >> 4, i = 0;
         // This will probably be needed when encrypting byte arrays and not long arrays.
@@ -201,7 +201,7 @@ size_t speck_128_256_cbc_encrypt(uint64_t k1, uint64_t k2, uint64_t k3, uint64_t
 }
      */
 
-    public void decryptCBC(long k1, long k2, long k3, long k4, long iv1, long iv2,
+    public static void decryptCBC(long k1, long k2, long k3, long k4, long iv1, long iv2,
                            long[] plaintext, int plainOffset, long[] ciphertext, int cipherOffset, int textLength) {
         int blocks = textLength >> 4, i = 0;
         // This will probably be needed when encrypting byte arrays and not long arrays.
