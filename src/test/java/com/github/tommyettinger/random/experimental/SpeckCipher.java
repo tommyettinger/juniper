@@ -135,8 +135,6 @@ public class SpeckCipher {
     pt[1] = b[0];
      */
 
-
-
     public void encryptCBC(long k1, long k2, long k3, long k4, long iv1, long iv2,
                            long[] plaintext, int plainOffset, long[] ciphertext, int cipherOffset, int textLength) {
         int blocks = textLength >> 4, i = 0;
@@ -200,6 +198,70 @@ size_t speck_128_256_cbc_encrypt(uint64_t k1, uint64_t k2, uint64_t k3, uint64_t
 
     free(kx);
     return (i * block_size);
+}
+     */
+
+    public void decryptCBC(long k1, long k2, long k3, long k4, long iv1, long iv2,
+                           long[] plaintext, int plainOffset, long[] ciphertext, int cipherOffset, int textLength) {
+        int blocks = textLength >> 4, i = 0;
+        // This will probably be needed when encrypting byte arrays and not long arrays.
+//        final int blockSize = 16;
+//        byte padding = (byte) (blockSize - (textLength - blocks * blockSize));
+//        if(padding == 0) padding = blockSize;
+        long[] kx = expandKey(k1, k2, k3, k4);
+        long last0 = iv2, last1 = iv1;
+        do {
+            decrypt(kx, plaintext, plainOffset, ciphertext, cipherOffset);
+            plaintext[plainOffset] ^= last0;
+            plaintext[plainOffset + 1] ^= last1;
+            last0 = ciphertext[cipherOffset];
+            last1 = ciphertext[cipherOffset + 1];
+            plainOffset += 2;
+            cipherOffset += 2;
+            i++;
+        } while (i < blocks);
+        // ignore padding for now.
+    }
+
+    /*
+size_t speck_128_256_cbc_decrypt(uint64_t k1, uint64_t k2, uint64_t k3, uint64_t k4, uint64_t iv1, uint64_t iv2, void * ciphertext, void * plaintext, size_t length)
+{
+    size_t i = 0;
+    int block_size = sizeof(uint64_t) * 2;
+    size_t blocks = length / block_size;
+    uint8_t padding_bytes;
+    uint64_t * kx = speck_expand_key_128_256(k1, k2, k3, k4);
+    uint64_t last[2];
+    uint64_t x[2];
+    last[0] = iv2;
+    last[1] = iv1;
+    uint64_t * pt = (uint64_t *) plaintext;
+    uint64_t * ct = (uint64_t *) ciphertext;
+    do
+    {
+        speck_decrypt_128_256(kx, ct, x);
+        xor128(pt, x, last);
+        last[0] = ct[0];
+        last[1] = ct[1];
+        ct+=2;
+        pt+=2;
+        i++;
+    } while (i < blocks);
+
+    free(kx);
+
+    // Check for padding bytes
+    uint8_t * pt_bytes = (uint8_t *) plaintext;
+    padding_bytes = pt_bytes[i * block_size -1];
+    if (padding_bytes > block_size) return 0;
+    int j;
+    for (j=0; j<padding_bytes; j++) if (pt_bytes[i * block_size -1 - j] != padding_bytes)
+    {
+        // Error in padding
+        return 0;
+    }
+
+    return (i * block_size - padding_bytes);
 }
      */
 }
