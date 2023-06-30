@@ -65,12 +65,19 @@ public class SpeckCipher {
          */
 
 
-    public void encrypt(long[] key, long[] plaintext, int plainOffset, long[] ciphertext, int cipherOffset) {
-        if(plaintext == null || ciphertext == null || key == null || key.length < 34
-                || plaintext.length - plainOffset < 2
+    public void encrypt(long[] key, long last0, long last1, long[] plaintext, int plainOffset, long[] ciphertext, int cipherOffset) {
+        if(ciphertext == null || key == null || key.length < 34
+                || (plaintext != null && plaintext.length - plainOffset < 2)
                 || ciphertext.length - cipherOffset < 2)
             throw new IllegalArgumentException("Invalid encryption arguments");
-        long b0 = plaintext[plainOffset + 1], b1 = plaintext[plainOffset];
+        long b0, b1;
+        if(plaintext == null){
+            b0 = last0;
+            b1 = last1;
+        } else {
+            b0 = plaintext[plainOffset + 1] ^ last1;
+            b1 = plaintext[plainOffset] ^ last0;
+        }
         for (int i = 0; i < 34; i++) {
             b1 = (b1 << 56 | b1 >>> 8) + b0 ^ key[i];
             b0 = (b0 << 3 | b0 >>> 61) ^ b1;
@@ -126,5 +133,73 @@ public class SpeckCipher {
 
     pt[0] = b[1];
     pt[1] = b[0];
+     */
+
+
+
+    public void encryptCBC(long k1, long k2, long k3, long k4, long iv1, long iv2,
+                           long[] plaintext, int plainOffset, long[] ciphertext, int cipherOffset, int textLength) {
+        int blocks = textLength >> 4, i = 0;
+        // This will probably be needed when encrypting byte arrays and not long arrays.
+//        final int blockSize = 16;
+//        byte padding = (byte) (blockSize - (textLength - blocks * blockSize));
+//        if(padding == 0) padding = blockSize;
+        long[] kx = expandKey(k1, k2, k3, k4);
+        long last0 = iv2, last1 = iv1;
+        do {
+            encrypt(kx, last0, last1, plaintext, plainOffset, ciphertext, cipherOffset);
+            last0 = ciphertext[cipherOffset];
+            last1 = ciphertext[cipherOffset+1];
+            plainOffset+=2;
+            cipherOffset+=2;
+            i++;
+        } while(i < blocks);
+        last0 ^= 0x1010101010101010L;
+        last1 ^= 0x1010101010101010L;
+        encrypt(kx, last0, last1, null, 0, ciphertext, cipherOffset);
+
+    }
+
+    /*
+
+size_t speck_128_256_cbc_encrypt(uint64_t k1, uint64_t k2, uint64_t k3, uint64_t k4, uint64_t iv1, uint64_t iv2, void * plaintext, void * ciphertext, size_t length)
+{
+    size_t i = 0;
+    int block_size = sizeof(uint64_t) * 2;
+    size_t blocks = length / block_size;
+    uint8_t padding_bytes = (int) (block_size - (length - blocks * block_size));
+    if (padding_bytes == 0) padding_bytes = block_size;
+    uint64_t * kx = speck_expand_key_128_256(k1, k2, k3, k4);
+    uint64_t last[2];
+    uint64_t x[2];
+    last[0] = iv2;
+    last[1] = iv1;
+    uint64_t last_block[2];
+    uint8_t * last_block_bytes = (uint8_t *) &last_block;
+    uint64_t * pt = (uint64_t *) plaintext;
+    uint64_t * ct = (uint64_t *) ciphertext;
+    do
+    {
+        xor128(x, pt, last);
+        speck_encrypt_128_256(kx, x, ct);
+        last[0] = ct[0];
+        last[1] = ct[1];
+        ct+=2;
+        pt+=2;
+        i++;
+    } while (i < blocks);
+
+    // Create last padded block
+    pt = (uint64_t *) plaintext;
+    memcpy(&last_block, &pt[i*2], block_size - padding_bytes);
+    memset(&last_block_bytes[block_size - padding_bytes], (uint8_t) padding_bytes, padding_bytes);
+
+    xor128(x, last_block, last);
+    speck_encrypt_128_256(kx, x, ct);
+    i++;
+
+    free(kx);
+    return (i * block_size);
+}
      */
 }
