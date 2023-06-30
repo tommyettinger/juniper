@@ -65,19 +65,18 @@ public class SpeckCipher {
          */
 
 
-    public long[] encrypt(long[] key, long[] plaintext, long[] ciphertext) {
+    public void encrypt(long[] key, long[] plaintext, int plainOffset, long[] ciphertext, int cipherOffset) {
         if(plaintext == null || ciphertext == null || key == null || key.length < 34
-                || ciphertext.length < 2) throw new IllegalArgumentException("Invalid encryption arguments");
-        long b0 = 0, b1 = 0;
-        if(plaintext.length > 0) b1 = plaintext[0];
-        if(plaintext.length > 1) b0 = plaintext[1];
+                || plaintext.length - plainOffset < 2
+                || ciphertext.length - cipherOffset < 2)
+            throw new IllegalArgumentException("Invalid encryption arguments");
+        long b0 = plaintext[plainOffset + 1], b1 = plaintext[plainOffset];
         for (int i = 0; i < 34; i++) {
             b1 = (b1 << 56 | b1 >>> 8) + b0 ^ key[i];
             b0 = (b0 << 3 | b0 >>> 61) ^ b1;
         }
-        ciphertext[0] = b1;
-        ciphertext[1] = b0;
-        return ciphertext;
+        ciphertext[cipherOffset] = b1;
+        ciphertext[cipherOffset + 1] = b0;
     }
         /*
     uint64_t b[2];
@@ -94,21 +93,22 @@ public class SpeckCipher {
     ct[1] = b[0];
          */
 
-    public long[] decrypt(long[] key, long[] plaintext, long[] ciphertext) {
+    public void decrypt(long[] key, long[] plaintext, int plainOffset, long[] ciphertext, int cipherOffset) {
         if(plaintext == null || ciphertext == null || key == null || key.length < 34
-                || ciphertext.length < 2) throw new IllegalArgumentException("Invalid decryption arguments");
+                || plaintext.length - plainOffset < 2
+                || ciphertext.length - cipherOffset < 2)
+            throw new IllegalArgumentException("Invalid decryption arguments");
         long b0, b1, item;
-        b1 = ciphertext[0];
-        b0 = ciphertext[1];
+        b1 = ciphertext[cipherOffset];
+        b0 = ciphertext[cipherOffset + 1];
         for (int i = 33; i >= 0; i--) {
             item = b0 ^ b1;
             b0 = (item << 61 | item >>> 3);
             item = (b1 ^ key[i]) - b0;
             b1 = (item << 8 | item >>> 56);
         }
-        plaintext[0] = b1;
-        plaintext[1] = b0;
-        return plaintext;
+        plaintext[plainOffset] = b1;
+        plaintext[plainOffset + 1] = b0;
     }
 
     /*
