@@ -66,7 +66,11 @@ public class SpeckCipher {
 
 
     public long[] encrypt(long[] key, long[] plaintext, long[] ciphertext) {
-        long b0 = plaintext[1], b1 = plaintext[0];
+        if(plaintext == null || ciphertext == null || key == null || key.length < 34
+                || ciphertext.length < 2) throw new IllegalArgumentException("Invalid encryption arguments");
+        long b0 = 0, b1 = 0;
+        if(plaintext.length > 0) b1 = plaintext[0];
+        if(plaintext.length > 1) b0 = plaintext[1];
         for (int i = 0; i < 34; i++) {
             b1 = (b1 << 56 | b1 >>> 8) + b0 ^ key[i];
             b0 = (b0 << 3 | b0 >>> 61) ^ b1;
@@ -90,4 +94,37 @@ public class SpeckCipher {
     ct[1] = b[0];
          */
 
+    public long[] decrypt(long[] key, long[] plaintext, long[] ciphertext) {
+        if(plaintext == null || ciphertext == null || key == null || key.length < 34
+                || ciphertext.length < 2) throw new IllegalArgumentException("Invalid decryption arguments");
+        long b0, b1, item;
+        b1 = ciphertext[0];
+        b0 = ciphertext[1];
+        for (int i = 33; i >= 0; i--) {
+            item = b0 ^ b1;
+            b0 = (item << 61 | item >>> 3);
+            item = (b1 ^ key[i]) - b0;
+            b1 = (item << 8 | item >>> 56);
+        }
+        plaintext[0] = b1;
+        plaintext[1] = b0;
+        return plaintext;
+    }
+
+    /*
+    uint64_t b[2];
+    b[0] = ct[1];
+    b[1] = ct[0];
+
+    for (i=34; i>0; i--)
+    {
+        b[0] = b[0] ^ b[1];
+        b[0] = RR(b[0], 3, 64);
+        b[1] = (b[1] ^ k[i-1]) - b[0];
+        b[1] = RL(b[1], 8, 64);
+    }
+
+    pt[0] = b[1];
+    pt[1] = b[0];
+     */
 }
