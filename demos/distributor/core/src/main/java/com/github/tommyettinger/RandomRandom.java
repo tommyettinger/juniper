@@ -21,6 +21,13 @@ import com.github.tommyettinger.random.EnhancedRandom;
 
 import java.util.Random;
 
+/**
+ * An EnhancedRandom that simply wraps a {@link Random} instance.
+ * Note that {@link #copy()} does not actually copy this.
+ * {@link #getSelectedState(int)}, {@link #setSelectedState(int, long)},
+ * and all other methods that handle the state directly will throw an
+ * UnsupportedOperationException.
+ */
 public class RandomRandom extends EnhancedRandom {
     public Random base = new Random();
 
