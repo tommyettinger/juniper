@@ -8,9 +8,42 @@ import java.util.Arrays;
  * It should be fast, though.
  * <br>
  * The implementation here is based on <a href="https://github.com/m2mi/open_speck/blob/master/open-speck/src/main/c/speck.c">m2mi's open_speck C code</a>,
- * which is licensed under Apache 2.0.
+ * which is licensed under Apache 2.0. Though the m2mi implementation seems to use some form of PKCS#7 for padding, it
+ * encrypts the last block but doesn't decrypt it, so I think it may only work when a full block of padding is written,
+ * validated and ignored. That is, if it works at all! This version uses zero-padding instead, and works even if a
+ * partial block is all there is in the plaintext.
  */
-public class SpeckCipher {
+public final class SpeckCipher {
+
+    private SpeckCipher() {
+    }
+
+    private static long fromBytes(byte[] bytes, int index) {
+        return (bytes[index]   & 255L)
+             | (bytes[index+1] & 255L) <<  8
+             | (bytes[index+2] & 255L) << 16
+             | (bytes[index+3] & 255L) << 24
+             | (bytes[index+4] & 255L) << 32
+             | (bytes[index+5] & 255L) << 40
+             | (bytes[index+6] & 255L) << 48
+             | (bytes[index+7] & 255L) << 56;
+    }
+
+    private static void intoBytes(byte[] bytes, int index, long data) {
+        bytes[index]   = (byte) data;
+        bytes[index+1] = (byte) (data >>> 8);
+        bytes[index+2] = (byte) (data >>> 16);
+        bytes[index+3] = (byte) (data >>> 24);
+        bytes[index+4] = (byte) (data >>> 32);
+        bytes[index+5] = (byte) (data >>> 40);
+        bytes[index+6] = (byte) (data >>> 48);
+        bytes[index+7] = (byte) (data >>> 56);
+    }
+
+    public static byte[] pad(byte[] data) {
+        if((data.length & 15) == 0) return data;
+        return Arrays.copyOfRange(data, 0, data.length + 15 & -16);
+    }
 
     public static long[] expandKey(long k1, long k2, long k3, long k4) {
         long item;
@@ -93,6 +126,27 @@ public class SpeckCipher {
         ciphertext[cipherOffset] = b1;
         ciphertext[cipherOffset + 1] = b0;
     }
+
+    public static void encrypt(long[] key, long last0, long last1, byte[] plaintext, int plainOffset, byte[] ciphertext, int cipherOffset) {
+        if(ciphertext == null || key == null || key.length < 34
+                || (plaintext != null && plaintext.length - plainOffset < 16)
+                || ciphertext.length - cipherOffset < 16)
+            throw new IllegalArgumentException("Invalid encryption arguments");
+        long b0, b1;
+        if(plaintext == null){
+            b0 = last0;
+            b1 = last1;
+        } else {
+            b0 = fromBytes(plaintext, plainOffset + 8) ^ last1;
+            b1 = fromBytes(plaintext, plainOffset) ^ last0;
+        }
+        for (int i = 0; i < 34; i++) {
+            b1 = (b1 << 56 | b1 >>> 8) + b0 ^ key[i];
+            b0 = (b0 << 3 | b0 >>> 61) ^ b1;
+        }
+        intoBytes(ciphertext, cipherOffset, b1);
+        intoBytes(ciphertext, cipherOffset + 8, b0);
+    }
         /*
     uint64_t b[2];
     b[0] = pt[1];
@@ -146,9 +200,9 @@ public class SpeckCipher {
 
     public static void encryptCBC(long k1, long k2, long k3, long k4, long iv1, long iv2,
                            long[] plaintext, int plainOffset, long[] ciphertext, int cipherOffset, int textLength) {
-        int blocks = textLength + 1 >> 1, i = 0;
-        final int blockSize = 16;
-        long padding = (blockSize - (((long)textLength << 3) - (long) blocks * blockSize));
+        int blocks = textLength + 1 >>> 1, i = 0;
+//        final int blockSize = 16;
+//        long padding = (blockSize - (((long)textLength << 3) - (long) blocks * blockSize));
 //        if(padding == 0)
 //            padding = blockSize;
         long[] kx = expandKey(k1, k2, k3, k4);
@@ -157,6 +211,36 @@ public class SpeckCipher {
             encrypt(kx, last0, last1, plaintext, plainOffset, ciphertext, cipherOffset);
             last0 = ciphertext[cipherOffset];
             last1 = ciphertext[cipherOffset+1];
+            plainOffset+=2;
+            cipherOffset+=2;
+            i++;
+        } while(i < blocks);
+//        long b = blockSize - 1;
+//        for (; b >= 8 && blockSize - padding <= b; b--) {
+//            last1 ^= padding << (b - 8 << 3);
+//        }
+//        for (; b >= 0; b--) {
+//            last0 ^= padding << (b << 3);
+//        }
+//        encrypt(kx, last0, last1, null, 0, ciphertext, cipherOffset);
+
+    }
+
+    public static void encryptCBC(long k1, long k2, long k3, long k4, long iv1, long iv2,
+                           byte[] plaintext, int plainOffset, byte[] ciphertext, int cipherOffset, int textLength) {
+        if((textLength & 15) != 0) throw new UnsupportedOperationException("textLength must be a multiple of 16");
+        int blocks = textLength >>> 4, i = 0;
+//        final int blockSize = 16;
+//        long padding = (blockSize - (((long)textLength << 3) - (long) blocks * blockSize));
+//        if(padding == 0)
+//            padding = blockSize;
+        long[] kx = expandKey(k1, k2, k3, k4);
+        long last0 = iv2, last1 = iv1;
+        do {
+            encrypt(kx, last0, last1, plaintext, plainOffset, ciphertext, cipherOffset);
+            last0 = fromBytes(ciphertext, cipherOffset + 8);
+            last1 = fromBytes(ciphertext, cipherOffset);
+            
             plainOffset+=2;
             cipherOffset+=2;
             i++;
@@ -217,7 +301,7 @@ size_t speck_128_256_cbc_encrypt(uint64_t k1, uint64_t k2, uint64_t k3, uint64_t
 
     public static void decryptCBC(long k1, long k2, long k3, long k4, long iv1, long iv2,
                            long[] plaintext, int plainOffset, long[] ciphertext, int cipherOffset, int textLength) {
-        int blocks = textLength + 1 >> 1, i = 0;
+        int blocks = textLength + 1 >>> 1, i = 0;
 //        final int blockSize = 16;
 //        byte padding = (byte) (blockSize - (textLength - blocks * blockSize));
 //        if(padding == 0) padding = blockSize;
