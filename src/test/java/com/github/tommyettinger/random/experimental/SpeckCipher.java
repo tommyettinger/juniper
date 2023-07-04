@@ -240,7 +240,7 @@ public final class SpeckCipher {
             encrypt(kx, last0, last1, plaintext, plainOffset, ciphertext, cipherOffset);
             last0 = fromBytes(ciphertext, cipherOffset + 8);
             last1 = fromBytes(ciphertext, cipherOffset);
-            
+
             plainOffset+=2;
             cipherOffset+=2;
             i++;
