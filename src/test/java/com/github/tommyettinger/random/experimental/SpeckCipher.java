@@ -19,25 +19,25 @@ public final class SpeckCipher {
     }
 
     private static long fromBytes(byte[] bytes, int index) {
-        return (bytes[index]   & 255L)
-             | (bytes[index+1] & 255L) <<  8
-             | (bytes[index+2] & 255L) << 16
-             | (bytes[index+3] & 255L) << 24
-             | (bytes[index+4] & 255L) << 32
-             | (bytes[index+5] & 255L) << 40
-             | (bytes[index+6] & 255L) << 48
-             | (bytes[index+7] & 255L) << 56;
+        return (bytes[index+7] & 255L)
+             | (bytes[index+6] & 255L) <<  8
+             | (bytes[index+5] & 255L) << 16
+             | (bytes[index+4] & 255L) << 24
+             | (bytes[index+3] & 255L) << 32
+             | (bytes[index+2] & 255L) << 40
+             | (bytes[index+1] & 255L) << 48
+             | (bytes[index  ] & 255L) << 56;
     }
 
     private static void intoBytes(byte[] bytes, int index, long data) {
-        bytes[index]   = (byte) data;
-        bytes[index+1] = (byte) (data >>> 8);
-        bytes[index+2] = (byte) (data >>> 16);
-        bytes[index+3] = (byte) (data >>> 24);
-        bytes[index+4] = (byte) (data >>> 32);
-        bytes[index+5] = (byte) (data >>> 40);
-        bytes[index+6] = (byte) (data >>> 48);
-        bytes[index+7] = (byte) (data >>> 56);
+        bytes[index+7] = (byte) data;
+        bytes[index+6] = (byte) (data >>>  8);
+        bytes[index+5] = (byte) (data >>> 16);
+        bytes[index+4] = (byte) (data >>> 24);
+        bytes[index+3] = (byte) (data >>> 32);
+        bytes[index+2] = (byte) (data >>> 40);
+        bytes[index+1] = (byte) (data >>> 48);
+        bytes[index  ] = (byte) (data >>> 56);
     }
 
     public static byte[] pad(byte[] data) {
@@ -238,11 +238,11 @@ public final class SpeckCipher {
         long last0 = iv2, last1 = iv1;
         do {
             encrypt(kx, last0, last1, plaintext, plainOffset, ciphertext, cipherOffset);
-            last0 = fromBytes(ciphertext, cipherOffset + 8);
-            last1 = fromBytes(ciphertext, cipherOffset);
+            last0 = fromBytes(ciphertext, cipherOffset);
+            last1 = fromBytes(ciphertext, cipherOffset + 8);
 
-            plainOffset+=2;
-            cipherOffset+=2;
+            plainOffset+=16;
+            cipherOffset+=16;
             i++;
         } while(i < blocks);
 //        long b = blockSize - 1;
