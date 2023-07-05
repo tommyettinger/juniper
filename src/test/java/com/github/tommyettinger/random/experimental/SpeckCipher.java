@@ -40,6 +40,17 @@ public final class SpeckCipher {
         bytes[index  ] = (byte) (data >>> 56);
     }
 
+    private static void xorIntoBytes(byte[] bytes, int index, long data) {
+        bytes[index+7] ^= (byte) data;
+        bytes[index+6] ^= (byte) (data >>>  8);
+        bytes[index+5] ^= (byte) (data >>> 16);
+        bytes[index+4] ^= (byte) (data >>> 24);
+        bytes[index+3] ^= (byte) (data >>> 32);
+        bytes[index+2] ^= (byte) (data >>> 40);
+        bytes[index+1] ^= (byte) (data >>> 48);
+        bytes[index  ] ^= (byte) (data >>> 56);
+    }
+
     public static byte[] pad(byte[] data) {
         if((data.length & 15) == 0) return data;
         return Arrays.copyOfRange(data, 0, data.length + 15 & -16);
@@ -379,4 +390,26 @@ size_t speck_128_256_cbc_decrypt(uint64_t k1, uint64_t k2, uint64_t k3, uint64_t
     return (i * block_size - padding_bytes);
 }
      */
+
+    public static void decryptCBC(long k1, long k2, long k3, long k4, long iv1, long iv2,
+                                  byte[] plaintext, int plainOffset, byte[] ciphertext, int cipherOffset, int textLength) {
+        if((textLength & 15) != 0) throw new UnsupportedOperationException("textLength must be a multiple of 16");
+        int blocks = textLength >>> 4, i = 0;
+//        final int blockSize = 16;
+//        byte padding = (byte) (blockSize - (textLength - blocks * blockSize));
+//        if(padding == 0) padding = blockSize;
+        long[] kx = expandKey(k1, k2, k3, k4);
+        long last0 = iv2, last1 = iv1;
+        do {
+            decrypt(kx, plaintext, plainOffset, ciphertext, cipherOffset);
+            xorIntoBytes(plaintext, plainOffset, last0);
+            xorIntoBytes(plaintext, plainOffset + 8, last1);
+            last0 = fromBytes(ciphertext, cipherOffset);
+            last1 = fromBytes(ciphertext, cipherOffset + 8);
+            plainOffset += 16;
+            cipherOffset += 16;
+            i++;
+        } while (i < blocks);
+    }
+
 }
