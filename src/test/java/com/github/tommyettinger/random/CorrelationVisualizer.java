@@ -80,6 +80,8 @@ public class CorrelationVisualizer extends ApplicationAdapter {
         rl.add(new SpryRandom(1, 1));
 //        rl.add(new SkyRandom(1, 1));
         rl.add(new ScamperRandom(1, 1));
+        rl.add(new AceRandom(1, 1, 1, 1, 1));
+        rl.add(new LaceRandom(1, 1, 1, 1, 1));
         randoms = new EnhancedRandom[rl.size()][][];
         for (int i = 0; i < randoms.length; i++) {
             randoms[i] = makeGrid(rl.get(i));
@@ -88,6 +90,7 @@ public class CorrelationVisualizer extends ApplicationAdapter {
     public int currentRandom = 0;
     public static int randomCount = randoms.length;
     public int currentMode = 0;
+    public static int frame = 0;
     public static int modeCount = 3;
 
     public static void refreshGrid() {
@@ -114,6 +117,7 @@ public class CorrelationVisualizer extends ApplicationAdapter {
                 }
             }
         }
+        frame = 0;
     }
 
 
@@ -125,6 +129,7 @@ public class CorrelationVisualizer extends ApplicationAdapter {
                 }
             }
         }
+        frame = 0;
     }
 
     private Viewport view;
@@ -145,6 +150,7 @@ public class CorrelationVisualizer extends ApplicationAdapter {
                         keepGoing = !keepGoing;
                         break;
                     case S: // step
+                        System.out.println("Frame " + frame);
                         putMap();
                         break;
                     case V: // vertical
@@ -196,6 +202,7 @@ public class CorrelationVisualizer extends ApplicationAdapter {
     }
 
     public void putMap() {
+        ++frame;
         renderer.begin(view.getCamera().combined, GL_POINTS);
         int bt;
         switch (currentMode) {
