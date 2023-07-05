@@ -189,7 +189,7 @@ public class EncryptionTest {
         System.out.println("cipher after LONG : " + join("", cipherLong));
         System.out.println("cipher after BYTE : " + join("", cipherByte));
         plainLong = new long[]{0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55};
-        plainByte = SpeckCipher.pad(new byte[]{
+        plainByte = (new byte[]{
                 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 1,
                 0, 0, 0, 0, 0, 0, 0, 1,

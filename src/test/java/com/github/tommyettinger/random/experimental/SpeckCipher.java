@@ -20,51 +20,57 @@ public final class SpeckCipher {
 
     private static long fromBytes(byte[] bytes, int index) {
         long r = 0;
-        switch (bytes.length & 7) {
-            case 0:
-                  r = (bytes[index+7] & 255L)
-                    | (bytes[index+6] & 255L) <<  8
-                    | (bytes[index+5] & 255L) << 16
-                    | (bytes[index+4] & 255L) << 24
-                    | (bytes[index+3] & 255L) << 32
-                    | (bytes[index+2] & 255L) << 40
-                    | (bytes[index+1] & 255L) << 48
-                    | (bytes[index  ] & 255L) << 56;
-                  break;
-            case 7: r |= (bytes[index+6] & 255L) <<  8;
-            case 6: r |= (bytes[index+5] & 255L) << 16;
-            case 5: r |= (bytes[index+4] & 255L) << 24;
-            case 4: r |= (bytes[index+3] & 255L) << 32;
-            case 3: r |= (bytes[index+2] & 255L) << 40;
-            case 2: r |= (bytes[index+1] & 255L) << 48;
-            case 1: r |= (bytes[index  ] & 255L) << 56;
+        if(bytes.length >= index + 8) {
+            switch (bytes.length & 7) {
+                case 0:
+                      r = (bytes[index+7] & 255L)
+                        | (bytes[index+6] & 255L) <<  8
+                        | (bytes[index+5] & 255L) << 16
+                        | (bytes[index+4] & 255L) << 24
+                        | (bytes[index+3] & 255L) << 32
+                        | (bytes[index+2] & 255L) << 40
+                        | (bytes[index+1] & 255L) << 48
+                        | (bytes[index  ] & 255L) << 56;
+                      break;
+                case 7: r |= (bytes[index+6] & 255L) <<  8;
+                case 6: r |= (bytes[index+5] & 255L) << 16;
+                case 5: r |= (bytes[index+4] & 255L) << 24;
+                case 4: r |= (bytes[index+3] & 255L) << 32;
+                case 3: r |= (bytes[index+2] & 255L) << 40;
+                case 2: r |= (bytes[index+1] & 255L) << 48;
+                case 1: r |= (bytes[index  ] & 255L) << 56;
             }
+        }
         return r;
     }
 
     private static void intoBytes(byte[] bytes, int index, long data) {
-        switch (bytes.length & 7) {
-            case 0: bytes[index + 7] = (byte) data;
-            case 7: bytes[index + 6] = (byte) (data >>> 8);
-            case 6: bytes[index + 5] = (byte) (data >>> 16);
-            case 5: bytes[index + 4] = (byte) (data >>> 24);
-            case 4: bytes[index + 3] = (byte) (data >>> 32);
-            case 3: bytes[index + 2] = (byte) (data >>> 40);
-            case 2: bytes[index + 1] = (byte) (data >>> 48);
-            case 1: bytes[index    ] = (byte) (data >>> 56);
+        if(bytes.length >= index + 8) {
+            switch (bytes.length & 7) {
+                case 0: bytes[index + 7] = (byte) data;
+                case 7: bytes[index + 6] = (byte) (data >>> 8);
+                case 6: bytes[index + 5] = (byte) (data >>> 16);
+                case 5: bytes[index + 4] = (byte) (data >>> 24);
+                case 4: bytes[index + 3] = (byte) (data >>> 32);
+                case 3: bytes[index + 2] = (byte) (data >>> 40);
+                case 2: bytes[index + 1] = (byte) (data >>> 48);
+                case 1: bytes[index    ] = (byte) (data >>> 56);
+            }
         }
     }
 
     private static void xorIntoBytes(byte[] bytes, int index, long data) {
-        switch (bytes.length & 7) {
-            case 0: bytes[index + 7] ^= (byte) data;
-            case 7: bytes[index + 6] ^= (byte) (data >>> 8);
-            case 6: bytes[index + 5] ^= (byte) (data >>> 16);
-            case 5: bytes[index + 4] ^= (byte) (data >>> 24);
-            case 4: bytes[index + 3] ^= (byte) (data >>> 32);
-            case 3: bytes[index + 2] ^= (byte) (data >>> 40);
-            case 2: bytes[index + 1] ^= (byte) (data >>> 48);
-            case 1: bytes[index    ] ^= (byte) (data >>> 56);
+        if(bytes.length >= index + 8) {
+            switch (bytes.length & 7) {
+                case 0: bytes[index + 7] ^= (byte) data;
+                case 7: bytes[index + 6] ^= (byte) (data >>> 8);
+                case 6: bytes[index + 5] ^= (byte) (data >>> 16);
+                case 5: bytes[index + 4] ^= (byte) (data >>> 24);
+                case 4: bytes[index + 3] ^= (byte) (data >>> 32);
+                case 3: bytes[index + 2] ^= (byte) (data >>> 40);
+                case 2: bytes[index + 1] ^= (byte) (data >>> 48);
+                case 1: bytes[index    ] ^= (byte) (data >>> 56);
+            }
         }
     }
 
