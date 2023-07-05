@@ -129,8 +129,8 @@ public final class SpeckCipher {
 
     public static void encrypt(long[] key, long last0, long last1, byte[] plaintext, int plainOffset, byte[] ciphertext, int cipherOffset) {
         if(ciphertext == null || key == null || key.length < 34
-                || (plaintext != null && plaintext.length - plainOffset < 16)
-                || ciphertext.length - cipherOffset < 16)
+                || (plaintext != null && (plaintext.length - plainOffset & 15) != 0)
+                || (ciphertext.length - cipherOffset & 15) != 0)
             throw new IllegalArgumentException("Invalid encryption arguments");
         long b0, b1;
         if(plaintext == null){
@@ -179,6 +179,24 @@ public final class SpeckCipher {
         plaintext[plainOffset] = b1;
         if(plainOffset + 1 < plaintext.length)
             plaintext[plainOffset + 1] = b0;
+    }
+
+    public static void decrypt(long[] key, byte[] plaintext, int plainOffset, byte[] ciphertext, int cipherOffset) {
+        if(plaintext == null || ciphertext == null || key == null || key.length < 34
+                || (plaintext.length - plainOffset & 15) != 0
+                || (ciphertext.length - cipherOffset & 15) != 0)
+            throw new IllegalArgumentException("Invalid decryption arguments");
+        long b0, b1, item;
+        b1 = fromBytes(ciphertext, cipherOffset);
+        b0 = fromBytes(ciphertext, cipherOffset + 8);
+        for (int i = 33; i >= 0; i--) {
+            item = b0 ^ b1;
+            b0 = (item << 61 | item >>> 3);
+            item = (b1 ^ key[i]) - b0;
+            b1 = (item << 8 | item >>> 56);
+        }
+        intoBytes(plaintext, plainOffset, b1);
+        intoBytes(plaintext, plainOffset + 8, b0);
     }
 
     /*
@@ -318,7 +336,6 @@ size_t speck_128_256_cbc_encrypt(uint64_t k1, uint64_t k2, uint64_t k3, uint64_t
             cipherOffset += 2;
             i++;
         } while (i < blocks);
-        // ignore padding for now.
     }
 
     /*
