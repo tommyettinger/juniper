@@ -132,7 +132,8 @@ public final class SpeckCipher {
             b0 = (b0 << 3 | b0 >>> 61) ^ b1;
         }
         ciphertext[cipherOffset] = b1;
-        ciphertext[cipherOffset + 1] = b0;
+        if(cipherOffset + 1 < ciphertext.length)
+            ciphertext[cipherOffset + 1] = b0;
     }
 
     public static void encrypt(long[] key, long last0, long last1, byte[] plaintext, int plainOffset, byte[] ciphertext, int cipherOffset) {
@@ -257,6 +258,40 @@ public final class SpeckCipher {
             cipherOffset += 16;
             i++;
         } while (i < blocks);
+    }
+
+
+    public static void encryptCTR(long k1, long k2, long k3, long k4, long nonce,
+                                  long[] plaintext, int plainOffset, long[] ciphertext, int cipherOffset, int textLength) {
+        int blocks = textLength + 1 >>> 1, i = 0;
+        long[] kx = expandKey(k1, k2, k3, k4);
+        long counter = 0L;
+        do {
+            encrypt(kx, nonce, counter++, null, 0, ciphertext, cipherOffset);
+            ciphertext[cipherOffset]   ^= plaintext[plainOffset]  ;
+            if(plainOffset + 1 < plaintext.length && cipherOffset + 1 < ciphertext.length)
+                ciphertext[cipherOffset+1] ^= plaintext[plainOffset+1];
+            plainOffset+=2;
+            cipherOffset+=2;
+            i++;
+        } while(i < blocks);
+    }
+
+    public static void encryptCTR(long k1, long k2, long k3, long k4, long nonce,
+                                  byte[] plaintext, int plainOffset, byte[] ciphertext, int cipherOffset, int textLength) {
+        int blocks = textLength + 15 >>> 4, i = 0;
+        long[] kx = expandKey(k1, k2, k3, k4);
+        long counter = 0L;
+        do {
+            encrypt(kx, nonce, counter++, null, 0, ciphertext, cipherOffset);
+
+            xorIntoBytes(ciphertext, cipherOffset, fromBytes(plaintext, plainOffset));
+            xorIntoBytes(ciphertext, cipherOffset + 8, fromBytes(plaintext, plainOffset + 8));
+
+            plainOffset+=16;
+            cipherOffset+=16;
+            i++;
+        } while(i < blocks);
     }
 
 }
