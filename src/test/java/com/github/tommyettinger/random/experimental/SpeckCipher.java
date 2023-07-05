@@ -293,5 +293,12 @@ public final class SpeckCipher {
             i++;
         } while(i < blocks);
     }
-
+    public static void decryptCTR(long k1, long k2, long k3, long k4, long nonce,
+                                  long[] plaintext, int plainOffset, long[] ciphertext, int cipherOffset, int textLength) {
+        encryptCTR(k1, k2, k3, k4, nonce, ciphertext, cipherOffset, plaintext, plainOffset, textLength);
+    }
+    public static void decryptCTR(long k1, long k2, long k3, long k4, long nonce,
+                                  byte[] plaintext, int plainOffset, byte[] ciphertext, int cipherOffset, int textLength) {
+        encryptCTR(k1, k2, k3, k4, nonce, ciphertext, cipherOffset, plaintext, plainOffset, textLength);
+    }
 }

@@ -233,4 +233,93 @@ public class EncryptionTest {
 
     }
 
+    @Test
+    public void testSpeckCTR() {
+        long k1 = 12, k2 = 34, k3 = 56, k4 = 78, nonce = 1234567890987654321L;
+        long[] plainLong = new long[]{0, 1, 1, 2, 3, 5, 8, 13, 21, 34};
+        byte[] plainByte = new byte[]{
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 1,
+                0, 0, 0, 0, 0, 0, 0, 1,
+                0, 0, 0, 0, 0, 0, 0, 2,
+                0, 0, 0, 0, 0, 0, 0, 3,
+                0, 0, 0, 0, 0, 0, 0, 5,
+                0, 0, 0, 0, 0, 0, 0, 8,
+                0, 0, 0, 0, 0, 0, 0, 13,
+                0, 0, 0, 0, 0, 0, 0, 21,
+                0, 0, 0, 0, 0, 0, 0, 34,
+        };
+        long[] cipherLong = new long[plainLong.length + 1 & -2];
+        byte[] cipherByte = new byte[plainByte.length + 15 & -16];
+        Arrays.fill(cipherLong, -1);
+        Arrays.fill(cipherByte, (byte)-1);
+        System.out.println("ENCRYPT");
+        System.out.println("plain before  LONG: " + join("", plainLong));
+        System.out.println("plain before  BYTE: " + join("", plainByte));
+        System.out.println("cipher before LONG: " + join("", cipherLong));
+        System.out.println("cipher before BYTE: " + join("", cipherByte));
+        SpeckCipher.encryptCTR(k1, k2, k3, k4, nonce, plainLong, 0, cipherLong, 0, 10);
+        SpeckCipher.encryptCTR(k1, k2, k3, k4, nonce, plainByte, 0, cipherByte, 0, 80);
+        System.out.println("plain after  LONG : " + join("", plainLong));
+        System.out.println("plain after  BYTE : " + join("", plainByte));
+        System.out.println("cipher after LONG : " + join("", cipherLong));
+        System.out.println("cipher after BYTE : " + join("", cipherByte));
+        System.out.println("DECRYPT");
+        Arrays.fill(plainLong, -3);
+        Arrays.fill(plainByte, (byte)-3);
+        System.out.println("plain before LONG : " + join("", plainLong));
+        System.out.println("plain before BYTE : " + join("", plainByte));
+        System.out.println("cipher before LONG: " + join("", cipherLong));
+        System.out.println("cipher before BYTE: " + join("", cipherByte));
+        SpeckCipher.decryptCTR(k1, k2, k3, k4, nonce, plainLong, 0, cipherLong, 0, 10);
+        SpeckCipher.decryptCTR(k1, k2, k3, k4, nonce, plainByte, 0, cipherByte, 0, 80);
+        System.out.println("plain after  LONG : " + join("", plainLong));
+        System.out.println("plain after  BYTE : " + join("", plainByte));
+        System.out.println("cipher after LONG : " + join("", cipherLong));
+        System.out.println("cipher after BYTE : " + join("", cipherByte));
+        plainLong = new long[]{0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55};
+        plainByte = (new byte[]{
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 1,
+                0, 0, 0, 0, 0, 0, 0, 1,
+                0, 0, 0, 0, 0, 0, 0, 2,
+                0, 0, 0, 0, 0, 0, 0, 3,
+                0, 0, 0, 0, 0, 0, 0, 5,
+                0, 0, 0, 0, 0, 0, 0, 8,
+                0, 0, 0, 0, 0, 0, 0, 13,
+                0, 0, 0, 0, 0, 0, 0, 21,
+                0, 0, 0, 0, 0, 0, 0, 34,
+                0, 0, 0, 0, 0, 0, 0, 55,
+        });
+        cipherLong = new long[plainLong.length + 1 & -2];
+        cipherByte = new byte[plainByte.length + 15 & -16];
+        Arrays.fill(cipherLong, -1);
+        Arrays.fill(cipherByte, (byte)-1);
+        System.out.println("ENCRYPT");
+        System.out.println("plain before  LONG: " + join("", plainLong));
+        System.out.println("plain before  BYTE: " + join("", plainByte));
+        System.out.println("cipher before LONG: " + join("", cipherLong));
+        System.out.println("cipher before BYTE: " + join("", cipherByte));
+        SpeckCipher.encryptCTR(k1, k2, k3, k4, nonce, plainLong, 0, cipherLong, 0, 11);
+        SpeckCipher.encryptCTR(k1, k2, k3, k4, nonce, plainByte, 0, cipherByte, 0, 96);
+        System.out.println("plain after  LONG : " + join("", plainLong));
+        System.out.println("plain after  BYTE : " + join("", plainByte));
+        System.out.println("cipher after LONG : " + join("", cipherLong));
+        System.out.println("cipher after BYTE : " + join("", cipherByte));
+        System.out.println("DECRYPT");
+        Arrays.fill(plainLong, -3);
+        Arrays.fill(plainByte, (byte)-3);
+        System.out.println("plain before LONG : " + join("", plainLong));
+        System.out.println("plain before BYTE : " + join("", plainByte));
+        System.out.println("cipher before LONG: " + join("", cipherLong));
+        System.out.println("cipher before BYTE: " + join("", cipherByte));
+        SpeckCipher.decryptCTR(k1, k2, k3, k4, nonce, plainLong, 0, cipherLong, 0, 11);
+        SpeckCipher.decryptCTR(k1, k2, k3, k4, nonce, plainByte, 0, cipherByte, 0, 96);
+        System.out.println("plain after  LONG : " + join("", plainLong));
+        System.out.println("plain after  BYTE : " + join("", plainByte));
+        System.out.println("cipher after LONG : " + join("", cipherLong));
+        System.out.println("cipher after BYTE : " + join("", cipherByte));
+
+    }
+
 }
