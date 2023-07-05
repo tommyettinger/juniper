@@ -19,36 +19,53 @@ public final class SpeckCipher {
     }
 
     private static long fromBytes(byte[] bytes, int index) {
-        return (bytes[index+7] & 255L)
-             | (bytes[index+6] & 255L) <<  8
-             | (bytes[index+5] & 255L) << 16
-             | (bytes[index+4] & 255L) << 24
-             | (bytes[index+3] & 255L) << 32
-             | (bytes[index+2] & 255L) << 40
-             | (bytes[index+1] & 255L) << 48
-             | (bytes[index  ] & 255L) << 56;
+        long r = 0;
+        switch (bytes.length & 7) {
+            case 0:
+                  r = (bytes[index+7] & 255L)
+                    | (bytes[index+6] & 255L) <<  8
+                    | (bytes[index+5] & 255L) << 16
+                    | (bytes[index+4] & 255L) << 24
+                    | (bytes[index+3] & 255L) << 32
+                    | (bytes[index+2] & 255L) << 40
+                    | (bytes[index+1] & 255L) << 48
+                    | (bytes[index  ] & 255L) << 56;
+                  break;
+            case 7: r |= (bytes[index+6] & 255L) <<  8;
+            case 6: r |= (bytes[index+5] & 255L) << 16;
+            case 5: r |= (bytes[index+4] & 255L) << 24;
+            case 4: r |= (bytes[index+3] & 255L) << 32;
+            case 3: r |= (bytes[index+2] & 255L) << 40;
+            case 2: r |= (bytes[index+1] & 255L) << 48;
+            case 1: r |= (bytes[index  ] & 255L) << 56;
+            }
+        return r;
     }
 
     private static void intoBytes(byte[] bytes, int index, long data) {
-        bytes[index+7] = (byte) data;
-        bytes[index+6] = (byte) (data >>>  8);
-        bytes[index+5] = (byte) (data >>> 16);
-        bytes[index+4] = (byte) (data >>> 24);
-        bytes[index+3] = (byte) (data >>> 32);
-        bytes[index+2] = (byte) (data >>> 40);
-        bytes[index+1] = (byte) (data >>> 48);
-        bytes[index  ] = (byte) (data >>> 56);
+        switch (bytes.length & 7) {
+            case 0: bytes[index + 7] = (byte) data;
+            case 7: bytes[index + 6] = (byte) (data >>> 8);
+            case 6: bytes[index + 5] = (byte) (data >>> 16);
+            case 5: bytes[index + 4] = (byte) (data >>> 24);
+            case 4: bytes[index + 3] = (byte) (data >>> 32);
+            case 3: bytes[index + 2] = (byte) (data >>> 40);
+            case 2: bytes[index + 1] = (byte) (data >>> 48);
+            case 1: bytes[index    ] = (byte) (data >>> 56);
+        }
     }
 
     private static void xorIntoBytes(byte[] bytes, int index, long data) {
-        bytes[index+7] ^= (byte) data;
-        bytes[index+6] ^= (byte) (data >>>  8);
-        bytes[index+5] ^= (byte) (data >>> 16);
-        bytes[index+4] ^= (byte) (data >>> 24);
-        bytes[index+3] ^= (byte) (data >>> 32);
-        bytes[index+2] ^= (byte) (data >>> 40);
-        bytes[index+1] ^= (byte) (data >>> 48);
-        bytes[index  ] ^= (byte) (data >>> 56);
+        switch (bytes.length & 7) {
+            case 0: bytes[index + 7] ^= (byte) data;
+            case 7: bytes[index + 6] ^= (byte) (data >>> 8);
+            case 6: bytes[index + 5] ^= (byte) (data >>> 16);
+            case 5: bytes[index + 4] ^= (byte) (data >>> 24);
+            case 4: bytes[index + 3] ^= (byte) (data >>> 32);
+            case 3: bytes[index + 2] ^= (byte) (data >>> 40);
+            case 2: bytes[index + 1] ^= (byte) (data >>> 48);
+            case 1: bytes[index    ] ^= (byte) (data >>> 56);
+        }
     }
 
     public static byte[] pad(byte[] data) {
@@ -85,37 +102,11 @@ public final class SpeckCipher {
         }
         return k;
     }
-        /*
-  uint64_t * speck_expand_key_128_256(uint64_t k1, uint64_t k2, uint64_t k3, uint64_t k4)
-  {
-      uint64_t i, idx;
-      uint64_t * k = (uint64_t *) malloc(sizeof(uint64_t) * 34);
-      uint64_t tk[4];
-
-      tk[0] = k4;
-      tk[1] = k3;
-      tk[2] = k2;
-      tk[3] = k1;
-
-      k[0] = tk[0];
-
-      for (i=0; i<34 - 1; i++)
-      {
-          idx = (i % 3) + 1;
-          tk[idx] = (RR(tk[idx], 8, 64) + tk[0]) ^ i;
-          tk[0] = RL(tk[0], 3, 64) ^ tk[idx];
-          k[i+1] = tk[0];
-      }
-      return k;
-  }
-         */
-
 
     public static void encrypt(long[] key, long last0, long last1, long[] plaintext, int plainOffset, long[] ciphertext, int cipherOffset) {
-        if(ciphertext == null || key == null || key.length < 34
-//                || (plaintext != null && plaintext.length - plainOffset < 2)
-                || ciphertext.length - cipherOffset < 2)
-            throw new IllegalArgumentException("Invalid encryption arguments");
+//        if(ciphertext == null || key == null || key.length < 34
+//                || ciphertext.length - cipherOffset < 2)
+//            throw new IllegalArgumentException("Invalid encryption arguments");
         long b0, b1;
         if(plaintext == null){
             b0 = last0;
@@ -139,10 +130,10 @@ public final class SpeckCipher {
     }
 
     public static void encrypt(long[] key, long last0, long last1, byte[] plaintext, int plainOffset, byte[] ciphertext, int cipherOffset) {
-        if(ciphertext == null || key == null || key.length < 34
-                || (plaintext != null && (plaintext.length - plainOffset & 15) != 0)
-                || (ciphertext.length - cipherOffset & 15) != 0)
-            throw new IllegalArgumentException("Invalid encryption arguments");
+//        if(ciphertext == null || key == null || key.length < 34
+//                || (plaintext != null && (plaintext.length - plainOffset & 15) != 0)
+//                || (ciphertext.length - cipherOffset & 15) != 0)
+//            throw new IllegalArgumentException("Invalid encryption arguments");
         long b0, b1;
         if(plaintext == null){
             b0 = last0;
@@ -158,26 +149,11 @@ public final class SpeckCipher {
         intoBytes(ciphertext, cipherOffset, b1);
         intoBytes(ciphertext, cipherOffset + 8, b0);
     }
-        /*
-    uint64_t b[2];
-    b[0] = pt[1];
-    b[1] = pt[0];
-
-    for (i=0; i<34; i++)
-    {
-        b[1] = (RR(b[1], 8, 64) + b[0]) ^ k[i];
-        b[0] = RL(b[0], 3, 64) ^ b[1];
-    }
-
-    ct[0] = b[1];
-    ct[1] = b[0];
-         */
 
     public static void decrypt(long[] key, long[] plaintext, int plainOffset, long[] ciphertext, int cipherOffset) {
-        if(plaintext == null || ciphertext == null || key == null || key.length < 34
-//                || plaintext.length - plainOffset < 2
-                || ciphertext.length - cipherOffset < 2)
-            throw new IllegalArgumentException("Invalid decryption arguments");
+//        if(plaintext == null || ciphertext == null || key == null || key.length < 34
+//                || ciphertext.length - cipherOffset < 2)
+//            throw new IllegalArgumentException("Invalid decryption arguments");
         long b0, b1, item;
         b1 = ciphertext[cipherOffset];
         b0 = ciphertext[cipherOffset + 1];
@@ -193,10 +169,10 @@ public final class SpeckCipher {
     }
 
     public static void decrypt(long[] key, byte[] plaintext, int plainOffset, byte[] ciphertext, int cipherOffset) {
-        if(plaintext == null || ciphertext == null || key == null || key.length < 34
-                || (plaintext.length - plainOffset & 15) != 0
-                || (ciphertext.length - cipherOffset & 15) != 0)
-            throw new IllegalArgumentException("Invalid decryption arguments");
+//        if(plaintext == null || ciphertext == null || key == null || key.length < 34
+//                || (plaintext.length - plainOffset & 15) != 0
+//                || (ciphertext.length - cipherOffset & 15) != 0)
+//            throw new IllegalArgumentException("Invalid decryption arguments");
         long b0, b1, item;
         b1 = fromBytes(ciphertext, cipherOffset);
         b0 = fromBytes(ciphertext, cipherOffset + 8);
@@ -210,30 +186,9 @@ public final class SpeckCipher {
         intoBytes(plaintext, plainOffset + 8, b0);
     }
 
-    /*
-    uint64_t b[2];
-    b[0] = ct[1];
-    b[1] = ct[0];
-
-    for (i=34; i>0; i--)
-    {
-        b[0] = b[0] ^ b[1];
-        b[0] = RR(b[0], 3, 64);
-        b[1] = (b[1] ^ k[i-1]) - b[0];
-        b[1] = RL(b[1], 8, 64);
-    }
-
-    pt[0] = b[1];
-    pt[1] = b[0];
-     */
-
     public static void encryptCBC(long k1, long k2, long k3, long k4, long iv1, long iv2,
                            long[] plaintext, int plainOffset, long[] ciphertext, int cipherOffset, int textLength) {
         int blocks = textLength + 1 >>> 1, i = 0;
-//        final int blockSize = 16;
-//        long padding = (blockSize - (((long)textLength << 3) - (long) blocks * blockSize));
-//        if(padding == 0)
-//            padding = blockSize;
         long[] kx = expandKey(k1, k2, k3, k4);
         long last0 = iv2, last1 = iv1;
         do {
@@ -244,25 +199,11 @@ public final class SpeckCipher {
             cipherOffset+=2;
             i++;
         } while(i < blocks);
-//        long b = blockSize - 1;
-//        for (; b >= 8 && blockSize - padding <= b; b--) {
-//            last1 ^= padding << (b - 8 << 3);
-//        }
-//        for (; b >= 0; b--) {
-//            last0 ^= padding << (b << 3);
-//        }
-//        encrypt(kx, last0, last1, null, 0, ciphertext, cipherOffset);
-
     }
 
     public static void encryptCBC(long k1, long k2, long k3, long k4, long iv1, long iv2,
                            byte[] plaintext, int plainOffset, byte[] ciphertext, int cipherOffset, int textLength) {
-        if((textLength & 15) != 0) throw new UnsupportedOperationException("textLength must be a multiple of 16");
-        int blocks = textLength >>> 4, i = 0;
-//        final int blockSize = 16;
-//        long padding = (blockSize - (((long)textLength << 3) - (long) blocks * blockSize));
-//        if(padding == 0)
-//            padding = blockSize;
+        int blocks = textLength + 15 >>> 4, i = 0;
         long[] kx = expandKey(k1, k2, k3, k4);
         long last0 = iv2, last1 = iv1;
         do {
@@ -274,66 +215,11 @@ public final class SpeckCipher {
             cipherOffset+=16;
             i++;
         } while(i < blocks);
-//        long b = blockSize - 1;
-//        for (; b >= 8 && blockSize - padding <= b; b--) {
-//            last1 ^= padding << (b - 8 << 3);
-//        }
-//        for (; b >= 0; b--) {
-//            last0 ^= padding << (b << 3);
-//        }
-//        encrypt(kx, last0, last1, null, 0, ciphertext, cipherOffset);
-
     }
-
-    /*
-
-size_t speck_128_256_cbc_encrypt(uint64_t k1, uint64_t k2, uint64_t k3, uint64_t k4, uint64_t iv1, uint64_t iv2, void * plaintext, void * ciphertext, size_t length)
-{
-    size_t i = 0;
-    int block_size = sizeof(uint64_t) * 2;
-    size_t blocks = length / block_size;
-    uint8_t padding_bytes = (int) (block_size - (length - blocks * block_size));
-    if (padding_bytes == 0) padding_bytes = block_size;
-    uint64_t * kx = speck_expand_key_128_256(k1, k2, k3, k4);
-    uint64_t last[2];
-    uint64_t x[2];
-    last[0] = iv2;
-    last[1] = iv1;
-    uint64_t last_block[2];
-    uint8_t * last_block_bytes = (uint8_t *) &last_block;
-    uint64_t * pt = (uint64_t *) plaintext;
-    uint64_t * ct = (uint64_t *) ciphertext;
-    do
-    {
-        xor128(x, pt, last);
-        speck_encrypt_128_256(kx, x, ct);
-        last[0] = ct[0];
-        last[1] = ct[1];
-        ct+=2;
-        pt+=2;
-        i++;
-    } while (i < blocks);
-
-    // Create last padded block
-    pt = (uint64_t *) plaintext;
-    memcpy(&last_block, &pt[i*2], block_size - padding_bytes);
-    memset(&last_block_bytes[block_size - padding_bytes], (uint8_t) padding_bytes, padding_bytes);
-
-    xor128(x, last_block, last);
-    speck_encrypt_128_256(kx, x, ct);
-    i++;
-
-    free(kx);
-    return (i * block_size);
-}
-     */
 
     public static void decryptCBC(long k1, long k2, long k3, long k4, long iv1, long iv2,
                            long[] plaintext, int plainOffset, long[] ciphertext, int cipherOffset, int textLength) {
         int blocks = textLength + 1 >>> 1, i = 0;
-//        final int blockSize = 16;
-//        byte padding = (byte) (blockSize - (textLength - blocks * blockSize));
-//        if(padding == 0) padding = blockSize;
         long[] kx = expandKey(k1, k2, k3, k4);
         long last0 = iv2, last1 = iv1;
         do {
@@ -349,55 +235,10 @@ size_t speck_128_256_cbc_encrypt(uint64_t k1, uint64_t k2, uint64_t k3, uint64_t
         } while (i < blocks);
     }
 
-    /*
-size_t speck_128_256_cbc_decrypt(uint64_t k1, uint64_t k2, uint64_t k3, uint64_t k4, uint64_t iv1, uint64_t iv2, void * ciphertext, void * plaintext, size_t length)
-{
-    size_t i = 0;
-    int block_size = sizeof(uint64_t) * 2;
-    size_t blocks = length / block_size;
-    uint8_t padding_bytes;
-    uint64_t * kx = speck_expand_key_128_256(k1, k2, k3, k4);
-    uint64_t last[2];
-    uint64_t x[2];
-    last[0] = iv2;
-    last[1] = iv1;
-    uint64_t * pt = (uint64_t *) plaintext;
-    uint64_t * ct = (uint64_t *) ciphertext;
-    do
-    {
-        speck_decrypt_128_256(kx, ct, x);
-        xor128(pt, x, last);
-        last[0] = ct[0];
-        last[1] = ct[1];
-        ct+=2;
-        pt+=2;
-        i++;
-    } while (i < blocks);
-
-    free(kx);
-
-    // Check for padding bytes
-    uint8_t * pt_bytes = (uint8_t *) plaintext;
-    padding_bytes = pt_bytes[i * block_size -1];
-    if (padding_bytes > block_size) return 0;
-    int j;
-    for (j=0; j<padding_bytes; j++) if (pt_bytes[i * block_size -1 - j] != padding_bytes)
-    {
-        // Error in padding
-        return 0;
-    }
-
-    return (i * block_size - padding_bytes);
-}
-     */
-
     public static void decryptCBC(long k1, long k2, long k3, long k4, long iv1, long iv2,
                                   byte[] plaintext, int plainOffset, byte[] ciphertext, int cipherOffset, int textLength) {
         if((textLength & 15) != 0) throw new UnsupportedOperationException("textLength must be a multiple of 16");
         int blocks = textLength >>> 4, i = 0;
-//        final int blockSize = 16;
-//        byte padding = (byte) (blockSize - (textLength - blocks * blockSize));
-//        if(padding == 0) padding = blockSize;
         long[] kx = expandKey(k1, k2, k3, k4);
         long last0 = iv2, last1 = iv1;
         do {
