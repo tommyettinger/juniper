@@ -331,7 +331,7 @@ public class EncryptionTest {
         String[] testStrings = {"I", "love", "my", "surveillance", "state"};
         for(String test : testStrings) {
             byte[] plain = test.getBytes(StandardCharsets.UTF_8);
-            byte[] cipher = SpeckCipher.withPadding(plain);
+            byte[] cipher = SpeckCipher.newPaddedArray(plain);
             SpeckCipher.encryptCBC(k1, k2, k3, k4, iv0, iv1, plain, 0, cipher, 0, plain.length);
             System.out.println(test + " -> PLAIN  -> " + new String(plain, StandardCharsets.UTF_8));
             System.out.println(test + " -> CIPHER -> " + new String(cipher, StandardCharsets.UTF_8));
@@ -344,7 +344,7 @@ public class EncryptionTest {
         for(String test : testStrings) {
             nonce = ivGenerator.nextLong();
             byte[] plain = test.getBytes(StandardCharsets.UTF_8);
-            byte[] cipher = SpeckCipher.withPadding(plain);
+            byte[] cipher = SpeckCipher.newPaddedArray(plain);
             SpeckCipher.encryptCTR(k1, k2, k3, k4, nonce, plain, 0, cipher, 0, plain.length);
             System.out.println(test + " -> PLAIN  -> " + new String(plain, StandardCharsets.UTF_8));
             System.out.println(test + " -> CIPHER -> " + new String(cipher, StandardCharsets.UTF_8));

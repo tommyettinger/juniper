@@ -1,6 +1,6 @@
 package com.github.tommyettinger.random.experimental;
 
-import java.util.Arrays;
+import com.github.tommyettinger.random.DistinctRandom;
 
 /**
  * An implementation of the <a href="https://en.wikipedia.org/wiki/Speck_(cipher)">Speck Cipher</a> that can encrypt
@@ -16,7 +16,7 @@ import java.util.Arrays;
  * validated and ignored. That is, if it works at all! I haven't been able to test m2mi's implementation, but this
  * code has been tested some in this repo. This version uses zero-padding instead of PKCS#7, and works even if a
  * partial block is all there is in the plaintext. When encrypting, the ciphertext array may need to be larger than the
- * plaintext array; use {@link #withPadding(long[])} or {@link #withPadding(byte[])} to get an array of the right size.
+ * plaintext array; use {@link #newPaddedArray(long[])} or {@link #newPaddedArray(byte[])} to get an array of the right size.
  */
 public final class SpeckCipher {
 
@@ -89,7 +89,7 @@ public final class SpeckCipher {
      * @param data a long array to copy, potentially including padding in the copy
      * @return a long array with a length that is a multiple of 2
      */
-    public static long[] withPadding(long[] data) {
+    public static long[] newPaddedArray(long[] data) {
         if(data == null) return new long[2];
         return new long[data.length + 1 & -2];
     }
@@ -104,7 +104,7 @@ public final class SpeckCipher {
      * @param data a byte array to copy, potentially including padding in the copy
      * @return a byte array with a length that is a multiple of 16
      */
-    public static byte[] withPadding(byte[] data) {
+    public static byte[] newPaddedArray(byte[] data) {
         if(data == null) return new byte[16];
         return new byte[data.length + 15 & -16];
     }
@@ -158,7 +158,7 @@ public final class SpeckCipher {
      * @param last1 the last half of the previous result, or the second IV if there was no previous result
      * @param plaintext the plaintext array, as long items
      * @param plainOffset the index to start reading from in plaintext
-     * @param ciphertext the ciphertext array, as long items that will be written to; {@link #withPadding(long[]) may need to be padded}
+     * @param ciphertext the ciphertext array, as long items that will be written to; {@link #newPaddedArray(long[]) may need to be padded}
      * @param cipherOffset the index to start writing to in ciphertext
      */
     public static void encrypt(long[] key, long last0, long last1, long[] plaintext, int plainOffset, long[] ciphertext, int cipherOffset) {
@@ -193,7 +193,7 @@ public final class SpeckCipher {
      * @param last1 the last half of the previous result, or the second IV if there was no previous result
      * @param plaintext the plaintext array, as byte items
      * @param plainOffset the index to start reading from in plaintext
-     * @param ciphertext the ciphertext array, as byte items that will be written to; {@link #withPadding(byte[]) may need to be padded}
+     * @param ciphertext the ciphertext array, as byte items that will be written to; {@link #newPaddedArray(byte[]) may need to be padded}
      * @param cipherOffset the index to start writing to in ciphertext
      */
     public static void encrypt(long[] key, long last0, long last1, byte[] plaintext, int plainOffset, byte[] ciphertext, int cipherOffset) {
@@ -261,6 +261,34 @@ public final class SpeckCipher {
         intoBytes(plaintext, plainOffset + 8, b0);
     }
 
+    /**
+     * One of the main ways here to encrypt a "plaintext" long array and get back a coded "ciphertext" long array.
+     * This takes four {@code long}s as its key (256-bits), and also requires two unique (never used again) longs
+     * as IVs. How you generate keys is up to you, but the keys must be kept secret for encryption to stay secure.
+     * To generate IVs, secrecy isn't as important as uniqueness; calling {@link DistinctRandom#nextLong()} even many
+     * times will never return the same long unless IVs are requested for years from one generator, so it is a good
+     * option to produce IVs (using two DistinctRandom generators also works, with one for each IV). The rest of the
+     * arguments are about the data being encrypted. The plaintext is the long array to encrypt; it will not be
+     * modified here. The plainOffset is which index in plaintext to start reading from. The ciphertext will be written
+     * to, should usually be empty at the start (though it doesn't need to be), and must be padded as by
+     * {@link #newPaddedArray(long[])}. The cipheroffset is which index to start writing to in ciphertext. Lastly, the
+     * textLength is how many long items to encrypt from plaintext; this can be less than plaintext's length.
+     * <br>
+     * This uses CBC mode, so it takes two IVs instead of how CTR mode takes one nonce. If the IVs aren't sufficiently
+     * random, this produces higher-quality outputs than CTR mode. CBC mode may be slightly faster, though this isn't
+     * clear yet.
+     * @param k1 a secret long
+     * @param k2 a secret long
+     * @param k3 a secret long
+     * @param k4 a secret long
+     * @param iv1 a long that must never be reused as iv1 again
+     * @param iv2 a long that must never be reused as iv2 again
+     * @param plaintext the long array to encrypt; will not be modified
+     * @param plainOffset which index to start reading from plaintext
+     * @param ciphertext the long array to write encrypted data to; will be modified, and should be padded
+     * @param cipherOffset which index to start writing to in ciphertext
+     * @param textLength how many long items to read and encrypt from plaintext
+     */
     public static void encryptCBC(long k1, long k2, long k3, long k4, long iv1, long iv2,
                            long[] plaintext, int plainOffset, long[] ciphertext, int cipherOffset, int textLength) {
         int blocks = textLength + 1 >>> 1, i = 0;
@@ -276,6 +304,34 @@ public final class SpeckCipher {
         } while(i < blocks);
     }
 
+    /**
+     * One of the main ways here to encrypt a "plaintext" byte array and get back a coded "ciphertext" byte array.
+     * This takes four {@code long}s as its key (256-bits), and also requires two unique (never used again) longs
+     * as IVs. How you generate keys is up to you, but the keys must be kept secret for encryption to stay secure.
+     * To generate IVs, secrecy isn't as important as uniqueness; calling {@link DistinctRandom#nextLong()} even many
+     * times will never return the same long unless IVs are requested for years from one generator, so it is a good
+     * option to produce IVs (using two DistinctRandom generators also works, with one for each IV). The rest of the
+     * arguments are about the data being encrypted. The plaintext is the byte array to encrypt; it will not be
+     * modified here. The plainOffset is which index in plaintext to start reading from. The ciphertext will be written
+     * to, should usually be empty at the start (though it doesn't need to be), and must be padded as by
+     * {@link #newPaddedArray(byte[])}. The cipheroffset is which index to start writing to in ciphertext. Lastly, the
+     * textLength is how many byte items to encrypt from plaintext; this can be less than plaintext's length.
+     * <br>
+     * This uses CBC mode, so it takes two IVs instead of how CTR mode takes one nonce. If the IVs aren't sufficiently
+     * random, this produces higher-quality outputs than CTR mode. CBC mode may be slightly faster, though this isn't
+     * clear yet.
+     * @param k1 a secret long
+     * @param k2 a secret long
+     * @param k3 a secret long
+     * @param k4 a secret long
+     * @param iv1 a long that must never be reused as iv1 again
+     * @param iv2 a long that must never be reused as iv2 again
+     * @param plaintext the byte array to encrypt; will not be modified
+     * @param plainOffset which index to start reading from plaintext
+     * @param ciphertext the byte array to write encrypted data to; will be modified, and should be padded
+     * @param cipherOffset which index to start writing to in ciphertext
+     * @param textLength how many byte items to read and encrypt from plaintext
+     */
     public static void encryptCBC(long k1, long k2, long k3, long k4, long iv1, long iv2,
                            byte[] plaintext, int plainOffset, byte[] ciphertext, int cipherOffset, int textLength) {
         int blocks = textLength + 15 >>> 4, i = 0;
@@ -292,6 +348,36 @@ public final class SpeckCipher {
         } while(i < blocks);
     }
 
+    /**
+     * One of the main ways here to decrypt a coded "ciphertext" long array and get back the original "plaintext"
+     * long array from before {@link #encryptCBC(long, long, long, long, long, long, long[], int, long[], int, int)}
+     * was called.
+     * This takes four {@code long}s as its key (256-bits), and also requires two unique (never used again) longs
+     * as IVs. How you generate keys is up to you, but the keys must be kept secret for encryption to stay secure.
+     * To generate IVs, secrecy isn't as important as uniqueness; calling {@link DistinctRandom#nextLong()} even many
+     * times will never return the same long unless IVs are requested for years from one generator, so it is a good
+     * option to produce IVs (using two DistinctRandom generators also works, with one for each IV). The rest of the
+     * arguments are about the data being encrypted. The plaintext is the long array to receive decrypted data; it will
+     * be modified, but doesn't have size restrictions. The plainOffset is which index in plaintext to start writing to.
+     * The ciphertext will only be read from here, and should start with the output of encryptCBC(). The cipheroffset is
+     * which index to start reading from in ciphertext. Lastly, the textLength is how many long items to decrypt from
+     * ciphertext; this must be at least equal to plaintext's length.
+     * <br>
+     * This uses CBC mode, so it takes two IVs instead of how CTR mode takes one nonce. If the IVs aren't sufficiently
+     * random, this produces higher-quality outputs than CTR mode. CBC mode may be slightly faster, though this isn't
+     * clear yet.
+     * @param k1 a secret long
+     * @param k2 a secret long
+     * @param k3 a secret long
+     * @param k4 a secret long
+     * @param iv1 a long that must never be reused as iv1 again
+     * @param iv2 a long that must never be reused as iv2 again
+     * @param plaintext the long array to write to
+     * @param plainOffset which index to start writing to in plaintext
+     * @param ciphertext the long array to read coded data from
+     * @param cipherOffset which index to start reading from in ciphertext
+     * @param textLength how many long items to read from ciphertext
+     */
     public static void decryptCBC(long k1, long k2, long k3, long k4, long iv1, long iv2,
                            long[] plaintext, int plainOffset, long[] ciphertext, int cipherOffset, int textLength) {
         int blocks = textLength + 1 >>> 1, i = 0;
@@ -310,6 +396,36 @@ public final class SpeckCipher {
         } while (i < blocks);
     }
 
+    /**
+     * One of the main ways here to decrypt a coded "ciphertext" byte array and get back the original "plaintext"
+     * byte array from before {@link #encryptCBC(long, long, long, long, long, long, byte[], int, byte[], int, int)}
+     * was called.
+     * This takes four {@code long}s as its key (256-bits), and also requires two unique (never used again) longs
+     * as IVs. How you generate keys is up to you, but the keys must be kept secret for encryption to stay secure.
+     * To generate IVs, secrecy isn't as important as uniqueness; calling {@link DistinctRandom#nextLong()} even many
+     * times will never return the same long unless IVs are requested for years from one generator, so it is a good
+     * option to produce IVs (using two DistinctRandom generators also works, with one for each IV). The rest of the
+     * arguments are about the data being encrypted. The plaintext is the byte array to receive decrypted data; it will
+     * be modified, but doesn't have size restrictions. The plainOffset is which index in plaintext to start writing to.
+     * The ciphertext will only be read from here, and should start with the output of encryptCBC(). The cipheroffset is
+     * which index to start reading from in ciphertext. Lastly, the textLength is how many byte items to decrypt from
+     * ciphertext; this must be at least equal to plaintext's length.
+     * <br>
+     * This uses CBC mode, so it takes two IVs instead of how CTR mode takes one nonce. If the IVs aren't sufficiently
+     * random, this produces higher-quality outputs than CTR mode. CBC mode may be slightly faster, though this isn't
+     * clear yet.
+     * @param k1 a secret long
+     * @param k2 a secret long
+     * @param k3 a secret long
+     * @param k4 a secret long
+     * @param iv1 a long that must never be reused as iv1 again
+     * @param iv2 a long that must never be reused as iv2 again
+     * @param plaintext the byte array to write to
+     * @param plainOffset which index to start writing to in plaintext
+     * @param ciphertext the byte array to read coded data from
+     * @param cipherOffset which index to start reading from in ciphertext
+     * @param textLength how many byte items to read from ciphertext
+     */
     public static void decryptCBC(long k1, long k2, long k3, long k4, long iv1, long iv2,
                                   byte[] plaintext, int plainOffset, byte[] ciphertext, int cipherOffset, int textLength) {
         if((textLength & 15) != 0) throw new UnsupportedOperationException("textLength must be a multiple of 16");
