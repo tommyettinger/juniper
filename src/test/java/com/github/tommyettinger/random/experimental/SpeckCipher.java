@@ -91,7 +91,7 @@ public final class SpeckCipher {
      */
     public static long[] withPadding(long[] data) {
         if(data == null) return new long[2];
-        return Arrays.copyOf(data, data.length + 1 & -2);
+        return new long[data.length + 1 & -2];
     }
 
     /**
@@ -106,7 +106,7 @@ public final class SpeckCipher {
      */
     public static byte[] withPadding(byte[] data) {
         if(data == null) return new byte[16];
-        return Arrays.copyOf(data, data.length + 15 & -16);
+        return new byte[data.length + 15 & -16];
     }
 
     /**

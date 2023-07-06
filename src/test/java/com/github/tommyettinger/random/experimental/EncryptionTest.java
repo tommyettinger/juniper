@@ -2,6 +2,7 @@ package com.github.tommyettinger.random.experimental;
 
 import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.random.AceRandom;
+import com.github.tommyettinger.random.Xoshiro128PlusPlusRandom;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -189,7 +190,7 @@ public class EncryptionTest {
         System.out.println("cipher after LONG : " + join("", cipherLong));
         System.out.println("cipher after BYTE : " + join("", cipherByte));
         plainLong = new long[]{0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55};
-        plainByte = (new byte[]{
+        plainByte = new byte[]{
                 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 1,
                 0, 0, 0, 0, 0, 0, 0, 1,
@@ -201,7 +202,7 @@ public class EncryptionTest {
                 0, 0, 0, 0, 0, 0, 0, 21,
                 0, 0, 0, 0, 0, 0, 0, 34,
                 0, 0, 0, 0, 0, 0, 0, 55,
-        });
+        };
         cipherLong = new long[plainLong.length + 1 & -2];
         cipherByte = new byte[plainByte.length + 15 & -16];
         Arrays.fill(cipherLong, -1);
@@ -319,7 +320,34 @@ public class EncryptionTest {
         System.out.println("plain after  BYTE : " + join("", plainByte));
         System.out.println("cipher after LONG : " + join("", cipherLong));
         System.out.println("cipher after BYTE : " + join("", cipherByte));
-
     }
-
+    @Test
+    public void testSpeckStrings() {
+        long k1 = 1212, k2 = 3434, k3 = 5656, k4 = 7878, nonce = -1234567890987654321L;
+        Xoshiro128PlusPlusRandom ivGenerator = new Xoshiro128PlusPlusRandom(nonce);
+        long iv0 = ivGenerator.nextLong(), iv1 = ivGenerator.nextLong();
+        String[] testStrings = {"I", "love", "my", "surveillance", "state"};
+        for(String test : testStrings) {
+            byte[] plain = test.getBytes(StandardCharsets.UTF_8);
+            byte[] cipher = SpeckCipher.withPadding(plain);
+            SpeckCipher.encryptCBC(k1, k2, k3, k4, iv0, iv1, plain, 0, cipher, 0, plain.length);
+            System.out.println(test + " -> PLAIN  -> " + new String(plain, StandardCharsets.UTF_8));
+            System.out.println(test + " -> CIPHER -> " + new String(cipher, StandardCharsets.UTF_8));
+            Arrays.fill(plain, (byte)0);
+            SpeckCipher.decryptCBC(k1, k2, k3, k4, iv0, iv1, plain, 0, cipher, 0, cipher.length);
+            System.out.println(test + " -> PLAIN  -> " + new String(plain, StandardCharsets.UTF_8));
+            System.out.println(test + " -> CIPHER -> " + new String(cipher, StandardCharsets.UTF_8));
+        }
+        for(String test : testStrings) {
+            byte[] plain = test.getBytes(StandardCharsets.UTF_8);
+            byte[] cipher = SpeckCipher.withPadding(plain);
+            SpeckCipher.encryptCTR(k1, k2, k3, k4, nonce, plain, 0, cipher, 0, plain.length);
+            System.out.println(test + " -> PLAIN  -> " + new String(plain, StandardCharsets.UTF_8));
+            System.out.println(test + " -> CIPHER -> " + new String(cipher, StandardCharsets.UTF_8));
+            Arrays.fill(plain, (byte)0);
+            SpeckCipher.decryptCTR(k1, k2, k3, k4, nonce, plain, 0, cipher, 0, cipher.length);
+            System.out.println(test + " -> PLAIN  -> " + new String(plain, StandardCharsets.UTF_8));
+            System.out.println(test + " -> CIPHER -> " + new String(cipher, StandardCharsets.UTF_8));
+        }
+    }
 }
