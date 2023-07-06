@@ -2,6 +2,8 @@ package com.github.tommyettinger.random.experimental;
 
 import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.random.AceRandom;
+import com.github.tommyettinger.random.DistinctRandom;
+import com.github.tommyettinger.random.EnhancedRandom;
 import com.github.tommyettinger.random.Xoshiro128PlusPlusRandom;
 import org.junit.Assert;
 import org.junit.Test;
@@ -324,7 +326,7 @@ public class EncryptionTest {
     @Test
     public void testSpeckStrings() {
         long k1 = 1212, k2 = 3434, k3 = 5656, k4 = 7878, nonce = -1234567890987654321L;
-        Xoshiro128PlusPlusRandom ivGenerator = new Xoshiro128PlusPlusRandom(nonce);
+        EnhancedRandom ivGenerator = new Xoshiro128PlusPlusRandom(nonce);
         long iv0 = ivGenerator.nextLong(), iv1 = ivGenerator.nextLong();
         String[] testStrings = {"I", "love", "my", "surveillance", "state"};
         for(String test : testStrings) {
@@ -338,7 +340,9 @@ public class EncryptionTest {
             System.out.println(test + " -> PLAIN  -> " + new String(plain, StandardCharsets.UTF_8));
             System.out.println(test + " -> CIPHER -> " + new String(cipher, StandardCharsets.UTF_8));
         }
+        ivGenerator = new DistinctRandom(nonce);
         for(String test : testStrings) {
+            nonce = ivGenerator.nextLong();
             byte[] plain = test.getBytes(StandardCharsets.UTF_8);
             byte[] cipher = SpeckCipher.withPadding(plain);
             SpeckCipher.encryptCTR(k1, k2, k3, k4, nonce, plain, 0, cipher, 0, plain.length);

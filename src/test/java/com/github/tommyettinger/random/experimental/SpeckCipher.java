@@ -25,9 +25,9 @@ public final class SpeckCipher {
 
     private static long fromBytes(byte[] bytes, int index) {
         long r = 0;
-        if(bytes.length >= index + 8) {
-            switch (bytes.length & 7) {
-                case 0:
+        if(bytes.length > index) {
+            switch (bytes.length - index) {
+                default:
                       r = (bytes[index+7] & 255L)
                         | (bytes[index+6] & 255L) <<  8
                         | (bytes[index+5] & 255L) << 16
@@ -50,31 +50,31 @@ public final class SpeckCipher {
     }
 
     private static void intoBytes(byte[] bytes, int index, long data) {
-        if(bytes.length >= index + 8) {
-            switch (bytes.length & 7) {
-                case 0: bytes[index + 7] = (byte) data;
-                case 7: bytes[index + 6] = (byte) (data >>> 8);
-                case 6: bytes[index + 5] = (byte) (data >>> 16);
-                case 5: bytes[index + 4] = (byte) (data >>> 24);
-                case 4: bytes[index + 3] = (byte) (data >>> 32);
-                case 3: bytes[index + 2] = (byte) (data >>> 40);
-                case 2: bytes[index + 1] = (byte) (data >>> 48);
-                case 1: bytes[index    ] = (byte) (data >>> 56);
+        if(bytes.length > index) {
+            switch (bytes.length - index) {
+                default: bytes[index + 7] = (byte) data;
+                case 7:  bytes[index + 6] = (byte) (data >>> 8);
+                case 6:  bytes[index + 5] = (byte) (data >>> 16);
+                case 5:  bytes[index + 4] = (byte) (data >>> 24);
+                case 4:  bytes[index + 3] = (byte) (data >>> 32);
+                case 3:  bytes[index + 2] = (byte) (data >>> 40);
+                case 2:  bytes[index + 1] = (byte) (data >>> 48);
+                case 1:  bytes[index    ] = (byte) (data >>> 56);
             }
         }
     }
 
     private static void xorIntoBytes(byte[] bytes, int index, long data) {
-        if(bytes.length >= index + 8) {
-            switch (bytes.length & 7) {
-                case 0: bytes[index + 7] ^= (byte) data;
-                case 7: bytes[index + 6] ^= (byte) (data >>> 8);
-                case 6: bytes[index + 5] ^= (byte) (data >>> 16);
-                case 5: bytes[index + 4] ^= (byte) (data >>> 24);
-                case 4: bytes[index + 3] ^= (byte) (data >>> 32);
-                case 3: bytes[index + 2] ^= (byte) (data >>> 40);
-                case 2: bytes[index + 1] ^= (byte) (data >>> 48);
-                case 1: bytes[index    ] ^= (byte) (data >>> 56);
+        if(bytes.length > index) {
+            switch (bytes.length - index) {
+                default: bytes[index + 7] ^= (byte) data;
+                case 7:  bytes[index + 6] ^= (byte) (data >>> 8);
+                case 6:  bytes[index + 5] ^= (byte) (data >>> 16);
+                case 5:  bytes[index + 4] ^= (byte) (data >>> 24);
+                case 4:  bytes[index + 3] ^= (byte) (data >>> 32);
+                case 3:  bytes[index + 2] ^= (byte) (data >>> 40);
+                case 2:  bytes[index + 1] ^= (byte) (data >>> 48);
+                case 1:  bytes[index    ] ^= (byte) (data >>> 56);
             }
         }
     }
@@ -313,7 +313,7 @@ public final class SpeckCipher {
     public static void decryptCBC(long k1, long k2, long k3, long k4, long iv1, long iv2,
                                   byte[] plaintext, int plainOffset, byte[] ciphertext, int cipherOffset, int textLength) {
         if((textLength & 15) != 0) throw new UnsupportedOperationException("textLength must be a multiple of 16");
-        int blocks = textLength >>> 4, i = 0;
+        int blocks = textLength + 15 >>> 4, i = 0;
         long[] kx = expandKey(k1, k2, k3, k4);
         long last0 = iv2, last1 = iv1;
         do {
