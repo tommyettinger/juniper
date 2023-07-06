@@ -3,15 +3,20 @@ package com.github.tommyettinger.random.experimental;
 import java.util.Arrays;
 
 /**
- * This is probably a bad idea to use; not only do I have very little faith in my implementation's accuracy, even
- * an accurate implementation would be specified by The United States of America's NSA, making it untrustworthy.
- * It should be fast, though.
+ * An implementation of the <a href="https://en.wikipedia.org/wiki/Speck_(cipher)">Speck Cipher</a> that can encrypt
+ * and decrypt using either CBC or CTR modes. Speck is designed to be small and implemented in software.
+ * I have very little faith in my implementation's accuracy, and even an accurate implementation would have been
+ * specified by The United States of America's NSA, making it inherently untrustworthy. It should be fast, though,
+ * and strong enough to keep small-time crooks out of encrypted files. Big-time crooks (nation-states) should be
+ * assumed to already have anything they want that was encrypted with this.
  * <br>
  * The implementation here is based on <a href="https://github.com/m2mi/open_speck/blob/master/open-speck/src/main/c/speck.c">m2mi's open_speck C code</a>,
  * which is licensed under Apache 2.0. Though the m2mi implementation seems to use some form of PKCS#7 for padding, it
  * encrypts the last block but doesn't decrypt it, so I think it may only work when a full block of padding is written,
- * validated and ignored. That is, if it works at all! This version uses zero-padding instead, and works even if a
- * partial block is all there is in the plaintext.
+ * validated and ignored. That is, if it works at all! I haven't been able to test m2mi's implementation, but this
+ * code has been tested some in this repo. This version uses zero-padding instead of PKCS#7, and works even if a
+ * partial block is all there is in the plaintext. When encrypting, the ciphertext array may need to be larger than the
+ * plaintext array; use {@link #withPadding(long[])} or {@link #withPadding(byte[])} to get an array of the right size.
  */
 public final class SpeckCipher {
 
@@ -74,11 +79,46 @@ public final class SpeckCipher {
         }
     }
 
-    public static byte[] pad(byte[] data) {
-        if((data.length & 15) == 0) return data;
-        return Arrays.copyOfRange(data, 0, data.length + 15 & -16);
+    /**
+     * Copies {@code data} into a new long array that will be at least as long as data, padded with zeroes
+     * so that it meets a length that is a multiple of 2, if necessary. If data is null, this returns a new
+     * long array with length 2.
+     * <br>
+     * This is typically used to ensure the ciphertext array is long enough to hold the data assigned to it.
+     *
+     * @param data a long array to copy, potentially including padding in the copy
+     * @return a long array with a length that is a multiple of 2
+     */
+    public static long[] withPadding(long[] data) {
+        if(data == null) return new long[2];
+        return Arrays.copyOf(data, data.length + 1 & -2);
     }
 
+    /**
+     * Copies {@code data} into a new byte array that will be at least as long as data, padded with zeroes
+     * so that it meets a length that is a multiple of 16, if necessary. If data is null, this returns a new
+     * byte array with length 16.
+     * <br>
+     * This is typically used to ensure the ciphertext array is long enough to hold the data assigned to it.
+     *
+     * @param data a byte array to copy, potentially including padding in the copy
+     * @return a byte array with a length that is a multiple of 16
+     */
+    public static byte[] withPadding(byte[] data) {
+        if(data == null) return new byte[16];
+        return Arrays.copyOf(data, data.length + 15 & -16);
+    }
+
+    /**
+     * Given a 256-bit key as four long values, this grows that initial key into a 2176-bit expanded key (a
+     * {@code long[34]}). This uses 34 rounds of the primary algorithm used by Speck.
+     * Used by {@link #encryptCBC}, {@link #encryptCTR}, {@link #decryptCBC}, and {@link #decryptCTR} internally.
+     * @param k1 a secret long
+     * @param k2 a secret long
+     * @param k3 a secret long
+     * @param k4 a secret long
+     * @return a 34-item long array that should, of course, be kept secret to be used cryptographically
+     */
     public static long[] expandKey(long k1, long k2, long k3, long k4) {
         long item;
         long[] k = new long[34], tk = new long[]{k4, k3, k2, k1};
@@ -109,10 +149,19 @@ public final class SpeckCipher {
         return k;
     }
 
+    /**
+     * A usually-internal encryption step. You should use either CBC or CTR mode to actually encrypt a piece of
+     * plaintext, with {@link #encryptCBC(long, long, long, long, long, long, long[], int, long[], int, int)} or
+     * {@link #encryptCTR(long, long, long, long, long, long[], int, long[], int, int)}.
+     * @param key an expanded key, as produced by {@link #expandKey(long, long, long, long)}
+     * @param last0 the first half of the previous result, or the first IV if there was no previous result
+     * @param last1 the last half of the previous result, or the second IV if there was no previous result
+     * @param plaintext the plaintext array, as long items
+     * @param plainOffset the index to start reading from in plaintext
+     * @param ciphertext the ciphertext array, as long items that will be written to; {@link #withPadding(long[]) may need to be padded}
+     * @param cipherOffset the index to start writing to in ciphertext
+     */
     public static void encrypt(long[] key, long last0, long last1, long[] plaintext, int plainOffset, long[] ciphertext, int cipherOffset) {
-//        if(ciphertext == null || key == null || key.length < 34
-//                || ciphertext.length - cipherOffset < 2)
-//            throw new IllegalArgumentException("Invalid encryption arguments");
         long b0, b1;
         if(plaintext == null){
             b0 = last0;
@@ -135,12 +184,19 @@ public final class SpeckCipher {
         if(cipherOffset + 1 < ciphertext.length)
             ciphertext[cipherOffset + 1] = b0;
     }
-
+    /**
+     * A usually-internal encryption step. You should use either CBC or CTR mode to actually encrypt a piece of
+     * plaintext, with {@link #encryptCBC(long, long, long, long, long, long, byte[], int, byte[], int, int)}  or
+     * {@link #encryptCTR(long, long, long, long, long, byte[], int, byte[], int, int)}.
+     * @param key an expanded key, as produced by {@link #expandKey(long, long, long, long)}
+     * @param last0 the first half of the previous result, or the first IV if there was no previous result
+     * @param last1 the last half of the previous result, or the second IV if there was no previous result
+     * @param plaintext the plaintext array, as byte items
+     * @param plainOffset the index to start reading from in plaintext
+     * @param ciphertext the ciphertext array, as byte items that will be written to; {@link #withPadding(byte[]) may need to be padded}
+     * @param cipherOffset the index to start writing to in ciphertext
+     */
     public static void encrypt(long[] key, long last0, long last1, byte[] plaintext, int plainOffset, byte[] ciphertext, int cipherOffset) {
-//        if(ciphertext == null || key == null || key.length < 34
-//                || (plaintext != null && (plaintext.length - plainOffset & 15) != 0)
-//                || (ciphertext.length - cipherOffset & 15) != 0)
-//            throw new IllegalArgumentException("Invalid encryption arguments");
         long b0, b1;
         if(plaintext == null){
             b0 = last0;
@@ -156,11 +212,17 @@ public final class SpeckCipher {
         intoBytes(ciphertext, cipherOffset, b1);
         intoBytes(ciphertext, cipherOffset + 8, b0);
     }
-
+    /**
+     * A usually-internal decryption step. You should use either CBC or CTR mode to actually decrypt a piece of
+     * plaintext, with {@link #decryptCBC(long, long, long, long, long, long, long[], int, long[], int, int)} or
+     * {@link #decryptCTR(long, long, long, long, long, long[], int, long[], int, int)}.
+     * @param key an expanded key, as produced by {@link #expandKey(long, long, long, long)}
+     * @param plaintext the plaintext array, as long items that will be written to
+     * @param plainOffset the index to start writing to in plaintext
+     * @param ciphertext the ciphertext array, as long items
+     * @param cipherOffset the index to start reading from in ciphertext
+     */
     public static void decrypt(long[] key, long[] plaintext, int plainOffset, long[] ciphertext, int cipherOffset) {
-//        if(plaintext == null || ciphertext == null || key == null || key.length < 34
-//                || ciphertext.length - cipherOffset < 2)
-//            throw new IllegalArgumentException("Invalid decryption arguments");
         long b0, b1, item;
         b1 = ciphertext[cipherOffset];
         b0 = ciphertext[cipherOffset + 1];
@@ -175,11 +237,17 @@ public final class SpeckCipher {
             plaintext[plainOffset + 1] = b0;
     }
 
+    /**
+     * A usually-internal decryption step. You should use either CBC or CTR mode to actually decrypt a piece of
+     * plaintext, with {@link #decryptCBC(long, long, long, long, long, long, byte[], int, byte[], int, int)}  or
+     * {@link #decryptCTR(long, long, long, long, long, byte[], int, byte[], int, int)}.
+     * @param key an expanded key, as produced by {@link #expandKey(long, long, long, long)}
+     * @param plaintext the plaintext array, as byte items that will be written to
+     * @param plainOffset the index to start writing to in plaintext
+     * @param ciphertext the ciphertext array, as byte items
+     * @param cipherOffset the index to start reading from in ciphertext
+     */
     public static void decrypt(long[] key, byte[] plaintext, int plainOffset, byte[] ciphertext, int cipherOffset) {
-//        if(plaintext == null || ciphertext == null || key == null || key.length < 34
-//                || (plaintext.length - plainOffset & 15) != 0
-//                || (ciphertext.length - cipherOffset & 15) != 0)
-//            throw new IllegalArgumentException("Invalid decryption arguments");
         long b0, b1, item;
         b1 = fromBytes(ciphertext, cipherOffset);
         b0 = fromBytes(ciphertext, cipherOffset + 8);

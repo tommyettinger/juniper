@@ -278,7 +278,7 @@ public class EncryptionTest {
         System.out.println("cipher after LONG : " + join("", cipherLong));
         System.out.println("cipher after BYTE : " + join("", cipherByte));
         plainLong = new long[]{0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55};
-        plainByte = (new byte[]{
+        plainByte = new byte[]{
                 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 1,
                 0, 0, 0, 0, 0, 0, 0, 1,
@@ -290,7 +290,7 @@ public class EncryptionTest {
                 0, 0, 0, 0, 0, 0, 0, 21,
                 0, 0, 0, 0, 0, 0, 0, 34,
                 0, 0, 0, 0, 0, 0, 0, 55,
-        });
+        };
         cipherLong = new long[plainLong.length + 1 & -2];
         cipherByte = new byte[plainByte.length + 15 & -16];
         Arrays.fill(cipherLong, -1);
