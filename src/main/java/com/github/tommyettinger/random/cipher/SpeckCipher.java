@@ -1,10 +1,9 @@
-package com.github.tommyettinger.random.experimental;
-
-import com.github.tommyettinger.random.DistinctRandom;
+package com.github.tommyettinger.random.cipher;
 
 /**
  * An implementation of the <a href="https://en.wikipedia.org/wiki/Speck_(cipher)">Speck Cipher</a> that can encrypt
- * and decrypt using either CBC or CTR modes. Speck is designed to be small and implemented in software.
+ * and decrypt using either CBC or CTR modes. Speck is designed to be small and fast when implemented in software.
+ * <br>
  * I have very little faith in my implementation's accuracy, and even an accurate implementation would have been
  * specified by The United States of America's NSA, making it inherently untrustworthy. It should be fast, though,
  * and strong enough to keep small-time crooks out of encrypted files. Big-time crooks (nation-states) should be
@@ -15,8 +14,9 @@ import com.github.tommyettinger.random.DistinctRandom;
  * encrypts the last block but doesn't decrypt it, so I think it may only work when a full block of padding is written,
  * validated and ignored. That is, if it works at all! I haven't been able to test m2mi's implementation, but this
  * code has been tested some in this repo. This version uses zero-padding instead of PKCS#7, and works even if a
- * partial block is all there is in the plaintext. When encrypting, the ciphertext array may need to be larger than the
- * plaintext array; use {@link #newPaddedArray(long[])} or {@link #newPaddedArray(byte[])} to get an array of the right size.
+ * partial block is all there is in the plaintext. When encrypting with CBC mode, the ciphertext array may need to be
+ * larger than the plaintext array; use {@link #newPaddedArray(long[])} or {@link #newPaddedArray(byte[])} to get an
+ * array of the right size. This isn't required for CTR mode.
  */
 public final class SpeckCipher {
 
@@ -85,6 +85,8 @@ public final class SpeckCipher {
      * long array with length 2.
      * <br>
      * This is typically used to ensure the ciphertext array is long enough to hold the data assigned to it.
+     * It is only needed for the ciphertext written to by
+     * {@link #encryptCBC(long, long, long, long, long, long, long[], int, long[], int, int)} (CTR doesn't need it).
      *
      * @param data a long array to copy, potentially including padding in the copy
      * @return a long array with a length that is a multiple of 2
@@ -100,6 +102,8 @@ public final class SpeckCipher {
      * byte array with length 16.
      * <br>
      * This is typically used to ensure the ciphertext array is long enough to hold the data assigned to it.
+     * It is only needed for the ciphertext written to by
+     * {@link #encryptCBC(long, long, long, long, long, long, byte[], int, byte[], int, int)} (CTR doesn't need it).
      *
      * @param data a byte array to copy, potentially including padding in the copy
      * @return a byte array with a length that is a multiple of 16
@@ -265,7 +269,7 @@ public final class SpeckCipher {
      * One of the main ways here to encrypt a "plaintext" long array and get back a coded "ciphertext" long array.
      * This takes four {@code long}s as its key (256-bits), and also requires two unique (never used again) longs
      * as IVs. How you generate keys is up to you, but the keys must be kept secret for encryption to stay secure.
-     * To generate IVs, secrecy isn't as important as uniqueness; calling {@link DistinctRandom#nextLong()} even many
+     * To generate IVs, secrecy isn't as important as uniqueness; calling DistinctRandom.nextLong() even many
      * times will never return the same long unless IVs are requested for years from one generator, so it is a good
      * option to produce IVs (using two DistinctRandom generators also works, with one for each IV). The rest of the
      * arguments are about the data being encrypted. The plaintext is the long array to encrypt; it will not be
@@ -276,7 +280,7 @@ public final class SpeckCipher {
      * <br>
      * This uses CBC mode, so it takes two IVs instead of how CTR mode takes one nonce. If the IVs aren't sufficiently
      * random, this produces higher-quality outputs than CTR mode. CBC mode may be slightly faster, though this isn't
-     * clear yet.
+     * clear yet. CTR mode doesn't need its ciphertext to have padding.
      * @param k1 a secret long
      * @param k2 a secret long
      * @param k3 a secret long
@@ -308,7 +312,7 @@ public final class SpeckCipher {
      * One of the main ways here to encrypt a "plaintext" byte array and get back a coded "ciphertext" byte array.
      * This takes four {@code long}s as its key (256-bits), and also requires two unique (never used again) longs
      * as IVs. How you generate keys is up to you, but the keys must be kept secret for encryption to stay secure.
-     * To generate IVs, secrecy isn't as important as uniqueness; calling {@link DistinctRandom#nextLong()} even many
+     * To generate IVs, secrecy isn't as important as uniqueness; calling DistinctRandom.nextLong() even many
      * times will never return the same long unless IVs are requested for years from one generator, so it is a good
      * option to produce IVs (using two DistinctRandom generators also works, with one for each IV). The rest of the
      * arguments are about the data being encrypted. The plaintext is the byte array to encrypt; it will not be
@@ -319,7 +323,7 @@ public final class SpeckCipher {
      * <br>
      * This uses CBC mode, so it takes two IVs instead of how CTR mode takes one nonce. If the IVs aren't sufficiently
      * random, this produces higher-quality outputs than CTR mode. CBC mode may be slightly faster, though this isn't
-     * clear yet.
+     * clear yet. CTR mode doesn't need its ciphertext to have padding.
      * @param k1 a secret long
      * @param k2 a secret long
      * @param k3 a secret long
@@ -354,7 +358,7 @@ public final class SpeckCipher {
      * was called.
      * This takes four {@code long}s as its key (256-bits), and also requires two unique (never used again) longs
      * as IVs. How you generate keys is up to you, but the keys must be kept secret for encryption to stay secure.
-     * To generate IVs, secrecy isn't as important as uniqueness; calling {@link DistinctRandom#nextLong()} even many
+     * To generate IVs, secrecy isn't as important as uniqueness; calling DistinctRandom.nextLong() even many
      * times will never return the same long unless IVs are requested for years from one generator, so it is a good
      * option to produce IVs (using two DistinctRandom generators also works, with one for each IV). The rest of the
      * arguments are about the data being encrypted. The plaintext is the long array to receive decrypted data; it will
@@ -365,7 +369,8 @@ public final class SpeckCipher {
      * <br>
      * This uses CBC mode, so it takes two IVs instead of how CTR mode takes one nonce. If the IVs aren't sufficiently
      * random, this produces higher-quality outputs than CTR mode. CBC mode may be slightly faster, though this isn't
-     * clear yet.
+     * clear yet. CTR mode doesn't need its ciphertext to have padding. CBC mode requires textLength to be a multiple
+     * of 2 (16 bytes) when decrypting (usually guaranteed by padding).
      * @param k1 a secret long
      * @param k2 a secret long
      * @param k3 a secret long
@@ -400,7 +405,7 @@ public final class SpeckCipher {
      * One of the main ways here to encrypt a "plaintext" byte array and get back a coded "ciphertext" byte array.
      * This takes four {@code long}s as its key (256-bits), and also requires one unique (never used again) long as
      * the nonce. How you generate keys is up to you, but the keys must be kept secret for encryption to stay secure.
-     * To generate nonce, secrecy isn't as important as uniqueness; calling {@link DistinctRandom#nextLong()} even many
+     * To generate nonce, secrecy isn't as important as uniqueness; calling DistinctRandom.nextLong() even many
      * times will never return the same long unless nonce are requested for years from one generator, so it is a good
      * option to produce nonce data. The rest of the arguments are about the data being encrypted. The plaintext is the
      * byte array to encrypt; it will not be modified here. The plainOffset is which index in plaintext to start reading
@@ -411,7 +416,8 @@ public final class SpeckCipher {
      * <br>
      * This uses CBC mode, so it takes two IVs instead of how CTR mode takes one nonce. If the IVs aren't sufficiently
      * random, this produces higher-quality outputs than CTR mode. CBC mode may be slightly faster, though this isn't
-     * clear yet.
+     * clear yet. CTR mode doesn't need its ciphertext to have padding. CBC mode requires textLength to be a multiple of
+     * 16 when decrypting (usually guaranteed by padding).
      * @param k1 a secret long
      * @param k2 a secret long
      * @param k3 a secret long
@@ -446,7 +452,7 @@ public final class SpeckCipher {
      * One of the main ways here to encrypt a "plaintext" long array and get back a coded "ciphertext" long array.
      * This takes four {@code long}s as its key (256-bits), and also requires one unique (never used again) long as
      * the nonce. How you generate keys is up to you, but the keys must be kept secret for encryption to stay secure.
-     * To generate nonce, secrecy isn't as important as uniqueness; calling {@link DistinctRandom#nextLong()} even many
+     * To generate nonce, secrecy isn't as important as uniqueness; calling DistinctRandom.nextLong() even many
      * times will never return the same long unless nonce are requested for years from one generator, so it is a good
      * option to produce nonce data. The rest of the arguments are about the data being encrypted. The plaintext is the
      * long array to encrypt; it will not be modified here. The plainOffset is which index in plaintext to start reading
@@ -457,7 +463,7 @@ public final class SpeckCipher {
      * <br>
      * This uses CTR mode, so it takes one nonce instead of how CBC mode takes two IVs. If the IVs/nonce aren't
      * sufficiently random, CBC mode produces higher-quality outputs than CTR mode. CBC mode may be slightly faster,
-     * though this isn't clear yet.
+     * though this isn't clear yet. CTR mode doesn't need its ciphertext to have padding.
      * @param k1 a secret long
      * @param k2 a secret long
      * @param k3 a secret long
@@ -489,7 +495,7 @@ public final class SpeckCipher {
      * One of the main ways here to encrypt a "plaintext" byte array and get back a coded "ciphertext" byte array.
      * This takes four {@code long}s as its key (256-bits), and also requires one unique (never used again) long as
      * the nonce. How you generate keys is up to you, but the keys must be kept secret for encryption to stay secure.
-     * To generate nonce, secrecy isn't as important as uniqueness; calling {@link DistinctRandom#nextLong()} even many
+     * To generate nonce, secrecy isn't as important as uniqueness; calling DistinctRandom.nextLong() even many
      * times will never return the same long unless nonce are requested for years from one generator, so it is a good
      * option to produce nonce data. The rest of the arguments are about the data being encrypted. The plaintext is the
      * byte array to encrypt; it will not be modified here. The plainOffset is which index in plaintext to start reading
@@ -500,7 +506,7 @@ public final class SpeckCipher {
      * <br>
      * This uses CTR mode, so it takes one nonce instead of how CBC mode takes two IVs. If the IVs/nonce aren't
      * sufficiently random, CBC mode produces higher-quality outputs than CTR mode. CBC mode may be slightly faster,
-     * though this isn't clear yet.
+     * though this isn't clear yet. CTR mode doesn't need its ciphertext to have padding.
      * @param k1 a secret long
      * @param k2 a secret long
      * @param k3 a secret long
@@ -532,7 +538,7 @@ public final class SpeckCipher {
      * One of the main ways here to decrypt a coded "ciphertext" long array and get back a "plaintext" long array.
      * This takes four {@code long}s as its key (256-bits), and also requires one unique (never used again) long as
      * the nonce. How you generate keys is up to you, but the keys must be kept secret for encryption to stay secure.
-     * To generate nonce, secrecy isn't as important as uniqueness; calling {@link DistinctRandom#nextLong()} even many
+     * To generate nonce, secrecy isn't as important as uniqueness; calling DistinctRandom.nextLong() even many
      * times will never return the same long unless nonce are requested for years from one generator, so it is a good
      * option to produce nonce data. The rest of the arguments are about the data being decrypted. The plaintext is the
      * long array that will receive the decrypted final result. The plainOffset is which index in plaintext to start
@@ -543,7 +549,8 @@ public final class SpeckCipher {
      * <br>
      * This uses CTR mode, so it takes one nonce instead of how CBC mode takes two IVs. If the IVs/nonce aren't
      * sufficiently random, CBC mode produces higher-quality outputs than CTR mode. CBC mode may be slightly faster,
-     * though this isn't clear yet.
+     * though this isn't clear yet. CTR mode doesn't need its ciphertext to have padding. CBC mode requires textLength
+     * to be a multiple of 2 (16 bytes) when decrypting (usually guaranteed by padding).
      * @param k1 a secret long
      * @param k2 a secret long
      * @param k3 a secret long
@@ -563,7 +570,7 @@ public final class SpeckCipher {
      * One of the main ways here to decrypt a coded "ciphertext" byte array and get back a "plaintext" byte array.
      * This takes four {@code long}s as its key (256-bits), and also requires one unique (never used again) long as
      * the nonce. How you generate keys is up to you, but the keys must be kept secret for encryption to stay secure.
-     * To generate nonce, secrecy isn't as important as uniqueness; calling {@link DistinctRandom#nextLong()} even many
+     * To generate nonce, secrecy isn't as important as uniqueness; calling DistinctRandom.nextLong() even many
      * times will never return the same long unless nonce are requested for years from one generator, so it is a good
      * option to produce nonce data. The rest of the arguments are about the data being decrypted. The plaintext is the
      * byte array that will receive the decrypted final result. The plainOffset is which index in plaintext to start
@@ -574,7 +581,8 @@ public final class SpeckCipher {
      * <br>
      * This uses CTR mode, so it takes one nonce instead of how CBC mode takes two IVs. If the IVs/nonce aren't
      * sufficiently random, CBC mode produces higher-quality outputs than CTR mode. CBC mode may be slightly faster,
-     * though this isn't clear yet.
+     * though this isn't clear yet. CTR mode doesn't need its ciphertext to have padding. CBC mode requires textLength
+     * to be a multiple of 16 when decrypting (usually guaranteed by padding).
      * @param k1 a secret long
      * @param k2 a secret long
      * @param k3 a secret long

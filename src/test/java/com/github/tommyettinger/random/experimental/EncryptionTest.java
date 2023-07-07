@@ -5,6 +5,7 @@ import com.github.tommyettinger.random.AceRandom;
 import com.github.tommyettinger.random.DistinctRandom;
 import com.github.tommyettinger.random.EnhancedRandom;
 import com.github.tommyettinger.random.Xoshiro128PlusPlusRandom;
+import com.github.tommyettinger.random.cipher.SpeckCipher;
 import org.junit.Assert;
 import org.junit.Test;
 
