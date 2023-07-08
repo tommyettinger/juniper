@@ -356,4 +356,35 @@ public class EncryptionTest {
             System.out.println(test + " -> CIPHER -> " + new String(cipher, StandardCharsets.UTF_8) + "   " + cipher.length);
         }
     }
+    @Test
+    public void testSpeckNonce() {
+        // I just wanted to make sure that the nonce was to be "reused" by decryption, but not by encryption.
+        long k1 = 1212, k2 = 3434, k3 = 5656, k4 = 7878, nonce = -1234567890987654321L;
+        EnhancedRandom ivg = new DistinctRandom(nonce);
+        String[] testStrings = {"I", "love", "my", "surveillance", "state"};
+        for(String test : testStrings) {
+            byte[] plain = test.getBytes(StandardCharsets.UTF_8);
+            byte[] cipher = SpeckCipher.newPaddedArray(plain);
+            SpeckCipher.encryptCBC(k1, k2, k3, k4, ivg.nextLong(), ivg.nextLong(), plain, 0, cipher, 0, plain.length);
+            System.out.println(test + " -> PLAIN  -> " + new String(plain, StandardCharsets.UTF_8));
+            System.out.println(test + " -> CIPHER -> " + new String(cipher, StandardCharsets.UTF_8));
+            Arrays.fill(plain, (byte)0);
+            SpeckCipher.decryptCBC(k1, k2, k3, k4, ivg.nextLong(), ivg.nextLong(), plain, 0, cipher, 0, cipher.length);
+            System.out.println(test + " -> PLAIN  -> " + new String(plain, StandardCharsets.UTF_8));
+            System.out.println(test + " -> CIPHER -> " + new String(cipher, StandardCharsets.UTF_8));
+        }
+        ivg.setSeed(nonce);
+        for(String test : testStrings) {
+            byte[] plain = test.getBytes(StandardCharsets.UTF_8);
+            byte[] cipher = new byte[plain.length];//SpeckCipher.newPaddedArray(plain);
+            SpeckCipher.encryptCTR(k1, k2, k3, k4, ivg.nextLong(), plain, 0, cipher, 0, plain.length);
+            System.out.println(test + " -> PLAIN  -> " + new String(plain, StandardCharsets.UTF_8) + "   " + plain.length);
+            String dec = new String(cipher, StandardCharsets.UTF_8);
+            System.out.println(test + " -> CIPHER -> " + dec + "   " + dec.length());
+            Arrays.fill(plain, (byte)0);
+            SpeckCipher.decryptCTR(k1, k2, k3, k4, ivg.nextLong(), plain, 0, cipher, 0, cipher.length);
+            System.out.println(test + " -> PLAIN  -> " + new String(plain, StandardCharsets.UTF_8) + "   " + plain.length);
+            System.out.println(test + " -> CIPHER -> " + new String(cipher, StandardCharsets.UTF_8) + "   " + cipher.length);
+        }
+    }
 }
