@@ -404,6 +404,10 @@ public class EncryptionTest {
             Arrays.fill(plain, (byte)0);
             SpeckCipher.decryptCTR(k1, k2, k3, k4, nonce, nonce2, plain, 0, cipher, 0, cipher.length);
             Assert.assertEquals(test, new String(plain, StandardCharsets.UTF_8));
+            nonce = gen.nextLong();
+            SpeckCipher.encryptInPlaceCTR(k1, k2, k3, k4, nonce, plain, 0, plain.length);
+            SpeckCipher.encryptInPlaceCTR(k1, k2, k3, k4, nonce, plain, 0, plain.length);
+            Assert.assertEquals(test, new String(plain, StandardCharsets.UTF_8));
         }
     }
     @Test
