@@ -58,12 +58,12 @@ public class EncryptedFileHandle extends FileHandle {
 		return file.write(append);
 	}
 
-	@Override
-	public void write(InputStream input, boolean append) {
-		//TODO: Implement encryption here
-		file.write(input, append);
-	}
-
+//	@Override
+//	public void write(InputStream input, boolean append) {
+//		//TODO: Implement encryption here
+//		file.write(input, append);
+//	}
+//
 	@Override
 	public void writeBytes(byte[] bytes, boolean append) {
 		//TODO: Implement encryption here

@@ -153,8 +153,7 @@ public class LaceRandom extends EnhancedRandom {
 
 	/**
 	 * This initializes all 5 states of the generator to random values based on the given seed.
-	 * (2 to the 64) possible initial generator states can be produced here, all with a different
-	 * first value returned by {@link #nextLong()}.
+	 * (2 to the 64) possible initial generator states can be produced here.
 	 *
 	 * @param seed the initial seed; may be any long
 	 */
@@ -289,7 +288,7 @@ public class LaceRandom extends EnhancedRandom {
 		stateA = fa + 0x9E3779B97F4A7C15L;
 		stateB = fa ^ fe;
 		stateC = fb + fd;
-		stateD = (fc << 11 | fc >>> 53);
+		stateD = (fc << 52 | fc >>> 12);
 		stateE = fb + fc;
 		return fb;
 	}
@@ -301,7 +300,7 @@ public class LaceRandom extends EnhancedRandom {
 		final long fd = stateD;
 		final long fe = stateE;
 		stateA -= 0x9E3779B97F4A7C15L;
-		stateC = (fd >>> 11 | fd << 53);
+		stateC = (fd >>> 52 | fd << 12);
 		stateB = fe - stateC;
 		stateD = fc - stateB;
 		stateE = fb ^ stateA;
@@ -318,7 +317,7 @@ public class LaceRandom extends EnhancedRandom {
 		stateA = fa + 0x9E3779B97F4A7C15L;
 		stateB = fa ^ fe;
 		stateC = fb + fd;
-		stateD = (fc << 11 | fc >>> 53);
+		stateD = (fc << 52 | fc >>> 12);
 		stateE = fb + fc;
 		return (int) (fb) >>> (32 - bits);
 	}
