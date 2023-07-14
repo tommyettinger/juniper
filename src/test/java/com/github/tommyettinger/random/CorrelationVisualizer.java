@@ -83,6 +83,7 @@ public class CorrelationVisualizer extends ApplicationAdapter {
         rl.add(new AceRandom(1, 1, 1, 1, 1));
         rl.add(new LaceRandom(1, 1, 1, 1, 1));
         rl.add(new RandomRandom(1));
+        rl.add(new LeaderRandom(1, 1));
         randoms = new EnhancedRandom[rl.size()][][];
         for (int i = 0; i < randoms.length; i++) {
             randoms[i] = makeGrid(rl.get(i));
@@ -267,7 +268,7 @@ public class CorrelationVisualizer extends ApplicationAdapter {
     public static void main(String[] arg) {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
         config.useVsync(true);
-        config.setForegroundFPS(0);
+        config.setForegroundFPS(6);
         config.setResizable(false);
         config.setWindowedMode(width, height);
         config.disableAudio(true);
