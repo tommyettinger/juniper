@@ -90,12 +90,12 @@ public class NormalAlternateScreen extends ScreenAdapter {
         }
         else if(Gdx.input.isKeyJustPressed(Input.Keys.J))
         {
-            mode = (mode + 6) % 7;
+            mode = (mode + 7) % 8;
             return;
         }
         else if(Gdx.input.isKeyJustPressed(Input.Keys.K))
         {
-            mode = (mode + 1) % 7;
+            mode = (mode + 1) % 8;
             return;
         }
         else if(Gdx.input.isKeyJustPressed(Input.Keys.SLASH))
@@ -180,6 +180,15 @@ public class NormalAlternateScreen extends ScreenAdapter {
             case 6:
                 for (int i = 0; i < RUNS; i++) {
                     int m = (int) ((dist.getMu() + dist.getSigma() * Ziggurat.normal(dist.generator.nextLong()))
+                            * 128 + 256);
+                    if (m >= 0 && m < 512)
+                        amounts[m]++;
+                }
+                break;
+            case 7: // "hrandom," one possible solution
+                for (int i = 0; i < RUNS; i++) {
+                    int m = (int) ((dist.getMu() + dist.getSigma() *
+                            ((Long.bitCount(dist.generator.nextLong()) - 32. + dist.generator.nextDouble() - dist.generator.nextDouble()) / 66.0))
                             * 128 + 256);
                     if (m >= 0 && m < 512)
                         amounts[m]++;
