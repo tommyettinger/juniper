@@ -19,7 +19,7 @@ package com.github.tommyettinger.random.experimental;
 
 import com.github.tommyettinger.random.EnhancedRandom;
 
-public class LeaderRandom extends EnhancedRandom {
+public class CobraRandom extends EnhancedRandom {
 
 	/**
 	 * The first state; can be any long.
@@ -31,33 +31,33 @@ public class LeaderRandom extends EnhancedRandom {
 	protected long stateB;
 
 	/**
-	 * Creates a new LeaderRandom with a random state.
+	 * Creates a new CobraRandom with a random state.
 	 */
-	public LeaderRandom() {
+	public CobraRandom() {
 		super();
 		stateA = EnhancedRandom.seedFromMath();
 		stateB = EnhancedRandom.seedFromMath();
 	}
 
 	/**
-	 * Creates a new LeaderRandom with the given seed; all {@code long} values are permitted.
+	 * Creates a new CobraRandom with the given seed; all {@code long} values are permitted.
 	 * The seed will be passed to {@link #setSeed(long)} to attempt to adequately distribute the seed randomly.
 	 *
 	 * @param seed any {@code long} value
 	 */
-	public LeaderRandom(long seed) {
+	public CobraRandom(long seed) {
 		super(seed);
 		setSeed(seed);
 	}
 
 	/**
-	 * Creates a new LeaderRandom with the given two states; all {@code long} values are permitted for
+	 * Creates a new CobraRandom with the given two states; all {@code long} values are permitted for
 	 * stateA and for stateB. These states are not changed during assignment.
 	 *
 	 * @param stateA any {@code long} value
 	 * @param stateB any {@code long} value
 	 */
-	public LeaderRandom(long stateA, long stateB) {
+	public CobraRandom(long stateA, long stateB) {
 		super(stateA);
 		this.stateA = stateA;
 		this.stateB = stateB;
@@ -65,7 +65,7 @@ public class LeaderRandom extends EnhancedRandom {
 
 	@Override
 	public String getTag() {
-		return "LedR";
+		return "CobR";
 	}
 
 	/**
@@ -173,44 +173,37 @@ public class LeaderRandom extends EnhancedRandom {
 
 	@Override
 	public long nextLong () {
-		// This version passed tests to at least 2TB with no anomalies in PractRand,
-		// but when initialized with similar seeds, it produces a XOR pattern.
-//		long a = (stateA += 0x9E3779B97F4A7C15L);
-//		long b = (stateB += Long.numberOfLeadingZeros(a));
-//		a = (a ^ a >>> 27 ^ b) * 0x3C79AC492BA7B653L;
-//		a = (a ^ a >>> 33) * 0x1C69B3F74AC4AE35L;
-
-		long a = (stateA += 0x9E3779B97F4A7C15L);
-		long b = (stateB += Long.numberOfLeadingZeros(a));
-		a = (a ^ a >>> 27 ^ (b << 21 | b >>> 43)) * 0x3C79AC492BA7B653L;
-		a = (a ^ a >>> 33 ^ (b << 41 | b >>> 23)) * 0x1C69B3F74AC4AE35L;
-		return a ^ a >>> 27;
+		long a = (stateA = stateA * 0xF7C2EBC08F67F2B5L + 0xD1342543DE82EF95L);
+		long b = (stateB += 0x9E3779B97F4A7C16L + Long.numberOfLeadingZeros(a));
+		a = (a ^ (a << 23 | a >>> 41) ^ (a << 53 | a >>> 11)) * 0x3C79AC492BA7B653L;
+		b = (b ^ (b << 47 | b >>> 17) ^ (b <<  5 | b >>> 59)) * 0x1C69B3F74AC4AE35L;
+		return a ^ a >>> 33 ^ b ^ b >>> 30;
 	}
 
 	@Override
 	public long previousLong () {
 		long a = stateA;
+		stateA = (a - 0xD1342543DE82EF95L) * 0x09795DFF8024EB9DL;
 		long b = stateB;
-		stateB -= Long.numberOfLeadingZeros(a);
-		stateA -= 0x9E3779B97F4A7C15L;
-		a = (a ^ a >>> 27 ^ (b << 21 | b >>> 43)) * 0x3C79AC492BA7B653L;
-		a = (a ^ a >>> 33 ^ (b << 41 | b >>> 23)) * 0x1C69B3F74AC4AE35L;
-		return a ^ a >>> 27;
+		stateB -= 0x9E3779B97F4A7C16L + Long.numberOfLeadingZeros(a);
+		a = (a ^ (a << 23 | a >>> 41) ^ (a << 53 | a >>> 11)) * 0x3C79AC492BA7B653L;
+		b = (b ^ (b << 47 | b >>> 17) ^ (b <<  5 | b >>> 59)) * 0x1C69B3F74AC4AE35L;
+		return a ^ a >>> 33 ^ b ^ b >>> 30;
 
 	}
 
 	@Override
 	public int next (int bits) {
-		long a = (stateA += 0x9E3779B97F4A7C15L);
-		long b = (stateB += Long.numberOfLeadingZeros(a));
-		a = (a ^ a >>> 27 ^ (b << 21 | b >>> 43)) * 0x3C79AC492BA7B653L;
-		a = (a ^ a >>> 33 ^ (b << 41 | b >>> 23)) * 0x1C69B3F74AC4AE35L;
-		return (int)(a ^ a >>> 27) >>> (32 - bits);
+		long a = (stateA = stateA * 0xF7C2EBC08F67F2B5L + 0xD1342543DE82EF95L);
+		long b = (stateB += 0x9E3779B97F4A7C16L + Long.numberOfLeadingZeros(a));
+		a = (a ^ (a << 23 | a >>> 41) ^ (a << 53 | a >>> 11)) * 0x3C79AC492BA7B653L;
+		b = (b ^ (b << 47 | b >>> 17) ^ (b <<  5 | b >>> 59)) * 0x1C69B3F74AC4AE35L;
+		return (int)(a ^ a >>> 33 ^ b ^ b >>> 30) >>> (32 - bits);
 	}
 
 	@Override
-	public LeaderRandom copy () {
-		return new LeaderRandom(stateA, stateB);
+	public CobraRandom copy () {
+		return new CobraRandom(stateA, stateB);
 	}
 
 	@Override
@@ -220,7 +213,7 @@ public class LeaderRandom extends EnhancedRandom {
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		LeaderRandom that = (LeaderRandom)o;
+		CobraRandom that = (CobraRandom)o;
 
 		if (stateA != that.stateA)
 			return false;
@@ -228,6 +221,6 @@ public class LeaderRandom extends EnhancedRandom {
 	}
 
 	public String toString () {
-		return "LeaderRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L}";
+		return "CobraRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L}";
 	}
 }

@@ -84,6 +84,7 @@ public class CorrelationVisualizer extends ApplicationAdapter {
         rl.add(new LaceRandom(1, 1, 1, 1, 1));
         rl.add(new RandomRandom(1));
         rl.add(new LeaderRandom(1, 1));
+        rl.add(new CobraRandom(1, 1));
         randoms = new EnhancedRandom[rl.size()][][];
         for (int i = 0; i < randoms.length; i++) {
             randoms[i] = makeGrid(rl.get(i));
