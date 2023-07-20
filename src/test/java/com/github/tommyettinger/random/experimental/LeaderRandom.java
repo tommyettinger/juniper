@@ -180,6 +180,7 @@ public class LeaderRandom extends EnhancedRandom {
 //		a = (a ^ a >>> 27 ^ b) * 0x3C79AC492BA7B653L;
 //		a = (a ^ a >>> 33) * 0x1C69B3F74AC4AE35L;
 
+		// Passes 64TB in PractRand!
 		long a = (stateA += 0x9E3779B97F4A7C15L);
 		long b = (stateB += Long.numberOfLeadingZeros(a));
 		a = (a ^ a >>> 27 ^ (b << 21 | b >>> 43)) * 0x3C79AC492BA7B653L;
@@ -230,4 +231,32 @@ public class LeaderRandom extends EnhancedRandom {
 	public String toString () {
 		return "LeaderRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L}";
 	}
+
+//	public static void main(String[] args) {
+//		LeaderRandom random = new LeaderRandom(1L);
+//		long n0 = random.nextLong();
+//		long n1 = random.nextLong();
+//		long n2 = random.nextLong();
+//		long n3 = random.nextLong();
+//		long n4 = random.nextLong();
+//		long n5 = random.nextLong();
+//		long p5 = random.previousLong();
+//		long p4 = random.previousLong();
+//		long p3 = random.previousLong();
+//		long p2 = random.previousLong();
+//		long p1 = random.previousLong();
+//		long p0 = random.previousLong();
+//		System.out.println(n0 == p0);
+//		System.out.println(n1 == p1);
+//		System.out.println(n2 == p2);
+//		System.out.println(n3 == p3);
+//		System.out.println(n4 == p4);
+//		System.out.println(n5 == p5);
+//		System.out.println(n0 + " vs. " + p0);
+//		System.out.println(n1 + " vs. " + p1);
+//		System.out.println(n2 + " vs. " + p2);
+//		System.out.println(n3 + " vs. " + p3);
+//		System.out.println(n4 + " vs. " + p4);
+//		System.out.println(n5 + " vs. " + p5);
+//	}
 }

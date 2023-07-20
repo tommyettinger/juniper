@@ -344,31 +344,31 @@ public class LaceRandom extends EnhancedRandom {
 		return "LaceRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L, stateD=" + (stateD) + "L, stateE=" + (stateE) + "L}";
 	}
 
-	public static void main(String[] args) {
-		LaceRandom random = new LaceRandom(1L);
-		long n0 = random.nextLong();
-		long n1 = random.nextLong();
-		long n2 = random.nextLong();
-		long n3 = random.nextLong();
-		long n4 = random.nextLong();
-		long n5 = random.nextLong();
-		long p5 = random.previousLong();
-		long p4 = random.previousLong();
-		long p3 = random.previousLong();
-		long p2 = random.previousLong();
-		long p1 = random.previousLong();
-		long p0 = random.previousLong();
-		System.out.println(n0 == p0);
-		System.out.println(n1 == p1);
-		System.out.println(n2 == p2);
-		System.out.println(n3 == p3);
-		System.out.println(n4 == p4);
-		System.out.println(n5 == p5);
-		System.out.println(n0 + " vs. " + p0);
-		System.out.println(n1 + " vs. " + p1);
-		System.out.println(n2 + " vs. " + p2);
-		System.out.println(n3 + " vs. " + p3);
-		System.out.println(n4 + " vs. " + p4);
-		System.out.println(n5 + " vs. " + p5);
-	}
+//	public static void main(String[] args) {
+//		LaceRandom random = new LaceRandom(1L);
+//		long n0 = random.nextLong();
+//		long n1 = random.nextLong();
+//		long n2 = random.nextLong();
+//		long n3 = random.nextLong();
+//		long n4 = random.nextLong();
+//		long n5 = random.nextLong();
+//		long p5 = random.previousLong();
+//		long p4 = random.previousLong();
+//		long p3 = random.previousLong();
+//		long p2 = random.previousLong();
+//		long p1 = random.previousLong();
+//		long p0 = random.previousLong();
+//		System.out.println(n0 == p0);
+//		System.out.println(n1 == p1);
+//		System.out.println(n2 == p2);
+//		System.out.println(n3 == p3);
+//		System.out.println(n4 == p4);
+//		System.out.println(n5 == p5);
+//		System.out.println(n0 + " vs. " + p0);
+//		System.out.println(n1 + " vs. " + p1);
+//		System.out.println(n2 + " vs. " + p2);
+//		System.out.println(n3 + " vs. " + p3);
+//		System.out.println(n4 + " vs. " + p4);
+//		System.out.println(n5 + " vs. " + p5);
+//	}
 }

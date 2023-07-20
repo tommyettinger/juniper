@@ -110,7 +110,7 @@ public class BinomialScreen extends ScreenAdapter {
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        font.draw(batch, Stringf.format("BinomialDistribution with A=%1.3f, B=%1.3f; mean=%1.3f at %d FPS",
+        font.draw(batch, Stringf.format("BinomialDistribution with A=%.3f, B=%.3f; mean=%.3f at %d FPS",
                         a, b, dist.getMean(), Gdx.graphics.getFramesPerSecond()),
                 64, 522, 256+128, Align.center, true);
         font.draw(batch, "Lower parameter A by holding a;\nhold Shift and A to raise.", 64, 500-6, 256+128, Align.center, true);

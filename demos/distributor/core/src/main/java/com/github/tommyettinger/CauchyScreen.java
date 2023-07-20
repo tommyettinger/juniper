@@ -115,7 +115,7 @@ public class CauchyScreen extends ScreenAdapter {
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        font.draw(batch, Stringf.format("CauchyDistribution with A=%1.3f, B=%1.3f; median=%1.3f at %d FPS",
+        font.draw(batch, Stringf.format("CauchyDistribution with A=%.3f, B=%.3f; median=%.3f at %d FPS",
                 a, b, dist.getMedian(), Gdx.graphics.getFramesPerSecond()),
                 64, 522, 256+128, Align.center, true);
         font.draw(batch, "Lower parameters A/B/C by holding a, b, or c;\nhold Shift and A/B/C to raise.", 64, 500-6, 256+128, Align.center, true);

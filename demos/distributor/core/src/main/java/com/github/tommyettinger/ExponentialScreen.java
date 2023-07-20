@@ -110,7 +110,7 @@ public class ExponentialScreen extends ScreenAdapter {
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        font.draw(batch, Stringf.format("ExponentialDistribution with A=%1.3f; mean=%1.3f at %d FPS",
+        font.draw(batch, Stringf.format("ExponentialDistribution with A=%.3f; mean=%.3f at %d FPS",
                         a, dist.getMean(), Gdx.graphics.getFramesPerSecond()),
                 64, 522, 256+128, Align.center, true);
         font.draw(batch, "Lower parameters A/B/C by holding a, b, or c;\nhold Shift and A/B/C to raise.", 64, 500-6, 256+128, Align.center, true);
