@@ -6,7 +6,7 @@ import com.github.tommyettinger.digital.TextTools;
 public final class Stringf {
     private Stringf(){}
 
-    public String format(String fmt, Object... args) {
+    public static StringBuilder formatBuilder(String fmt, Object... args) {
         int len = fmt.length(), arg = 0;
         StringBuilder sb = new StringBuilder(len);
         for (int i = 0; i < len; i++) {
@@ -38,6 +38,21 @@ public final class Stringf {
                             sb.append(TextTools.safeSubstring(num, num.length() - length, num.length()));
                         }
                     }
+                } else if (curr == '.') {
+                    curr = fmt.charAt(++i);
+                    if(curr == 'f'){
+                        Base.BASE10.appendDecimal(sb, ((Number) args[arg++]).doubleValue());
+                    }
+                    else {
+                        int precision = Base.BASE10.readInt(fmt, i, len) + 2;
+                        while ((curr = fmt.charAt(++i)) >= '0' && curr <= '9'){
+                        }
+                        if(curr == 'f')
+                        {
+                            String num = Base.BASE10.decimal(((Number) args[arg++]).doubleValue());
+                            sb.append(TextTools.safeSubstring(num, num.length() - precision, num.length()));
+                        }
+                    }
                 } else if (curr >= '1' && curr <= '9') {
                     int length = Base.BASE10.readInt(fmt, i, len);
                     while ((curr = fmt.charAt(++i)) >= '0' && curr <= '9'){
@@ -58,6 +73,23 @@ public final class Stringf {
                 sb.append(curr);
             }
         }
-        return sb.toString();
+        return sb;
     }
+
+    public static String format(String fmt, Object... args) {
+        return formatBuilder(fmt, args).toString();
+    }
+
+    public static void printf(String fmt, Object... args) {
+        System.out.append(formatBuilder(fmt, args));
+    }
+
+    public static void printfn(String fmt, Object... args) {
+        System.out.append(formatBuilder(fmt, args)).println();
+    }
+
+//    public static void main(String[] args) {
+//        printfn("Coming up to the plate, it's number %d, %s!", 42, "Jackie Robinson");
+//        printfn("His batting average is an outstanding %.3f, truly remarkable.", 0.415);
+//    }
 }
