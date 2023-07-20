@@ -17,9 +17,10 @@ public class DistributorDemo extends Game {
     private int screenIndex;
     public static double a = 1.0, b = 1.0, c = 1.0;
     public EnhancedRandom[] randoms = new EnhancedRandom[]{new ChopRandom(), new RandomRandom(), new WhiskerRandom(),
+            new AceRandom(), new ScruffRandom(), new MizuchiRandom(),
             new Xoshiro128PlusPlusRandom(), new LaserRandom(), new TrimRandom(), new DistinctRandom(),
             new GoldenQuasiRandom(), new VanDerCorputQuasiRandom(), new LowChangeQuasiRandom(), new TupleQuasiRandom(0)};
-    public int randomIndex = 10;
+    public int randomIndex = 0;
     public EnhancedRandom random = randoms[randomIndex];
     public BitmapFont font;
     public SpriteBatch batch;

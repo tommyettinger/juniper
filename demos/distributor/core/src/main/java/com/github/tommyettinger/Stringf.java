@@ -81,11 +81,11 @@ public final class Stringf {
     }
 
     public static void printf(String fmt, Object... args) {
-        System.out.append(formatBuilder(fmt, args));
+        System.out.print(formatBuilder(fmt, args));
     }
 
     public static void printfn(String fmt, Object... args) {
-        System.out.append(formatBuilder(fmt, args)).println();
+        System.out.println(formatBuilder(fmt, args));
     }
 
 //    public static void main(String[] args) {

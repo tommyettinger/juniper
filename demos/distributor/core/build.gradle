@@ -3,7 +3,7 @@ eclipse.project.name = appName + '-core'
 
 dependencies {
 	api "com.badlogicgames.gdx:gdx:$gdxVersion"
-	api "com.github.tommyettinger:formic:0.1.4"
+//	api "com.github.tommyettinger:formic:0.1.4"
 	api "com.github.tommyettinger:digital:$digitalVersion"
 	api "com.github.tommyettinger:juniper:$juniperVersion"
 	testImplementation "junit:junit:4.13.2"

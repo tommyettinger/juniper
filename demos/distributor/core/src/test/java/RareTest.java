@@ -1,6 +1,5 @@
 import com.badlogic.gdx.math.RandomXS128;
 import com.github.tommyettinger.random.DistinctRandom;
-import com.github.tommyettinger.random.EnhancedRandom;
 import com.github.tommyettinger.random.GoldenQuasiRandom;
 import com.github.tommyettinger.random.WhiskerRandom;
 import org.junit.Test;

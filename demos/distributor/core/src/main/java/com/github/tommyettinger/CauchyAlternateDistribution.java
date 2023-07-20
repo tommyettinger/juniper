@@ -1,6 +1,5 @@
 package com.github.tommyettinger;
 
-import com.github.tommyettinger.digital.BitConversion;
 import com.github.tommyettinger.digital.TrigTools;
 import com.github.tommyettinger.random.EnhancedRandom;
 import com.github.tommyettinger.random.GoldenQuasiRandom;
