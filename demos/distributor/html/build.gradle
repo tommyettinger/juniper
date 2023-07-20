@@ -30,7 +30,8 @@ gwt {
 
 dependencies {
 	implementation project(':core')
-	implementation "com.badlogicgames.gdx:gdx:$gdxVersion:sources"
+	implementation "com.badlogicgames.gdx:gdx:1.12.0"
+	implementation "com.badlogicgames.gdx:gdx:1.12.0:sources"
 //	implementation "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion"
 //	implementation "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion:sources"
 	implementation "com.github.tommyettinger:gdx-backend-gwt:1.1200.1"
