@@ -88,12 +88,12 @@ public class NormalAlternateScreen extends ScreenAdapter {
         }
         else if(Gdx.input.isKeyJustPressed(Input.Keys.J))
         {
-            mode = (mode + 8) % 9;
+            mode = (mode + 9) % 10;
             return;
         }
         else if(Gdx.input.isKeyJustPressed(Input.Keys.K))
         {
-            mode = (mode + 1) % 9;
+            mode = (mode + 1) % 10;
             return;
         }
         else if(Gdx.input.isKeyJustPressed(Input.Keys.SLASH))
@@ -195,8 +195,8 @@ public class NormalAlternateScreen extends ScreenAdapter {
             case 8:
                 for (int i = 0; i < RUNS; i++) {
                     int m = (int) ((dist.getMu() + dist.getSigma() *
-                            (dist.generator.nextExclusiveSignedDouble() * (13.0 / 12.0 - c)
-                                    + c * (1.0 / 12.0) * (
+                            (dist.generator.nextExclusiveSignedDouble() * (4.0 - 11.0 / 3.0 * c)
+                                    + c * (1.0 / 3.0) * (
                                             dist.generator.nextExclusiveSignedDouble() +
                                             dist.generator.nextExclusiveSignedDouble() +
                                             dist.generator.nextExclusiveSignedDouble() +
@@ -209,6 +209,17 @@ public class NormalAlternateScreen extends ScreenAdapter {
                                             dist.generator.nextExclusiveSignedDouble() +
                                             dist.generator.nextExclusiveSignedDouble()
                             )))
+                            * 128 + 256);
+                    if (m >= 0 && m < 512)
+                        amounts[m]++;
+                }
+                break;
+            case 9:
+                for (int i = 0; i < RUNS; i++) {
+                    int m = (int) ((dist.getMu() + dist.getSigma() *
+                            (dist.generator.nextExclusiveSignedDouble() * (1.0 - c)
+                                    + c * Ziggurat.normal(dist.generator.nextLong())
+                            ))
                             * 128 + 256);
                     if (m >= 0 && m < 512)
                         amounts[m]++;
@@ -235,8 +246,8 @@ public class NormalAlternateScreen extends ScreenAdapter {
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        font.draw(batch, Stringf.format("NormalAlternateDistribution with A=%.3f, B=%.3f; median=%.3f at %d FPS, mode %d (J or K to change)",
-                a, b, dist.getMedian(), Gdx.graphics.getFramesPerSecond(), mode),
+        font.draw(batch, Stringf.format("NormalAlternateDistribution with A=%.3f, B=%.3f; C=%.3f; median=%.3f at %d FPS, mode %d (J or K to change)",
+                a, b, c, dist.getMedian(), Gdx.graphics.getFramesPerSecond(), mode),
                 64, 522, 256+128, Align.center, true);
         font.draw(batch, "Lower parameters A/B/C by holding a, b, or c;\nhold Shift and A/B/C to raise.", 64, 500-6, 256+128, Align.center, true);
         font.draw(batch,
