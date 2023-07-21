@@ -52,6 +52,7 @@ package com.github.tommyettinger;
 public class Ziggurat {
     private static final int    TABLE_ITEMS = 256;
     private static final double R           = 3.65415288536100716461;
+    private static final double INV_R       = 1.0 / R;
     private static final double AREA        = 0.00492867323397465524494;
 
     /**
@@ -115,18 +116,18 @@ public class Ziggurat {
             if (idx == 0) {
                 /* If idx is 0, then the bottom 8 bits of state must all be 0,
                  * and u must be on the larger side.
-                 * We randomize the state thoroughly with the MX3 unary hash
-                 * when this happens, which should be rare. */
-                state ^= 0xABC98388FB8FAC03L;
-                state ^= state >>> 32;
-                state *= 0xBEA225F9EB34556DL;
-                state ^= state >>> 29;
-                state *= 0xBEA225F9EB34556DL;
-                state ^= state >>> 32;
-                state *= 0xBEA225F9EB34556DL;
-                state ^= state >>> 29;
+                 * Doing a "proper" mix of state to get a new random state is
+                 * not especially fast, but we could do it here with MX3. */
+//                state ^= 0xABC98388FB8FAC03L;
+//                state ^= state >>> 32;
+//                state *= 0xBEA225F9EB34556DL;
+//                state ^= state >>> 29;
+//                state *= 0xBEA225F9EB34556DL;
+//                state ^= state >>> 32;
+//                state *= 0xBEA225F9EB34556DL;
+//                state ^= state >>> 29;
                 do {
-                    x = Math.log((((state = (state ^ state >>> 11) + 0x9E3779B97F4A7C15L) & 0x1FFF_FFFFF_FFFFFL) + 1L) * 0x1p-53);
+                    x = Math.log((((state = (state ^ state >>> 11) + 0x9E3779B97F4A7C15L) & 0x1FFF_FFFFF_FFFFFL) + 1L) * 0x1p-53) * INV_R;
                     y = Math.log((((state = (state ^ state >>> 11) + 0x9E3779B97F4A7C15L) & 0x1FFF_FFFFF_FFFFFL) + 1L) * 0x1p-53);
                 } while (-(y + y) < x * x);
                 return (Long.bitCount(state) & 1L) == 0L ?

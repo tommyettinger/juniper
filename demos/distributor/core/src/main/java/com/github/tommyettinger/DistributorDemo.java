@@ -42,7 +42,7 @@ public class DistributorDemo extends Game {
                 new BinomialScreen(this), new ZipfianScreen(this),
                 new TriangleVariantsScreen(this),
         };
-        screenIndex = 17;
+        screenIndex = 3;
         setScreen(screens[screenIndex]);
     }
     public void nextScreen(){

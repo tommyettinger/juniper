@@ -27,10 +27,7 @@ package com.github.tommyettinger.random;
  * an ideal implementation; it cannot produce as wide of an output range when compared to normal-distributing methods
  * that can use an arbitrarily large supply of random numbers, such as Marsaglia's Polar method. Unlike those methods,
  * this only uses one long as its input. This will randomize its input if it reaches a condition that would normally
- * require the Ziggurat algorithm to generate another random number. The internals are very sensitive to how this input
- * randomization is performed, so <a href="https://github.com/jonmaiga/mx3/">the MX3 unary hash</a> is used in the
- * relatively-rare case that this must return a value in the Gaussian's trail, and that should make some patterns in the
- * input long less problematic.
+ * require the Ziggurat algorithm to generate another random number.
  * <br>
  * Every bit in the input long may be used in some form, but the most important distinctions are between the bottom 8
  * bits, which determine a "box" for where the output could be drawn from, the upper 53 bits, which form into a random
@@ -39,7 +36,7 @@ package com.github.tommyettinger.random;
  * defect. Further, generating values in the trail takes more time than other values, and that can happen most
  * frequently when bits 0 through 7 of {@code state} are all 0.
  * <br>
- * The range this can produce is at least from -8.162301284810678 to 7.816238618013967, and is almost certainly larger
+ * The range this can produce is at least from -7.6719775673883905 to 7.183851151080583, and is almost certainly larger
  * (only 4 billion distinct inputs were tested, and there are over 18 quintillion inputs possible).
  * <br>
  * From <a href="https://github.com/camel-cdr/cauldron/blob/7d5328441b1a1bc8143f627aebafe58b29531cb9/cauldron/random.h#L2013-L2265">Cauldron</a>,
@@ -52,6 +49,7 @@ package com.github.tommyettinger.random;
 public class Ziggurat {
     private static final int    TABLE_ITEMS = 256;
     private static final double R           = 3.65415288536100716461;
+    private static final double INV_R       = 1.0 / R;
     private static final double AREA        = 0.00492867323397465524494;
 
     /**
@@ -88,8 +86,6 @@ public class Ziggurat {
              * purposes:
              *    - The 53 most significant bits are used to generate
              *      a random floating-point number in the range [0.0,1.0).
-             *    - The parity of the complete state is used
-             *      to randomly set the sign of the return value.
              *    - The first to the eighth least significant bits are used
              *      to generate an index in the range [0,256).
              *    - The ninth least significant bit is treated as the sign
@@ -97,7 +93,10 @@ public class Ziggurat {
              *    - If the random variable is in the trail, the state will
              *      be modified instead of generating a new random number.
              *      This could yield lower quality, but variables in the
-             *      trail are already exceedingly rare.
+             *      trail are already rare (1/256 values or fewer).
+             *    - If the result is in the trail, the parity of the
+             *      complete state is used to randomly set the sign of the
+             *      return value.
              */
             idx = (int)(state & (TABLE_ITEMS - 1));
             u = (state >>> 11) * 0x1p-53 * TABLE[idx];
@@ -115,19 +114,19 @@ public class Ziggurat {
             if (idx == 0) {
                 /* If idx is 0, then the bottom 8 bits of state must all be 0,
                  * and u must be on the larger side.
-                 * We randomize the state thoroughly with the MX3 unary hash
-                 * when this happens, which should be rare. */
-                state ^= 0xABC98388FB8FAC03L;
-                state ^= state >>> 32;
-                state *= 0xBEA225F9EB34556DL;
-                state ^= state >>> 29;
-                state *= 0xBEA225F9EB34556DL;
-                state ^= state >>> 32;
-                state *= 0xBEA225F9EB34556DL;
-                state ^= state >>> 29;
+                 * Doing a "proper" mix of state to get a new random state is
+                 * not especially fast, but we could do it here with MX3. */
+//                state ^= 0xABC98388FB8FAC03L;
+//                state ^= state >>> 32;
+//                state *= 0xBEA225F9EB34556DL;
+//                state ^= state >>> 29;
+//                state *= 0xBEA225F9EB34556DL;
+//                state ^= state >>> 32;
+//                state *= 0xBEA225F9EB34556DL;
+//                state ^= state >>> 29;
                 do {
-                    x = Math.log((((state = (state ^ state >>> 11) + 0x9E3779B97F4A7C15L) & 0x1FFF_FFFFF_FFFFFL) + 1L) * 0x1p-53);
-                    y = Math.log((((state = (state ^ state >>> 11) + 0x9E3779B97F4A7C15L) & 0x1FFF_FFFFF_FFFFFL) + 1L) * 0x1p-53);
+                    x = Math.log((((state = (state ^ 0xF1357AEA2E62A9C5L) * 0xABC98388FB8FAC03L) >>> 11) + 1L) * 0x1p-53) * INV_R;
+                    y = Math.log((((state = (state ^ 0xF1357AEA2E62A9C5L) * 0xABC98388FB8FAC03L) >>> 11) + 1L) * 0x1p-53);
                 } while (-(y + y) < x * x);
                 return (Long.bitCount(state) & 1L) == 0L ?
                         x - R :
@@ -140,7 +139,7 @@ public class Ziggurat {
             y = u * u;
             f0 = Math.exp(-0.5 * (TABLE[idx]     * TABLE[idx]     - y));
             f1 = Math.exp(-0.5 * (TABLE[idx + 1] * TABLE[idx + 1] - y));
-            if (f1 + (((state = (state ^ state >>> 11) + 0x9E3779B97F4A7C15L) & 0x1FFF_FFFFF_FFFFFL) * 0x1p-53) * (f0 - f1) < 1.0)
+            if (f1 + (((state = (state ^ 0xF1357AEA2E62A9C5L) * 0xABC98388FB8FAC03L) >>> 11) * 0x1p-53) * (f0 - f1) < 1.0)
                 break;
         }
         /* (Zero-indexed ) bits 8, 9, and 10 aren't used in the calculations for idx

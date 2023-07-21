@@ -548,8 +548,9 @@ public class ZigguratExperiments {
 //            System.out.println("Shift: " + r);
             double mx = 0.0, mn = 0.0;
             long c = 0L;
-            for (int i = -2000000000; i < 2000000000; i++, c += 0xC6BC279692B5C323L) {
-                double z = normalNew(c);
+//            for (int i = -0x78000000; i < 0x78000000; i++, c += 0xF1357AEA2E62A000L) {
+            for (int i = -0x78000000; i < 0x78000000; i++, c += 0xC6BC279692B5C323L) {
+                double z = Ziggurat.normal(c);
 //                double z = MathTools.probit(MathTools.exclusiveDouble(c));
                 mx = Math.max(mx, z);
                 mn = Math.min(mn, z);
