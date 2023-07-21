@@ -88,12 +88,12 @@ public class NormalAlternateScreen extends ScreenAdapter {
         }
         else if(Gdx.input.isKeyJustPressed(Input.Keys.J))
         {
-            mode = (mode + 7) % 8;
+            mode = (mode + 8) % 9;
             return;
         }
         else if(Gdx.input.isKeyJustPressed(Input.Keys.K))
         {
-            mode = (mode + 1) % 8;
+            mode = (mode + 1) % 9;
             return;
         }
         else if(Gdx.input.isKeyJustPressed(Input.Keys.SLASH))
@@ -187,6 +187,28 @@ public class NormalAlternateScreen extends ScreenAdapter {
                 for (int i = 0; i < RUNS; i++) {
                     int m = (int) ((dist.getMu() + dist.getSigma() *
                             ((Long.bitCount(dist.generator.nextLong()) - 32. + dist.generator.nextDouble() - dist.generator.nextDouble()) / 66.0))
+                            * 128 + 256);
+                    if (m >= 0 && m < 512)
+                        amounts[m]++;
+                }
+                break;
+            case 8:
+                for (int i = 0; i < RUNS; i++) {
+                    int m = (int) ((dist.getMu() + dist.getSigma() *
+                            (dist.generator.nextExclusiveSignedDouble() * (13.0 / 12.0 - c)
+                                    + c * (1.0 / 12.0) * (
+                                            dist.generator.nextExclusiveSignedDouble() +
+                                            dist.generator.nextExclusiveSignedDouble() +
+                                            dist.generator.nextExclusiveSignedDouble() +
+                                            dist.generator.nextExclusiveSignedDouble() +
+                                            dist.generator.nextExclusiveSignedDouble() +
+                                            dist.generator.nextExclusiveSignedDouble() +
+                                            dist.generator.nextExclusiveSignedDouble() +
+                                            dist.generator.nextExclusiveSignedDouble() +
+                                            dist.generator.nextExclusiveSignedDouble() +
+                                            dist.generator.nextExclusiveSignedDouble() +
+                                            dist.generator.nextExclusiveSignedDouble()
+                            )))
                             * 128 + 256);
                     if (m >= 0 && m < 512)
                         amounts[m]++;
