@@ -20,7 +20,8 @@ public final class Stringf {
                 } else if (curr == 'd') {
                     sb.append(((Number) args[arg++]).longValue());
                 } else if (curr == 'f') {
-                    sb.append(TextTools.safeSubstring(Base.BASE10.decimal(((Number) args[arg++]).doubleValue()), 0, 5));
+                    double d = ((Number) args[arg++]).doubleValue();
+                    sb.append(TextTools.safeSubstring(Base.BASE10.decimal(d), 0, d < 0.0 ? 6 : 5));
                 } else if (curr == '0') {
                     curr = fmt.charAt(++i);
                     if(curr == 'X'){
@@ -49,8 +50,9 @@ public final class Stringf {
                         }
                         if(curr == 'f')
                         {
-                            String num = Base.BASE10.decimal(((Number) args[arg++]).doubleValue());
-                            sb.append(TextTools.safeSubstring(num, num.length() - precision, num.length()));
+                            double d = ((Number) args[arg++]).doubleValue();
+                            String num = Base.BASE10.decimal(d);
+                            sb.append(TextTools.safeSubstring(num, 0, d < 0.0 ? precision + 1 : precision));
                         }
                     }
                 } else if (curr >= '1' && curr <= '9') {
