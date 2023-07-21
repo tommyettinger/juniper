@@ -102,6 +102,7 @@ public final class Deserializer {
         register(new FisherTippettDistribution(random, 1.0, 0.0));
         register(new GammaDistribution(random, 1.0, 1.0));
         register(new GeometricDistribution(random, 0.5));
+        register(new KnobDistribution(random, 0.0, 1.0, 0.5));
         register(new KumaraswamyDistribution(random, 2.0, 2.0));
         register(new LaplaceDistribution(random, 1.0, 0.0));
         register(new LogisticDistribution(random, 1.0, 1.0));
