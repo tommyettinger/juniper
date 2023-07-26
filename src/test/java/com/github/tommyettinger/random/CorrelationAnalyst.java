@@ -54,7 +54,7 @@ public class CorrelationAnalyst extends ApplicationAdapter {
     private static final float[][] colors = new float[width][height];
 
     private static final int[] freq0 = new int[256];
-    private static final int[][] bits = new int[width][height];
+    private static final long[][] bits = new long[width][height];
     private static final float LIGHT_YELLOW = Color.toFloatBits(1f, 1f, 0.4f, 1f);
 
     public float basicPrepare(int bt)
@@ -63,13 +63,15 @@ public class CorrelationAnalyst extends ApplicationAdapter {
         return BitConversion.intBitsToFloat(0xFE000000 | bt * 0x00010101);
     }
 
-    public float redPrepare(int bt)
+    public float colorPrepare(int bt)
     {
-        if(bt >= 510)
-            return BitConversion.intBitsToFloat(0xFE000000 | bt - 510 << 16 | 0xFFFF);
-        if(bt >= 255)
-            return BitConversion.intBitsToFloat(0xFE000000 | bt - 255 << 8 | 0xFF);
-        return BitConversion.intBitsToFloat(0xFE000000 | bt);
+        if(bt >= 381)
+            return Color.WHITE_FLOAT_BITS;
+        if(bt >= 254)
+            return BitConversion.intBitsToFloat(0xFE000000 | bt - 254 << 1 | 0xFFFF00);
+        if(bt >= 127)
+            return BitConversion.intBitsToFloat(0xFE000000 | bt - 127 << 9 | 0xFF0000);
+        return BitConversion.intBitsToFloat(0xFE000000 | bt << 17);
     }
 
     @Override
@@ -161,10 +163,18 @@ public class CorrelationAnalyst extends ApplicationAdapter {
                     }
                 }
 
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
+        for (int x = 63; x < width; x++) {
+            for (int y = 63; y < height; y++) {
                 // TODO: analyze here
-                renderer.color(previousGrid[x+width][y] = colors[x][y]);
+                long before = bits[x][y];
+                for (int i = 1; i < 64; i++) {
+                    before |= bits[x][y-i] << i;
+                }
+                int points = Math.abs(32 - Long.bitCount(before));
+                for (int r = 1; r < 64; r++) {
+                    points += Math.abs(32 - Long.bitCount(before ^ (before << r | before >>> 64 - r)));
+                }
+                renderer.color(previousGrid[x+width][y] = colorPrepare(points));
                 renderer.vertex(x + width, y, 0);
             }
         }
