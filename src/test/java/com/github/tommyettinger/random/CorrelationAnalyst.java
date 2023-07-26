@@ -166,26 +166,28 @@ public class CorrelationAnalyst extends ApplicationAdapter {
         for (int x = 63; x < width; x++) {
             for (int y = 63; y < height; y++) {
                 // TODO: analyze here
-                long before = bits[x][y];
+                long v = bits[x][y], h = v;
                 for (int i = 1; i < 64; i++) {
-                    before |= bits[x][y-i] << i;
+                    v |= bits[x][y-i] << i;
                 }
-                int points = Math.abs(32 - Long.bitCount(before));
+                int points = Math.abs(32 - Long.bitCount(v));
                 for (int r = 1; r < 64; r++) {
-                    points += Math.abs(32 - Long.bitCount(before ^ (before << r | before >>> 64 - r)));
+                    points += Math.abs(32 - Long.bitCount(v ^ (v << r | v >>> 64 - r)));
                 }
 
-
-                before = bits[x][y];
                 for (int i = 1; i < 64; i++) {
-                    before |= bits[x-i][y] << i;
+                    h |= bits[x-i][y] << i;
                 }
-                points += Math.abs(32 - Long.bitCount(before));
+                points += Math.abs(32 - Long.bitCount(h));
                 for (int r = 1; r < 64; r++) {
-                    points += Math.abs(32 - Long.bitCount(before ^ (before << r | before >>> 64 - r)));
+                    points += Math.abs(32 - Long.bitCount(h ^ (h << r | h >>> 64 - r)));
+                }
+                points += Math.abs(32 - Long.bitCount(v ^ h));
+                for (int r = 1; r < 64; r++) {
+                    points += Math.abs(32 - Long.bitCount(v ^ (h << r | h >>> 64 - r)));
                 }
 
-                renderer.color(previousGrid[x+width][y] = colorPrepare(points));
+                renderer.color(previousGrid[x+width][y] = colorPrepare(points >>> 1));
                 renderer.vertex(x + width, y, 0);
             }
         }
