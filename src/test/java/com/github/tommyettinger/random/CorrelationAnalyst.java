@@ -169,34 +169,40 @@ public class CorrelationAnalyst extends ApplicationAdapter {
             for (int y = 63; y < height; y++) {
 
                 long v = bits[x][y], h = v;
+                int error;
                 for (int i = 1; i < 64; i++) {
                     v |= bits[x][y - i] << i;
                 }
-                int points = Math.abs(32 - Long.bitCount(v));
+                error = Math.abs(32 - Long.bitCount(v));
+                int points = error * error;
                 for (int r = 1; r < 64; r++) {
-                    points += Math.abs(32 - Long.bitCount(v ^ (v << r | v >>> 64 - r)));
+                    error = Math.abs(32 - Long.bitCount(v ^ (v << r | v >>> 64 - r)));
+                    points += error * error;
                 }
 
                 for (int i = 1; i < 64; i++) {
                     h |= bits[x - i][y] << i;
                 }
-                points += Math.abs(32 - Long.bitCount(h));
+                error = Math.abs(32 - Long.bitCount(h));
+                points += error * error;
                 for (int r = 1; r < 64; r++) {
-                    points += Math.abs(32 - Long.bitCount(h ^ (h << r | h >>> 64 - r)));
+                    error = Math.abs(32 - Long.bitCount(h ^ (h << r | h >>> 64 - r)));
+                    points += error * error;
                 }
                 points += Math.abs(32 - Long.bitCount(v ^ h));
                 for (int r = 1; r < 64; r++) {
-                    points += Math.abs(32 - Long.bitCount(v ^ (h << r | h >>> 64 - r)));
+                    error = Math.abs(32 - Long.bitCount(v ^ (h << r | h >>> 64 - r)));
+                    points += error * error;
                 }
 
                 total += points;
 
-                renderer.color(previousGrid[x + width][y] = colorPrepare(points >>> 1));
+                renderer.color(previousGrid[x + width][y] = colorPrepare(points >>> 4));
                 renderer.vertex(x + width, y, 0);
             }
         }
         if(Gdx.input.isKeyPressed(T)){ // Total
-            title = "total score of " + Base.BASE10.friendly(total / ((width - 63.0) * (height - 63.0)));
+            title = "total score of " + Base.BASE10.friendly(/*Math.sqrt*/(total / ((width - 63.0) * (height - 63.0))));
         }
         renderer.end();
         if (Gdx.input.isKeyPressed(A)) { // Analysis
@@ -247,7 +253,7 @@ public class CorrelationAnalyst extends ApplicationAdapter {
         config.setTitle("Juniper Correlation Analysis");
         config.setWindowedMode(width << 1, height);
         config.useVsync(false);
-        config.setForegroundFPS(120);
+        config.setForegroundFPS(10);
         config.setResizable(false);
         new Lwjgl3Application(new CorrelationAnalyst(), config);
     }
