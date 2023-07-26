@@ -29,6 +29,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.github.tommyettinger.digital.ArrayTools;
+import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.digital.BitConversion;
 
 import java.util.Arrays;
@@ -154,21 +155,22 @@ public class CorrelationAnalyst extends ApplicationAdapter {
         ArrayTools.fill(bits, 0);
 
         int bt;
-                for (int x = 0; x < width; x++) {
-                    for (int y = 0; y < height; y++) {
-                        bt = (int) (-(randoms[currentRandom][x][y].nextLong() & 1L << selectedBit) >> 63) & 255;
-                        bits[x][y] = bt & 1;
-                        renderer.color(previousGrid[x][y] = basicPrepare(bt));
-                        renderer.vertex(x, y, 0);
-                    }
-                }
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                bt = (int) (-(randoms[currentRandom][x][y].nextLong() & 1L << selectedBit) >> 63) & 255;
+                bits[x][y] = bt & 1;
+                renderer.color(previousGrid[x][y] = basicPrepare(bt));
+                renderer.vertex(x, y, 0);
+            }
+        }
 
+        double total = 0.0;
         for (int x = 63; x < width; x++) {
             for (int y = 63; y < height; y++) {
-                // TODO: analyze here
+
                 long v = bits[x][y], h = v;
                 for (int i = 1; i < 64; i++) {
-                    v |= bits[x][y-i] << i;
+                    v |= bits[x][y - i] << i;
                 }
                 int points = Math.abs(32 - Long.bitCount(v));
                 for (int r = 1; r < 64; r++) {
@@ -176,7 +178,7 @@ public class CorrelationAnalyst extends ApplicationAdapter {
                 }
 
                 for (int i = 1; i < 64; i++) {
-                    h |= bits[x-i][y] << i;
+                    h |= bits[x - i][y] << i;
                 }
                 points += Math.abs(32 - Long.bitCount(h));
                 for (int r = 1; r < 64; r++) {
@@ -187,18 +189,23 @@ public class CorrelationAnalyst extends ApplicationAdapter {
                     points += Math.abs(32 - Long.bitCount(v ^ (h << r | h >>> 64 - r)));
                 }
 
-                renderer.color(previousGrid[x+width][y] = colorPrepare(points >>> 1));
+                total += points;
+
+                renderer.color(previousGrid[x + width][y] = colorPrepare(points >>> 1));
                 renderer.vertex(x + width, y, 0);
             }
         }
+        if(Gdx.input.isKeyPressed(T)){ // Total
+            title = "total score of " + Base.BASE10.friendly(total / ((width - 63.0) * (height - 63.0)));
+        }
         renderer.end();
-        if(Gdx.input.isKeyPressed(A)){ // Analysis
+        if (Gdx.input.isKeyPressed(A)) { // Analysis
             renderer.begin(view.getCamera().combined, GL_LINES);
             for (int i = 0; i < 255; i++) {
                 renderer.color(LIGHT_YELLOW);
                 renderer.vertex(i, freq0[i] * 0x1p-3f, 0);
                 renderer.color(LIGHT_YELLOW);
-                renderer.vertex(i+1, freq0[i+1] * 0x1p-3f, 0);
+                renderer.vertex(i + 1, freq0[i + 1] * 0x1p-3f, 0);
             }
             renderer.color(LIGHT_YELLOW);
             renderer.vertex(255, 0 * 0x1p-3f, 0);
