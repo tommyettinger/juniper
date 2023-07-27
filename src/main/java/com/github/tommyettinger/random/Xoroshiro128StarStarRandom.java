@@ -238,6 +238,45 @@ public class Xoroshiro128StarStarRandom extends EnhancedRandom {
 		return (int)(((result << 7 | result >>> 57) * 9) >>> 64 - bits);
 	}
 
+	/**
+	 * Jumps extremely far in the generator's sequence, such that it requires {@code Math.pow(2, 32)} calls to leap() to
+	 * complete a cycle through the generator's entire sequence. This can be used to create over 4 billion
+	 * substreams of this generator's sequence, each with a period of {@code Math.pow(2, 96)}.
+	 * @return the result of what nextLong() would return if it was called at the state this jumped to
+	 */
+	public long leap()
+	{
+		long s0 = 0L;
+		long s1 = 0L;
+		for (long b = 0xd2a98b26625eee7bL; b != 0L; b >>>= 1)
+		{
+			if ((1L & b) != 0L)
+			{
+				s0 ^= stateA;
+				s1 ^= stateB;
+			}
+			nextLong();
+		}
+		for (long b = 0xdddf9b1090aa7ac1L; b != 0L; b >>>= 1)
+		{
+			if ((1L & b) != 0L)
+			{
+				s0 ^= stateA;
+				s1 ^= stateB;
+			}
+			nextLong();
+		}
+		stateA = s0;
+		stateB = s1;
+
+		// gets the result that would have been returned by nextLong() before this step.
+		s1 = (s1 << 27 | s1 >>> 37);
+		s0 ^= s1 ^ s1 << 16;
+		s0 = (s0 << 40 | s0 >>> 24);
+		s0 *= 5;
+		return (s0 << 7 | s0 >>> 57) * 9;
+	}
+
 	@Override
 	public Xoroshiro128StarStarRandom copy () {
 		return new Xoroshiro128StarStarRandom(stateA, stateB);
