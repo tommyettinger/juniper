@@ -35,15 +35,75 @@ import com.github.tommyettinger.digital.BitConversion;
 import com.github.tommyettinger.random.experimental.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import static com.badlogic.gdx.Input.Keys.*;
-import static com.badlogic.gdx.graphics.GL20.GL_LINES;
 import static com.badlogic.gdx.graphics.GL20.GL_POINTS;
-import static com.github.tommyettinger.random.CorrelationVisualizer.*;
+import static com.github.tommyettinger.random.CorrelationVisualizer.title;
 
 public class CorrelationAnalyst extends ApplicationAdapter {
     private static final int width = 459, height = 816;
+    public static EnhancedRandom[][] makeGrid(EnhancedRandom base, int width, int height){
+        EnhancedRandom[][] g = new EnhancedRandom[width][height];
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                g[x][y] = base.copy();
+                switch (g[x][y].getStateCount()) {
+                    case 1:
+                        g[x][y].setState(x << 17 ^ y << 1);
+                        break;
+                    case 2:
+                        g[x][y].setState(x << 1, y << 1);
+                        break;
+                    case 3:
+                        g[x][y].setState(x << 1, y << 1, 1L);
+                        break;
+                    case 4:
+                        g[x][y].setState(x << 1, y << 1, 1L, 1L);
+                        break;
+                    case 5:
+                        g[x][y].setState(x << 1, y << 1, 1L, 1L, 1L);
+                        break;
+                }
+            }
+        }
+        return g;
+    }
+
+    public static void refreshGrid() {
+        for (int i = 0, n = randoms.length; i < n; i++) {
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    switch (randoms[i][x][y].getStateCount()) {
+                        case 1:
+                            randoms[i][x][y].setState(x << 17 ^ y << 1);
+                            break;
+                        case 2:
+                            randoms[i][x][y].setState(x << 1, y << 1);
+                            break;
+                        case 3:
+                            randoms[i][x][y].setState(x << 1, y << 1, 1L);
+                            break;
+                        case 4:
+                            randoms[i][x][y].setState(x << 1, y << 1, 1L, 1L);
+                            break;
+                        case 5:
+                            randoms[i][x][y].setState(x << 1, y << 1, 1L, 1L, 1L);
+                            break;
+                    }
+                }
+            }
+        }
+    }
+
+    public static void seedGrid() {
+        for (int i = 0, n = randoms.length; i < n; i++) {
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    randoms[i][x][y].setSeed(x << 17 ^ y << 1);
+                }
+            }
+        }
+    }
 
     public static final EnhancedRandom[][][] randoms;
     static {
@@ -53,7 +113,6 @@ public class CorrelationAnalyst extends ApplicationAdapter {
         rl.add(new SpoonRandom(1, 1));
         rl.add(new SpritzRandom(1, 1));
         rl.add(new SpryRandom(1, 1));
-//        rl.add(new SkyRandom(1, 1));
         rl.add(new ScamperRandom(1, 1));
         rl.add(new AceRandom(1, 1, 1, 1, 1));
         rl.add(new LaceRandom(1, 1, 1, 1, 1));
@@ -62,6 +121,15 @@ public class CorrelationAnalyst extends ApplicationAdapter {
         rl.add(new CobraRandom(1, 1));
         rl.add(new FleetRandom(1, 1));
         rl.add(new BarleyRandom(1, 1));
+        rl.add(new AceAlternates.AceRandomAC(1, 1, 1, 1, 1));
+        rl.add(new AceAlternates.AceRandomAD(1, 1, 1, 1, 1));
+        rl.add(new AceAlternates.AceRandomAE(1, 1, 1, 1, 1));
+        rl.add(new AceAlternates.AceRandomBC(1, 1, 1, 1, 1));
+        rl.add(new AceAlternates.AceRandomBD(1, 1, 1, 1, 1));
+        rl.add(new AceAlternates.AceRandomBE(1, 1, 1, 1, 1));
+        rl.add(new AceAlternates.AceRandomCD(1, 1, 1, 1, 1));
+        rl.add(new AceAlternates.AceRandomCE(1, 1, 1, 1, 1));
+        rl.add(new AceAlternates.AceRandomDE(1, 1, 1, 1, 1));
         randoms = new EnhancedRandom[rl.size()][][];
         for (int i = 0; i < randoms.length; i++) {
             randoms[i] = makeGrid(rl.get(i), width, height);
