@@ -43,7 +43,7 @@ public class CorrelationVisualizer extends ApplicationAdapter {
     private ImmediateModeRenderer20 renderer;
     public static final int width = 256, height = 256;
     private static final float[][] previousGrid = new float[width][height];
-    public static EnhancedRandom[][] makeGrid(EnhancedRandom base){
+    public static EnhancedRandom[][] makeGrid(EnhancedRandom base, int width, int height){
         EnhancedRandom[][] g = new EnhancedRandom[width][height];
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
@@ -89,9 +89,9 @@ public class CorrelationVisualizer extends ApplicationAdapter {
         rl.add(new BarleyRandom(1, 1));
         randoms = new EnhancedRandom[rl.size()][][];
         for (int i = 0; i < randoms.length; i++) {
-            randoms[i] = makeGrid(rl.get(i));
+            randoms[i] = makeGrid(rl.get(i), width, height);
         }
-    };
+    }
     public int currentRandom = 0;
     public static int randomCount = randoms.length;
     public int currentMode = 0;

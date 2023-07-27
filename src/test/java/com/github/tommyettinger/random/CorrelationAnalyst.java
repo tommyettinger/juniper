@@ -23,6 +23,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
 import com.badlogic.gdx.scenes.scene2d.utils.UIUtils;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -31,7 +32,9 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.github.tommyettinger.digital.ArrayTools;
 import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.digital.BitConversion;
+import com.github.tommyettinger.random.experimental.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import static com.badlogic.gdx.Input.Keys.*;
@@ -40,6 +43,30 @@ import static com.badlogic.gdx.graphics.GL20.GL_POINTS;
 import static com.github.tommyettinger.random.CorrelationVisualizer.*;
 
 public class CorrelationAnalyst extends ApplicationAdapter {
+    private static final int width = 459, height = 816;
+
+    public static final EnhancedRandom[][][] randoms;
+    static {
+        ArrayList<EnhancedRandom> rl = Deserializer.copyRandoms();
+        rl.add(new SplurgeRandom(1, 1));
+        rl.add(new SportyRandom(1, 1));
+        rl.add(new SpoonRandom(1, 1));
+        rl.add(new SpritzRandom(1, 1));
+        rl.add(new SpryRandom(1, 1));
+//        rl.add(new SkyRandom(1, 1));
+        rl.add(new ScamperRandom(1, 1));
+        rl.add(new AceRandom(1, 1, 1, 1, 1));
+        rl.add(new LaceRandom(1, 1, 1, 1, 1));
+        rl.add(new RandomRandom(1));
+        rl.add(new LeaderRandom(1, 1));
+        rl.add(new CobraRandom(1, 1));
+        rl.add(new FleetRandom(1, 1));
+        rl.add(new BarleyRandom(1, 1));
+        randoms = new EnhancedRandom[rl.size()][][];
+        for (int i = 0; i < randoms.length; i++) {
+            randoms[i] = makeGrid(rl.get(i), width, height);
+        }
+    }
 
     public static int randomCount = randoms.length;
     private int currentRandom = 0;
@@ -48,20 +75,18 @@ public class CorrelationAnalyst extends ApplicationAdapter {
     private boolean keepGoing = true;
     private ImmediateModeRenderer20 renderer;
 
-    private static final int width = 256, height = 256;
-
     // packed float colors
     private static final float[][] previousGrid = new float[width << 1][height];
-    private static final float[][] colors = new float[width][height];
 
-    private static final int[] freq0 = new int[256];
     private static final long[][] bits = new long[width][height];
     private static final float LIGHT_YELLOW = Color.toFloatBits(1f, 1f, 0.4f, 1f);
 
     private int minPoints = Integer.MAX_VALUE, maxPoints = 0;
+
+    private Pixmap image = null;
+
     public float basicPrepare(int bt)
     {
-        freq0[bt]++;
         return BitConversion.intBitsToFloat(0xFE000000 | bt * 0x00010101);
     }
 
@@ -193,6 +218,13 @@ public class CorrelationAnalyst extends ApplicationAdapter {
                         System.out.println(title);
                         if (!keepGoing) putMap();
                         break;
+                    case I: // image
+                        if(image == null) image = new Pixmap(Gdx.files.internal("Cat_BW.png"));
+                        else {
+                            image.dispose();
+                            image = null;
+                        }
+                        break;
                     case Q: // quit
                     case ESCAPE: {
                         Gdx.app.exit();
@@ -205,7 +237,6 @@ public class CorrelationAnalyst extends ApplicationAdapter {
     }
 
     public void putMap() {
-        Arrays.fill(freq0, 0);
         renderer.begin(view.getCamera().combined, GL_POINTS);
         ArrayTools.fill(bits, 0);
 
@@ -267,21 +298,6 @@ public class CorrelationAnalyst extends ApplicationAdapter {
             //Maximum points: 195616
         }
         renderer.end();
-        if (Gdx.input.isKeyPressed(A)) { // Analysis
-            renderer.begin(view.getCamera().combined, GL_LINES);
-            for (int i = 0; i < 255; i++) {
-                renderer.color(LIGHT_YELLOW);
-                renderer.vertex(i, freq0[i] * 0x1p-3f, 0);
-                renderer.color(LIGHT_YELLOW);
-                renderer.vertex(i + 1, freq0[i + 1] * 0x1p-3f, 0);
-            }
-            renderer.color(LIGHT_YELLOW);
-            renderer.vertex(255, 0 * 0x1p-3f, 0);
-            renderer.color(LIGHT_YELLOW);
-            renderer.vertex(256, 0 * 0x1p-3f, 0);
-            renderer.end();
-        }
-
     }
 
     @Override
