@@ -219,7 +219,16 @@ public class CorrelationAnalyst extends ApplicationAdapter {
                         if (!keepGoing) putMap();
                         break;
                     case I: // image
-                        if(image == null) image = new Pixmap(Gdx.files.internal("Cat_BW.png"));
+                        if(image == null) {
+                            image = new Pixmap(Gdx.files.internal("Cat_BW.png"));
+                            int h = image.getHeight(), w = image.getWidth();
+                            for (int y = 0; y < h && y < height; y++) {
+                                for (int x = 0; x < w && x < width; x++) {
+                                    int color = image.getPixel(x, h - 1 - y);
+                                    bits[x][y] = (color >>> 24) * 3 + (color >>> 16 & 255) * 4 + (color >>> 8 & 255) >>> 10;
+                                }
+                            }
+                        }
                         else {
                             image.dispose();
                             image = null;
@@ -238,18 +247,28 @@ public class CorrelationAnalyst extends ApplicationAdapter {
 
     public void putMap() {
         renderer.begin(view.getCamera().combined, GL_POINTS);
-        ArrayTools.fill(bits, 0);
+        if(image == null) {
+            ArrayTools.fill(bits, 0);
 
-        int bt;
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                bt = (int) (-(randoms[currentRandom][x][y].nextLong() & 1L << selectedBit) >> 63) & 255;
-                bits[x][y] = bt & 1;
-                renderer.color(previousGrid[x][y] = basicPrepare(bt));
-                renderer.vertex(x, y, 0);
+            int bt;
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    bt = (int) (-(randoms[currentRandom][x][y].nextLong() & 1L << selectedBit) >> 63) & 255;
+                    bits[x][y] = bt & 1;
+                    renderer.color(previousGrid[x][y] = basicPrepare(bt));
+                    renderer.vertex(x, y, 0);
+                }
             }
         }
+        else {
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    renderer.color(previousGrid[x][y] = basicPrepare(-(int)(bits[x][y]) & 255));
+                    renderer.vertex(x, y, 0);
+                }
+            }
 
+        }
         double total = 0.0;
         for (int x = 63; x < width; x++) {
             for (int y = 63; y < height; y++) {
