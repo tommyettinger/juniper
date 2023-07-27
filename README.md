@@ -18,8 +18,19 @@ without any anomalies considered worse than "unusual". Many have also undergone
 additional, significantly-more-strenuous testing on the GPU, and the generators
 that fail that testing only do so after at least 100PB of data is generated.
 
-This library is compatible with Java 7 language level and higher. This should
-allow it to be used on Android, GWT, and RoboVM.
+This library is compatible with Java 8 language level and higher. It uses only
+language features from Java 8, and does not need any APIs introduced in Java 8.
+This should allow it to be used on Android, GWT, and RoboVM. Some extremely
+out-of-date versions of Android may not be compatible with Java 8 even with core
+library desugaring; Google is dropping support for older Android versions and
+developers should follow suit. RoboVM has always had support for language level
+8, but in the main branch has never supported Java 8 APIs (not a problem here).
+GWT has had support for Java 8 in some form since the 2.8.x line of releases;
+using 2.10.0 is recommended because it improves on this support. Most of these
+are made at least a little easier by using
+[gdx-liftoff](https://github.com/tommyettinger/gdx-liftoff) to generate projects
+(assuming you are making a libGDX app or game), since gdx-liftoff handles core
+library desugaring on Android and uses GWT 2.10.0 by default.
 
 You can preview what some distributions look like
 [on this page](https://tommyettinger.github.io/juniper/distributor/). It uses
@@ -181,7 +192,7 @@ In a libGDX project that has a GWT/HTML backend, the `html/build.gradle` file
 should additionally have:
 
 ```
-implementation "com.github.tommyettinger:digital:0.3.3:sources"
+implementation "com.github.tommyettinger:digital:0.3.5:sources"
 implementation "com.github.tommyettinger:juniper:0.3.5:sources"
 ```
 

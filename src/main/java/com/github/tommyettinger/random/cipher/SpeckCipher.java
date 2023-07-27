@@ -3,11 +3,14 @@ package com.github.tommyettinger.random.cipher;
 /**
  * An implementation of the <a href="https://en.wikipedia.org/wiki/Speck_(cipher)">Speck Cipher</a> that can encrypt
  * and decrypt using either CBC or CTR modes. Speck is designed to be small and fast when implemented in software.
+ * This does not extend {@code javax.crypto.Cipher} because that isn't possible in a pure Java library, to my knowledge.
  * <br>
  * I have very little faith in my implementation's accuracy, and even an accurate implementation would have been
  * specified by The United States of America's NSA, making it inherently untrustworthy. It should be fast, though,
  * and strong enough to keep small-time crooks out of encrypted files. Big-time crooks (nation-states) should be
  * assumed to already have anything they want that was encrypted with this.
+ * <br>
+ * This uses a block size of 128 bits and a key size of 256 bits.
  * <br>
  * The implementation here is based on <a href="https://github.com/m2mi/open_speck/blob/master/open-speck/src/main/c/speck.c">m2mi's open_speck C code</a>,
  * which is licensed under Apache 2.0. Though the m2mi implementation seems to use some form of PKCS#7 for padding, it
