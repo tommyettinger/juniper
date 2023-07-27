@@ -64,7 +64,7 @@ public class Xoshiro256StarStarRandom extends EnhancedRandom {
 	protected long stateD;
 
 	/**
-	 * Creates a new FourWheelRandom with a random state.
+	 * Creates a new Xoshiro256StarStarRandom with a random state.
 	 */
 	public Xoshiro256StarStarRandom () {
 		super();
@@ -77,7 +77,7 @@ public class Xoshiro256StarStarRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Creates a new FourWheelRandom with the given seed; all {@code long} values are permitted.
+	 * Creates a new Xoshiro256StarStarRandom with the given seed; all {@code long} values are permitted.
 	 * The seed will be passed to {@link #setSeed(long)} to attempt to adequately distribute the seed randomly.
 	 *
 	 * @param seed any {@code long} value
@@ -88,7 +88,7 @@ public class Xoshiro256StarStarRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Creates a new FourWheelRandom with the given four states; all {@code long} values are permitted.
+	 * Creates a new Xoshiro256StarStarRandom with the given four states; all {@code long} values are permitted.
 	 * These states will be used verbatim, as long as they are not all 0. In that case, stateD is changed.
 	 *
 	 * @param stateA any {@code long} value
