@@ -87,9 +87,11 @@ is similar to DistinctRandom in terms of its features (it can skip to any point 
 also has each possible LaserRandom instance produce a different set of outputs over its full cycle, with some outputs
 produced twice and some not at all, but appending the outputs of all LaserRandom instances would contain every possible
 long exactly 2 to the 64 times. `com.github.tommyettinger.random.Xoshiro256StarStarRandom` isn't quite as fast, as the
-above generators, but is four-dimensionally equidistributed
-(this means every sequence of four `long` values will be produced with equal likelihood, except the four-zeroes sequence, which is
-never produced). `com.github.tommyettinger.random.StrangerRandom` is mostly useful if you anticipate running on unusual
+above generators, but is four-dimensionally equidistributed (this means every sequence of four `long` values will be
+produced with equal likelihood, except the four-zeroes sequence, which is never produced).
+`com.github.tommyettinger.random.Xoshiro256MX3Random` is just like the previously-mentioned generator, but uses a
+more robust way of mixing the output bits (the MX3 unary hash instead of the StarStar scrambler).
+`com.github.tommyettinger.random.StrangerRandom` is mostly useful if you anticipate running on unusual
 hardware, particularly some that doesn't support fast multiplication between `long`s (StrangerRandom doesn't use multiplication);
 it also has a good guaranteed minimum period length of 2 to the 65 minus 2, but is between DistinctRandom and FourWheelRandom in
 raw speed. `com.github.tommyettinger.random.MizuchiRandom` is a simple PCG-style generator, using a linear congruential generator
@@ -99,6 +101,8 @@ works on `int` states instead of `long`, so it has a shorter guaranteed period o
 when run on GWT (even when generating `long` values!). `com.github.tommyettinger.random.Xoshiro128PlusPlusRandom` is a slightly-modified
 version of the 32-bit Xoshiro generator with the ++ scrambler; it has some optimizations so that it can return `long`
 values more quickly, though it is still slower than ChopRandom.
+`com.github.tommyettinger.random.Xoroshiro128StarStarRandom` uses the precursoor to Xoshiro, the similarly-named
+Xoroshiro, with two `long` states; it is two-dimensionally equidistributed and has a period of 2 to the 128 minus 1.
 
 Two quasi-random number generators are present here; these are designed for a different purpose than the other
 generators and don't pass statistical tests for randomness. They do converge much more quickly than a pseudo-random
@@ -118,8 +122,9 @@ to match the generator that was serialized.
 
 Some generators have the ability to `leap()` ahead many steps in their sequence, guaranteeing some span of values will
 not overlap with the next call to `leap()`. The Xoshiro generators have an exact-length leap that guarantees a
-non-overlapping span of either 2 to the 64 (Xoshiro128PlusPlusRandom) or 2 to the 192 (Xoshiro256StarStarRandom)
-generated values. Some generators with a counter (PasarRandom, TrimRandom, AceRandom, WhiskerRandom, and ScruffRandom)
+non-overlapping span of 2 to the 64 (Xoshiro128PlusPlusRandom), 2 to the 96 (Xoroshiro128StarStarRandom), or 2 to the
+192 (Xoshiro256StarStarRandom and Xoshiro256MX3Random) generated values. Some generators with a counter
+(PasarRandom, TrimRandom, AceRandom, WhiskerRandom, and ScruffRandom)
 can jump an inexact length, but guarantee at least 2 to the 48 generated values without overlap (usually, the actual
 number is much higher).
 
@@ -180,12 +185,20 @@ can resume from this point at a later time. Just call `setArchive()` with what `
 back to the state before `pauseStorage()` was called, though the random number generator is probably in a different
 state. This uses `LongSequence.NO_OP`, a constant, always-empty LongSequence, to avoid storing anything.
 
+## And so on...
+
+There's a probably-badly-implemented cipher in the `com.github.tommyettinger.random.cipher.SpeckCipher` class; I don't
+think it's going to be terribly useful or secure, but it was mostly a learning exercise. Speck is a relatively simple
+and fast cipher released by the NSA (although the NSA isn't exactly a group I would trust to secure anything, Speck
+seems to be secure enough to stop the average criminal). Unless you can lock down your JVM rather well, any software
+cipher is just going to get ripped apart by any standard Java agent, so... don't bother with this.
+
 ## How to get it?
 
 With Gradle, the dependency (of the core module, if you have multiple) is:
 
 ```
-api "com.github.tommyettinger:juniper:0.3.5"
+api "com.github.tommyettinger:juniper:0.3.6"
 ```
 
 In a libGDX project that has a GWT/HTML backend, the `html/build.gradle` file
@@ -193,7 +206,7 @@ should additionally have:
 
 ```
 implementation "com.github.tommyettinger:digital:0.3.5:sources"
-implementation "com.github.tommyettinger:juniper:0.3.5:sources"
+implementation "com.github.tommyettinger:juniper:0.3.6:sources"
 ```
 
 And the `GdxDefinition.gwt.xml` file should have:
@@ -209,7 +222,7 @@ If you don't use Gradle, then with Maven, the dependency is:
 <dependency>
   <groupId>com.github.tommyettinger</groupId>
   <artifactId>juniper</artifactId>
-  <version>0.3.5</version>
+  <version>0.3.6</version>
 </dependency>
 ```
 
