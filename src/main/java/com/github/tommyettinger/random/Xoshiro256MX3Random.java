@@ -103,7 +103,7 @@ public class Xoshiro256MX3Random extends EnhancedRandom {
 
 	@Override
 	public String getTag() {
-		return "XSSR";
+		return "XMXR";
 	}
 
 	/**
