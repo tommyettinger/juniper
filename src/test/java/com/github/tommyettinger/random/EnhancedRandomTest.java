@@ -361,6 +361,39 @@ public class EnhancedRandomTest {
 	}
 
 	@Test
+	public void testXoshiro256MX3Previous() {
+		Xoshiro256MX3Random random = new Xoshiro256MX3Random(0L);
+		long n0 = random.nextLong();
+		long n1 = random.nextLong();
+		long n2 = random.nextLong();
+		long n3 = random.nextLong();
+		long n4 = random.nextLong();
+		long n5 = random.nextLong();
+		long n6 = random.nextLong();
+		long p6 = random.previousLong();
+		long p5 = random.previousLong();
+		long p4 = random.previousLong();
+		long p3 = random.previousLong();
+		long p2 = random.previousLong();
+		long p1 = random.previousLong();
+		long p0 = random.previousLong();
+		Assert.assertEquals(n0, p0);
+		Assert.assertEquals(n1, p1);
+		Assert.assertEquals(n2, p2);
+		Assert.assertEquals(n3, p3);
+		Assert.assertEquals(n4, p4);
+		Assert.assertEquals(n5, p5);
+		Assert.assertEquals(n6, p6);
+		long n = random.nextLong();
+		long np = random.previousLong();
+		long npn = random.nextLong();
+		long npnp = random.previousLong();
+		Assert.assertEquals(n, np);
+		Assert.assertEquals(np, npn);
+		Assert.assertEquals(npn, npnp);
+	}
+
+	@Test
 	public void testXoroshiro128StarStarPrevious() {
 		Xoroshiro128StarStarRandom random = new Xoroshiro128StarStarRandom(0L);
 		long n0 = random.nextLong();
