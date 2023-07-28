@@ -292,16 +292,6 @@ public class Xoshiro128PlusPlusRandom extends EnhancedRandom {
 		int pb = stateB ^= stateC; // StateB has b
 		int pd = stateD ^= stateB; // StateD has d
 
-		pd = (pd << 21 | pd >>> 11); // pd has d ^ b
-		pa ^= pd; // pa has a
-		pc ^= pb; // pc has b ^ b << 9
-		pc ^= pc << 9;
-		pc ^= pc << 18; // pc has b
-		pb ^= pa; // pb has b ^ c
-		pc ^= pb; // pc has c
-		pb ^= pc; // pb has b
-		pd ^= pb; // pd has d
-
 		pd = pa + pd;
 		pd = (pd << 7 | pd >>> 25) + pa;
 		pb = pc - pb;
@@ -461,11 +451,21 @@ public class Xoshiro128PlusPlusRandom extends EnhancedRandom {
 		stateC = s2;
 		stateD = s3;
 
-		s3 += s0;
-		s0 += (s3 << 7 | s3 >>> 25);
+		s3 = (s3 << 21 | s3 >>> 11); // s3 has d ^ b
+		s0 ^= s3; // s0 has a
+		s2 ^= s1; // s2 has b ^ b << 9
+		s2 ^= s2 << 9;
+		s2 ^= s2 << 18; // s2 has b
+		s1 ^= s0; // s1 has b ^ c
+		s2 ^= s1; // s2 has c
+		s1 ^= s2; // s1 has b
+		s3 ^= s1; // s3 has d
+
+		s3 = s0 + s3;
+		s3 = (s3 << 7 | s3 >>> 25) + s0;
 		s1 = s2 - s1;
-		s2 += (s1 << 13 | s1 >>> 19);
-		return (long) s0 << 32 ^ (s2 & 0xFFFFFFFFL);
+		s1 = (s1 << 13 | s1 >>> 19) + s2;
+		return (long) s3 << 32 ^ (s1 & 0xFFFFFFFFL);
 	}
 
 	@Override
