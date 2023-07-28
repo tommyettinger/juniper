@@ -282,7 +282,8 @@ public class ScruffRandom extends EnhancedRandom {
 		stateB = fd * 0xD1342543DE82EF95L;
 		stateC = fa ^ fb;
 		stateD = (fc << 21 | fc >>> 43);
-		return fd - fc;
+		// 0x572B5EE77A54E3BDL is the modular multiplicative inverse of 0xD1342543DE82EF95L
+		return stateB * 0x572B5EE77A54E3BDL - (stateD << 43 | stateD >>> 21);
 	}
 
 	@Override

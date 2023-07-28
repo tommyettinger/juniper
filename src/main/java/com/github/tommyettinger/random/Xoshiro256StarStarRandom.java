@@ -383,8 +383,19 @@ public class Xoshiro256StarStarRandom extends EnhancedRandom {
 		stateB = s1;
 		stateC = s2;
 		stateD = s3;
-		final long t = s1 * 5;
-		return  (t << 7 | t >>> 57) * 9;
+
+
+		s3 = (s3 << 19 | s3 >>> 45); // s3 has d ^ b
+		s0 ^= s3; // s0 has a
+		s2 ^= s1; // s2 has b ^ b << 17;
+		s2 ^= s2 << 17;
+		s2 ^= s2 << 34; // s2 has b
+		s1 ^= s0; // s1 has b ^ c
+		s2 ^= s1; // s2 has c;
+		s1 ^= s2; // StateB has b;
+
+		s1 *= 5;
+		return  (s1 << 7 | s1 >>> 57) * 9;
 	}
 
 
