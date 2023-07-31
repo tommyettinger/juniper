@@ -60,8 +60,8 @@ public class SerializationTest {
 //        TrimRandom trim = new TrimRandom(-1L);
 //        EnhancedRandom[] all = new EnhancedRandom[]{chop, distinct, mizuchi, tricycle, trim};
 
-//        List<EnhancedRandom> all = Deserializer.copyRandoms();
-        List<EnhancedRandom> all = Collections.singletonList(Deserializer.get("KnSR"));
+        List<EnhancedRandom> all = Deserializer.copyRandoms();
+//        List<EnhancedRandom> all = Collections.singletonList(Deserializer.get("KnSR"));
 
         List<Base> bases = Base.values();
         for(Base base : bases)
@@ -72,6 +72,7 @@ public class SerializationTest {
                 r.nextLong();
                 long rl = r.nextLong();
                 EnhancedRandom de = Deserializer.deserialize(s, base);
+                System.out.println(s + "   " + de.stringSerialize(base));
                 de.nextLong();
                 long dl = de.nextLong();
                 Assert.assertEquals("Failure with " + s + " and radix " + base.base, rl, dl);
@@ -92,7 +93,7 @@ public class SerializationTest {
         List<Distribution> all = Deserializer.copyDistributions();
         ArrayList<EnhancedRandom> randoms = Deserializer.copyRandoms();
         // we can't nest a DistributedRandom, with its own Distribution, as the generator and sanely deserialize.
-        randoms.removeIf(r -> "DsrR".equals(r.getTag()));
+        randoms.removeIf(r -> "DsrR".equals(r.getTag()) || "InrR".equals(r.getTag()));
         WhiskerRandom rand = new WhiskerRandom(123456789L);
         Base base = Base.BASE10;
                 //Base.scrambledBase(new LaserRandom(123456789L));

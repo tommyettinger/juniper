@@ -18,6 +18,7 @@
 package com.github.tommyettinger.random;
 
 import com.github.tommyettinger.digital.Base;
+import com.github.tommyettinger.digital.Interpolations;
 import com.github.tommyettinger.digital.MathTools;
 import com.github.tommyettinger.random.distribution.*;
 
@@ -122,6 +123,7 @@ public final class Deserializer {
         register(new ZipfianDistribution(random, 2L, 0.5, 1.0 + 0.5 * MathTools.ROOT2_D)); // precalculated zeta
 
         register(new DistributedRandom(1, 2, 3, 4));
+        register(new InterpolatedRandom(Interpolations.smooth, 1, 2, 3, 4));
     }
 
     /**
@@ -180,7 +182,7 @@ public final class Deserializer {
         String tagData = data.substring(0, idx);
         EnhancedRandom root = RANDOM_BY_TAG.get(tagData);
         if(root == null)
-            throw new RuntimeException("Tag in given data is invalid or unknown.");
+            throw new RuntimeException("Tag " + tagData + " from given String " + data + " in given data is invalid or unknown.");
         return root.copy().stringDeserialize(data, base);
     }
 
@@ -214,7 +216,7 @@ public final class Deserializer {
         String tagData = data.substring(0, idx);
         Distribution root = DIST_BY_TAG.get(tagData);
         if(root == null)
-            throw new RuntimeException("Tag in given data is invalid or unknown.");
+            throw new RuntimeException("Tag " + tagData + " from given String " + data + " in given data is invalid or unknown.");
         return root.copy().stringDeserialize(data, base);
     }
 
