@@ -150,7 +150,15 @@ as well as the `Distribution` implementation and parameters.
 You can use `DistributedRandom` to get some `Distribution` types to distribute across all the types an `EnhancedRandom`
 can produce, instead of just `double`. This only really works for numbers distributed between 0.0 and 1.0, so
 `DistributedRandom` provides various ways to reduce the range of a distribution like a `NormalDistribution` or
-`ExponentialDistribution` so only the valid range is used.
+`ExponentialDistribution` so only the valid range is used. Note that a `DistributedRandom` can't really be used as the
+random number generator for another `Distribution` if that `Distribution` needs to be serialized.
+
+The `InterpolatedRandom` class is similar to `DistributedRandom` in that it shapes a floating-point input before trying
+to maintain that shape in whatever output was requested. It's different in that it uses `Interpolator` from the
+"digital" library (the one dependency here), and new `Interpolator`s are much easier to create than `Distribution`s.
+it probably won't have as high-quality low-order bits if you generate large values, because `Interpolator` only works
+with `float`s, where `Distribution` works with `double`s. Like `DistributedRandom`, you can't use an
+`InterpolatedRandom` as the generator for a `Distribution` and still serialize it.
 
 Juniper now uses the Ziggurat method to generate normal-distributed values. This is different from the Marsaglia Polar
 or Box-Muller methods that are more commonly-used (such as by the JDK), but Ziggurat seems to be faster in testing,
@@ -198,15 +206,15 @@ cipher is just going to get ripped apart by any standard Java agent, so... don't
 With Gradle, the dependency (of the core module, if you have multiple) is:
 
 ```
-api "com.github.tommyettinger:juniper:0.3.7"
+api "com.github.tommyettinger:juniper:0.3.8"
 ```
 
 In a libGDX project that has a GWT/HTML backend, the `html/build.gradle` file
 should additionally have:
 
 ```
-implementation "com.github.tommyettinger:digital:0.3.5:sources"
-implementation "com.github.tommyettinger:juniper:0.3.7:sources"
+implementation "com.github.tommyettinger:digital:0.3.7:sources"
+implementation "com.github.tommyettinger:juniper:0.3.8:sources"
 ```
 
 And the `GdxDefinition.gwt.xml` file should have:
@@ -222,7 +230,7 @@ If you don't use Gradle, then with Maven, the dependency is:
 <dependency>
   <groupId>com.github.tommyettinger</groupId>
   <artifactId>juniper</artifactId>
-  <version>0.3.7</version>
+  <version>0.3.8</version>
 </dependency>
 ```
 
