@@ -116,6 +116,7 @@ public class Configurable4Random extends EnhancedRandom {
 	 * @param seed the initial seed; may be any long
 	 */
 	public void setSeed(long seed) {
+		if(state == null) return;
 		seed = (seed ^ 0x1C69B3F74AC4AE35L) * 0x3C79AC492BA7B653L; // an XLCG
 		seed ^= seed >>> 32;
 		state[0] = seed ^ 0xD3833E804F4C574BL;
@@ -202,7 +203,7 @@ public class Configurable4Random extends EnhancedRandom {
 
 	private static final LongBinaryOperator[] OPS = {
 			(a, b) -> a + b,
-			(a, b) -> a - b,
+			(a, b) -> a * 0xF1357AEA2E62A9C5L,
 			(a, b) -> (a << 41 | a >>> 23),
 			(a, b) -> a ^ b,
 	};
@@ -214,7 +215,11 @@ public class Configurable4Random extends EnhancedRandom {
 	 * Only the bottom two bits of each item are used. state[3] is not stored, since it never changes here.
 	 */
 	public static final int[] CONFIG =
-			{3, 1, 2, 2, 2, 2, 0, 0, 3, 2};
+			{
+					1, 2,-0,
+					0, 0, 3,
+					2, 1,-0,
+					0};
 
 	public static void printConfig() {
 		System.out.println(Base.BASE10.join(", ", CONFIG));
