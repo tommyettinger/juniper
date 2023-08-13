@@ -142,21 +142,40 @@ public class LineWobbleTest {
 
     @Test
     public void testBicubicExhaustive() {
+        final float M = 4.8186754E-20f; //Min: -0.6666665077209, max: 0.6666665077209
+//        final float M = 0x0.5555555p-62f; //Min: -1.0000000000000, max: 1.0000000000000
+//        final float M = 0x0.FFFFFFp-63f; //Min: -1.5000000000000, max: 1.5000000000000
         float min = Float.MAX_VALUE, max = -Float.MAX_VALUE;
-        for (int i = 0; i < 16; i++) {
-            final float a = (-(i & 1) ^ Long.MAX_VALUE) * 4.8186754E-20f;
-            final float b = (-(i >>> 1 & 1) ^ Long.MAX_VALUE) * 4.8186754E-20f;
-            final float c = (-(i >>> 2 & 1) ^ Long.MAX_VALUE) * 4.8186754E-20f;
-            final float d = (-(i >>> 3 & 1) ^ Long.MAX_VALUE) * 4.8186754E-20f;
-
-            for (int j = 0; j < 0x1000000; j++) {
-                float t = j * 0x1p-24f;
-                final float p = d - c + b - a;
-                final float result = (t * (t * t * p + t * (a - b - p) + c - a) + b);
-                min = Math.min(min, result);
-                max = Math.max(max, result);
+        final float[] tested = {(1L << 63) * M, (-1L >>> 1) * M, (1L << 62) * M, (-1L >>> 2) * M, 0f};
+        for(float a : tested) {
+            for(float b : tested) {
+                for(float c : tested) {
+                    for (float d : tested) {
+                        for (int j = 0; j < 0x40000; j++) {
+                            float t = j * 0x1p-18f;
+                            final float p = d - c + b - a;
+                            final float result = (t * (t * t * p + t * (a - b - p) + c - a) + b);
+                            min = Math.min(min, result);
+                            max = Math.max(max, result);
+                        }
+                    }
+                }
             }
         }
+//        for (int i = 0; i < 16; i++) {
+//            final float a = (-(i & 1) ^ Long.MAX_VALUE) * M;
+//            final float b = (-(i >>> 1 & 1) ^ Long.MAX_VALUE) * M;
+//            final float c = (-(i >>> 2 & 1) ^ Long.MAX_VALUE) * M;
+//            final float d = (-(i >>> 3 & 1) ^ Long.MAX_VALUE) * M;
+//
+//            for (int j = 0; j < 0x100000; j++) {
+//                float t = j * 0x1p-20f;
+//                final float p = d - c + b - a;
+//                final float result = (t * (t * t * p + t * (a - b - p) + c - a) + b);
+//                min = Math.min(min, result);
+//                max = Math.max(max, result);
+//            }
+//        }
         System.out.printf("Min: %.13f, max: %.13f\n", min, max);
     }
 }
