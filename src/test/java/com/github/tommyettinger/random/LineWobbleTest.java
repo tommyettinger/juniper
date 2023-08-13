@@ -139,4 +139,24 @@ public class LineWobbleTest {
             System.out.println();
         }
     }
+
+    @Test
+    public void testBicubicExhaustive() {
+        float min = Float.MAX_VALUE, max = -Float.MAX_VALUE;
+        for (int i = 0; i < 16; i++) {
+            final float a = (-(i & 1) ^ Long.MAX_VALUE) * 4.8186754E-20f;
+            final float b = (-(i >>> 1 & 1) ^ Long.MAX_VALUE) * 4.8186754E-20f;
+            final float c = (-(i >>> 2 & 1) ^ Long.MAX_VALUE) * 4.8186754E-20f;
+            final float d = (-(i >>> 3 & 1) ^ Long.MAX_VALUE) * 4.8186754E-20f;
+
+            for (int j = 0; j < 0x1000000; j++) {
+                float t = j * 0x1p-24f;
+                final float p = d - c + b - a;
+                final float result = (t * (t * t * p + t * (a - b - p) + c - a) + b);
+                min = Math.min(min, result);
+                max = Math.max(max, result);
+            }
+        }
+        System.out.printf("Min: %.13f, max: %.13f\n", min, max);
+    }
 }
