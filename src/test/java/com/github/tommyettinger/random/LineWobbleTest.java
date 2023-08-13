@@ -143,10 +143,10 @@ public class LineWobbleTest {
     @Test
     public void testBicubicExhaustiveFloat() {
 //        final float M = 4.8186754E-20f; //Min: -0.6666665077209, max: 0.6666665077209
-        final float M = 0x0.5555554p-62f; //Min: -1.0000000000000, max: 1.0000000000000
+        final float M = 0x0.5555554p-62f; //Min: -0.9999999403954, max: 0.9999999403954
 //        final float M = 0x0.FFFFFFp-63f; //Min: -1.5000000000000, max: 1.5000000000000
         float min = Float.MAX_VALUE, max = -Float.MAX_VALUE;
-        final float[] tested = {(1L << 63) * M, (-1L >>> 1) * M, (1L << 62) * M, (-1L >>> 2) * M, 0f};
+        final float[] tested = {(1L << 63) * M, (-1L >>> 1) * M, (3L << 62) * M, (-1L >>> 2) * M, 0f};
         for(float a : tested) {
             for(float b : tested) {
                 for(float c : tested) {
@@ -180,7 +180,7 @@ public class LineWobbleTest {
         final double M = 0x1.5555555555428p-64; //Min: -0.9999999999999, max: 0.9999999999999
 //        final double M = 0x0.FFFFFFFFFFFF8p-63; //Min: -1.5000000000000, max: 1.5000000000000
         double min = Double.MAX_VALUE, max = -Double.MAX_VALUE;
-        final double[] tested = {(1L << 63) * M, (-1L >>> 1) * M, (1L << 62) * M, (-1L >>> 2) * M, 0f};
+        final double[] tested = {(1L << 63) * M, (-1L >>> 1) * M, (3L << 62) * M, (-1L >>> 2) * M, 0f};
         for(double a : tested) {
             for(double b : tested) {
                 for(double c : tested) {

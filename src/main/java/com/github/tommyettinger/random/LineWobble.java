@@ -86,8 +86,8 @@ public class LineWobble {
     {
         final int floor = (int) Math.floor(value);
         int z = seed + floor * 0xBE56D;
-        final double start = ((z ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x0.fffffffffffffbp-31,
-                end = ((z + 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x0.fffffffffffffbp-31;
+        final double start = ((z ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x1D2BC3 * 0x0.fffffffffffffbp-31,
+                end = ((z + 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x1D2BC3 * 0x0.fffffffffffffbp-31;
         value -= floor;
         value *= value * (3.0 - 2.0 * value);
         return (1.0 - value) * start + value * end;
@@ -105,8 +105,8 @@ public class LineWobble {
     {
         final int floor = ((int)(value + 0x1p14) - 0x4000);
         int z = seed + floor * 0xBE56D;
-        final float start = ((z ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x0.ffffffp-31f,
-                end = ((z + 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x0.ffffffp-31f;
+        final float start = ((z ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x1D2BC3 * 0x0.ffffffp-31f,
+                end = ((z + 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x1D2BC3 * 0x0.ffffffp-31f;
         value -= floor;
         value *= value * (3 - 2 * value);
         return (1 - value) * start + value * end;
@@ -284,8 +284,8 @@ public class LineWobble {
 //        if(value < floor) --floor;
         // gets roughly-random values for the start and end, involving the seed also.
         int z = seed + floor * 0xBE56D;
-        float start = (((z ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) >>> 1) * 0x1p-31f,
-                end = (((z + 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) >>> 1) * 0x1p-31f;
+        float start = (((z ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x1D2BC3 >>> 1) * 0x1p-31f,
+                end = (((z + 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x1D2BC3 >>> 1) * 0x1p-31f;
 
         value -= floor;
         // makes the changes smoother by slowing down near start or end.
@@ -313,8 +313,8 @@ public class LineWobble {
     {
         final int floor = ((int)(value + 0x1p14) - 0x4000);
         int z = seed + floor * 0xBE56D;
-        float start = (((z ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) >>> 1) * 0x1p-31f,
-                end = (((z + 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) >>> 1) * 0x1p-31f;
+        float start = (((z ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x1D2BC3 >>> 1) * 0x1p-31f,
+                end = (((z + 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x1D2BC3 >>> 1) * 0x1p-31f;
         value -= floor;
         value *= value * (3f - 2f * value);
         end = end - start + 1.5f;
@@ -339,8 +339,8 @@ public class LineWobble {
     {
         final int floor = ((int)(value + 0x1p14) - 0x4000);
         int z = seed + floor * 0xBE56D;
-        float start = (((z ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) >>> 1) * 0x1p-31f,
-                end = (((z + 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) >>> 1) * 0x1p-31f;
+        float start = (((z ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x1D2BC3 >>> 1) * 0x1p-31f,
+                end = (((z + 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x1D2BC3 >>> 1) * 0x1p-31f;
         value -= floor;
         value *= value * (3f - 2f * value);
         end = end - start + 1.5f;
