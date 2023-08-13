@@ -142,8 +142,8 @@ public class LineWobbleTest {
 
     @Test
     public void testBicubicExhaustive() {
-        final float M = 4.8186754E-20f; //Min: -0.6666665077209, max: 0.6666665077209
-//        final float M = 0x0.5555555p-62f; //Min: -1.0000000000000, max: 1.0000000000000
+//        final float M = 4.8186754E-20f; //Min: -0.6666665077209, max: 0.6666665077209
+        final float M = 0x0.5555554p-62f; //Min: -1.0000000000000, max: 1.0000000000000
 //        final float M = 0x0.FFFFFFp-63f; //Min: -1.5000000000000, max: 1.5000000000000
         float min = Float.MAX_VALUE, max = -Float.MAX_VALUE;
         final float[] tested = {(1L << 63) * M, (-1L >>> 1) * M, (1L << 62) * M, (-1L >>> 2) * M, 0f};
@@ -176,6 +176,15 @@ public class LineWobbleTest {
 //                max = Math.max(max, result);
 //            }
 //        }
-        System.out.printf("Min: %.13f, max: %.13f\n", min, max);
+        System.out.printf("Specified: Min: %.13f, max: %.13f\n", min, max);
+
+        min = Float.MAX_VALUE;
+        max = -Float.MAX_VALUE;
+        for (int j = 0; j < 0x1000000; j++) {
+            float result = LineWobble.bicubicWobble(4, j * 0x1p-10f);
+            min = Math.min(min, result);
+            max = Math.max(max, result);
+        }
+        System.out.printf("Generative: Min: %.13f, max: %.13f\n", min, max);
     }
 }

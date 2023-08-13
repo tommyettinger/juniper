@@ -151,7 +151,7 @@ public class LineGraphDemo extends ApplicationAdapter {
                 for (int i = 0; i < width - 1; i++)
                     System.arraycopy(previousGrid[i+1], 0, previousGrid[i], 0, width);
                 Arrays.fill(previousGrid[width - 1], WHITE);
-                high = (int)(LineWobble.bicubicWobble(seed, traveled) * 0x.fp8f);
+                high = (int)(LineWobble.bicubicWobble(seed, traveled) * 0x.fcp7f);
                 previousGrid[width - 1][half - 1 + high] = DARK;
                 previousGrid[width - 1][half + 0 + high] = DARK;
                 previousGrid[width - 1][half + 1 + high] = DARK;
@@ -167,7 +167,7 @@ public class LineGraphDemo extends ApplicationAdapter {
                     System.arraycopy(previousGrid[i+1], 0, previousGrid[i], 0, width);
                 Arrays.fill(previousGrid[width - 1], WHITE);
                 
-                high = (int)(LineWobble.bicubicWobble(seed, traveled) * 0x.fp8f);
+                high = (int)(LineWobble.bicubicWobble(seed, traveled) * 0x.fcp7f);
                 previousGrid[width - 1][half - 1 + high] = DARK;
                 previousGrid[width - 1][half + 0 + high] = DARK;
                 previousGrid[width - 1][half + 1 + high] = DARK;
@@ -178,7 +178,7 @@ public class LineGraphDemo extends ApplicationAdapter {
                 previousGrid[width - 3][half + 0 + high] = DARK;
                 previousGrid[width - 3][half + 1 + high] = DARK;
 
-                high = (int)(LineWobble.bicubicWobble(seed + 1, traveled) * 0x.fp8f);
+                high = (int)(LineWobble.bicubicWobble(seed + 1, traveled) * 0x.fcp7f);
                 previousGrid[width - 1][half - 1 + high] = RED;
                 previousGrid[width - 1][half + 0 + high] = RED;
                 previousGrid[width - 1][half + 1 + high] = RED;
@@ -189,7 +189,7 @@ public class LineGraphDemo extends ApplicationAdapter {
                 previousGrid[width - 3][half + 0 + high] = RED;
                 previousGrid[width - 3][half + 1 + high] = RED;
 
-                high = (int)(LineWobble.bicubicWobble(seed + 2, traveled) * 0x.fp8f);
+                high = (int)(LineWobble.bicubicWobble(seed + 2, traveled) * 0x.fcp7f);
                 previousGrid[width - 1][half - 1 + high] = GREEN;
                 previousGrid[width - 1][half + 0 + high] = GREEN;
                 previousGrid[width - 1][half + 1 + high] = GREEN;
@@ -200,7 +200,7 @@ public class LineGraphDemo extends ApplicationAdapter {
                 previousGrid[width - 3][half + 0 + high] = GREEN;
                 previousGrid[width - 3][half + 1 + high] = GREEN;
 
-                high = (int)(LineWobble.bicubicWobble(seed + 3, traveled) * 0x.fp8f);
+                high = (int)(LineWobble.bicubicWobble(seed + 3, traveled) * 0x.fcp7f);
                 previousGrid[width - 1][half - 1 + high] = BLUE;
                 previousGrid[width - 1][half + 0 + high] = BLUE;
                 previousGrid[width - 1][half + 1 + high] = BLUE;

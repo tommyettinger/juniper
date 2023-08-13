@@ -136,11 +136,11 @@ public class LineWobble {
         final long n = s * 0xABC98388FB8FAC03L;
         final long o = s * 0x8CB92BA72F3D8DD7L;
 
-        // 4.8186754E-20f == 0x0.FFFFFFp-63f * 0.4444444f; it gets about as close as we can go to 1.0
-        final float a = (m ^ n ^ o) * 4.8186754E-20f;
-        final float b = (m + 0xD1B54A32D192ED03L ^ n + 0xABC98388FB8FAC03L ^ o + 0x8CB92BA72F3D8DD7L) * 4.8186754E-20f;
-        final float c = (m + 0xA36A9465A325DA06L ^ n + 0x57930711F71F5806L ^ o + 0x1972574E5E7B1BAEL) * 4.8186754E-20f;
-        final float d = (m + 0x751FDE9874B8C709L ^ n + 0x035C8A9AF2AF0409L ^ o + 0xA62B82F58DB8A985L) * 4.8186754E-20f;
+        // 0x0.5555554p-62f is just inside 2/3 of Long.MIN_VALUE; it gets about as close as we can go to 1.0
+        final float a = (m ^ n ^ o) * 0x0.5555554p-62f;
+        final float b = (m + 0xD1B54A32D192ED03L ^ n + 0xABC98388FB8FAC03L ^ o + 0x8CB92BA72F3D8DD7L) * 0x0.5555554p-62f;
+        final float c = (m + 0xA36A9465A325DA06L ^ n + 0x57930711F71F5806L ^ o + 0x1972574E5E7B1BAEL) * 0x0.5555554p-62f;
+        final float d = (m + 0x751FDE9874B8C709L ^ n + 0x035C8A9AF2AF0409L ^ o + 0xA62B82F58DB8A985L) * 0x0.5555554p-62f;
 
         t -= floor;
         // this is bicubic interpolation, inlined
