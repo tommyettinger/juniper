@@ -136,7 +136,7 @@ public class LineWobble {
         final long n = s * 0xABC98388FB8FAC03L;
         final long o = s * 0x8CB92BA72F3D8DD7L;
 
-        // 0x0.5555554p-62f is just inside 2/3 of Long.MIN_VALUE; it gets about as close as we can go to 1.0
+        // 0x0.5555554p-62f is just inside {@code -2f/3f/Long.MIN_VALUE}; it gets about as close as we can go to 1.0
         final float a = (m ^ n ^ o) * 0x0.5555554p-62f;
         final float b = (m + 0xD1B54A32D192ED03L ^ n + 0xABC98388FB8FAC03L ^ o + 0x8CB92BA72F3D8DD7L) * 0x0.5555554p-62f;
         final float c = (m + 0xA36A9465A325DA06L ^ n + 0x57930711F71F5806L ^ o + 0x1972574E5E7B1BAEL) * 0x0.5555554p-62f;
@@ -171,12 +171,12 @@ public class LineWobble {
         final long n = s * 0xABC98388FB8FAC03L;
         final long o = s * 0x8CB92BA72F3D8DD7L;
 
-        // 4.818676322157797E-20 == 0x0.FFFFFFFFFFFFF8p-63 * 0.4444444444444444
+        // 0x1.5555555555428p-64 is just inside {@code -2.0/3.0/Long.MIN_VALUE}
         // it gets about as close as we can go to 1.0
-        final double a = (m ^ n ^ o) * 4.818676322157797E-20;
-        final double b = (m + 0xD1B54A32D192ED03L ^ n + 0xABC98388FB8FAC03L ^ o + 0x8CB92BA72F3D8DD7L) * 4.818676322157797E-20;
-        final double c = (m + 0xA36A9465A325DA06L ^ n + 0x57930711F71F5806L ^ o + 0x1972574E5E7B1BAEL) * 4.818676322157797E-20;
-        final double d = (m + 0x751FDE9874B8C709L ^ n + 0x035C8A9AF2AF0409L ^ o + 0xA62B82F58DB8A985L) * 4.818676322157797E-20;
+        final double a = (m ^ n ^ o) * 0x1.5555555555428p-64;
+        final double b = (m + 0xD1B54A32D192ED03L ^ n + 0xABC98388FB8FAC03L ^ o + 0x8CB92BA72F3D8DD7L) * 0x1.5555555555428p-64;
+        final double c = (m + 0xA36A9465A325DA06L ^ n + 0x57930711F71F5806L ^ o + 0x1972574E5E7B1BAEL) * 0x1.5555555555428p-64;
+        final double d = (m + 0x751FDE9874B8C709L ^ n + 0x035C8A9AF2AF0409L ^ o + 0xA62B82F58DB8A985L) * 0x1.5555555555428p-64;
 
         t -= floor;
         // this is bicubic interpolation, inlined
