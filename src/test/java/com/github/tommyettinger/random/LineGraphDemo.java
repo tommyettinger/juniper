@@ -40,7 +40,7 @@ import static com.badlogic.gdx.graphics.GL20.GL_POINTS;
 public class LineGraphDemo extends ApplicationAdapter {
 
     public static String title = "";
-    public static int modeCount = 4;
+    public static int modeCount = 5;
     private int currentMode = 0;
     private int seed = 1;
     private Viewport view;
@@ -274,6 +274,21 @@ public class LineGraphDemo extends ApplicationAdapter {
                 previousGrid[width - 3][half - 1 + high] = BLUE;
                 previousGrid[width - 3][half + 0 + high] = BLUE;
                 previousGrid[width - 3][half + 1 + high] = BLUE;
+                break;
+            case 4:
+                for (int i = 0; i < width - 1; i++)
+                    System.arraycopy(previousGrid[i+1], 0, previousGrid[i], 0, width);
+                Arrays.fill(previousGrid[width - 1], WHITE);
+                high = (int)(LineWobble.splobble(seed, traveled) * 0x.fcp7f);
+                previousGrid[width - 1][half - 1 + high] = DARK;
+                previousGrid[width - 1][half + 0 + high] = DARK;
+                previousGrid[width - 1][half + 1 + high] = DARK;
+                previousGrid[width - 2][half - 1 + high] = DARK;
+                previousGrid[width - 2][half + 0 + high] = DARK;
+                previousGrid[width - 2][half + 1 + high] = DARK;
+                previousGrid[width - 3][half - 1 + high] = DARK;
+                previousGrid[width - 3][half + 0 + high] = DARK;
+                previousGrid[width - 3][half + 1 + high] = DARK;
                 break;
         }
         for (int x = 0; x < width; x++) {

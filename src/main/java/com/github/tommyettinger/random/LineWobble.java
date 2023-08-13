@@ -18,6 +18,7 @@
 package com.github.tommyettinger.random;
 
 import com.github.tommyettinger.digital.BitConversion;
+import com.github.tommyettinger.digital.MathTools;
 
 /**
  * Provides 1D noise methods that can be queried at any point on a line to get a continuous random value.
@@ -184,6 +185,28 @@ public class LineWobble {
         return (t * (t * t * p + t * ((a - b) - p) + (c - a)) + b);
     }
 
+
+    /**
+     * A variant on {@link #wobble(int, float)} that uses {@link MathTools#barronSpline(float, float, float)} to
+     * interpolate between peaks/valleys, with the shape and turning point determined like the other values.
+     * @param seed an int seed that will determine the pattern of peaks and valleys this will generate as value changes; this should not change between calls
+     * @param value a float that typically changes slowly, by less than 2.0, with direction changes at integer inputs
+     * @return a pseudo-random float between -1f and 1f (both exclusive), smoothly changing with value
+     */
+    public static float splobble(int seed, float value)
+    {
+        final int floor = ((int)(value + 0x1p14) - 0x4000);
+        int z = seed + floor * 0xBE56D;
+        final int startBits = ((z ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x1D2BC3,
+                endBits = ((z + 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x1D2BC3,
+                mixBits = startBits + endBits;
+        final float start = startBits * 0x0.ffffffp-31f,
+                end = endBits * 0x0.ffffffp-31f;
+        value -= floor;
+        value = MathTools.barronSpline(value, (mixBits >>> 16) * 0x1p-14f + 0.5f, (mixBits & 0xFFFF) * 0x1.8p-17f + 0.125f);
+        value *= value * (3f - 2f * value);
+        return (1 - value) * start + value * end;
+    }
 
     /**
      * A 1D "noise" method that produces smooth transitions like a sine wave, but also wrapping around at pi * 2 so this
