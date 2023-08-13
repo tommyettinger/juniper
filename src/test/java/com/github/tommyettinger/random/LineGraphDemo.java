@@ -28,15 +28,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.UIUtils;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.github.tommyettinger.digital.ArrayTools;
-import com.github.tommyettinger.digital.BitConversion;
+import com.github.tommyettinger.digital.Hasher;
 
 import java.util.Arrays;
 
 import static com.badlogic.gdx.Input.Keys.*;
-import static com.badlogic.gdx.graphics.GL20.GL_LINES;
 import static com.badlogic.gdx.graphics.GL20.GL_POINTS;
-import static com.github.tommyettinger.random.CorrelationVisualizer.title;
 
 /**
  */
@@ -79,6 +76,24 @@ public class LineGraphDemo extends ApplicationAdapter {
             public boolean keyDown(int keycode) {
                 switch (keycode) {
                     case SPACE:
+                    case H: // higher seed
+                        seed++;
+                        title = "On mode " + currentMode + " at speed " + speed + " with seed " + seed;
+                        System.out.println(title);
+                        if (!keepGoing) putMap();
+                        break;
+                    case L: // lower seed
+                        seed--;
+                        title = "On mode " + currentMode + " at speed " + speed + " with seed " + seed;
+                        System.out.println(title);
+                        if (!keepGoing) putMap();
+                        break;
+                    case R: // random seed
+                        seed = (int)Hasher.randomize3(seed ^ 0x9E3779B97F4A7C15L);
+                        title = "On mode " + currentMode + " at speed " + speed + " with seed " + seed;
+                        System.out.println(title);
+                        if (!keepGoing) putMap();
+                        break;
                     case P: // pause
                         keepGoing = !keepGoing;
                         break;
@@ -87,7 +102,7 @@ public class LineGraphDemo extends ApplicationAdapter {
                         break;
                     case DOWN:
                         currentMode = ((currentMode + modeCount - 1) % modeCount);
-                        title = "On mode " + currentMode + " at speed " + speed;
+                        title = "On mode " + currentMode + " at speed " + speed + " with seed " + seed;
                         System.out.println(title);
                         if (!keepGoing) putMap();
                         break;
@@ -96,25 +111,25 @@ public class LineGraphDemo extends ApplicationAdapter {
                     case ENTER:
                     case UP:
                         currentMode = ((currentMode + 1) % modeCount);
-                        title = "On mode " + currentMode + " at speed " + speed;
+                        title = "On mode " + currentMode + " at speed " + speed + " with seed " + seed;
                         System.out.println(title);
                         if (!keepGoing) putMap();
                         break;
                     case M: // mode
                         currentMode = ((currentMode + (UIUtils.shift() ? modeCount - 1 : 1)) % modeCount);
-                        title = "On mode " + currentMode + " at speed " + speed;
+                        title = "On mode " + currentMode + " at speed " + speed + " with seed " + seed;
                         System.out.println(title);
                         if (!keepGoing) putMap();
                         break;
                     case RIGHT: // mode
                         speed = (float)Math.exp(speedControl += 0.05);
-                        title = "On mode " + currentMode + " at speed " + speed;
+                        title = "On mode " + currentMode + " at speed " + speed + " with seed " + seed;
                         System.out.println(title);
                         if (!keepGoing) putMap();
                         break;
                     case LEFT: // mode
                         speed = (float)Math.exp(speedControl -= 0.05);
-                        title = "On mode " + currentMode + " at speed " + speed;
+                        title = "On mode " + currentMode + " at speed " + speed + " with seed " + seed;
                         System.out.println(title);
                         if (!keepGoing) putMap();
                         break;
@@ -164,7 +179,6 @@ public class LineGraphDemo extends ApplicationAdapter {
     @Override
     public void render() {
         ScreenUtils.clear(Color.BLACK);
-        Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() + " FPS showing " + title);
         if (keepGoing) {
             putMap();
         }
