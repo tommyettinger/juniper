@@ -144,8 +144,8 @@ public class LineWobble {
 
         t -= floor;
         // this is bicubic interpolation, inlined
-        final float p = (d - c) - (a - b);
-        return (t * (t * t * p + t * ((a - b) - p) + (c - a)) + b);
+        final float p = d - c + b - a;
+        return (t * (t * t * p + t * (a - b - p) + c - a) + b);
     }
 
     /**
