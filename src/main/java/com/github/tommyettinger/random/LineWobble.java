@@ -189,6 +189,8 @@ public class LineWobble {
     /**
      * A variant on {@link #wobble(int, float)} that uses {@link MathTools#barronSpline(float, float, float)} to
      * interpolate between peaks/valleys, with the shape and turning point determined like the other values.
+     * This can be useful when you want a curve to seem more "natural," without the similarity between every peak or
+     * every valley in {@link #wobble(int, float)}. This can produce both fairly sharp turns and very gradual curves.
      * @param seed an int seed that will determine the pattern of peaks and valleys this will generate as value changes; this should not change between calls
      * @param value a float that typically changes slowly, by less than 2.0, with direction changes at integer inputs
      * @return a pseudo-random float between -1f and 1f (both exclusive), smoothly changing with value
@@ -203,8 +205,80 @@ public class LineWobble {
         final float start = startBits * 0x0.ffffffp-31f,
                 end = endBits * 0x0.ffffffp-31f;
         value -= floor;
-        value = MathTools.barronSpline(value, (mixBits >>> 16) * 0x1p-14f + 0.5f, (mixBits & 0xFFFF) * 0x1.8p-17f + 0.125f);
+        value = MathTools.barronSpline(value, (mixBits & 0xFFFF) * 0x1p-14f + 0.5f, (mixBits >>> 16) * 0x1.8p-17f + 0.125f);
         value *= value * (3f - 2f * value);
+        return (1 - value) * start + value * end;
+    }
+
+    /**
+     * A variant on {@link #wobble(int, float)} that uses {@link MathTools#barronSpline(float, float, float)} to
+     * interpolate between peaks/valleys, with the shape and turning point determined like the other values.
+     * This can be useful when you want a curve to seem more "natural," without the similarity between every peak or
+     * every valley in {@link #wobble(int, double)}. This can produce both fairly sharp turns and very gradual curves.
+     * @param seed an int seed that will determine the pattern of peaks and valleys this will generate as value changes; this should not change between calls
+     * @param value a float that typically changes slowly, by less than 2.0, with direction changes at integer inputs
+     * @return a pseudo-random float between -1f and 1f (both exclusive), smoothly changing with value
+     */
+    public static double splobble(int seed, double value)
+    {
+        final int floor = (int)Math.floor(value);
+        int z = seed + floor * 0xBE56D;
+        final int startBits = ((z ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x1D2BC3,
+                endBits = ((z + 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x1D2BC3,
+                mixBits = startBits + endBits;
+        final double start = startBits * 0x0.fffffffffffffbp-31,
+                end = endBits * 0x0.fffffffffffffbp-31;
+        value -= floor;
+        value = MathTools.barronSpline(value, (mixBits & 0xFFFF) * 0x1p-14 + 0.5, (mixBits >>> 16) * 0x1.8p-17 + 0.125);
+        value *= value * (3.0 - 2.0 * value);
+        return (1 - value) * start + value * end;
+    }
+
+    /**
+     * A variant on {@link #wobble(int, float)} that uses {@link MathTools#barronSpline(float, float, float)} to
+     * interpolate between peaks/valleys, with the shape and turning point determined like the other values.
+     * This can be useful when you want a curve to seem more "natural," without the similarity between every peak or
+     * every valley in {@link #wobble(long, float)}. This can produce both fairly sharp turns and very gradual curves.
+     * @param seed an int seed that will determine the pattern of peaks and valleys this will generate as value changes; this should not change between calls
+     * @param value a float that typically changes slowly, by less than 2.0, with direction changes at integer inputs
+     * @return a pseudo-random float between -1f and 1f (both exclusive), smoothly changing with value
+     */
+    public static float splobble(long seed, float value)
+    {
+        final long floor = ((long)(value + 0x1p14) - 0x4000);
+        final long z = seed + floor * 0x6C8E9CF570932BD5L;
+        final long startBits = ((z ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L),
+                endBits = ((z + 0x6C8E9CF570932BD5L ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L),
+                mixBits = startBits + endBits;
+        final float start = startBits * 0x0.ffffffp-63f,
+                end = endBits  * 0x0.ffffffp-63f;
+        value -= floor;
+        value = MathTools.barronSpline(value, (mixBits & 0xFFFFFFFFL) * 0x1p-30f + 0.5f, (mixBits & 0xFFFFL) * 0x1.8p-17f + 0.125f);
+        value *= value * (3f - 2f * value);
+        return (1 - value) * start + value * end;
+    }
+
+    /**
+     * A variant on {@link #wobble(int, float)} that uses {@link MathTools#barronSpline(float, float, float)} to
+     * interpolate between peaks/valleys, with the shape and turning point determined like the other values.
+     * This can be useful when you want a curve to seem more "natural," without the similarity between every peak or
+     * every valley in {@link #wobble(long, float)}. This can produce both fairly sharp turns and very gradual curves.
+     * @param seed an int seed that will determine the pattern of peaks and valleys this will generate as value changes; this should not change between calls
+     * @param value a float that typically changes slowly, by less than 2.0, with direction changes at integer inputs
+     * @return a pseudo-random float between -1f and 1f (both exclusive), smoothly changing with value
+     */
+    public static double splobble(long seed, double value)
+    {
+        final long floor = (long) Math.floor(value);
+        final long z = seed + floor * 0x6C8E9CF570932BD5L;
+        final long startBits = ((z ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L),
+                endBits = ((z + 0x6C8E9CF570932BD5L ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L),
+                mixBits = startBits + endBits;
+        final double start = startBits * 0x0.fffffffffffffbp-63,
+                end = endBits * 0x0.fffffffffffffbp-63;
+        value -= floor;
+        value = MathTools.barronSpline(value, (mixBits & 0xFFFFFFFFL) * 0x1p-30 + 0.5, (mixBits & 0xFFFFL) * 0x1.8p-17 + 0.125);
+        value *= value * (3.0 - 2.0 * value);
         return (1 - value) * start + value * end;
     }
 
