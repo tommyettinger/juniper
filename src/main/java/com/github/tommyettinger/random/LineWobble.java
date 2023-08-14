@@ -211,13 +211,13 @@ public class LineWobble {
     }
 
     /**
-     * A variant on {@link #wobble(int, float)} that uses {@link MathTools#barronSpline(float, float, float)} to
+     * A variant on {@link #wobble(int, double)} that uses {@link MathTools#barronSpline(double, double, double)} to
      * interpolate between peaks/valleys, with the shape and turning point determined like the other values.
      * This can be useful when you want a curve to seem more "natural," without the similarity between every peak or
      * every valley in {@link #wobble(int, double)}. This can produce both fairly sharp turns and very gradual curves.
      * @param seed an int seed that will determine the pattern of peaks and valleys this will generate as value changes; this should not change between calls
-     * @param value a float that typically changes slowly, by less than 2.0, with direction changes at integer inputs
-     * @return a pseudo-random float between -1f and 1f (both exclusive), smoothly changing with value
+     * @param value a double that typically changes slowly, by less than 2.0, with direction changes at integer inputs
+     * @return a pseudo-random double between -1.0 and 1.0 (both exclusive), smoothly changing with value
      */
     public static double splobble(int seed, double value)
     {
@@ -239,7 +239,7 @@ public class LineWobble {
      * interpolate between peaks/valleys, with the shape and turning point determined like the other values.
      * This can be useful when you want a curve to seem more "natural," without the similarity between every peak or
      * every valley in {@link #wobble(long, float)}. This can produce both fairly sharp turns and very gradual curves.
-     * @param seed an int seed that will determine the pattern of peaks and valleys this will generate as value changes; this should not change between calls
+     * @param seed a long seed that will determine the pattern of peaks and valleys this will generate as value changes; this should not change between calls
      * @param value a float that typically changes slowly, by less than 2.0, with direction changes at integer inputs
      * @return a pseudo-random float between -1f and 1f (both exclusive), smoothly changing with value
      */
@@ -259,13 +259,13 @@ public class LineWobble {
     }
 
     /**
-     * A variant on {@link #wobble(int, float)} that uses {@link MathTools#barronSpline(float, float, float)} to
+     * A variant on {@link #wobble(long, double)} that uses {@link MathTools#barronSpline(double, double, double)} to
      * interpolate between peaks/valleys, with the shape and turning point determined like the other values.
      * This can be useful when you want a curve to seem more "natural," without the similarity between every peak or
-     * every valley in {@link #wobble(long, float)}. This can produce both fairly sharp turns and very gradual curves.
-     * @param seed an int seed that will determine the pattern of peaks and valleys this will generate as value changes; this should not change between calls
-     * @param value a float that typically changes slowly, by less than 2.0, with direction changes at integer inputs
-     * @return a pseudo-random float between -1f and 1f (both exclusive), smoothly changing with value
+     * every valley in {@link #wobble(long, double)}. This can produce both fairly sharp turns and very gradual curves.
+     * @param seed a long seed that will determine the pattern of peaks and valleys this will generate as value changes; this should not change between calls
+     * @param value a double that typically changes slowly, by less than 2.0, with direction changes at integer inputs
+     * @return a pseudo-random double between -1.0 and 1.0 (both exclusive), smoothly changing with value
      */
     public static double splobble(long seed, double value)
     {
@@ -277,6 +277,50 @@ public class LineWobble {
         final double start = startBits * 0x0.fffffffffffffbp-63,
                 end = endBits * 0x0.fffffffffffffbp-63;
         value -= floor;
+        value = MathTools.barronSpline(value, (mixBits & 0xFFFFFFFFL) * 0x1p-30 + 0.5, (mixBits & 0xFFFFL) * 0x1.8p-17 + 0.125);
+        value *= value * (3.0 - 2.0 * value);
+        return (1 - value) * start + value * end;
+    }
+
+    /**
+     * A variant on {@link #splobble(long, float)} that takes some kind of hash-generated {@code long}s for the
+     * {@code startBits} and {@code endBits}. This makes this usable as a building-block for noise with more than
+     * one dimension. Unlike the other wobbling-line methods here, {@code value} must be between 0 and 1 (inclusive).
+     * The name comes from "hash wobble."
+     * This can be useful when you want a curve to seem more "natural," without the similarity between every peak or
+     * every valley in {@link #wobble(long, float)}. This can produce both fairly sharp turns and very gradual curves.
+     * @param startBits any long; determines the result exactly when {@code value} is 0, and later affects it less
+     * @param endBits any long; determines the result exactly when {@code value} is 1, and earlier affects it less
+     * @param value a float between 0f and 1f, representing how much the result is affected by the start and end bits
+     * @return a pseudo-random float between -1f and 1f (both exclusive), smoothly changing with value
+     */
+    public static float hobble(long startBits, long endBits, float value)
+    {
+        final long mixBits = startBits + endBits;
+        final float start = startBits * 0x0.ffffffp-63f,
+                end = endBits  * 0x0.ffffffp-63f;
+        value = MathTools.barronSpline(value, (mixBits & 0xFFFFFFFFL) * 0x1p-30f + 0.5f, (mixBits & 0xFFFFL) * 0x1.8p-17f + 0.125f);
+        value *= value * (3f - 2f * value);
+        return (1 - value) * start + value * end;
+    }
+
+    /**
+     * A variant on {@link #splobble(long, double)} that takes some kind of hash-generated {@code long}s for the
+     * {@code startBits} and {@code endBits}. This makes this usable as a building-block for noise with more than
+     * one dimension. Unlike the other wobbling-line methods here, {@code value} must be between 0 and 1 (inclusive).
+     * The name comes from "hash wobble."
+     * This can be useful when you want a curve to seem more "natural," without the similarity between every peak or
+     * every valley in {@link #wobble(long, double)}. This can produce both fairly sharp turns and very gradual curves.
+     * @param startBits any long; determines the result exactly when {@code value} is 0, and later affects it less
+     * @param endBits any long; determines the result exactly when {@code value} is 1, and earlier affects it less
+     * @param value a double between 0.0 and 1.0, representing how much the result is affected by the start and end bits
+     * @return a pseudo-random double between -1.0 and 1.0 (both exclusive), smoothly changing with value
+     */
+    public static double hobble(long startBits, long endBits, double value)
+    {
+        final long mixBits = startBits + endBits;
+        final double start = startBits * 0x0.fffffffffffffbp-63,
+                end = endBits * 0x0.fffffffffffffbp-63;
         value = MathTools.barronSpline(value, (mixBits & 0xFFFFFFFFL) * 0x1p-30 + 0.5, (mixBits & 0xFFFFL) * 0x1.8p-17 + 0.125);
         value *= value * (3.0 - 2.0 * value);
         return (1 - value) * start + value * end;
