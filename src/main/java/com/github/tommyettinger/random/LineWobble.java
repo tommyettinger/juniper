@@ -296,7 +296,8 @@ public class LineWobble {
      */
     public static float hobble(long startBits, long endBits, float value)
     {
-        final long mixBits = startBits + endBits;
+        long mixBits = startBits + endBits;
+        mixBits ^= mixBits >>> 32;
         final float start = startBits * 0x0.ffffffp-63f,
                 end = endBits  * 0x0.ffffffp-63f;
         value = MathTools.barronSpline(value, (mixBits & 0xFFFFFFFFL) * 0x1p-30f + 0.5f, (mixBits & 0xFFFFL) * 0x1.8p-17f + 0.125f);
@@ -318,12 +319,46 @@ public class LineWobble {
      */
     public static double hobble(long startBits, long endBits, double value)
     {
-        final long mixBits = startBits + endBits;
+        long mixBits = startBits + endBits;
+        mixBits ^= mixBits >>> 32;
         final double start = startBits * 0x0.fffffffffffffbp-63,
                 end = endBits * 0x0.fffffffffffffbp-63;
         value = MathTools.barronSpline(value, (mixBits & 0xFFFFFFFFL) * 0x1p-30 + 0.5, (mixBits & 0xFFFFL) * 0x1.8p-17 + 0.125);
         value *= value * (3.0 - 2.0 * value);
         return (1 - value) * start + value * end;
+    }
+
+    /**
+     * Quilez' 1D noise, with some changes to work on the CPU. Takes a distance value and any int seed, and produces a
+     * smoothly-changing value as value goes up or down and seed stays the same. Uses a quartic curve.
+     * <br>
+     * The distance ({@code value}) should be between -16384 and 1073733631 for this to return correct results.
+     * Because floats incur precision loss earlier than 1073733631, the actual upper bound is lower. The limit of
+     * -8192 comes from how this uses {@link MathTools#fastFloor(float)} internally on {@code value + value}.
+     *
+     * @param value    should go up and/or down steadily and by small amounts (less than 1.0, certainly)
+     * @param seed should stay the same for a given curve
+     * @return a noise value between -1.0 and 1.0
+     */
+    public static float quobble(final int seed, float value) {
+        value += seed * 0x1p-24f;
+        final int xFloor = MathTools.fastFloor(value),
+                rise = 1 - (MathTools.fastFloor(value + value) & 2);
+        value -= xFloor;
+        // gets a random float between -16 and 16. Magic.
+        final float h = BitConversion.intBitsToFloat((int) ((seed + xFloor ^ 0x9E3779B97F4A7C15L) * 0xD1B54A32D192ED03L >>> 41) | 0x42000000) - 48f;
+        value *= value - 1f;
+        return rise * value * value * h;
+    }
+    /**
+     * Just gets two octaves of {@link #quobble(int, float)}; still has a range of -1 to 1.
+     *
+     * @param x    should go up and/or down steadily and by small amounts (less than 1.0, certainly)
+     * @param seed should stay the same for a given curve
+     * @return a noise value between -1.0 and 1.0
+     */
+    public static float quobbleOctave2(final int seed, float x) {
+        return quobble(seed, x) * 0.6666666f + quobble(~seed, x * 1.9f) * 0.33333333f;
     }
 
     /**

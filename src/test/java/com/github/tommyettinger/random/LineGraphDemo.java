@@ -40,7 +40,7 @@ import static com.badlogic.gdx.graphics.GL20.GL_POINTS;
 public class LineGraphDemo extends ApplicationAdapter {
 
     public static String title = "";
-    public static int modeCount = 5;
+    public static int modeCount = 7;
     private int currentMode = 0;
     private int seed = 1;
     private Viewport view;
@@ -280,6 +280,36 @@ public class LineGraphDemo extends ApplicationAdapter {
                     System.arraycopy(previousGrid[i+1], 0, previousGrid[i], 0, width);
                 Arrays.fill(previousGrid[width - 1], WHITE);
                 high = (int)(LineWobble.splobble(seed, traveled) * 0x.fcp7f);
+                previousGrid[width - 1][half - 1 + high] = DARK;
+                previousGrid[width - 1][half + 0 + high] = DARK;
+                previousGrid[width - 1][half + 1 + high] = DARK;
+                previousGrid[width - 2][half - 1 + high] = DARK;
+                previousGrid[width - 2][half + 0 + high] = DARK;
+                previousGrid[width - 2][half + 1 + high] = DARK;
+                previousGrid[width - 3][half - 1 + high] = DARK;
+                previousGrid[width - 3][half + 0 + high] = DARK;
+                previousGrid[width - 3][half + 1 + high] = DARK;
+                break;
+            case 5:
+                for (int i = 0; i < width - 1; i++)
+                    System.arraycopy(previousGrid[i+1], 0, previousGrid[i], 0, width);
+                Arrays.fill(previousGrid[width - 1], WHITE);
+                high = (int)(LineWobble.quobble(seed, traveled) * 0x.fcp7f);
+                previousGrid[width - 1][half - 1 + high] = DARK;
+                previousGrid[width - 1][half + 0 + high] = DARK;
+                previousGrid[width - 1][half + 1 + high] = DARK;
+                previousGrid[width - 2][half - 1 + high] = DARK;
+                previousGrid[width - 2][half + 0 + high] = DARK;
+                previousGrid[width - 2][half + 1 + high] = DARK;
+                previousGrid[width - 3][half - 1 + high] = DARK;
+                previousGrid[width - 3][half + 0 + high] = DARK;
+                previousGrid[width - 3][half + 1 + high] = DARK;
+                break;
+            case 6:
+                for (int i = 0; i < width - 1; i++)
+                    System.arraycopy(previousGrid[i+1], 0, previousGrid[i], 0, width);
+                Arrays.fill(previousGrid[width - 1], WHITE);
+                high = (int)(LineWobble.quobbleOctave2(seed, traveled) * 0x.fcp7f);
                 previousGrid[width - 1][half - 1 + high] = DARK;
                 previousGrid[width - 1][half + 0 + high] = DARK;
                 previousGrid[width - 1][half + 1 + high] = DARK;
