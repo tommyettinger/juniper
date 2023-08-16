@@ -29,6 +29,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.github.tommyettinger.digital.Hasher;
+import com.github.tommyettinger.digital.MathTools;
 import com.github.tommyettinger.digital.TrigTools;
 
 import static com.badlogic.gdx.Input.Keys.*;
@@ -56,10 +57,11 @@ public class LineGraphDemo extends ApplicationAdapter {
 
     public float fbm(final int seed, float x) {
         final IntFloatToFloatFunction wobble = wobbles[currentWobble];
-        float totalPower = (1 << octaves) - 1f, accrued = 0f, frequencyChange = totalPower;
+        float totalPower = (1 << octaves) - 1f, accrued = 0f, frequencyChange = (1 << octaves - 1);
+        float slide = ((seed ^ (seed << 19 | seed >>> 13) ^ (seed << 5 | seed >>> 27) ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x1D2BC3 * 0x1p-31f;
         int power = 1;
         for (int i = octaves; i > 0; i--, power += power, frequencyChange *= 0.5f) {
-            accrued += wobble.applyAsFloat(seed ^ 0x9E3779B9 * octaves, x * frequencyChange) * power;
+            accrued += wobble.applyAsFloat(seed ^ 0x9E3779B9 * octaves, x * frequencyChange + (slide *= MathTools.PHI)) * power;
         }
         return accrued / totalPower;
     }
@@ -208,8 +210,8 @@ public class LineGraphDemo extends ApplicationAdapter {
                 System.arraycopy(heights, 2, heights, 1, width * 86 - 2);
                 // iterates 52 times.
                 for (int i = 0, t = 0; i < 256; i += 5, t++) {
-                    heights[width*t] = hueColor(i * 0x1p-8f);
-//                    heights[width*t] = Float.intBitsToFloat(i * 0x010101 | 0xFE000000);
+//                    heights[width*t] = hueColor(i * 0x1p-8f);
+                    heights[width*t] = Float.intBitsToFloat(t * 0x010305 | 0xFE000000); // Halloween colors
                     heights[width * (t+1) - 1] = (int) (wobble.applyAsFloat(seed+t, traveled) * 0x.fcp7f);
                 }
                 break;
