@@ -52,6 +52,19 @@ public class LineGraphDemo extends ApplicationAdapter {
     };
     public int currentWobble = 0;
     public int wobbleCount = wobbles.length;
+    public int octaves = 1;
+    public int maxOctaves = 4;
+
+
+    public float fbm(final int seed, float x) {
+        final IntFloatToFloatFunction wobble = wobbles[currentWobble];
+        float totalPower = (1 << octaves) - 1f, accrued = 0f, frequencyChange = totalPower;
+        int power = 1;
+        for (int i = octaves; i > 0; i--, power += power, frequencyChange *= 0.5f) {
+            accrued += wobble.applyAsFloat(seed ^ 0x9E3779B9 * octaves, x * frequencyChange) * power;
+        }
+        return accrued / totalPower;
+    }
 
 
     public static String title = "";
@@ -62,7 +75,7 @@ public class LineGraphDemo extends ApplicationAdapter {
     private boolean keepGoing = true;
     private ImmediateModeRenderer20 renderer;
     private float traveled = 0f;
-    private float speed = (float)(1.0 / Math.E);
+    private float speed = (float)(0.75 / Math.E);
     private double speedControl = -1.0;
     private static final int width = 256, height = 256, half = height >>> 1;
 
@@ -135,19 +148,25 @@ public class LineGraphDemo extends ApplicationAdapter {
                         if (!keepGoing) putMap();
                         break;
                     case RIGHT: // mode
-                        speed = (float)Math.exp(speedControl += 0.05);
+                        speed = 0.75f * (float)Math.exp(speedControl += 0.05);
                         title = "On mode " + currentMode + " with wobble " + currentWobble + " at speed " + speed + " with seed " + seed;
                         System.out.println(title);
                         if (!keepGoing) putMap();
                         break;
                     case LEFT: // mode
-                        speed = (float)Math.exp(speedControl -= 0.05);
+                        speed = 0.75f * (float)Math.exp(speedControl -= 0.05);
                         title = "On mode " + currentMode + " with wobble " + currentWobble + " at speed " + speed + " with seed " + seed;
                         System.out.println(title);
                         if (!keepGoing) putMap();
                         break;
                     case W:
                         currentWobble = (currentWobble + (UIUtils.shift() ? wobbleCount - 1 : 1)) % wobbleCount;
+                        title = "On mode " + currentMode + " with wobble " + currentWobble + " at speed " + speed + " with seed " + seed;
+                        System.out.println(title);
+                        if (!keepGoing) putMap();
+                        break;
+                    case O:
+                        octaves = UIUtils.shift() ? (octaves - 2 & 3) + 1 : (octaves & 3) + 1;
                         title = "On mode " + currentMode + " with wobble " + currentWobble + " at speed " + speed + " with seed " + seed;
                         System.out.println(title);
                         if (!keepGoing) putMap();
@@ -167,7 +186,7 @@ public class LineGraphDemo extends ApplicationAdapter {
         renderer.begin(view.getCamera().combined, GL_POINTS);
         traveled += speed * Math.max(0.03125f, Gdx.graphics.getDeltaTime());
         int high;
-        IntFloatToFloatFunction wobble = wobbles[currentWobble];
+        IntFloatToFloatFunction wobble = this::fbm;
         switch (currentMode) {
             case 0:
                 for (int i = 0; i < width - 1; i++)
