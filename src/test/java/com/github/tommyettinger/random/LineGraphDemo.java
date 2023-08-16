@@ -29,6 +29,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.github.tommyettinger.digital.Hasher;
+import com.github.tommyettinger.digital.TrigTools;
 
 import static com.badlogic.gdx.Input.Keys.*;
 
@@ -198,9 +199,9 @@ public class LineGraphDemo extends ApplicationAdapter {
                 heights[width] = RED;
                 heights[width*2-1] = (int) (wobble.applyAsFloat(seed+1, traveled) * 0x.fcp7f);
                 heights[width*2] = GREEN;
-                heights[width*3-1] = (int) (wobble.applyAsFloat(seed+1, traveled) * 0x.fcp7f);
+                heights[width*3-1] = (int) (wobble.applyAsFloat(seed+2, traveled) * 0x.fcp7f);
                 heights[width*3] = BLUE;
-                heights[width*4-1] = (int) (wobble.applyAsFloat(seed+1, traveled) * 0x.fcp7f);
+                heights[width*4-1] = (int) (wobble.applyAsFloat(seed+3, traveled) * 0x.fcp7f);
                 break;
             case 2:
                 lineSize = width * 52;
@@ -261,12 +262,10 @@ public class LineGraphDemo extends ApplicationAdapter {
         final float start = heights[i] + half, end = heights[i + 1] + half;
         i &= width - 1;
         for (int x = -1; x <= 1; x++) {
-//            for (int y = -1; y <= 1; y++) {
-                renderer.color(color);
-                renderer.vertex(i + x, start, 0);
-                renderer.color(color);
-                renderer.vertex(i + 1 + x, end, 0);
-//            }
+            renderer.color(color);
+            renderer.vertex(i + x, start, 0);
+            renderer.color(color);
+            renderer.vertex(i + 1 + x, end, 0);
         }
     }
 
