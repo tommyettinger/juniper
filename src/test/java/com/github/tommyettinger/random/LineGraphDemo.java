@@ -208,7 +208,8 @@ public class LineGraphDemo extends ApplicationAdapter {
                 System.arraycopy(heights, 2, heights, 1, width * 86 - 2);
                 // iterates 52 times.
                 for (int i = 0, t = 0; i < 256; i += 5, t++) {
-                    heights[width*t] = Float.intBitsToFloat(i * 0x010101 | 0xFE000000);
+                    heights[width*t] = hueColor(i * 0x1p-8f);
+//                    heights[width*t] = Float.intBitsToFloat(i * 0x010101 | 0xFE000000);
                     heights[width * (t+1) - 1] = (int) (wobble.applyAsFloat(seed+t, traveled) * 0x.fcp7f);
                 }
                 break;
@@ -267,6 +268,23 @@ public class LineGraphDemo extends ApplicationAdapter {
             renderer.color(color);
             renderer.vertex(i + 1 + x, end, 0);
         }
+    }
+
+    /**
+     * Rotates the hue from red to orange, yellow, etc. using a Rodrigues rotation.
+     * <br>
+     * Credit for this challenging method goes to Andrey-Postelzhuk,
+     * <a href="https://forum.unity.com/threads/hue-saturation-brightness-contrast-shader.260649/">Unity Forums</a>.
+     * @param hue between 0.0f and 1.0f (in turns)
+     * @return a packed float color that should be a hue rotation of pure red
+     */
+    private static float hueColor(float hue) {
+        float k = 0.57735f, c = TrigTools.cosTurns(hue), s = TrigTools.sinTurns(hue), d = k * k * (1f - c);
+        float r = d+c, g = d+s*k, b = d-s*k; // result of: rgb * c + cross(k, rgb) * sin(hue)
+        return Float.intBitsToFloat(0xFE000000
+                | ((int)(255 * Math.max(0, b)) << 16)
+                | ((int)(255 * Math.max(0, g)) << 8)
+                | ((int)(255 * Math.max(0, r))));
     }
 
     @Override
