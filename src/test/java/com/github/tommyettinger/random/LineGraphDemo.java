@@ -39,8 +39,23 @@ import static com.badlogic.gdx.graphics.GL20.GL_POINTS;
  */
 public class LineGraphDemo extends ApplicationAdapter {
 
+    public interface IntFloatToFloatFunction {
+        float applyAsFloat(int i, float f);
+    }
+
+    public IntFloatToFloatFunction[] wobbles = {
+            LineWobble::wobble,
+            LineWobble::bicubicWobble,
+            LineWobble::splobble,
+            LineWobble::quobble,
+            LineWobble::quobbleOctave2,
+    };
+    public int currentWobble = 0;
+    public int wobbleCount = wobbles.length;
+
+
     public static String title = "";
-    public static int modeCount = 7;
+    public static int modeCount = 3;
     private int currentMode = 0;
     private int seed = 1;
     private Viewport view;
@@ -76,19 +91,19 @@ public class LineGraphDemo extends ApplicationAdapter {
                     case SPACE:
                     case H: // higher seed
                         seed++;
-                        title = "On mode " + currentMode + " at speed " + speed + " with seed " + seed;
+                        title = "On mode " + currentMode + " with wobble " + currentWobble + " at speed " + speed + " with seed " + seed;
                         System.out.println(title);
                         if (!keepGoing) putMap();
                         break;
                     case L: // lower seed
                         seed--;
-                        title = "On mode " + currentMode + " at speed " + speed + " with seed " + seed;
+                        title = "On mode " + currentMode + " with wobble " + currentWobble + " at speed " + speed + " with seed " + seed;
                         System.out.println(title);
                         if (!keepGoing) putMap();
                         break;
                     case R: // random seed
                         seed = (int)Hasher.randomize3(seed ^ 0x9E3779B97F4A7C15L);
-                        title = "On mode " + currentMode + " at speed " + speed + " with seed " + seed;
+                        title = "On mode " + currentMode + " with wobble " + currentWobble + " at speed " + speed + " with seed " + seed;
                         System.out.println(title);
                         if (!keepGoing) putMap();
                         break;
@@ -100,7 +115,7 @@ public class LineGraphDemo extends ApplicationAdapter {
                         break;
                     case DOWN:
                         currentMode = ((currentMode + modeCount - 1) % modeCount);
-                        title = "On mode " + currentMode + " at speed " + speed + " with seed " + seed;
+                        title = "On mode " + currentMode + " with wobble " + currentWobble + " at speed " + speed + " with seed " + seed;
                         System.out.println(title);
                         if (!keepGoing) putMap();
                         break;
@@ -109,25 +124,31 @@ public class LineGraphDemo extends ApplicationAdapter {
                     case ENTER:
                     case UP:
                         currentMode = ((currentMode + 1) % modeCount);
-                        title = "On mode " + currentMode + " at speed " + speed + " with seed " + seed;
+                        title = "On mode " + currentMode + " with wobble " + currentWobble + " at speed " + speed + " with seed " + seed;
                         System.out.println(title);
                         if (!keepGoing) putMap();
                         break;
                     case M: // mode
                         currentMode = ((currentMode + (UIUtils.shift() ? modeCount - 1 : 1)) % modeCount);
-                        title = "On mode " + currentMode + " at speed " + speed + " with seed " + seed;
+                        title = "On mode " + currentMode + " with wobble " + currentWobble + " at speed " + speed + " with seed " + seed;
                         System.out.println(title);
                         if (!keepGoing) putMap();
                         break;
                     case RIGHT: // mode
                         speed = (float)Math.exp(speedControl += 0.05);
-                        title = "On mode " + currentMode + " at speed " + speed + " with seed " + seed;
+                        title = "On mode " + currentMode + " with wobble " + currentWobble + " at speed " + speed + " with seed " + seed;
                         System.out.println(title);
                         if (!keepGoing) putMap();
                         break;
                     case LEFT: // mode
                         speed = (float)Math.exp(speedControl -= 0.05);
-                        title = "On mode " + currentMode + " at speed " + speed + " with seed " + seed;
+                        title = "On mode " + currentMode + " with wobble " + currentWobble + " at speed " + speed + " with seed " + seed;
+                        System.out.println(title);
+                        if (!keepGoing) putMap();
+                        break;
+                    case W:
+                        currentWobble = (currentWobble + (UIUtils.shift() ? wobbleCount - 1 : 1)) % wobbleCount;
+                        title = "On mode " + currentMode + " with wobble " + currentWobble + " at speed " + speed + " with seed " + seed;
                         System.out.println(title);
                         if (!keepGoing) putMap();
                         break;
@@ -144,14 +165,15 @@ public class LineGraphDemo extends ApplicationAdapter {
 
     public void putMap() {
         renderer.begin(view.getCamera().combined, GL_POINTS);
-        traveled += speed * Math.max(0.016666668f, Gdx.graphics.getDeltaTime());
+        traveled += speed * Math.max(0.03125f, Gdx.graphics.getDeltaTime());
         int high;
+        IntFloatToFloatFunction wobble = wobbles[currentWobble];
         switch (currentMode) {
             case 0:
                 for (int i = 0; i < width - 1; i++)
-                    System.arraycopy(previousGrid[i+1], 0, previousGrid[i], 0, width);
+                    System.arraycopy(previousGrid[i + 1], 0, previousGrid[i], 0, width);
                 Arrays.fill(previousGrid[width - 1], WHITE);
-                high = (int)(LineWobble.wobble(seed, traveled) * 0x.fcp7f);
+                high = (int) (wobble.applyAsFloat(seed, traveled) * 0x.fcp7f);
                 previousGrid[width - 1][half - 1 + high] = DARK;
                 previousGrid[width - 1][half + 0 + high] = DARK;
                 previousGrid[width - 1][half + 1 + high] = DARK;
@@ -164,9 +186,10 @@ public class LineGraphDemo extends ApplicationAdapter {
                 break;
             case 1:
                 for (int i = 0; i < width - 1; i++)
-                    System.arraycopy(previousGrid[i+1], 0, previousGrid[i], 0, width);
+                    System.arraycopy(previousGrid[i + 1], 0, previousGrid[i], 0, width);
                 Arrays.fill(previousGrid[width - 1], WHITE);
-                high = (int)(LineWobble.bicubicWobble(seed, traveled) * 0x.fcp7f);
+
+                high = (int) (wobble.applyAsFloat(seed, traveled) * 0x.fcp7f);
                 previousGrid[width - 1][half - 1 + high] = DARK;
                 previousGrid[width - 1][half + 0 + high] = DARK;
                 previousGrid[width - 1][half + 1 + high] = DARK;
@@ -176,149 +199,58 @@ public class LineGraphDemo extends ApplicationAdapter {
                 previousGrid[width - 3][half - 1 + high] = DARK;
                 previousGrid[width - 3][half + 0 + high] = DARK;
                 previousGrid[width - 3][half + 1 + high] = DARK;
+
+                high = (int) (wobble.applyAsFloat(seed + 1, traveled) * 0x.fcp7f);
+                previousGrid[width - 1][half - 1 + high] = RED;
+                previousGrid[width - 1][half + 0 + high] = RED;
+                previousGrid[width - 1][half + 1 + high] = RED;
+                previousGrid[width - 2][half - 1 + high] = RED;
+                previousGrid[width - 2][half + 0 + high] = RED;
+                previousGrid[width - 2][half + 1 + high] = RED;
+                previousGrid[width - 3][half - 1 + high] = RED;
+                previousGrid[width - 3][half + 0 + high] = RED;
+                previousGrid[width - 3][half + 1 + high] = RED;
+
+                high = (int) (wobble.applyAsFloat(seed + 2, traveled) * 0x.fcp7f);
+                previousGrid[width - 1][half - 1 + high] = GREEN;
+                previousGrid[width - 1][half + 0 + high] = GREEN;
+                previousGrid[width - 1][half + 1 + high] = GREEN;
+                previousGrid[width - 2][half - 1 + high] = GREEN;
+                previousGrid[width - 2][half + 0 + high] = GREEN;
+                previousGrid[width - 2][half + 1 + high] = GREEN;
+                previousGrid[width - 3][half - 1 + high] = GREEN;
+                previousGrid[width - 3][half + 0 + high] = GREEN;
+                previousGrid[width - 3][half + 1 + high] = GREEN;
+
+                high = (int) (wobble.applyAsFloat(seed + 3, traveled) * 0x.fcp7f);
+                previousGrid[width - 1][half - 1 + high] = BLUE;
+                previousGrid[width - 1][half + 0 + high] = BLUE;
+                previousGrid[width - 1][half + 1 + high] = BLUE;
+                previousGrid[width - 2][half - 1 + high] = BLUE;
+                previousGrid[width - 2][half + 0 + high] = BLUE;
+                previousGrid[width - 2][half + 1 + high] = BLUE;
+                previousGrid[width - 3][half - 1 + high] = BLUE;
+                previousGrid[width - 3][half + 0 + high] = BLUE;
+                previousGrid[width - 3][half + 1 + high] = BLUE;
                 break;
             case 2:
                 for (int i = 0; i < width - 1; i++)
-                    System.arraycopy(previousGrid[i+1], 0, previousGrid[i], 0, width);
-                Arrays.fill(previousGrid[width - 1], WHITE);
-                
-                high = (int)(LineWobble.wobble(seed, traveled) * 0x.fcp7f);
-                previousGrid[width - 1][half - 1 + high] = DARK;
-                previousGrid[width - 1][half + 0 + high] = DARK;
-                previousGrid[width - 1][half + 1 + high] = DARK;
-                previousGrid[width - 2][half - 1 + high] = DARK;
-                previousGrid[width - 2][half + 0 + high] = DARK;
-                previousGrid[width - 2][half + 1 + high] = DARK;
-                previousGrid[width - 3][half - 1 + high] = DARK;
-                previousGrid[width - 3][half + 0 + high] = DARK;
-                previousGrid[width - 3][half + 1 + high] = DARK;
-
-                high = (int)(LineWobble.wobble(seed + 1, traveled) * 0x.fcp7f);
-                previousGrid[width - 1][half - 1 + high] = RED;
-                previousGrid[width - 1][half + 0 + high] = RED;
-                previousGrid[width - 1][half + 1 + high] = RED;
-                previousGrid[width - 2][half - 1 + high] = RED;
-                previousGrid[width - 2][half + 0 + high] = RED;
-                previousGrid[width - 2][half + 1 + high] = RED;
-                previousGrid[width - 3][half - 1 + high] = RED;
-                previousGrid[width - 3][half + 0 + high] = RED;
-                previousGrid[width - 3][half + 1 + high] = RED;
-
-                high = (int)(LineWobble.wobble(seed + 2, traveled) * 0x.fcp7f);
-                previousGrid[width - 1][half - 1 + high] = GREEN;
-                previousGrid[width - 1][half + 0 + high] = GREEN;
-                previousGrid[width - 1][half + 1 + high] = GREEN;
-                previousGrid[width - 2][half - 1 + high] = GREEN;
-                previousGrid[width - 2][half + 0 + high] = GREEN;
-                previousGrid[width - 2][half + 1 + high] = GREEN;
-                previousGrid[width - 3][half - 1 + high] = GREEN;
-                previousGrid[width - 3][half + 0 + high] = GREEN;
-                previousGrid[width - 3][half + 1 + high] = GREEN;
-
-                high = (int)(LineWobble.wobble(seed + 3, traveled) * 0x.fcp7f);
-                previousGrid[width - 1][half - 1 + high] = BLUE;
-                previousGrid[width - 1][half + 0 + high] = BLUE;
-                previousGrid[width - 1][half + 1 + high] = BLUE;
-                previousGrid[width - 2][half - 1 + high] = BLUE;
-                previousGrid[width - 2][half + 0 + high] = BLUE;
-                previousGrid[width - 2][half + 1 + high] = BLUE;
-                previousGrid[width - 3][half - 1 + high] = BLUE;
-                previousGrid[width - 3][half + 0 + high] = BLUE;
-                previousGrid[width - 3][half + 1 + high] = BLUE;
-                break;
-            case 3:
-                for (int i = 0; i < width - 1; i++)
-                    System.arraycopy(previousGrid[i+1], 0, previousGrid[i], 0, width);
+                    System.arraycopy(previousGrid[i + 1], 0, previousGrid[i], 0, width);
                 Arrays.fill(previousGrid[width - 1], WHITE);
 
-                high = (int)(LineWobble.bicubicWobble(seed, traveled) * 0x.fcp7f);
-                previousGrid[width - 1][half - 1 + high] = DARK;
-                previousGrid[width - 1][half + 0 + high] = DARK;
-                previousGrid[width - 1][half + 1 + high] = DARK;
-                previousGrid[width - 2][half - 1 + high] = DARK;
-                previousGrid[width - 2][half + 0 + high] = DARK;
-                previousGrid[width - 2][half + 1 + high] = DARK;
-                previousGrid[width - 3][half - 1 + high] = DARK;
-                previousGrid[width - 3][half + 0 + high] = DARK;
-                previousGrid[width - 3][half + 1 + high] = DARK;
-
-                high = (int)(LineWobble.bicubicWobble(seed + 1, traveled) * 0x.fcp7f);
-                previousGrid[width - 1][half - 1 + high] = RED;
-                previousGrid[width - 1][half + 0 + high] = RED;
-                previousGrid[width - 1][half + 1 + high] = RED;
-                previousGrid[width - 2][half - 1 + high] = RED;
-                previousGrid[width - 2][half + 0 + high] = RED;
-                previousGrid[width - 2][half + 1 + high] = RED;
-                previousGrid[width - 3][half - 1 + high] = RED;
-                previousGrid[width - 3][half + 0 + high] = RED;
-                previousGrid[width - 3][half + 1 + high] = RED;
-
-                high = (int)(LineWobble.bicubicWobble(seed + 2, traveled) * 0x.fcp7f);
-                previousGrid[width - 1][half - 1 + high] = GREEN;
-                previousGrid[width - 1][half + 0 + high] = GREEN;
-                previousGrid[width - 1][half + 1 + high] = GREEN;
-                previousGrid[width - 2][half - 1 + high] = GREEN;
-                previousGrid[width - 2][half + 0 + high] = GREEN;
-                previousGrid[width - 2][half + 1 + high] = GREEN;
-                previousGrid[width - 3][half - 1 + high] = GREEN;
-                previousGrid[width - 3][half + 0 + high] = GREEN;
-                previousGrid[width - 3][half + 1 + high] = GREEN;
-
-                high = (int)(LineWobble.bicubicWobble(seed + 3, traveled) * 0x.fcp7f);
-                previousGrid[width - 1][half - 1 + high] = BLUE;
-                previousGrid[width - 1][half + 0 + high] = BLUE;
-                previousGrid[width - 1][half + 1 + high] = BLUE;
-                previousGrid[width - 2][half - 1 + high] = BLUE;
-                previousGrid[width - 2][half + 0 + high] = BLUE;
-                previousGrid[width - 2][half + 1 + high] = BLUE;
-                previousGrid[width - 3][half - 1 + high] = BLUE;
-                previousGrid[width - 3][half + 0 + high] = BLUE;
-                previousGrid[width - 3][half + 1 + high] = BLUE;
-                break;
-            case 4:
-                for (int i = 0; i < width - 1; i++)
-                    System.arraycopy(previousGrid[i+1], 0, previousGrid[i], 0, width);
-                Arrays.fill(previousGrid[width - 1], WHITE);
-                high = (int)(LineWobble.splobble(seed, traveled) * 0x.fcp7f);
-                previousGrid[width - 1][half - 1 + high] = DARK;
-                previousGrid[width - 1][half + 0 + high] = DARK;
-                previousGrid[width - 1][half + 1 + high] = DARK;
-                previousGrid[width - 2][half - 1 + high] = DARK;
-                previousGrid[width - 2][half + 0 + high] = DARK;
-                previousGrid[width - 2][half + 1 + high] = DARK;
-                previousGrid[width - 3][half - 1 + high] = DARK;
-                previousGrid[width - 3][half + 0 + high] = DARK;
-                previousGrid[width - 3][half + 1 + high] = DARK;
-                break;
-            case 5:
-                for (int i = 0; i < width - 1; i++)
-                    System.arraycopy(previousGrid[i+1], 0, previousGrid[i], 0, width);
-                Arrays.fill(previousGrid[width - 1], WHITE);
-                high = (int)(LineWobble.quobble(seed, traveled) * 0x.fcp7f);
-                previousGrid[width - 1][half - 1 + high] = DARK;
-                previousGrid[width - 1][half + 0 + high] = DARK;
-                previousGrid[width - 1][half + 1 + high] = DARK;
-                previousGrid[width - 2][half - 1 + high] = DARK;
-                previousGrid[width - 2][half + 0 + high] = DARK;
-                previousGrid[width - 2][half + 1 + high] = DARK;
-                previousGrid[width - 3][half - 1 + high] = DARK;
-                previousGrid[width - 3][half + 0 + high] = DARK;
-                previousGrid[width - 3][half + 1 + high] = DARK;
-                break;
-            case 6:
-                for (int i = 0; i < width - 1; i++)
-                    System.arraycopy(previousGrid[i+1], 0, previousGrid[i], 0, width);
-                Arrays.fill(previousGrid[width - 1], WHITE);
-                high = (int)(LineWobble.quobbleOctave2(seed, traveled) * 0x.fcp7f);
-                previousGrid[width - 1][half - 1 + high] = DARK;
-                previousGrid[width - 1][half + 0 + high] = DARK;
-                previousGrid[width - 1][half + 1 + high] = DARK;
-                previousGrid[width - 2][half - 1 + high] = DARK;
-                previousGrid[width - 2][half + 0 + high] = DARK;
-                previousGrid[width - 2][half + 1 + high] = DARK;
-                previousGrid[width - 3][half - 1 + high] = DARK;
-                previousGrid[width - 3][half + 0 + high] = DARK;
-                previousGrid[width - 3][half + 1 + high] = DARK;
+                for (int i = 0; i < 256; i++) {
+                    high = (int) (wobble.applyAsFloat(seed + i, traveled) * 0x.fcp7f);
+                    float color = Float.intBitsToFloat(i * 0x010101 | 0xFE000000);
+                    previousGrid[width - 1][half - 1 + high] = color;
+                    previousGrid[width - 1][half + 0 + high] = color;
+                    previousGrid[width - 1][half + 1 + high] = color;
+                    previousGrid[width - 2][half - 1 + high] = color;
+                    previousGrid[width - 2][half + 0 + high] = color;
+                    previousGrid[width - 2][half + 1 + high] = color;
+                    previousGrid[width - 3][half - 1 + high] = color;
+                    previousGrid[width - 3][half + 0 + high] = color;
+                    previousGrid[width - 3][half + 1 + high] = color;
+                }
                 break;
         }
         for (int x = 0; x < width; x++) {
@@ -333,6 +265,7 @@ public class LineGraphDemo extends ApplicationAdapter {
 
     @Override
     public void render() {
+        Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() + " FPS");
         ScreenUtils.clear(Color.BLACK);
         if (keepGoing) {
             putMap();
@@ -360,7 +293,7 @@ public class LineGraphDemo extends ApplicationAdapter {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
         config.setTitle("Juniper Line Graphing Demo");
         config.setWindowedMode(width, height);
-        config.useVsync(false);
+        config.useVsync(true);
         config.setForegroundFPS(120);
         config.setResizable(false);
         new Lwjgl3Application(new LineGraphDemo(), config);
