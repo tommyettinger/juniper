@@ -30,10 +30,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.github.tommyettinger.digital.Hasher;
 
-import java.util.Arrays;
-
 import static com.badlogic.gdx.Input.Keys.*;
-import static com.badlogic.gdx.graphics.GL20.GL_POINTS;
 
 /**
  */
@@ -80,8 +77,8 @@ public class LineGraphDemo extends ApplicationAdapter {
     private static final int width = 256, height = 256, half = height >>> 1;
 
     // packed float colors
-    private static final float[][] previousGrid = new float[width][height];
-    private static final float[][] colors = new float[width][height];
+    private static final float[] heights = new float[width * 128];
+    private static int lineSize = 256;
 
     private static final float WHITE = Color.WHITE_FLOAT_BITS;
     private static final float BLACK = Color.BLACK.toFloatBits();
@@ -95,7 +92,7 @@ public class LineGraphDemo extends ApplicationAdapter {
     @Override
     public void create() {
         Gdx.gl.glDisable(GL20.GL_BLEND);
-        renderer = new ImmediateModeRenderer20(width * height, false, true, 0);
+        renderer = new ImmediateModeRenderer20(width * 256 * 3, false, true, 0);
         view = new ScreenViewport();
         InputAdapter input = new InputAdapter() {
             @Override
@@ -183,121 +180,93 @@ public class LineGraphDemo extends ApplicationAdapter {
     }
 
     public void putMap() {
-        renderer.begin(view.getCamera().combined, GL_POINTS);
         traveled += speed * Math.max(0.03125f, Gdx.graphics.getDeltaTime());
         int high;
         IntFloatToFloatFunction wobble = this::fbm;
         switch (currentMode) {
             case 0:
-                for (int i = 0; i < width - 1; i++)
-                    System.arraycopy(previousGrid[i + 1], 0, previousGrid[i], 0, width);
-                Arrays.fill(previousGrid[width - 1], WHITE);
-                high = (int) (wobble.applyAsFloat(seed, traveled) * 0x.fcp7f);
-                previousGrid[width - 1][half - 1 + high] = DARK;
-                previousGrid[width - 1][half + 0 + high] = DARK;
-                previousGrid[width - 1][half + 1 + high] = DARK;
-                previousGrid[width - 2][half - 1 + high] = DARK;
-                previousGrid[width - 2][half + 0 + high] = DARK;
-                previousGrid[width - 2][half + 1 + high] = DARK;
-                previousGrid[width - 3][half - 1 + high] = DARK;
-                previousGrid[width - 3][half + 0 + high] = DARK;
-                previousGrid[width - 3][half + 1 + high] = DARK;
+                lineSize = 256;
+                System.arraycopy(heights, 2, heights, 1, width - 2);
+                heights[0] = DARK;
+                heights[width-1] = (int) (wobble.applyAsFloat(seed, traveled) * 0x.fcp7f);
                 break;
             case 1:
-                for (int i = 0; i < width - 1; i++)
-                    System.arraycopy(previousGrid[i + 1], 0, previousGrid[i], 0, width);
-                Arrays.fill(previousGrid[width - 1], WHITE);
-
-                high = (int) (wobble.applyAsFloat(seed, traveled) * 0x.fcp7f);
-                previousGrid[width - 1][half - 1 + high] = DARK;
-                previousGrid[width - 1][half + 0 + high] = DARK;
-                previousGrid[width - 1][half + 1 + high] = DARK;
-                previousGrid[width - 2][half - 1 + high] = DARK;
-                previousGrid[width - 2][half + 0 + high] = DARK;
-                previousGrid[width - 2][half + 1 + high] = DARK;
-                previousGrid[width - 3][half - 1 + high] = DARK;
-                previousGrid[width - 3][half + 0 + high] = DARK;
-                previousGrid[width - 3][half + 1 + high] = DARK;
-
-                high = (int) (wobble.applyAsFloat(seed + 1, traveled) * 0x.fcp7f);
-                previousGrid[width - 1][half - 1 + high] = RED;
-                previousGrid[width - 1][half + 0 + high] = RED;
-                previousGrid[width - 1][half + 1 + high] = RED;
-                previousGrid[width - 2][half - 1 + high] = RED;
-                previousGrid[width - 2][half + 0 + high] = RED;
-                previousGrid[width - 2][half + 1 + high] = RED;
-                previousGrid[width - 3][half - 1 + high] = RED;
-                previousGrid[width - 3][half + 0 + high] = RED;
-                previousGrid[width - 3][half + 1 + high] = RED;
-
-                high = (int) (wobble.applyAsFloat(seed + 2, traveled) * 0x.fcp7f);
-                previousGrid[width - 1][half - 1 + high] = GREEN;
-                previousGrid[width - 1][half + 0 + high] = GREEN;
-                previousGrid[width - 1][half + 1 + high] = GREEN;
-                previousGrid[width - 2][half - 1 + high] = GREEN;
-                previousGrid[width - 2][half + 0 + high] = GREEN;
-                previousGrid[width - 2][half + 1 + high] = GREEN;
-                previousGrid[width - 3][half - 1 + high] = GREEN;
-                previousGrid[width - 3][half + 0 + high] = GREEN;
-                previousGrid[width - 3][half + 1 + high] = GREEN;
-
-                high = (int) (wobble.applyAsFloat(seed + 3, traveled) * 0x.fcp7f);
-                previousGrid[width - 1][half - 1 + high] = BLUE;
-                previousGrid[width - 1][half + 0 + high] = BLUE;
-                previousGrid[width - 1][half + 1 + high] = BLUE;
-                previousGrid[width - 2][half - 1 + high] = BLUE;
-                previousGrid[width - 2][half + 0 + high] = BLUE;
-                previousGrid[width - 2][half + 1 + high] = BLUE;
-                previousGrid[width - 3][half - 1 + high] = BLUE;
-                previousGrid[width - 3][half + 0 + high] = BLUE;
-                previousGrid[width - 3][half + 1 + high] = BLUE;
+                lineSize = 1024;
+                System.arraycopy(heights, 2, heights, 1, width * 4 - 2);
+                heights[0] = DARK;
+                heights[width-1] = (int) (wobble.applyAsFloat(seed, traveled) * 0x.fcp7f);
+                heights[width] = RED;
+                heights[width*2-1] = (int) (wobble.applyAsFloat(seed+1, traveled) * 0x.fcp7f);
+                heights[width*2] = GREEN;
+                heights[width*3-1] = (int) (wobble.applyAsFloat(seed+1, traveled) * 0x.fcp7f);
+                heights[width*3] = BLUE;
+                heights[width*4-1] = (int) (wobble.applyAsFloat(seed+1, traveled) * 0x.fcp7f);
                 break;
             case 2:
-                for (int i = 0; i < width - 1; i++)
-                    System.arraycopy(previousGrid[i + 1], 0, previousGrid[i], 0, width);
-                Arrays.fill(previousGrid[width - 1], WHITE);
-
-                for (int i = 0; i < 256; i++) {
-                    high = (int) (wobble.applyAsFloat(seed + i, traveled) * 0x.fcp7f);
-                    float color = Float.intBitsToFloat(i * 0x010101 | 0xFE000000);
-                    previousGrid[width - 1][half - 1 + high] = color;
-                    previousGrid[width - 1][half + 0 + high] = color;
-                    previousGrid[width - 1][half + 1 + high] = color;
-                    previousGrid[width - 2][half - 1 + high] = color;
-                    previousGrid[width - 2][half + 0 + high] = color;
-                    previousGrid[width - 2][half + 1 + high] = color;
-                    previousGrid[width - 3][half - 1 + high] = color;
-                    previousGrid[width - 3][half + 0 + high] = color;
-                    previousGrid[width - 3][half + 1 + high] = color;
+                lineSize = width * 52;
+                System.arraycopy(heights, 2, heights, 1, width * 86 - 2);
+                // iterates 52 times.
+                for (int i = 0, t = 0; i < 256; i += 5, t++) {
+                    heights[width*t] = Float.intBitsToFloat(i * 0x010101 | 0xFE000000);
+                    heights[width * (t+1) - 1] = (int) (wobble.applyAsFloat(seed+t, traveled) * 0x.fcp7f);
                 }
                 break;
         }
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                renderer.color(previousGrid[x][y]);
-                renderer.vertex(x, y, 0);
+//        for (int x = 0; x < width; x++) {
+//            for (int y = 0; y < height; y++) {
+//                renderer.color(previousGrid[x][y]);
+//                renderer.vertex(x, y, 0);
+//            }
+//        }
+//        renderer.end();
+        renderer.begin(view.getCamera().combined, GL20.GL_LINES);
+        for (int index = 0; index < lineSize;) {
+            float color = heights[index++];
+            for (int i = 0; i < width - 1; i++) {
+                thickLine(index++, color);
             }
         }
-
         renderer.end();
+
     }
 
     @Override
     public void render() {
         Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() + " FPS");
-        ScreenUtils.clear(Color.BLACK);
+        ScreenUtils.clear(Color.WHITE);
         if (keepGoing) {
             putMap();
         }
         else {
-            renderer.begin(view.getCamera().combined, GL_POINTS);
-            for (int x = 0; x < width + width; x++) {
-                for (int y = 0; y < height; y++) {
-                    renderer.color(previousGrid[x][y]);
-                    renderer.vertex(x, y, 0);
+//            renderer.begin(view.getCamera().combined, GL_POINTS);
+//            for (int x = 0; x < width + width; x++) {
+//                for (int y = 0; y < height; y++) {
+//                    renderer.color(previousGrid[x][y]);
+//                    renderer.vertex(x, y, 0);
+//                }
+//            }
+//            renderer.end();
+            renderer.begin(view.getCamera().combined, GL20.GL_LINES);
+            for (int index = 0; index < lineSize;) {
+                float color = heights[index++];
+                for (int i = 0; i < width - 1; i++) {
+                    thickLine(index++, color);
                 }
             }
             renderer.end();
+        }
+    }
+
+    private void thickLine(int i, float color) {
+        final float start = heights[i] + half, end = heights[i + 1] + half;
+        i &= width - 1;
+        for (int x = -1; x <= 1; x++) {
+//            for (int y = -1; y <= 1; y++) {
+                renderer.color(color);
+                renderer.vertex(i + x, start, 0);
+                renderer.color(color);
+                renderer.vertex(i + 1 + x, end, 0);
+//            }
         }
     }
 
