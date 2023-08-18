@@ -17,8 +17,9 @@
 
 package com.github.tommyettinger.random.gdx;
 
-import com.badlogic.gdx.utils.NumberUtils;
+import com.badlogic.gdx.utils.*;
 
+import java.lang.StringBuilder;
 import java.util.List;
 import java.util.Random;
 
@@ -27,6 +28,11 @@ import java.util.Random;
  * that would be too bare-bones with just Random's methods. This is extremely similar to
  * EnhancedRandom from the Juniper library, but depends only on libGDX (Juniper depends
  * on the digital library).
+ * <br>
+ * The only differences between the behavior of this class and EnhancedRandom are in
+ * {@link #nextGaussian()} and the serialized format, sometimes. You can make the
+ * serialized format the same if you give Base.BASE10 to EnhancedRandom's (de)serialization
+ * methods. This class also adds some methods to aid usage with libGDX.
  */
 public abstract class GdxRandom extends Random {
 
@@ -1383,6 +1389,103 @@ public abstract class GdxRandom extends Random {
 	}
 
 	/**
+	 * Gets a randomly selected item from the given LongArray.
+	 * If {@code arr} is empty, this throws an IndexOutOfBoundsException.
+	 * Unlike {@link LongArray#random()}, this allows using a seeded GdxRandom.
+	 *
+	 * @param arr    a non-empty LongArray
+	 * @return a randomly-selected item from arr
+	 */
+	public long randomElement (LongArray arr) {
+		return arr.get(nextInt(arr.size));
+	}
+
+	/**
+	 * Gets a randomly selected item from the given IntArray.
+	 * If {@code arr} is empty, this throws an IndexOutOfBoundsException.
+	 * Unlike {@link IntArray#random()}, this allows using a seeded GdxRandom.
+	 *
+	 * @param arr    a non-empty IntArray
+	 * @return a randomly-selected item from arr
+	 */
+	public int randomElement (IntArray arr) {
+		return arr.get(nextInt(arr.size));
+	}
+
+	/**
+	 * Gets a randomly selected item from the given ShortArray.
+	 * If {@code arr} is empty, this throws an IndexOutOfBoundsException.
+	 * Unlike {@link ShortArray#random()}, this allows using a seeded GdxRandom.
+	 *
+	 * @param arr    a non-empty ShortArray
+	 * @return a randomly-selected item from arr
+	 */
+	public short randomElement (ShortArray arr) {
+		return arr.get(nextInt(arr.size));
+	}
+
+	/**
+	 * Gets a randomly selected item from the given ByteArray.
+	 * If {@code arr} is empty, this throws an IndexOutOfBoundsException.
+	 * Unlike {@link ByteArray#random()}, this allows using a seeded GdxRandom.
+	 *
+	 * @param arr    a non-empty ByteArray
+	 * @return a randomly-selected item from arr
+	 */
+	public byte randomElement (ByteArray arr) {
+		return arr.get(nextInt(arr.size));
+	}
+	
+	/**
+	 * Gets a randomly selected item from the given FloatArray.
+	 * If {@code arr} is empty, this throws an IndexOutOfBoundsException.
+	 * Unlike {@link FloatArray#random()}, this allows using a seeded GdxRandom.
+	 *
+	 * @param arr    a non-empty FloatArray
+	 * @return a randomly-selected item from arr
+	 */
+	public float randomElement (FloatArray arr) {
+		return arr.get(nextInt(arr.size));
+	}
+
+	/**
+	 * Gets a randomly selected item from the given CharArray.
+	 * If {@code arr} is empty, this throws an IndexOutOfBoundsException.
+	 * Unlike {@link CharArray#random()}, this allows using a seeded GdxRandom.
+	 *
+	 * @param arr    a non-empty CharArray
+	 * @return a randomly-selected item from arr
+	 */
+	public char randomElement (CharArray arr) {
+		return arr.get(nextInt(arr.size));
+	}
+
+	/**
+	 * Gets a randomly selected item from the given BooleanArray.
+	 * If {@code arr} is empty, this throws an IndexOutOfBoundsException.
+	 * Unlike {@link BooleanArray#random()}, this allows using a seeded GdxRandom.
+	 *
+	 * @param arr    a non-empty BooleanArray
+	 * @return a randomly-selected item from arr
+	 */
+	public boolean randomElement (BooleanArray arr) {
+		return arr.get(nextInt(arr.size));
+	}
+
+	/**
+	 * Gets a randomly selected item from the given Array.
+	 * If {@code arr} is empty, this throws an IndexOutOfBoundsException.
+	 * Unlike {@link Array#random()}, this allows using a seeded GdxRandom.
+	 *
+	 * @param arr    a non-empty Array
+	 * @param <T>    the type of items
+	 * @return a randomly-selected item from arr
+	 */
+	public <T> T randomElement (Array<T> arr) {
+		return arr.get(nextInt(arr.size));
+	}
+
+	/**
 	 * Shuffles the given array in-place pseudo-randomly, using this to determine how to shuffle.
 	 *
 	 * @param items an int array; must be non-null
@@ -1623,6 +1726,86 @@ public abstract class GdxRandom extends Random {
 			items[i] = items[ii];
 			items[ii] = temp;
 		}
+	}
+
+	/**
+	 * Shuffles the given IntArray in-place pseudo-randomly, using this to determine how to shuffle.
+	 * Unlike {@link IntArray#shuffle()}, this allows using a seeded GdxRandom.
+	 *
+	 * @param arr an IntArray; must be non-null
+	 */
+	public void shuffle (IntArray arr) {
+		shuffle(arr.items, 0, arr.size);
+	}
+
+	/**
+	 * Shuffles the given LongArray in-place pseudo-randomly, using this to determine how to shuffle.
+	 * Unlike {@link LongArray#shuffle()}, this allows using a seeded GdxRandom.
+	 *
+	 * @param arr a LongArray; must be non-null
+	 */
+	public void shuffle (LongArray arr) {
+		shuffle(arr.items, 0, arr.size);
+	}
+
+	/**
+	 * Shuffles the given FloatArray in-place pseudo-randomly, using this to determine how to shuffle.
+	 * Unlike {@link FloatArray#shuffle()}, this allows using a seeded GdxRandom.
+	 *
+	 * @param arr a FloatArray; must be non-null
+	 */
+	public void shuffle (FloatArray arr) {
+		shuffle(arr.items, 0, arr.size);
+	}
+
+	/**
+	 * Shuffles the given CharArray in-place pseudo-randomly, using this to determine how to shuffle.
+	 * Unlike {@link CharArray#shuffle()}, this allows using a seeded GdxRandom.
+	 *
+	 * @param arr a CharArray; must be non-null
+	 */
+	public void shuffle (CharArray arr) {
+		shuffle(arr.items, 0, arr.size);
+	}
+
+	/**
+	 * Shuffles the given ByteArray in-place pseudo-randomly, using this to determine how to shuffle.
+	 * Unlike {@link ByteArray#shuffle()}, this allows using a seeded GdxRandom.
+	 *
+	 * @param arr a ByteArray; must be non-null
+	 */
+	public void shuffle (ByteArray arr) {
+		shuffle(arr.items, 0, arr.size);
+	}
+
+	/**
+	 * Shuffles the given ShortArray in-place pseudo-randomly, using this to determine how to shuffle.
+	 * Unlike {@link ShortArray#shuffle()}, this allows using a seeded GdxRandom.
+	 *
+	 * @param arr a ShortArray; must be non-null
+	 */
+	public void shuffle (ShortArray arr) {
+		shuffle(arr.items, 0, arr.size);
+	}
+
+	/**
+	 * Shuffles the given BooleanArray in-place pseudo-randomly, using this to determine how to shuffle.
+	 * Unlike {@link BooleanArray#shuffle()}, this allows using a seeded GdxRandom.
+	 *
+	 * @param arr a BooleanArray; must be non-null
+	 */
+	public void shuffle (BooleanArray arr) {
+		shuffle(arr.items, 0, arr.size);
+	}
+
+	/**
+	 * Shuffles the given Array in-place pseudo-randomly, using this to determine how to shuffle.
+	 * Unlike {@link Array#shuffle()}, this allows using a seeded GdxRandom.
+	 *
+	 * @param arr an Array with any item type; must be non-null
+	 */
+	public void shuffle (Array<?> arr) {
+		shuffle(arr.items, 0, arr.size);
 	}
 
 	/**
