@@ -18,7 +18,7 @@
 package com.github.tommyettinger.random;
 
 /**
- * A random number generator that is fairly fast and guarantees 4-dimensional equidistribution (with the exception of the
+ * A random number generator that is fairly fast and guarantees 4-dimensional equidistribution (except for the
  * quartet with four zeroes in a row, every quartet of long results is produced exactly once over the period). It has a
  * period of (2 to the 256) - 1, which would take millennia to exhaust on current-generation hardware (at least).
  * It can be considered stable, like the other EnhancedRandom implementations here. This passes heavy testing, but isn't a
@@ -179,25 +179,25 @@ public class Xoshiro256StarStarRandom extends EnhancedRandom {
 	 */
 	@Override
 	public void setSeed (long seed) {
-		long x = (seed += 0x9E3779B97F4A7C15L);
+		long x = (seed + 0x9E3779B97F4A7C15L);
 		x ^= x >>> 27;
 		x *= 0x3C79AC492BA7B653L;
 		x ^= x >>> 33;
 		x *= 0x1C69B3F74AC4AE35L;
 		stateA = x ^ x >>> 27;
-		x = (seed += 0x9E3779B97F4A7C15L);
+		x = (seed + 0x3C6EF372FE94F82AL);
 		x ^= x >>> 27;
 		x *= 0x3C79AC492BA7B653L;
 		x ^= x >>> 33;
 		x *= 0x1C69B3F74AC4AE35L;
 		stateB = x ^ x >>> 27;
-		x = (seed += 0x9E3779B97F4A7C15L);
+		x = (seed + 0xDAA66D2C7DDF743FL);
 		x ^= x >>> 27;
 		x *= 0x3C79AC492BA7B653L;
 		x ^= x >>> 33;
 		x *= 0x1C69B3F74AC4AE35L;
 		stateC = x ^ x >>> 27;
-		x = (seed + 0x9E3779B97F4A7C15L);
+		x = (seed + 0x78DDE6E5FD29F054L);
 		x ^= x >>> 27;
 		x *= 0x3C79AC492BA7B653L;
 		x ^= x >>> 33;

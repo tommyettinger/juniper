@@ -15,21 +15,26 @@
  *
  */
 
-package com.github.tommyettinger.random;
+package com.github.tommyettinger.random.gdx;
 
 /**
  * A random number generator that guarantees 4-dimensional equidistribution (except for the quartet with four
  * zeroes in a row, every quartet of long results is produced exactly once over the period). This particular generator
- * is nearly identical to {@link Xoshiro256StarStarRandom}, but instead of using the fast but weak StarStar "scrambler,"
+ * is nearly identical to Xoshiro256** (or StarStar), but instead of using the fast but weak StarStar "scrambler,"
  * it runs output through the MX3 unary hash, which is slower but extremely strong. It has a period of
  * (2 to the 256) - 1, which would take millennia to exhaust on current-generation hardware (at least).
- * It can be considered stable, like the other EnhancedRandom implementations here. This isn't a cryptographic
- * generator, but the only issue I know of with Xoshiro and the StarStar scrambler should be fully resolved here. The
- * only invalid state is the one with 0 in each state variable, and this won't ever
+ * This isn't a cryptographic generator, but the only issue I know of with Xoshiro and the StarStar scrambler should be
+ * fully resolved here. The only invalid state is the one with 0 in each state variable, and this won't ever
  * occur in the normal period of that contains all other states. You can seed this with either {@link #setSeed(long)}
  * or {@link #setState(long, long, long, long)} without encountering problems past the first 4 or so outputs. If you
  * pass very similar initial states to two different generators with {@link #setState(long)}, their output will likely
  * be similar for the first 3 or 4 outputs, and will then diverge rapidly.
+ * <br>
+ * This generator is substantially slower than {@link RandomAce320}, but has an exactly-known, extremely-long period and
+ * is 4-dimensionally equidistributed. It also randomizes even tiny changes in its state using a hash, so very similar
+ * states are not likely to produce similar output. Where RandomAce320 generates 1.75 billion longs per second, this
+ * generates 554 million longs per second. For many applications, random number generation is far from a bottleneck, so
+ * in both cases the generators should be more than fast enough.
  * <br>
  * This implements all optional methods in EnhancedRandom except {@link #skip(long)}; it does implement
  * {@link #previousLong()} without using skip().
@@ -38,7 +43,7 @@ package com.github.tommyettinger.random;
  * <a href="https://vigna.di.unimi.it/ftp/papers/ScrambledLinear.pdf">PDF link here</a>. The MX3 unary hash was written
  * 2020 by Jon Maiga, <a href="https://github.com/jonmaiga/mx3">GitHub repo here</a>.
  */
-public class Xoshiro256MX3Random extends EnhancedRandom {
+public class RandomXMX256 extends GdxRandom {
 
 	/**
 	 * The first state; can be any long, as long as all states are not 0.
@@ -60,31 +65,31 @@ public class Xoshiro256MX3Random extends EnhancedRandom {
 	protected long stateD;
 
 	/**
-	 * Creates a new Xoshiro256MX3Random with a random state.
+	 * Creates a new RandomXMX256 with a random state.
 	 */
-	public Xoshiro256MX3Random() {
+	public RandomXMX256() {
 		super();
-		stateA = EnhancedRandom.seedFromMath();
-		stateB = EnhancedRandom.seedFromMath();
-		stateC = EnhancedRandom.seedFromMath();
-		stateD = EnhancedRandom.seedFromMath();
+		stateA = seedFromMath();
+		stateB = seedFromMath();
+		stateC = seedFromMath();
+		stateD = seedFromMath();
 		if ((stateA | stateB | stateC | stateD) == 0L)
 			stateD = 0x9E3779B97F4A7C15L;
 	}
 
 	/**
-	 * Creates a new Xoshiro256MX3Random with the given seed; all {@code long} values are permitted.
+	 * Creates a new RandomXMX256 with the given seed; all {@code long} values are permitted.
 	 * The seed will be passed to {@link #setSeed(long)} to attempt to adequately distribute the seed randomly.
 	 *
 	 * @param seed any {@code long} value
 	 */
-	public Xoshiro256MX3Random(long seed) {
+	public RandomXMX256(long seed) {
 		super(seed);
 		setSeed(seed);
 	}
 
 	/**
-	 * Creates a new Xoshiro256MX3Random with the given four states; all {@code long} values are permitted.
+	 * Creates a new RandomXMX256 with the given four states; all {@code long} values are permitted.
 	 * These states will be used verbatim, as long as they are not all 0. In that case, stateD is changed.
 	 *
 	 * @param stateA any {@code long} value
@@ -92,7 +97,7 @@ public class Xoshiro256MX3Random extends EnhancedRandom {
 	 * @param stateC any {@code long} value
 	 * @param stateD any {@code long} value
 	 */
-	public Xoshiro256MX3Random(long stateA, long stateB, long stateC, long stateD) {
+	public RandomXMX256(long stateA, long stateB, long stateC, long stateD) {
 		super(stateA);
 		this.stateA = stateA;
 		this.stateB = stateB;
@@ -416,8 +421,8 @@ public class Xoshiro256MX3Random extends EnhancedRandom {
 
 
 	@Override
-	public Xoshiro256MX3Random copy () {
-		return new Xoshiro256MX3Random(stateA, stateB, stateC, stateD);
+	public RandomXMX256 copy () {
+		return new RandomXMX256(stateA, stateB, stateC, stateD);
 	}
 
 	@Override
@@ -427,7 +432,7 @@ public class Xoshiro256MX3Random extends EnhancedRandom {
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		Xoshiro256MX3Random that = (Xoshiro256MX3Random)o;
+		RandomXMX256 that = (RandomXMX256)o;
 
 		if (stateA != that.stateA)
 			return false;
@@ -439,6 +444,6 @@ public class Xoshiro256MX3Random extends EnhancedRandom {
 	}
 
 	public String toString () {
-		return "Xoshiro256MX3Random{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L, stateD=" + (stateD) + "L}";
+		return "RandomXMX256{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L, stateD=" + (stateD) + "L}";
 	}
 }
