@@ -49,19 +49,19 @@ public class CorrelationAnalyst extends ApplicationAdapter {
                 g[x][y] = base.copy();
                 switch (g[x][y].getStateCount()) {
                     case 1:
-                        g[x][y].setState(x << 17 ^ y << 1);
+                        g[x][y].setState(x << 16 ^ y);
                         break;
                     case 2:
-                        g[x][y].setState(x << 1, y << 1);
+                        g[x][y].setState(x, y);
                         break;
                     case 3:
-                        g[x][y].setState(x << 1, y << 1, 1L);
+                        g[x][y].setState(x, y, 1L);
                         break;
                     case 4:
-                        g[x][y].setState(x << 1, y << 1, 1L, 1L);
+                        g[x][y].setState(x, y, 1L, 1L);
                         break;
                     case 5:
-                        g[x][y].setState(x << 1, y << 1, 1L, 1L, 1L);
+                        g[x][y].setState(x, y, 1L, 1L, 1L);
                         break;
                 }
             }
@@ -75,19 +75,19 @@ public class CorrelationAnalyst extends ApplicationAdapter {
                 for (int y = 0; y < height; y++) {
                     switch (randoms[i][x][y].getStateCount()) {
                         case 1:
-                            randoms[i][x][y].setState(x << 17 ^ y << 1);
+                            randoms[i][x][y].setState(x << 16 ^ y);
                             break;
                         case 2:
-                            randoms[i][x][y].setState(x << 1, y << 1);
+                            randoms[i][x][y].setState(x, y);
                             break;
                         case 3:
-                            randoms[i][x][y].setState(x << 1, y << 1, 1L);
+                            randoms[i][x][y].setState(x, y, 1L);
                             break;
                         case 4:
-                            randoms[i][x][y].setState(x << 1, y << 1, 1L, 1L);
+                            randoms[i][x][y].setState(x, y, 1L, 1L);
                             break;
                         case 5:
-                            randoms[i][x][y].setState(x << 1, y << 1, 1L, 1L, 1L);
+                            randoms[i][x][y].setState(x, y, 1L, 1L, 1L);
                             break;
                     }
                 }
@@ -99,7 +99,7 @@ public class CorrelationAnalyst extends ApplicationAdapter {
         for (int i = 0, n = randoms.length; i < n; i++) {
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
-                    randoms[i][x][y].setSeed(x << 17 ^ y << 1);
+                    randoms[i][x][y].setSeed(x << 16 ^ y);
                 }
             }
         }
@@ -144,7 +144,7 @@ public class CorrelationAnalyst extends ApplicationAdapter {
     private ImmediateModeRenderer20 renderer;
 
     // packed float colors
-    private static final float[][] previousGrid = new float[width << 1][height];
+    private static final float[][] previousGrid = new float[width + width][height];
 
     private static final long[][] bits = new long[width][height];
     private static final float LIGHT_YELLOW = Color.toFloatBits(1f, 1f, 0.4f, 1f);
@@ -416,7 +416,7 @@ public class CorrelationAnalyst extends ApplicationAdapter {
     public static void main(String[] arg) {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
         config.setTitle("Juniper Correlation Analysis");
-        config.setWindowedMode(width << 1, height);
+        config.setWindowedMode(width + width, height);
         config.useVsync(false);
         config.setForegroundFPS(10);
         config.setResizable(false);

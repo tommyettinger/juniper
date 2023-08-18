@@ -34,8 +34,6 @@ import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.digital.BitConversion;
 import com.github.tommyettinger.random.experimental.*;
 
-import java.util.ArrayList;
-
 import static com.badlogic.gdx.Input.Keys.*;
 import static com.badlogic.gdx.graphics.GL20.GL_POINTS;
 import static com.github.tommyettinger.random.CorrelationVisualizer.title;
@@ -66,7 +64,7 @@ public class ConfigurableAnalyst extends ApplicationAdapter {
         for (int i = 0, n = randoms.length; i < n; i++) {
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
-                    randoms[i][x][y].setSeed(x << 17 ^ y << 1);
+                    randoms[i][x][y].setSeed(x << 16 ^ y);
                 }
             }
         }

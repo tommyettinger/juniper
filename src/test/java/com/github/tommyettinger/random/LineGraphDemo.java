@@ -52,16 +52,22 @@ public class LineGraphDemo extends ApplicationAdapter {
     public int currentWobble = 0;
     public int wobbleCount = wobbles.length;
     public int octaves = 1;
-    public int maxOctaves = 4;
 
 
     public float fbm(final int seed, float x) {
         final IntFloatToFloatFunction wobble = wobbles[currentWobble];
-        float totalPower = (1 << octaves) - 1f, accrued = 0f, frequencyChange = (1 << octaves - 1);
-        float slide = ((seed ^ (seed << 19 | seed >>> 13) ^ (seed << 5 | seed >>> 27) ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x1D2BC3 * 0x1p-31f;
+        float totalPower = (1 << octaves) - 1f, accrued = 0f, frequencyChange = 1 << (octaves - 1);
+        //0x91E10DA5, 0xD1B54A35, and 0xA0F2EC75 are all sections of numbers from MathTools, in some R* sequence.
+        //0x142543 is a subsequence of the bits of 0xd1342543de82ef95, which was found to be a strong LCG multiplier.
+        //XOR with a constant that ends in the bits 101, then multiplying by a constant that ends in the bits 011, is
+        //called an XLCG sometimes, and it is comparable to a normal LCG but has advantages on GWT. Note that the
+        //low-order bits of an (X)LCG are trash, but for generating floats it doesn't matter; they are discarded.
+        //0x1.9E3779B9p-31f is the golden ratio divided by (2 to the 31).
+        float slide = (((seed ^ 0x91E10DA5) * 0x142543 ^ 0xD1B54A35) * 0x142543 ^ 0xA0F2EC75) * 0x1.9E3779B9p-31f + 0.25f;
+//        float slide = (((seed ^ (seed << 19 | seed >>> 13) ^ (seed << 5 | seed >>> 27)) * 0x1D2BC3 ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x1p-31f;
         int power = 1;
         for (int i = octaves; i > 0; i--, power += power, frequencyChange *= 0.5f) {
-            accrued += wobble.applyAsFloat(seed ^ 0x9E3779B9 * octaves, x * frequencyChange + (slide *= MathTools.PHI)) * power;
+            accrued += wobble.applyAsFloat(seed ^ 0x9E3779B9 * octaves, x * frequencyChange + (slide *= 1.6180339887498949f)) * power;
         }
         return accrued / totalPower;
     }
