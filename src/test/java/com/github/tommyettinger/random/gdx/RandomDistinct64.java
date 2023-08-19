@@ -198,6 +198,19 @@ public class RandomDistinct64 extends GdxRandom {
 		return new RandomDistinct64(state);
 	}
 
+	/**
+	 * Given a String in the format produced by {@link #stringSerialize()}, this will attempt to set this RandomDistinct64
+	 * object to match the state in the serialized data. Returns this RandomDistinct64, after possibly changing its state.
+	 *
+	 * @param data a String probably produced by {@link #stringSerialize()}
+	 * @return this, after setting its state
+	 */
+	@Override
+	public RandomDistinct64 stringDeserialize(String data) {
+		super.stringDeserialize(data);
+		return this;
+	}
+
 	@Override
 	public boolean equals (Object o) {
 		if (this == o)

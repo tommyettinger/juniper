@@ -340,6 +340,19 @@ public class RandomAce320 extends GdxRandom {
 		return new RandomAce320(stateA, stateB, stateC, stateD, stateE);
 	}
 
+	/**
+	 * Given a String in the format produced by {@link #stringSerialize()}, this will attempt to set this RandomAce320
+	 * object to match the state in the serialized data. Returns this RandomAce320, after possibly changing its state.
+	 *
+	 * @param data a String probably produced by {@link #stringSerialize()}
+	 * @return this, after setting its state
+	 */
+	@Override
+	public RandomAce320 stringDeserialize(String data) {
+		super.stringDeserialize(data);
+		return this;
+	}
+
 	@Override
 	public boolean equals (Object o) {
 		if (this == o)
@@ -356,5 +369,4 @@ public class RandomAce320 extends GdxRandom {
 	public String toString () {
 		return "RandomAce320{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L, stateD=" + (stateD) + "L, stateE=" + (stateE) + "L}";
 	}
-
 }

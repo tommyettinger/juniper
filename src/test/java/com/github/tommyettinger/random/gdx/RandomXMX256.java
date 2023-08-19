@@ -425,6 +425,19 @@ public class RandomXMX256 extends GdxRandom {
 		return new RandomXMX256(stateA, stateB, stateC, stateD);
 	}
 
+	/**
+	 * Given a String in the format produced by {@link #stringSerialize()}, this will attempt to set this RandomXMX256
+	 * object to match the state in the serialized data. Returns this RandomXMX256, after possibly changing its state.
+	 *
+	 * @param data a String probably produced by {@link #stringSerialize()}
+	 * @return this, after setting its state
+	 */
+	@Override
+	public RandomXMX256 stringDeserialize(String data) {
+		super.stringDeserialize(data);
+		return this;
+	}
+	
 	@Override
 	public boolean equals (Object o) {
 		if (this == o)
