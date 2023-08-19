@@ -512,16 +512,16 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 
 	/**
 	 * Returns a pseudorandom, uniformly distributed {@code long} value between the
-	 * specified {@code innerBound} (inclusive) and the specified {@code outerBound}
-	 * (exclusive). If {@code outerBound} is less than or equal to {@code innerBound},
-	 * this always returns {@code innerBound}.
+	 * specified {@code inner} bound (inclusive) and the specified {@code outer} bound
+	 * (exclusive). If {@code outer} is less than or equal to {@code inner},
+	 * this always returns {@code inner}.
 	 *
-	 * <br> For any case where outerBound might be valid but less than innerBound, you
+	 * <br> For any case where outer might be valid but less than inner, you
 	 * can use {@link #nextSignedLong(long, long)}.
 	 *
 	 * @param inner the inclusive inner bound; may be any long, allowing negative
-	 * @param outer the exclusive outer bound; must be greater than innerBound (otherwise this returns innerBound)
-	 * @return a pseudorandom long between innerBound (inclusive) and outerBound (exclusive)
+	 * @param outer the exclusive outer bound; must be greater than inner (otherwise this returns inner)
+	 * @return a pseudorandom long between inner (inclusive) and outer (exclusive)
 	 * @see #nextInt(int) Here's a note about the bias present in the bounded generation.
 	 */
 	public long nextLong (long inner, long outer) {
@@ -538,13 +538,13 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 
 	/**
 	 * Returns a pseudorandom, uniformly distributed {@code long} value between the
-	 * specified {@code innerBound} (inclusive) and the specified {@code outerBound}
+	 * specified {@code inner} bound (inclusive) and the specified {@code outer} bound
 	 * (exclusive). This is meant for cases where either bound may be negative,
 	 * especially if the bounds are unknown or may be user-specified.
 	 *
 	 * @param inner the inclusive inner bound; may be any long, allowing negative
 	 * @param outer the exclusive outer bound; may be any long, allowing negative
-	 * @return a pseudorandom long between innerBound (inclusive) and outerBound (exclusive)
+	 * @return a pseudorandom long between inner (inclusive) and outer (exclusive)
 	 * @see #nextInt(int) Here's a note about the bias present in the bounded generation.
 	 */
 	public long nextSignedLong (long inner, long outer) {
