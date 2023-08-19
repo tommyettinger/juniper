@@ -34,7 +34,7 @@ import java.util.Random;
  * serialized format the same if you give Base.BASE10 to EnhancedRandom's (de)serialization
  * methods. This class also adds some methods to aid usage with libGDX.
  */
-public abstract class GdxRandom extends Random {
+public abstract class GdxRandom extends Random implements Json.Serializable {
 
 	public GdxRandom() {
 		super();
@@ -1847,6 +1847,18 @@ public abstract class GdxRandom extends Random {
 			setSelectedState(getStateCount() - 1, Long.parseLong(data.substring(idx + 1, data.indexOf('`', idx + 1))));
 		}
 		return this;
+	}
+
+	// Json serialization and deserialization
+
+	@Override
+	public void write(Json json) {
+		json.writeValue(stringSerialize());
+	}
+
+	@Override
+	public void read(Json json, JsonValue jsonData) {
+		stringDeserialize(jsonData.asString());
 	}
 
 //	public static void main(String[] args) {
