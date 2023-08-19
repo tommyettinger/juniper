@@ -36,12 +36,17 @@ package com.github.tommyettinger.random.gdx;
  * generates 554 million longs per second. For many applications, random number generation is far from a bottleneck, so
  * in both cases the generators should be more than fast enough.
  * <br>
- * This implements all optional methods in EnhancedRandom except {@link #skip(long)}; it does implement
+ * This class is a {@link GdxRandom} and is also a JDK {@link java.util.Random} as a result.
+ * This implements all optional methods in GdxRandom except {@link #skip(long)}; it does implement
  * {@link #previousLong()} without using skip().
  * <br>
  * Xoshiro256** was written in 2018 by David Blackman and Sebastiano Vigna. You can consult their paper for technical details:
  * <a href="https://vigna.di.unimi.it/ftp/papers/ScrambledLinear.pdf">PDF link here</a>. The MX3 unary hash was written
  * 2020 by Jon Maiga, <a href="https://github.com/jonmaiga/mx3">GitHub repo here</a>.
+ * <br>
+ * To use this class in your code, you only need to copy RandomXMX256.java and GdxRandom.java from this folder into
+ * any package in your codebase. They must be in the same package, but there are no other restrictions. You do not need
+ * to copy any other subclasses of GdxRandom if you are satisfied with this one.
  */
 public class RandomXMX256 extends GdxRandom {
 
@@ -459,4 +464,86 @@ public class RandomXMX256 extends GdxRandom {
 	public String toString () {
 		return "RandomXMX256{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L, stateD=" + (stateD) + "L}";
 	}
+
+	/**
+	 * Given a long {@code x}, this randomly scrambles x, so it is (almost always) a very different long.
+	 * This can take any long and can return any long.
+	 * <br>
+	 * It is currently unknown if this has any fixed-points (inputs that produce an identical output), but
+	 * a step is taken at the start of the function to eliminate one major known fixed-point at 0.
+	 * <br>
+	 * This uses the MX3 unary hash by Jon Maiga, but XORs the input with 0xABC98388FB8FAC03L before using MX3.
+	 * @param x any long, to be randomized
+	 * @return a randomized long derived from {@code x}
+	 */
+	public static long randomize(long x) {
+		x ^= 0xABC98388FB8FAC03L;
+		x ^= x >>> 32;
+		x *= 0xBEA225F9EB34556DL;
+		x ^= x >>> 29;
+		x *= 0xBEA225F9EB34556DL;
+		x ^= x >>> 32;
+		x *= 0xBEA225F9EB34556DL;
+		return x ^ x >>> 29;
+	}
+
+	/**
+	 * Given a long {@code x} and an int {@code bound}, this randomly scrambles x, so it produces an int between 0
+	 * (inclusive) and bound (exclusive). The bound is permitted to be negative; it is still exclusive then.
+	 * <br>
+	 * This uses the MX3 unary hash by Jon Maiga, but XORs the input with 0xABC98388FB8FAC03L before using MX3.
+	 * @param x any long, to be randomized
+	 * @param bound the exclusive outer bound
+	 * @return a randomized int between 0 (inclusive) and {@code bound} (exclusive) derived from {@code x}
+	 */
+	public static int randomizeBounded(long x, int bound) {
+		x ^= 0xABC98388FB8FAC03L;
+		x ^= x >>> 32;
+		x *= 0xBEA225F9EB34556DL;
+		x ^= x >>> 29;
+		x *= 0xBEA225F9EB34556DL;
+		x ^= x >>> 32;
+		x *= 0xBEA225F9EB34556DL;
+		return (bound = (int) ((bound * ((x ^ x >>> 29) & 0xFFFFFFFFL)) >> 32)) + (bound >>> 31);
+	}
+
+	/**
+	 * Given a long {@code x}, this randomly scrambles x to get a pseudo-random float.
+	 * This can take any long, and returns a float between 0 (inclusive) and 1 (exclusive).
+	 * The floats that this function returns are always multiples of {@code Math.pow(2, -24)}.
+	 * <br>
+	 * This uses the MX3 unary hash by Jon Maiga, but XORs the input with 0xABC98388FB8FAC03L before using MX3.
+	 * @param x any long, to be randomized
+	 * @return a randomized float between 0 (inclusive) and 1 (exclusive) derived from {@code x}
+	 */
+	public static float randomizeFloat(long x) {
+		x ^= 0xABC98388FB8FAC03L;
+		x ^= x >>> 32;
+		x *= 0xBEA225F9EB34556DL;
+		x ^= x >>> 29;
+		x *= 0xBEA225F9EB34556DL;
+		x ^= x >>> 32;
+		x *= 0xBEA225F9EB34556DL;
+		return (x >>> 40) * 0x1p-24f;
+	}
+	/**
+	 * Given a long {@code x}, this randomly scrambles x to get a pseudo-random double.
+	 * This can take any long, and returns a double between 0 (inclusive) and 1 (exclusive).
+	 * The doubles that this function returns are always multiples of {@code Math.pow(2, -53)}.
+	 * <br>
+	 * This uses the MX3 unary hash by Jon Maiga, but XORs the input with 0xABC98388FB8FAC03L before using MX3.
+	 * @param x any long, to be randomized
+	 * @return a randomized double between 0 (inclusive) and 1 (exclusive) derived from {@code x}
+	 */
+	public static double randomizeDouble(long x) {
+		x ^= 0xABC98388FB8FAC03L;
+		x ^= x >>> 32;
+		x *= 0xBEA225F9EB34556DL;
+		x ^= x >>> 29;
+		x *= 0xBEA225F9EB34556DL;
+		x ^= x >>> 32;
+		x *= 0xBEA225F9EB34556DL;
+		return (x >>> 11 ^ x >>> 40) * 0x1p-53;
+	}
+
 }

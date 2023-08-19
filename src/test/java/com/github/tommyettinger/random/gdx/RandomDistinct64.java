@@ -38,13 +38,16 @@ package com.github.tommyettinger.random.gdx;
  * permitted for that state, and that you can {@link #skip(long)} the state forwards or backwards in constant time.
  * It is also quite fast, though not as fast as {@link RandomAce320} on Java 16 or newer.
  * <br>
- * This class is a {@link GdxRandom} and is also a JDK {@link java.util.Random} as a result.
- * <br>
  * Unlike the multiple-state generators here, RandomDistinct64 tolerates being given sequential seeds and/or states, and
  * in fact doesn't randomize the seed when given one with {@link #setSeed(long)}.
  * <br>
+ * This class is a {@link GdxRandom} and is also a JDK {@link java.util.Random} as a result.
  * This implements all methods from {@link GdxRandom}, including the optional {@link #skip(long)} and
  * {@link #previousLong()} methods.
+ * <br>
+ * To use this class in your code, you only need to copy RandomDistinct64.java and GdxRandom.java from this folder into
+ * any package in your codebase. They must be in the same package, but there are no other restrictions. You do not need
+ * to copy any other subclasses of GdxRandom if you are satisfied with this one.
  */
 public class RandomDistinct64 extends GdxRandom {
 

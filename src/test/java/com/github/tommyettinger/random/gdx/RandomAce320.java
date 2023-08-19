@@ -17,24 +17,30 @@
 
 package com.github.tommyettinger.random.gdx;
 
-import java.util.Random;
-
 /**
  * A random number generator with five 64-bit states; does not use multiplication, only add, subtract, XOR, and rotate
  * operations. Has a state that runs like a counter, guaranteeing a minimum period of 2 to the 64. This passes roughly
  * 180 petabytes of intensive testing on the GPU with ReMort, as well as 64TB of PractRand's broad spectrum of tests.
  * It is very fast on modern JDKs (such as HotSpot or Graal, compatible with Java 16 or later), able to generate 1.75
- * billion longs per second with {@link #nextLong()} on a mid-grade laptop. To compare, {@link Random#nextLong()} is
- * only able to generate 64 million longs per second on the same machine.
+ * billion longs per second with {@link #nextLong()} on a mid-grade laptop. To compare,
+ * {@link java.util.Random#nextLong()} is only able to generate 64 million longs per second on the same machine.
  * <br>
  * The maximum and/or expected periods for RandomAce320 are far larger than they would need to be, even if run for
  * decades on current hardware. The minimum period alone would take multiple years to exhaust if using a CPU, let alone
  * to find that particular cycle with the shortest period. Running on a fast GPU would take less time, but still an
  * impractically long time.
  * <br>
+ * This class is a {@link GdxRandom} and is also a JDK {@link java.util.Random} as a result.
+ * This implements all optional methods in GdxRandom except {@link #skip(long)}; it does implement
+ * {@link #previousLong()} without using skip().
+ * <br>
  * The name comes from the 52 cards (excluding jokers, but including aces) in a standard playing card deck, since this
  * uses a left rotation by exactly 52 as one of its critical components. Rotations by anything else I tried didn't pass
  * testing as well, or even at all.
+ * <br>
+ * To use this class in your code, you only need to copy RandomAce320.java and GdxRandom.java from this folder into any
+ * package in your codebase. They must be in the same package, but there are no other restrictions. You do not need to
+ * copy any other subclasses of GdxRandom if you are satisfied with this one.
  */
 public class RandomAce320 extends GdxRandom {
 
