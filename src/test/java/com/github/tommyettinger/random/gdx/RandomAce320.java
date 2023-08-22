@@ -44,6 +44,10 @@ package com.github.tommyettinger.random.gdx;
  */
 public class RandomAce320 extends GdxRandom {
 
+	/**
+	 * Returns the String {@code "AceR"}, which is the tag here.
+	 * @return the String {@code "AceR"}
+	 */
 	@Override
 	public String getTag() {
 		return "AceR";
@@ -51,25 +55,35 @@ public class RandomAce320 extends GdxRandom {
 
 	/**
 	 * The first state; can be any long.
+	 * <br>
+	 * This is a public field to match the style used by libGDX and to make changes easier.
 	 */
-	protected long stateA;
+	public long stateA;
 	/**
 	 * The second state; can be any long.
+	 * <br>
+	 * This is a public field to match the style used by libGDX and to make changes easier.
 	 */
-	protected long stateB;
+	public long stateB;
 	/**
 	 * The third state; can be any long.
+	 * <br>
+	 * This is a public field to match the style used by libGDX and to make changes easier.
 	 */
-	protected long stateC;
+	public long stateC;
 	/**
 	 * The fourth state; can be any long.
+	 * <br>
+	 * This is a public field to match the style used by libGDX and to make changes easier.
 	 */
-	protected long stateD;
+	public long stateD;
 	/**
 	 * The fifth state; can be any long. The first call to {@link #nextLong()} will return this verbatim, if no other
 	 * methods have been called.
+	 * <br>
+	 * This is a public field to match the style used by libGDX and to make changes easier.
 	 */
-	protected long stateE;
+	public long stateE;
 
 	/**
 	 * Creates a new RandomAce320 with a random state.

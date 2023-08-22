@@ -50,9 +50,19 @@ package com.github.tommyettinger.random.gdx;
  * to copy any other subclasses of GdxRandom if you are satisfied with this one.
  */
 public class RandomDistinct64 extends GdxRandom {
+	/**
+	 * Returns the String {@code "DisR"}, which is the tag here.
+	 * @return the String {@code "DisR"}
+	 */
+	@Override
+	public String getTag() {
+		return "DisR";
+	}
 
 	/**
 	 * The only state variable; can be any {@code long}.
+	 * <br>
+	 * This is a public field to match the style used by libGDX and to make changes easier.
 	 */
 	public long state;
 
@@ -71,11 +81,6 @@ public class RandomDistinct64 extends GdxRandom {
 	public RandomDistinct64(long state) {
 		super(state);
 		this.state = state;
-	}
-
-	@Override
-	public String getTag() {
-		return "DisR";
 	}
 
 	/**

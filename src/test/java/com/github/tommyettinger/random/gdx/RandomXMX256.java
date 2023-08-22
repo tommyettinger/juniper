@@ -49,25 +49,41 @@ package com.github.tommyettinger.random.gdx;
  * to copy any other subclasses of GdxRandom if you are satisfied with this one.
  */
 public class RandomXMX256 extends GdxRandom {
+	/**
+	 * Returns the String {@code "XMXR"}, which is the tag here.
+	 * @return the String {@code "XMXR"}
+	 */
+	@Override
+	public String getTag() {
+		return "XMXR";
+	}
 
 	/**
 	 * The first state; can be any long, as long as all states are not 0.
+	 * <br>
+	 * This is a public field to match the style used by libGDX and to make changes easier.
 	 */
-	protected long stateA;
+	public long stateA;
 	/**
 	 * The second state; can be any long, as long as all states are not 0.
 	 * This is the state that is scrambled and returned; if it is 0 before a number
-	 * is generated, then the next number will be 0.
+	 * is generated, then the next number returned by {@link #nextLong()} will be 0.
+	 * <br>
+	 * This is a public field to match the style used by libGDX and to make changes easier.
 	 */
-	protected long stateB;
+	public long stateB;
 	/**
 	 * The third state; can be any long, as long as all states are not 0.
+	 * <br>
+	 * This is a public field to match the style used by libGDX and to make changes easier.
 	 */
-	protected long stateC;
+	public long stateC;
 	/**
 	 * The fourth state; can be any long, as long as all states are not 0.
+	 * <br>
+	 * This is a public field to match the style used by libGDX and to make changes easier.
 	 */
-	protected long stateD;
+	public long stateD;
 
 	/**
 	 * Creates a new RandomXMX256 with a random state.
@@ -110,11 +126,6 @@ public class RandomXMX256 extends GdxRandom {
 		this.stateD = stateD;
 		if ((stateA | stateB | stateC | stateD) == 0L)
 			this.stateD = 0x9E3779B97F4A7C15L;
-	}
-
-	@Override
-	public String getTag() {
-		return "XMXR";
 	}
 
 	/**

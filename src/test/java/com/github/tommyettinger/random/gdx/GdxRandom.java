@@ -1811,6 +1811,12 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	/**
 	 * Serializes the current state of this GdxRandom to a String that can be used by
 	 * {@link #stringDeserialize(String)} to load this state at another time.
+	 * This method does not typically need to be extended by subclasses.
+	 * <br>
+	 * If you use Kryo or some other non-JSON format to serialize your generators,
+	 * you could get a serialized String using this method and then pass that to
+	 * your alternative serialization method; that avoids needing to implement custom
+	 * serialization logic for whatever GdxRandom you use.
 	 * @return a String storing all data from the GdxRandom part of this generator
 	 */
 	public String stringSerialize() {
@@ -1834,6 +1840,16 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * Given a String in the format produced by {@link #stringSerialize()}, this will attempt to set this GdxRandom
 	 * object to match the state in the serialized data. This only works if this GdxRandom is the same
 	 * implementation that was serialized. Returns this GdxRandom, after possibly changing its state.
+	 * <br>
+	 * If you use Kryo or some other non-JSON format to serialize your generators, and you follow the suggestion
+	 * in {@link #stringSerialize()} to store a String instead of writing custom serialization logic, then you
+	 * would use this method to deserialize a String you retrieve from your alternative deserialization method.
+	 * <br>
+	 * Subclasses should return their own class rather than GdxRandom, and the body for their extended method
+	 * is strongly recommended to be the following:
+	 * <br>
+	 * {@code super.stringDeserialize(data); return this;}
+	 *
 	 * @param data a String probably produced by {@link #stringSerialize()}
 	 * @return this, after setting its state
 	 */
