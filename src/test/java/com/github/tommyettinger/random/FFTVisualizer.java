@@ -36,7 +36,10 @@ import java.util.Arrays;
 import static com.badlogic.gdx.Input.Keys.*;
 import static com.badlogic.gdx.graphics.GL20.GL_LINES;
 import static com.badlogic.gdx.graphics.GL20.GL_POINTS;
-import static com.github.tommyettinger.random.CorrelationVisualizer.*;
+import static com.github.tommyettinger.random.CorrelationVisualizer.randoms;
+import static com.github.tommyettinger.random.CorrelationVisualizer.refreshGrid;
+import static com.github.tommyettinger.random.CorrelationVisualizer.seedGrid;
+import static com.github.tommyettinger.random.CorrelationVisualizer.title;
 
 /**
  */

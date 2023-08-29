@@ -190,7 +190,6 @@ public class LineGraphDemo extends ApplicationAdapter {
 
     public void putMap() {
         traveled += speed * Math.max(0.03125f, Gdx.graphics.getDeltaTime());
-        int high;
         IntFloatToFloatFunction wobble = this::fbm;
         switch (currentMode) {
             case 0:
