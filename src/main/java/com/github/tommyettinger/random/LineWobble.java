@@ -205,8 +205,8 @@ public class LineWobble {
         final float start = startBits * 0x0.ffffffp-31f,
                 end = endBits * 0x0.ffffffp-31f;
         value -= floor;
-        value = MathTools.barronSpline(value, (mixBits & 0xFFFF) * 0x1p-14f + 0.5f, (mixBits >>> 16) * 0x1.8p-17f + 0.125f);
-        value *= value * value * (value * (value * 6f - 15f) + 9.999998f);
+        value = MathTools.barronSpline(value, (mixBits & 0xFFFF) * 0x1p-14f + 1f, (mixBits >>> 16) * 0x1.8p-17f + 0.125f);
+        value *= value * (3f - 2f * value);
         return (1 - value) * start + value * end;
     }
 
@@ -229,8 +229,8 @@ public class LineWobble {
         final double start = startBits * 0x0.fffffffffffffbp-31,
                 end = endBits * 0x0.fffffffffffffbp-31;
         value -= floor;
-        value = MathTools.barronSpline(value, (mixBits & 0xFFFF) * 0x1p-14 + 0.5, (mixBits >>> 16) * 0x1.8p-17 + 0.125);
-        value *= value * value * (value * (value * 6.0 - 15.0) + 9.999999999999998);
+        value = MathTools.barronSpline(value, (mixBits & 0xFFFF) * 0x1p-14 + 1.0, (mixBits >>> 16) * 0x1.8p-17 + 0.125);
+        value *= value * (3.0 - 2.0 * value);
         return (1 - value) * start + value * end;
     }
 
@@ -253,8 +253,8 @@ public class LineWobble {
         final float start = startBits * 0x0.ffffffp-63f,
                 end = endBits  * 0x0.ffffffp-63f;
         value -= floor;
-        value = MathTools.barronSpline(value, (mixBits & 0xFFFFFFFFL) * 0x1p-30f + 0.5f, (mixBits & 0xFFFFL) * 0x1.8p-17f + 0.125f);
-        value *= value * value * (value * (value * 6f - 15f) + 9.999998f);
+        value = MathTools.barronSpline(value, (mixBits & 0xFFFFFFFFL) * 0x1p-30f + 1f, (mixBits & 0xFFFFL) * 0x1.8p-17f + 0.125f);
+        value *= value * (3f - 2f * value);
         return (1 - value) * start + value * end;
     }
 
@@ -277,8 +277,8 @@ public class LineWobble {
         final double start = startBits * 0x0.fffffffffffffbp-63,
                 end = endBits * 0x0.fffffffffffffbp-63;
         value -= floor;
-        value = MathTools.barronSpline(value, (mixBits & 0xFFFFFFFFL) * 0x1p-30 + 0.5, (mixBits & 0xFFFFL) * 0x1.8p-17 + 0.125);
-        value *= value * value * (value * (value * 6.0 - 15.0) + 9.999999999999998);
+        value = MathTools.barronSpline(value, (mixBits & 0xFFFFFFFFL) * 0x1p-30 + 1.0, (mixBits & 0xFFFFL) * 0x1.8p-17 + 0.125);
+        value *= value * (3.0 - 2.0 * value);
         return (1 - value) * start + value * end;
     }
 
@@ -300,8 +300,8 @@ public class LineWobble {
         mixBits ^= mixBits >>> 32;
         final float start = startBits * 0x0.ffffffp-63f,
                 end = endBits  * 0x0.ffffffp-63f;
-        value = MathTools.barronSpline(value, (mixBits & 0xFFFFFFFFL) * 0x1p-30f + 0.5f, (mixBits & 0xFFFFL) * 0x1.8p-17f + 0.125f);
-        value *= value * value * (value * (value * 6f - 15f) + 9.999998f);
+        value = MathTools.barronSpline(value, (mixBits & 0xFFFFFFFFL) * 0x1p-30f + 1f, (mixBits & 0xFFFFL) * 0x1.8p-17f + 0.125f);
+        value *= value * (3f - 2f * value);
         return (1 - value) * start + value * end;
     }
 
@@ -323,8 +323,8 @@ public class LineWobble {
         mixBits ^= mixBits >>> 32;
         final double start = startBits * 0x0.fffffffffffffbp-63,
                 end = endBits * 0x0.fffffffffffffbp-63;
-        value = MathTools.barronSpline(value, (mixBits & 0xFFFFFFFFL) * 0x1p-30 + 0.5, (mixBits & 0xFFFFL) * 0x1.8p-17 + 0.125);
-        value *= value * value * (value * (value * 6.0 - 15.0) + 9.999999999999998);
+        value = MathTools.barronSpline(value, (mixBits & 0xFFFFFFFFL) * 0x1p-30 + 1.0, (mixBits & 0xFFFFL) * 0x1.8p-17 + 0.125);
+        value *= value * (3.0 - 2.0 * value);
         return (1 - value) * start + value * end;
     }
 

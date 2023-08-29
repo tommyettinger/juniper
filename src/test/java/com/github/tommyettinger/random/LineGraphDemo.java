@@ -24,6 +24,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.utils.UIUtils;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -48,8 +49,12 @@ public class LineGraphDemo extends ApplicationAdapter {
             LineWobble::splobble,
             LineWobble::quobble,
             LineWobble::quobbleOctave2,
+            (s, f) -> {
+                final long start = MathTools.fastFloor(f), end = start + 1L;
+                return LineWobble.hobble(s ^ start * 0x9E3779B97F4A7C15L, s ^ end * 0x9E3779B97F4A7C15L, f - start);
+            }
     };
-    public int currentWobble = 0;
+    public int currentWobble = 2;
     public int wobbleCount = wobbles.length;
     public int octaves = 1;
 
