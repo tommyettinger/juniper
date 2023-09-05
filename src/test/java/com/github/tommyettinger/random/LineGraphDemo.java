@@ -52,9 +52,13 @@ public class LineGraphDemo extends ApplicationAdapter {
             (s, f) -> {
                 final long start = MathTools.fastFloor(f), end = start + 1L;
                 return LineWobble.hobble(s ^ start * 0x9E3779B97F4A7C15L, s ^ end * 0x9E3779B97F4A7C15L, f - start);
-            }
+            },
+            (i, f) -> LineWobble.wobble(i * 0x9E3779B97F4A7C15L, f),
+            (i, f) -> LineWobble.bicubicWobble(i * 0x9E3779B97F4A7C15L, f),
+            (i, f) -> LineWobble.splobble(i * 0x9E3779B97F4A7C15L, f),
+            (i, f) -> LineWobble.quobble(i * 0x9E3779B97F4A7C15L, f),
     };
-    public int currentWobble = 2;
+    public int currentWobble = 6;
     public int wobbleCount = wobbles.length;
     public int octaves = 1;
 
