@@ -305,7 +305,7 @@ public class LineWobble {
     }
 
     /**
-     * A variant on {@link #wobble(int, float)} that uses {@link MathTools#barronSpline(float, float, float)} to
+     * A variant on {@link #wobble(long, float)} that uses {@link MathTools#barronSpline(float, float, float)} to
      * interpolate between peaks/valleys, with the shape and turning point determined like the other values.
      * This can be useful when you want a curve to seem more "natural," without the similarity between every peak or
      * every valley in {@link #wobble(long, float)}. This can produce both fairly sharp turns and very gradual curves.
@@ -400,7 +400,7 @@ public class LineWobble {
 
     /**
      * Quilez' 1D noise, with some changes to work on the CPU. Takes a distance value and any int seed, and produces a
-     * smoothly-changing value as value goes up or down and seed stays the same. Uses a quartic curve. The quartic
+     * smoothly-changing result as value goes up or down and seed stays the same. Uses a quartic curve. The quartic
      * curve means that at specific positions, each separated by an integer from each other, the noise will reliably
      * be 0. This does not typically happen on integers for {@code value}, but it can if {@code seed} is 0 or some very
      * high numbers.
@@ -438,8 +438,42 @@ public class LineWobble {
     }
 
     /**
+     * Quilez' 1D noise, with some changes to work on the CPU. Takes a distance value and any int seed, and produces a
+     * smoothly-changing result as value goes up or down and seed stays the same. Uses a quartic curve. The quartic
+     * curve means that at specific positions, each separated by an integer from each other, the noise will reliably
+     * be 0. This does not typically happen on integers for {@code value}, but it can if {@code seed} is 0.
+     *
+     * @param value    should go up and/or down steadily and by small amounts (less than 1.0, certainly)
+     * @param seed should stay the same for a given curve
+     * @return a noise value between -1.0 and 1.0
+     */
+    public static double quobble(final int seed, double value) {
+        value += seed * 0x1p-31;
+        final long xFloor = (long) Math.floor(value),
+                rise = 1L - ((long)Math.floor(value + value) & 2L);
+        value -= xFloor;
+        // gets a random double between -16 and 16. Magic.
+        final double h = BitConversion.longBitsToDouble(((seed + xFloor ^ 0x9E3779B97F4A7C15L) * 0xD1B54A32D192ED03L >>> 12) | 0x4040000000000000L) - 48f;
+        value *= value - 1.0;
+        return rise * value * value * h;
+    }
+
+    /**
+     * Just gets two octaves of {@link #quobble(int, double)}; still has a range of -1 to 1. This tends to look much more
+     * natural than just one octave of quobble(), because the points where it always will hit 0 are spaced differently
+     * for the two octaves here.
+     *
+     * @param x    should go up and/or down steadily and by small amounts (less than 1.0, certainly)
+     * @param seed should stay the same for a given curve
+     * @return a noise value between -1.0 and 1.0
+     */
+    public static double quobbleOctave2(final int seed, double x) {
+        return quobble(seed, x) * 0.6666666666666666 + quobble(~seed, x * 1.9) * 0.3333333333333333;
+    }
+
+    /**
      * Quilez' 1D noise, with some changes to work on the CPU. Takes a distance value and any long seed, and produces a
-     * smoothly-changing value as value goes up or down and seed stays the same. Uses a quartic curve. The quartic
+     * smoothly-changing result as value goes up or down and seed stays the same. Uses a quartic curve. The quartic
      * curve means that at specific positions, each separated by an integer from each other, the noise will reliably
      * be 0. This does not typically happen on integers for {@code value}, but it can if {@code seed} is 0 or some very
      * high numbers.
@@ -474,6 +508,40 @@ public class LineWobble {
      */
     public static float quobbleOctave2(final long seed, float x) {
         return quobble(seed, x) * 0.6666666f + quobble(~seed, x * 1.9f) * 0.33333333f;
+    }
+
+    /**
+     * Quilez' 1D noise, with some changes to work on the CPU. Takes a distance value and any long seed, and produces a
+     * smoothly-changing result as value goes up or down and seed stays the same. Uses a quartic curve. The quartic
+     * curve means that at specific positions, each separated by an integer from each other, the noise will reliably
+     * be 0. This does not typically happen on integers for {@code value}, but it can if {@code seed} is 0.
+     *
+     * @param value    should go up and/or down steadily and by small amounts (less than 1.0, certainly)
+     * @param seed should stay the same for a given curve
+     * @return a noise value between -1.0 and 1.0
+     */
+    public static double quobble(final long seed, double value) {
+        value += (int)(seed ^ seed >>> 32) * 0x1p-31;
+        final long xFloor = (long) Math.floor(value),
+                rise = 1L - ((long)Math.floor(value + value) & 2L);
+        value -= xFloor;
+        // gets a random double between -16 and 16. Magic.
+        final double h = BitConversion.longBitsToDouble(((seed + xFloor ^ 0x9E3779B97F4A7C15L) * 0xD1B54A32D192ED03L >>> 12) | 0x4040000000000000L) - 48f;
+        value *= value - 1.0;
+        return rise * value * value * h;
+    }
+
+    /**
+     * Just gets two octaves of {@link #quobble(long, double)}; still has a range of -1 to 1. This tends to look much more
+     * natural than just one octave of quobble(), because the points where it always will hit 0 are spaced differently
+     * for the two octaves here.
+     *
+     * @param x    should go up and/or down steadily and by small amounts (less than 1.0, certainly)
+     * @param seed should stay the same for a given curve
+     * @return a noise value between -1.0 and 1.0
+     */
+    public static double quobbleOctave2(final long seed, double x) {
+        return quobble(seed, x) * 0.6666666666666666 + quobble(~seed, x * 1.9) * 0.3333333333333333;
     }
 
     /**
