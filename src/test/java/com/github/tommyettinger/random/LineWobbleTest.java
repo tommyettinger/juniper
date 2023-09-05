@@ -48,6 +48,141 @@ public class LineWobbleTest {
             System.out.println();
         }
     }
+    @Test
+    public void testIntFloatBicubicWobble() {
+        int seed = 1234;
+        for (int i = 0; i < 256; i++) {
+            int len = Math.round((LineWobble.bicubicWobble(seed, i * 0x1p-5f) + 1) * 39);
+            for (int j = 0; j < len; j++) {
+                System.out.print('*');
+            }
+            System.out.println();
+        }
+    }
+    @Test
+    public void testIntDoubleBicubicWobble() {
+        int seed = 1234;
+        for (int i = 0; i < 256; i++) {
+            long len = Math.round((LineWobble.bicubicWobble(seed, i * 0x1p-5) + 1) * 39);
+            for (int j = 0; j < len; j++) {
+                System.out.print('*');
+            }
+            System.out.println();
+        }
+    }
+
+    @Test
+    public void testLongFloatBicubicWobble() {
+        long seed = 1234L;
+        for (int i = 0; i < 256; i++) {
+            int len = Math.round((LineWobble.bicubicWobble(seed, i * 0x1p-5f) + 1) * 39);
+            for (int j = 0; j < len; j++) {
+                System.out.print('*');
+            }
+            System.out.println();
+        }
+    }
+    @Test
+    public void testLongDoubleBicubicWobble() {
+        long seed = 1234L;
+        for (int i = 0; i < 256; i++) {
+            long len = Math.round((LineWobble.bicubicWobble(seed, i * 0x1p-5) + 1) * 39);
+            for (int j = 0; j < len; j++) {
+                System.out.print('*');
+            }
+            System.out.println();
+        }
+    }
+    @Test
+    public void testIntFloatQuobble() {
+        int seed = 1234;
+        for (int i = 0; i < 256; i++) {
+            int len = Math.round((LineWobble.quobble(seed, i * 0x1p-5f) + 1) * 39);
+            for (int j = 0; j < len; j++) {
+                System.out.print('*');
+            }
+            System.out.println();
+        }
+    }
+    @Test
+    public void testIntDoubleQuobble() {
+        int seed = 1234;
+        for (int i = 0; i < 256; i++) {
+            long len = Math.round((LineWobble.quobble(seed, i * 0x1p-5) + 1) * 39);
+            for (int j = 0; j < len; j++) {
+                System.out.print('*');
+            }
+            System.out.println();
+        }
+    }
+
+    @Test
+    public void testLongFloatQuobble() {
+        long seed = 1234L;
+        for (int i = 0; i < 256; i++) {
+            int len = Math.round((LineWobble.quobble(seed, i * 0x1p-5f) + 1) * 39);
+            for (int j = 0; j < len; j++) {
+                System.out.print('*');
+            }
+            System.out.println();
+        }
+    }
+    @Test
+    public void testLongDoubleQuobble() {
+        long seed = 1234L;
+        for (int i = 0; i < 256; i++) {
+            long len = Math.round((LineWobble.quobble(seed, i * 0x1p-5) + 1) * 39);
+            for (int j = 0; j < len; j++) {
+                System.out.print('*');
+            }
+            System.out.println();
+        }
+    }
+    @Test
+    public void testIntFloatSplobble() {
+        int seed = 1234;
+        for (int i = 0; i < 256; i++) {
+            int len = Math.round((LineWobble.splobble(seed, i * 0x1p-5f) + 1) * 39);
+            for (int j = 0; j < len; j++) {
+                System.out.print('*');
+            }
+            System.out.println();
+        }
+    }
+    @Test
+    public void testIntDoubleSplobble() {
+        int seed = 1234;
+        for (int i = 0; i < 256; i++) {
+            long len = Math.round((LineWobble.splobble(seed, i * 0x1p-5) + 1) * 39);
+            for (int j = 0; j < len; j++) {
+                System.out.print('*');
+            }
+            System.out.println();
+        }
+    }
+
+    @Test
+    public void testLongFloatSplobble() {
+        long seed = 1234L;
+        for (int i = 0; i < 256; i++) {
+            int len = Math.round((LineWobble.splobble(seed, i * 0x1p-5f) + 1) * 39);
+            for (int j = 0; j < len; j++) {
+                System.out.print('*');
+            }
+            System.out.println();
+        }
+    }
+    @Test
+    public void testLongDoubleSplobble() {
+        long seed = 1234L;
+        for (int i = 0; i < 256; i++) {
+            long len = Math.round((LineWobble.splobble(seed, i * 0x1p-5) + 1) * 39);
+            for (int j = 0; j < len; j++) {
+                System.out.print('*');
+            }
+            System.out.println();
+        }
+    }
 
     @Test
     public void testIntAngleWobble() {
