@@ -128,9 +128,15 @@ non-overlapping span of 2 to the 64 (Xoshiro128PlusPlusRandom), 2 to the 96 (Xor
 can jump an inexact length, but guarantee at least 2 to the 48 generated values without overlap (usually, the actual
 number is much higher).
 
-You may also want to use the `randomize()` methods in the `digital` dependency's `Hasher` class to make sequential
-values more random; this is essentially the approach used by DistinctRandom. A similar non-generator use of randomness
-is available in `com.github.tommyettinger.random.LineWobble`; it provides 1D continuous noise, or a wobbly line.
+You may also want to use the `Hasher.randomize()` methods in the `digital` dependency's `Hasher` class to make
+sequential values more random; this is essentially the approach used by DistinctRandom. A similar non-generator use of
+randomness is available in `com.github.tommyettinger.random.LineWobble`; it provides 1D continuous noise, or a wobbly
+line, in various different formats. The names got a little silly there, but...
+ - `wobble()` is a fairly standard cubic curve between pseudo-random values,
+ - `bicubicWobble()` gets values for ahead and behind the current area using bicubic interpolation,
+ - `splobble()` uses a configurable spline with a pseudo-random configuration to produce sometimes-sharper, sometimes-softer connections between curves,
+ - `hobble()` is like `splobble()` but takes the "before" and "after" values as `long`s directly without calculating them itself (it usually gets them from some sort of hash, hence the 'h' in the name), and
+ - `quobble()` is a quartic curve that needs less hashing but is more predictable (written by Inigo Quilez).
 
 ## Did I hear about distributions here?
 
@@ -206,15 +212,15 @@ cipher is just going to get ripped apart by any standard Java agent, so... don't
 With Gradle, the dependency (of the core module, if you have multiple) is:
 
 ```
-api "com.github.tommyettinger:juniper:0.3.8"
+api "com.github.tommyettinger:juniper:0.3.9"
 ```
 
 In a libGDX project that has a GWT/HTML backend, the `html/build.gradle` file
 should additionally have:
 
 ```
-implementation "com.github.tommyettinger:digital:0.3.7:sources"
-implementation "com.github.tommyettinger:juniper:0.3.8:sources"
+implementation "com.github.tommyettinger:digital:0.4.0:sources"
+implementation "com.github.tommyettinger:juniper:0.3.9:sources"
 ```
 
 And the `GdxDefinition.gwt.xml` file should have:
@@ -230,7 +236,7 @@ If you don't use Gradle, then with Maven, the dependency is:
 <dependency>
   <groupId>com.github.tommyettinger</groupId>
   <artifactId>juniper</artifactId>
-  <version>0.3.8</version>
+  <version>0.3.9</version>
 </dependency>
 ```
 

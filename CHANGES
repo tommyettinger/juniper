@@ -1,3 +1,20 @@
+[0.3.9]
+- Updated dependency on digital to 0.4.0 .
+- Updated LineWobble with several new methods, such as splobble(), quobble(), and hobble().
+
+[0.3.8]
+- Updated dependency on digital to 0.3.7 .
+- InterpolatedRandom is new.
+
+[0.3.7]
+- [SEED BREAKING CHANGE] Ziggurat had its outputs change in some rare cases, which should now make it more "fair." This only affects Gaussian and/or normal-distributed variables, or things that consume them.
+- Added Xoshiro256MX3Random .
+- Add a cipher, SpeckCipher, as a learning exercise; don't use it please!
+- Add leap() to some random number generators.
+
+[0.3.6]
+- Immediately replaced by 0.3.7 .
+
 [0.3.5]
 - Updated dependency on digital to one that will work on GWT (digital 0.3.3).
 
