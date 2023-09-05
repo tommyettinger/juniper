@@ -185,6 +185,76 @@ public class LineWobble {
         return (t * (t * t * p + t * ((a - b) - p) + (c - a)) + b);
     }
 
+    /**
+     * Sway smoothly using bicubic interpolation between 4 points (the two integers before t and the two after).
+     * This pretty much never produces steep changes between peaks and valleys; this may make it more useful for things
+     * like generating terrain that can be walked across in a side-scrolling game.
+     * @param seed any long
+     * @param t a distance traveled; should change by less than 1 between calls, and should be less than about 10000
+     * @return a smoothly-interpolated swaying value between -1 and 1, both exclusive
+     */
+    public static float bicubicWobble(long seed, float t)
+    {
+        final long floor = (long) Math.floor(t);
+        // what we add here ensures that at the very least, the upper half will have some non-zero bits.
+        long s = ((seed & 0xFFFFFFFFL) ^ (seed >>> 32)) + 0x9E3779B97F4A7C15L;
+        // fancy XOR-rotate-rotate is a way to mix bits both up and down without multiplication.
+        s = (s ^ (s << 21 | s >>> 43) ^ (s << 50 | s >>> 14)) + floor;
+        // we use a different technique here, relative to other wobble methods.
+        // to avoid frequent multiplication and replace it with addition by constants, we track 3 variables, each of
+        // which updates with a different large, negative long increment. when we want to get a result, we just XOR
+        // m, n, and o, and use only the upper bits (by multiplying by a tiny fraction).
+        final long m = s * 0xD1B54A32D192ED03L;
+        final long n = s * 0xABC98388FB8FAC03L;
+        final long o = s * 0x8CB92BA72F3D8DD7L;
+
+        // 0x0.5555554p-62f is just inside {@code -2f/3f/Long.MIN_VALUE}; it gets about as close as we can go to 1.0
+        final float a = (m ^ n ^ o) * 0x0.5555554p-62f;
+        final float b = (m + 0xD1B54A32D192ED03L ^ n + 0xABC98388FB8FAC03L ^ o + 0x8CB92BA72F3D8DD7L) * 0x0.5555554p-62f;
+        final float c = (m + 0xA36A9465A325DA06L ^ n + 0x57930711F71F5806L ^ o + 0x1972574E5E7B1BAEL) * 0x0.5555554p-62f;
+        final float d = (m + 0x751FDE9874B8C709L ^ n + 0x035C8A9AF2AF0409L ^ o + 0xA62B82F58DB8A985L) * 0x0.5555554p-62f;
+
+        t -= floor;
+        // this is bicubic interpolation, inlined
+        final float p = d - c + b - a;
+        return (t * (t * t * p + t * (a - b - p) + c - a) + b);
+    }
+
+    /**
+     * Sway smoothly using bicubic interpolation between 4 points (the two integers before t and the two after).
+     * This pretty much never produces steep changes between peaks and valleys; this may make it more useful for things
+     * like generating terrain that can be walked across in a side-scrolling game.
+     * @param seed any long
+     * @param t a distance traveled; should change by less than 1 between calls, and should be less than about 10000
+     * @return a smoothly-interpolated swaying value between -1 and 1, both exclusive
+     */
+    public static double bicubicWobble(long seed, double t)
+    {
+        final long floor = (long)Math.floor(t);
+        // what we add here ensures that at the very least, the upper half will have some non-zero bits.
+        long s = ((seed & 0xFFFFFFFFL) ^ (seed >>> 32)) + 0x9E3779B97F4A7C15L;
+        // fancy XOR-rotate-rotate is a way to mix bits both up and down without multiplication.
+        s = (s ^ (s << 21 | s >>> 43) ^ (s << 50 | s >>> 14)) + floor;
+        // we use a different technique here, relative to other wobble methods.
+        // to avoid frequent multiplication and replace it with addition by constants, we track 3 variables, each of
+        // which updates with a different large, negative long increment. when we want to get a result, we just XOR
+        // m, n, and o, and use only the upper bits (by multiplying by a tiny fraction).
+        final long m = s * 0xD1B54A32D192ED03L;
+        final long n = s * 0xABC98388FB8FAC03L;
+        final long o = s * 0x8CB92BA72F3D8DD7L;
+
+        // 0x1.5555555555428p-64 is just inside {@code -2.0/3.0/Long.MIN_VALUE}
+        // it gets about as close as we can go to 1.0
+        final double a = (m ^ n ^ o) * 0x1.5555555555428p-64;
+        final double b = (m + 0xD1B54A32D192ED03L ^ n + 0xABC98388FB8FAC03L ^ o + 0x8CB92BA72F3D8DD7L) * 0x1.5555555555428p-64;
+        final double c = (m + 0xA36A9465A325DA06L ^ n + 0x57930711F71F5806L ^ o + 0x1972574E5E7B1BAEL) * 0x1.5555555555428p-64;
+        final double d = (m + 0x751FDE9874B8C709L ^ n + 0x035C8A9AF2AF0409L ^ o + 0xA62B82F58DB8A985L) * 0x1.5555555555428p-64;
+
+        t -= floor;
+        // this is bicubic interpolation, inlined
+        final double p = (d - c) - (a - b);
+        return (t * (t * t * p + t * ((a - b) - p) + (c - a)) + b);
+    }
 
     /**
      * A variant on {@link #wobble(int, float)} that uses {@link MathTools#barronSpline(float, float, float)} to
@@ -330,7 +400,10 @@ public class LineWobble {
 
     /**
      * Quilez' 1D noise, with some changes to work on the CPU. Takes a distance value and any int seed, and produces a
-     * smoothly-changing value as value goes up or down and seed stays the same. Uses a quartic curve.
+     * smoothly-changing value as value goes up or down and seed stays the same. Uses a quartic curve. The quartic
+     * curve means that at specific positions, each separated by an integer from each other, the noise will reliably
+     * be 0. This does not typically happen on integers for {@code value}, but it can if {@code seed} is 0 or some very
+     * high numbers.
      * <br>
      * The distance ({@code value}) should be between -16384 and 1073733631 for this to return correct results.
      * Because floats incur precision loss earlier than 1073733631, the actual upper bound is lower. The limit of
@@ -350,14 +423,56 @@ public class LineWobble {
         value *= value - 1f;
         return rise * value * value * h;
     }
+
     /**
-     * Just gets two octaves of {@link #quobble(int, float)}; still has a range of -1 to 1.
+     * Just gets two octaves of {@link #quobble(int, float)}; still has a range of -1 to 1. This tends to look much more
+     * natural than just one octave of quobble(), because the points where it always will hit 0 are spaced differently
+     * for the two octaves here.
      *
      * @param x    should go up and/or down steadily and by small amounts (less than 1.0, certainly)
      * @param seed should stay the same for a given curve
      * @return a noise value between -1.0 and 1.0
      */
     public static float quobbleOctave2(final int seed, float x) {
+        return quobble(seed, x) * 0.6666666f + quobble(~seed, x * 1.9f) * 0.33333333f;
+    }
+
+    /**
+     * Quilez' 1D noise, with some changes to work on the CPU. Takes a distance value and any long seed, and produces a
+     * smoothly-changing value as value goes up or down and seed stays the same. Uses a quartic curve. The quartic
+     * curve means that at specific positions, each separated by an integer from each other, the noise will reliably
+     * be 0. This does not typically happen on integers for {@code value}, but it can if {@code seed} is 0 or some very
+     * high numbers.
+     * <br>
+     * The distance ({@code value}) should be between -16384 and 1073733631 for this to return correct results.
+     * Because floats incur precision loss earlier than 1073733631, the actual upper bound is lower. The limit of
+     * -8192 comes from how this uses {@link MathTools#fastFloor(float)} internally on {@code value + value}.
+     *
+     * @param value    should go up and/or down steadily and by small amounts (less than 1.0, certainly)
+     * @param seed should stay the same for a given curve
+     * @return a noise value between -1.0 and 1.0
+     */
+    public static float quobble(final long seed, float value) {
+        value += (int)(seed ^ seed >>> 32) * 0x1p-24f;
+        final int xFloor = MathTools.fastFloor(value),
+                rise = 1 - (MathTools.fastFloor(value + value) & 2);
+        value -= xFloor;
+        // gets a random float between -16 and 16. Magic.
+        final float h = BitConversion.intBitsToFloat((int) ((seed + xFloor ^ 0x9E3779B97F4A7C15L) * 0xD1B54A32D192ED03L >>> 41) | 0x42000000) - 48f;
+        value *= value - 1f;
+        return rise * value * value * h;
+    }
+
+    /**
+     * Just gets two octaves of {@link #quobble(long, float)}; still has a range of -1 to 1. This tends to look much
+     * more natural than just one octave of quobble(), because the points where it always will hit 0 are spaced
+     * differently for the two octaves here.
+     *
+     * @param x    should go up and/or down steadily and by small amounts (less than 1.0, certainly)
+     * @param seed should stay the same for a given curve
+     * @return a noise value between -1.0 and 1.0
+     */
+    public static float quobbleOctave2(final long seed, float x) {
         return quobble(seed, x) * 0.6666666f + quobble(~seed, x * 1.9f) * 0.33333333f;
     }
 
