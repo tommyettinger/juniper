@@ -39,11 +39,11 @@ public class DistributorDemo extends Game {
                 new NormalScreen(this), new RaisedNormalScreen(this), new ProductNormalScreen(this),
                 new CauchyScreen(this), new LogCauchyScreen(this), new ErlangScreen(this),
                 new ExponentialScreen(this), new ParetoScreen(this), new PowerScreen(this),
-                new ChiScreen(this), new ChiSquareScreen(this), new ArcsineScreen(this),
-                new BinomialScreen(this), new ZipfianScreen(this),
+                new ChiScreen(this), new ChiSquareScreen(this), new StudentsTScreen(this),
+                new ArcsineScreen(this), new BinomialScreen(this), new ZipfianScreen(this),
                 new TriangularScreen(this), new KnobScreen(this),
         };
-        screenIndex = screens.length - 1;
+        screenIndex = screens.length - 6;
         setScreen(screens[screenIndex]);
     }
     public void nextScreen(){
