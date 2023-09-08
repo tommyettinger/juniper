@@ -21,6 +21,12 @@ import com.github.tommyettinger.digital.MathTools;
 import com.github.tommyettinger.random.EnhancedRandom;
 
 /**
+ * A four-state EnhancedRandom that uses four different operations to generate each number, one operation per state.
+ * It has an additive counter (Weyl sequence) that is always an odd number, and has a cycle length on its own of 2 to
+ * the 63; this is stateD. The other states are updated A) by multiplying stateC by the odd stateD, B) by
+ * bitwise-rotating stateA, and C) by getting the difference between states B and A. This thus uses 64-bit addition,
+ * subtraction, bitwise-rotation, and multiplication operations. Because multiplication may be pipelined by many
+ * processors, there might not be a speed penalty for including a multiply (at least, that's the logic behind RomuTrio).
  */
 public class PouchRandom extends EnhancedRandom {
 	@Override
@@ -267,9 +273,9 @@ public class PouchRandom extends EnhancedRandom {
 		final long c = stateC;
 		final long d = stateD;
 		stateA = c * d;
-		stateB = (a << 41 | a >>> 23);
-		stateC = a ^ b;
-		stateD = d + 0x9E3779B97F4A7C16L;
+		stateB = (a << 47 | a >>> 17);
+		stateC = b - a;
+		stateD = d + 0xE35E156A2314DCDAL;
 		return c;
 	}
 
@@ -278,10 +284,10 @@ public class PouchRandom extends EnhancedRandom {
 		final long a = stateA;
 		final long b = stateB;
 		final long c = stateC;
-		stateD -= 0x9E3779B97F4A7C16L;
+		stateD -= 0xE35E156A2314DCDAL;
 		stateC = a * MathTools.modularMultiplicativeInverse(stateD);
-		stateA = (b << 23 | b >>> 41);
-		stateB = c ^ stateA;
+		stateA = (b << 17 | b >>> 47);
+		stateB = c + stateA;
 		return stateC;
 	}
 
@@ -292,9 +298,9 @@ public class PouchRandom extends EnhancedRandom {
 		final long c = stateC;
 		final long d = stateD;
 		stateA = c * d;
-		stateB = (a << 41 | a >>> 23);
-		stateC = a ^ b;
-		stateD = d + 0x9E3779B97F4A7C16L;
+		stateB = (a << 47 | a >>> 17);
+		stateC = b - a;
+		stateD = d + 0xE35E156A2314DCDAL;
 		return (int)c >>> (32 - bits);
 	}
 
