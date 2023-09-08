@@ -117,6 +117,7 @@ public class CorrelationAnalyst extends ApplicationAdapter {
         rl.add(new AceRandom(1, 1, 1, 1, 1));
         rl.add(new LaceRandom(1, 1, 1, 1, 1));
         rl.add(new RandomRandom(1));
+        rl.add(new RandomXS128Random(1, 1));
         rl.add(new LeaderRandom(1, 1));
         rl.add(new CobraRandom(1, 1));
         rl.add(new FleetRandom(1, 1));
