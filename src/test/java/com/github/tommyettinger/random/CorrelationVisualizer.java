@@ -31,6 +31,7 @@ import com.github.tommyettinger.digital.BitConversion;
 import com.github.tommyettinger.random.experimental.*;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 import static com.badlogic.gdx.Input.Keys.*;
 import static com.badlogic.gdx.graphics.GL20.GL_POINTS;
@@ -47,6 +48,8 @@ public class CorrelationVisualizer extends ApplicationAdapter {
     public static final EnhancedRandom[][][] randoms;
     static {
         ArrayList<EnhancedRandom> rl = Deserializer.copyRandoms();
+        rl.sort(Comparator.comparing(EnhancedRandom::getTag));
+
         rl.add(new SplurgeRandom(1, 1));
         rl.add(new SportyRandom(1, 1));
         rl.add(new SpoonRandom(1, 1));

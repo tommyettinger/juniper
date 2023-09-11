@@ -35,6 +35,7 @@ import com.github.tommyettinger.digital.BitConversion;
 import com.github.tommyettinger.random.experimental.*;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 import static com.badlogic.gdx.Input.Keys.*;
 import static com.badlogic.gdx.graphics.GL20.GL_POINTS;
@@ -108,6 +109,8 @@ public class CorrelationAnalyst extends ApplicationAdapter {
     public static final EnhancedRandom[][][] randoms;
     static {
         ArrayList<EnhancedRandom> rl = Deserializer.copyRandoms();
+        rl.sort(Comparator.comparing(EnhancedRandom::getTag));
+
         rl.add(new SplurgeRandom(1, 1));
         rl.add(new SportyRandom(1, 1));
         rl.add(new SpoonRandom(1, 1));
@@ -122,15 +125,15 @@ public class CorrelationAnalyst extends ApplicationAdapter {
         rl.add(new CobraRandom(1, 1));
         rl.add(new FleetRandom(1, 1));
         rl.add(new BarleyRandom(1, 1));
-        rl.add(new AceAlternates.AceRandomAC(1, 1, 1, 1, 1));
-        rl.add(new AceAlternates.AceRandomAD(1, 1, 1, 1, 1));
-        rl.add(new AceAlternates.AceRandomAE(1, 1, 1, 1, 1));
-        rl.add(new AceAlternates.AceRandomBC(1, 1, 1, 1, 1));
-        rl.add(new AceAlternates.AceRandomBD(1, 1, 1, 1, 1));
-        rl.add(new AceAlternates.AceRandomBE(1, 1, 1, 1, 1));
-        rl.add(new AceAlternates.AceRandomCD(1, 1, 1, 1, 1));
-        rl.add(new AceAlternates.AceRandomCE(1, 1, 1, 1, 1));
-        rl.add(new AceAlternates.AceRandomDE(1, 1, 1, 1, 1));
+//        rl.add(new AceAlternates.AceRandomAC(1, 1, 1, 1, 1));
+//        rl.add(new AceAlternates.AceRandomAD(1, 1, 1, 1, 1));
+//        rl.add(new AceAlternates.AceRandomAE(1, 1, 1, 1, 1));
+//        rl.add(new AceAlternates.AceRandomBC(1, 1, 1, 1, 1));
+//        rl.add(new AceAlternates.AceRandomBD(1, 1, 1, 1, 1));
+//        rl.add(new AceAlternates.AceRandomBE(1, 1, 1, 1, 1));
+//        rl.add(new AceAlternates.AceRandomCD(1, 1, 1, 1, 1));
+//        rl.add(new AceAlternates.AceRandomCE(1, 1, 1, 1, 1));
+//        rl.add(new AceAlternates.AceRandomDE(1, 1, 1, 1, 1));
         rl.add(new PouchRandom(1, 1));
         randoms = new EnhancedRandom[rl.size()][][];
         for (int i = 0; i < randoms.length; i++) {
@@ -139,7 +142,7 @@ public class CorrelationAnalyst extends ApplicationAdapter {
     }
 
     public static int randomCount = randoms.length;
-    private int currentRandom = 0;
+    private int currentRandom = randomCount - 1;
     private int selectedBit = 0;
     private Viewport view;
     private boolean keepGoing = true;

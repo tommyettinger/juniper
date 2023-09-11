@@ -59,6 +59,7 @@ public class PouchRandom extends EnhancedRandom {
 		stateB = EnhancedRandom.seedFromMath();
 		stateC = EnhancedRandom.seedFromMath();
 		stateD = EnhancedRandom.seedFromMath() | 1L;
+		if((stateA|stateB|stateC)==0L) stateA = 1L;
 	}
 
 	/**
@@ -100,6 +101,8 @@ public class PouchRandom extends EnhancedRandom {
 		this.stateB = stateB;
 		this.stateC = stateC;
 		this.stateD = stateD | 1L;
+		if((stateA|stateB|stateC)==0L) this.stateA = 1L;
+
 	}
 
 	/**
@@ -146,12 +149,15 @@ public class PouchRandom extends EnhancedRandom {
 		switch (selection) {
 		case 0:
 			stateA = value;
+			if((stateA|stateB|stateC)==0L) this.stateA = 1L;
 			break;
 		case 1:
 			stateB = value;
+			if((stateA|stateB|stateC)==0L) this.stateB = 1L;
 			break;
 		case 2:
 			stateC = value;
+			if((stateA|stateB|stateC)==0L) this.stateC = 1L;
 			break;
 		case 3:
 			stateD = value | 1L;
@@ -178,6 +184,8 @@ public class PouchRandom extends EnhancedRandom {
 		seed *= 0xBEA225F9EB34556DL;
 		seed ^= seed >>> 29;
 		stateD = (seed ^ ~0xC6BC279692B5C323L) | 1L;
+		if((stateA|stateB|stateC)==0L) this.stateA = 1L;
+
 	}
 
 	public long getStateA () {
@@ -191,6 +199,7 @@ public class PouchRandom extends EnhancedRandom {
 	 */
 	public void setStateA (long stateA) {
 		this.stateA = stateA;
+		if((stateA|stateB|stateC)==0L) this.stateA = 1L;
 	}
 
 	public long getStateB () {
@@ -204,6 +213,7 @@ public class PouchRandom extends EnhancedRandom {
 	 */
 	public void setStateB (long stateB) {
 		this.stateB = stateB;
+		if((stateA|stateB|stateC)==0L) this.stateB = 1L;
 	}
 
 	public long getStateC () {
@@ -217,6 +227,7 @@ public class PouchRandom extends EnhancedRandom {
 	 */
 	public void setStateC (long stateC) {
 		this.stateC = stateC;
+		if((stateA|stateB|stateC)==0L) this.stateC = 1L;
 	}
 
 	public long getStateD () {
@@ -264,6 +275,7 @@ public class PouchRandom extends EnhancedRandom {
 		this.stateB = stateB;
 		this.stateC = stateC;
 		this.stateD = stateD | 1L;
+		if((stateA|stateB|stateC)==0L) this.stateA = 1L;
 	}
 
 	@Override
@@ -273,8 +285,10 @@ public class PouchRandom extends EnhancedRandom {
 		final long c = stateC;
 		final long d = stateD;
 		stateA = c * d;
-		stateB = (a << 47 | a >>> 17);
-		stateC = b - a;
+		// temporary change; worsens results in PractRand drastically
+		stateB = (a << 5 | a >>> 59);
+		// another temporary change; worsens results in PractRand drastically
+		stateC = b ^ a;
 		stateD = d + 0xE35E156A2314DCDAL;
 		return c;
 	}
@@ -286,8 +300,8 @@ public class PouchRandom extends EnhancedRandom {
 		final long c = stateC;
 		stateD -= 0xE35E156A2314DCDAL;
 		stateC = a * MathTools.modularMultiplicativeInverse(stateD);
-		stateA = (b << 17 | b >>> 47);
-		stateB = c + stateA;
+		stateA = (b << 59 | b >>> 5);
+		stateB = c ^ stateA;
 		return stateC;
 	}
 
@@ -298,8 +312,8 @@ public class PouchRandom extends EnhancedRandom {
 		final long c = stateC;
 		final long d = stateD;
 		stateA = c * d;
-		stateB = (a << 47 | a >>> 17);
-		stateC = b - a;
+		stateB = (a << 5 | a >>> 59);
+		stateC = b ^ a;
 		stateD = d + 0xE35E156A2314DCDAL;
 		return (int)c >>> (32 - bits);
 	}
