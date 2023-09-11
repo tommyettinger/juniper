@@ -24,9 +24,18 @@ import com.github.tommyettinger.random.EnhancedRandom;
  * A four-state EnhancedRandom that uses four different operations to generate each number, one operation per state.
  * It has an additive counter (Weyl sequence) that is always an odd number, and has a cycle length on its own of 2 to
  * the 63; this is stateD. The other states are updated A) by multiplying stateC by the odd stateD, B) by
- * bitwise-rotating stateA, and C) by getting the difference between states B and A. This thus uses 64-bit addition,
+ * bitwise-rotating stateA, and C) by getting the difference between states B and A. Thus, this uses 64-bit addition,
  * subtraction, bitwise-rotation, and multiplication operations. Because multiplication may be pipelined by many
  * processors, there might not be a speed penalty for including a multiply (at least, that's the logic behind RomuTrio).
+ * In addition to the requirement that stateD must be an odd number, if all three of stateA, stateB, and stateC are 0,
+ * that combination of states is disallowed. This is a similar constraint to the one RomuTrio has; for both generators,
+ * if states A, B, and C are all 0, then only 0 would be produced and the period would be 1.
+ * <br>
+ * Because there are some constraints on valid state combinations, setting the state is a tiny bit slower here. Getting
+ * the {@link #previousLong()} is significantly slower than normal because it requires getting the
+ * {@link MathTools#modularMultiplicativeInverse(long)} of a long, though the slowdown is likely not noticeable. Other
+ * than that, this generator seems to be quite fast (judging by how quickly it passed 64TB of PractRand). Benchmarks
+ * will be needed to tell the full story.
  */
 public class PouchRandom extends EnhancedRandom {
 	@Override
@@ -138,10 +147,11 @@ public class PouchRandom extends EnhancedRandom {
 
 	/**
 	 * Sets one of the states, determined by {@code selection}, to {@code value}, as-is.
-	 * Selections 0, 1, 2, and 3 refer to states A, B, C, and D,  and if the selection is anything
-	 * else, this treats it as 3 and sets stateD.
+	 * Selections 0, 1, 2, and 3 refer to states A, B, C, and D, and if the selection is anything
+	 * else, this does nothing. If you try to set state A, B, or C to 0 and that would produce the invalid triple-zero
+	 * state, then this instead sets the state you chose to 1.
 	 *
-	 * @param selection used to select which state variable to set; generally 0, 1, 2, or 3
+	 * @param selection used to select which state variable to set; always 0, 1, 2, or 3
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
@@ -193,7 +203,8 @@ public class PouchRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Sets the first part of the state.
+	 * Sets the first part of the state. If this call would result in the invalid triple-zero state, it instead sets
+	 * the first part of the state to 1.
 	 *
 	 * @param stateA can be any long
 	 */
@@ -207,7 +218,8 @@ public class PouchRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Sets the second part of the state.
+	 * Sets the second part of the state. If this call would result in the invalid triple-zero state, it instead sets
+	 * the second part of the state to 1.
 	 *
 	 * @param stateB can be any long
 	 */
@@ -221,7 +233,8 @@ public class PouchRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Sets the third part of the state.
+	 * Sets the third part of the state. If this call would result in the invalid triple-zero state, it instead sets
+	 * the third part of the state to 1.
 	 *
 	 * @param stateC can be any long
 	 */
@@ -235,7 +248,8 @@ public class PouchRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Sets the fourth part of the state.
+	 * Sets the fourth part of the state. If this call would set the fourth part of the state to an even number, the
+	 * state is instead set to the odd number one greater than the invalid even number.
 	 *
 	 * @param stateD can be any long
 	 */
@@ -285,10 +299,8 @@ public class PouchRandom extends EnhancedRandom {
 		final long c = stateC;
 		final long d = stateD;
 		stateA = c * d;
-		// temporary change; worsens results in PractRand drastically
-		stateB = (a << 5 | a >>> 59);
-		// another temporary change; worsens results in PractRand drastically
-		stateC = b ^ a;
+		stateB = (a << 47 | a >>> 17);
+		stateC = b - a;
 		stateD = d + 0xE35E156A2314DCDAL;
 		return c;
 	}
@@ -299,9 +311,17 @@ public class PouchRandom extends EnhancedRandom {
 		final long b = stateB;
 		final long c = stateC;
 		stateD -= 0xE35E156A2314DCDAL;
-		stateC = a * MathTools.modularMultiplicativeInverse(stateD);
-		stateA = (b << 59 | b >>> 5);
-		stateB = c ^ stateA;
+
+		// inlined version of MathTools.modularMultiplicativeInverse(stateD)
+		long x = 2 ^ stateD * 3;
+		x *= 2 - stateD * x;
+		x *= 2 - stateD * x;
+		x *= 2 - stateD * x;
+		x *= 2 - stateD * x;
+
+		stateC = a * x;
+		stateA = (b << 17 | b >>> 47);
+		stateB = c + stateA;
 		return stateC;
 	}
 
@@ -312,8 +332,8 @@ public class PouchRandom extends EnhancedRandom {
 		final long c = stateC;
 		final long d = stateD;
 		stateA = c * d;
-		stateB = (a << 5 | a >>> 59);
-		stateC = b ^ a;
+		stateB = (a << 47 | a >>> 17);
+		stateC = b - a;
 		stateD = d + 0xE35E156A2314DCDAL;
 		return (int)c >>> (32 - bits);
 	}
