@@ -25,7 +25,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
-import com.badlogic.gdx.scenes.scene2d.utils.UIUtils;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -268,32 +267,7 @@ public class ConfigurableAnalyst extends ApplicationAdapter {
         for (int x = 63; x < width; x++) {
             for (int y = 63; y < height; y++) {
 
-                long v = bits[x][y], h = v;
-                int error;
-                for (int i = 1; i < 64; i++) {
-                    v |= bits[x][y - i] << i;
-                }
-                error = Math.abs(32 - Long.bitCount(v));
-                int points = error * error;
-                for (int r = 1; r < 64; r++) {
-                    error = Math.abs(32 - Long.bitCount(v ^ (v << r | v >>> 64 - r)));
-                    points += error * error;
-                }
-
-                for (int i = 1; i < 64; i++) {
-                    h |= bits[x - i][y] << i;
-                }
-                error = Math.abs(32 - Long.bitCount(h));
-                points += error * error;
-                for (int r = 1; r < 64; r++) {
-                    error = Math.abs(32 - Long.bitCount(h ^ (h << r | h >>> 64 - r)));
-                    points += error * error;
-                }
-                points += Math.abs(32 - Long.bitCount(v ^ h));
-                for (int r = 1; r < 64; r++) {
-                    error = Math.abs(32 - Long.bitCount(v ^ (h << r | h >>> 64 - r)));
-                    points += error * error;
-                }
+                int points = calculatePoints(x, y);
 
                 total += points;
                 minPoints = Math.min(minPoints, points);
@@ -312,6 +286,36 @@ public class ConfigurableAnalyst extends ApplicationAdapter {
             //Maximum points: 195616
         }
         renderer.end();
+    }
+
+    private static int calculatePoints(int x, int y) {
+        long v = bits[x][y], h = v;
+        int error;
+        for (int i = 1; i < 64; i++) {
+            v |= bits[x][y - i] << i;
+        }
+        error = Math.abs(32 - Long.bitCount(v));
+        int points = error * error;
+        for (int r = 1; r < 64; r++) {
+            error = Math.abs(32 - Long.bitCount(v ^ (v << r | v >>> 64 - r)));
+            points += error * error;
+        }
+
+        for (int i = 1; i < 64; i++) {
+            h |= bits[x - i][y] << i;
+        }
+        error = Math.abs(32 - Long.bitCount(h));
+        points += error * error;
+        for (int r = 1; r < 64; r++) {
+            error = Math.abs(32 - Long.bitCount(h ^ (h << r | h >>> 64 - r)));
+            points += error * error;
+        }
+        points += Math.abs(32 - Long.bitCount(v ^ h));
+        for (int r = 1; r < 64; r++) {
+            error = Math.abs(32 - Long.bitCount(v ^ (h << r | h >>> 64 - r)));
+            points += error * error;
+        }
+        return points;
     }
 
     @Override

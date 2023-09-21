@@ -558,10 +558,42 @@ public class EnhancedRandomTest {
 		Assert.assertEquals(npn, npnp);
 	}
 
-
 	@Test
 	public void testScruffPrevious() {
 		ScruffRandom random = new ScruffRandom(0L);
+		long n0 = random.nextLong();
+		long n1 = random.nextLong();
+		long n2 = random.nextLong();
+		long n3 = random.nextLong();
+		long n4 = random.nextLong();
+		long n5 = random.nextLong();
+		long n6 = random.nextLong();
+		long p6 = random.previousLong();
+		long p5 = random.previousLong();
+		long p4 = random.previousLong();
+		long p3 = random.previousLong();
+		long p2 = random.previousLong();
+		long p1 = random.previousLong();
+		long p0 = random.previousLong();
+		Assert.assertEquals(n0, p0);
+		Assert.assertEquals(n1, p1);
+		Assert.assertEquals(n2, p2);
+		Assert.assertEquals(n3, p3);
+		Assert.assertEquals(n4, p4);
+		Assert.assertEquals(n5, p5);
+		Assert.assertEquals(n6, p6);
+		long n = random.nextLong();
+		long np = random.previousLong();
+		long npn = random.nextLong();
+		long npnp = random.previousLong();
+		Assert.assertEquals(n, np);
+		Assert.assertEquals(np, npn);
+		Assert.assertEquals(npn, npnp);
+	}
+
+	@Test
+	public void testPouchPrevious() {
+		PouchRandom random = new PouchRandom(0L);
 		long n0 = random.nextLong();
 		long n1 = random.nextLong();
 		long n2 = random.nextLong();
@@ -851,7 +883,7 @@ public class EnhancedRandomTest {
 				new StrangerRandom(1), new TricycleRandom(1), new TrimRandom(1),
 				new Xoshiro256StarStarRandom(1), new Xoshiro128PlusPlusRandom(1),
 				new WhiskerRandom(1), new PasarRandom(1), new AceRandom(1),
-				new ScruffRandom(1), }) {
+				new ScruffRandom(1), new PouchRandom(1), }) {
 			bits.set(0, 0x800000);
 			for (int i = 0; i < 0x10000000; i++) {
 				bits.clear((int) (gen.nextFloat() * 0x800000));

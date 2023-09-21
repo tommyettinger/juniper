@@ -14,7 +14,7 @@ public class SeedingTest {
                 rng.setSeed(seed);
                 long earlier = rng.nextLong();
                 long later;
-                int count = 32;
+                int count;
                 for (int i = 1; i < 10; i++) {
                     later = rng.nextLong();
                     if((count = Long.bitCount(earlier ^ later)) < 8)
