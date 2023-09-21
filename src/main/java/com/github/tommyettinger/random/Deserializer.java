@@ -79,6 +79,7 @@ public final class Deserializer {
         register(new Xoshiro256StarStarRandom(1, 2, 3, 4));
         register(new Xoshiro256MX3Random(1, 2, 3, 4));
         register(new Xoshiro128PlusPlusRandom(1, 2, 3, 4));
+        register(new PouchRandom(1, 2, 3, 4));
         register(new WhiskerRandom(1, 2, 3, 4));
         register(new ScruffRandom(1, 2, 3, 4));
         register(new PasarRandom(1, 2, 3, 4, 5));

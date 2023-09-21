@@ -15,10 +15,9 @@
  *
  */
 
-package com.github.tommyettinger.random.experimental;
+package com.github.tommyettinger.random;
 
 import com.github.tommyettinger.digital.MathTools;
-import com.github.tommyettinger.random.EnhancedRandom;
 
 /**
  * A four-state EnhancedRandom that uses four different operations to generate each number, one operation per state.
@@ -27,15 +26,28 @@ import com.github.tommyettinger.random.EnhancedRandom;
  * bitwise-rotating stateA, and C) by getting the difference between states B and A. Thus, this uses 64-bit addition,
  * subtraction, bitwise-rotation, and multiplication operations. Because multiplication may be pipelined by many
  * processors, there might not be a speed penalty for including a multiply (at least, that's the logic behind RomuTrio).
+ * <br>
  * In addition to the requirement that stateD must be an odd number, if all three of stateA, stateB, and stateC are 0,
- * that combination of states is disallowed. This is a similar constraint to the one RomuTrio has; for both generators,
- * if states A, B, and C are all 0, then only 0 would be produced and the period would be 1.
+ * that combination of states (the invalid triple-zero state) is disallowed. This is a similar constraint to the one
+ * RomuTrio has; for both generators, if states A, B, and C are all 0, then only 0 would be produced and the period
+ * would be 1.
  * <br>
  * Because there are some constraints on valid state combinations, setting the state is a tiny bit slower here. Getting
  * the {@link #previousLong()} is significantly slower than normal because it requires getting the
  * {@link MathTools#modularMultiplicativeInverse(long)} of a long, though the slowdown is likely not noticeable. Other
- * than that, this generator seems to be quite fast (judging by how quickly it passed 64TB of PractRand). Benchmarks
- * will be needed to tell the full story.
+ * than that, this generator is extremely fast when calling {@link #nextLong()} and anything that uses it. It's faster
+ * than {@link com.github.tommyettinger.random.WhiskerRandom} and {@link com.github.tommyettinger.random.AceRandom},
+ * which are the runners-up for fastest generators here, and if it is set in a too-predictable way using
+ * {@link #setState(long, long, long, long)}, it still will diffuse to produce random results (AceRandom does this a
+ * little more quickly, but WhiskerRandom won't at all). If two states are only different by a very small amount (either
+ * numerically or by their bits), then calling nextLong() about 25 times should fully diffuse PouchRandom, or about 18
+ * for AceRandom.
+ * <br>
+ * This passes at least 64TB of PractRand testing without anomalies. It also passes 179 PB of ReMort testing without
+ * anomalies.
+ * <br>
+ * The name here comes from the same theme as WhiskerRandom and ScruffRandom (cat anatomy). My cat, Satchmo, has gotten
+ * an enormous "primordial pouch" because he's just so fat. He does not seem to mind his condition one bit.
  */
 public class PouchRandom extends EnhancedRandom {
 	@Override
@@ -44,15 +56,15 @@ public class PouchRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * The first state; can be any long.
+	 * The first state; can be any long, as long as states A, B, and C are not all 0.
 	 */
 	protected long stateA;
 	/**
-	 * The second state; can be any long.
+	 * The second state; can be any long, as long as states A, B, and C are not all 0.
 	 */
 	protected long stateB;
 	/**
-	 * The third state; can be any long.
+	 * The third state; can be any long, as long as states A, B, and C are not all 0.
 	 */
 	protected long stateC;
 	/**
@@ -82,28 +94,15 @@ public class PouchRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Creates a new PouchRandom with the given two states; all {@code long} values are permitted.
-	 * These states will be used verbatim for stateA and stateB. Both stateC and stateD will be assigned 1.
-	 *
-	 * @param stateA any {@code long} value
-	 * @param stateB any {@code long} value
-	 */
-	public PouchRandom(long stateA, long stateB) {
-		this.stateA = stateA;
-		this.stateB = stateB;
-		this.stateC = 1L;
-		this.stateD = 1L;
-	}
-
-	/**
 	 * Creates a new PouchRandom with the given four states; all {@code long} values are permitted for states A, B, and
-	 * C, and all odd-number {@code long} values are permitted for stateD.
+	 * C, and all odd-number {@code long} values are permitted for stateD, with one exception. If stateA, stateB, and
+	 * stateC are all 0, then that is the "invalid triple-zero state" and it will be avoided by setting stateA to 1.
 	 * These states will be used verbatim, unless stateD is even (then 1 is added).
 	 *
-	 * @param stateA any {@code long} value
-	 * @param stateB any {@code long} value
-	 * @param stateC any {@code long} value
-	 * @param stateD any {@code long} value
+	 * @param stateA any {@code long} value (as long as states A, B, and C are not all 0)
+	 * @param stateB any {@code long} value (as long as states A, B, and C are not all 0)
+	 * @param stateC any {@code long} value (as long as states A, B, and C are not all 0)
+	 * @param stateD any odd {@code long} value
 	 */
 	public PouchRandom(long stateA, long stateB, long stateC, long stateD) {
 		this.stateA = stateA;
@@ -258,22 +257,6 @@ public class PouchRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Sets each state variable to either {@code stateA} or {@code stateB}, alternating.
-	 * This uses {@link #setSelectedState(int, long)} to set the values. If there is one
-	 * state variable ({@link #getStateCount()} is 1), then this only sets that state
-	 * variable to stateA. If there are two state variables, the first is set to stateA,
-	 * and the second to stateB. If there are more, it reuses stateA, then stateB, then
-	 * stateA, and so on until all variables are set.
-	 *
-	 * @param stateA the long value to use for states at index 0, 2, 4, 6...
-	 * @param stateB the long value to use for states at index 1, 3, 5, 7...
-	 */
-	@Override
-	public void setState(long stateA, long stateB) {
-		setState(stateA, stateB, 1L, 1L);
-	}
-
-	/**
 	 * Sets the state completely to the given four state variables.
 	 * This is the same as calling {@link #setStateA(long)}, {@link #setStateB(long)},
 	 * {@link #setStateC(long)}, and {@link #setStateD(long)} as a group.
@@ -281,7 +264,7 @@ public class PouchRandom extends EnhancedRandom {
 	 * @param stateA the first state; can be any long
 	 * @param stateB the second state; can be any long
 	 * @param stateC the third state; can be any long
-	 * @param stateD the fourth state; can be any long
+	 * @param stateD the fourth state; can be any odd long
 	 */
 	@Override
 	public void setState (long stateA, long stateB, long stateC, long stateD) {
