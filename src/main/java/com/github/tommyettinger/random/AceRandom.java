@@ -39,6 +39,9 @@ package com.github.tommyettinger.random;
  * than the others - WhiskerRandom and ScruffRandom each only mix one pair of states per generation, and PasarRandom
  * only mixes two pairs of states, but AceRandom mixes three pairs.
  * <br>
+ * This implements all optional methods in EnhancedRandom except {@link #skip(long)}; it does implement
+ * {@link #previousLong()} without using skip().
+ * <br>
  * The name comes from the 52 cards (excluding jokers, but including aces) in a standard playing card deck, since this
  * uses a left rotation by exactly 52 as one of its critical components. Rotations by anything else I tried didn't pass
  * testing as well, or even at all.

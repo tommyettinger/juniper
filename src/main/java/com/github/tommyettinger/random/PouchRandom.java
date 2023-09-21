@@ -36,15 +36,17 @@ import com.github.tommyettinger.digital.MathTools;
  * the {@link #previousLong()} is significantly slower than normal because it requires getting the
  * {@link MathTools#modularMultiplicativeInverse(long)} of a long, though the slowdown is likely not noticeable. Other
  * than that, this generator is extremely fast when calling {@link #nextLong()} and anything that uses it. It's faster
- * than {@link com.github.tommyettinger.random.WhiskerRandom} and {@link com.github.tommyettinger.random.AceRandom},
- * which are the runners-up for fastest generators here, and if it is set in a too-predictable way using
- * {@link #setState(long, long, long, long)}, it still will diffuse to produce random results (AceRandom does this a
- * little more quickly, but WhiskerRandom won't at all). If two states are only different by a very small amount (either
- * numerically or by their bits), then calling nextLong() about 25 times should fully diffuse PouchRandom, or about 18
- * for AceRandom.
+ * than {@link WhiskerRandom} and {@link AceRandom}, which are the runners-up for fastest generators here, and if it is
+ * set in a too-predictable way using {@link #setState(long, long, long, long)}, it still will diffuse to produce random
+ * results (AceRandom does this a little more quickly, but WhiskerRandom won't at all). If two states are only different
+ * by a very small amount (either numerically or by their bits), then calling nextLong() about 25 times should fully
+ * diffuse PouchRandom, or about 18 for AceRandom.
  * <br>
  * This passes at least 64TB of PractRand testing without anomalies. It also passes 179 PB of ReMort testing without
  * anomalies.
+ * <br>
+ * This implements all optional methods in EnhancedRandom except {@link #skip(long)}; it does implement
+ * {@link #previousLong()} without using skip().
  * <br>
  * The name here comes from the same theme as WhiskerRandom and ScruffRandom (cat anatomy). My cat, Satchmo, has gotten
  * an enormous "primordial pouch" because he's just so fat. He does not seem to mind his condition one bit.
@@ -285,6 +287,24 @@ public class PouchRandom extends EnhancedRandom {
 		stateB = (a << 47 | a >>> 17);
 		stateC = b - a;
 		stateD = d + 0xE35E156A2314DCDAL;
+		return c;
+	}
+
+	/**
+	 * Jumps extremely far in the generator's sequence, such that one call to leap() advances the state as many as
+	 * {@code Math.pow(2, 48)} calls to {@link #nextLong()}. This can be used to create 32768 substreams of this
+	 * generator's sequence, each with a period of at least {@code Math.pow(2, 48)} but likely much more.
+	 * @return the result of what nextLong() would return if it was called at the state this jumped to
+	 */
+	public long leap () {
+		final long a = stateA;
+		final long b = stateB;
+		final long c = stateC;
+		final long d = stateD;
+		stateA = c * d;
+		stateB = (a << 47 | a >>> 17);
+		stateC = b - a;
+		stateD = d + 0xDCDA000000000000L;
 		return c;
 	}
 
