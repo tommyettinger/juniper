@@ -50,6 +50,7 @@ public class FFTVisualizer extends ApplicationAdapter {
     private int currentRandom = 0;
     private int currentMode = 0;
     private int selectedBit = 0;
+    private int steps = 0;
     private Viewport view;
     private boolean keepGoing = true;
     private ImmediateModeRenderer20 renderer;
@@ -85,11 +86,13 @@ public class FFTVisualizer extends ApplicationAdapter {
                         keepGoing = !keepGoing;
                         break;
                     case S: // step
+                        System.out.println("On step " + steps);
                         putMap();
                         break;
                     case NUM_1:
                     case NUMPAD_1:
                         seedGrid();
+                        steps = 0;
                         putMap();
                         break;
                     case N: // next
@@ -100,6 +103,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                         title = randoms[currentRandom][0][0].getClass().getSimpleName()
                                 + " on mode " + currentMode + " selecting bit " + selectedBit;
                         System.out.println(title);
+                        steps = 0;
                         if (!keepGoing) putMap();
                         break;
                     case LEFT:
@@ -108,6 +112,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                         title = randoms[currentRandom][0][0].getClass().getSimpleName()
                                 + " on mode " + currentMode + " selecting bit " + selectedBit;
                         System.out.println(title);
+                        steps = 0;
                         if (!keepGoing) putMap();
                         break;
                     case RIGHT:
@@ -116,6 +121,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                         title = randoms[currentRandom][0][0].getClass().getSimpleName()
                                 + " on mode " + currentMode + " selecting bit " + selectedBit;
                         System.out.println(title);
+                        steps = 0;
                         if (!keepGoing) putMap();
                         break;
                     case M: // mode
@@ -124,6 +130,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                         title = randoms[currentRandom][0][0].getClass().getSimpleName()
                                 + " on mode " + currentMode + " selecting bit " + selectedBit;
                         System.out.println(title);
+                        steps = 0;
                         if (!keepGoing) putMap();
                         break;
                     case UP: // mode
@@ -132,6 +139,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                         title = randoms[currentRandom][0][0].getClass().getSimpleName()
                                 + " on mode " + currentMode + " selecting bit " + selectedBit;
                         System.out.println(title);
+                        steps = 0;
                         if (!keepGoing) putMap();
                         break;
                     case DOWN: // mode
@@ -140,6 +148,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                         title = randoms[currentRandom][0][0].getClass().getSimpleName()
                                 + " on mode " + currentMode + " selecting bit " + selectedBit;
                         System.out.println(title);
+                        steps = 0;
                         if (!keepGoing) putMap();
                         break;
                     case Q: // quit
@@ -154,6 +163,7 @@ public class FFTVisualizer extends ApplicationAdapter {
     }
 
     public void putMap() {
+        ++steps;
         Arrays.fill(freq0, 0);
         renderer.begin(view.getCamera().combined, GL_POINTS);
         ArrayTools.fill(imag, 0.0);
