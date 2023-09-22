@@ -25,6 +25,10 @@ package com.github.tommyettinger.random;
 
 /**
  * A 256-bit "chaotic" generator that also includes an (odd-number) 64-bit stream.
+ * This generator was inspired by SFC64, but has diverged significantly. Like SFC64, it uses a counter (Weyl sequence),
+ * so it has a minimum cycle length of 2 to the 64. The maximum cycle length for any given state is unknown exactly, but
+ * must be less than 2 to the 256. There are 2 to the 63 possible streams, all distinct, though the presence of flawed
+ * streams can't really be ruled out (they should be extremely unlikely; even the stream {@code 1L} is good).
  * <br>
  * From the original source:
  * <br>
@@ -36,6 +40,10 @@ package com.github.tommyettinger.random;
  * Passes all statistical tests, e.g PractRand and correlation tests, i.e. interleaved
  * streams with one-bit diff state. Even the 16-bit version (LR=6, RS=5, LS=3) passes
  * PractRand to multiple TB input.
+ * <br>
+ * [sic]
+ * <br>
+ * Note that most other generators in Juniper have been tested more thoroughly, but 8TB of PractRand is still excellent.
  * <br>
  * This implements all optional methods in EnhancedRandom except {@link #skip(long)} and {@link #previousLong()}.
  * <br>
@@ -280,30 +288,20 @@ public class Crand64Random extends EnhancedRandom {
 
 	@Override
 	public long nextLong () {
-		final long fa = stateA;
-		final long fb = stateB;
-		final long fc = stateC;
-		final long fd = stateD;
-		final long fe = stateE;
-		stateA = fa + 0x9E3779B97F4A7C15L;
-		stateB = fa ^ fe;
-		stateC = fb + fd;
-		stateD = (fc << 52 | fc >>> 12);
-		return stateE = fb - fc;
+		final long result = (stateA ^ (stateD += stateE)) + stateB;
+		stateA = stateB ^ (stateB >>> 11);
+		stateB = stateC + (stateC << 3);
+		stateC = (stateC << 24 | stateC >>> 40) + result;
+		return result;
 	}
 
 	@Override
 	public int next (int bits) {
-		final long fa = stateA;
-		final long fb = stateB;
-		final long fc = stateC;
-		final long fd = stateD;
-		final long fe = stateE;
-		stateA = fa + 0x9E3779B97F4A7C15L;
-		stateB = fa ^ fe;
-		stateC = fb + fd;
-		stateD = (fc << 52 | fc >>> 12);
-		return (int) (stateE = fb - fc) >>> (32 - bits);
+		final long result = (stateA ^ (stateD += stateE)) + stateB;
+		stateA = stateB ^ (stateB >>> 11);
+		stateB = stateC + (stateC << 3);
+		stateC = (stateC << 24 | stateC >>> 40) + result;
+		return (int) result >>> (32 - bits);
 	}
 
 	@Override
