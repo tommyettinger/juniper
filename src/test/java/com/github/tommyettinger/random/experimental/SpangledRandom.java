@@ -172,27 +172,38 @@ public class SpangledRandom extends EnhancedRandom {
 
 	@Override
 	public long nextLong () {
-		final long a = (stateA += 0x9E3779B97F4A7C15L);
-		final long b = (stateB += Long.numberOfLeadingZeros(a));
-//		b = ((b << 56 | b >>> 8) + a ^ 0xBEA225F9EB34556DL);
-//		a = ((a << 3 | a >>> 61) ^ b);
-		return ((a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ 0xBEA225F9EB34556DL));
+//		final long b = (stateB += (a | 0xE35E156A2314DCDAL - a) >> 63 & 0xD1B54A32D192ED03L);
+		long a = (stateA += 0x9E3779B97F4A7C15L);
+		long b = (stateB += Long.numberOfLeadingZeros(a)) * 0xBEA225F9EB34556DL;
+		b = ((b << 56 | b >>> 8) + a ^ 0xA62B82F58DB8A985L);
+		a = ((a << 3 | a >>> 61) ^ b);
+		b = ((b << 56 | b >>> 8) + a ^ 0xE35E156A2314DCDAL);
+		a = ((a << 3 | a >>> 61) ^ b);
+		return ((a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ 0xD1B54A32D192ED03L));
 	}
 
 	@Override
 	public long previousLong () {
 		long a = stateA;
-		long b = stateB;
+		long b = stateB * 0xBEA225F9EB34556DL;
 		stateA -= 0x9E3779B97F4A7C15L;
 		stateB -= Long.numberOfLeadingZeros(a);
-		return ((a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ 0xBEA225F9EB34556DL));
+		b = ((b << 56 | b >>> 8) + a ^ 0xA62B82F58DB8A985L);
+		a = ((a << 3 | a >>> 61) ^ b);
+		b = ((b << 56 | b >>> 8) + a ^ 0xE35E156A2314DCDAL);
+		a = ((a << 3 | a >>> 61) ^ b);
+		return ((a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ 0xD1B54A32D192ED03L));
 	}
 
 	@Override
 	public int next (int bits) {
-		final long a = (stateA += 0x9E3779B97F4A7C15L);
-		final long b = (stateB += Long.numberOfLeadingZeros(a));
-		return (int) ((a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ 0xBEA225F9EB34556DL)) >>> (32 - bits);
+		long a = (stateA += 0x9E3779B97F4A7C15L);
+		long b = (stateB += Long.numberOfLeadingZeros(a)) * 0xBEA225F9EB34556DL;
+		b = ((b << 56 | b >>> 8) + a ^ 0xA62B82F58DB8A985L);
+		a = ((a << 3 | a >>> 61) ^ b);
+		b = ((b << 56 | b >>> 8) + a ^ 0xE35E156A2314DCDAL);
+		a = ((a << 3 | a >>> 61) ^ b);
+		return (int) ((a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ 0xD1B54A32D192ED03L)) >>> (32 - bits);
 	}
 
 	@Override
