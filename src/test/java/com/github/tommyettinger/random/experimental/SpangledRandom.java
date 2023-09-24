@@ -22,9 +22,14 @@ import com.github.tommyettinger.random.EnhancedRandom;
 import java.util.Arrays;
 
 /**
- * A hash-on-counters type of RNG with two 64-bit states; uses {@link Long#numberOfLeadingZeros(long)} as part of what
- * ensures its long period. Has an exact period of 2 to the 128. Uses the round function from
- * {@link com.github.tommyettinger.random.cipher.SpeckCipher} to mix its two states a little.
+ * A hash-on-counters type of RNG with two 64-bit states and a variable size key array to provide additional strength.
+ * Uses {@link Long#numberOfLeadingZeros(long)} as part of what ensures its long period. Has an exact period of 2 to the
+ * 128. Uses the round function from {@link com.github.tommyettinger.random.cipher.SpeckCipher} to mix its two states;
+ * this calls the round function at least 3 times, plus once per {@code long} in the keys. The more keys this has in it,
+ * the more rounds it requires for each random number it generates, which will slow it down with larger key arrays.
+ * Having a different key array might be sufficient to consider a generator as on a different stream; determining if two
+ * streams are correlated is hard, and this might be correlated for smaller key arrays, but not ones as large as Speck
+ * typically uses (which would be a key array of length 33 for speck, or maybe 30 here).
  */
 public class SpangledRandom extends EnhancedRandom {
 	@Override
@@ -42,10 +47,14 @@ public class SpangledRandom extends EnhancedRandom {
 	 */
 	protected long stateB;
 
+	/**
+	 * Zero or more long keys in an array; every key will be used in its own round on each call of a random generation
+	 * function such as {@link #nextLong()}. Must be non-null.
+	 */
 	protected long[] keys;
 
 	/**
-	 * Creates a new SpangledRandom with a random state.
+	 * Creates a new SpangledRandom with a random state and a random 4-item keys array.
 	 */
 	public SpangledRandom() {
 		stateA = EnhancedRandom.seedFromMath();
@@ -62,6 +71,7 @@ public class SpangledRandom extends EnhancedRandom {
 	 */
 	public SpangledRandom(long seed) {
 		setSeed(seed);
+		this.keys = new long[0];
 	}
 
 	/**
@@ -96,8 +106,8 @@ public class SpangledRandom extends EnhancedRandom {
 	 * between the indices {@code fromIndex} (inclusive) and {@code toIndex} (exclusive) will be used. This copies
 	 * {@code keys} to a new long array. If {@code toIndex} is greater than {@code keys.length}, then this will zero-pad
 	 * the long array it uses until toIndex would otherwise be reached. The {@code fromIndex} must be at least 0, and no
-	 * greater than {@code keys.length}. The exact rules followed for the array copying are those of
-	 * {@link Arrays#copyOfRange(long[], int, int)}.
+	 * greater than {@code keys.length}. The {@code toIndex} must be at least equal to {@code fromIndex}. The exact
+	 * rules followed for the array copying are those of {@link Arrays#copyOfRange(long[], int, int)}.
 	 *
 	 * @param stateA any {@code long} value
 	 * @param stateB any {@code long} value
@@ -203,7 +213,7 @@ public class SpangledRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Sets the state completely to the given two state variables.
+	 * Sets the state completely to the given two state variables (but not the keys).
 	 * This is the same as calling {@link #setStateA(long)} and {@link #setStateB(long)} as a group.
 	 *
 	 * @param stateA the first state; can be any long
@@ -212,6 +222,44 @@ public class SpangledRandom extends EnhancedRandom {
 	public void setState (long stateA, long stateB) {
 		this.stateA = stateA;
 		this.stateB = stateB;
+	}
+
+	public long[] getKeys() {
+		return keys;
+	}
+
+	/**
+	 * Sets the key array this uses to a copy of the given (non-null) key array; all {@code long} values are permitted
+	 * for keys. The keys will be used verbatim unless the array is null, in which case this will treat it as an empty
+	 * array.
+	 * @param keys a long array of any length to copy and use as the keys here; if null, will be treated as empty
+	 */
+	public void setKeys(long[] keys) {
+		if(keys == null)
+			this.keys = new long[0];
+		else
+			this.keys = Arrays.copyOf(keys, keys.length);
+	}
+
+	/**
+	 * Sets the key array this uses to a copy of the given (non-null) key array; all {@code long} values are permitted
+	 * for keys. The keys will be used verbatim unless the array is null, in which case this will treat it as an empty
+	 * array. Only the items in {@code keys} between the indices {@code fromIndex} (inclusive) and {@code toIndex}
+	 * (exclusive) will be used. This copies {@code keys} to a new long array. If {@code toIndex} is greater than
+	 * {@code keys.length}, then this will zero-pad the long array it uses until toIndex would otherwise be reached. The
+	 * {@code fromIndex} must be at least 0, and no greater than {@code keys.length}. The {@code toIndex} must be at
+	 * least equal to {@code fromIndex}. The exact rules followed for the array copying are those of
+	 * {@link Arrays#copyOfRange(long[], int, int)}.
+	 *
+	 * @param keys a long array of any length to copy and use as the keys here; if null, will be treated as empty
+	 * @param fromIndex as per {@code from} in {@link Arrays#copyOfRange(long[], int, int)}, called on {@code keys}
+	 * @param toIndex as per {@code to} in {@link Arrays#copyOfRange(long[], int, int)}, called on {@code keys}
+	 */
+	public void setKeys(long[] keys, int fromIndex, int toIndex) {
+		if(keys == null)
+			this.keys = new long[0];
+		else
+			this.keys = Arrays.copyOfRange(keys, fromIndex, toIndex);
 	}
 
 	@Override
@@ -225,12 +273,8 @@ public class SpangledRandom extends EnhancedRandom {
 		}
 		b = ((b << 56 | b >>> 8) + a ^ 0xE35E156A2314DCDAL); a = ((a << 3 | a >>> 61) ^ b);
 		return ((a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ 0xBEA225F9EB34556DL));
-//		b = ((b << 56 | b >>> 8) + a ^ 0xA62B82F58DB8A985L);
-//		a = ((a << 3 | a >>> 61) ^ b);
-//		b = ((b << 56 | b >>> 8) + a ^ 0xE35E156A2314DCDAL);
-//		a = ((a << 3 | a >>> 61) ^ b);
-//		return ((a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ 0xBEA225F9EB34556DL));
 	}
+
 //		long b = (stateB += (a | 0x57930711F71F5806L - a) >> 63 ^ 0xBEA225F9EB34556DL);
 
 	@Override
@@ -238,7 +282,6 @@ public class SpangledRandom extends EnhancedRandom {
 		long a = stateA;
 		long b = stateB * 0xD1B54A32D192ED03L;
 		stateA -= 0x9E3779B97F4A7C15L;
-//		stateB -= (a | 0x57930711F71F5806L - a) >> 63 ^ 0xBEA225F9EB34556DL;
 		stateB -= Long.numberOfLeadingZeros(a);
 		b = ((b << 56 | b >>> 8) + a ^ 0xA62B82F58DB8A985L); a = ((a << 3 | a >>> 61) ^ b);
 		for (int i = 0; i < keys.length; i++) {
@@ -252,7 +295,6 @@ public class SpangledRandom extends EnhancedRandom {
 	@Override
 	public int next (int bits) {
 		long a = (stateA += 0x9E3779B97F4A7C15L);
-//		long b = (stateB += (a | 0x57930711F71F5806L - a) >> 63 ^ 0xBEA225F9EB34556DL);
 		long b = (stateB += Long.numberOfLeadingZeros(a)) * 0xD1B54A32D192ED03L;
 		b = ((b << 56 | b >>> 8) + a ^ 0xA62B82F58DB8A985L); a = ((a << 3 | a >>> 61) ^ b);
 		for (int i = 0; i < keys.length; i++) {
