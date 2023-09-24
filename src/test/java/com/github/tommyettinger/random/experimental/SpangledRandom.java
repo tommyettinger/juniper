@@ -19,6 +19,8 @@ package com.github.tommyettinger.random.experimental;
 
 import com.github.tommyettinger.random.EnhancedRandom;
 
+import java.util.Arrays;
+
 /**
  * A hash-on-counters type of RNG with two 64-bit states; uses {@link Long#numberOfLeadingZeros(long)} as part of what
  * ensures its long period. Has an exact period of 2 to the 128. Uses the round function from
@@ -40,12 +42,16 @@ public class SpangledRandom extends EnhancedRandom {
 	 */
 	protected long stateB;
 
+	protected long[] keys;
+
 	/**
 	 * Creates a new SpangledRandom with a random state.
 	 */
 	public SpangledRandom() {
 		stateA = EnhancedRandom.seedFromMath();
 		stateB = EnhancedRandom.seedFromMath();
+		keys = new long[]{EnhancedRandom.seedFromMath(), EnhancedRandom.seedFromMath(),
+				EnhancedRandom.seedFromMath(), EnhancedRandom.seedFromMath()};
 	}
 
 	/**
@@ -66,8 +72,46 @@ public class SpangledRandom extends EnhancedRandom {
 	 * @param stateB any {@code long} value
 	 */
 	public SpangledRandom(long stateA, long stateB) {
+		this(stateA, stateB, null, 0, 0);
+	}
+
+	/**
+	 * Creates a new SpangledRandom with the given two states and the given (non-null) key array; all {@code long}
+	 * values are permitted for states and for keys. These states will be used verbatim. The keys will be used verbatim
+	 * unless the array is null, in which case this will treat it as an empty array. All items in {@code keys} will be
+	 * used, and no more will be added. This copies {@code keys} into a new long array.
+	 *
+	 * @param stateA any {@code long} value
+	 * @param stateB any {@code long} value
+	 * @param keys a long array of any length that will be used in full; if null it will be treated as empty
+	 */
+	public SpangledRandom(long stateA, long stateB, long[] keys) {
+		this(stateA, stateB, keys, 0, keys == null ? 0 : keys.length);
+	}
+
+	/**
+	 * Creates a new SpangledRandom with the given two states and the given (non-null) key array; all {@code long}
+	 * values are permitted for states and for keys. These states will be used verbatim. The keys will be used verbatim
+	 * unless the array is null, in which case this will treat it as an empty array. Only the items in {@code keys}
+	 * between the indices {@code fromIndex} (inclusive) and {@code toIndex} (exclusive) will be used. This copies
+	 * {@code keys} to a new long array. If {@code toIndex} is greater than {@code keys.length}, then this will zero-pad
+	 * the long array it uses until toIndex would otherwise be reached. The {@code fromIndex} must be at least 0, and no
+	 * greater than {@code keys.length}. The exact rules followed for the array copying are those of
+	 * {@link Arrays#copyOfRange(long[], int, int)}.
+	 *
+	 * @param stateA any {@code long} value
+	 * @param stateB any {@code long} value
+	 * @param keys a long array of any length; if null it will be treated as empty
+	 * @param fromIndex as per {@code from} in {@link Arrays#copyOfRange(long[], int, int)}, called on {@code keys}
+	 * @param toIndex as per {@code to} in {@link Arrays#copyOfRange(long[], int, int)}, called on {@code keys}
+	 */
+	public SpangledRandom(long stateA, long stateB, long[] keys, int fromIndex, int toIndex) {
 		this.stateA = stateA;
 		this.stateB = stateB;
+		if(keys == null)
+			this.keys = new long[0];
+		else
+			this.keys = Arrays.copyOfRange(keys, fromIndex, toIndex);
 	}
 
 	/**
@@ -172,43 +216,56 @@ public class SpangledRandom extends EnhancedRandom {
 
 	@Override
 	public long nextLong () {
-//		final long b = (stateB += (a | 0xE35E156A2314DCDAL - a) >> 63 & 0xD1B54A32D192ED03L);
 		long a = (stateA += 0x9E3779B97F4A7C15L);
-		long b = (stateB += Long.numberOfLeadingZeros(a)) * 0xBEA225F9EB34556DL;
-		b = ((b << 56 | b >>> 8) + a ^ 0xA62B82F58DB8A985L);
-		a = ((a << 3 | a >>> 61) ^ b);
-		b = ((b << 56 | b >>> 8) + a ^ 0xE35E156A2314DCDAL);
-		a = ((a << 3 | a >>> 61) ^ b);
-		return ((a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ 0xD1B54A32D192ED03L));
+		long b = (stateB += Long.numberOfLeadingZeros(a)) * 0xD1B54A32D192ED03L;
+		b = ((b << 56 | b >>> 8) + a ^ 0xA62B82F58DB8A985L); a = ((a << 3 | a >>> 61) ^ b);
+		for (int i = 0; i < keys.length; i++) {
+			b = ((b << 56 | b >>> 8) + a ^ keys[i]);
+			a = ((a << 3 | a >>> 61) ^ b);
+		}
+		b = ((b << 56 | b >>> 8) + a ^ 0xE35E156A2314DCDAL); a = ((a << 3 | a >>> 61) ^ b);
+		return ((a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ 0xBEA225F9EB34556DL));
+//		b = ((b << 56 | b >>> 8) + a ^ 0xA62B82F58DB8A985L);
+//		a = ((a << 3 | a >>> 61) ^ b);
+//		b = ((b << 56 | b >>> 8) + a ^ 0xE35E156A2314DCDAL);
+//		a = ((a << 3 | a >>> 61) ^ b);
+//		return ((a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ 0xBEA225F9EB34556DL));
 	}
+//		long b = (stateB += (a | 0x57930711F71F5806L - a) >> 63 ^ 0xBEA225F9EB34556DL);
 
 	@Override
 	public long previousLong () {
 		long a = stateA;
-		long b = stateB * 0xBEA225F9EB34556DL;
+		long b = stateB * 0xD1B54A32D192ED03L;
 		stateA -= 0x9E3779B97F4A7C15L;
+//		stateB -= (a | 0x57930711F71F5806L - a) >> 63 ^ 0xBEA225F9EB34556DL;
 		stateB -= Long.numberOfLeadingZeros(a);
-		b = ((b << 56 | b >>> 8) + a ^ 0xA62B82F58DB8A985L);
-		a = ((a << 3 | a >>> 61) ^ b);
-		b = ((b << 56 | b >>> 8) + a ^ 0xE35E156A2314DCDAL);
-		a = ((a << 3 | a >>> 61) ^ b);
-		return ((a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ 0xD1B54A32D192ED03L));
+		b = ((b << 56 | b >>> 8) + a ^ 0xA62B82F58DB8A985L); a = ((a << 3 | a >>> 61) ^ b);
+		for (int i = 0; i < keys.length; i++) {
+			b = ((b << 56 | b >>> 8) + a ^ keys[i]);
+			a = ((a << 3 | a >>> 61) ^ b);
+		}
+		b = ((b << 56 | b >>> 8) + a ^ 0xE35E156A2314DCDAL); a = ((a << 3 | a >>> 61) ^ b);
+		return ((a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ 0xBEA225F9EB34556DL));
 	}
 
 	@Override
 	public int next (int bits) {
 		long a = (stateA += 0x9E3779B97F4A7C15L);
-		long b = (stateB += Long.numberOfLeadingZeros(a)) * 0xBEA225F9EB34556DL;
-		b = ((b << 56 | b >>> 8) + a ^ 0xA62B82F58DB8A985L);
-		a = ((a << 3 | a >>> 61) ^ b);
-		b = ((b << 56 | b >>> 8) + a ^ 0xE35E156A2314DCDAL);
-		a = ((a << 3 | a >>> 61) ^ b);
-		return (int) ((a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ 0xD1B54A32D192ED03L)) >>> (32 - bits);
+//		long b = (stateB += (a | 0x57930711F71F5806L - a) >> 63 ^ 0xBEA225F9EB34556DL);
+		long b = (stateB += Long.numberOfLeadingZeros(a)) * 0xD1B54A32D192ED03L;
+		b = ((b << 56 | b >>> 8) + a ^ 0xA62B82F58DB8A985L); a = ((a << 3 | a >>> 61) ^ b);
+		for (int i = 0; i < keys.length; i++) {
+			b = ((b << 56 | b >>> 8) + a ^ keys[i]);
+			a = ((a << 3 | a >>> 61) ^ b);
+		}
+		b = ((b << 56 | b >>> 8) + a ^ 0xE35E156A2314DCDAL); a = ((a << 3 | a >>> 61) ^ b);
+		return (int) ((a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ 0xBEA225F9EB34556DL)) >>> (32 - bits);
 	}
 
 	@Override
 	public SpangledRandom copy () {
-		return new SpangledRandom(stateA, stateB);
+		return new SpangledRandom(stateA, stateB, keys);
 	}
 
 	@Override
