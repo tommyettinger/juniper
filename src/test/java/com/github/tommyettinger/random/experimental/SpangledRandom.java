@@ -265,7 +265,8 @@ public class SpangledRandom extends EnhancedRandom {
 	@Override
 	public long nextLong () {
 		long a = (stateA += 0x9E3779B97F4A7C15L);
-		long b = (stateB += Long.numberOfLeadingZeros(a)) * 0xD1B54A32D192ED03L;
+		long b = (stateB += 0xD1B54A32D192ED03L); // don't use this unless the output function is much stronger.
+//		long b = (stateB += Long.numberOfLeadingZeros(a)) * 0xD1B54A32D192ED03L;
 		b = ((b << 56 | b >>> 8) + a ^ 0xA62B82F58DB8A985L); a = ((a << 3 | a >>> 61) ^ b);
 		for (int i = 0; i < keys.length; i++) {
 			b = ((b << 56 | b >>> 8) + a ^ keys[i]);
@@ -280,9 +281,11 @@ public class SpangledRandom extends EnhancedRandom {
 	@Override
 	public long previousLong () {
 		long a = stateA;
-		long b = stateB * 0xD1B54A32D192ED03L;
 		stateA -= 0x9E3779B97F4A7C15L;
-		stateB -= Long.numberOfLeadingZeros(a);
+		long b = stateB;
+		stateB -= 0xD1B54A32D192ED03L;
+//		long b = stateB * 0xD1B54A32D192ED03L;
+//		stateB -= Long.numberOfLeadingZeros(a);
 		b = ((b << 56 | b >>> 8) + a ^ 0xA62B82F58DB8A985L); a = ((a << 3 | a >>> 61) ^ b);
 		for (int i = 0; i < keys.length; i++) {
 			b = ((b << 56 | b >>> 8) + a ^ keys[i]);
@@ -295,7 +298,8 @@ public class SpangledRandom extends EnhancedRandom {
 	@Override
 	public int next (int bits) {
 		long a = (stateA += 0x9E3779B97F4A7C15L);
-		long b = (stateB += Long.numberOfLeadingZeros(a)) * 0xD1B54A32D192ED03L;
+		long b = (stateB += 0xD1B54A32D192ED03L);
+//		long b = (stateB += Long.numberOfLeadingZeros(a)) * 0xD1B54A32D192ED03L;
 		b = ((b << 56 | b >>> 8) + a ^ 0xA62B82F58DB8A985L); a = ((a << 3 | a >>> 61) ^ b);
 		for (int i = 0; i < keys.length; i++) {
 			b = ((b << 56 | b >>> 8) + a ^ keys[i]);
@@ -327,7 +331,7 @@ public class SpangledRandom extends EnhancedRandom {
 	}
 
 	public static void main(String[] args) {
-		SpangledRandom random = new SpangledRandom(1L);
+		SpangledRandom random = new SpangledRandom(-1L);
 		long n0 = random.nextLong();
 		long n1 = random.nextLong();
 		long n2 = random.nextLong();
