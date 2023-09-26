@@ -25,14 +25,14 @@ import java.util.Arrays;
 /**
  * A hash-on-counters type of RNG with two 64-bit states and a variable size key array to provide additional strength.
  * Uses {@link Long#numberOfLeadingZeros(long)} as part of what ensures its long period. Has an exact period of 2 to the
- * 128. Uses the round function from {@link com.github.tommyettinger.random.cipher.SpeckCipher} to mix its two states;
- * this calls the round function at least 3 times, plus once per {@code long} in the keys. The more keys this has in it,
- * the more rounds it requires for each random number it generates, which will slow it down a bit with large key arrays.
- * Having a different key array might be sufficient to consider a generator as on a different stream; determining if two
- * streams are correlated is hard, and this might be correlated for smaller key arrays, but not ones as large as Speck
- * typically uses (which would be a key array of length 33 for speck, or maybe 30 here). The recommended key array
- * length here is 4 or greater; a 1024-bit key array (a {@code long[16]}) is actually pretty reasonable, if you have
- * that many keys.
+ * 64 and 64 distinct streams (before considering the key array). Uses the round function from
+ * {@link com.github.tommyettinger.random.cipher.SpeckCipher} to mix its two states; this calls the round function at
+ * least 3 times, plus once per {@code long} in the keys. The more keys this has in it, the more rounds it requires for
+ * each random number it generates, which will slow it down a bit with large key arrays. Having a different key array
+ * might be sufficient to consider a generator as on a different stream; determining if two streams are correlated is
+ * hard, and this might be correlated for smaller key arrays, but not ones as large as Speck typically uses (which would
+ * be a key array of length 33 for speck, or maybe 30 here). The recommended key array length here is 4 or greater; a
+ * 1024-bit key array (a {@code long[16]}) is actually pretty reasonable, if you have that many keys.
  */
 public class SpangledRandom extends EnhancedRandom {
 	@Override
@@ -286,9 +286,7 @@ public class SpangledRandom extends EnhancedRandom {
 	@Override
 	public long nextLong () {
 		long a = (stateA += 0x9E3779B97F4A7C15L);
-//		long b = (stateB += (a | 0x57930711F71F5806L - a) >> 63 ^ 0xD1B54A32D192ED03L);
 		long b = (stateB += 0xD1B54A32D192ED03L);
-//		long b = (stateB += Long.numberOfLeadingZeros(a)) * 0xD1B54A32D192ED03L;
 		b = ((b << 56 | b >>> 8) + a ^ 0xA62B82F58DB8A985L); a = ((a << 3 | a >>> 61) ^ b);
 		for (int i = 0; i < keys.length; i++) {
 			b = ((b << 56 | b >>> 8) + a ^ keys[i]);
@@ -336,6 +334,17 @@ public class SpangledRandom extends EnhancedRandom {
 		return new SpangledRandom(stateA, stateB, keys);
 	}
 
+	/**
+	 * Gets a long that identifies which of the 2 to the 64 possible streams this is on, before considering the keys.
+	 * If the streams are different for two generators, their output (after enough keys have been incorporated) should
+	 * be very different. With 3 or fewer keys, two different streams that have numerically similar states (like 0,1 and
+	 * 0,2) are likely to be correlated.
+	 * @return a long that identifies which stream the main state of the generator is on (not considering keys)
+	 */
+	public long getStream() {
+		return stateB * 0x06106CCFA448E5ABL - stateA * 0xF1DE83E19937733DL;
+	}
+
 	@Override
 	public boolean equals (Object o) {
 		if (this == o)
@@ -352,31 +361,31 @@ public class SpangledRandom extends EnhancedRandom {
 		return "SpangledRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L}";
 	}
 
-	public static void main(String[] args) {
-		SpangledRandom random = new SpangledRandom(-1L);
-		long n0 = random.nextLong();
-		long n1 = random.nextLong();
-		long n2 = random.nextLong();
-		long n3 = random.nextLong();
-		long n4 = random.nextLong();
-		long n5 = random.nextLong();
-		long p5 = random.previousLong();
-		long p4 = random.previousLong();
-		long p3 = random.previousLong();
-		long p2 = random.previousLong();
-		long p1 = random.previousLong();
-		long p0 = random.previousLong();
-		System.out.println(n0 == p0);
-		System.out.println(n1 == p1);
-		System.out.println(n2 == p2);
-		System.out.println(n3 == p3);
-		System.out.println(n4 == p4);
-		System.out.println(n5 == p5);
-		System.out.println(n0 + " vs. " + p0);
-		System.out.println(n1 + " vs. " + p1);
-		System.out.println(n2 + " vs. " + p2);
-		System.out.println(n3 + " vs. " + p3);
-		System.out.println(n4 + " vs. " + p4);
-		System.out.println(n5 + " vs. " + p5);
-	}
+//	public static void main(String[] args) {
+//		SpangledRandom random = new SpangledRandom(-1L);
+//		long n0 = random.nextLong();
+//		long n1 = random.nextLong();
+//		long n2 = random.nextLong();
+//		long n3 = random.nextLong();
+//		long n4 = random.nextLong();
+//		long n5 = random.nextLong();
+//		long p5 = random.previousLong();
+//		long p4 = random.previousLong();
+//		long p3 = random.previousLong();
+//		long p2 = random.previousLong();
+//		long p1 = random.previousLong();
+//		long p0 = random.previousLong();
+//		System.out.println(n0 == p0);
+//		System.out.println(n1 == p1);
+//		System.out.println(n2 == p2);
+//		System.out.println(n3 == p3);
+//		System.out.println(n4 == p4);
+//		System.out.println(n5 == p5);
+//		System.out.println(n0 + " vs. " + p0);
+//		System.out.println(n1 + " vs. " + p1);
+//		System.out.println(n2 + " vs. " + p2);
+//		System.out.println(n3 + " vs. " + p3);
+//		System.out.println(n4 + " vs. " + p4);
+//		System.out.println(n5 + " vs. " + p5);
+//	}
 }
