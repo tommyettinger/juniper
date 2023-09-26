@@ -296,7 +296,9 @@ public class SpangledRandom extends EnhancedRandom {
 		return ((a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ 0xBEA225F9EB34556DL));
 	}
 
+	// Alternate ways of updating stateB with a longer period, but no skip():
 //		long b = (stateB += (a | 0x57930711F71F5806L - a) >> 63 ^ 0xD1B54A32D192ED03L);
+//		long b = (stateB += Long.numberOfLeadingZeros(a)) * 0xD1B54A32D192ED03L;
 
 	@Override
 	public long previousLong () {
@@ -304,8 +306,6 @@ public class SpangledRandom extends EnhancedRandom {
 		stateA -= 0x9E3779B97F4A7C15L;
 		long b = stateB;
 		stateB -= 0xD1B54A32D192ED03L;
-//		long b = stateB * 0xD1B54A32D192ED03L;
-//		stateB -= Long.numberOfLeadingZeros(a);
 		b = ((b << 56 | b >>> 8) + a ^ 0xA62B82F58DB8A985L); a = ((a << 3 | a >>> 61) ^ b);
 		for (int i = 0; i < keys.length; i++) {
 			b = ((b << 56 | b >>> 8) + a ^ keys[i]);
@@ -319,7 +319,6 @@ public class SpangledRandom extends EnhancedRandom {
 	public int next (int bits) {
 		long a = (stateA += 0x9E3779B97F4A7C15L);
 		long b = (stateB += 0xD1B54A32D192ED03L);
-//		long b = (stateB += Long.numberOfLeadingZeros(a)) * 0xD1B54A32D192ED03L;
 		b = ((b << 56 | b >>> 8) + a ^ 0xA62B82F58DB8A985L); a = ((a << 3 | a >>> 61) ^ b);
 		for (int i = 0; i < keys.length; i++) {
 			b = ((b << 56 | b >>> 8) + a ^ keys[i]);
@@ -327,6 +326,19 @@ public class SpangledRandom extends EnhancedRandom {
 		}
 		b = ((b << 56 | b >>> 8) + a ^ 0xE35E156A2314DCDAL); a = ((a << 3 | a >>> 61) ^ b);
 		return (int) ((a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ 0xBEA225F9EB34556DL)) >>> (32 - bits);
+	}
+
+	@Override
+	public long skip (final long advance) {
+		long a = (stateA += 0x9E3779B97F4A7C15L * advance);
+		long b = (stateB += 0xD1B54A32D192ED03L * advance);
+		b = ((b << 56 | b >>> 8) + a ^ 0xA62B82F58DB8A985L); a = ((a << 3 | a >>> 61) ^ b);
+		for (int i = 0; i < keys.length; i++) {
+			b = ((b << 56 | b >>> 8) + a ^ keys[i]);
+			a = ((a << 3 | a >>> 61) ^ b);
+		}
+		b = ((b << 56 | b >>> 8) + a ^ 0xE35E156A2314DCDAL); a = ((a << 3 | a >>> 61) ^ b);
+		return ((a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ 0xBEA225F9EB34556DL));
 	}
 
 	@Override
