@@ -28,6 +28,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.github.tommyettinger.digital.BitConversion;
+import com.github.tommyettinger.digital.MathTools;
 import com.github.tommyettinger.random.experimental.*;
 
 import java.util.ArrayList;
@@ -64,7 +65,7 @@ public class CorrelationVisualizer extends ApplicationAdapter {
         rl.add(new CobraRandom(1, 1));
         rl.add(new FleetRandom(1, 1));
         rl.add(new BarleyRandom(1, 1));
-        rl.add(new SpangledRandom(1, 1));
+        rl.add(new SpangledRandom(1, 1, MathTools.GOLDEN_LONGS, 0, 5));
         rl.add(new PouchRandom(1, 1, 1, 1));
         randoms = new EnhancedRandom[rl.size()][][];
         for (int i = 0; i < randoms.length; i++) {
