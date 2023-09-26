@@ -17,6 +17,7 @@
 
 package com.github.tommyettinger.random.experimental;
 
+import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.digital.MathTools;
 import com.github.tommyettinger.random.EnhancedRandom;
 
@@ -344,6 +345,30 @@ public class SpangledRandom extends EnhancedRandom {
 	@Override
 	public SpangledRandom copy () {
 		return new SpangledRandom(stateA, stateB, keys);
+	}
+
+	@Override
+	public String stringSerialize(Base base) {
+		StringBuilder ser = new StringBuilder(getTag());
+
+		ser.append('`');
+		base.appendSigned(ser, stateA).append('~');
+		base.appendSigned(ser, stateB).append('~');
+		base.appendJoined(ser, "~", keys);
+		ser.append('`');
+
+		return ser.toString();
+	}
+
+	@Override
+	public SpangledRandom stringDeserialize(String data, Base base) {
+		int idx = data.indexOf('`');
+
+		stateA = base.readLong(data, idx + 1, (idx = data.indexOf('~', idx + 1)));
+		stateB = base.readLong(data, idx + 1, (idx = data.indexOf('~', idx + 1)));
+		keys = base.longSplit(data, "~", idx + 1, data.indexOf('`', idx + 1));
+
+		return this;
 	}
 
 	/**
