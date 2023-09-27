@@ -376,10 +376,40 @@ public class SpangledRandom extends EnhancedRandom {
 	 * If the streams are different for two generators, their output (after enough keys have been incorporated) should
 	 * be very different. With 3 or fewer keys, two different streams that have numerically similar states (like 0,1 and
 	 * 0,2) are likely to be correlated.
+	 * <br>
+	 * This takes constant time.
+	 *
 	 * @return a long that identifies which stream the main state of the generator is on (not considering keys)
 	 */
 	public long getStream() {
 		return stateB * 0x06106CCFA448E5ABL - stateA * 0xF1DE83E19937733DL;
+	}
+
+	/**
+	 * Changes the generator's stream to any of the 2 to the 64 possible streams this can be on, before considering the
+	 * keys. The {@code stream} this takes uses the same numbering convention used by {@link #getStream()} and
+	 * {@link #shiftStream(long)}. This makes an absolute change to the stream, while shiftStream() is relative.
+	 * <br>
+	 * This takes constant time.
+	 *
+	 * @param stream the number of the stream to change to; may be any long
+	 */
+	public void setStream(long stream) {
+		stateB += 0xD1B54A32D192ED03L * (stream - (stateB * 0x06106CCFA448E5ABL - stateA * 0xF1DE83E19937733DL));
+	}
+
+	/**
+	 * Adjusts the generator's stream "up" or "down" to any of the 2 to the 64 possible streams this can be on, before
+	 * considering the keys. The {@code difference} this takes will be the difference between the result of
+	 * {@link #getStream()} before the shift, and after the shift. This makes a relative change to the stream, while
+	 * setStream() is absolute.
+	 * <br>
+	 * This takes constant time.
+	 *
+	 * @param difference how much to change the stream by; may be any long
+	 */
+	public void shiftStream(long difference) {
+		stateB += 0xD1B54A32D192ED03L * difference;
 	}
 
 	@Override
