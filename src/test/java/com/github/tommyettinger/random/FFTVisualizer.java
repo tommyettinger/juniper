@@ -89,6 +89,9 @@ public class FFTVisualizer extends ApplicationAdapter {
                         System.out.println("On step " + steps);
                         putMap();
                         break;
+                    case V: // view
+                        System.out.println(randoms[currentRandom][0][0]);
+                        break;
                     case NUM_1:
                     case NUMPAD_1:
                         seedGrid();
