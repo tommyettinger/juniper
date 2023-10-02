@@ -34,6 +34,11 @@ import java.util.Arrays;
  * hard, and this might be correlated for smaller key arrays, but not ones as large as Speck typically uses (which would
  * be a key array of length 33 for speck, or maybe 30 here). The recommended key array length here is 4 or greater; a
  * 1024-bit key array (a {@code long[16]}) is actually pretty reasonable, if you have that many keys.
+ * <br>
+ * This passes 64TB of PractRand testing in a simpler variant, using what here would be the keys {@code 1, 2, 3, 4}.
+ * The variant that passed is simpler because it just returns {@code a} at the end of {@link #nextLong()}, while this
+ * currently returns {@code a ^ (a << 25 | a >>> 39) ^ (a << 50 | a >>> 14)} (or {@code a} XORed with two different
+ * rotations of {@code a}).
  */
 public class SpangledRandom extends EnhancedRandom {
 	@Override
@@ -98,15 +103,14 @@ public class SpangledRandom extends EnhancedRandom {
 	 * Creates a new SpangledRandom with the given two states and the given (non-null) key array; all {@code long}
 	 * values are permitted for states and for keys. These states will be used verbatim. The keys will be used verbatim
 	 * unless the array is null, in which case this will treat it as {@link MathTools#GOLDEN_LONGS}. All items in
-	 * {@code keys} will be used; keys with a value of 0 may be added to ensure the array this uses has at least 4
-	 * items. This copies {@code keys} into a new long array.
+	 * {@code keys} will be used. This copies {@code keys} into a new long array.
 	 *
 	 * @param stateA any {@code long} value
 	 * @param stateB any {@code long} value
 	 * @param keys a long array of any length that will be used in full; if null it will be treated as empty
 	 */
 	public SpangledRandom(long stateA, long stateB, long[] keys) {
-		this(stateA, stateB, keys, 0, keys == null ? 4 : Math.max(4, keys.length));
+		this(stateA, stateB, keys, 0, keys == null ? 4 : keys.length);
 	}
 
 	/**
@@ -294,7 +298,8 @@ public class SpangledRandom extends EnhancedRandom {
 			a = ((a << 3 | a >>> 61) ^ b);
 		}
 		b = ((b << 56 | b >>> 8) + a ^ 0xE35E156A2314DCDAL); a = ((a << 3 | a >>> 61) ^ b);
-		return ((a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ 0xBEA225F9EB34556DL));
+		a = ((a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ 0xBEA225F9EB34556DL));
+		return a ^ (a << 25 | a >>> 39) ^ (a << 50 | a >>> 14);
 	}
 
 	// Alternate ways of updating stateB with a longer period, but no skip():
@@ -313,7 +318,8 @@ public class SpangledRandom extends EnhancedRandom {
 			a = ((a << 3 | a >>> 61) ^ b);
 		}
 		b = ((b << 56 | b >>> 8) + a ^ 0xE35E156A2314DCDAL); a = ((a << 3 | a >>> 61) ^ b);
-		return ((a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ 0xBEA225F9EB34556DL));
+		a = ((a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ 0xBEA225F9EB34556DL));
+		return a ^ (a << 25 | a >>> 39) ^ (a << 50 | a >>> 14);
 	}
 
 	@Override
@@ -326,7 +332,8 @@ public class SpangledRandom extends EnhancedRandom {
 			a = ((a << 3 | a >>> 61) ^ b);
 		}
 		b = ((b << 56 | b >>> 8) + a ^ 0xE35E156A2314DCDAL); a = ((a << 3 | a >>> 61) ^ b);
-		return (int) ((a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ 0xBEA225F9EB34556DL)) >>> (32 - bits);
+		a = ((a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ 0xBEA225F9EB34556DL));
+		return (int) (a ^ (a << 25 | a >>> 39) ^ (a << 50 | a >>> 14)) >>> (32 - bits);
 	}
 
 	@Override
@@ -339,7 +346,8 @@ public class SpangledRandom extends EnhancedRandom {
 			a = ((a << 3 | a >>> 61) ^ b);
 		}
 		b = ((b << 56 | b >>> 8) + a ^ 0xE35E156A2314DCDAL); a = ((a << 3 | a >>> 61) ^ b);
-		return ((a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ 0xBEA225F9EB34556DL));
+		a = ((a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ 0xBEA225F9EB34556DL));
+		return a ^ (a << 25 | a >>> 39) ^ (a << 50 | a >>> 14);
 	}
 
 	@Override

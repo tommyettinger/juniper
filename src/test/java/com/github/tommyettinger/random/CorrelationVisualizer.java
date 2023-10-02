@@ -65,7 +65,14 @@ public class CorrelationVisualizer extends ApplicationAdapter {
         rl.add(new CobraRandom(1, 1));
         rl.add(new FleetRandom(1, 1));
         rl.add(new BarleyRandom(1, 1));
+        rl.add(new SpangledRandom(1, 1, MathTools.GOLDEN_LONGS, 0, 2));
+        rl.add(new SpangledRandom(1, 1, MathTools.GOLDEN_LONGS, 0, 3));
+        rl.add(new SpangledRandom(1, 1, MathTools.GOLDEN_LONGS, 0, 4));
         rl.add(new SpangledRandom(1, 1, MathTools.GOLDEN_LONGS, 0, 5));
+        rl.add(new SpangledRandom(1, 1, new long[2]));
+        rl.add(new SpangledRandom(1, 1, new long[3]));
+        rl.add(new SpangledRandom(1, 1, new long[4]));
+        rl.add(new SpangledRandom(1, 1, new long[5]));
         rl.add(new PouchRandom(1, 1, 1, 1));
         randoms = new EnhancedRandom[rl.size()][][];
         for (int i = 0; i < randoms.length; i++) {
