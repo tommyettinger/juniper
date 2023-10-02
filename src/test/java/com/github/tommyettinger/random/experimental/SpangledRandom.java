@@ -32,13 +32,15 @@ import java.util.Arrays;
  * each random number it generates, which will slow it down a bit with large key arrays. Having a different key array
  * might be sufficient to consider a generator as on a different stream; determining if two streams are correlated is
  * hard, and this might be correlated for smaller key arrays, but not ones as large as Speck typically uses (which would
- * be a key array of length 33 for speck, or maybe 30 here). The recommended key array length here is 4 or greater; a
+ * be a key array of length 33 for speck, or maybe 30 here). The recommended key array length here is 2 or greater; a
  * 1024-bit key array (a {@code long[16]}) is actually pretty reasonable, if you have that many keys.
  * <br>
  * This passes 64TB of PractRand testing in a simpler variant, using what here would be the keys {@code 1, 2, 3, 4}.
- * The variant that passed is simpler because it just returns {@code a} at the end of {@link #nextLong()}, while this
- * currently returns {@code a ^ (a << 25 | a >>> 39) ^ (a << 50 | a >>> 14)} (or {@code a} XORed with two different
- * rotations of {@code a}).
+ * Even though it passed PractRand without any anomalies, PractRand doesn't check for correlation between streams. With
+ * 4 or even 5 keys, the PractRand-tested version had correlation between numerically similar A and B state pairs,
+ * mainly on bits 13-28 (depending on how many rounds were run, largely). This has been strengthened since then, and
+ * runs a small additional step between each pair of rounds ({@code a += (b << 41 | b >>> 23);}). This lets it work well
+ * with as few as two keys, for five rounds total, and still performs a bit less calculation to do so.
  */
 public class SpangledRandom extends EnhancedRandom {
 	@Override
@@ -58,45 +60,46 @@ public class SpangledRandom extends EnhancedRandom {
 
 	/**
 	 * Zero or more long keys in an array; every key will be used in its own round on each call of a random generation
-	 * function such as {@link #nextLong()}. Must be non-null, and should have at least 4 elements. Having more keys
-	 * doesn't increase security in any way, but having less than 4 keys results in sometimes-noticeable artifacts.
+	 * function such as {@link #nextLong()}. Must be non-null, and should have at least 2 elements. Having more keys
+	 * doesn't increase security in any way, but having less than 2 keys results in sometimes-noticeable artifacts.
 	 * This doesn't seem to slow down especially badly from having even 100 keys; though I am sure it isn't as fast as
-	 * with 4 keys when run like that, other factors are so much more of a bottleneck that a quarter-million nextLong()
+	 * with 2 keys when run like that, other factors are so much more of a bottleneck that a quarter-million nextLong()
 	 * calls per second don't have a difference in frames per second compared to the current fastest generator here,
 	 * PouchRandom.
 	 */
 	protected long[] keys;
 
 	/**
-	 * Creates a new SpangledRandom with a random state and a random 4-item keys array.
+	 * Creates a new SpangledRandom with a random state and a random 2-item keys array.
 	 */
 	public SpangledRandom() {
 		stateA = EnhancedRandom.seedFromMath();
 		stateB = EnhancedRandom.seedFromMath();
-		keys = new long[]{EnhancedRandom.seedFromMath(), EnhancedRandom.seedFromMath(),
-				EnhancedRandom.seedFromMath(), EnhancedRandom.seedFromMath()};
+		keys = new long[]{EnhancedRandom.seedFromMath(), EnhancedRandom.seedFromMath()};
 	}
 
 	/**
 	 * Creates a new SpangledRandom with the given seed; all {@code long} values are permitted.
 	 * The seed will be passed to {@link #setSeed(long)} to attempt to adequately distribute the seed randomly.
+	 * This will use an array with 2 items from {@link MathTools#GOLDEN_LONGS} as its {@code keys}.
 	 *
 	 * @param seed any {@code long} value
 	 */
 	public SpangledRandom(long seed) {
 		setSeed(seed);
-		this.keys = Arrays.copyOfRange(MathTools.GOLDEN_LONGS, 0, 4);
+		this.keys = Arrays.copyOfRange(MathTools.GOLDEN_LONGS, 0, 2);
 	}
 
 	/**
 	 * Creates a new SpangledRandom with the given two states; all {@code long} values are permitted.
 	 * These states will be used verbatim.
+	 * This will use an array with 2 items from {@link MathTools#GOLDEN_LONGS} as its {@code keys}.
 	 *
 	 * @param stateA any {@code long} value
 	 * @param stateB any {@code long} value
 	 */
 	public SpangledRandom(long stateA, long stateB) {
-		this(stateA, stateB, null, 0, 4);
+		this(stateA, stateB, null, 0, 2);
 	}
 
 	/**
@@ -110,21 +113,21 @@ public class SpangledRandom extends EnhancedRandom {
 	 * @param keys a long array of any length that will be used in full; if null it will be treated as empty
 	 */
 	public SpangledRandom(long stateA, long stateB, long[] keys) {
-		this(stateA, stateB, keys, 0, keys == null ? 4 : keys.length);
+		this(stateA, stateB, keys, 0, keys == null ? 2 : keys.length);
 	}
 
 	/**
 	 * Creates a new SpangledRandom with the given two states and the given (non-null) key array; all {@code long}
 	 * values are permitted for states and for keys. These states will be used verbatim. The keys will be used verbatim
 	 * unless the array is null, in which case this will treat it as if {@link MathTools#GOLDEN_LONGS} had been given as
-	 * keys, and the indices were 0 and 4. Only the items in {@code keys} between the indices {@code fromIndex}
+	 * keys, and the indices were 0 and 2. Only the items in {@code keys} between the indices {@code fromIndex}
 	 * (inclusive) and {@code toIndex} (exclusive) will be used. This copies {@code keys} to a new long array. If
 	 * {@code toIndex} is greater than {@code keys.length}, then this will zero-pad the long array it uses until toIndex
 	 * would otherwise be reached. The {@code fromIndex} must be at least 0, and no greater than {@code keys.length}.
 	 * The {@code toIndex} must be at least equal to {@code fromIndex}. The exact rules followed for the array copying
 	 * are those of {@link Arrays#copyOfRange(long[], int, int)}.
 	 * <br>
-	 * It is highly recommended that you use at least 4 keys, even if this means using a larger toIndex than the length
+	 * It is highly recommended that you use at least 2 keys, even if this means using a larger toIndex than the length
 	 * of the keys array (which just fills later keys with 0).
 	 *
 	 * @param stateA any {@code long} value
@@ -252,14 +255,14 @@ public class SpangledRandom extends EnhancedRandom {
 
 	/**
 	 * Sets the key array this uses to a copy of the given (non-null) key array; all {@code long} values are permitted
-	 * for keys. The keys will be used verbatim unless the array is null, in which case this will use the first 4 items
+	 * for keys. The keys will be used verbatim unless the array is null, in which case this will use the first 2 items
 	 * from {@link MathTools#GOLDEN_LONGS}.
 	 *
 	 * @param keys a long array of any length to copy and use as the keys here; if null, will be treated as empty
 	 */
 	public void setKeys(long[] keys) {
 		if(keys == null)
-			this.keys = Arrays.copyOfRange(MathTools.GOLDEN_LONGS, 0, 4);
+			this.keys = Arrays.copyOfRange(MathTools.GOLDEN_LONGS, 0, 2);
 		else
 			this.keys = Arrays.copyOf(keys, keys.length);
 	}
@@ -267,14 +270,14 @@ public class SpangledRandom extends EnhancedRandom {
 	/**
 	 * Sets the key array this uses to a copy of the given (non-null) key array; all {@code long} values are permitted
 	 * for keys. The keys will be used verbatim unless the array is null, in which case this will treat it as if
-	 * {@link MathTools#GOLDEN_LONGS} had been given as keys, and the indices were 0 and 4. Only the items in
+	 * {@link MathTools#GOLDEN_LONGS} had been given as keys. Only the items in
 	 * {@code keys} between the indices {@code fromIndex} (inclusive) and {@code toIndex} (exclusive) will be used. This
 	 * copies {@code keys} to a new long array. If {@code toIndex} is greater than {@code keys.length}, then this will
 	 * zero-pad the long array it uses until toIndex would otherwise be reached. The {@code fromIndex} must be at least
 	 * 0, and no greater than {@code keys.length}. The {@code toIndex} must be at least equal to {@code fromIndex}. The
 	 * exact rules followed for the array copying are those of {@link Arrays#copyOfRange(long[], int, int)}.
 	 * <br>
-	 * It is highly recommended that you use at least 4 keys, even if this means using a larger toIndex than the length
+	 * It is highly recommended that you use at least 2 keys, even if this means using a larger toIndex than the length
 	 * of the keys array (which just fills later keys with 0).
 	 *
 	 * @param keys a long array of any length to copy and use as the keys here; if null, will be treated as {@link MathTools#GOLDEN_LONGS}
@@ -292,7 +295,6 @@ public class SpangledRandom extends EnhancedRandom {
 	public long nextLong () {
 		long a = (stateA += 0x9E3779B97F4A7C15L);
 		long b = (stateB += 0xD1B54A32D192ED03L);
-		a += (b << 41 | b >>> 23);
 		b = ((b << 56 | b >>> 8) + a ^ 0xA62B82F58DB8A985L); a = ((a << 3 | a >>> 61) ^ b);
 		for (int i = 0; i < keys.length; i++) {
 			a += (b << 41 | b >>> 23);
@@ -302,8 +304,7 @@ public class SpangledRandom extends EnhancedRandom {
 		a += (b << 41 | b >>> 23);
 		b = ((b << 56 | b >>> 8) + a ^ 0xE35E156A2314DCDAL); a = ((a << 3 | a >>> 61) ^ b);
 		a += (b << 41 | b >>> 23);
-		a = ((a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ 0xBEA225F9EB34556DL));
-		return a;
+		return ((a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ 0xBEA225F9EB34556DL));
 	}
 
 	// Alternate ways of updating stateB with a longer period, but no skip():
@@ -318,12 +319,14 @@ public class SpangledRandom extends EnhancedRandom {
 		stateB -= 0xD1B54A32D192ED03L;
 		b = ((b << 56 | b >>> 8) + a ^ 0xA62B82F58DB8A985L); a = ((a << 3 | a >>> 61) ^ b);
 		for (int i = 0; i < keys.length; i++) {
+			a += (b << 41 | b >>> 23);
 			b = ((b << 56 | b >>> 8) + a ^ keys[i]);
 			a = ((a << 3 | a >>> 61) ^ b);
 		}
+		a += (b << 41 | b >>> 23);
 		b = ((b << 56 | b >>> 8) + a ^ 0xE35E156A2314DCDAL); a = ((a << 3 | a >>> 61) ^ b);
-		a = ((a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ 0xBEA225F9EB34556DL));
-		return a ^ (a << 25 | a >>> 39) ^ (a << 50 | a >>> 14);
+		a += (b << 41 | b >>> 23);
+		return ((a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ 0xBEA225F9EB34556DL));
 	}
 
 	@Override
@@ -332,12 +335,14 @@ public class SpangledRandom extends EnhancedRandom {
 		long b = (stateB += 0xD1B54A32D192ED03L);
 		b = ((b << 56 | b >>> 8) + a ^ 0xA62B82F58DB8A985L); a = ((a << 3 | a >>> 61) ^ b);
 		for (int i = 0; i < keys.length; i++) {
+			a += (b << 41 | b >>> 23);
 			b = ((b << 56 | b >>> 8) + a ^ keys[i]);
 			a = ((a << 3 | a >>> 61) ^ b);
 		}
+		a += (b << 41 | b >>> 23);
 		b = ((b << 56 | b >>> 8) + a ^ 0xE35E156A2314DCDAL); a = ((a << 3 | a >>> 61) ^ b);
-		a = ((a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ 0xBEA225F9EB34556DL));
-		return (int) (a ^ (a << 25 | a >>> 39) ^ (a << 50 | a >>> 14)) >>> (32 - bits);
+		a += (b << 41 | b >>> 23);
+		return (int) (((a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ 0xBEA225F9EB34556DL))) >>> (32 - bits);
 	}
 
 	@Override
@@ -346,12 +351,14 @@ public class SpangledRandom extends EnhancedRandom {
 		long b = (stateB += 0xD1B54A32D192ED03L * advance);
 		b = ((b << 56 | b >>> 8) + a ^ 0xA62B82F58DB8A985L); a = ((a << 3 | a >>> 61) ^ b);
 		for (int i = 0; i < keys.length; i++) {
+			a += (b << 41 | b >>> 23);
 			b = ((b << 56 | b >>> 8) + a ^ keys[i]);
 			a = ((a << 3 | a >>> 61) ^ b);
 		}
+		a += (b << 41 | b >>> 23);
 		b = ((b << 56 | b >>> 8) + a ^ 0xE35E156A2314DCDAL); a = ((a << 3 | a >>> 61) ^ b);
-		a = ((a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ 0xBEA225F9EB34556DL));
-		return a ^ (a << 25 | a >>> 39) ^ (a << 50 | a >>> 14);
+		a += (b << 41 | b >>> 23);
+		return ((a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ 0xBEA225F9EB34556DL));
 	}
 
 	@Override
@@ -386,7 +393,7 @@ public class SpangledRandom extends EnhancedRandom {
 	/**
 	 * Gets a long that identifies which of the 2 to the 64 possible streams this is on, before considering the keys.
 	 * If the streams are different for two generators, their output (after enough keys have been incorporated) should
-	 * be very different. With 3 or fewer keys, two different streams that have numerically similar states (like 0,1 and
+	 * be very different. With 1 or 0 keys, two different streams that have numerically similar states (like 0,1 and
 	 * 0,2) are likely to be correlated.
 	 * <br>
 	 * This takes constant time.
@@ -433,7 +440,7 @@ public class SpangledRandom extends EnhancedRandom {
 
 		SpangledRandom that = (SpangledRandom)o;
 
-		return stateA == that.stateA && stateB == that.stateB;
+		return stateA == that.stateA && stateB == that.stateB && Arrays.equals(keys, that.keys);
 	}
 
 	public String toString () {
