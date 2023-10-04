@@ -172,44 +172,44 @@ public class BarleyRandom extends EnhancedRandom {
 	@Override
 	public long nextLong () {
 		long a = (stateA += 0x9E3779B97F4A7C15L);
-		long b = (stateB += Long.numberOfLeadingZeros(a)) ^ a;
-		b ^= b >>> 32;
+		long b = (stateB += Long.numberOfLeadingZeros(a));
+		b ^= b >>> 32 ^ a;
 		b *= 0xbea225f9eb34556dL;
-		b ^= b >>> 29;
+		b ^= b >>> 29 ^ a;
 		b *= 0xbea225f9eb34556dL;
-		b ^= b >>> 32;
+		b ^= b >>> 32 ^ a;
 		b *= 0xbea225f9eb34556dL;
-		b ^= b >>> 29;
+		b ^= b >>> 29 ^ a;
 		return b;
 	}
 
 	@Override
 	public long previousLong () {
 		long a = stateA;
-		long b = stateB ^ a;
+		long b = stateB;
 		stateA -= 0x9E3779B97F4A7C15L;
 		stateB -= Long.numberOfLeadingZeros(a);
-		b ^= b >>> 32;
+		b ^= b >>> 32 ^ a;
 		b *= 0xbea225f9eb34556dL;
-		b ^= b >>> 29;
+		b ^= b >>> 29 ^ a;
 		b *= 0xbea225f9eb34556dL;
-		b ^= b >>> 32;
+		b ^= b >>> 32 ^ a;
 		b *= 0xbea225f9eb34556dL;
-		b ^= b >>> 29;
+		b ^= b >>> 29 ^ a;
 		return b;
 	}
 
 	@Override
 	public int next (int bits) {
 		long a = (stateA += 0x9E3779B97F4A7C15L);
-		long b = (stateB += Long.numberOfLeadingZeros(a)) ^ a;
-		b ^= b >>> 32;
+		long b = (stateB += Long.numberOfLeadingZeros(a));
+		b ^= b >>> 32 ^ a;
 		b *= 0xbea225f9eb34556dL;
-		b ^= b >>> 29;
+		b ^= b >>> 29 ^ a;
 		b *= 0xbea225f9eb34556dL;
-		b ^= b >>> 32;
+		b ^= b >>> 32 ^ a;
 		b *= 0xbea225f9eb34556dL;
-		b ^= b >>> 29;
+		b ^= b >>> 29 ^ a;
 		return (int) (b) >>> (32 - bits);
 	}
 
