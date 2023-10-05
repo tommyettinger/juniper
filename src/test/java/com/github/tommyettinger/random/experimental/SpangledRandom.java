@@ -351,14 +351,16 @@ public class SpangledRandom extends EnhancedRandom {
 	public long skip (final long advance) {
 		long a = (stateA += 0x9E3779B97F4A7C15L * advance);
 		long b = (stateB += 0xD1B54A32D192ED03L * advance);
-		b = ((b << 56 | b >>> 8) + a ^ 0xA62B82F58DB8A985L); a = ((a << 3 | a >>> 61) ^ b);
+		b = ((b << 56 | b >>> 8) + a ^ 0xA62B82F58DB8A985L);
+		a = ((a << 3 | a >>> 61) ^ b);
 		for (int i = 0; i < keys.length; i++) {
 			a += (b << 41 | b >>> 23);
 			b = ((b << 56 | b >>> 8) + a ^ keys[i]);
 			a = ((a << 3 | a >>> 61) ^ b);
 		}
 		a += (b << 41 | b >>> 23);
-		b = ((b << 56 | b >>> 8) + a ^ 0xE35E156A2314DCDAL); a = ((a << 3 | a >>> 61) ^ b);
+		b = ((b << 56 | b >>> 8) + a ^ 0xE35E156A2314DCDAL);
+		a = ((a << 3 | a >>> 61) ^ b);
 		a += (b << 41 | b >>> 23);
 		return ((a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ 0xBEA225F9EB34556DL));
 	}
