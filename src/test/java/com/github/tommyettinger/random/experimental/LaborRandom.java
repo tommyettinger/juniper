@@ -179,11 +179,25 @@ public class LaborRandom extends EnhancedRandom {
 	public long nextLong () {
 		long a = (stateA += 0x9E3779B97F4A7C15L);
 		long b = (stateB += 0xD1B54A32D192ED03L);
-		a ^= (b << 29 | b >>> 35);
-		b ^= (a << 47 | a >>> 17);
-		a += (b << 11 | b >>> 53);
-		b += (a << 50 | a >>> 14);
-		a ^= (b << 23 | b >>> 41);
+		a = ((b << 41 | b >>> 23) ^ a);
+		b = ((b << 56 | b >>> 8) + a);
+		a = ((a << 3 | a >>> 61) ^ b);
+		a = ((b << 41 | b >>> 23) ^ a);
+		b = ((b << 56 | b >>> 8) + a);
+		a = ((a << 3 | a >>> 61) ^ b);
+		a = ((b << 41 | b >>> 23) ^ a);
+		b = ((b << 56 | b >>> 8) + a);
+		a = ((a << 3 | a >>> 61) ^ b);
+		a = ((b << 41 | b >>> 23) ^ a);
+		b = ((b << 56 | b >>> 8) + a);
+		a = ((a << 3 | a >>> 61) ^ b);
+		a = ((b << 41 | b >>> 23) ^ a);
+
+//		a = b ^ (a << 29 | a >>> 35);
+//		b = a ^ (b << 47 | b >>> 17);
+//		a = b + (a << 11 | a >>> 53);
+//		b = a + (b << 50 | b >>> 14);
+//		a = b ^ (a << 23 | a >>> 41);
 		return a;
 	}
 
@@ -193,11 +207,19 @@ public class LaborRandom extends EnhancedRandom {
 		long b = stateB;
 		stateB -= 0xD1B54A32D192ED03L;
 		stateA -= 0x9E3779B97F4A7C15L;
-		a ^= (b << 29 | b >>> 35);
-		b ^= (a << 47 | a >>> 17);
-		a += (b << 11 | b >>> 53);
-		b += (a << 50 | a >>> 14);
-		a ^= (b << 23 | b >>> 41);
+		a = ((b << 41 | b >>> 23) ^ a);
+		b = ((b << 56 | b >>> 8) + a);
+		a = ((a << 3 | a >>> 61) ^ b);
+		a = ((b << 41 | b >>> 23) ^ a);
+		b = ((b << 56 | b >>> 8) + a);
+		a = ((a << 3 | a >>> 61) ^ b);
+		a = ((b << 41 | b >>> 23) ^ a);
+		b = ((b << 56 | b >>> 8) + a);
+		a = ((a << 3 | a >>> 61) ^ b);
+		a = ((b << 41 | b >>> 23) ^ a);
+		b = ((b << 56 | b >>> 8) + a);
+		a = ((a << 3 | a >>> 61) ^ b);
+		a = ((b << 41 | b >>> 23) ^ a);
 		return a;
 
 	}
@@ -206,22 +228,38 @@ public class LaborRandom extends EnhancedRandom {
 	public int next (int bits) {
 		long a = (stateA += 0x9E3779B97F4A7C15L);
 		long b = (stateB += 0xD1B54A32D192ED03L);
-		a ^= (b << 29 | b >>> 35);
-		b ^= (a << 47 | a >>> 17);
-		a += (b << 11 | b >>> 53);
-		b += (a << 50 | a >>> 14);
-		a ^= (b << 23 | b >>> 41);
+		a = ((b << 41 | b >>> 23) ^ a);
+		b = ((b << 56 | b >>> 8) + a);
+		a = ((a << 3 | a >>> 61) ^ b);
+		a = ((b << 41 | b >>> 23) ^ a);
+		b = ((b << 56 | b >>> 8) + a);
+		a = ((a << 3 | a >>> 61) ^ b);
+		a = ((b << 41 | b >>> 23) ^ a);
+		b = ((b << 56 | b >>> 8) + a);
+		a = ((a << 3 | a >>> 61) ^ b);
+		a = ((b << 41 | b >>> 23) ^ a);
+		b = ((b << 56 | b >>> 8) + a);
+		a = ((a << 3 | a >>> 61) ^ b);
+		a = ((b << 41 | b >>> 23) ^ a);
 		return (int)(a) >>> (32 - bits);
 	}
 	@Override
 	public long skip (final long advance) {
 		long a = (stateA += 0x9E3779B97F4A7C15L * advance);
 		long b = (stateB += 0xD1B54A32D192ED03L * advance);
-		a ^= (b << 29 | b >>> 35);
-		b ^= (a << 47 | a >>> 17);
-		a += (b << 11 | b >>> 53);
-		b += (a << 50 | a >>> 14);
-		a ^= (b << 23 | b >>> 41);
+		a = ((b << 41 | b >>> 23) ^ a);
+		b = ((b << 56 | b >>> 8) + a);
+		a = ((a << 3 | a >>> 61) ^ b);
+		a = ((b << 41 | b >>> 23) ^ a);
+		b = ((b << 56 | b >>> 8) + a);
+		a = ((a << 3 | a >>> 61) ^ b);
+		a = ((b << 41 | b >>> 23) ^ a);
+		b = ((b << 56 | b >>> 8) + a);
+		a = ((a << 3 | a >>> 61) ^ b);
+		a = ((b << 41 | b >>> 23) ^ a);
+		b = ((b << 56 | b >>> 8) + a);
+		a = ((a << 3 | a >>> 61) ^ b);
+		a = ((b << 41 | b >>> 23) ^ a);
 		return a;
 	}
 	/**
