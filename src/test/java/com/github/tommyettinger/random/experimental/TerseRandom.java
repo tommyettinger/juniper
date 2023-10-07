@@ -233,8 +233,8 @@ public class TerseRandom extends EnhancedRandom {
 		long a = (stateA += 0x9E3779B97F4A7C15L);
 		long b = (stateB += 0xD1B54A32D192ED03L);
 		long c = (stateC += 0xC13FA9A902A6328FL);
-		a ^= (b << 53 | b >>> 11) + c;
-		a += (c <<  5 | c >>> 59) ^ b;
+		a ^= (b << 11 | b >>> 53) + c;
+		a += (c << 50 | c >>> 14) ^ b;
 		b += (a << 41 | a >>> 23) ^ c;
 		b += (c << 12 | c >>> 52) ^ a;
 		c ^= (a << 17 | a >>> 47) + b;
@@ -255,8 +255,8 @@ public class TerseRandom extends EnhancedRandom {
 		long a = (stateA += 0x9E3779B97F4A7C15L * advance);
 		long b = (stateB += 0xD1B54A32D192ED03L * advance);
 		long c = (stateC += 0xC13FA9A902A6328FL * advance);
-		a ^= (b << 53 | b >>> 11) + c;
-		a += (c <<  5 | c >>> 59) ^ b;
+		a ^= (b << 11 | b >>> 53) + c;
+		a += (c << 50 | c >>> 14) ^ b;
 		b += (a << 41 | a >>> 23) ^ c;
 		b += (c << 12 | c >>> 52) ^ a;
 		c ^= (a << 17 | a >>> 47) + b;
@@ -277,8 +277,8 @@ public class TerseRandom extends EnhancedRandom {
         long a = stateA -= 0x9E3779B97F4A7C15L;
 		long b = stateB -= 0xD1B54A32D192ED03L;
 		long c = stateC -= 0xC13FA9A902A6328FL;
-		a ^= (b << 53 | b >>> 11) + c;
-		a += (c <<  5 | c >>> 59) ^ b;
+		a ^= (b << 11 | b >>> 53) + c;
+		a += (c << 50 | c >>> 14) ^ b;
 		b += (a << 41 | a >>> 23) ^ c;
 		b += (c << 12 | c >>> 52) ^ a;
 		c ^= (a << 17 | a >>> 47) + b;
@@ -299,8 +299,8 @@ public class TerseRandom extends EnhancedRandom {
 		long a = (stateA += 0x9E3779B97F4A7C15L);
 		long b = (stateB += 0xD1B54A32D192ED03L);
 		long c = (stateC += 0xC13FA9A902A6328FL);
-		a ^= (b << 53 | b >>> 11) + c;
-		a += (c <<  5 | c >>> 59) ^ b;
+		a ^= (b << 11 | b >>> 53) + c;
+		a += (c << 50 | c >>> 14) ^ b;
 		b += (a << 41 | a >>> 23) ^ c;
 		b += (c << 12 | c >>> 52) ^ a;
 		c ^= (a << 17 | a >>> 47) + b;

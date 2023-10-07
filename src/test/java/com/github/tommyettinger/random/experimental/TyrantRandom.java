@@ -233,6 +233,8 @@ public class TyrantRandom extends EnhancedRandom {
 		long a = (stateA += 0x9E3779B97F4A7C15L);
 		long b = (stateB += Long.numberOfLeadingZeros(a));
 		long c = (stateC += Long.numberOfLeadingZeros(a|b));
+		a ^= (b << 11 | b >>> 53) + c;
+		a += (c << 50 | c >>> 14) ^ b;
 		b += (a << 41 | a >>> 23) ^ c;
 		b += (c << 12 | c >>> 52) ^ a;
 		c ^= (a << 17 | a >>> 47) + b;
@@ -258,6 +260,8 @@ public class TyrantRandom extends EnhancedRandom {
 		a = stateA;
 		b = stateB;
 		long c = stateC;
+		a ^= (b << 11 | b >>> 53) + c;
+		a += (c << 50 | c >>> 14) ^ b;
 		b += (a << 41 | a >>> 23) ^ c;
 		b += (c << 12 | c >>> 52) ^ a;
 		c ^= (a << 17 | a >>> 47) + b;
@@ -278,6 +282,8 @@ public class TyrantRandom extends EnhancedRandom {
 		long a = (stateA += 0x9E3779B97F4A7C15L);
 		long b = (stateB += Long.numberOfLeadingZeros(a));
 		long c = (stateC += Long.numberOfLeadingZeros(a|b));
+		a ^= (b << 11 | b >>> 53) + c;
+		a += (c << 50 | c >>> 14) ^ b;
 		b += (a << 41 | a >>> 23) ^ c;
 		b += (c << 12 | c >>> 52) ^ a;
 		c ^= (a << 17 | a >>> 47) + b;
