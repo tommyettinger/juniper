@@ -233,6 +233,10 @@ public class TyrantRandom extends EnhancedRandom {
 		long a = (stateA += 0x9E3779B97F4A7C15L);
 		long b = (stateB += Long.numberOfLeadingZeros(a));
 		long c = (stateC += Long.numberOfLeadingZeros(a|b));
+		b += (a << 41 | a >>> 23) ^ c;
+		b += (c << 12 | c >>> 52) ^ a;
+		c ^= (a << 17 | a >>> 47) + b;
+		c ^= (b << 58 | b >>>  6) + a;
 		b = ((b << 56 | b >>> 8) + a ^ (c + (0xD1B54A32D192ED03L)));
 		a = ((a << 3 | a >>> 61) ^ b);
 		b = ((b << 56 | b >>> 8) + a ^ (c + (0xA36A9465A325DA06L)));
@@ -254,6 +258,10 @@ public class TyrantRandom extends EnhancedRandom {
 		a = stateA;
 		b = stateB;
 		long c = stateC;
+		b += (a << 41 | a >>> 23) ^ c;
+		b += (c << 12 | c >>> 52) ^ a;
+		c ^= (a << 17 | a >>> 47) + b;
+		c ^= (b << 58 | b >>>  6) + a;
 		b = ((b << 56 | b >>> 8) + a ^ (c + (0xD1B54A32D192ED03L)));
 		a = ((a << 3 | a >>> 61) ^ b);
 		b = ((b << 56 | b >>> 8) + a ^ (c + (0xA36A9465A325DA06L)));
@@ -270,6 +278,10 @@ public class TyrantRandom extends EnhancedRandom {
 		long a = (stateA += 0x9E3779B97F4A7C15L);
 		long b = (stateB += Long.numberOfLeadingZeros(a));
 		long c = (stateC += Long.numberOfLeadingZeros(a|b));
+		b += (a << 41 | a >>> 23) ^ c;
+		b += (c << 12 | c >>> 52) ^ a;
+		c ^= (a << 17 | a >>> 47) + b;
+		c ^= (b << 58 | b >>>  6) + a;
 		b = ((b << 56 | b >>> 8) + a ^ (c + (0xD1B54A32D192ED03L)));
 		a = ((a << 3 | a >>> 61) ^ b);
 		b = ((b << 56 | b >>> 8) + a ^ (c + (0xA36A9465A325DA06L)));
@@ -303,32 +315,32 @@ public class TyrantRandom extends EnhancedRandom {
 		return "TyrantRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L}";
 	}
 
-	public static void main(String[] args) {
-		TyrantRandom random = new TyrantRandom(1L);
-		long n0 = random.nextLong();
-		long n1 = random.nextLong();
-		long n2 = random.nextLong();
-		long n3 = random.nextLong();
-		long n4 = random.nextLong();
-		long n5 = random.nextLong();
-		long n6 = random.nextLong();
-		long p5 = random.previousLong();
-		long p4 = random.previousLong();
-		long p3 = random.previousLong();
-		long p2 = random.previousLong();
-		long p1 = random.previousLong();
-		long p0 = random.previousLong();
-		System.out.println(n0 == p0);
-		System.out.println(n1 == p1);
-		System.out.println(n2 == p2);
-		System.out.println(n3 == p3);
-		System.out.println(n4 == p4);
-		System.out.println(n5 == p5);
-		System.out.println(n0 + " vs. " + p0);
-		System.out.println(n1 + " vs. " + p1);
-		System.out.println(n2 + " vs. " + p2);
-		System.out.println(n3 + " vs. " + p3);
-		System.out.println(n4 + " vs. " + p4);
-		System.out.println(n5 + " vs. " + p5);
-	}
+//	public static void main(String[] args) {
+//		TyrantRandom random = new TyrantRandom(1L);
+//		long n0 = random.nextLong();
+//		long n1 = random.nextLong();
+//		long n2 = random.nextLong();
+//		long n3 = random.nextLong();
+//		long n4 = random.nextLong();
+//		long n5 = random.nextLong();
+//		long n6 = random.nextLong();
+//		long p5 = random.previousLong();
+//		long p4 = random.previousLong();
+//		long p3 = random.previousLong();
+//		long p2 = random.previousLong();
+//		long p1 = random.previousLong();
+//		long p0 = random.previousLong();
+//		System.out.println(n0 == p0);
+//		System.out.println(n1 == p1);
+//		System.out.println(n2 == p2);
+//		System.out.println(n3 == p3);
+//		System.out.println(n4 == p4);
+//		System.out.println(n5 == p5);
+//		System.out.println(n0 + " vs. " + p0);
+//		System.out.println(n1 + " vs. " + p1);
+//		System.out.println(n2 + " vs. " + p2);
+//		System.out.println(n3 + " vs. " + p3);
+//		System.out.println(n4 + " vs. " + p4);
+//		System.out.println(n5 + " vs. " + p5);
+//	}
 }
