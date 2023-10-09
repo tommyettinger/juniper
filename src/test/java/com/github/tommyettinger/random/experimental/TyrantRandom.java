@@ -266,14 +266,10 @@ public class TyrantRandom extends EnhancedRandom {
 		b += (c << 12 | c >>> 52) ^ a;
 		c ^= (a << 17 | a >>> 47) + b;
 		c ^= (b << 58 | b >>>  6) + a;
-		b = ((b << 56 | b >>> 8) + a ^ (c + (0xD1B54A32D192ED03L)));
-		a = ((a << 3 | a >>> 61) ^ b);
-		b = ((b << 56 | b >>> 8) + a ^ (c + (0xA36A9465A325DA06L)));
-		a = ((a << 3 | a >>> 61) ^ b);
-		b = ((b << 56 | b >>> 8) + a ^ (c + (0x751FDE9874B8C709L)));
-		a = ((a << 3 | a >>> 61) ^ b);
-		b = ((b << 56 | b >>> 8) + a ^ (c + (0x46D528CB464BB40CL)));
-		a = ((a << 3 | a >>> 61) ^ b);
+		for (int i = 0; i < 5; i++) {
+			b = ((b << 56 | b >>> 8) + a ^ c);
+			a = ((a << 3 | a >>> 61) ^ b);
+		}
 		return a;
 	}
 
@@ -288,14 +284,10 @@ public class TyrantRandom extends EnhancedRandom {
 		b += (c << 12 | c >>> 52) ^ a;
 		c ^= (a << 17 | a >>> 47) + b;
 		c ^= (b << 58 | b >>>  6) + a;
-		b = ((b << 56 | b >>> 8) + a ^ (c + (0xD1B54A32D192ED03L)));
-		a = ((a << 3 | a >>> 61) ^ b);
-		b = ((b << 56 | b >>> 8) + a ^ (c + (0xA36A9465A325DA06L)));
-		a = ((a << 3 | a >>> 61) ^ b);
-		b = ((b << 56 | b >>> 8) + a ^ (c + (0x751FDE9874B8C709L)));
-		a = ((a << 3 | a >>> 61) ^ b);
-		b = ((b << 56 | b >>> 8) + a ^ (c + (0x46D528CB464BB40CL)));
-		a = ((a << 3 | a >>> 61) ^ b);
+		for (int i = 0; i < 5; i++) {
+			b = ((b << 56 | b >>> 8) + a ^ c);
+			a = ((a << 3 | a >>> 61) ^ b);
+		}
 		return (int)a >>> (32 - bits);
 	}
 

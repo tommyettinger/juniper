@@ -265,20 +265,10 @@ public class TerseRandom extends EnhancedRandom {
 		long a = (stateA += 0x9E3779B97F4A7C15L * advance);
 		long b = (stateB += 0xD1B54A32D192ED03L * advance);
 		long c = (stateC += 0xC13FA9A902A6328FL * advance);
-		a ^= (b << 11 | b >>> 53) + c;
-		a += (c << 50 | c >>> 14) ^ b;
-		b += (a << 41 | a >>> 23) ^ c;
-		b += (c << 12 | c >>> 52) ^ a;
-		c ^= (a << 17 | a >>> 47) + b;
-		c ^= (b << 58 | b >>>  6) + a;
-		b = ((b << 56 | b >>> 8) + a ^ (c + (0xA62B82F58DB8A985L)));
-		a = ((a << 3 | a >>> 61) ^ b);
-		b = ((b << 56 | b >>> 8) + a ^ (c + (0x4C5705EB1B71530AL)));
-		a = ((a << 3 | a >>> 61) ^ b);
-		b = ((b << 56 | b >>> 8) + a ^ (c + (0xF28288E0A929FC8FL)));
-		a = ((a << 3 | a >>> 61) ^ b);
-		b = ((b << 56 | b >>> 8) + a ^ (c + (0x98AE0BD636E2A614L)));
-		a = ((a << 3 | a >>> 61) ^ b);
+		for (int i = 0; i < 9; i++) {
+			b = ((b << 56 | b >>> 8) + a ^ c);
+			a = ((a << 3 | a >>> 61) ^ b);
+		}
 		return a;
 	}
 
@@ -287,20 +277,10 @@ public class TerseRandom extends EnhancedRandom {
         long a = stateA -= 0x9E3779B97F4A7C15L;
 		long b = stateB -= 0xD1B54A32D192ED03L;
 		long c = stateC -= 0xC13FA9A902A6328FL;
-		a ^= (b << 11 | b >>> 53) + c;
-		a += (c << 50 | c >>> 14) ^ b;
-		b += (a << 41 | a >>> 23) ^ c;
-		b += (c << 12 | c >>> 52) ^ a;
-		c ^= (a << 17 | a >>> 47) + b;
-		c ^= (b << 58 | b >>>  6) + a;
-		b = ((b << 56 | b >>> 8) + a ^ (c + (0xA62B82F58DB8A985L)));
-		a = ((a << 3 | a >>> 61) ^ b);
-		b = ((b << 56 | b >>> 8) + a ^ (c + (0x4C5705EB1B71530AL)));
-		a = ((a << 3 | a >>> 61) ^ b);
-		b = ((b << 56 | b >>> 8) + a ^ (c + (0xF28288E0A929FC8FL)));
-		a = ((a << 3 | a >>> 61) ^ b);
-		b = ((b << 56 | b >>> 8) + a ^ (c + (0x98AE0BD636E2A614L)));
-		a = ((a << 3 | a >>> 61) ^ b);
+		for (int i = 0; i < 9; i++) {
+			b = ((b << 56 | b >>> 8) + a ^ c);
+			a = ((a << 3 | a >>> 61) ^ b);
+		}
 		return a;
 	}
 
@@ -309,23 +289,17 @@ public class TerseRandom extends EnhancedRandom {
 		long a = (stateA += 0x9E3779B97F4A7C15L);
 		long b = (stateB += 0xD1B54A32D192ED03L);
 		long c = (stateC += 0xC13FA9A902A6328FL);
-		a ^= (b << 11 | b >>> 53) + c;
-		a += (c << 50 | c >>> 14) ^ b;
-		b += (a << 41 | a >>> 23) ^ c;
-		b += (c << 12 | c >>> 52) ^ a;
-		c ^= (a << 17 | a >>> 47) + b;
-		c ^= (b << 58 | b >>>  6) + a;
-		b = ((b << 56 | b >>> 8) + a ^ (c + (0xA62B82F58DB8A985L)));
-		a = ((a << 3 | a >>> 61) ^ b);
-		b = ((b << 56 | b >>> 8) + a ^ (c + (0x4C5705EB1B71530AL)));
-		a = ((a << 3 | a >>> 61) ^ b);
-		b = ((b << 56 | b >>> 8) + a ^ (c + (0xF28288E0A929FC8FL)));
-		a = ((a << 3 | a >>> 61) ^ b);
-		b = ((b << 56 | b >>> 8) + a ^ (c + (0x98AE0BD636E2A614L)));
-		a = ((a << 3 | a >>> 61) ^ b);
+		for (int i = 0; i < 9; i++) {
+			b = ((b << 56 | b >>> 8) + a ^ c);
+			a = ((a << 3 | a >>> 61) ^ b);
+		}
 		return (int)a >>> (32 - bits);
 	}
 
+	//0xA62B82F58DB8A985L
+	//0x4C5705EB1B71530AL
+	//0xF28288E0A929FC8FL
+	//0x98AE0BD636E2A614L
 
 	@Override
 	public TerseRandom copy () {
