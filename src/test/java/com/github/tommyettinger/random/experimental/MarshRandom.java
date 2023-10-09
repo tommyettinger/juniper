@@ -21,11 +21,12 @@ import com.github.tommyettinger.random.EnhancedRandom;
 
 /**
  * 192 bits of state. Period is 2 to the 64, with 2 to the 128 possible streams.
+ * This uses one round of the Speck cipher, followed by Moremur to mix the result.
  */
-public class TerseRandom extends EnhancedRandom {
+public class MarshRandom extends EnhancedRandom {
 	@Override
 	public String getTag() {
-		return "TerR";
+		return "MarR";
 	}
 
 	/**
@@ -42,46 +43,46 @@ public class TerseRandom extends EnhancedRandom {
 	protected long stateC;
 
 	/**
-	 * Creates a new TerseRandom with a random state.
+	 * Creates a new MarshRandom with a random state.
 	 */
-	public TerseRandom() {
+	public MarshRandom() {
 		stateA = EnhancedRandom.seedFromMath();
 		stateB = EnhancedRandom.seedFromMath();
 		stateC = EnhancedRandom.seedFromMath();
 	}
 
 	/**
-	 * Creates a new TerseRandom with the given seed; all {@code long} values are permitted.
+	 * Creates a new MarshRandom with the given seed; all {@code long} values are permitted.
 	 * The seed will be passed to {@link #setSeed(long)} to attempt to adequately distribute the seed randomly.
 	 *
 	 * @param seed any {@code long} value
 	 */
-	public TerseRandom(long seed) {
+	public MarshRandom(long seed) {
 		setSeed(seed);
 	}
 
 	/**
-	 * Creates a new TerseRandom with the given two states; all {@code long} values are permitted.
+	 * Creates a new MarshRandom with the given two states; all {@code long} values are permitted.
 	 * These states will be used verbatim for stateA and stateB. stateC will be assigned 1.
 	 *
 	 * @param stateA any {@code long} value
 	 * @param stateB any {@code long} value
 	 */
-	public TerseRandom(long stateA, long stateB) {
+	public MarshRandom(long stateA, long stateB) {
 		this.stateA = stateA;
 		this.stateB = stateB;
 		this.stateC = 1L;
 	}
 
 	/**
-	 * Creates a new TerseRandom with the given four states; all {@code long} values are permitted.
+	 * Creates a new MarshRandom with the given four states; all {@code long} values are permitted.
 	 * These states will be used verbatim.
 	 *
 	 * @param stateA any {@code long} value
 	 * @param stateB any {@code long} value
 	 * @param stateC any {@code long} value
 	 */
-	public TerseRandom(long stateA, long stateB, long stateC) {
+	public MarshRandom(long stateA, long stateB, long stateC) {
 		this.stateA = stateA;
 		this.stateB = stateB;
 		this.stateC = stateC;
@@ -231,31 +232,10 @@ public class TerseRandom extends EnhancedRandom {
 		long a = (stateA += 0x9E3779B97F4A7C15L);
 		long b = (stateB += 0xD1B54A32D192ED03L);
 		long c = (stateC += 0xC13FA9A902A6328FL);
-//		a ^= (b << 11 | b >>> 53) + c;
-//		a += (c << 50 | c >>> 14) ^ b;
-//		b += (a << 41 | a >>> 23) ^ c;
-//		b += (c << 12 | c >>> 52) ^ a;
-//		c ^= (a << 17 | a >>> 47) + b;
-//		c ^= (b << 58 | b >>>  6) + a;
-		for (int i = 0; i < 9; i++) {
-			b = ((b << 56 | b >>> 8) + a ^ c);
-			a = ((a << 3 | a >>> 61) ^ b);
-		}
-//		c = (c << 23 | c >>> 41) + 0xA62B82F58DB8A985L;
-//		b = ((b << 56 | b >>> 8) + a ^ c);
-//		a = ((a << 3 | a >>> 61) ^ b);
-//		c = (c << 23 | c >>> 41) + 0xA62B82F58DB8A985L;
-//		b = ((b << 56 | b >>> 8) + a ^ c);
-//		a = ((a << 3 | a >>> 61) ^ b);
-//		c = (c << 23 | c >>> 41) + 0xA62B82F58DB8A985L;
-//		b = ((b << 56 | b >>> 8) + a ^ c);
-//		a = ((a << 3 | a >>> 61) ^ b);
-
-//		b = ((b << 56 | b >>> 8) + a ^ (c + (0x3ED98ECBC49B4F99L)));
-//		a = ((a << 3 | a >>> 61) ^ b);
-//		b = ((b << 56 | b >>> 8) + a ^ (c + (0xE50511C15253F91EL)));
-//		a = ((a << 3 | a >>> 61) ^ b);
-		return a;
+		a = (a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ c);
+		a = (a ^ a >>> 27) * 0x3C79AC492BA7B653L;
+		a = (a ^ a >>> 33) * 0x1C69B3F74AC4AE35L;
+		return a ^ a >>> 27;
 	}
 
 	@Override
@@ -263,11 +243,10 @@ public class TerseRandom extends EnhancedRandom {
 		long a = (stateA += 0x9E3779B97F4A7C15L * advance);
 		long b = (stateB += 0xD1B54A32D192ED03L * advance);
 		long c = (stateC += 0xC13FA9A902A6328FL * advance);
-		for (int i = 0; i < 9; i++) {
-			b = ((b << 56 | b >>> 8) + a ^ c);
-			a = ((a << 3 | a >>> 61) ^ b);
-		}
-		return a;
+		a = (a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ c);
+		a = (a ^ a >>> 27) * 0x3C79AC492BA7B653L;
+		a = (a ^ a >>> 33) * 0x1C69B3F74AC4AE35L;
+		return a ^ a >>> 27;
 	}
 
 	@Override
@@ -275,11 +254,10 @@ public class TerseRandom extends EnhancedRandom {
         long a = stateA -= 0x9E3779B97F4A7C15L;
 		long b = stateB -= 0xD1B54A32D192ED03L;
 		long c = stateC -= 0xC13FA9A902A6328FL;
-		for (int i = 0; i < 9; i++) {
-			b = ((b << 56 | b >>> 8) + a ^ c);
-			a = ((a << 3 | a >>> 61) ^ b);
-		}
-		return a;
+		a = (a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ c);
+		a = (a ^ a >>> 27) * 0x3C79AC492BA7B653L;
+		a = (a ^ a >>> 33) * 0x1C69B3F74AC4AE35L;
+		return a ^ a >>> 27;
 	}
 
 	@Override
@@ -287,11 +265,10 @@ public class TerseRandom extends EnhancedRandom {
 		long a = (stateA += 0x9E3779B97F4A7C15L);
 		long b = (stateB += 0xD1B54A32D192ED03L);
 		long c = (stateC += 0xC13FA9A902A6328FL);
-		for (int i = 0; i < 9; i++) {
-			b = ((b << 56 | b >>> 8) + a ^ c);
-			a = ((a << 3 | a >>> 61) ^ b);
-		}
-		return (int)a >>> (32 - bits);
+		a = (a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ c);
+		a = (a ^ a >>> 27) * 0x3C79AC492BA7B653L;
+		a = (a ^ a >>> 33) * 0x1C69B3F74AC4AE35L;
+		return (int)(a ^ a >>> 27) >>> (32 - bits);
 	}
 
 	//0xA62B82F58DB8A985L
@@ -300,8 +277,8 @@ public class TerseRandom extends EnhancedRandom {
 	//0x98AE0BD636E2A614L
 
 	@Override
-	public TerseRandom copy () {
-		return new TerseRandom(stateA, stateB, stateC);
+	public MarshRandom copy () {
+		return new MarshRandom(stateA, stateB, stateC);
 	}
 
 	@Override
@@ -311,17 +288,17 @@ public class TerseRandom extends EnhancedRandom {
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		TerseRandom that = (TerseRandom)o;
+		MarshRandom that = (MarshRandom)o;
 
 		return stateA == that.stateA && stateB == that.stateB && stateC == that.stateC;
 	}
 
 	public String toString () {
-		return "TerseRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L}";
+		return "MarshRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L}";
 	}
 
 	public static void main(String[] args) {
-		TerseRandom random = new TerseRandom(1L);
+		MarshRandom random = new MarshRandom(1L);
 		long n0 = random.nextLong();
 		long n1 = random.nextLong();
 		long n2 = random.nextLong();
