@@ -139,6 +139,7 @@ public class CorrelationAnalyst extends ApplicationAdapter {
         rl.add(new TyrantRandom(1, 1, 1));
         rl.add(new TerseRandom(1, 1, 1));
         rl.add(new MarshRandom(1, 1, 1));
+        rl.add(new MunchRandom(1, 1, 1));
 
         randoms = new EnhancedRandom[rl.size()][][];
         for (int i = 0; i < randoms.length; i++) {
