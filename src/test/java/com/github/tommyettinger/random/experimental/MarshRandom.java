@@ -20,8 +20,21 @@ package com.github.tommyettinger.random.experimental;
 import com.github.tommyettinger.random.EnhancedRandom;
 
 /**
- * 192 bits of state. Period is 2 to the 64, with 2 to the 128 possible streams.
- * This uses one round of the Speck cipher, followed by Moremur to mix the result.
+ * A generator with moderately-low period length but many more streams than other generators here have.
+ * Has 192 bits of state. Period is 2 to the 64 for any stream, with 2 to the 128 possible streams.
+ * This uses one round of the Speck cipher, followed by the Moremur unary hash to mix the result.
+ * This appears to be slightly sensitive to the choice of the three different increments for
+ * states A, B, and C; other generators with the same period that rely on a unary hash seem to
+ * also be sensitive when the unary hash isn't quite strong enough (i.e. SplitMix).
+ * <br>
+ * Constants used here:
+ * <ul>
+ * <li>0xDE916ABCC965815BL, the eighth number from the 39-dimensional harmonious sequence,</li>
+ * <li>0xF1357AEA2E62A9C5L, <a href="https://arxiv.org/abs/2001.05304">the best 64-bit MCG constant found by Vigna and Steele</a>,</li>
+ * <li>0xBEA225F9EB34556DL, used by <a href="https://github.com/jonmaiga/mx3/">MX3 by Jon Maiga</a>,</li>
+ * <li>the <a href="https://en.wikipedia.org/wiki/Speck_(cipher)">Speck cipher</a> round function,</li>
+ * <li>the <a href="http://mostlymangling.blogspot.com/2019/12/stronger-better-morer-moremur-better.html">Moremur unary hash</a>.</li>
+ * </ul>
  */
 public class MarshRandom extends EnhancedRandom {
 	@Override
@@ -143,12 +156,13 @@ public class MarshRandom extends EnhancedRandom {
 	/**
 	 * This initializes all 4 states of the generator to random values based on the given seed.
 	 * (2 to the 64) possible initial generator states can be produced here, though there are
-	 * (2 to the 190) possible states in total.
+	 * (2 to the 192) possible states in total.
 	 *
 	 * @param seed the initial seed; may be any long
 	 */
 	@Override
 	public void setSeed (long seed) {
+		// This is based on MX3, but pulls out values and assigns them to states mid-way, sometimes XORing them.
 		seed ^= seed >>> 32;
 		seed *= 0xbea225f9eb34556dL;
 		seed ^= seed >>> 29;
@@ -229,20 +243,20 @@ public class MarshRandom extends EnhancedRandom {
 
 	@Override
 	public long nextLong () {
-		long a = (stateA += 0x9E3779B97F4A7C15L);
-		long b = (stateB += 0xD1B54A32D192ED03L);
-		long c = (stateC += 0xC13FA9A902A6328FL);
-		a = (a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ c);
-		a = (a ^ a >>> 27) * 0x3C79AC492BA7B653L;
+		long a = (stateA += 0xDE916ABCC965815BL); // the eighth number from the 39-dimensional harmonious sequence
+		long b = (stateB += 0xF1357AEA2E62A9C5L); // from https://arxiv.org/abs/2001.05304 (a 64-bit MCG constant)
+		long c = (stateC += 0xBEA225F9EB34556DL); // used by https://github.com/jonmaiga/mx3
+		a = (a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ c); // Speck cipher round function, https://en.wikipedia.org/wiki/Speck_(cipher)
+		a = (a ^ a >>> 27) * 0x3C79AC492BA7B653L; // from http://mostlymangling.blogspot.com/2019/12/stronger-better-morer-moremur-better.html
 		a = (a ^ a >>> 33) * 0x1C69B3F74AC4AE35L;
 		return a ^ a >>> 27;
 	}
 
 	@Override
 	public long skip(long advance) {
-		long a = (stateA += 0x9E3779B97F4A7C15L * advance);
-		long b = (stateB += 0xD1B54A32D192ED03L * advance);
-		long c = (stateC += 0xC13FA9A902A6328FL * advance);
+		long a = (stateA += 0xDE916ABCC965815BL * advance);
+		long b = (stateB += 0xF1357AEA2E62A9C5L * advance);
+		long c = (stateC += 0xBEA225F9EB34556DL * advance);
 		a = (a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ c);
 		a = (a ^ a >>> 27) * 0x3C79AC492BA7B653L;
 		a = (a ^ a >>> 33) * 0x1C69B3F74AC4AE35L;
@@ -251,9 +265,9 @@ public class MarshRandom extends EnhancedRandom {
 
 	@Override
 	public long previousLong () {
-        long a = stateA -= 0x9E3779B97F4A7C15L;
-		long b = stateB -= 0xD1B54A32D192ED03L;
-		long c = stateC -= 0xC13FA9A902A6328FL;
+        long a = stateA -= 0xDE916ABCC965815BL;
+		long b = stateB -= 0xF1357AEA2E62A9C5L;
+		long c = stateC -= 0xBEA225F9EB34556DL;
 		a = (a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ c);
 		a = (a ^ a >>> 27) * 0x3C79AC492BA7B653L;
 		a = (a ^ a >>> 33) * 0x1C69B3F74AC4AE35L;
@@ -262,9 +276,9 @@ public class MarshRandom extends EnhancedRandom {
 
 	@Override
 	public int next (int bits) {
-		long a = (stateA += 0x9E3779B97F4A7C15L);
-		long b = (stateB += 0xD1B54A32D192ED03L);
-		long c = (stateC += 0xC13FA9A902A6328FL);
+		long a = (stateA += 0xDE916ABCC965815BL);
+		long b = (stateB += 0xF1357AEA2E62A9C5L);
+		long c = (stateC += 0xBEA225F9EB34556DL);
 		a = (a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ c);
 		a = (a ^ a >>> 27) * 0x3C79AC492BA7B653L;
 		a = (a ^ a >>> 33) * 0x1C69B3F74AC4AE35L;
