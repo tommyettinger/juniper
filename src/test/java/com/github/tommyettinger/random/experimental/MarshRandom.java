@@ -383,6 +383,44 @@ public class MarshRandom extends EnhancedRandom {
 		stateC += 0xBEA225F9EB34556DL * difference;
 	}
 
+	/**
+	 * Adjusts the generator's stream "up" or "down" to any of the 2 to the 128 possible streams this can be on.
+	 * A MarshRandom has its stream split into two parts, a "0" stream and a "1" stream; the streams are independent of
+	 * each other, and when considered as a whole, there are 2 to the 128 complete streams.
+	 * The {@code difference0} this takes will be the difference between the result of {@link #getStream0()} before
+	 * the shift, and after the shift. This makes a relative change to the stream, while setStream0() is absolute.
+	 * The {@code difference1} this takes will be the difference between the result of {@link #getStream1()} before
+	 * the shift, and after the shift. This makes a relative change to the stream, while setStream1() is absolute.
+	 * <br>
+	 * This takes constant time.
+	 *
+	 * @param difference0 how much to change stream0 by; may be any long
+	 * @param difference1 how much to change stream1 by; may be any long
+	 */
+	public void shiftStream(long difference0, long difference1) {
+		stateB += 0xF1357AEA2E62A9C5L * difference0;
+		stateC += 0xBEA225F9EB34556DL * difference1;
+	}
+
+	/**
+	 * Changes the generator's streams to any of the 2 to the 128 possible complete streams this can be on.
+	 * A MarshRandom has its stream split into two parts, a "0" stream and a "1" stream; the streams are independent of
+	 * each other, and when considered as a whole, there are 2 to the 128 complete streams.
+	 * The {@code stream0} this takes uses the same numbering convention used by {@link #getStream0()} and
+	 * {@link #shiftStream0(long)}. This makes an absolute change to the stream, while shiftStream0() is relative.
+	 * The {@code stream1} this takes uses the same numbering convention used by {@link #getStream1()} and
+	 * {@link #shiftStream1(long)}. This makes an absolute change to the stream, while shiftStream1() is relative.
+	 * <br>
+	 * This takes constant time.
+	 *
+	 * @param stream0 the number of the "0" stream to change to; may be any long
+	 * @param stream1 the number of the "1" stream to change to; may be any long
+	 */
+	public void setStream(long stream0, long stream1) {
+		stateB += 0xF1357AEA2E62A9C5L * (stream0 - (stateB * 0x781494A55DAAED0DL - stateA * 0xF8B010FB25FEC6D3L));
+		stateC += 0xBEA225F9EB34556DL * (stream1 - (stateC * 0xDD01F46A7E6FFC65L - stateA * 0xF8B010FB25FEC6D3L));
+	}
+
 	@Override
 	public boolean equals (Object o) {
 		if (this == o)
