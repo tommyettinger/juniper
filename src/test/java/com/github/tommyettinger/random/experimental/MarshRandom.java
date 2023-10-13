@@ -295,6 +295,94 @@ public class MarshRandom extends EnhancedRandom {
 		return new MarshRandom(stateA, stateB, stateC);
 	}
 
+	/**
+	 * Gets a long that identifies which of the 2 to the 64 possible "0" streams this is on.
+	 * A MarshRandom has its stream split into two parts, a "0" stream and a "1" stream; the streams are independent of
+	 * each other, and when considered as a whole, there are 2 to the 128 complete streams.
+	 * If the streams are different for two generators, their output should be very different.
+	 * <br>
+	 * This takes constant time.
+	 *
+	 * @return a long that identifies which stream the main state of the generator is on (not considering keys)
+	 */
+	public long getStream0() {
+		return stateB * 0x781494A55DAAED0DL - stateA * 0xF8B010FB25FEC6D3L;
+	}
+
+	/**
+	 * Changes the generator's stream to any of the 2 to the 64 possible "0" streams this can be on.
+	 * A MarshRandom has its stream split into two parts, a "0" stream and a "1" stream; the streams are independent of
+	 * each other, and when considered as a whole, there are 2 to the 128 complete streams.
+	 * The {@code stream} this takes uses the same numbering convention used by {@link #getStream0()} and
+	 * {@link #shiftStream0(long)}. This makes an absolute change to the stream, while shiftStream0() is relative.
+	 * <br>
+	 * This takes constant time.
+	 *
+	 * @param stream the number of the stream to change to; may be any long
+	 */
+	public void setStream0(long stream) {
+		stateB += 0xF1357AEA2E62A9C5L * (stream - (stateB * 0x781494A55DAAED0DL - stateA * 0xF8B010FB25FEC6D3L));
+	}
+
+	/**
+	 * Adjusts the generator's "0" stream "up" or "down" to any of the 2 to the 64 possible streams this can be on.
+	 * A MarshRandom has its stream split into two parts, a "0" stream and a "1" stream; the streams are independent of
+	 * each other, and when considered as a whole, there are 2 to the 128 complete streams.
+	 * The {@code difference} this takes will be the difference between the result of {@link #getStream0()} before
+	 * the shift, and after the shift. This makes a relative change to the stream, while setStream0() is absolute.
+	 * <br>
+	 * This takes constant time.
+	 *
+	 * @param difference how much to change stream0 by; may be any long
+	 */
+	public void shiftStream0(long difference) {
+		stateB += 0xF1357AEA2E62A9C5L * difference;
+	}
+
+	/**
+	 * Gets a long that identifies which of the 2 to the 64 possible "1" streams this is on.
+	 * A MarshRandom has its stream split into two parts, a "0" stream and a "1" stream; the streams are independent of
+	 * each other, and when considered as a whole, there are 2 to the 128 complete streams.
+	 * If the streams are different for two generators, their output should be very different.
+	 * <br>
+	 * This takes constant time.
+	 *
+	 * @return a long that identifies which stream the main state of the generator is on (not considering keys)
+	 */
+	public long getStream1() {
+		return stateC * 0xDD01F46A7E6FFC65L - stateA * 0xF8B010FB25FEC6D3L;
+	}
+
+	/**
+	 * Changes the generator's stream to any of the 2 to the 64 possible "1" streams this can be on.
+	 * A MarshRandom has its stream split into two parts, a "0" stream and a "1" stream; the streams are independent of
+	 * each other, and when considered as a whole, there are 2 to the 128 complete streams.
+	 * The {@code stream} this takes uses the same numbering convention used by {@link #getStream1()} and
+	 * {@link #shiftStream1(long)}. This makes an absolute change to the stream, while shiftStream1() is relative.
+	 * <br>
+	 * This takes constant time.
+	 *
+	 * @param stream the number of the stream to change to; may be any long
+	 */
+	public void setStream1(long stream) {
+		stateC += 0xBEA225F9EB34556DL * (stream - (stateC * 0xDD01F46A7E6FFC65L - stateA * 0xF8B010FB25FEC6D3L));
+	}
+
+	/**
+	 * Adjusts the generator's "1" stream "up" or "down" to any of the 2 to the 64 possible streams this can be on.
+	 * A MarshRandom has its stream split into two parts, a "0" stream and a "1" stream; the streams are independent of
+	 * each other, and when considered as a whole, there are 2 to the 128 complete streams.
+	 * The {@code difference} this takes will be the difference between the result of {@link #getStream1()} before
+	 * the shift, and after the shift. This makes a relative change to the stream, while setStream1() is absolute.
+	 * <br>
+	 * This takes constant time.
+	 *
+	 * @param difference how much to change stream1 by; may be any long
+	 */
+	public void shiftStream1(long difference) {
+		stateC += 0xBEA225F9EB34556DL * difference;
+	}
+
 	@Override
 	public boolean equals (Object o) {
 		if (this == o)
