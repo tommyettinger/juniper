@@ -88,7 +88,7 @@ public class MarshRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Creates a new MarshRandom with the given four states; all {@code long} values are permitted.
+	 * Creates a new MarshRandom with the given three states; all {@code long} values are permitted.
 	 * These states will be used verbatim.
 	 *
 	 * @param stateA any {@code long} value
@@ -154,7 +154,7 @@ public class MarshRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * This initializes all 4 states of the generator to random values based on the given seed.
+	 * This initializes all three states of the generator to random values based on the given seed.
 	 * (2 to the 64) possible initial generator states can be produced here, though there are
 	 * (2 to the 192) possible states in total.
 	 *
@@ -226,7 +226,7 @@ public class MarshRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Sets the state completely to the given four state variables.
+	 * Sets the state completely to the given three state variables.
 	 * This is the same as calling {@link #setStateA(long)}, {@link #setStateB(long)},
 	 * and {@link #setStateC(long)} as a group.
 	 *
