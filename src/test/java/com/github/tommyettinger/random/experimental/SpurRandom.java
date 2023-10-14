@@ -231,10 +231,7 @@ public class SpurRandom extends EnhancedRandom {
 		long a = (stateA = stateA * 0xD1342543DE82EF95L + 0x9E3779B97F4A7C15L); // Vigna and Steele, 2021
 		long b = (stateB = stateB * 0x2C6FE96EE78B6955L + Long.numberOfLeadingZeros(a)); // L'Ecuyer 1999, errata 2005
 		long c = (stateC = stateC * 0x369DEA0F31A53F85L + Long.numberOfLeadingZeros(a&b)); // L'Ecuyer 1999, errata 2005
-		b = ((b << 56 | b >>> 8) + a ^ c); // Speck cipher round function, https://en.wikipedia.org/wiki/Speck_(cipher)
-		a = ((a << 3 | a >>> 61) ^ b);
-		a = (a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ c);
-		return a;
+		return (a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ c); // Speck cipher round function, https://en.wikipedia.org/wiki/Speck_(cipher)
 	}
 
 	@Override
@@ -247,10 +244,7 @@ public class SpurRandom extends EnhancedRandom {
 		a = stateA;
 		b = stateB;
 		long c = stateC;
-		b = ((b << 56 | b >>> 8) + a ^ c); // Speck cipher round function, https://en.wikipedia.org/wiki/Speck_(cipher)
-		a = ((a << 3 | a >>> 61) ^ b);
-		a = (a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ c);
-		return a;
+		return (a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ c);
 	}
 
 	@Override
@@ -258,10 +252,9 @@ public class SpurRandom extends EnhancedRandom {
 		long a = (stateA = stateA * 0xD1342543DE82EF95L + 0x9E3779B97F4A7C15L); // Vigna and Steele, 2021
 		long b = (stateB = stateB * 0x2C6FE96EE78B6955L + Long.numberOfLeadingZeros(a)); // L'Ecuyer 1999, errata 2005
 		long c = (stateC = stateC * 0x369DEA0F31A53F85L + Long.numberOfLeadingZeros(a&b)); // L'Ecuyer 1999, errata 2005
-		b = ((b << 56 | b >>> 8) + a ^ c); // Speck cipher round function, https://en.wikipedia.org/wiki/Speck_(cipher)
-		a = ((a << 3 | a >>> 61) ^ b);
-		a = (a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ c);
-		return (int)(a >>> 64 - bits);
+//		b = ((b << 56 | b >>> 8) + a ^ c); // Speck cipher round function, https://en.wikipedia.org/wiki/Speck_(cipher)
+//		a = ((a << 3 | a >>> 61) ^ b);
+		return (int)((a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ c) >>> 64 - bits);
 	}
 
 
@@ -286,32 +279,32 @@ public class SpurRandom extends EnhancedRandom {
 		return "SpurRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L}";
 	}
 
-//	public static void main(String[] args) {
-//		SpurRandom random = new SpurRandom(1L);
-//		long n0 = random.nextLong();
-//		long n1 = random.nextLong();
-//		long n2 = random.nextLong();
-//		long n3 = random.nextLong();
-//		long n4 = random.nextLong();
-//		long n5 = random.nextLong();
-//		long n6 = random.nextLong();
-//		long p5 = random.previousLong();
-//		long p4 = random.previousLong();
-//		long p3 = random.previousLong();
-//		long p2 = random.previousLong();
-//		long p1 = random.previousLong();
-//		long p0 = random.previousLong();
-//		System.out.println(n0 == p0);
-//		System.out.println(n1 == p1);
-//		System.out.println(n2 == p2);
-//		System.out.println(n3 == p3);
-//		System.out.println(n4 == p4);
-//		System.out.println(n5 == p5);
-//		System.out.println(n0 + " vs. " + p0);
-//		System.out.println(n1 + " vs. " + p1);
-//		System.out.println(n2 + " vs. " + p2);
-//		System.out.println(n3 + " vs. " + p3);
-//		System.out.println(n4 + " vs. " + p4);
-//		System.out.println(n5 + " vs. " + p5);
-//	}
+	public static void main(String[] args) {
+		SpurRandom random = new SpurRandom(1L);
+		long n0 = random.nextLong();
+		long n1 = random.nextLong();
+		long n2 = random.nextLong();
+		long n3 = random.nextLong();
+		long n4 = random.nextLong();
+		long n5 = random.nextLong();
+		long n6 = random.nextLong();
+		long p5 = random.previousLong();
+		long p4 = random.previousLong();
+		long p3 = random.previousLong();
+		long p2 = random.previousLong();
+		long p1 = random.previousLong();
+		long p0 = random.previousLong();
+		System.out.println(n0 == p0);
+		System.out.println(n1 == p1);
+		System.out.println(n2 == p2);
+		System.out.println(n3 == p3);
+		System.out.println(n4 == p4);
+		System.out.println(n5 == p5);
+		System.out.println(n0 + " vs. " + p0);
+		System.out.println(n1 + " vs. " + p1);
+		System.out.println(n2 + " vs. " + p2);
+		System.out.println(n3 + " vs. " + p3);
+		System.out.println(n4 + " vs. " + p4);
+		System.out.println(n5 + " vs. " + p5);
+	}
 }
