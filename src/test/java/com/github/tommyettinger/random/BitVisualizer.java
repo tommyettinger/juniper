@@ -41,7 +41,7 @@ import java.util.Arrays;
  */
 public class BitVisualizer extends ApplicationAdapter {
     private int mode = 0;
-    private final int modes = 4;
+    private final int modes = 6;
     private SpriteBatch batch;
     private ImmediateModeRenderer20 renderer;
     private InputAdapter input;
@@ -102,11 +102,15 @@ public class BitVisualizer extends ApplicationAdapter {
         switch (mode) {
             case 0: bitsNextFloat();
                 break;
-            case 1: bitsNextDouble();
+            case 1: bitsNextExclusiveFloat();
                 break;
-            case 2: bitsNextExclusiveFloat();
+            case 2: bitsNextInclusiveFloat();
                 break;
-            case 3: bitsNextExclusiveDouble();
+            case 3: bitsNextDouble();
+                break;
+            case 4: bitsNextExclusiveDouble();
+                break;
+            case 5: bitsNextInclusiveDouble();
                 break;
         }
         batch.setProjectionMatrix(camera.combined);
@@ -140,7 +144,7 @@ public class BitVisualizer extends ApplicationAdapter {
             if ((i & 7) == 3) {
                 for (int j = 9 + (amounts[i] >> 8); j > 0; j--) {
                     if(amounts[i] < 256) continue;
-                    renderer.color(cyan);
+                    renderer.color(black);
                     renderer.vertex(i, j, 0);
                 }
             } else {
@@ -175,7 +179,7 @@ public class BitVisualizer extends ApplicationAdapter {
             if ((i & 7) == 3) {
                 for (int j = 9 + (amounts[i] >> 8); j > 0; j--) {
                     if(amounts[i] < 256) continue;
-                    renderer.color(cyan);
+                    renderer.color(black);
                     renderer.vertex(i, j, 0);
                 }
             } else {
@@ -210,7 +214,7 @@ public class BitVisualizer extends ApplicationAdapter {
             if ((i & 7) == 3) {
                 for (int j = 9 + (amounts[i] >> 8); j > 0; j--) {
                     if(amounts[i] < 256) continue;
-                    renderer.color(cyan);
+                    renderer.color(black);
                     renderer.vertex(i, j, 0);
                 }
             } else {
@@ -245,7 +249,77 @@ public class BitVisualizer extends ApplicationAdapter {
             if ((i & 7) == 3) {
                 for (int j = 9 + (amounts[i] >> 8); j > 0; j--) {
                     if(amounts[i] < 256) continue;
-                    renderer.color(cyan);
+                    renderer.color(black);
+                    renderer.vertex(i, j, 0);
+                }
+            } else {
+                for (int j = (amounts[i] >> 8); j > 0; j--) {
+                    renderer.color(blue);
+                    renderer.vertex(i, j, 0);
+                }
+            }
+        }
+        for (int i = 0; i < 10; i++) {
+            for (int j = 512; j >= 8; j -= 32) {
+                renderer.color(red);
+                renderer.vertex(i, j, 0);
+            }
+        }
+        renderer.end();
+    }
+
+    private void bitsNextInclusiveFloat() {
+        renderer.begin(camera.combined, GL20.GL_POINTS);
+        Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
+                " " + random.getTag() + ", bits of nextInclusiveFloat() at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+        for (int i = 0; i < 0x10000; i++) {
+            int bits = Float.floatToIntBits(random.nextInclusiveFloat());
+            for (int j = 0, jj = 504 - 128; j < 32; j++, jj -= 8) {
+                if (1 == (bits >>> j & 1))
+                    amounts[jj] = amounts[jj + 1] = amounts[jj + 2] = amounts[jj + 3]
+                            = amounts[jj + 4] = amounts[jj + 5] = ++amounts[jj + 6];
+            }
+        }
+        for (int i = 0; i < 512; i++) {
+            if ((i & 7) == 3) {
+                for (int j = 9 + (amounts[i] >> 8); j > 0; j--) {
+                    if(amounts[i] < 256) continue;
+                    renderer.color(black);
+                    renderer.vertex(i, j, 0);
+                }
+            } else {
+                for (int j = (amounts[i] >> 8); j > 0; j--) {
+                    renderer.color(blue);
+                    renderer.vertex(i, j, 0);
+                }
+            }
+        }
+        for (int i = 0; i < 10; i++) {
+            for (int j = 512; j >= 8; j -= 32) {
+                renderer.color(red);
+                renderer.vertex(i, j, 0);
+            }
+        }
+        renderer.end();
+    }
+
+    private void bitsNextInclusiveDouble() {
+        renderer.begin(camera.combined, GL20.GL_POINTS);
+        Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
+                " " + random.getTag() + ", bits of nextInclusiveDouble() at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+        for (int i = 0; i < 0x10000; i++) {
+            long bits = Double.doubleToLongBits(random.nextInclusiveDouble());
+            for (int j = 0, jj = 504; j < 64; j++, jj -= 8) {
+                if (1L == (bits >>> j & 1L))
+                    amounts[jj] = amounts[jj + 1] = amounts[jj + 2] = amounts[jj + 3]
+                            = amounts[jj + 4] = amounts[jj + 5] = ++amounts[jj + 6];
+            }
+        }
+        for (int i = 0; i < 512; i++) {
+            if ((i & 7) == 3) {
+                for (int j = 9 + (amounts[i] >> 8); j > 0; j--) {
+                    if(amounts[i] < 256) continue;
+                    renderer.color(black);
                     renderer.vertex(i, j, 0);
                 }
             } else {
