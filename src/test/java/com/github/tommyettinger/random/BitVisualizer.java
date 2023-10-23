@@ -28,26 +28,20 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.utils.UIUtils;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.github.tommyettinger.digital.MathTools;
-import com.github.tommyettinger.digital.ShapeTools;
-import com.github.tommyettinger.digital.TrigTools;
 
 import java.util.Arrays;
 
-import static com.github.tommyettinger.digital.TrigTools.*;
-
 /**
- * Adapted from SquidLib's MathVisualizer, but stripped down to only include sphere-related math.
+ * Adapted from SquidLib's MathVisualizer, but stripped down to only include displays of bit frequency.
  */
 public class BitVisualizer extends ApplicationAdapter {
     private int mode = 0;
-    private final int modes = 2;
+    private final int modes = 4;
     private SpriteBatch batch;
     private ImmediateModeRenderer20 renderer;
     private InputAdapter input;
@@ -110,6 +104,10 @@ public class BitVisualizer extends ApplicationAdapter {
                 break;
             case 1: bitsNextDouble();
                 break;
+            case 2: bitsNextExclusiveFloat();
+                break;
+            case 3: bitsNextExclusiveDouble();
+                break;
         }
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
@@ -126,7 +124,6 @@ public class BitVisualizer extends ApplicationAdapter {
         viewport.apply(true);
     }
 
-
     private void bitsNextFloat() {
         renderer.begin(camera.combined, GL20.GL_POINTS);
         Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
@@ -141,20 +138,21 @@ public class BitVisualizer extends ApplicationAdapter {
         }
         for (int i = 0; i < 512; i++) {
             if ((i & 7) == 3) {
-                for (int j = (amounts[i] >> 8); j > 0; j--) {
-                    renderer.color(-0x1.c98066p126F);
+                for (int j = 9 + (amounts[i] >> 8); j > 0; j--) {
+                    if(amounts[i] < 256) continue;
+                    renderer.color(cyan);
                     renderer.vertex(i, j, 0);
                 }
             } else {
-                for (int j = (amounts[i] >> 8) - 9; j > 0; j--) {
-                    renderer.color(-0x1.d08864p126F);
+                for (int j = (amounts[i] >> 8); j > 0; j--) {
+                    renderer.color(blue);
                     renderer.vertex(i, j, 0);
                 }
             }
         }
         for (int i = 0; i < 10; i++) {
             for (int j = 512; j >= 8; j -= 32) {
-                renderer.color(-0x1.7677e8p125F);
+                renderer.color(red);
                 renderer.vertex(i, j, 0);
             }
         }
@@ -175,20 +173,91 @@ public class BitVisualizer extends ApplicationAdapter {
         }
         for (int i = 0; i < 512; i++) {
             if ((i & 7) == 3) {
-                for (int j = (amounts[i] >> 8); j > 0; j--) {
-                    renderer.color(-0x1.c98066p126F);
+                for (int j = 9 + (amounts[i] >> 8); j > 0; j--) {
+                    if(amounts[i] < 256) continue;
+                    renderer.color(cyan);
                     renderer.vertex(i, j, 0);
                 }
             } else {
-                for (int j = (amounts[i] >> 8) - 9; j > 0; j--) {
-                    renderer.color(-0x1.d08864p126F);
+                for (int j = (amounts[i] >> 8); j > 0; j--) {
+                    renderer.color(blue);
                     renderer.vertex(i, j, 0);
                 }
             }
         }
         for (int i = 0; i < 10; i++) {
             for (int j = 512; j >= 8; j -= 32) {
-                renderer.color(-0x1.7677e8p125F);
+                renderer.color(red);
+                renderer.vertex(i, j, 0);
+            }
+        }
+        renderer.end();
+    }
+
+    private void bitsNextExclusiveFloat() {
+        renderer.begin(camera.combined, GL20.GL_POINTS);
+        Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
+                " " + random.getTag() + ", bits of nextExclusiveFloat() at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+        for (int i = 0; i < 0x10000; i++) {
+            int bits = Float.floatToIntBits(random.nextExclusiveFloat());
+            for (int j = 0, jj = 504 - 128; j < 32; j++, jj -= 8) {
+                if (1 == (bits >>> j & 1))
+                    amounts[jj] = amounts[jj + 1] = amounts[jj + 2] = amounts[jj + 3]
+                            = amounts[jj + 4] = amounts[jj + 5] = ++amounts[jj + 6];
+            }
+        }
+        for (int i = 0; i < 512; i++) {
+            if ((i & 7) == 3) {
+                for (int j = 9 + (amounts[i] >> 8); j > 0; j--) {
+                    if(amounts[i] < 256) continue;
+                    renderer.color(cyan);
+                    renderer.vertex(i, j, 0);
+                }
+            } else {
+                for (int j = (amounts[i] >> 8); j > 0; j--) {
+                    renderer.color(blue);
+                    renderer.vertex(i, j, 0);
+                }
+            }
+        }
+        for (int i = 0; i < 10; i++) {
+            for (int j = 512; j >= 8; j -= 32) {
+                renderer.color(red);
+                renderer.vertex(i, j, 0);
+            }
+        }
+        renderer.end();
+    }
+
+    private void bitsNextExclusiveDouble() {
+        renderer.begin(camera.combined, GL20.GL_POINTS);
+        Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
+                " " + random.getTag() + ", bits of nextExclusiveDouble() at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+        for (int i = 0; i < 0x10000; i++) {
+            long bits = Double.doubleToLongBits(random.nextExclusiveDouble());
+            for (int j = 0, jj = 504; j < 64; j++, jj -= 8) {
+                if (1L == (bits >>> j & 1L))
+                    amounts[jj] = amounts[jj + 1] = amounts[jj + 2] = amounts[jj + 3]
+                            = amounts[jj + 4] = amounts[jj + 5] = ++amounts[jj + 6];
+            }
+        }
+        for (int i = 0; i < 512; i++) {
+            if ((i & 7) == 3) {
+                for (int j = 9 + (amounts[i] >> 8); j > 0; j--) {
+                    if(amounts[i] < 256) continue;
+                    renderer.color(cyan);
+                    renderer.vertex(i, j, 0);
+                }
+            } else {
+                for (int j = (amounts[i] >> 8); j > 0; j--) {
+                    renderer.color(blue);
+                    renderer.vertex(i, j, 0);
+                }
+            }
+        }
+        for (int i = 0; i < 10; i++) {
+            for (int j = 512; j >= 8; j -= 32) {
+                renderer.color(red);
                 renderer.vertex(i, j, 0);
             }
         }
