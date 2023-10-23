@@ -685,7 +685,7 @@ public abstract class EnhancedRandom extends Random {
 //		return ((randLow * boundHigh >>> 32) + randHigh * boundHigh) * 0x1p-53;
 
 		final long bits = nextLong();
-		return BitConversion.longBitsToDouble(1022L - Long.numberOfTrailingZeros(bits) << 52 | bits >>> 12) + 0x1p-12 - 0x1p-12;
+		return BitConversion.longBitsToDouble(1022L - BitConversion.countLeadingZeros(bits) << 52 | (bits & 0xFFFFFFFFFFFFFL)) + 0x1p-12 - 0x1p-12;
 	}
 
 	/**
@@ -727,7 +727,7 @@ public abstract class EnhancedRandom extends Random {
 	public float nextInclusiveFloat () {
 //		return (int)(0x1000001L * (nextLong() & 0xFFFFFFFFL) >> 32) * 0x1p-24f;
 		final long bits = nextLong();
-		return BitConversion.intBitsToFloat(126 - Long.numberOfTrailingZeros(bits) << 23 | (int)(bits >>> 41)) + 0x1p-22f - 0x1p-22f;
+		return BitConversion.intBitsToFloat(126 - BitConversion.countLeadingZeros(bits) << 23 | ((int)bits & 0x7FFFFF)) + 0x1p-22f - 0x1p-22f;
 	}
 
 	/**
@@ -774,8 +774,8 @@ public abstract class EnhancedRandom extends Random {
 	 * The implementation may have different performance characteristics than {@link #nextDouble()}, because this
 	 * doesn't perform any floating-point multiplication or division, and instead assembles bits obtained by one call to
 	 * {@link #nextLong()}. This uses {@link BitConversion#longBitsToDouble(long)} and
-	 * {@link Long#numberOfTrailingZeros(long)}, both of which typically have optimized intrinsics on HotSpot, and this
-	 * is branchless and loopless, unlike the original algorithm by Allen Downey. When compared with
+	 * {@link BitConversion#countLeadingZeros(long)}, both of which typically have optimized intrinsics on HotSpot, and
+	 * this is branchless and loopless, unlike the original algorithm by Allen Downey. When compared with
 	 * {@link #nextExclusiveDoubleEquidistant()}, this method performs better on at least HotSpot JVMs. On GraalVM 17,
 	 * this is over twice as fast as nextExclusiveDoubleEquidistant().
 	 *
@@ -783,7 +783,7 @@ public abstract class EnhancedRandom extends Random {
 	 */
 	public double nextExclusiveDouble () {
 		final long bits = nextLong();
-		return BitConversion.longBitsToDouble(1022L - Long.numberOfTrailingZeros(bits) << 52 | bits >>> 12);
+		return BitConversion.longBitsToDouble(1022L - BitConversion.countLeadingZeros(bits) << 52 | (bits & 0xFFFFFFFFFFFFFL));
 	}
 
 	/**
@@ -848,7 +848,7 @@ public abstract class EnhancedRandom extends Random {
 	 */
 	public double nextExclusiveSignedDouble(){
 		final long bits = nextLong();
-		return BitConversion.longBitsToDouble(1022L - Long.numberOfLeadingZeros(bits) << 52 | ((bits << 63 | bits >>> 1) & 0x800FFFFFFFFFFFFFL));
+		return BitConversion.longBitsToDouble(1022L - BitConversion.countLeadingZeros(bits) << 52 | ((bits << 63 | bits >>> 1) & 0x800FFFFFFFFFFFFFL));
 	}
 
 	/**
@@ -865,7 +865,7 @@ public abstract class EnhancedRandom extends Random {
 	 * The implementation may have different performance characteristics than {@link #nextFloat()},
 	 * because this doesn't perform any floating-point multiplication or division, and instead assembles bits
 	 * obtained by one call to {@link #nextLong()}. This uses {@link BitConversion#intBitsToFloat(int)} and
-	 * {@link Long#numberOfTrailingZeros(long)}, both of which typically have optimized intrinsics on HotSpot,
+	 * {@link BitConversion#countLeadingZeros(long)}, both of which typically have optimized intrinsics on HotSpot,
 	 * and this is branchless and loopless, unlike the original algorithm by Allen Downey. When compared with
 	 * {@link #nextExclusiveFloatEquidistant()}, this method performs better on at least HotSpot JVMs. On GraalVM 17,
 	 * this is over twice as fast as nextExclusiveFloatEquidistant().
@@ -874,7 +874,8 @@ public abstract class EnhancedRandom extends Random {
 	 */
 	public float nextExclusiveFloat () {
 		final long bits = nextLong();
-		return BitConversion.intBitsToFloat(126 - Long.numberOfTrailingZeros(bits) << 23 | (int)(bits >>> 41));
+		return BitConversion.intBitsToFloat(126 - BitConversion.countLeadingZeros(bits) << 23 | ((int)bits & 0x7FFFFF));
+//		return BitConversion.intBitsToFloat(126 - Long.numberOfTrailingZeros(bits) << 23 | (int)(bits >>> 41));
 	}
 
 	/**
@@ -938,7 +939,7 @@ public abstract class EnhancedRandom extends Random {
 	 */
 	public float nextExclusiveSignedFloat(){
 		final long bits = nextLong();
-		return BitConversion.intBitsToFloat(126 - Long.numberOfLeadingZeros(bits) << 23 | ((int)bits & 0x807FFFFF));
+		return BitConversion.intBitsToFloat(126 - BitConversion.countLeadingZeros(bits) << 23 | ((int)bits & 0x807FFFFF));
 	}
 
 	/**

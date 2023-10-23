@@ -309,9 +309,9 @@ public class SpangledRandom extends EnhancedRandom {
 
 	// Alternate ways of updating stateB with a longer period, but no skip():
 //		long b = (stateB += (a | 0x57930711F71F5806L - a) >> 63 ^ 0xD1B54A32D192ED03L);
-//		long b = (stateB += Long.numberOfLeadingZeros(a)) * 0xD1B54A32D192ED03L;
+//		long b = (stateB += BitConversion.countLeadingZeros(a)) * 0xD1B54A32D192ED03L;
 	// Actually, this works; we don't need the multiply:
-//		long b = (stateB += Long.numberOfLeadingZeros(a));
+//		long b = (stateB += BitConversion.countLeadingZeros(a));
 
 	@Override
 	public long previousLong () {

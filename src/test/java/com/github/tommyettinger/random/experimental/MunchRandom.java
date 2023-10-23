@@ -17,6 +17,7 @@
 
 package com.github.tommyettinger.random.experimental;
 
+import com.github.tommyettinger.digital.BitConversion;
 import com.github.tommyettinger.random.EnhancedRandom;
 
 /**
@@ -230,8 +231,8 @@ public class MunchRandom extends EnhancedRandom {
 	@Override
 	public long nextLong () {
 		long a = (stateA += 0x9E3779B97F4A7C15L);
-		long b = (stateB += Long.numberOfLeadingZeros(a));
-		long c = (stateC += Long.numberOfLeadingZeros(a|b));
+		long b = (stateB += BitConversion.countLeadingZeros(a));
+		long c = (stateC += BitConversion.countLeadingZeros(a|b));
 		a = (a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ c);
 		a = (a ^ a >>> 27) * 0x3C79AC492BA7B653L;
 		a = (a ^ a >>> 33) * 0x1C69B3F74AC4AE35L;
@@ -243,8 +244,8 @@ public class MunchRandom extends EnhancedRandom {
 		long a = stateA;
 		long b = stateB;
 		stateA -= 0x9E3779B97F4A7C15L;
-		stateB -= Long.numberOfLeadingZeros(a);
-		stateC -= Long.numberOfLeadingZeros(a|b);
+		stateB -= BitConversion.countLeadingZeros(a);
+		stateC -= BitConversion.countLeadingZeros(a|b);
 		a = stateA;
 		b = stateB;
 		long c = stateC;
@@ -257,8 +258,8 @@ public class MunchRandom extends EnhancedRandom {
 	@Override
 	public int next (int bits) {
 		long a = (stateA += 0x9E3779B97F4A7C15L);
-		long b = (stateB += Long.numberOfLeadingZeros(a));
-		long c = (stateC += Long.numberOfLeadingZeros(a|b));
+		long b = (stateB += BitConversion.countLeadingZeros(a));
+		long c = (stateC += BitConversion.countLeadingZeros(a|b));
 		a = (a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ c);
 		a = (a ^ a >>> 27) * 0x3C79AC492BA7B653L;
 		a = (a ^ a >>> 33) * 0x1C69B3F74AC4AE35L;

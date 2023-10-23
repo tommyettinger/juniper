@@ -17,6 +17,7 @@
 
 package com.github.tommyettinger.random.experimental;
 
+import com.github.tommyettinger.digital.BitConversion;
 import com.github.tommyettinger.random.EnhancedRandom;
 
 /**
@@ -229,8 +230,8 @@ public class SpurRandom extends EnhancedRandom {
 	@Override
 	public long nextLong () {
 		long a = (stateA = stateA * 0xD1342543DE82EF95L + 0x9E3779B97F4A7C15L); // Vigna and Steele, 2021
-		long b = (stateB = stateB * 0x2C6FE96EE78B6955L + Long.numberOfLeadingZeros(a)); // L'Ecuyer 1999, errata 2005
-		long c = (stateC = stateC * 0x369DEA0F31A53F85L + Long.numberOfLeadingZeros(a&b)); // L'Ecuyer 1999, errata 2005
+		long b = (stateB = stateB * 0x2C6FE96EE78B6955L + BitConversion.countLeadingZeros(a)); // L'Ecuyer 1999, errata 2005
+		long c = (stateC = stateC * 0x369DEA0F31A53F85L + BitConversion.countLeadingZeros(a&b)); // L'Ecuyer 1999, errata 2005
 		return (a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ c); // Speck cipher round function, https://en.wikipedia.org/wiki/Speck_(cipher)
 	}
 
@@ -239,8 +240,8 @@ public class SpurRandom extends EnhancedRandom {
 		long a = stateA;
         long b = stateB;
         stateA = 0x572B5EE77A54E3BDL * (stateA - 0x9E3779B97F4A7C15L);
-		stateB = 0x94947AB6A1E94BFDL * (stateB - Long.numberOfLeadingZeros(a));
-		stateC = 0xBE21F44C6018E14DL * (stateC - Long.numberOfLeadingZeros(a&b));
+		stateB = 0x94947AB6A1E94BFDL * (stateB - BitConversion.countLeadingZeros(a));
+		stateC = 0xBE21F44C6018E14DL * (stateC - BitConversion.countLeadingZeros(a&b));
 		a = stateA;
 		b = stateB;
 		long c = stateC;
@@ -250,8 +251,8 @@ public class SpurRandom extends EnhancedRandom {
 	@Override
 	public int next (int bits) {
 		long a = (stateA = stateA * 0xD1342543DE82EF95L + 0x9E3779B97F4A7C15L); // Vigna and Steele, 2021
-		long b = (stateB = stateB * 0x2C6FE96EE78B6955L + Long.numberOfLeadingZeros(a)); // L'Ecuyer 1999, errata 2005
-		long c = (stateC = stateC * 0x369DEA0F31A53F85L + Long.numberOfLeadingZeros(a&b)); // L'Ecuyer 1999, errata 2005
+		long b = (stateB = stateB * 0x2C6FE96EE78B6955L + BitConversion.countLeadingZeros(a)); // L'Ecuyer 1999, errata 2005
+		long c = (stateC = stateC * 0x369DEA0F31A53F85L + BitConversion.countLeadingZeros(a&b)); // L'Ecuyer 1999, errata 2005
 //		b = ((b << 56 | b >>> 8) + a ^ c); // Speck cipher round function, https://en.wikipedia.org/wiki/Speck_(cipher)
 //		a = ((a << 3 | a >>> 61) ^ b);
 		return (int)((a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ c) >>> 64 - bits);

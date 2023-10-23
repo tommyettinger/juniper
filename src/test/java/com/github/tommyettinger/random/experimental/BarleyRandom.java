@@ -17,6 +17,7 @@
 
 package com.github.tommyettinger.random.experimental;
 
+import com.github.tommyettinger.digital.BitConversion;
 import com.github.tommyettinger.random.EnhancedRandom;
 
 /**
@@ -172,7 +173,7 @@ public class BarleyRandom extends EnhancedRandom {
 	@Override
 	public long nextLong () {
 		long a = (stateA += 0x9E3779B97F4A7C15L);
-		long b = (stateB += Long.numberOfLeadingZeros(a));
+		long b = (stateB += BitConversion.countLeadingZeros(a));
 		b ^= b >>> 32 ^ a;
 		b *= 0xbea225f9eb34556dL;
 		b ^= b >>> 29 ^ a;
@@ -188,7 +189,7 @@ public class BarleyRandom extends EnhancedRandom {
 		long a = stateA;
 		long b = stateB;
 		stateA -= 0x9E3779B97F4A7C15L;
-		stateB -= Long.numberOfLeadingZeros(a);
+		stateB -= BitConversion.countLeadingZeros(a);
 		b ^= b >>> 32 ^ a;
 		b *= 0xbea225f9eb34556dL;
 		b ^= b >>> 29 ^ a;
@@ -202,7 +203,7 @@ public class BarleyRandom extends EnhancedRandom {
 	@Override
 	public int next (int bits) {
 		long a = (stateA += 0x9E3779B97F4A7C15L);
-		long b = (stateB += Long.numberOfLeadingZeros(a));
+		long b = (stateB += BitConversion.countLeadingZeros(a));
 		b ^= b >>> 32 ^ a;
 		b *= 0xbea225f9eb34556dL;
 		b ^= b >>> 29 ^ a;

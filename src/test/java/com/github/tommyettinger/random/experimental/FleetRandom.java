@@ -17,6 +17,7 @@
 
 package com.github.tommyettinger.random.experimental;
 
+import com.github.tommyettinger.digital.BitConversion;
 import com.github.tommyettinger.random.EnhancedRandom;
 
 /**
@@ -172,7 +173,7 @@ public class FleetRandom extends EnhancedRandom {
 	@Override
 	public long nextLong () {
 		long a = (stateA += 0x9E3779B97F4A7C15L);
-		long b = (stateB += 0xC6BC279692B5C323L ^ Long.numberOfLeadingZeros(a));
+		long b = (stateB += 0xC6BC279692B5C323L ^ BitConversion.countLeadingZeros(a));
 		b ^= b >>> 28;
 		b *= a | 1L;
 		return b ^ b >>> 30 ^ b >>> 6;
@@ -183,7 +184,7 @@ public class FleetRandom extends EnhancedRandom {
 		long a = stateA;
 		long b = stateB;
 		stateA -= 0x9E3779B97F4A7C15L;
-		stateB -= 0xC6BC279692B5C323L ^ Long.numberOfLeadingZeros(a);
+		stateB -= 0xC6BC279692B5C323L ^ BitConversion.countLeadingZeros(a);
 		b ^= b >>> 28;
 		b *= a | 1L;
 		return b ^ b >>> 30 ^ b >>> 6;
@@ -192,7 +193,7 @@ public class FleetRandom extends EnhancedRandom {
 	@Override
 	public int next (int bits) {
 		long a = (stateA += 0x9E3779B97F4A7C15L);
-		long b = (stateB += 0xC6BC279692B5C323L ^ Long.numberOfLeadingZeros(a));
+		long b = (stateB += 0xC6BC279692B5C323L ^ BitConversion.countLeadingZeros(a));
 		b ^= b >>> 28;
 		b *= a | 1L;
 		return (int) (b ^ b >>> 30 ^ b >>> 6) >>> (32 - bits);

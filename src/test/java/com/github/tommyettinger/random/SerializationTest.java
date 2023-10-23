@@ -12,12 +12,6 @@ import java.util.List;
 public class SerializationTest {
     @Test
     public void testWrite() {
-//        ChopRandom chop = new ChopRandom(-1L);
-//        DistinctRandom distinct = new DistinctRandom(-1L);
-//        MizuchiRandom mizuchi = new MizuchiRandom(-1L);
-//        TricycleRandom tricycle = new TricycleRandom(-1L);
-//        TrimRandom trim = new TrimRandom(-1L);
-//        EnhancedRandom[] all = new EnhancedRandom[]{chop, distinct, mizuchi, tricycle, trim};
         List<EnhancedRandom> all = Deserializer.copyRandoms();
         for(EnhancedRandom r : all) {
             r.setSeed(-1L);
@@ -53,15 +47,7 @@ public class SerializationTest {
     }
     @Test
     public void testRoundTrip() {
-//        ChopRandom chop = new ChopRandom(-1L);
-//        DistinctRandom distinct = new DistinctRandom(-1L);
-//        MizuchiRandom mizuchi = new MizuchiRandom(-1L);
-//        TricycleRandom tricycle = new TricycleRandom(-1L);
-//        TrimRandom trim = new TrimRandom(-1L);
-//        EnhancedRandom[] all = new EnhancedRandom[]{chop, distinct, mizuchi, tricycle, trim};
-
         List<EnhancedRandom> all = Deserializer.copyRandoms();
-//        List<EnhancedRandom> all = Collections.singletonList(Deserializer.get("KnSR"));
 
         List<Base> bases = Base.values();
         for(Base base : bases)

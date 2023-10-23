@@ -17,6 +17,7 @@
 
 package com.github.tommyettinger.random.experimental;
 
+import com.github.tommyettinger.digital.BitConversion;
 import com.github.tommyettinger.random.EnhancedRandom;
 
 public class CobraRandom extends EnhancedRandom {
@@ -174,7 +175,7 @@ public class CobraRandom extends EnhancedRandom {
 	@Override
 	public long nextLong () {
 		long a = (stateA = stateA * 0xF7C2EBC08F67F2B5L + 0xD1342543DE82EF95L);
-		long b = (stateB += 0x9E3779B97F4A7C16L + Long.numberOfLeadingZeros(a));
+		long b = (stateB += 0x9E3779B97F4A7C16L + BitConversion.countLeadingZeros(a));
 		a = (a ^ (a << 23 | a >>> 41) ^ (a << 53 | a >>> 11)) * 0x3C79AC492BA7B653L;
 		b = (b ^ (b << 47 | b >>> 17) ^ (b <<  5 | b >>> 59)) * 0x1C69B3F74AC4AE35L;
 		return a ^ a >>> 33 ^ b ^ b >>> 30;
@@ -185,7 +186,7 @@ public class CobraRandom extends EnhancedRandom {
 		long a = stateA;
 		stateA = (a - 0xD1342543DE82EF95L) * 0x09795DFF8024EB9DL;
 		long b = stateB;
-		stateB -= 0x9E3779B97F4A7C16L + Long.numberOfLeadingZeros(a);
+		stateB -= 0x9E3779B97F4A7C16L + BitConversion.countLeadingZeros(a);
 		a = (a ^ (a << 23 | a >>> 41) ^ (a << 53 | a >>> 11)) * 0x3C79AC492BA7B653L;
 		b = (b ^ (b << 47 | b >>> 17) ^ (b <<  5 | b >>> 59)) * 0x1C69B3F74AC4AE35L;
 		return a ^ a >>> 33 ^ b ^ b >>> 30;
@@ -195,7 +196,7 @@ public class CobraRandom extends EnhancedRandom {
 	@Override
 	public int next (int bits) {
 		long a = (stateA = stateA * 0xF7C2EBC08F67F2B5L + 0xD1342543DE82EF95L);
-		long b = (stateB += 0x9E3779B97F4A7C16L + Long.numberOfLeadingZeros(a));
+		long b = (stateB += 0x9E3779B97F4A7C16L + BitConversion.countLeadingZeros(a));
 		a = (a ^ (a << 23 | a >>> 41) ^ (a << 53 | a >>> 11)) * 0x3C79AC492BA7B653L;
 		b = (b ^ (b << 47 | b >>> 17) ^ (b <<  5 | b >>> 59)) * 0x1C69B3F74AC4AE35L;
 		return (int)(a ^ a >>> 33 ^ b ^ b >>> 30) >>> (32 - bits);

@@ -17,6 +17,7 @@
 
 package com.github.tommyettinger.random.experimental;
 
+import com.github.tommyettinger.digital.BitConversion;
 import com.github.tommyettinger.random.EnhancedRandom;
 
 public class LeaderRandom extends EnhancedRandom {
@@ -176,13 +177,13 @@ public class LeaderRandom extends EnhancedRandom {
 		// This version passed tests to at least 2TB with no anomalies in PractRand,
 		// but when initialized with similar seeds, it produces a XOR pattern.
 //		long a = (stateA += 0x9E3779B97F4A7C15L);
-//		long b = (stateB += Long.numberOfLeadingZeros(a));
+//		long b = (stateB += BitConversion.countLeadingZeros(a));
 //		a = (a ^ a >>> 27 ^ b) * 0x3C79AC492BA7B653L;
 //		a = (a ^ a >>> 33) * 0x1C69B3F74AC4AE35L;
 
 		// Passes 64TB in PractRand!
 		long a = (stateA += 0x9E3779B97F4A7C15L);
-		long b = (stateB += Long.numberOfLeadingZeros(a));
+		long b = (stateB += BitConversion.countLeadingZeros(a));
 		a = (a ^ a >>> 27 ^ (b << 21 | b >>> 43)) * 0x3C79AC492BA7B653L;
 		a = (a ^ a >>> 33 ^ (b << 41 | b >>> 23)) * 0x1C69B3F74AC4AE35L;
 		return a ^ a >>> 27;
@@ -192,7 +193,7 @@ public class LeaderRandom extends EnhancedRandom {
 	public long previousLong () {
 		long a = stateA;
 		long b = stateB;
-		stateB -= Long.numberOfLeadingZeros(a);
+		stateB -= BitConversion.countLeadingZeros(a);
 		stateA -= 0x9E3779B97F4A7C15L;
 		a = (a ^ a >>> 27 ^ (b << 21 | b >>> 43)) * 0x3C79AC492BA7B653L;
 		a = (a ^ a >>> 33 ^ (b << 41 | b >>> 23)) * 0x1C69B3F74AC4AE35L;
@@ -203,7 +204,7 @@ public class LeaderRandom extends EnhancedRandom {
 	@Override
 	public int next (int bits) {
 		long a = (stateA += 0x9E3779B97F4A7C15L);
-		long b = (stateB += Long.numberOfLeadingZeros(a));
+		long b = (stateB += BitConversion.countLeadingZeros(a));
 		a = (a ^ a >>> 27 ^ (b << 21 | b >>> 43)) * 0x3C79AC492BA7B653L;
 		a = (a ^ a >>> 33 ^ (b << 41 | b >>> 23)) * 0x1C69B3F74AC4AE35L;
 		return (int)(a ^ a >>> 27) >>> (32 - bits);

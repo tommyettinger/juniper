@@ -136,6 +136,6 @@ public class CauchyDistribution extends Distribution {
     public static double sample(EnhancedRandom generator, double alpha, double gamma) {
         final long bits = generator.nextLong();
         // this is just like nextExclusiveDouble(), but uses a smaller exponent to avoid multiplying by 0.5 .
-        return alpha + gamma * TrigTools.tanSmootherTurns(BitConversion.longBitsToDouble(1021L - Long.numberOfTrailingZeros(bits) << 52 | bits >>> 12) - 0.25);
+        return alpha + gamma * TrigTools.tanSmootherTurns(BitConversion.longBitsToDouble(1021L - BitConversion.countLeadingZeros(bits) << 52 | (bits & 0xFFFFFFFFFFFFFL)) - 0.25);
     }
 }
