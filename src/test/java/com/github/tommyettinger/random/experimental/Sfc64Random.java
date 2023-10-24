@@ -25,7 +25,8 @@ import com.github.tommyettinger.random.*;
  * <br>
  * The algorithm here can be considered stable, but the implementation is still experimental.
  * <br>
- * This implements all optional methods in EnhancedRandom except {@link #skip(long)} and {@link #previousLong()}.
+ * This implements all optional methods in EnhancedRandom except {@link #skip(long)}; it does implement
+ * {@link #previousLong()} without using skip().
  * <br>
  * This is based loosely off of
  * <a href="https://gist.github.com/imneme/f1f7821f07cf76504a97f6537c818083">M.E. O'Neill's C++ implementation</a>.
@@ -254,6 +255,15 @@ public class Sfc64Random extends EnhancedRandom {
 	}
 
 	@Override
+	public long previousLong() {
+		final long c = stateC;
+		stateC = 0x8E38E38E38E38E39L * stateB;
+		stateB = stateA ^ stateA >>> 11 ^ stateA >>> 22 ^ stateA >>> 33 ^ stateA >>> 44 ^ stateA >>> 55;
+		stateA = (c - (stateC << 24 | stateC >>> 40)) - stateB - --stateD;
+		return stateA + stateB + stateD;
+	}
+
+	@Override
 	public int next (int bits) {
 		final long tmp = stateA + stateB + stateD++;
 		stateA = stateB ^ (stateB >>> 11);
@@ -297,4 +307,45 @@ public class Sfc64Random extends EnhancedRandom {
 	public String toString () {
 		return "Sfc64Random{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L, stateD=" + (stateD) + "L}";
 	}
+
+//	public static void main(String[] args) {
+//		Sfc64Random random = new Sfc64Random(1L);
+//		System.out.println("Start: " + random);
+//		long n0 = random.nextLong();
+//		System.out.println("n0:    " + random);
+//		long n1 = random.nextLong();
+//		System.out.println("n1:    " + random);
+//		long n2 = random.nextLong();
+//		System.out.println("n2:    " + random);
+//		long n3 = random.nextLong();
+//		System.out.println("n3:    " + random);
+//		long n4 = random.nextLong();
+//		System.out.println("n4:    " + random);
+//		long n5 = random.nextLong();
+//		System.out.println("n5:    " + random);
+//		long p5 = random.previousLong();
+//		System.out.println("p5:    " + random);
+//		long p4 = random.previousLong();
+//		System.out.println("p4:    " + random);
+//		long p3 = random.previousLong();
+//		System.out.println("p3:    " + random);
+//		long p2 = random.previousLong();
+//		System.out.println("p2:    " + random);
+//		long p1 = random.previousLong();
+//		System.out.println("p1:    " + random);
+//		long p0 = random.previousLong();
+//		System.out.println("p0:    " + random);
+//		System.out.println(n0 == p0);
+//		System.out.println(n1 == p1);
+//		System.out.println(n2 == p2);
+//		System.out.println(n3 == p3);
+//		System.out.println(n4 == p4);
+//		System.out.println(n5 == p5);
+//		System.out.println(n0 + " vs. " + p0);
+//		System.out.println(n1 + " vs. " + p1);
+//		System.out.println(n2 + " vs. " + p2);
+//		System.out.println(n3 + " vs. " + p3);
+//		System.out.println(n4 + " vs. " + p4);
+//		System.out.println(n5 + " vs. " + p5);
+//	}
 }
