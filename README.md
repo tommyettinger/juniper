@@ -44,9 +44,9 @@ seemingly-random, response to any new person she meets.
 ### What are these generators?
 
 Several high-quality and very-fast random number generators are here, such as
-`com.github.tommyettinger.random.WhiskerRandom`,
-`com.github.tommyettinger.random.TricycleRandom`, `com.github.tommyettinger.random.DistinctRandom`,
+`com.github.tommyettinger.random.PouchRandom`, `com.github.tommyettinger.random.WhiskerRandom`,
 `com.github.tommyettinger.random.AceRandom`, `com.github.tommyettinger.random.PasarRandom`,
+`com.github.tommyettinger.random.TricycleRandom`, `com.github.tommyettinger.random.DistinctRandom`,
 `com.github.tommyettinger.random.FourWheelRandom`, `com.github.tommyettinger.random.TrimRandom`, and
 `com.github.tommyettinger.random.ScruffRandom`. These extend
 the abstract class `com.github.tommyettinger.random.EnhancedRandom`, and that extends `java.util.Random` for
@@ -59,18 +59,23 @@ WhiskerRandom is often considerably faster than DistinctRandom (which is no slou
 quality, but does not have a guaranteed cycle length -- a given seed could be found that has an unusually short cycle,
 which would reduce the usefulness of the generator. But, finding such a seed at random is so improbable for a generator
 with 256 bits of state that it can essentially be ignored as a weakness unless considering adversarial access (and you 
-**should not use** any of the generators here if that is the case, since none are cryptographically secure). TrimRandom
-and ScruffRandom are both like WhiskerRandom, also with 256 bits of state, but each promises a minimum period of 2 to
-the 64, and the maximum period is likely much higher. Trim and ScruffRandom aren't quite as fast as Whisker, and Trim
-seems to have questionable quality on some seeds, but only when using very stringent testing (Scruff seems very robust).
-PasarRandom and AceRandom are structured much like Whisker and Trim, but have five
+**should not use** any of the generators here if that is the case, since none are cryptographically secure).
+PouchRandom is often the fastest generator here in benchmarks; it acts like WhiskerRandom but has a guaranteed minimum
+cycle length of 2 to the 63 (as long as it isn't somehow forced into an invalid state, which its own methods cannot do).
+TrimRandom and ScruffRandom are both like WhiskerRandom, also with 256 bits of state, but each promises a minimum period
+of 2 to the 64, and the maximum period is likely much higher. Trim and ScruffRandom aren't quite as fast as Whisker or
+Poucn, and Trim seems to have questionable quality on some seeds, but only when using very stringent testing (Scruff
+seems very robust). PasarRandom and AceRandom are structured much like Whisker and Trim, but have five
 long states instead of four. Pasar uses multiplication, like Whisker, while Ace uses only add, rotate, XOR, and subtract
 operations. Ace can often be faster than Pasar, especially on Java 19 and newer, but can also be slower on older JVMs.
-Both of these have the same minimum period guarantee as Trim. All three of Trim, Pasar, and Whisker can `leap()` ahead
-in their subcycle and almost always into a different subcycle, which can be used to make non-overlapping sequences
-produced by different generators copied out from the same original parent. TricycleRandom and FourWheelRandom are
-somewhat older; Tricycle can sometimes be quite fast and has three long states, while FourWheel is extremely similar to
-Whisker, but not quite as fast.
+AceRandom is a good all-around default because it resists various ways generators can be constructed so they are
+correlated with each other; it's also certainly fast enough for most usage, and its maximum/expected period is larger
+than WhiskerRandom or PouchRandom (All have an expected period that's so large it essentially isn't a concern, estimated
+at over 2 to the 100). Both Pasar and Ace have the same minimum period guarantee as Trim. All three of Trim, Pasar, and
+Whisker can `leap()` ahead in their subcycle and almost always into a different subcycle, which can be used to make
+non-overlapping sequences produced by different generators copied out from the same original parent. TricycleRandom and
+FourWheelRandom are somewhat older; Tricycle can sometimes be quite fast and has three long states, while FourWheel is
+extremely similar to Whisker, but not quite as fast.
 
 Except for DistinctRandom, all of these mentioned generators are fast because they are designed to
 take advantage of ILP -- Instruction Level Parallelism. The idea here came from Mark Overton's Romu generators (see
@@ -212,15 +217,15 @@ cipher is just going to get ripped apart by any standard Java agent, so... don't
 With Gradle, the dependency (of the core module, if you have multiple) is:
 
 ```
-api "com.github.tommyettinger:juniper:0.3.9"
+api "com.github.tommyettinger:juniper:0.4.0"
 ```
 
 In a libGDX project that has a GWT/HTML backend, the `html/build.gradle` file
 should additionally have:
 
 ```
-implementation "com.github.tommyettinger:digital:0.4.0:sources"
-implementation "com.github.tommyettinger:juniper:0.3.9:sources"
+implementation "com.github.tommyettinger:digital:0.4.1:sources"
+implementation "com.github.tommyettinger:juniper:0.4.0:sources"
 ```
 
 And the `GdxDefinition.gwt.xml` file should have:
@@ -236,7 +241,7 @@ If you don't use Gradle, then with Maven, the dependency is:
 <dependency>
   <groupId>com.github.tommyettinger</groupId>
   <artifactId>juniper</artifactId>
-  <version>0.3.9</version>
+  <version>0.4.0</version>
 </dependency>
 ```
 

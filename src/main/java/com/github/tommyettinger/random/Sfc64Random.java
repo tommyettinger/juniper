@@ -15,21 +15,21 @@
  *
  */
 
-package com.github.tommyettinger.random.experimental;
-
-import com.github.tommyettinger.random.*;
+package com.github.tommyettinger.random;
 
 /**
  * A random number generator by Chris Doty-Humphrey, this has four {@code long} states, one of which is a counter.
- * It has a guaranteed minimum period of 2 o the 64, but an expected period that is drastically larger.
+ * It has a guaranteed minimum period of 2 to the 64, but an expected period that is drastically larger. Using
+ * {@link #nextLong()} does not use multiplication, but using {@link #previousLong()} does.
  * <br>
- * The algorithm here can be considered stable, but the implementation is still experimental.
+ * The algorithm and implementation here can be considered stable.
  * <br>
  * This implements all optional methods in EnhancedRandom except {@link #skip(long)}; it does implement
  * {@link #previousLong()} without using skip().
  * <br>
  * This is based loosely off of
  * <a href="https://gist.github.com/imneme/f1f7821f07cf76504a97f6537c818083">M.E. O'Neill's C++ implementation</a>.
+ * The original source for SFC64 is in <a href="https://sourceforge.net/projects/pracrand/">Practrand itself</a>.
  */
 public class Sfc64Random extends EnhancedRandom {
 
@@ -158,7 +158,8 @@ public class Sfc64Random extends EnhancedRandom {
 	 * <br>
 	 * This uses MX3 by Jon Maiga to mix {@code seed}, then only does a little distribution of the
 	 * mixed long so that 128 of 256 bits are always set across the four states. Because this uses
-	 * MX3, it uses long multiplication; this is the only part of Sfc64Random that does so.
+	 * MX3, it uses long multiplication; this and {@link #previousLong()} are the only parts of
+	 * Sfc64Random that do so.
 	 * @param seed the initial seed; may be any long
 	 */
 	public void setSeed(long seed) {
