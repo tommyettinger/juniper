@@ -25,6 +25,10 @@ package com.github.tommyettinger.random;
  * billion) seeds have been checked to ensure they do not produce a generator with a period shorter than 2 to the 20
  * (over 1 million).
  * <br>
+ * This algorithm hasn't been tested with ReMort, but
+ * <a href="https://www.pcg-random.org/posts/bob-jenkins-small-prng-passes-practrand.html">it passes PractRand</a> to
+ * 128 TB in M.E. O'Neill's testing, with two anomalies at 64TB and no other issues.
+ * <br>
  * This implements all optional methods in EnhancedRandom except {@link #skip(long)}.
  * <br>
  * Based on <a href="http://burtleburtle.net/bob/rand/smallprng.html">this public-domain code</a> by Bob Jenkins.
