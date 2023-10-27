@@ -220,92 +220,27 @@ public class Respite32Random extends EnhancedRandom {
 
 	@Override
 	public long nextLong () {
-		int a = (stateA += 0x91E10DA5);
-		int b = (stateB += 0x6C8E9CF5 ^ Integer.numberOfLeadingZeros(a));
-		int c = (stateC += 0x7FEB352D ^ Integer.numberOfLeadingZeros(a&b));
-		b = (b << 24 | b >>> 8) + a ^ c;
-		a = (a << 3 | a >>> 29) ^ b;
-		b = (b << 24 | b >>> 8) + a ^ c;
-		a = (a << 3 | a >>> 29) ^ b;
-		b = (b << 24 | b >>> 8) + a ^ c;
-		a = (a << 3 | a >>> 29) ^ b;
-		b = (b << 24 | b >>> 8) + a ^ c;
-		a = (a << 3 | a >>> 29) ^ b;
-		long h = a;
-		a = (stateA += 0x91E10DA5);
-		b = (stateB += 0x6C8E9CF5 ^ Integer.numberOfLeadingZeros(a));
-		c = (stateC += 0x7FEB352D ^ Integer.numberOfLeadingZeros(a&b));
-		b = (b << 24 | b >>> 8) + a ^ c;
-		a = (a << 3 | a >>> 29) ^ b;
-		b = (b << 24 | b >>> 8) + a ^ c;
-		a = (a << 3 | a >>> 29) ^ b;
-		b = (b << 24 | b >>> 8) + a ^ c;
-		a = (a << 3 | a >>> 29) ^ b;
-		b = (b << 24 | b >>> 8) + a ^ c;
-		a = (a << 3 | a >>> 29) ^ b;
-		return h << 32 ^ (a & 0xFFFFFFFFL);
+		long h = nextInt();
+		return h << 32 ^ (nextInt() & 0xFFFFFFFFL);
 	}
 
 	@Override
 	public long previousLong () {
-		int a = stateA;
-		int b = stateB;
-		int c = stateC;
-		b = (b << 24 | b >>> 8) + a ^ c;
-		a = (a << 3 | a >>> 29) ^ b;
-		b = (b << 24 | b >>> 8) + a ^ c;
-		a = (a << 3 | a >>> 29) ^ b;
-		b = (b << 24 | b >>> 8) + a ^ c;
-		a = (a << 3 | a >>> 29) ^ b;
-		b = (b << 24 | b >>> 8) + a ^ c;
-		a = (a << 3 | a >>> 29) ^ b;
-		long l = (a & 0xFFFFFFFFL);
-		a = stateA;
-		b = stateB;
-		stateA -= 0x91E10DA5;
-		stateB -= 0x6C8E9CF5 ^ Integer.numberOfLeadingZeros(a);
-		stateC -= 0x7FEB352D ^ Integer.numberOfLeadingZeros(a&b);
-		a = stateA;
-		b = stateB;
-		c = stateC;
-		b = (b << 24 | b >>> 8) + a ^ c;
-		a = (a << 3 | a >>> 29) ^ b;
-		b = (b << 24 | b >>> 8) + a ^ c;
-		a = (a << 3 | a >>> 29) ^ b;
-		b = (b << 24 | b >>> 8) + a ^ c;
-		a = (a << 3 | a >>> 29) ^ b;
-		b = (b << 24 | b >>> 8) + a ^ c;
-		a = (a << 3 | a >>> 29) ^ b;
-		long h = a;
-		a = stateA;
-		b = stateB;
-		stateA -= 0x91E10DA5;
-		stateB -= 0x6C8E9CF5 ^ Integer.numberOfLeadingZeros(a);
-		stateC -= 0x7FEB352D ^ Integer.numberOfLeadingZeros(a&b);
+		long l = (previousInt() & 0xFFFFFFFFL);
+		long h = previousInt();
 		return h << 32 ^ l;
 	}
 
 	@Override
 	public int next (int bits) {
-		int a = (stateA += 0x91E10DA5);
-		int b = (stateB += 0x6C8E9CF5 ^ Integer.numberOfLeadingZeros(a));
-		int c = (stateC += 0x7FEB352D ^ Integer.numberOfLeadingZeros(a&b));
-		b = (b << 24 | b >>> 8) + a ^ c;
-		a = (a << 3 | a >>> 29) ^ b;
-		b = (b << 24 | b >>> 8) + a ^ c;
-		a = (a << 3 | a >>> 29) ^ b;
-		b = (b << 24 | b >>> 8) + a ^ c;
-		a = (a << 3 | a >>> 29) ^ b;
-		b = (b << 24 | b >>> 8) + a ^ c;
-		a = (a << 3 | a >>> 29) ^ b;
-		return a >>> (32 - bits);
+		return nextInt() >>> (32 - bits);
 	}
 
 	@Override
-	public int nextInt () {
-		int a = (stateA += 0x91E10DA5);
-		int b = (stateB += 0x6C8E9CF5 ^ Integer.numberOfLeadingZeros(a));
-		int c = (stateC += 0x7FEB352D ^ Integer.numberOfLeadingZeros(a&b));
+	public native int nextInt () /*-{
+		var a = (this.@com.github.tommyettinger.random.Respite32Random::stateA = this.@com.github.tommyettinger.random.Respite32Random::stateA + (0x91E10DA5) | 0);
+		var b = (this.@com.github.tommyettinger.random.Respite32Random::stateB = this.@com.github.tommyettinger.random.Respite32Random::stateB + (0x6C8E9CF5 ^ Math.clz32(a)) | 0);
+		var c = (this.@com.github.tommyettinger.random.Respite32Random::stateC = this.@com.github.tommyettinger.random.Respite32Random::stateC + (0x7FEB352D ^ Math.clz32(a&b)) | 0);
 		b = (b << 24 | b >>> 8) + a ^ c;
 		a = (a << 3 | a >>> 29) ^ b;
 		b = (b << 24 | b >>> 8) + a ^ c;
@@ -315,12 +250,12 @@ public class Respite32Random extends EnhancedRandom {
 		b = (b << 24 | b >>> 8) + a ^ c;
 		a = (a << 3 | a >>> 29) ^ b;
 		return a;
-	}
+	}-*/;
 
-	public int previousInt() {
-		int a = stateA;
-		int b = stateB;
-		int c = stateC;
+	public native int previousInt() /*-{
+		var a = this.@com.github.tommyettinger.random.Respite32Random::stateA;
+		var b = this.@com.github.tommyettinger.random.Respite32Random::stateB;
+		var c = this.@com.github.tommyettinger.random.Respite32Random::stateC;
 		b = (b << 24 | b >>> 8) + a ^ c;
 		a = (a << 3 | a >>> 29) ^ b;
 		b = (b << 24 | b >>> 8) + a ^ c;
@@ -329,13 +264,13 @@ public class Respite32Random extends EnhancedRandom {
 		a = (a << 3 | a >>> 29) ^ b;
 		b = (b << 24 | b >>> 8) + a ^ c;
 		a = (a << 3 | a >>> 29) ^ b;
-		b = stateA;
-		c = stateB;
-		stateA -= 0x91E10DA5;
-		stateB -= 0x6C8E9CF5 ^ Integer.numberOfLeadingZeros(b);
-		stateC -= 0x7FEB352D ^ Integer.numberOfLeadingZeros(b&c);
+		b = this.@com.github.tommyettinger.random.Respite32Random::stateA;
+		c = this.@com.github.tommyettinger.random.Respite32Random::stateB;
+		this.@com.github.tommyettinger.random.Respite32Random::stateA = this.@com.github.tommyettinger.random.Respite32Random::stateA + (0x91E10DA5) | 0;
+		this.@com.github.tommyettinger.random.Respite32Random::stateB = this.@com.github.tommyettinger.random.Respite32Random::stateB + (0x6C8E9CF5 ^ Math.clz32(a)) | 0;
+		this.@com.github.tommyettinger.random.Respite32Random::stateC = this.@com.github.tommyettinger.random.Respite32Random::stateC + (0x7FEB352D ^ Math.clz32(a&b)) | 0;
 		return a;
-	}
+	}-*/;
 
 	@Override
 	public int nextInt (int bound) {
@@ -355,11 +290,10 @@ public class Respite32Random extends EnhancedRandom {
 
 	@Override
 	public long nextLong (long inner, long outer) {
-		final long rand = nextLong();
+		final long randHigh = nextInt() & 0xFFFFFFFFL;
+		final long randLow = nextInt() & 0xFFFFFFFFL;
 		if (inner >= outer)
 			return inner;
-		final long randLow = rand & 0xFFFFFFFFL;
-		final long randHigh = rand >>> 32;
 		final long bound = outer - inner;
 		final long boundLow = bound & 0xFFFFFFFFL;
 		final long boundHigh = (bound >>> 32);
@@ -374,9 +308,8 @@ public class Respite32Random extends EnhancedRandom {
 			inner = t + 1L;
 		}
 		final long bound = outer - inner;
-		final long rand = nextLong();
-		final long randLow = rand & 0xFFFFFFFFL;
-		final long randHigh = rand >>> 32;
+		final long randHigh = nextInt() & 0xFFFFFFFFL;
+		final long randLow = nextInt() & 0xFFFFFFFFL;
 		final long boundLow = bound & 0xFFFFFFFFL;
 		final long boundHigh = (bound >>> 32);
 		return inner + (randHigh * boundLow >>> 32) + (randLow * boundHigh >>> 32) + randHigh * boundHigh;
@@ -417,32 +350,4 @@ public class Respite32Random extends EnhancedRandom {
 	public String toString () {
 		return "Respite32Random{" + "stateA=" + (stateA) + ", stateB=" + (stateB) + ", stateC=" + (stateC) + "}";
 	}
-
-//	public static void main(String[] args) {
-//		Respite32Random random = new Respite32Random(1L);
-//		long n0 = random.nextLong();
-//		long n1 = random.nextLong();
-//		long n2 = random.nextLong();
-//		long n3 = random.nextLong();
-//		long n4 = random.nextLong();
-//		long n5 = random.nextLong();
-//		long p5 = random.previousLong();
-//		long p4 = random.previousLong();
-//		long p3 = random.previousLong();
-//		long p2 = random.previousLong();
-//		long p1 = random.previousLong();
-//		long p0 = random.previousLong();
-//		System.out.println(n0 == p0);
-//		System.out.println(n1 == p1);
-//		System.out.println(n2 == p2);
-//		System.out.println(n3 == p3);
-//		System.out.println(n4 == p4);
-//		System.out.println(n5 == p5);
-//		System.out.printf("0x%016XL vs. 0x%016XL\n", n0, p0);
-//		System.out.printf("0x%016XL vs. 0x%016XL\n", n1, p1);
-//		System.out.printf("0x%016XL vs. 0x%016XL\n", n2, p2);
-//		System.out.printf("0x%016XL vs. 0x%016XL\n", n3, p3);
-//		System.out.printf("0x%016XL vs. 0x%016XL\n", n4, p4);
-//		System.out.printf("0x%016XL vs. 0x%016XL\n", n5, p5);
-//	}
 }
