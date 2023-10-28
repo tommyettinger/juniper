@@ -16,9 +16,9 @@ public class DistributorDemo extends Game {
     public Screen alternateCauchy, alternateArcsine, alternateNormal, alternateTriangular;
     private int screenIndex;
     public static double a = 1.0, b = 1.0, c = 1.0;
-    public EnhancedRandom[] randoms = new EnhancedRandom[]{new ChopRandom(), new RandomRandom(), new WhiskerRandom(),
-            new AceRandom(), new ScruffRandom(), new MizuchiRandom(),
-            new Xoshiro128PlusPlusRandom(), new LaserRandom(), new TrimRandom(), new DistinctRandom(),
+    public EnhancedRandom[] randoms = new EnhancedRandom[]{new Respite32Random(), new Jsf32Random(), new ChopRandom(),
+            new RandomRandom(), new WhiskerRandom(), new AceRandom(), new PouchRandom(), new ScruffRandom(),
+            new MizuchiRandom(), new Xoshiro128PlusPlusRandom(), new LaserRandom(), new TrimRandom(), new DistinctRandom(),
             new GoldenQuasiRandom(), new VanDerCorputQuasiRandom(), new LowChangeQuasiRandom(), new TupleQuasiRandom(0)};
     public int randomIndex = 0;
     public EnhancedRandom random = randoms[randomIndex];
