@@ -91,11 +91,13 @@ There's also some other generators that you might want for other reasons. `com.g
 is similar to DistinctRandom in terms of its features (it can skip to any point in its sequence in constant time). It
 also has each possible LaserRandom instance produce a different set of outputs over its full cycle, with some outputs
 produced twice and some not at all, but appending the outputs of all LaserRandom instances would contain every possible
-long exactly 2 to the 64 times. `com.github.tommyettinger.random.Xoshiro256StarStarRandom` isn't quite as fast, as the
+long exactly 2 to the 64 times. Unfortunately, all LaserRandom streams are correlated with many other LaserRandom
+streams, so you should usually only have one LaserRandom producing output that could be compared with another generator.
+`com.github.tommyettinger.random.Xoshiro256StarStarRandom` isn't quite as fast as the
 above generators, but is four-dimensionally equidistributed (this means every sequence of four `long` values will be
 produced with equal likelihood, except the four-zeroes sequence, which is never produced).
 `com.github.tommyettinger.random.Xoshiro256MX3Random` is just like the previously-mentioned generator, but uses a
-more robust way of mixing the output bits (the MX3 unary hash instead of the StarStar scrambler).
+more robust (slow) way of mixing the output bits (the MX3 unary hash instead of the StarStar scrambler).
 `com.github.tommyettinger.random.StrangerRandom` is mostly useful if you anticipate running on unusual
 hardware, particularly some that doesn't support fast multiplication between `long`s (StrangerRandom doesn't use multiplication);
 it also has a good guaranteed minimum period length of 2 to the 65 minus 2, but is between DistinctRandom and FourWheelRandom in
@@ -105,17 +107,27 @@ with each other than in LaserRandom. `com.github.tommyettinger.random.ChopRandom
 works on `int` states instead of `long`, so it has a shorter guaranteed period of 2 to the 32, but should be much faster
 when run on GWT (even when generating `long` values!). `com.github.tommyettinger.random.Xoshiro128PlusPlusRandom` is a slightly-modified
 version of the 32-bit Xoshiro generator with the ++ scrambler; it has some optimizations so that it can return `long`
-values more quickly, though it is still slower than ChopRandom.
-`com.github.tommyettinger.random.Xoroshiro128StarStarRandom` uses the precursoor to Xoshiro, the similarly-named
+values more quickly, though it is still slower than ChopRandom. Its period is 2 to the 128 minus 1.
+`com.github.tommyettinger.random.Respite32Random` is another 32-bit generator, this one built with a hash-on-counters
+design like DistinctRandom; it has a guaranteed exact period of 2 to the 96, and has more of an emphasis on GWT
+performance because it uses a rather different implementation with the same results, only when compiled to JS.
+Respite32Random uses similar code to the Speck cipher for its hashing section, but has an unusual strategy for the
+counters it has -- one counter simply adds a constant, but the others add a constant and the result of
+`Integer.numberOfLeadingZeros()` on either a previous state or the bitwise AND of two previous states. In other words,
+it isn't a commonly-seen way of running a counter, but it does work well, and ensures a longer period.
+`com.github.tommyettinger.random.Xoroshiro128StarStarRandom` uses the precursor to Xoshiro, the similarly-named
 Xoroshiro, with two `long` states; it is two-dimensionally equidistributed and has a period of 2 to the 128 minus 1.
 
-Two quasi-random number generators are present here; these are designed for a different purpose than the other
+Some quasi-random number generators are present here; these are designed for a different purpose than the other
 generators and don't pass statistical tests for randomness. They do converge much more quickly than a pseudo-random
 number generator when you request one number from them at a time and get an answer to some question by running many
 quasi-random trials. The quasi-random generators are `com.github.tommyettinger.random.GoldenQuasiRandom`, which uses a
-linear recurrence of 2 to the 64 divided by the golden ratio, and
-`com.github.tommyettinger.random.VanDerCorputQuasiRandom`, which uses the base-2 van der Corput sequence. Both do their
-job well enough (GoldenQuasiRandom is probably faster), but don't use either when you specifically need randomness.
+linear recurrence of 2 to the 64 divided by the golden ratio, `com.github.tommyettinger.random.TupleQuasiRandom`, which
+multiplies a counter by a different multiplier every time for 1024 different multipliers, then cycles that,
+`com.github.tommyettinger.random.VanDerCorputQuasiRandom`, which uses the base-2 van der Corput sequence, and
+`com.github.tommyettinger.random.LowChangeQuasiRandom`, which is about as non-random-seeming as it gets because it only
+changes one bit of its output at a time (but which bit is selected pseudo-randomly). They do their
+job well enough (GoldenQuasiRandom is probably fastest), but don't use either when you specifically need randomness.
 
 A nice quality of the `EnhancedRandom` values here is that they can be serialized to Strings easily and in a consistent
 format, and deserialized to the appropriate class given a serialized String from any generator. You can use the
@@ -217,15 +229,15 @@ cipher is just going to get ripped apart by any standard Java agent, so... don't
 With Gradle, the dependency (of the core module, if you have multiple) is:
 
 ```
-api "com.github.tommyettinger:juniper:0.4.0"
+api "com.github.tommyettinger:juniper:0.4.1"
 ```
 
 In a libGDX project that has a GWT/HTML backend, the `html/build.gradle` file
 should additionally have:
 
 ```
-implementation "com.github.tommyettinger:digital:0.4.1:sources"
-implementation "com.github.tommyettinger:juniper:0.4.0:sources"
+implementation "com.github.tommyettinger:digital:0.4.2:sources"
+implementation "com.github.tommyettinger:juniper:0.4.1:sources"
 ```
 
 And the `GdxDefinition.gwt.xml` file should have:
@@ -241,7 +253,7 @@ If you don't use Gradle, then with Maven, the dependency is:
 <dependency>
   <groupId>com.github.tommyettinger</groupId>
   <artifactId>juniper</artifactId>
-  <version>0.4.0</version>
+  <version>0.4.1</version>
 </dependency>
 ```
 
