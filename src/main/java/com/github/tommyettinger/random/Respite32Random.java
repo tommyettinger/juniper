@@ -19,8 +19,10 @@ package com.github.tommyettinger.random;
 
 /**
  * A random number generator that is optimized for performance on 32-bit machines and with Google Web Toolkit,
- * Respite32Random is (currently) the only 32-bit-native generator here that doesn't have any shorter subcycles (because
- * it only has one cycle, of length 2 to the 96). This generator has three {@code int} states and doesn't use any
+ * Respite32Random is a 32-bit-native generator here that doesn't have any shorter subcycles (because it only has one
+ * cycle, of length 2 to the 96). It effectively shares this property with {@link Xoshiro128PlusPlusRandom}, except that
+ * Xoshiro128PlusPlusRandom doesn't permit the state to be all 0s, while Respite32Random isn't adversely affected by
+ * that condition. This generator has three {@code int} states and doesn't use any
  * multiplication. It does use the count leading zeros instruction, which is {@link Integer#numberOfLeadingZeros(int)}
  * on most platforms, or the JS function {@code Math.clz32()} on GWT. This only counts leading zeros for the purposes of
  * its state transition (for stateB and stateC), and using it the way this does is what allows the period to be so high.
@@ -28,13 +30,18 @@ package com.github.tommyettinger.random;
  * This algorithm hasn't been tested with ReMort, but passes 64TB of PractRand testing with no anomalies. Numerically
  * similar initial states tend to be correlated with each other, even in the long term. This property is shared with
  * many other generators, such as {@link Xoshiro256StarStarRandom}, and the correlation isn't as severe as it is in
- * {@link WhiskerRandom}.
+ * {@link WhiskerRandom}. Of the 32-bit-native generators, {@link ChopRandom} and {@link Jsf32Random} do not have
+ * correlations I can find, but {@link Xoshiro128PlusPlusRandom} does have noticeable correlation between numerically
+ * similar initial states.
  * <br>
  * This implements all optional methods in EnhancedRandom except {@link #skip(long)}.
  * <br>
  * The name comes from how this was a short break from generators that use 64-bit math, and also because it sounds
  * similar to "respect" -- RespectRandom is a closely-related generator that is still in development. Respite and its
  * relatives use the Speck cipher's round function to reliably randomize multiple states.
+ * <br>
+ * Respite32Random is not currently considered stable; I am pursuing alternative implementation options that keep the
+ * same period and state properties.
  */
 public class Respite32Random extends EnhancedRandom {
 
