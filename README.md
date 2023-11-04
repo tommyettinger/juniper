@@ -229,15 +229,15 @@ cipher is just going to get ripped apart by any standard Java agent, so... don't
 With Gradle, the dependency (of the core module, if you have multiple) is:
 
 ```
-api "com.github.tommyettinger:juniper:0.4.1"
+api "com.github.tommyettinger:juniper:0.4.2"
 ```
 
 In a libGDX project that has a GWT/HTML backend, the `html/build.gradle` file
 should additionally have:
 
 ```
-implementation "com.github.tommyettinger:digital:0.4.2:sources"
-implementation "com.github.tommyettinger:juniper:0.4.1:sources"
+implementation "com.github.tommyettinger:digital:0.4.3:sources"
+implementation "com.github.tommyettinger:juniper:0.4.2:sources"
 ```
 
 And the `GdxDefinition.gwt.xml` file should have:
@@ -253,7 +253,7 @@ If you don't use Gradle, then with Maven, the dependency is:
 <dependency>
   <groupId>com.github.tommyettinger</groupId>
   <artifactId>juniper</artifactId>
-  <version>0.4.1</version>
+  <version>0.4.2</version>
 </dependency>
 ```
 

@@ -77,7 +77,7 @@ repositories {
 
 dependencies {
     api "com.github.tommyettinger:digital:$digitalVersion"
-    testImplementation "com.github.tommyettinger:jdkgdxds:1.4.2"
+    testImplementation "com.github.tommyettinger:jdkgdxds:1.4.4"
     testImplementation "com.badlogicgames.gdx:gdx:1.12.1"
     testImplementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:1.12.1"
     testImplementation "com.badlogicgames.gdx:gdx-platform:1.12.1:natives-desktop"

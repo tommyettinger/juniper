@@ -1,3 +1,17 @@
+[0.4.2]
+- Update digital dependency to 0.4.3, which allows Juniper to be used on GWT again.
+
+[0.4.1]
+- Add Respite32Random (this is a 32-bit generator).
+- Update digital dependency to 0.4.2 .
+
+[0.4.0]
+- Added PouchRandom; this is currently the fastest generator here, but has some state constraints that other generators don't require.
+- Added Crand64Random.
+- Added Sfc64Random.
+- Added Jsf32Random (this is a 32-bit generator, unlike the others added in this release, which are 64-bit).
+- Update digital dependency to 0.4.1 .
+
 [0.3.9]
 - Updated dependency on digital to 0.4.0 .
 - Updated LineWobble with several new methods, such as splobble(), quobble(), and hobble().
