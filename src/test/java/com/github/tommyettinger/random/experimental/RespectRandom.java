@@ -15,7 +15,11 @@
  *
  */
 
-package com.github.tommyettinger.random;
+package com.github.tommyettinger.random.experimental;
+
+import com.github.tommyettinger.random.EnhancedRandom;
+import com.github.tommyettinger.random.LaserRandom;
+import com.github.tommyettinger.random.Respite32Random;
 
 /**
  * A generator with "good enough" period length but many more streams than other generators here have.
@@ -259,9 +263,12 @@ public class RespectRandom extends EnhancedRandom {
 
 	@Override
 	public long previousLong () {
-        long a = stateA -= 0xBEA225F9EB34556DL;
-		long b = stateB -= 0xD1342543DE82EF95L;
-		long c = stateC -= 0xA62B82F58DB8A985L;
+        long a = stateA;
+		long b = stateB;
+		long c = stateC;
+        stateA -= 0xBEA225F9EB34556DL;
+		stateB -= 0xD1342543DE82EF95L;
+		stateC -= 0xA62B82F58DB8A985L;
 		b = (b << 56 | b >>> 8) + a ^ c;
 		a = ((a << 3 | a >>> 61) ^ b);
 		b = (b << 51 | b >>> 13) + a ^ c;
