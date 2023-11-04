@@ -142,7 +142,7 @@ public class TerseRandom extends EnhancedRandom {
 	/**
 	 * This initializes all 4 states of the generator to random values based on the given seed.
 	 * (2 to the 64) possible initial generator states can be produced here, though there are
-	 * (2 to the 190) possible states in total.
+	 * (2 to the 192) possible states in total.
 	 *
 	 * @param seed the initial seed; may be any long
 	 */

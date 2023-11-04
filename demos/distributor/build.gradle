@@ -28,9 +28,8 @@ subprojects {
 	version = '0.0.1'
 	ext.appName = 'distributor'
 	repositories {
-//		mavenLocal()
+		mavenLocal()
 		mavenCentral()
-		gradlePluginPortal()
 		maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
 		maven { url 'https://jitpack.io' }
 		maven { url 'https://teavm.org/maven/repository/' }
