@@ -18,25 +18,23 @@
 package com.github.tommyettinger.random.experimental;
 
 import com.github.tommyettinger.random.EnhancedRandom;
-import com.github.tommyettinger.random.LaserRandom;
 import com.github.tommyettinger.random.Respite32Random;
 
 /**
  * A generator with "good enough" period length but many more streams than other generators here have.
  * Has 192 bits of state. Period is 2 to the 64 for any stream, with 2 to the 128 possible streams.
- * The {@link #nextLong()}, {@link #previousLong()}, and {@link #next(int)} methods do not use any
- * multiplication, but other methods do (ones that aren't usually called in tight loops).
+ * The {@link #nextLong()}, {@link #previousLong()}, and {@link #next(int)} methods only use ARX
+ * operations (add, rotate, XOR), but other methods do (ones that aren't usually called in tight loops).
  * This uses four rounds of something like the Speck cipher to mix the result. It allows arbitrary
  * skipping within the current stream using {@link #skip(long)}, and you can get the stream as a pair
  * of longs with {@link #getStream0()} and {@link #getStream1()}. You can also set the current stream
  * absolutely (with {@link #setStream(long, long)}) or relatively (with {@link #shiftStream(long, long)}).
  * <br>
- * This generator passes 64TB of PractRand testing with no anomalies. Even though a period of 2 to the 64
+ * Even though a period of 2 to the 64
  * is just "good enough," it's tens of thousands of times longer than java.util.Random, and equivalent to
  * any individual SplittableRandom. The speed of this generator is unknown, but probably isn't great,
  * especially compared to designs that take advantage of instruction-level parallelism. The streams are
- * meant to have much less correlation between similar initial states, and this could be used to replace
- * {@link LaserRandom} (which has strong correlation between many initial states).
+ * meant to have much less correlation between similar initial states, but are still quite correlated.
  * <br>
  * The name is similar to {@link Respite32Random} because both generators have three states and run them
  * through 4 rounds of the Speck cipher's round function (or something very close to it).
@@ -244,6 +242,10 @@ public class RespectRandom extends EnhancedRandom {
 		a = ((a << 5 | a >>> 59) ^ b);
 		b = (b << 43 | b >>> 21) + a ^ c;
 		a = ((a << 8 | a >>> 56) ^ b);
+		b = (b << 56 | b >>> 8) + a ^ c;
+		a = ((a << 3 | a >>> 61) ^ b);
+		b = (b << 51 | b >>> 13) + a ^ c;
+		a = ((a << 5 | a >>> 59) ^ b);
 		return (a << 13 | a >>> 51) ^ ((b << 30 | b >>> 34) + a ^ c);
 	}
 
@@ -258,6 +260,10 @@ public class RespectRandom extends EnhancedRandom {
 		a = ((a << 5 | a >>> 59) ^ b);
 		b = (b << 43 | b >>> 21) + a ^ c;
 		a = ((a << 8 | a >>> 56) ^ b);
+		b = (b << 56 | b >>> 8) + a ^ c;
+		a = ((a << 3 | a >>> 61) ^ b);
+		b = (b << 51 | b >>> 13) + a ^ c;
+		a = ((a << 5 | a >>> 59) ^ b);
 		return (a << 13 | a >>> 51) ^ ((b << 30 | b >>> 34) + a ^ c);
 	}
 
@@ -275,6 +281,10 @@ public class RespectRandom extends EnhancedRandom {
 		a = ((a << 5 | a >>> 59) ^ b);
 		b = (b << 43 | b >>> 21) + a ^ c;
 		a = ((a << 8 | a >>> 56) ^ b);
+		b = (b << 56 | b >>> 8) + a ^ c;
+		a = ((a << 3 | a >>> 61) ^ b);
+		b = (b << 51 | b >>> 13) + a ^ c;
+		a = ((a << 5 | a >>> 59) ^ b);
 		return (a << 13 | a >>> 51) ^ ((b << 30 | b >>> 34) + a ^ c);
 	}
 
@@ -289,6 +299,10 @@ public class RespectRandom extends EnhancedRandom {
 		a = ((a << 5 | a >>> 59) ^ b);
 		b = (b << 43 | b >>> 21) + a ^ c;
 		a = ((a << 8 | a >>> 56) ^ b);
+		b = (b << 56 | b >>> 8) + a ^ c;
+		a = ((a << 3 | a >>> 61) ^ b);
+		b = (b << 51 | b >>> 13) + a ^ c;
+		a = ((a << 5 | a >>> 59) ^ b);
 		return (int)((a << 13 | a >>> 51) ^ ((b << 30 | b >>> 34) + a ^ c)) >>> (32 - bits);
 	}
 

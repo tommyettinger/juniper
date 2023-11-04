@@ -25,7 +25,10 @@ package com.github.tommyettinger.random;
  * on most platforms, or the JS function {@code Math.clz32()} on GWT. This only counts leading zeros for the purposes of
  * its state transition (for stateB and stateC), and using it the way this does is what allows the period to be so high.
  * <br>
- * This algorithm hasn't been tested with ReMort, but passes 64TB of PractRand testing with no anomalies.
+ * This algorithm hasn't been tested with ReMort, but passes 64TB of PractRand testing with no anomalies. Numerically
+ * similar initial states tend to be correlated with each other, even in the long term. This property is shared with
+ * many other generators, such as {@link Xoshiro256StarStarRandom}, and the correlation isn't as severe as it is in
+ * {@link WhiskerRandom}.
  * <br>
  * This implements all optional methods in EnhancedRandom except {@link #skip(long)}.
  * <br>
