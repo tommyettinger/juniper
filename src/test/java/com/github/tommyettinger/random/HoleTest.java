@@ -20,8 +20,8 @@ public class HoleTest {
         GoldenQuasiRandom random = new GoldenQuasiRandom(123L);
         for (int i = 0; i < 0x10000000; i++) {
             int pos = (int)(random.nextExclusiveFloat() * PARTITIONS);
-//            fractionFrequencies.getAndIncrement(pos, 0, 1); // broken in jdkgdxds 1.4.2
-            fractionFrequencies.put(pos, fractionFrequencies.get(pos) + 1);
+            fractionFrequencies.getAndIncrement(pos, 0, 1);
+//            fractionFrequencies.put(pos, fractionFrequencies.get(pos) + 1);
         }
         System.out.println("The least frequent...");
         fractionFrequencies.sortByValue(IntComparators.NATURAL_COMPARATOR);
@@ -42,8 +42,8 @@ public class HoleTest {
         GoldenQuasiRandom random = new GoldenQuasiRandom(123L);
         for (int i = 0; i < 0x10000000; i++) {
             int pos = (int)(random.nextExclusiveDouble() * PARTITIONS);
-//            fractionFrequencies.getAndIncrement(pos, 0, 1); // broken in jdkgdxds 1.4.2
-            fractionFrequencies.put(pos, fractionFrequencies.get(pos) + 1);
+            fractionFrequencies.getAndIncrement(pos, 0, 1);
+//            fractionFrequencies.put(pos, fractionFrequencies.get(pos) + 1);
         }
         System.out.println("The least frequent...");
         fractionFrequencies.sortByValue(IntComparators.NATURAL_COMPARATOR);
@@ -69,8 +69,8 @@ public class HoleTest {
         GoldenQuasiRandom random = new GoldenQuasiRandom(123L);
         for (int i = 0; i < 0x10000000; i++) {
             int pos = (int)(nextExclusiveFloatNew(random) * PARTITIONS);
-//            fractionFrequencies.getAndIncrement(pos, 0, 1); // broken in jdkgdxds 1.4.2
-            fractionFrequencies.put(pos, fractionFrequencies.get(pos) + 1);
+            fractionFrequencies.getAndIncrement(pos, 0, 1);
+//            fractionFrequencies.put(pos, fractionFrequencies.get(pos) + 1);
         }
         System.out.println("The least frequent...");
         fractionFrequencies.sortByValue(IntComparators.NATURAL_COMPARATOR);
@@ -96,8 +96,8 @@ public class HoleTest {
         GoldenQuasiRandom random = new GoldenQuasiRandom(123L);
         for (int i = 0; i < 0x10000000; i++) {
             int pos = (int)(nextExclusiveDoubleNew(random) * PARTITIONS);
-//            fractionFrequencies.getAndIncrement(pos, 0, 1); // broken in jdkgdxds 1.4.2
-            fractionFrequencies.put(pos, fractionFrequencies.get(pos) + 1);
+            fractionFrequencies.getAndIncrement(pos, 0, 1);
+//            fractionFrequencies.put(pos, fractionFrequencies.get(pos) + 1);
         }
         System.out.println("The least frequent...");
         fractionFrequencies.sortByValue(IntComparators.NATURAL_COMPARATOR);
