@@ -23,6 +23,8 @@
 
 package com.github.tommyettinger.random;
 
+import com.github.tommyettinger.digital.TrigTools;
+
 /**
  * Computes the fast discrete cosine transform (DCT-II).
  * Algorithm by Byeong Gi Lee, 1984. For details, see:
@@ -52,7 +54,7 @@ public final class Dct {
 	}
 	
 	
-	private static void transform(double[] vector, int off, int len, double[] temp) {
+	public static void transform(double[] vector, int off, int len, double[] temp) {
 		// Algorithm by Byeong Gi Lee, 1984. For details, see:
 		// http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.118.3056&rep=rep1&type=pdf#page=34
 		if (len == 1)
@@ -73,8 +75,7 @@ public final class Dct {
 		vector[off + len - 2] = temp[off + halfLen - 1];
 		vector[off + len - 1] = temp[off + len - 1];
 	}
-	
-	
+
 	/**
 	 * Computes the unscaled DCT type III on the specified array in place.
 	 * The array length must be a power of 2.
@@ -92,7 +93,7 @@ public final class Dct {
 	}
 	
 	
-	private static void inverseTransform(double[] vector, int off, int len, double[] temp) {
+	public static void inverseTransform(double[] vector, int off, int len, double[] temp) {
 		// Algorithm by Byeong Gi Lee, 1984. For details, see:
 		// https://www.nayuki.io/res/fast-discrete-cosine-transform-algorithms/lee-new-algo-discrete-cosine-transform.pdf
 		if (len == 1)
@@ -113,5 +114,37 @@ public final class Dct {
 			vector[off + len - 1 - i] = x - y;
 		}
 	}
-	
+
+	public static void transform2D(double[][] real, double[][] temp){
+		final int n = real.length;
+		double inc = 1.0 / n;
+		// window function
+		for (int i = 0; i < n; i++) {
+			double im = 0.5 * (1.0 - TrigTools.cosSmootherTurns(i * inc));
+			for (int j = 0; j < n; j++) {
+				double jm = 0.5 * (1.0 - TrigTools.cosSmootherTurns(j * inc));
+				real[i][j] *= im * jm;
+			}
+		}
+		transformWindowless2D(real, temp);
+	}
+
+	public static void transformWindowless2D(double[][] real, double[][] temp){
+		final int n = real.length;
+		for (int x = 0; x < n; x++) {
+			transform(real[x], 0, n, temp[x]);
+		}
+		double swap;
+		for (int x = 0; x < n; x++) {
+			for (int y = x + 1; y < n; y++) {
+				swap = real[x][y];
+				real[x][y] = real[y][x];
+				real[y][x] = swap;
+			}
+		}
+		for (int x = 0; x < n; x++) {
+			transform(real[x], 0, n, temp[x]);
+		}
+	}
+
 }

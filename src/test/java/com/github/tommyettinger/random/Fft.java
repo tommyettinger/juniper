@@ -137,6 +137,7 @@ public final class Fft {
 		}
 		transformWindowless2D(real, imag);
 	}
+
 	public static void transformWindowless2D(double[][] real, double[][] imag){
 		final int n = real.length;
 		for (int x = 0; x < n; x++) {
@@ -180,8 +181,8 @@ public final class Fft {
 		}
 		if(max <= 0.0)
 			max = 0.001;
-		double c = 255.9999 / Math.log1p(max);
 		double d = 1.0 / Math.log1p(max);
+		double c = 255.9999 * d;
 		int cb;
 		Arrays.fill(histogram, 0);
 		for (int x = 0; x < n; x++) {
