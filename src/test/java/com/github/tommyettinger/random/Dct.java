@@ -25,6 +25,8 @@ package com.github.tommyettinger.random;
 
 import com.github.tommyettinger.digital.TrigTools;
 
+import java.util.Arrays;
+
 /**
  * Computes the fast discrete cosine transform (DCT-II).
  * Algorithm by Byeong Gi Lee, 1984. For details, see:
@@ -147,4 +149,65 @@ public final class Dct {
 		}
 	}
 
+	public static final int[] histogram = new int[256];
+
+	/**
+	 *
+	 * @param real must be square and have side length that is a power of two
+	 * @param background will contain ABGR packed float colors;  must have the same dimensions as {@code real}
+	 */
+	public static void getColors(double[][] real, float[][] background){
+		final int n = real.length, mask = n - 1, half = n >>> 1;
+		double max = 0.0, mag, r;
+		for (int x = 0; x < n; x++) {
+			for (int y = 0; y < n; y++) {
+				r = real[x + half & mask][y + half & mask];
+				mag = Math.abs(r);
+				max = Math.max(mag, max);
+				background[x][y] = (float) mag;
+			}
+		}
+		if(max <= 0.0)
+			max = 0.001;
+		double d = 1.0 / Math.log1p(max);
+		double c = 255.9999 * d;
+		int cb;
+//		Arrays.fill(histogram, 0);
+		for (int x = 0; x < n; x++) {
+			for (int y = 0; y < n; y++) {
+				double lg = Math.log1p(background[x][y]);
+//				real[x][y] = d * lg;
+				cb = (int)(c * lg);
+//				histogram[cb]++;
+				background[x][y] = Float.intBitsToFloat(cb * 0x010101 | 0xFE000000);
+			}
+		}
+	}
+
+	public static final float BLACK = Float.intBitsToFloat(0xFE000000);
+	public static final float WHITE = Float.intBitsToFloat(0xFEFFFFFF);
+
+	public static void getColorsThreshold(double[][] real, float[][] background, float threshold){
+		final int n = real.length, mask = n - 1, half = n >>> 1;
+		double max = 0.0, mag, r, i;
+		for (int x = 0; x < n; x++) {
+			for (int y = 0; y < n; y++) {
+				r = real[x + half & mask][y + half & mask];
+				mag = Math.abs(r);
+				max = Math.max(mag, max);
+				background[x][y] = (float) mag;
+			}
+		}
+		if(max <= 0.0)
+			max = 0.001;
+		double d = 1.0 / Math.log1p(max);
+		double cb;
+		for (int x = 0; x < n; x++) {
+			for (int y = 0; y < n; y++) {
+				cb = d * Math.log1p(background[x][y]);
+				background[x][y] = (cb < threshold) ? BLACK : WHITE;
+//				real[x][y] = (cb < threshold) ? 0.0 : 1.0;
+			}
+		}
+	}
 }

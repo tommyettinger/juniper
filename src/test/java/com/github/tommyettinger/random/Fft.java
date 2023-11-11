@@ -184,17 +184,20 @@ public final class Fft {
 		double d = 1.0 / Math.log1p(max);
 		double c = 255.9999 * d;
 		int cb;
-		Arrays.fill(histogram, 0);
+//		Arrays.fill(histogram, 0);
 		for (int x = 0; x < n; x++) {
 			for (int y = 0; y < n; y++) {
 				double lg = Math.log1p(background[x][y]);
-				real[x][y] = d * lg;
+//				real[x][y] = d * lg;
 				cb = (int)(c * lg);
-				histogram[cb]++;
+//				histogram[cb]++;
 				background[x][y] = Float.intBitsToFloat(cb * 0x010101 | 0xFE000000);
 			}
 		}
 	}
+
+	public static final float BLACK = Float.intBitsToFloat(0xFE000000);
+	public static final float WHITE = Float.intBitsToFloat(0xFEFFFFFF);
 
 	public static void getColorsThreshold(double[][] real, double[][] imag, float[][] background, float threshold){
 		final int n = real.length, mask = n - 1, half = n >>> 1;
@@ -212,12 +215,11 @@ public final class Fft {
 			max = 0.001;
 		double c = 1.0 / Math.log1p(max);
 		double cb;
-		float black = Float.intBitsToFloat(0xFE000000), white = Float.intBitsToFloat(0xFEFFFFFF);
 		for (int x = 0; x < n; x++) {
 			for (int y = 0; y < n; y++) {
 				cb = c * Math.log1p(background[x][y]);
-				background[x][y] = (cb < threshold) ? black : white;
-				real[x][y] = (cb < threshold) ? 0.0 : 1.0;
+				background[x][y] = (cb < threshold) ? BLACK : WHITE;
+//				real[x][y] = (cb < threshold) ? 0.0 : 1.0;
 			}
 		}
 	}
