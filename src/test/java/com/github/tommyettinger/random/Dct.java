@@ -117,35 +117,35 @@ public final class Dct {
 		}
 	}
 
-	public static void transform2D(double[][] real, double[][] temp){
-		final int n = real.length;
+	public static void transform2D(double[][] vector, double[][] temp){
+		final int n = vector.length;
 		double inc = 1.0 / n;
 		// window function
 		for (int i = 0; i < n; i++) {
 			double im = 0.5 * (1.0 - TrigTools.cosSmootherTurns(i * inc));
 			for (int j = 0; j < n; j++) {
 				double jm = 0.5 * (1.0 - TrigTools.cosSmootherTurns(j * inc));
-				real[i][j] *= im * jm;
+				vector[i][j] *= im * jm;
 			}
 		}
-		transformWindowless2D(real, temp);
+		transformWindowless2D(vector, temp);
 	}
 
-	public static void transformWindowless2D(double[][] real, double[][] temp){
-		final int n = real.length;
+	public static void transformWindowless2D(double[][] vector, double[][] temp){
+		final int n = vector.length;
 		for (int x = 0; x < n; x++) {
-			transform(real[x], 0, n, temp[x]);
+			transform(vector[x], 0, n, temp[x]);
 		}
 		double swap;
 		for (int x = 0; x < n; x++) {
 			for (int y = x + 1; y < n; y++) {
-				swap = real[x][y];
-				real[x][y] = real[y][x];
-				real[y][x] = swap;
+				swap = vector[x][y];
+				vector[x][y] = vector[y][x];
+				vector[y][x] = swap;
 			}
 		}
 		for (int x = 0; x < n; x++) {
-			transform(real[x], 0, n, temp[x]);
+			transform(vector[x], 0, n, temp[x]);
 		}
 	}
 
@@ -153,15 +153,16 @@ public final class Dct {
 
 	/**
 	 *
-	 * @param real must be square and have side length that is a power of two
-	 * @param background will contain ABGR packed float colors;  must have the same dimensions as {@code real}
+	 * @param vector must be square and have side length that is a power of two
+	 * @param background will contain ABGR packed float colors;  must have the same dimensions as {@code vector}
 	 */
-	public static void getColors(double[][] real, float[][] background){
-		final int n = real.length, mask = n - 1, half = n >>> 1;
+	public static void getColors(double[][] vector, float[][] background){
+		final int n = vector.length, mask = n - 1, half = n >>> 1;
 		double max = 0.0, mag, r;
 		for (int x = 0; x < n; x++) {
 			for (int y = 0; y < n; y++) {
-				r = real[x + half & mask][y + half & mask];
+				r = vector[x][y];
+//				r = vector[x + half & mask][y + half & mask];
 				mag = Math.abs(r);
 				max = Math.max(mag, max);
 				background[x][y] = (float) mag;
@@ -187,12 +188,13 @@ public final class Dct {
 	public static final float BLACK = Float.intBitsToFloat(0xFE000000);
 	public static final float WHITE = Float.intBitsToFloat(0xFEFFFFFF);
 
-	public static void getColorsThreshold(double[][] real, float[][] background, float threshold){
-		final int n = real.length, mask = n - 1, half = n >>> 1;
+	public static void getColorsThreshold(double[][] vector, float[][] background, float threshold){
+		final int n = vector.length, mask = n - 1, half = n >>> 1;
 		double max = 0.0, mag, r, i;
 		for (int x = 0; x < n; x++) {
 			for (int y = 0; y < n; y++) {
-				r = real[x + half & mask][y + half & mask];
+				r = vector[x][y];
+//				r = vector[x + half & mask][y + half & mask];
 				mag = Math.abs(r);
 				max = Math.max(mag, max);
 				background[x][y] = (float) mag;
@@ -206,7 +208,7 @@ public final class Dct {
 			for (int y = 0; y < n; y++) {
 				cb = d * Math.log1p(background[x][y]);
 				background[x][y] = (cb < threshold) ? BLACK : WHITE;
-//				real[x][y] = (cb < threshold) ? 0.0 : 1.0;
+//				vector[x][y] = (cb < threshold) ? 0.0 : 1.0;
 			}
 		}
 	}

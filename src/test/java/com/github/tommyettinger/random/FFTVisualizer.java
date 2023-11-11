@@ -45,6 +45,7 @@ import static com.github.tommyettinger.random.CorrelationVisualizer.title;
  */
 public class FFTVisualizer extends ApplicationAdapter {
 
+    public static final boolean USE_DCT = true;
     public static int randomCount = randoms.length;
     public static int modeCount = 2;
     private int currentRandom = 0;
@@ -195,8 +196,14 @@ public class FFTVisualizer extends ApplicationAdapter {
                 break;
         }
 
-        Fft.transformWindowless2D(real, imag);
-        Fft.getColors(real, imag, colors);
+        if (USE_DCT) {
+            Dct.transformWindowless2D(real, imag);
+            Dct.getColors(real, colors);
+        }
+        else {
+            Fft.transformWindowless2D(real, imag);
+            Fft.getColors(real, imag, colors);
+        }
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 renderer.color(previousGrid[x+width][y] = colors[x][y]);
