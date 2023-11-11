@@ -160,8 +160,12 @@ public final class Fft {
 
 	public static final int[] histogram = new int[256];
 
-	private static final double[][] temp = new double[256][256];
-
+	/**
+	 *
+	 * @param real must be square and have side length that is a power of two
+	 * @param imag must have the same dimensions as {@code real}
+	 * @param background will contain ABGR packed float colors;  must have the same dimensions as {@code real}
+	 */
 	public static void getColors(double[][] real, double[][] imag, float[][] background){
 		final int n = real.length, mask = n - 1, half = n >>> 1;
 		double max = 0.0, mag, r, i;
@@ -171,7 +175,7 @@ public final class Fft {
 				i = imag[x + half & mask][y + half & mask];
 				mag = Math.sqrt(r * r + i * i);
 				max = Math.max(mag, max);
-				temp[x][y] = mag;
+				background[x][y] = (float) mag;
 			}
 		}
 		if(max <= 0.0)
@@ -182,7 +186,7 @@ public final class Fft {
 		Arrays.fill(histogram, 0);
 		for (int x = 0; x < n; x++) {
 			for (int y = 0; y < n; y++) {
-				double lg = Math.log1p(temp[x][y]);
+				double lg = Math.log1p(background[x][y]);
 				real[x][y] = d * lg;
 				cb = (int)(c * lg);
 				histogram[cb]++;

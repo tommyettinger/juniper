@@ -195,7 +195,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                 break;
         }
 
-        Fft.transform2D(real, imag);
+        Fft.transformWindowless2D(real, imag);
         Fft.getColors(real, imag, colors);
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
