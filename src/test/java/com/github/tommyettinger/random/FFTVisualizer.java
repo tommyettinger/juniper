@@ -45,7 +45,7 @@ import static com.github.tommyettinger.random.CorrelationVisualizer.title;
  */
 public class FFTVisualizer extends ApplicationAdapter {
 
-    public static final boolean USE_DCT = true;
+    public static boolean dctMode = true;
     public static int randomCount = randoms.length;
     public static int modeCount = 2;
     private int currentRandom = 0;
@@ -155,6 +155,9 @@ public class FFTVisualizer extends ApplicationAdapter {
                         steps = 0;
                         if (!keepGoing) putMap();
                         break;
+                    case D:
+                        dctMode = !dctMode;
+                        break;
                     case Q: // quit
                     case ESCAPE: {
                         Gdx.app.exit();
@@ -196,7 +199,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                 break;
         }
 
-        if (USE_DCT) {
+        if (dctMode) {
             Dct.transformWindowless2D(real, imag);
             Dct.getColors(real, colors);
         }

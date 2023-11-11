@@ -149,6 +149,38 @@ public final class Dct {
 		}
 	}
 
+	public static void inverseTransform2D(double[][] vector, double[][] temp){
+		final int n = vector.length;
+		double inc = 1.0 / n;
+		// window function
+		for (int i = 0; i < n; i++) {
+			double im = 0.5 * (1.0 - TrigTools.cosSmootherTurns(i * inc));
+			for (int j = 0; j < n; j++) {
+				double jm = 0.5 * (1.0 - TrigTools.cosSmootherTurns(j * inc));
+				vector[i][j] *= im * jm;
+			}
+		}
+		inverseTransformWindowless2D(vector, temp);
+	}
+
+	public static void inverseTransformWindowless2D(double[][] vector, double[][] temp){
+		final int n = vector.length;
+		for (int x = 0; x < n; x++) {
+			inverseTransform(vector[x], 0, n, temp[x]);
+		}
+		double swap;
+		for (int x = 0; x < n; x++) {
+			for (int y = x + 1; y < n; y++) {
+				swap = vector[x][y];
+				vector[x][y] = vector[y][x];
+				vector[y][x] = swap;
+			}
+		}
+		for (int x = 0; x < n; x++) {
+			inverseTransform(vector[x], 0, n, temp[x]);
+		}
+	}
+
 	public static final int[] histogram = new int[256];
 
 	/**
