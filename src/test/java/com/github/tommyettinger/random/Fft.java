@@ -182,17 +182,12 @@ public final class Fft {
 				background[x][y] = (float) mag;
 			}
 		}
-		if(max <= 0.0)
-			max = 0.001;
-		double d = 1.0 / Math.log1p(max);
-		double c = 255.9999 * d;
+		double c = 255.9999 / Math.log1p(Math.max(max, 0.001));
 		int cb;
 		Arrays.fill(histogram, 0);
 		for (int x = 0; x < n; x++) {
 			for (int y = 0; y < n; y++) {
-				double lg = Math.log1p(background[x][y]);
-//				real[x][y] = d * lg;
-				cb = (int)(c * lg);
+				cb = (int)(c * Math.log1p(background[x][y]));
 				histogram[cb]++;
 				background[x][y] = Float.intBitsToFloat(cb * 0x010101 | 0xFE000000);
 			}
@@ -211,9 +206,7 @@ public final class Fft {
 				background[x][y] = (float) mag;
 			}
 		}
-		if(max <= 0.0)
-			max = 0.001;
-		double c = 1.0 / Math.log1p(max);
+		double c = 1.0 / Math.log1p(Math.max(max, 0.001));
 		double cb;
 		for (int x = 0; x < n; x++) {
 			for (int y = 0; y < n; y++) {
@@ -222,6 +215,38 @@ public final class Fft {
 //				real[x][y] = (cb < threshold) ? 0.0 : 1.0;
 			}
 		}
+	}
+
+	public static int[] getHistogram(double[][] real, double[][] imag){
+		final int n = real.length;
+		double max = 0.0, mag, r, i;
+		for (int x = 0; x < n; x++) {
+			for (int y = 0; y < n; y++) {
+				r = real[x][y];
+				i = imag[x][y];
+				mag = Math.sqrt(r * r + i * i);
+				max = Math.max(mag, max);
+				imag[x][y] = mag;
+			}
+		}
+		double c = 255.9999 / Math.log1p(Math.max(0.001, max));
+		Arrays.fill(histogram, 0);
+		for (int x = 0; x < n; x++) {
+			for (int y = 0; y < n; y++) {
+				histogram[(int)(c * Math.log1p(imag[x][y]))]++;
+			}
+		}
+		return histogram;
+	}
+
+	public static int maxIndex(int[] items) {
+		int highestIdx = 0;
+		for (int i = 1; i < items.length; i++) {
+			if ((items[i] - items[highestIdx]) > 0) {
+				highestIdx = i;
+			}
+		}
+		return highestIdx;
 	}
 
 	/*
