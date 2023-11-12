@@ -25,8 +25,6 @@ package com.github.tommyettinger.random;
 
 import com.github.tommyettinger.digital.TrigTools;
 
-import java.util.Arrays;
-
 /**
  * Computes the fast discrete cosine transform (DCT-II).
  * Algorithm by Byeong Gi Lee, 1984. For details, see:
@@ -61,12 +59,13 @@ public final class Dct {
 		// http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.118.3056&rep=rep1&type=pdf#page=34
 		if (len == 1)
 			return;
-		int halfLen = len / 2;
-		for (int i = 0; i < halfLen; i++) {
+		int halfLen = len / 2, tInc = TrigTools.TABLE_SIZE / (len + len);
+		for (int i = 0, t = tInc >>> 1; i < halfLen; i++, t += tInc) {
 			double x = vector[off + i];
 			double y = vector[off + len - 1 - i];
 			temp[off + i] = x + y;
-			temp[off + i + halfLen] = (x - y) / (Math.cos((i + 0.5) * Math.PI / len) * 2);
+			temp[off + i + halfLen] = (x - y) / (TrigTools.COS_TABLE_D[t] * 2);
+//			temp[off + i + halfLen] = (x - y) / (Math.cos((i + 0.5) * Math.PI / len) * 2);
 		}
 		transform(temp, off, halfLen, vector);
 		transform(temp, off + halfLen, halfLen, vector);
@@ -100,7 +99,7 @@ public final class Dct {
 		// https://www.nayuki.io/res/fast-discrete-cosine-transform-algorithms/lee-new-algo-discrete-cosine-transform.pdf
 		if (len == 1)
 			return;
-		int halfLen = len / 2;
+		int halfLen = len / 2, tInc = TrigTools.TABLE_SIZE / (len + len);
 		temp[off] = vector[off];
 		temp[off + halfLen] = vector[off + 1];
 		for (int i = 1; i < halfLen; i++) {
@@ -109,9 +108,9 @@ public final class Dct {
 		}
 		inverseTransform(temp, off, halfLen, vector);
 		inverseTransform(temp, off + halfLen, halfLen, vector);
-		for (int i = 0; i < halfLen; i++) {
+		for (int i = 0, t = tInc >>> 1; i < halfLen; i++, t += tInc) {
 			double x = temp[off + i];
-			double y = temp[off + i + halfLen] / (Math.cos((i + 0.5) * Math.PI / len) * 2);
+			double y = temp[off + i + halfLen] / (TrigTools.COS_TABLE_D[t] * 2);
 			vector[off + i] = x + y;
 			vector[off + len - 1 - i] = x - y;
 		}
