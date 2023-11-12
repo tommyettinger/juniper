@@ -25,7 +25,15 @@ package com.github.tommyettinger.random;
 import java.util.Arrays;
 
 public final class Fft {
-	
+
+	public static final float BLACK = Float.intBitsToFloat(0xFE000000);
+	public static final float WHITE = Float.intBitsToFloat(0xFEFFFFFF);
+
+	private static double[] cosTable;
+	private static double[] sinTable;
+
+	public static final int[] histogram = new int[256];
+
 	/* 
 	 * Computes the discrete Fourier transform (DFT) of the given complex vector, storing the result back into the vector.
 	 * The vector can have any length. This is a wrapper function.
@@ -51,9 +59,6 @@ public final class Fft {
 		transform(imag, real);
 	}
 
-	private static double[] cosTable;
-	private static double[] sinTable;
-	
 	public static void loadTables(final int n) {
 		if (cosTable == null || sinTable == null || cosTable.length != n || sinTable.length != n) {
 			cosTable = new double[n];
@@ -159,8 +164,6 @@ public final class Fft {
 		}
 	}
 
-	public static final int[] histogram = new int[256];
-
 	/**
 	 *
 	 * @param real must be square and have side length that is a power of two
@@ -184,20 +187,17 @@ public final class Fft {
 		double d = 1.0 / Math.log1p(max);
 		double c = 255.9999 * d;
 		int cb;
-//		Arrays.fill(histogram, 0);
+		Arrays.fill(histogram, 0);
 		for (int x = 0; x < n; x++) {
 			for (int y = 0; y < n; y++) {
 				double lg = Math.log1p(background[x][y]);
 //				real[x][y] = d * lg;
 				cb = (int)(c * lg);
-//				histogram[cb]++;
+				histogram[cb]++;
 				background[x][y] = Float.intBitsToFloat(cb * 0x010101 | 0xFE000000);
 			}
 		}
 	}
-
-	public static final float BLACK = Float.intBitsToFloat(0xFE000000);
-	public static final float WHITE = Float.intBitsToFloat(0xFEFFFFFF);
 
 	public static void getColorsThreshold(double[][] real, double[][] imag, float[][] background, float threshold){
 		final int n = real.length, mask = n - 1, half = n >>> 1;

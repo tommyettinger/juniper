@@ -25,6 +25,8 @@ package com.github.tommyettinger.random;
 
 import com.github.tommyettinger.digital.TrigTools;
 
+import java.util.Arrays;
+
 /**
  * Computes the fast discrete cosine transform (DCT-II).
  * Algorithm by Byeong Gi Lee, 1984. For details, see:
@@ -180,8 +182,6 @@ public final class Dct {
 		}
 	}
 
-	public static final int[] histogram = new int[256];
-
 	/**
 	 *
 	 * @param vector must be square and have side length that is a power of two
@@ -204,13 +204,13 @@ public final class Dct {
 		double d = 1.0 / Math.log1p(max);
 		double c = 255.9999 * d;
 		int cb;
-//		Arrays.fill(histogram, 0);
+		Arrays.fill(Fft.histogram, 0);
 		for (int x = 0; x < n; x++) {
 			for (int y = 0; y < n; y++) {
 				double lg = Math.log1p(background[x][y]);
 //				real[x][y] = d * lg;
 				cb = (int)(c * lg);
-//				histogram[cb]++;
+				Fft.histogram[cb]++;
 				background[x][y] = Float.intBitsToFloat(cb * 0x010101 | 0xFE000000);
 			}
 		}

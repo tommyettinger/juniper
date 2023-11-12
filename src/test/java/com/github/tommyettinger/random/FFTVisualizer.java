@@ -45,7 +45,7 @@ import static com.github.tommyettinger.random.CorrelationVisualizer.title;
  */
 public class FFTVisualizer extends ApplicationAdapter {
 
-    public static boolean dctMode = true;
+    public static boolean dctMode = false;
     public static int randomCount = randoms.length;
     public static int modeCount = 2;
     private int currentRandom = 0;
@@ -64,12 +64,13 @@ public class FFTVisualizer extends ApplicationAdapter {
     private static final float[][] colors = new float[width][height];
 
     private static final double[][] real = new double[width][height], imag = new double[width][height];
-    private static final int[] freq0 = new int[256];
+    private static final int[] freq = new int[256];
     private static final float LIGHT_YELLOW = Color.toFloatBits(1f, 1f, 0.4f, 1f);
+    private static final float LIGHT_PURPLE = Color.toFloatBits(1f, 0.5f, 1f, 1f);
 
     public float basicPrepare(int bt)
     {
-        freq0[bt & 255]++;
+        freq[bt &= 255]++;
         return BitConversion.intBitsToFloat(0xFE000000 | bt << 16 | bt << 8 | bt);
     }
 
@@ -171,7 +172,7 @@ public class FFTVisualizer extends ApplicationAdapter {
 
     public void putMap() {
         ++steps;
-        Arrays.fill(freq0, 0);
+        Arrays.fill(freq, 0);
         renderer.begin(view.getCamera().combined, GL_POINTS);
         ArrayTools.fill(imag, 0.0);
 
@@ -214,20 +215,21 @@ public class FFTVisualizer extends ApplicationAdapter {
             }
         }
         renderer.end();
-        if(Gdx.input.isKeyPressed(A)){ // Analysis
-            renderer.begin(view.getCamera().combined, GL_LINES);
-            for (int i = 0; i < 255; i++) {
-                renderer.color(LIGHT_YELLOW);
-                renderer.vertex(i, freq0[i] * 0x1p-3f, 0);
-                renderer.color(LIGHT_YELLOW);
-                renderer.vertex(i+1, freq0[i+1] * 0x1p-3f, 0);
-            }
-            renderer.color(LIGHT_YELLOW);
-            renderer.vertex(255, 0 * 0x1p-3f, 0);
-            renderer.color(LIGHT_YELLOW);
-            renderer.vertex(256, 0 * 0x1p-3f, 0);
-            renderer.end();
+    }
+
+    private void analyze(int[] hist, float packedColor) {
+        renderer.begin(view.getCamera().combined, GL_LINES);
+        for (int i = 0; i < 255; i++) {
+            renderer.color(packedColor);
+            renderer.vertex(i, hist[i] * 0x1p-3f, 0);
+            renderer.color(packedColor);
+            renderer.vertex(i+1, hist[i+1] * 0x1p-3f, 0);
         }
+        renderer.color(packedColor);
+        renderer.vertex(255, 0, 0);
+        renderer.color(packedColor);
+        renderer.vertex(256, 0, 0);
+        renderer.end();
 
     }
 
@@ -248,6 +250,13 @@ public class FFTVisualizer extends ApplicationAdapter {
             }
             renderer.end();
         }
+        if(Gdx.input.isKeyPressed(A)){ // Analysis (of random numbers, left side)
+            analyze(freq, LIGHT_YELLOW);
+        }
+        if(Gdx.input.isKeyPressed(H)){ // Histogram (of DFT or DCT, right side)
+            analyze(Fft.histogram, LIGHT_PURPLE);
+        }
+
     }
 
     @Override
