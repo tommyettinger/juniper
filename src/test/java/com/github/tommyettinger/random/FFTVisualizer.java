@@ -39,12 +39,12 @@ import static com.badlogic.gdx.graphics.GL20.GL_POINTS;
 import static com.github.tommyettinger.random.CorrelationVisualizer.randoms;
 import static com.github.tommyettinger.random.CorrelationVisualizer.refreshGrid;
 import static com.github.tommyettinger.random.CorrelationVisualizer.seedGrid;
-import static com.github.tommyettinger.random.CorrelationVisualizer.title;
 
 /**
  */
 public class FFTVisualizer extends ApplicationAdapter {
 
+    public static String title = "";
     public static boolean dctMode = false;
     public static int randomCount = randoms.length;
     public static int modeCount = 2;

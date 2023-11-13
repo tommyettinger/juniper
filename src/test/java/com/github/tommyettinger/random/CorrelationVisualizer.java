@@ -28,7 +28,6 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.github.tommyettinger.digital.BitConversion;
-import com.github.tommyettinger.digital.MathTools;
 import com.github.tommyettinger.random.experimental.*;
 
 import java.util.ArrayList;
@@ -47,48 +46,38 @@ public class CorrelationVisualizer extends ApplicationAdapter {
     private static final float[][] previousGrid = new float[width][height];
 
     public static final EnhancedRandom[][][] randoms;
+    public static final ArrayList<EnhancedRandom> randomList;
     static {
-        ArrayList<EnhancedRandom> rl = Deserializer.copyRandoms();
-        rl.sort(Comparator.comparing(EnhancedRandom::getTag));
+        randomList = Deserializer.copyRandoms();
+        randomList.sort(Comparator.comparing(EnhancedRandom::getTag));
 
-        rl.add(new SplurgeRandom(1, 1));
-        rl.add(new SportyRandom(1, 1));
-        rl.add(new SpoonRandom(1, 1));
-        rl.add(new SpritzRandom(1, 1));
-        rl.add(new SpryRandom(1, 1));
-        rl.add(new ScamperRandom(1, 1));
-        rl.add(new AceRandom(1, 1, 1, 1, 1));
-        rl.add(new LaceRandom(1, 1, 1, 1, 1));
-        rl.add(new RandomRandom(1));
-        rl.add(new RandomXS128Random(1, 1));
-        rl.add(new LeaderRandom(1, 1));
-        rl.add(new CobraRandom(1, 1));
-        rl.add(new FleetRandom(1, 1));
-        rl.add(new SpangledRandom(1, 1, MathTools.GOLDEN_LONGS, 0, 2));
-        rl.add(new SpangledRandom(1, 1, MathTools.GOLDEN_LONGS, 0, 3));
-        rl.add(new SpangledRandom(1, 1, MathTools.GOLDEN_LONGS, 0, 4));
-        rl.add(new SpangledRandom(1, 1, MathTools.GOLDEN_LONGS, 0, 5));
-        rl.add(new SpangledRandom(1, 1, new long[2]));
-        rl.add(new SpangledRandom(1, 1, new long[3]));
-        rl.add(new SpangledRandom(1, 1, new long[4]));
-        rl.add(new SpangledRandom(1, 1, new long[5]));
-        rl.add(new BarleyRandom(1, 1));
-        rl.add(new PouchRandom(1, 1, 1, 1));
-        rl.add(new LaborRandom(1, 1));
-        rl.add(new TyrantRandom(1, 1, 1));
-        rl.add(new TerseRandom(1, 1, 1));
-        rl.add(new MarshRandom(1, 1, 1));
-        rl.add(new MunchRandom(1, 1, 1));
-        rl.add(new SpurRandom(1, 1, 1));
-        rl.add(new Sfc64Random(1, 1, 1, 1));
-        rl.add(new RespectRandom(1, 1, 1));
-        rl.add(new Crand64Random(1, 1, 1, 1, 1));
-        rl.add(new Jsf32Random(1, 1, 1, 1));
-        rl.add(new Respite32Random(1, 1, 1));
-        rl.add(new Recipe32Random(1, 1, 1));
-        randoms = new EnhancedRandom[rl.size()][][];
+        randomList.add(new SplurgeRandom(1, 1));
+        randomList.add(new SportyRandom(1, 1));
+        randomList.add(new SpoonRandom(1, 1));
+        randomList.add(new SpritzRandom(1, 1));
+        randomList.add(new SpryRandom(1, 1));
+        randomList.add(new ScamperRandom(1, 1));
+        randomList.add(new LaceRandom(1, 1, 1, 1, 1));
+        randomList.add(new SkyRandom(1, 1, 1, 1));
+        randomList.add(new ScarfRandom(1, 1, 1, 1));
+        randomList.add(new RandomRandom(1));
+        randomList.add(new RandomXS128Random(1, 1));
+        randomList.add(new LeaderRandom(1, 1));
+        randomList.add(new CobraRandom(1, 1));
+        randomList.add(new FleetRandom(1, 1));
+        randomList.add(new SpangledRandom(1, 1, new long[3]));
+        randomList.add(new BarleyRandom(1, 1));
+        randomList.add(new LaborRandom(1, 1));
+        randomList.add(new TyrantRandom(1, 1, 1));
+        randomList.add(new TerseRandom(1, 1, 1));
+        randomList.add(new MarshRandom(1, 1, 1));
+        randomList.add(new MunchRandom(1, 1, 1));
+        randomList.add(new SpurRandom(1, 1, 1));
+        randomList.add(new RespectRandom(1, 1, 1));
+        randomList.add(new Recipe32Random(1, 1, 1));
+        randoms = new EnhancedRandom[randomList.size()][][];
         for (int i = 0; i < randoms.length; i++) {
-            randoms[i] = makeGrid(rl.get(i), width, height);
+            randoms[i] = makeGrid(randomList.get(i), width, height);
         }
     }
     public int currentRandom = 0;

@@ -35,10 +35,11 @@ import com.github.tommyettinger.random.experimental.*;
 
 import static com.badlogic.gdx.Input.Keys.*;
 import static com.badlogic.gdx.graphics.GL20.GL_POINTS;
-import static com.github.tommyettinger.random.CorrelationVisualizer.title;
 
 public class ConfigurableAnalyst extends ApplicationAdapter {
     private static final int width = 459, height = 816;
+    public static String title = "";
+
     public static Configurable4Random[][] makeGrid(int width, int height){
         Configurable4Random[][] g = new Configurable4Random[width][height];
         for (int x = 0; x < width; x++) {

@@ -39,9 +39,10 @@ import java.util.Comparator;
 
 import static com.badlogic.gdx.Input.Keys.*;
 import static com.badlogic.gdx.graphics.GL20.GL_POINTS;
-import static com.github.tommyettinger.random.CorrelationVisualizer.title;
+import static com.github.tommyettinger.random.CorrelationVisualizer.randomList;
 
 public class CorrelationAnalyst extends ApplicationAdapter {
+    public static String title = "";
     private static final int width = 459, height = 816;
     public static EnhancedRandom[][] makeGrid(EnhancedRandom base, int width, int height){
         EnhancedRandom[][] g = new EnhancedRandom[width][height];
@@ -108,49 +109,9 @@ public class CorrelationAnalyst extends ApplicationAdapter {
 
     public static final EnhancedRandom[][][] randoms;
     static {
-        ArrayList<EnhancedRandom> rl = Deserializer.copyRandoms();
-        rl.sort(Comparator.comparing(EnhancedRandom::getTag));
-
-        rl.add(new SplurgeRandom(1, 1));
-        rl.add(new SportyRandom(1, 1));
-        rl.add(new SpoonRandom(1, 1));
-        rl.add(new SpritzRandom(1, 1));
-        rl.add(new SpryRandom(1, 1));
-        rl.add(new ScamperRandom(1, 1));
-        rl.add(new AceRandom(1, 1, 1, 1, 1));
-        rl.add(new LaceRandom(1, 1, 1, 1, 1));
-        rl.add(new RandomRandom(1));
-        rl.add(new RandomXS128Random(1, 1));
-        rl.add(new LeaderRandom(1, 1));
-        rl.add(new CobraRandom(1, 1));
-        rl.add(new FleetRandom(1, 1));
-        rl.add(new BarleyRandom(1, 1));
-        rl.add(new SpangledRandom(1, 1));
-//        rl.add(new AceAlternates.AceRandomAC(1, 1, 1, 1, 1));
-//        rl.add(new AceAlternates.AceRandomAD(1, 1, 1, 1, 1));
-//        rl.add(new AceAlternates.AceRandomAE(1, 1, 1, 1, 1));
-//        rl.add(new AceAlternates.AceRandomBC(1, 1, 1, 1, 1));
-//        rl.add(new AceAlternates.AceRandomBD(1, 1, 1, 1, 1));
-//        rl.add(new AceAlternates.AceRandomBE(1, 1, 1, 1, 1));
-//        rl.add(new AceAlternates.AceRandomCD(1, 1, 1, 1, 1));
-//        rl.add(new AceAlternates.AceRandomCE(1, 1, 1, 1, 1));
-//        rl.add(new AceAlternates.AceRandomDE(1, 1, 1, 1, 1));
-        rl.add(new PouchRandom(1, 1, 1, 1));
-        rl.add(new TyrantRandom(1, 1, 1));
-        rl.add(new TerseRandom(1, 1, 1));
-        rl.add(new MarshRandom(1, 1, 1));
-        rl.add(new MunchRandom(1, 1, 1));
-        rl.add(new SpurRandom(1, 1, 1));
-        rl.add(new Sfc64Random(1, 1, 1, 1));
-        rl.add(new RespectRandom(1, 1, 1));
-        rl.add(new Crand64Random(1, 1, 1, 1, 1));
-        rl.add(new Jsf32Random(1, 1, 1, 1));
-        rl.add(new Respite32Random(1, 1, 1));
-        rl.add(new Recipe32Random(1, 1, 1));
-
-        randoms = new EnhancedRandom[rl.size()][][];
+        randoms = new EnhancedRandom[randomList.size()][][];
         for (int i = 0; i < randoms.length; i++) {
-            randoms[i] = makeGrid(rl.get(i), width, height);
+            randoms[i] = makeGrid(randomList.get(i), width, height);
         }
     }
 
