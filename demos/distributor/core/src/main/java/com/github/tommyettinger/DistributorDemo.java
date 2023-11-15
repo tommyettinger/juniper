@@ -19,7 +19,8 @@ public class DistributorDemo extends Game {
     public EnhancedRandom[] randoms = new EnhancedRandom[]{new Respite32Random(), new Jsf32Random(), new ChopRandom(),
             new RandomRandom(), new WhiskerRandom(), new AceRandom(), new PouchRandom(), new ScruffRandom(),
             new MizuchiRandom(), new Xoshiro128PlusPlusRandom(), new LaserRandom(), new TrimRandom(), new DistinctRandom(),
-            new GoldenQuasiRandom(), new VanDerCorputQuasiRandom(), new LowChangeQuasiRandom(), new TupleQuasiRandom(0)};
+            new GoldenQuasiRandom(), new VanDerCorputQuasiRandom(), new LowChangeQuasiRandom(), new TupleQuasiRandom(0),
+    };
     public int randomIndex = 0;
     public EnhancedRandom random = randoms[randomIndex];
     public BitmapFont font;
@@ -42,8 +43,11 @@ public class DistributorDemo extends Game {
                 new ChiScreen(this), new ChiSquareScreen(this), new StudentsTScreen(this),
                 new ArcsineScreen(this), new BinomialScreen(this), new ZipfianScreen(this),
                 new TriangularScreen(this), new KnobScreen(this),
+
+                new GdxSinScreen(this), new MathSinScreen(this), new DigitalSinScreen(this), new DigitalSinSmoothScreen(this),
+                new DigitalSinSmootherScreen(this)
         };
-        screenIndex = screens.length - 6;
+        screenIndex = screens.length - 5;
         setScreen(screens[screenIndex]);
     }
     public void nextScreen(){
