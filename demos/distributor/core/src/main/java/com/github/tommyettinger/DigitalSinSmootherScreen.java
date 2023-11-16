@@ -101,6 +101,7 @@ public class DigitalSinSmootherScreen extends ScreenAdapter {
         batch.begin();
         font.draw(batch, Stringf.format("TrigTools.sinSmoother() at %d FPS", Gdx.graphics.getFramesPerSecond()),
                 64, 522, 256+128, Align.center, true);
+        font.draw(batch, "Using " + random.getTag(), 64, 500-6, 256+128, Align.center, true);
         batch.end();
 
     }

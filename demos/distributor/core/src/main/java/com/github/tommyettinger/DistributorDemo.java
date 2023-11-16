@@ -21,7 +21,7 @@ public class DistributorDemo extends Game {
             new MizuchiRandom(), new Xoshiro128PlusPlusRandom(), new LaserRandom(), new TrimRandom(), new DistinctRandom(),
             new GoldenQuasiRandom(), new VanDerCorputQuasiRandom(), new LowChangeQuasiRandom(), new TupleQuasiRandom(0),
     };
-    public int randomIndex = 0;
+    public int randomIndex = 5;
     public EnhancedRandom random = randoms[randomIndex];
     public BitmapFont font;
     public SpriteBatch batch;
@@ -45,7 +45,10 @@ public class DistributorDemo extends Game {
                 new TriangularScreen(this), new KnobScreen(this),
 
                 new GdxSinScreen(this), new MathSinScreen(this), new DigitalSinScreen(this), new DigitalSinSmoothScreen(this),
-                new DigitalSinSmootherScreen(this)
+                new DigitalSinSmootherScreen(this), 
+
+                new GdxCosScreen(this), new MathCosScreen(this), new DigitalCosScreen(this), new DigitalCosSmoothScreen(this),
+                new DigitalCosSmootherScreen(this), 
         };
         screenIndex = screens.length - 5;
         setScreen(screens[screenIndex]);

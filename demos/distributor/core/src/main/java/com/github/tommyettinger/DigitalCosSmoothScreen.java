@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -17,7 +16,7 @@ import com.github.tommyettinger.random.EnhancedRandom;
 
 import java.util.Arrays;
 
-public class GdxSinScreen extends ScreenAdapter {
+public class DigitalCosSmoothScreen extends ScreenAdapter {
     private EnhancedRandom random;
     private SpriteBatch batch;
     private ImmediateModeRenderer20 renderer;
@@ -39,7 +38,7 @@ public class GdxSinScreen extends ScreenAdapter {
     }
     private final DistributorDemo mainGame;
 
-    public GdxSinScreen(DistributorDemo main){
+    public DigitalCosSmoothScreen(DistributorDemo main){
         mainGame = main;
     }
 
@@ -76,7 +75,7 @@ public class GdxSinScreen extends ScreenAdapter {
         }
         iterations += 1;
         for (int i = 0; i < 0x40000; i++) {
-            int m = (int) (MathUtils.sin(random.nextExclusiveFloat()) * 128 + 128);
+            int m = (int) (TrigTools.cosSmooth(random.nextExclusiveFloat()) * 256 + 128);
             if(m >= 0 && m < 512)
                 amounts[m]++;
         }
@@ -100,7 +99,7 @@ public class GdxSinScreen extends ScreenAdapter {
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        font.draw(batch, Stringf.format("MathUtils.sin() at %d FPS", Gdx.graphics.getFramesPerSecond()),
+        font.draw(batch, Stringf.format("TrigTools.cosSmooth() at %d FPS", Gdx.graphics.getFramesPerSecond()),
                 64, 522, 256+128, Align.center, true);
         font.draw(batch, "Using " + random.getTag(), 64, 500-6, 256+128, Align.center, true);
         batch.end();
