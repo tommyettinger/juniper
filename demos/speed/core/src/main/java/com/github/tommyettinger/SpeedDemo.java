@@ -24,7 +24,21 @@ public class SpeedDemo extends Game {
         font.setColor(Color.BLACK);
         batch = new SpriteBatch();
         screens = new Screen[]{
-                new ChopScreen(this), new AceScreen(this),
+                new com.github.tommyettinger.ef.RandomScreen(this),
+                new com.github.tommyettinger.ef.ChopScreen(this),
+                new com.github.tommyettinger.ef.AceScreen(this),
+                new com.github.tommyettinger.f.RandomScreen(this),
+                new com.github.tommyettinger.f.ChopScreen(this),
+                new com.github.tommyettinger.f.AceScreen(this),
+                new com.github.tommyettinger.d.RandomScreen(this),
+                new com.github.tommyettinger.d.ChopScreen(this),
+                new com.github.tommyettinger.d.AceScreen(this),
+                new com.github.tommyettinger.i.RandomScreen(this),
+                new com.github.tommyettinger.i.ChopScreen(this),
+                new com.github.tommyettinger.i.AceScreen(this),
+                new com.github.tommyettinger.l.RandomScreen(this),
+                new com.github.tommyettinger.l.ChopScreen(this),
+                new com.github.tommyettinger.l.AceScreen(this),
         };
         screenIndex = 0;
         setScreen(screens[screenIndex]);

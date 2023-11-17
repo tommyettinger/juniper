@@ -1,4 +1,4 @@
-package com.github.tommyettinger;
+package com.github.tommyettinger.i;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -11,12 +11,14 @@ import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.github.tommyettinger.random.ChopRandom;
+import com.github.tommyettinger.RandomRandom;
+import com.github.tommyettinger.SpeedDemo;
+import com.github.tommyettinger.Stringf;
 
 import java.util.Arrays;
 
-public class ChopScreen extends ScreenAdapter {
-    private ChopRandom random;
+public class RandomScreen extends ScreenAdapter {
+    private RandomRandom random;
     private SpriteBatch batch;
     private ImmediateModeRenderer20 renderer;
     private final long[] amounts = new long[512];
@@ -28,7 +30,7 @@ public class ChopScreen extends ScreenAdapter {
     @Override
     public void show() {
         font = mainGame.font;
-        random = new ChopRandom();
+        random = new RandomRandom();
         batch = mainGame.batch;
         viewport = new ScreenViewport();
         renderer = new ImmediateModeRenderer20(512 * 3, false, true, 0);
@@ -37,7 +39,7 @@ public class ChopScreen extends ScreenAdapter {
     }
     private final SpeedDemo mainGame;
 
-    public ChopScreen(SpeedDemo main){
+    public RandomScreen(SpeedDemo main){
         mainGame = main;
     }
 
@@ -74,7 +76,7 @@ public class ChopScreen extends ScreenAdapter {
         }
         iterations += 1;
         for (int i = 0; i < 0x80000; i++) {
-            int m = (int) (random.nextExclusiveFloat() * 512f);
+            int m = random.nextInt(512);
             if(m >= 0 && m < 512)
                 amounts[m]++;
         }
@@ -98,7 +100,7 @@ public class ChopScreen extends ScreenAdapter {
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        font.draw(batch, Stringf.format("%s at %d FPS", random.getTag(), Gdx.graphics.getFramesPerSecond()),
+        font.draw(batch, Stringf.format("nextInt() using %s at %d FPS", random.getTag(), Gdx.graphics.getFramesPerSecond()),
                 64, 522, 256+128, Align.center, true);
         batch.end();
 

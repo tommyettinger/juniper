@@ -1,4 +1,4 @@
-package com.github.tommyettinger;
+package com.github.tommyettinger.l;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -11,8 +11,9 @@ import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.github.tommyettinger.SpeedDemo;
+import com.github.tommyettinger.Stringf;
 import com.github.tommyettinger.random.AceRandom;
-import com.github.tommyettinger.random.ChopRandom;
 
 import java.util.Arrays;
 
@@ -75,7 +76,7 @@ public class AceScreen extends ScreenAdapter {
         }
         iterations += 1;
         for (int i = 0; i < 0x80000; i++) {
-            int m = (int) (random.nextExclusiveFloat() * 512f);
+            int m = (int) (random.nextLong(512L));
             if(m >= 0 && m < 512)
                 amounts[m]++;
         }
@@ -99,7 +100,7 @@ public class AceScreen extends ScreenAdapter {
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        font.draw(batch, Stringf.format("%s at %d FPS", random.getTag(), Gdx.graphics.getFramesPerSecond()),
+        font.draw(batch, Stringf.format("nextLong() using %s at %d FPS", random.getTag(), Gdx.graphics.getFramesPerSecond()),
                 64, 522, 256+128, Align.center, true);
         batch.end();
 
