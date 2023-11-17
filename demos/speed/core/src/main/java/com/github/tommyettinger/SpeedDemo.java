@@ -39,6 +39,9 @@ public class SpeedDemo extends Game {
                 new com.github.tommyettinger.l.RandomScreen(this),
                 new com.github.tommyettinger.l.ChopScreen(this),
                 new com.github.tommyettinger.l.AceScreen(this),
+                new com.github.tommyettinger.ul.RandomScreen(this),
+                new com.github.tommyettinger.ul.ChopScreen(this),
+                new com.github.tommyettinger.ul.AceScreen(this),
         };
         screenIndex = 0;
         setScreen(screens[screenIndex]);
