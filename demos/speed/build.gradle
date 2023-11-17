@@ -1,0 +1,39 @@
+buildscript {
+	repositories {
+		mavenLocal()
+		mavenCentral()
+		google()
+		gradlePluginPortal()
+		maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+	}
+	dependencies {
+		classpath "org.docstr:gwt-gradle-plugin:$gwtPluginVersion"
+	}
+}
+
+allprojects {
+	apply plugin: 'eclipse'
+	apply plugin: 'idea'
+}
+
+configure(subprojects) {
+	apply plugin: 'java-library'
+	sourceCompatibility = 11
+	compileJava {
+		options.incremental = true
+	}
+}
+
+subprojects {
+	version = '0.0.1'
+	ext.appName = 'distributor'
+	repositories {
+		mavenLocal()
+		mavenCentral()
+		maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+		maven { url 'https://jitpack.io' }
+		maven { url 'https://teavm.org/maven/repository/' }
+	}
+}
+
+eclipse.project.name = 'distributor' + '-parent'
