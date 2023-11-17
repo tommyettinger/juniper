@@ -7,6 +7,7 @@ import com.github.xpenatan.gdx.backends.teavm.gen.SkipClass;
 import java.io.File;
 import java.io.IOException;
 import org.teavm.tooling.TeaVMTool;
+import org.teavm.vm.TeaVMOptimizationLevel;
 
 /** Builds the TeaVM/HTML application. */
 @SkipClass
@@ -24,6 +25,7 @@ public class TeaVMBuilder {
 
         TeaVMTool tool = TeaBuilder.config(teaBuildConfiguration);
         tool.setMainClass(TeaVMLauncher.class.getName());
+        tool.setOptimizationLevel(TeaVMOptimizationLevel.FULL);
         TeaBuilder.build(tool);
     }
 }
