@@ -26,7 +26,7 @@ configure(subprojects) {
 
 subprojects {
 	version = '0.0.1'
-	ext.appName = 'distributor'
+	ext.appName = 'speed'
 	repositories {
 		mavenLocal()
 		mavenCentral()
@@ -36,4 +36,4 @@ subprojects {
 	}
 }
 
-eclipse.project.name = 'distributor' + '-parent'
+eclipse.project.name = 'speed' + '-parent'
