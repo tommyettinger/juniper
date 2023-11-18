@@ -1,5 +1,6 @@
 package com.github.tommyettinger.teavm;
 
+import com.github.tommyettinger.Random;
 import com.github.xpenatan.gdx.backends.teavm.TeaApplicationConfiguration;
 import com.github.xpenatan.gdx.backends.teavm.TeaApplication;
 import com.github.tommyettinger.SpeedDemo;
@@ -16,8 +17,9 @@ public class TeaVMLauncher {
     public static void main(String[] args) {
         TeaApplicationConfiguration config = new TeaApplicationConfiguration("canvas");
         // change these to both 0 to use all available space, or both -1 for the canvas size.
+        Random testRandom = new Random(123);
         config.width = SpeedDemo.SCREEN_WIDTH;
-        config.height = SpeedDemo.SCREEN_HEIGHT;
+        config.height = SpeedDemo.SCREEN_HEIGHT + testRandom.nextInt(8);
         new TeaApplication(new SpeedDemo(), config);
     }
 }

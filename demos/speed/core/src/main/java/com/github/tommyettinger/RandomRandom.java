@@ -19,8 +19,6 @@ package com.github.tommyettinger;
 
 import com.github.tommyettinger.random.EnhancedRandom;
 
-import java.util.Random;
-
 /**
  * An EnhancedRandom that simply wraps a {@link Random} instance.
  * Note that {@link #copy()} does not actually copy this.
