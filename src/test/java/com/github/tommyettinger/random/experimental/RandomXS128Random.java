@@ -65,8 +65,8 @@ public class RandomXS128Random extends EnhancedRandom {
     @Override
     public void setState(long state) {
         if(base == null)
-            base = new RandomXS128();
-        base.setSeed(state);
+            base = new RandomXS128(state, state);
+        base.setState(state, state == 0 ? 1 : state);
     }
 
     @Override
