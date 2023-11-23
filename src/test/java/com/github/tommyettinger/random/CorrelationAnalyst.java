@@ -32,14 +32,10 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.github.tommyettinger.digital.ArrayTools;
 import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.digital.BitConversion;
-import com.github.tommyettinger.random.experimental.*;
-
-import java.util.ArrayList;
-import java.util.Comparator;
 
 import static com.badlogic.gdx.Input.Keys.*;
 import static com.badlogic.gdx.graphics.GL20.GL_POINTS;
-import static com.github.tommyettinger.random.CorrelationVisualizer.randomList;
+import static com.github.tommyettinger.random.Generators.randomList;
 
 public class CorrelationAnalyst extends ApplicationAdapter {
     public static String title = "";

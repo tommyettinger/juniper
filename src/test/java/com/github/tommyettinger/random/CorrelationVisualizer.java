@@ -28,13 +28,10 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.github.tommyettinger.digital.BitConversion;
-import com.github.tommyettinger.random.experimental.*;
-
-import java.util.ArrayList;
-import java.util.Comparator;
 
 import static com.badlogic.gdx.Input.Keys.*;
 import static com.badlogic.gdx.graphics.GL20.GL_POINTS;
+import static com.github.tommyettinger.random.Generators.randomList;
 
 /**
  */
@@ -46,43 +43,13 @@ public class CorrelationVisualizer extends ApplicationAdapter {
     private static final float[][] previousGrid = new float[width][height];
 
     public static final EnhancedRandom[][][] randoms;
-    public static final ArrayList<EnhancedRandom> randomList;
     static {
-        randomList = Deserializer.copyRandoms();
-        randomList.sort(Comparator.comparing(EnhancedRandom::getTag));
-
-        randomList.add(new SplurgeRandom(1, 1));
-        randomList.add(new SportyRandom(1, 1));
-        randomList.add(new SpoonRandom(1, 1));
-        randomList.add(new SpritzRandom(1, 1));
-        randomList.add(new SpryRandom(1, 1));
-        randomList.add(new ScamperRandom(1, 1));
-        randomList.add(new LaceRandom(1, 1, 1, 1, 1));
-        randomList.add(new SkyRandom(1, 1, 1, 1));
-        randomList.add(new ScarfRandom(1, 1, 1, 1));
-        randomList.add(new RandomRandom(1));
-        randomList.add(new RandomXS128Random(1, 1));
-        randomList.add(new LeaderRandom(1, 1));
-        randomList.add(new CobraRandom(1, 1));
-        randomList.add(new FleetRandom(1, 1));
-        randomList.add(new SpangledRandom(1, 1, new long[3]));
-        randomList.add(new BarleyRandom(1, 1));
-        randomList.add(new LaborRandom(1, 1));
-        randomList.add(new TyrantRandom(1, 1, 1));
-        randomList.add(new TerseRandom(1, 1, 1));
-        randomList.add(new MarshRandom(1, 1, 1));
-        randomList.add(new MunchRandom(1, 1, 1));
-        randomList.add(new SpurRandom(1, 1, 1));
-        randomList.add(new RespectRandom(1, 1, 1));
-        randomList.add(new Recipe32Random(1, 1, 1));
-        randomList.add(new SnoutRandom(1, 1, 1, 1));
         randoms = new EnhancedRandom[randomList.size()][][];
         for (int i = 0; i < randoms.length; i++) {
             randoms[i] = makeGrid(randomList.get(i), width, height);
         }
     }
     public int currentRandom = 0;
-    public static int randomCount = randoms.length;
     public int currentMode = 0;
     public static int frame = 0;
     public static int modeCount = 3;
@@ -195,7 +162,7 @@ public class CorrelationVisualizer extends ApplicationAdapter {
                     case N: // next
                     case EQUALS:
                     case ENTER:
-                        currentRandom = ((currentRandom + (UIUtils.shift() ? randomCount - 1 : 1)) % randomCount);
+                        currentRandom = ((currentRandom + (UIUtils.shift() ? Generators.randomCount - 1 : 1)) % Generators.randomCount);
                         refreshGrid();
                         title = randoms[currentRandom][0][0].getClass().getSimpleName()
                                 + " on mode " + currentMode;

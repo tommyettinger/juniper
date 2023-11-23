@@ -208,6 +208,7 @@ Lowest mode: 101 has mean amount 0.0312333106  PASS 👍 for Crand64Random
 Lowest mode: 103 has mean amount 0.0313153266  PASS 👍 for DistinctRandom
 Lowest mode: 103 has mean amount 0.0312800407  PASS 👍 for DistributedRandom
 Lowest mode: 102 has mean amount 0.0311231613  PASS 👍 for FleetRandom
+Lowest mode: 102 has mean amount 0.0312409400  PASS 👍 for FlowRandom
 Lowest mode: 102 has mean amount 0.0312938690  PASS 👍 for FourWheelRandom
 Lowest mode: 56  has mean amount 0.0234346389  FAIL 💀 for GoldenQuasiRandom
 Lowest mode: 103 has mean amount 0.0312981605  PASS 👍 for InterpolatedRandom
@@ -263,6 +264,7 @@ Lowest mode: 103 has mean amount 0.0313186645  PASS 👍 for Crand64Random
 Lowest mode: 102 has mean amount 0.0311293601  PASS 👍 for DistinctRandom
 Lowest mode: 101 has mean amount 0.0312500000  PASS 👍 for DistributedRandom
 Lowest mode: 83  has mean amount 0.0244946479  FAIL 💀 for FleetRandom
+Lowest mode: 103 has mean amount 0.0314579010  PASS 👍 for FlowRandom
 Lowest mode: 102 has mean amount 0.0312094688  PASS 👍 for FourWheelRandom
 Lowest mode: 0   has mean amount 0.9960937500  FAIL 💀 for GoldenQuasiRandom
 Lowest mode: 102 has mean amount 0.0311503410  PASS 👍 for InterpolatedRandom
@@ -318,6 +320,7 @@ Lowest mode: 102 has mean amount 0.0312485694  PASS 👍 for Crand64Random
 Lowest mode: 102 has mean amount 0.0310759544  PASS 👍 for DistinctRandom
 Lowest mode: 102 has mean amount 0.0314383506  PASS 👍 for DistributedRandom
 Lowest mode: 64  has mean amount 0.0265011787  FAIL 💀 for FleetRandom
+Lowest mode: 103 has mean amount 0.0312075614  PASS 👍 for FlowRandom
 Lowest mode: 102 has mean amount 0.0312538146  PASS 👍 for FourWheelRandom
 Lowest mode: 0   has mean amount 0.9964046478  FAIL 💀 for GoldenQuasiRandom
 Lowest mode: 103 has mean amount 0.0313782691  PASS 👍 for InterpolatedRandom
@@ -363,10 +366,67 @@ Lowest mode: 87  has mean amount 0.0237760543  FAIL 💀 for Xoshiro128PlusPlusR
 Lowest mode: 103 has mean amount 0.0313544273  PASS 👍 for Xoshiro256MX3Random
 Lowest mode: 83  has mean amount 0.0218496322  FAIL 💀 for Xoshiro256StarStarRandom
 
+    Using setState(x << 16 ^ y) for single-state, or
+          setState(x, y, 1L, 1L, 1L) for multi-state:
+
+Lowest mode: 102 has mean amount 0.0312814712  PASS 👍 for AceRandom
+Lowest mode: 103 has mean amount 0.0314259529  PASS 👍 for BarleyRandom
+Lowest mode: 103 has mean amount 0.0312309265  PASS 👍 for ChopRandom
+Lowest mode: 91  has mean amount 0.0245819091  FAIL 💀 for CobraRandom
+Lowest mode: 102 has mean amount 0.0312867164  PASS 👍 for Crand64Random
+Lowest mode: 102 has mean amount 0.0311293601  PASS 👍 for DistinctRandom
+Lowest mode: 0   has mean amount 0.9960937500  FAIL 💀 for DistributedRandom
+Lowest mode: 101 has mean amount 0.0209321975  FAIL 💀 for FleetRandom
+Lowest mode: 103 has mean amount 0.0311579704  PASS 👍 for FlowRandom
+Lowest mode: 103 has mean amount 0.0312857627  PASS 👍 for FourWheelRandom
+Lowest mode: 0   has mean amount 0.9960937500  FAIL 💀 for GoldenQuasiRandom
+Lowest mode: 0   has mean amount 0.9960937500  FAIL 💀 for InterpolatedRandom
+Lowest mode: 102 has mean amount 0.0311360359  PASS 👍 for Jsf32Random
+Lowest mode: 0   has mean amount 0.9999389648  FAIL 💀 for KnownSequenceRandom
+Lowest mode: 103 has mean amount 0.0311112403  PASS 👍 for LaborRandom
+Lowest mode: 101 has mean amount 0.0311694145  PASS 👍 for LaceRandom
+Lowest mode: 99  has mean amount 0.0209736824  FAIL 💀 for LaserRandom
+Lowest mode: 102 has mean amount 0.0312838554  PASS 👍 for LeaderRandom
+Lowest mode: 0   has mean amount 0.9960937500  FAIL 💀 for LowChangeQuasiRandom
+Lowest mode: 102 has mean amount 0.0311636924  PASS 👍 for MarshRandom
+Lowest mode: 102 has mean amount 0.0209040641  FAIL 💀 for MizuchiRandom
+Lowest mode: 101 has mean amount 0.0314936637  PASS 👍 for MunchRandom
+Lowest mode: 0   has mean amount 0.9960937500  FAIL 💀 for PasarRandom
+Lowest mode: 103 has mean amount 0.0312166213  PASS 👍 for PouchRandom
+Lowest mode: 35  has mean amount 0.0192756652  FAIL 💀 for RandomRandom
+Lowest mode: 0   has mean amount 0.0230121612  FAIL 💀 for RandomXS128Random
+Lowest mode: 103 has mean amount 0.0312590599  PASS 👍 for Recipe32Random
+Lowest mode: 103 has mean amount 0.0311293601  PASS 👍 for RespectRandom
+Lowest mode: 102 has mean amount 0.0312829017  PASS 👍 for RomuTrioRandom
+Lowest mode: 102 has mean amount 0.0313277244  PASS 👍 for ScamperRandom
+Lowest mode: 0   has mean amount 0.3629975318  FAIL 💀 for ScarfRandom
+Lowest mode: 0   has mean amount 0.3629674911  FAIL 💀 for ScruffRandom
+Lowest mode: 97  has mean amount 0.0259561538  FAIL 💀 for SkyRandom
+Lowest mode: 103 has mean amount 0.0311317443  PASS 👍 for SnoutRandom
+Lowest mode: 103 has mean amount 0.0312662124  PASS 👍 for SpangledRandom
+Lowest mode: 103 has mean amount 0.0312414169  PASS 👍 for SplurgeRandom
+Lowest mode: 101 has mean amount 0.0210008621  FAIL 💀 for SpoonRandom
+Lowest mode: 100 has mean amount 0.0208730697  FAIL 💀 for SportyRandom
+Lowest mode: 102 has mean amount 0.0313653945  PASS 👍 for SpritzRandom
+Lowest mode: 103 has mean amount 0.0313363075  PASS 👍 for SpryRandom
+Lowest mode: 101 has mean amount 0.0313701629  PASS 👍 for SpurRandom
+Lowest mode: 0   has mean amount 0.9960937500  FAIL 💀 for StrangerRandom
+Lowest mode: 102 has mean amount 0.0310564041  PASS 👍 for TerseRandom
+Lowest mode: 102 has mean amount 0.0312862396  PASS 👍 for TricycleRandom
+Lowest mode: 103 has mean amount 0.0312538146  PASS 👍 for TrimRandom
+Lowest mode: 0   has mean amount 0.9843764305  FAIL 💀 for TupleQuasiRandom
+Lowest mode: 103 has mean amount 0.0312047004  PASS 👍 for TyrantRandom
+Lowest mode: 0   has mean amount 1.0000000000  FAIL 💀 for VanDerCorputQuasiRandom
+Lowest mode: 0   has mean amount 0.9960937500  FAIL 💀 for WhiskerRandom
+Lowest mode: 78  has mean amount 0.0217971801  FAIL 💀 for Xoroshiro128StarStarRandom
+Lowest mode: 86  has mean amount 0.0237264633  FAIL 💀 for Xoshiro128PlusPlusRandom
+Lowest mode: 103 has mean amount 0.0310606956  PASS 👍 for Xoshiro256MX3Random
+Lowest mode: 83  has mean amount 0.0215129852  FAIL 💀 for Xoshiro256StarStarRandom
+
      */
     public static void main(String[] arg) {
         EnhancedRandom[][] g = new EnhancedRandom[256][256];
-        ArrayList<EnhancedRandom> rs = CorrelationVisualizer.randomList;
+        ArrayList<EnhancedRandom> rs = Generators.randomList;
         rs.sort((l, r) -> l.getClass().getSimpleName().compareTo(r.getClass().getSimpleName()));
 //        rs.sort(Comparator.comparing(EnhancedRandom::getClass, Comparator.comparing(Class::getSimpleName)));
         for (EnhancedRandom r : rs) {
