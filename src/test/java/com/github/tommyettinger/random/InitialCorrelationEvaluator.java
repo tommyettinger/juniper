@@ -433,11 +433,12 @@ Lowest mode: 83  has mean amount 0.0215129852  FAIL 💀 for Xoshiro256StarStarR
             for (int x = 0; x < g.length; x++) {
                 for (int y = 0; y < g[x].length; y++) {
                     g[x][y] = r.copy();
-//                    if(r.getStateCount() == 1)
+                    if(r.getStateCount() == 1)
 //                        g[x][y].setState(interleaveBits(x, y));
-//                        g[x][y].setState(x << 16 ^ y);
-                        g[x][y].setState(y + ((x + y) * (x + y + 1L) >> 1)); // Cantor pairing function
-//                    else
+                        g[x][y].setState(x << 16 ^ y);
+//                        g[x][y].setState(y + ((x + y) * (x + y + 1L) >> 1)); // Cantor pairing function
+                    else
+                        g[x][y].setState((long)x<<1|1L, (long)y<<1|1L, 1L, 1L, 1L);
 //                        g[x][y].setState(x, y, 1L, 1L, 1L);
                 }
             }

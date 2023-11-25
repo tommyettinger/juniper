@@ -64,16 +64,16 @@ public class CorrelationVisualizer extends ApplicationAdapter {
                         g[x][y].setState(x << 16 ^ y);
                         break;
                     case 2:
-                        g[x][y].setState(x, y);
+                        g[x][y].setState((long)x<<1|1, (long)y<<1|1);
                         break;
                     case 3:
-                        g[x][y].setState(x, y, 1L);
+                        g[x][y].setState((long)x<<1|1, (long)y<<1|1, 1L);
                         break;
                     case 4:
-                        g[x][y].setState(x, y, 1L, 1L);
+                        g[x][y].setState((long)x<<1|1, (long)y<<1|1, 1L, 1L);
                         break;
                     case 5:
-                        g[x][y].setState(x, y, 1L, 1L, 1L);
+                        g[x][y].setState((long)x<<1|1, (long)y<<1|1, 1L, 1L, 1L);
                         break;
                 }
             }
@@ -83,23 +83,24 @@ public class CorrelationVisualizer extends ApplicationAdapter {
 
     public static void refreshGrid() {
         for (int i = 0, n = randoms.length; i < n; i++) {
+            EnhancedRandom[][] g = randoms[i];
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
-                    switch (randoms[i][x][y].getStateCount()) {
+                    switch (g[x][y].getStateCount()) {
                         case 1:
-                            randoms[i][x][y].setState(x << 16 ^ y);
+                            g[x][y].setState(x << 16 ^ y);
                             break;
                         case 2:
-                            randoms[i][x][y].setState(x, y);
+                            g[x][y].setState((long)x<<1|1, (long)y<<1|1);
                             break;
                         case 3:
-                            randoms[i][x][y].setState(x, y, 1L);
+                            g[x][y].setState((long)x<<1|1, (long)y<<1|1, 1L);
                             break;
                         case 4:
-                            randoms[i][x][y].setState(x, y, 1L, 1L);
+                            g[x][y].setState((long)x<<1|1, (long)y<<1|1, 1L, 1L);
                             break;
                         case 5:
-                            randoms[i][x][y].setState(x, y, 1L, 1L, 1L);
+                            g[x][y].setState((long)x<<1|1, (long)y<<1|1, 1L, 1L, 1L);
                             break;
                     }
                 }
