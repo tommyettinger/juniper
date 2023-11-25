@@ -29,7 +29,9 @@ public class InitialCorrelationEvaluator {
     public double steps = 0;
     public int mode = 0;
     public double amount = 0;
-    private static final double I255 = 1.0 / 255.0;
+    public double actualMode = 0;
+    public double actualAmount = 0;
+    private static final double I255 = 4.0 / 255.0;
     private double[][] real;
     private double[][] imag;
     public EnhancedRandom[][] randoms;
@@ -40,50 +42,63 @@ public class InitialCorrelationEvaluator {
 
     /**
      *
-     * @param randoms
+     * @param randomGrid
      * @param firstStepUsed
      * @param stepLimit
      * @return a positive number if the distribution of {@code randoms} is close to uniform; otherwise a negative number
      */
-    public double run(EnhancedRandom[][] randoms, int firstStepUsed, int stepLimit){
-        this.randoms = randoms;
+    public double run(EnhancedRandom[][] randomGrid, int firstStepUsed, int stepLimit){
+        this.randoms = new EnhancedRandom[randomGrid.length][randomGrid[0].length];
         real = new double[randoms.length][randoms[0].length];
         imag = new double[randoms.length][randoms[0].length];
-        for (int i = 0; i < firstStepUsed; i++) {
-            for (int x = 0; x < randoms.length; x++) {
-                for (int y = 0; y < randoms[x].length; y++) {
-                    randoms[x][y].nextLong();
+        actualAmount = 0;
+        actualMode = 0;
+        for (int bit = 0; bit < 64; bit++) {
+            steps = 0;
+            for (int x = 0; x < randomGrid.length; x++) {
+                for (int y = 0; y < randomGrid[0].length; y++) {
+                    this.randoms[x][y] = randomGrid[x][y].copy();
                 }
             }
-        }
-        double amountSum = 0;
-        int minMode = Integer.MAX_VALUE;
-        for (int i = firstStepUsed; i < stepLimit; i++) {
-            step();
-            amountSum += amount;
-            minMode = Math.min(mode, minMode);
-        }
-        amount = amountSum / steps;
-        mode = minMode;
+//            ArrayTools.fill(real, 0.0);
+//            ArrayTools.fill(imag, 0.0);
 
-        return (mode * amount) - 3.0;
+            for (int i = 0; i < firstStepUsed; i++) {
+                for (int x = 0; x < randoms.length; x++) {
+                    for (int y = 0; y < randoms[x].length; y++) {
+                        randoms[x][y].nextLong();
+                    }
+                }
+            }
+            double amountSum = 0;
+            int minMode = Integer.MAX_VALUE;
+            for (int i = firstStepUsed; i < stepLimit; i++) {
+                step(bit);
+                amountSum += amount;
+                minMode = Math.min(mode, minMode);
+            }
+            actualAmount += amountSum / steps;
+            actualMode += minMode / steps;
+        }
+        actualMode *= 0.5; // not sure why this is needed to get similar behavior to before...
+        return (actualMode * actualAmount) - 3.0;
     }
-    public void step() {
+    public void step(int bit) {
         ++steps;
         ArrayTools.fill(imag, 0.0);
 
-        int bt;
+        long v;
 
         for (int x = 0; x < randoms.length; x++) {
             for (int y = 0; y < randoms[x].length; y++) {
-                bt = (int) randoms[x][y].nextLong() & 255;
-                real[x][y] = bt * I255;
+                v = randoms[x][y].nextLong() >>> bit & 1L;
+                real[x][y] = v;
             }
         }
         Fft.transformWindowless2D(real, imag);
         Fft.getHistogram(real, imag);
         mode = Fft.maxIndex(Fft.histogram);
-        amount = Fft.histogram[mode] / (double)(randoms.length * randoms[0].length);
+        amount = Fft.histogram[mode] * 0x1p-6 / (randoms.length * randoms[0].length);
     }
     /**
      * Narrow-purpose; takes an x and a y value, each between 0 and 65535 inclusive, and interleaves their bits so the
@@ -445,8 +460,8 @@ Lowest mode: 83  has mean amount 0.0215129852  FAIL 💀 for Xoshiro256StarStarR
             InitialCorrelationEvaluator evaluator = new InitialCorrelationEvaluator();
             double result = evaluator.run(g, 32, 64);
             System.out.println("Lowest mode: "
-                    + TextTools.padRightStrict(Base.BASE10.signed(evaluator.mode), ' ', 3)
-                    + " has mean amount " + TextTools.padRightStrict(Base.BASE10.decimal(evaluator.amount), '0',  12)
+                    + Base.BASE10.decimal(evaluator.actualMode, 8)
+                    + " has mean amount " + Base.BASE10.decimal(evaluator.actualAmount, 12)
                     + (result > 0.0 ? "  PASS 👍 for " : "  FAIL 💀 for ") + r.getClass().getSimpleName());
         }
     }
