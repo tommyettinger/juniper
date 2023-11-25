@@ -31,7 +31,7 @@ public class InitialCorrelationEvaluator {
     public double amount = 0;
     public double actualMode = 0;
     public double actualAmount = 0;
-    private static final double I255 = 4.0 / 255.0;
+    private static final double I255 = 1.0 / 255.0;
     private double[][] real;
     private double[][] imag;
     public EnhancedRandom[][] randoms;
@@ -81,7 +81,7 @@ public class InitialCorrelationEvaluator {
             actualMode += minMode / steps;
         }
         actualMode *= 0.5; // not sure why this is needed to get similar behavior to before...
-        return (actualMode * actualAmount) - 3.0;
+        return 1.0 - Math.abs(actualMode - 115.5) - (actualAmount - 0.031) * 10;
     }
     public void step(int bit) {
         ++steps;
@@ -437,6 +437,65 @@ Lowest mode: 78  has mean amount 0.0217971801  FAIL 💀 for Xoroshiro128StarSta
 Lowest mode: 86  has mean amount 0.0237264633  FAIL 💀 for Xoshiro128PlusPlusRandom
 Lowest mode: 103 has mean amount 0.0310606956  PASS 👍 for Xoshiro256MX3Random
 Lowest mode: 83  has mean amount 0.0215129852  FAIL 💀 for Xoshiro256StarStarRandom
+
+// TESTING METHODOLOGY CHANGED HERE. Nov 24 2023
+
+    Using setState(x << 16 ^ y) for single-state, or
+          setState((long)x<<1|1L, (long)y<<1|1L, 1L, 1L, 1L); for multi-state:
+
+Lowest mode: 115.7968 has mean amount 0.0310869589  PASS 👍 for AceRandom
+Lowest mode: 115.6250 has mean amount 0.0311142951  PASS 👍 for BarleyRandom
+Lowest mode: 115.5156 has mean amount 0.0310856178  PASS 👍 for ChopRandom
+Lowest mode: 103.1250 has mean amount 0.0226631015  FAIL 💀 for CobraRandom
+Lowest mode: 115.6406 has mean amount 0.0311274901  PASS 👍 for Crand64Random
+Lowest mode: 115.6562 has mean amount 0.0311397239  PASS 👍 for DistinctRandom
+Lowest mode: 0.000000 has mean amount 0.9960947632  FAIL 💀 for DistributedRandom
+Lowest mode: 77.23437 has mean amount 0.0233430340  FAIL 💀 for FleetRandom
+Lowest mode: 115.7187 has mean amount 0.0310906246  PASS 👍 for FlowRandom
+Lowest mode: 115.6250 has mean amount 0.0311205834  PASS 👍 for FourWheelRandom
+Lowest mode: 0.000000 has mean amount 0.9996237233  FAIL 💀 for GoldenQuasiRandom
+Lowest mode: 0.000000 has mean amount 0.9960947632  FAIL 💀 for InterpolatedRandom
+Lowest mode: 115.6562 has mean amount 0.0310990065  PASS 👍 for Jsf32Random
+Lowest mode: 0.000000 has mean amount 0.9999911785  FAIL 💀 for KnownSequenceRandom
+Lowest mode: 115.5468 has mean amount 0.0310052260  PASS 👍 for LaborRandom
+Lowest mode: 115.6093 has mean amount 0.0311130359  PASS 👍 for LaceRandom
+Lowest mode: 75.29687 has mean amount 0.0234822258  FAIL 💀 for LaserRandom
+Lowest mode: 115.5156 has mean amount 0.0310955271  PASS 👍 for LeaderRandom
+Lowest mode: 0.000000 has mean amount 0.9999285936  FAIL 💀 for LowChangeQuasiRandom
+Lowest mode: 115.6093 has mean amount 0.0311282873  PASS 👍 for MarshRandom
+Lowest mode: 115.5781 has mean amount 0.0310883298  PASS 👍 for MizuchiRandom
+Lowest mode: 115.6250 has mean amount 0.0311053842  PASS 👍 for MunchRandom
+Lowest mode: 0.000000 has mean amount 0.9960946589  FAIL 💀 for PasarRandom
+Lowest mode: 115.6093 has mean amount 0.0310849845  PASS 👍 for PouchRandom
+Lowest mode: 115.7343 has mean amount 0.0310895964  PASS 👍 for RandomRandom
+Lowest mode: 50.64062 has mean amount 0.0580013692  FAIL 💀 for RandomXS128Random
+Lowest mode: 115.7031 has mean amount 0.0310938581  PASS 👍 for Recipe32Random
+Lowest mode: 115.4843 has mean amount 0.0311044976  PASS 👍 for RespectRandom
+Lowest mode: 115.5937 has mean amount 0.0310954526  PASS 👍 for RomuTrioRandom
+Lowest mode: 115.5468 has mean amount 0.0311045646  PASS 👍 for ScamperRandom
+Lowest mode: 0.000000 has mean amount 0.3628162965  FAIL 💀 for ScarfRandom
+Lowest mode: 0.000000 has mean amount 0.3628059253  FAIL 💀 for ScruffRandom
+Lowest mode: 103.2812 has mean amount 0.0241852626  FAIL 💀 for SkyRandom
+Lowest mode: 115.6093 has mean amount 0.0310771092  PASS 👍 for SnoutRandom
+Lowest mode: 115.6562 has mean amount 0.0310984104  PASS 👍 for SpangledRandom
+Lowest mode: 115.5156 has mean amount 0.0310729444  PASS 👍 for SplurgeRandom
+Lowest mode: 115.8437 has mean amount 0.0311003327  PASS 👍 for SpoonRandom
+Lowest mode: 115.7031 has mean amount 0.0311082229  PASS 👍 for SportyRandom
+Lowest mode: 115.5937 has mean amount 0.0310731902  PASS 👍 for SpritzRandom
+Lowest mode: 115.6093 has mean amount 0.0311004593  PASS 👍 for SpryRandom
+Lowest mode: 115.6875 has mean amount 0.0311148166  PASS 👍 for SpurRandom
+Lowest mode: 0.000000 has mean amount 0.9960947632  FAIL 💀 for StrangerRandom
+Lowest mode: 115.7187 has mean amount 0.0311227664  PASS 👍 for TerseRandom
+Lowest mode: 115.6718 has mean amount 0.0311185643  PASS 👍 for TricycleRandom
+Lowest mode: 115.5937 has mean amount 0.0311095491  PASS 👍 for TrimRandom
+Lowest mode: 89.06250 has mean amount 0.2257577031  FAIL 💀 for TupleQuasiRandom
+Lowest mode: 115.6250 has mean amount 0.0311327651  PASS 👍 for TyrantRandom
+Lowest mode: 0.000000 has mean amount 0.9998143911  FAIL 💀 for VanDerCorputQuasiRandom
+Lowest mode: 0.000000 has mean amount 0.9960947632  FAIL 💀 for WhiskerRandom
+Lowest mode: 77.31250 has mean amount 0.0183748900  FAIL 💀 for Xoroshiro128StarStarRandom
+Lowest mode: 91.93750 has mean amount 0.0219425112  FAIL 💀 for Xoshiro128PlusPlusRandom
+Lowest mode: 115.6250 has mean amount 0.0310974493  PASS 👍 for Xoshiro256MX3Random
+Lowest mode: 81.92187 has mean amount 0.0184360742  FAIL 💀 for Xoshiro256StarStarRandom
 
      */
     public static void main(String[] arg) {
