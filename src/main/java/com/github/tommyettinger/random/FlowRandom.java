@@ -15,21 +15,36 @@
  *
  */
 
-package com.github.tommyettinger.random.experimental;
-
-import com.github.tommyettinger.random.EnhancedRandom;
+package com.github.tommyettinger.random;
 
 /**
  * A hash-on-counters RNG with a period of 2 to the 64 and 2 to the 64 streams.
- * Has passed at least 32TB of PractRand without anomalies. Testing is ongoing.
+ * It allows arbitrary skipping within the current stream using {@link #skip(long)}, and you can get
+ * the stream as long with {@link #getStream()}. You can also set the current stream absolutely (with
+ * {@link #setStream(long)}) or relatively (with {@link #shiftStream(long)}).
+ * <br>
+ * Even though a period of 2 to the 64 is just "good enough," it's tens of thousands of times longer
+ * than java.util.Random, and equivalent to any individual SplittableRandom. The speed of this
+ * generator is unknown, but probably isn't great, especially compared to designs that take advantage
+ * of instruction-level parallelism. The streams are meant to avoid correlation, especially when
+ * compared to LaserRandom (which has very correlated streams, but the same state size and period).
+ * <br>
+ * Has passed 64TB of PractRand without anomalies. ReMort testing is ongoing;
+ * over 25 petabytes have passed so far. Any individual stream will return
+ * 2 to the 64 {@code long} results before repeating, but within a stream, some
+ * results will appear multiple times, and other results not at all. If you
+ * append all streams to each other to form one sequence of length 2 to the 128,
+ * that sequence will be 1-dimensionally equidistributed; that is, each long
+ * result will appear as often as any other (2 to the 64 times).
+ * <br>
  * Uses the Moremur unary hash (the same one as DistinctRandom), passing it a
  * combination of the two different Weyl sequences (counters) this has for its
  * state. Using just one sequence is enough to pass a large amount of PractRand,
- * but it has to change which sequence it uses to have multiple streams. Some
- * sequences are no good, like using an increment of 1; this generator uses a
- * pair of Weyl sequences that are known to work well, and never uses unknown
- * or untested sequences. The relationship between the two sequences is what
- * determines the current stream.
+ * but DistinctRandom would have to change which sequence it uses to have
+ * multiple streams. Some sequences are no good, like using an increment of 1;
+ * this generator uses a pair of Weyl sequences that are known to work well,
+ * and never uses unknown or untested sequences. The relationship between the
+ * two sequences is what determines the current stream.
  * <br>
  * All streams, in time, flow to the sea...
  */

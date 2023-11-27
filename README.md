@@ -45,39 +45,55 @@ seemingly-random, response to any new person she meets.
 
 Several high-quality and very-fast random number generators are here, such as
 `com.github.tommyettinger.random.PouchRandom`, `com.github.tommyettinger.random.WhiskerRandom`,
-`com.github.tommyettinger.random.AceRandom`, `com.github.tommyettinger.random.PasarRandom`,
-`com.github.tommyettinger.random.TricycleRandom`, `com.github.tommyettinger.random.DistinctRandom`,
-`com.github.tommyettinger.random.FourWheelRandom`, `com.github.tommyettinger.random.TrimRandom`, and
-`com.github.tommyettinger.random.ScruffRandom`. These extend
+`com.github.tommyettinger.random.FlowRandom`, `com.github.tommyettinger.random.DistinctRandom`,
+`com.github.tommyettinger.random.AceRandom`, and `com.github.tommyettinger.random.PasarRandom`. These extend
 the abstract class `com.github.tommyettinger.random.EnhancedRandom`, and that extends `java.util.Random` for
 compatibility. The simplest starting point is DistinctRandom; it is much like Java 8's SplittableRandom algorithm, but
 doesn't support splitting (since the possibility of low-quality splits is a major criticism of SplittableRandom), and
 otherwise uses the same style of code. It simply adds to a counter by a large constant, takes the current value of that
-counter, gets a unary hash of it using a similar algorithm to MurmurHash's finalizer step, and returns that.
-DistinctRandom is able to jump to any point in its cycle, which has a length of exactly 2 to the 64, in constant time.
+counter, gets a unary hash of it using a similar algorithm to MurmurHash's finalizer step, and returns that. "Unary
+hash" is another way of saying "a function that takes an n-bit input and produces a random-seeming n-bit output." The
+main reasons you might want DistinctRandom are that it has exactly one `long` of state, and that it produces every
+possible output from `nextLong()` exactly once over its cycle, with no repeats until potentially years later.
+DistinctRandom is able to jump to any point in its cycle, which has a length of exactly 2 to the 64, in constant time
+using the `skip()` method.
+
+This ability to skip is also shared by FlowRandom, but FlowRandom has many possible cycles (2 to the 64 possible cycles,
+each of 2 to the 64 `long` outputs) called streams. FlowRandom is very similar to DistinctRandom in most ways, except
+that it has two `long` states that each cycle with the same period. The relationship between the states is what
+determines the current stream, and you can access a FlowRandom's stream with `getStream()` or change it with
+`setStream()` or `shiftStream()`. Streams here are not correlated at all, as far as I have been able to determine.
+
 WhiskerRandom is often considerably faster than DistinctRandom (which is no slouch either), and generally has very high
 quality, but does not have a guaranteed cycle length -- a given seed could be found that has an unusually short cycle,
 which would reduce the usefulness of the generator. But, finding such a seed at random is so improbable for a generator
 with 256 bits of state that it can essentially be ignored as a weakness unless considering adversarial access (and you 
-**should not use** any of the generators here if that is the case, since none are cryptographically secure).
+**should not use** any of the generators here if that is the case, since none are cryptographically secure). A known
+potential flaw of WhiskerRandom (and many generators tested so far) is that generators with numerically similar initial
+states, such as with a generator initially set to the state `1, 1, 1, 1` and another generator set to `2, 1, 1, 1`,
+are very often highly correlated. This isn't a problem if you use `setSeed()`, since it won't produce numerically
+similar states often (or possibly won't at all), but can be a problem if you try to use a WhiskerRandom as a hash.
+
 PouchRandom is often the fastest generator here in benchmarks; it acts like WhiskerRandom but has a guaranteed minimum
 cycle length of 2 to the 63 (as long as it isn't somehow forced into an invalid state, which its own methods cannot do).
-TrimRandom and ScruffRandom are both like WhiskerRandom, also with 256 bits of state, but each promises a minimum period
-of 2 to the 64, and the maximum period is likely much higher. Trim and ScruffRandom aren't quite as fast as Whisker or
-Poucn, and Trim seems to have questionable quality on some seeds, but only when using very stringent testing (Scruff
-seems very robust). PasarRandom and AceRandom are structured much like Whisker and Trim, but have five
-long states instead of four. Pasar uses multiplication, like Whisker, while Ace uses only add, rotate, XOR, and subtract
-operations. Ace can often be faster than Pasar, especially on Java 19 and newer, but can also be slower on older JVMs.
-AceRandom is a good all-around default because it resists various ways generators can be constructed so they are
-correlated with each other; it's also certainly fast enough for most usage, and its maximum/expected period is larger
-than WhiskerRandom or PouchRandom (All have an expected period that's so large it essentially isn't a concern, estimated
-at over 2 to the 100). Both Pasar and Ace have the same minimum period guarantee as Trim. All three of Trim, Pasar, and
-Whisker can `leap()` ahead in their subcycle and almost always into a different subcycle, which can be used to make
-non-overlapping sequences produced by different generators copied out from the same original parent. TricycleRandom and
-FourWheelRandom are somewhat older; Tricycle can sometimes be quite fast and has three long states, while FourWheel is
-extremely similar to Whisker, but not quite as fast.
+While it disallows certain states (state D has to be an odd number, and the other states can't all be 0 at once), if
+that isn't a problem for your application, it is probably a solid choice. After producing about 25 outputs, numerically
+similar initial states won't appear correlated, and shouldn't become correlated again for a very long time. It has 4
+states and uses multiplication (in this case, it multiplies one state by another, always odd, state).
 
-Except for DistinctRandom, all of these mentioned generators are fast because they are designed to
+AceRandom is another recommended generator, this time with 5 states. One is a counter, which makes AceRandom have a
+minimum period of 2 to the 64, though its maximum period is much, much higher and its expected period is much higher
+than I could reach by brute-force generation with current hardware given a century. Ace uses only add, rotate, XOR, and
+subtract operations. These operations each take the same amount of time on current CPUs, a property that some
+cryptographic RNGs use to avoid timing attacks. AceRandom is a good all-around default because it resists various ways
+generators can be constructed so they are correlated with each other; it is also almost as fast as PouchRandom, and much
+faster than FlowRandom.
+
+There's lots of others here. TrimRandom, PasarRandom, ScruffRandom are all good but have the same or similar known flaw
+that WhiskerRandom has regarding numerically-similar initial states. TricycleRandom and FourWheelRandom don't have that
+flaw, but aren't quite as fast or high-quality as AceRandom or PouchRandom.
+
+Except for DistinctRandom and FlowRandom, all of these mentioned generators are fast because they are designed to
 take advantage of ILP -- Instruction Level Parallelism. The idea here came from Mark Overton's Romu generators (see
 below for RomuTrioRandom), which also have their period separated into multiple distinct sub-cycles, and don't have a
 single known cycle length. Romu generators and the ones here operate on multiple states simultaneously, with minimal

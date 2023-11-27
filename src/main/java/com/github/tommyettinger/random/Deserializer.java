@@ -70,6 +70,7 @@ public final class Deserializer {
         register(new MizuchiRandom(1, 2));
         register(new LowChangeQuasiRandom(1, 2));
         register(new Xoroshiro128StarStarRandom(1, 2));
+        register(new FlowRandom(1, 2));
         register(new RomuTrioRandom(1, 2, 3));
         register(new TricycleRandom(1, 2, 3));
         register(new ChopRandom(1, 2, 3, 4));

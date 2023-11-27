@@ -37,7 +37,6 @@ public final class Generators {
         randomList.add(new RespectRandom(1, 1, 1));
         randomList.add(new Recipe32Random(1, 1, 1));
         randomList.add(new SnoutRandom(1, 1, 1, 1));
-        randomList.add(new FlowRandom(1, 1));
     }
     public static int randomCount = randomList.size();
 
