@@ -49,6 +49,7 @@ public class LineGraphDemo extends ApplicationAdapter {
             LineWobble::splobble,
             LineWobble::quobble,
             LineWobble::quobbleOctave2,
+            LineWobble::trobble,
             (s, f) -> {
                 final long start = MathTools.longFloor(f), end = start + 1L;
                 return LineWobble.hobble(s ^ start * 0x9E3779B97F4A7C15L, s ^ end * 0x9E3779B97F4A7C15L, f - start);
@@ -57,16 +58,18 @@ public class LineGraphDemo extends ApplicationAdapter {
             (i, f) -> LineWobble.bicubicWobble(i * 0x9E3779B97F4A7C15L, f),
             (i, f) -> LineWobble.splobble(i * 0x9E3779B97F4A7C15L, f),
             (i, f) -> LineWobble.quobble(i * 0x9E3779B97F4A7C15L, f),
+            (i, f) -> LineWobble.quobbleOctave2(i * 0x9E3779B97F4A7C15L, f),
+            (i, f) -> LineWobble.trobble(i * 0x9E3779B97F4A7C15L, f),
             (h, f) -> {
                 final long start = MathTools.longFloor(f);
                 long i = h;
                 i = (i ^ (i << 21 | i >>> 43) ^ (i << 50 | i >>> 14)) + start;
                 float s = TrigTools.sinTurns(0.25f * (f - start));
                 s *= s;
-                return (Hasher.randomize3Float(i) * (1f - s) + Hasher.randomize3Float(1L + i) * s - 0.5f) * 2f;
+                return (Hasher.randomize3(i) * (1f - s) + Hasher.randomize3(1L + i) * s) * 0x1p-63f;
             }
     };
-    public int currentWobble = 6;
+    public int currentWobble = 12;
     public int wobbleCount = wobbles.length;
     public int octaves = 1;
 
