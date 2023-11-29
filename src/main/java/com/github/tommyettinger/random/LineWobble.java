@@ -19,6 +19,9 @@ package com.github.tommyettinger.random;
 
 import com.github.tommyettinger.digital.BitConversion;
 import com.github.tommyettinger.digital.MathTools;
+import com.github.tommyettinger.digital.TrigTools;
+
+import static com.github.tommyettinger.digital.TrigTools.*;
 
 /**
  * Provides 1D noise methods that can be queried at any point on a line to get a continuous random value.
@@ -548,6 +551,39 @@ public class LineWobble {
      */
     public static double quobbleOctave2(final long seed, double x) {
         return quobble(seed, x) * 0.6666666666666666 + quobble(~seed, x * 1.9) * 0.3333333333333333;
+    }
+    /**
+     * Trigonometric wobble. Domain for {@code value} is extremely large. Range is (-1, 1).
+     * @param seed an int seed that will determine the pattern of peaks and valleys this will generate as value changes; this should not change between calls
+     * @param value a double that typically changes slowly, by less than 2.0, with direction changes at integer inputs
+     * @return a pseudo-random double between -1.0 and 1.0 (both exclusive), smoothly changing with value
+     */
+    public static double trobble(int seed, double value)
+    {
+        final int floor = (int) Math.floor(value);
+        int z = seed + floor * 0xBE56D;
+        final int start = ((z ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35,
+                end = ((z + 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35;
+        value = SIN_TABLE_D[(int) ((value - floor) * 4096.0 + 16384.5) - 16384 & TABLE_MASK];
+        value *= value;
+        return ((1.0 - value) * start + value * end) * 0x0.fffffffffffffbp-31;
+    }
+
+    /**
+     * Trigonometric wobble. Domain for {@code value} is effectively [-16384, 16384]. Range is (-1, 1).
+     * @param seed an int seed that will determine the pattern of peaks and valleys this will generate as value changes; this should not change between calls
+     * @param value a float that typically changes slowly, by less than 2.0, with direction changes at integer inputs
+     * @return a pseudo-random float between -1f and 1f (both exclusive), smoothly changing with value
+     */
+    public static float trobble(int seed, float value)
+    {
+        final int floor = ((int)(value + 0x1p14) - 0x4000);
+        int z = seed + floor * 0xBE56D;
+        final int start = ((z ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35,
+                end = ((z + 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35;
+        value = SIN_TABLE[(int) ((value - floor) * 4096.0 + 16384.5) - 16384 & TABLE_MASK];
+        value *= value;
+        return ((1f - value) * start + value * end) * 0x0.ffffffp-31f;
     }
 
     /**
