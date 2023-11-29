@@ -554,6 +554,39 @@ public class LineWobble {
     }
     /**
      * Trigonometric wobble. Domain for {@code value} is extremely large. Range is (-1, 1).
+     * @param seed a long seed that will determine the pattern of peaks and valleys this will generate as value changes; this should not change between calls
+     * @param value a double that typically changes slowly, by less than 1.0, with direction changes at integer inputs
+     * @return a pseudo-random double between -1.0 and 1.0 (both exclusive), smoothly changing with value
+     */
+    public static double trobble(long seed, double value)
+    {
+        long floor = (long) Math.floor(value);
+        final long z = seed + floor * 0x6C8E9CF570932BD5L;
+        final long start = ((z ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L),
+                end = ((z + 0x6C8E9CF570932BD5L ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L);
+        value = SIN_TABLE_D[(int) ((value - floor) * 4096.0 + 16384.5) - 16384 & TABLE_MASK];
+        value *= value;
+        return ((1.0 - value) * start + value * end) * 0x0.fffffffffffffbp-63;
+    }
+
+    /**
+     * Trigonometric wobble. Domain for {@code value} is effectively [-16384, 16384]. Range is (-1, 1).
+     * @param seed a long seed that will determine the pattern of peaks and valleys this will generate as value changes; this should not change between calls
+     * @param value a float that typically changes slowly, by less than 2.0, with direction changes at integer inputs
+     * @return a pseudo-random float between -1f and 1f (both exclusive), smoothly changing with value
+     */
+    public static float trobble(long seed, float value)
+    {
+        final long floor = ((int)(value + 16384.0) - 16384);
+        final long z = seed + floor * 0x6C8E9CF570932BD5L;
+        final long start = ((z ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L),
+                end = ((z + 0x6C8E9CF570932BD5L ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L);
+        value = SIN_TABLE[(int) ((value - floor) * 4096.0 + 16384.5) - 16384 & TABLE_MASK];
+        value *= value;
+        return ((1f - value) * start + value * end) * 0x0.ffffffp-63f;
+    }
+    /**
+     * Trigonometric wobble. Domain for {@code value} is extremely large. Range is (-1, 1).
      * @param seed an int seed that will determine the pattern of peaks and valleys this will generate as value changes; this should not change between calls
      * @param value a double that typically changes slowly, by less than 2.0, with direction changes at integer inputs
      * @return a pseudo-random double between -1.0 and 1.0 (both exclusive), smoothly changing with value
