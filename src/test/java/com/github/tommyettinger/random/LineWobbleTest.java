@@ -5,6 +5,7 @@ import org.junit.Test;
 public class LineWobbleTest {
     @Test
     public void testIntFloatWobble() {
+        System.out.println("testIntFloatWobble");
         int seed = 1234567;
         for (int i = 0; i < 256; i++) {
             int len = Math.round((LineWobble.wobble(seed, i * 0x1p-5f) + 1) * 74.5f);
@@ -16,6 +17,7 @@ public class LineWobbleTest {
     }
     @Test
     public void testIntDoubleWobble() {
+        System.out.println("testIntDoubleWobble");
         int seed = 1234567;
         for (int i = 0; i < 256; i++) {
             long len = Math.round((LineWobble.wobble(seed, i * 0x1p-5) + 1) * 74.5f);
@@ -28,6 +30,7 @@ public class LineWobbleTest {
 
     @Test
     public void testLongFloatWobble() {
+        System.out.println("testLongFloatWobble");
         long seed = 1234567;
         for (int i = 0; i < 256; i++) {
             int len = Math.round((LineWobble.wobble(seed, i * 0x1p-5f) + 1) * 74.5f);
@@ -39,6 +42,7 @@ public class LineWobbleTest {
     }
     @Test
     public void testLongDoubleWobble() {
+        System.out.println("testLongDoubleWobble");
         long seed = 1234567;
         for (int i = 0; i < 256; i++) {
             long len = Math.round((LineWobble.wobble(seed, i * 0x1p-5) + 1) * 74.5f);
@@ -50,6 +54,7 @@ public class LineWobbleTest {
     }
     @Test
     public void testIntFloatBicubicWobble() {
+        System.out.println("testIntFloatBicubicWobble");
         int seed = 1234567;
         for (int i = 0; i < 256; i++) {
             int len = Math.round((LineWobble.bicubicWobble(seed, i * 0x1p-5f) + 1) * 74.5f);
@@ -61,6 +66,7 @@ public class LineWobbleTest {
     }
     @Test
     public void testIntDoubleBicubicWobble() {
+        System.out.println("testIntDoubleBicubicWobble");
         int seed = 1234567;
         for (int i = 0; i < 256; i++) {
             long len = Math.round((LineWobble.bicubicWobble(seed, i * 0x1p-5) + 1) * 74.5f);
@@ -73,6 +79,7 @@ public class LineWobbleTest {
 
     @Test
     public void testLongFloatBicubicWobble() {
+        System.out.println("testLongFloatBicubicWobble");
         long seed = 1234567;
         for (int i = 0; i < 256; i++) {
             int len = Math.round((LineWobble.bicubicWobble(seed, i * 0x1p-5f) + 1) * 74.5f);
@@ -84,6 +91,7 @@ public class LineWobbleTest {
     }
     @Test
     public void testLongDoubleBicubicWobble() {
+        System.out.println("testLongDoubleBicubicWobble");
         long seed = 1234567;
         for (int i = 0; i < 256; i++) {
             long len = Math.round((LineWobble.bicubicWobble(seed, i * 0x1p-5) + 1) * 74.5f);
@@ -95,6 +103,7 @@ public class LineWobbleTest {
     }
     @Test
     public void testIntFloatQuobble() {
+        System.out.println("testIntFloatQuobble");
         int seed = 1234567;
         for (int i = 0; i < 256; i++) {
             int len = Math.round((LineWobble.quobble(seed, i * 0x1p-5f) + 1) * 74.5f);
@@ -106,6 +115,7 @@ public class LineWobbleTest {
     }
     @Test
     public void testIntDoubleQuobble() {
+        System.out.println("testIntDoubleQuobble");
         int seed = 1234567;
         for (int i = 0; i < 256; i++) {
             long len = Math.round((LineWobble.quobble(seed, i * 0x1p-5) + 1) * 74.5f);
@@ -118,6 +128,7 @@ public class LineWobbleTest {
 
     @Test
     public void testLongFloatQuobble() {
+        System.out.println("testLongFloatQuobble");
         long seed = 1234567;
         for (int i = 0; i < 256; i++) {
             int len = Math.round((LineWobble.quobble(seed, i * 0x1p-5f) + 1) * 74.5f);
@@ -129,6 +140,7 @@ public class LineWobbleTest {
     }
     @Test
     public void testLongDoubleQuobble() {
+        System.out.println("testLongDoubleQuobble");
         long seed = 1234567;
         for (int i = 0; i < 256; i++) {
             long len = Math.round((LineWobble.quobble(seed, i * 0x1p-5) + 1) * 74.5f);
@@ -140,6 +152,7 @@ public class LineWobbleTest {
     }
     @Test
     public void testIntFloatSplobble() {
+        System.out.println("testIntFloatSplobble");
         int seed = 1234567;
         for (int i = 0; i < 256; i++) {
             int len = Math.round((LineWobble.splobble(seed, i * 0x1p-5f) + 1) * 74.5f);
@@ -151,6 +164,7 @@ public class LineWobbleTest {
     }
     @Test
     public void testIntDoubleSplobble() {
+        System.out.println("testIntDoubleSplobble");
         int seed = 1234567;
         for (int i = 0; i < 256; i++) {
             long len = Math.round((LineWobble.splobble(seed, i * 0x1p-5) + 1) * 74.5f);
@@ -163,6 +177,7 @@ public class LineWobbleTest {
 
     @Test
     public void testLongFloatSplobble() {
+        System.out.println("testLongFloatSplobble");
         long seed = 1234567;
         for (int i = 0; i < 256; i++) {
             int len = Math.round((LineWobble.splobble(seed, i * 0x1p-5f) + 1) * 74.5f);
@@ -174,6 +189,7 @@ public class LineWobbleTest {
     }
     @Test
     public void testLongDoubleSplobble() {
+        System.out.println("testLongDoubleSplobble");
         long seed = 1234567;
         for (int i = 0; i < 256; i++) {
             long len = Math.round((LineWobble.splobble(seed, i * 0x1p-5) + 1) * 74.5f);
@@ -186,6 +202,7 @@ public class LineWobbleTest {
 
     @Test
     public void testIntAngleWobble() {
+        System.out.println("testIntAngleWobble");
         int seed = 1234567;
         for (int i = 0; i < 256; i++) {
             long len = Math.round((LineWobble.wobbleAngleTurns(seed, i * 0x1p-5f)) * 79);
@@ -197,6 +214,7 @@ public class LineWobbleTest {
     }
     @Test
     public void testLongAngleWobble() {
+        System.out.println("testLongAngleWobble");
         long seed = 1234567;
         for (int i = 0; i < 256; i++) {
             long len = Math.round((LineWobble.wobbleAngleTurns(seed, i * 0x1p-5f)) * 79);
@@ -208,6 +226,7 @@ public class LineWobbleTest {
     }
     @Test
     public void testLongFloatWrappingWobble() {
+        System.out.println("testLongFloatWrappingWobble");
         long seed = 123456;
         for (int i = 0; i < 264; i++) {
             int len = Math.round((LineWobble.wobbleWrapped(seed, i * 0x1p-5f, 8) + 1) * 74.5f);
@@ -219,6 +238,7 @@ public class LineWobbleTest {
     }
     @Test
     public void testIntFloatWrappingWobble() {
+        System.out.println("testIntFloatWrappingWobble");
         int seed = 123456;
         for (int i = 0; i < 264; i++) {
             int len = Math.round((LineWobble.wobbleWrapped(seed, i * 0x1p-5f, 8) + 1) * 74.5f);
@@ -230,6 +250,7 @@ public class LineWobbleTest {
     }
     @Test
     public void testLongFloatWrappingTightWobble() {
+        System.out.println("testLongFloatWrappingTightWobble");
         long seed = 123456;
         for (int i = 0; i < 264; i++) {
             int len = Math.round((LineWobble.wobbleWrappedTight(seed, i * 0x1p-5f, 8)) * 79);
@@ -241,6 +262,7 @@ public class LineWobbleTest {
     }
     @Test
     public void testIntFloatWrappingTightWobble() {
+        System.out.println("testIntFloatWrappingTightWobble");
         int seed = 123456;
         for (int i = 0; i < 264; i++) {
             int len = Math.round((LineWobble.wobbleWrappedTight(seed, i * 0x1p-5f, 8)) * 79);
@@ -252,6 +274,7 @@ public class LineWobbleTest {
     }
     @Test
     public void testLUTWobble() {
+        System.out.println("testLUTWobble");
         int seed = 12345;
         float[] lut = LineWobble.generateLookupTable(seed, 256, 11, 4);
         for (int i = 0; i < 264; i++) {
@@ -264,6 +287,7 @@ public class LineWobbleTest {
     }
     @Test
     public void testSplineLUTWobble() {
+        System.out.println("testSplineLUTWobble");
         int seed = 12345;
         float[] lut = LineWobble.generateSplineLookupTable(seed, 256, 9, 4, 3f, 0.5f);
         for (int i = 0; i < 264; i++) {
@@ -277,6 +301,7 @@ public class LineWobbleTest {
 
     @Test
     public void testBicubicExhaustiveFloat() {
+        System.out.println("testBicubicExhaustiveFloat");
 //        final float M = 4.8186754E-20f; //Min: -0.6666665077209, max: 0.6666665077209
         final float M = 0x0.5555554p-62f; //Min: -0.9999999403954, max: 0.9999999403954
 //        final float M = 0x0.FFFFFFp-63f; //Min: -1.5000000000000, max: 1.5000000000000
@@ -311,6 +336,7 @@ public class LineWobbleTest {
 
     @Test
     public void testBicubicExhaustiveDouble() {
+        System.out.println("testBicubicExhaustiveDouble");
 //        final double M = 4.818676322157797E-20; //Min: -0.6666666666667, max: 0.6666666666667
         final double M = 0x1.5555555555428p-64; //Min: -0.9999999999999, max: 0.9999999999999
 //        final double M = 0x0.FFFFFFFFFFFF8p-63; //Min: -1.5000000000000, max: 1.5000000000000

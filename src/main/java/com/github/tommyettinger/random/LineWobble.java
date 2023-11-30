@@ -806,11 +806,11 @@ public class LineWobble {
     public static float wobbleWrapped(long seed, float value, int modulus)
     {
         final int floor = (int) value;
-        final float start = (((seed + floor % modulus) * 0x6C8E9CF570932BD5L ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L) * 0x0.ffffffp-63f,
-                end = (((seed + (floor + 1) % modulus) * 0x6C8E9CF570932BD5L ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L) * 0x0.ffffffp-63f;
+        final float start = (((seed + floor % modulus) * 0x6C8E9CF570932BD5L ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L),
+                end = (((seed + (floor + 1) % modulus) * 0x6C8E9CF570932BD5L ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L);
         value -= floor;
         value *= value * (3 - 2 * value);
-        return (1 - value) * start + value * end;
+        return ((1 - value) * start + value * end) * 0x0.ffffffp-63f;
     }
 
     /**
@@ -834,11 +834,11 @@ public class LineWobble {
     public static float wobbleWrappedTight(long seed, float value, int modulus)
     {
         final int floor = (int) value;
-        final float start = (((seed + floor % modulus) * 0x6C8E9CF570932BD5L ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L >>> 1) * 0x0.ffffffp-63f,
-                end = (((seed + (floor + 1) % modulus) * 0x6C8E9CF570932BD5L ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L >>> 1) * 0x0.ffffffp-63f;
+        final float start = (((seed + floor % modulus) * 0x6C8E9CF570932BD5L ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L >>> 1),
+                end = (((seed + (floor + 1) % modulus) * 0x6C8E9CF570932BD5L ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L >>> 1);
         value -= floor;
         value *= value * (3 - 2 * value);
-        return (1 - value) * start + value * end;
+        return ((1 - value) * start + value * end) * 0x0.ffffffp-63f;
     }
 
     /**
@@ -862,11 +862,11 @@ public class LineWobble {
     public static float wobbleWrapped(int seed, float value, int modulus)
     {
         final int floor = (int) value;
-        final float start = (((seed + floor % modulus) * 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3) * 0x0.ffffffp-31f,
-                end = (((seed + (floor + 1) % modulus) * 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3) * 0x0.ffffffp-31f;
+        final float start = (((seed + floor % modulus) * 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35),
+                end = (((seed + (floor + 1) % modulus) * 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35);
         value -= floor;
         value *= value * (3 - 2 * value);
-        return (1 - value) * start + value * end;
+        return ((1 - value) * start + value * end) * 0x0.ffffffp-31f;
     }
 
     /**
@@ -891,11 +891,11 @@ public class LineWobble {
     public static float wobbleWrappedTight(int seed, float value, int modulus)
     {
         final int floor = (int) value;
-        final float start = (((seed + floor % modulus) * 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 >>> 1) * 0x1.0p-31f,
-                end = (((seed + (floor + 1) % modulus) * 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 >>> 1) * 0x1.0p-31f;
+        final float start = (((seed + floor % modulus) * 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 >>> 1),
+                end = (((seed + (floor + 1) % modulus) * 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 >>> 1);
         value -= floor;
         value *= value * (3 - 2 * value);
-        return (1 - value) * start + value * end;
+        return ((1 - value) * start + value * end) * 0x1.0p-31f;
     }
 
     /**
