@@ -36,7 +36,7 @@ import com.github.tommyettinger.digital.TrigTools;
  * This implementation comes from <a href="https://www.nayuki.io/page/fast-discrete-cosine-transform-algorithms">Project Nayuki</a>.
  */
 public final class DctChoice {
-	public static void transformTable(double[] vector, int off, int len, double[] temp) {
+	public static void transformTable(double[] vector, int off, final int len, double[] temp) {
 		// Algorithm by Byeong Gi Lee, 1984. For details, see:
 		// http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.118.3056&rep=rep1&type=pdf#page=34
 		if (len == 1)
@@ -76,17 +76,18 @@ public final class DctChoice {
 			transformTable(vector[x], 0, n, temp[x]);
 		}
 	}
-	public static void transformMath(double[] vector, int off, int len, double[] temp) {
+	public static void transformMath(double[] vector, int off, final int len, double[] temp) {
 		// Algorithm by Byeong Gi Lee, 1984. For details, see:
 		// http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.118.3056&rep=rep1&type=pdf#page=34
 		if (len == 1)
 			return;
 		int halfLen = len / 2;
+		final double pl = Math.PI / len;
 		for (int i = 0; i < halfLen; i++) {
 			double x = vector[off + i];
 			double y = vector[off + len - 1 - i];
 			temp[off + i] = x + y;
-			temp[off + i + halfLen] = (x - y) / (Math.cos((i + 0.5) * Math.PI / len) * 2);
+			temp[off + i + halfLen] = (x - y) / (Math.cos((i + 0.5) * pl) * 2);
 		}
 		transformMath(temp, off, halfLen, vector);
 		transformMath(temp, off + halfLen, halfLen, vector);
@@ -115,17 +116,18 @@ public final class DctChoice {
 			transformMath(vector[x], 0, n, temp[x]);
 		}
 	}
-	public static void transformSmooth(double[] vector, int off, int len, double[] temp) {
+	public static void transformSmooth(double[] vector, int off, final int len, double[] temp) {
 		// Algorithm by Byeong Gi Lee, 1984. For details, see:
 		// http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.118.3056&rep=rep1&type=pdf#page=34
 		if (len == 1)
 			return;
 		int halfLen = len / 2;
+		final double pl = Math.PI / len;
 		for (int i = 0; i < halfLen; i++) {
 			double x = vector[off + i];
 			double y = vector[off + len - 1 - i];
 			temp[off + i] = x + y;
-			temp[off + i + halfLen] = (x - y) / (TrigTools.cosSmooth((i + 0.5) * Math.PI / len) * 2);
+			temp[off + i + halfLen] = (x - y) / (TrigTools.cosSmooth((i + 0.5) * pl) * 2);
 		}
 		transformSmooth(temp, off, halfLen, vector);
 		transformSmooth(temp, off + halfLen, halfLen, vector);
@@ -154,17 +156,18 @@ public final class DctChoice {
 			transformSmooth(vector[x], 0, n, temp[x]);
 		}
 	}
-	public static void transformSmoother(double[] vector, int off, int len, double[] temp) {
+	public static void transformSmoother(double[] vector, int off, final int len, double[] temp) {
 		// Algorithm by Byeong Gi Lee, 1984. For details, see:
 		// http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.118.3056&rep=rep1&type=pdf#page=34
 		if (len == 1)
 			return;
 		int halfLen = len / 2;
+		final double pl = Math.PI / len;
 		for (int i = 0; i < halfLen; i++) {
 			double x = vector[off + i];
 			double y = vector[off + len - 1 - i];
 			temp[off + i] = x + y;
-			temp[off + i + halfLen] = (x - y) / (TrigTools.cosSmoother((i + 0.5) * Math.PI / len) * 2);
+			temp[off + i + halfLen] = (x - y) / (TrigTools.cosSmoother((i + 0.5) * pl) * 2);
 		}
 		transformSmoother(temp, off, halfLen, vector);
 		transformSmoother(temp, off + halfLen, halfLen, vector);

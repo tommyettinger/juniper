@@ -44,23 +44,25 @@ public class LineGraphDemo extends ApplicationAdapter {
     }
 
     public IntFloatToFloatFunction[] wobbles = {
-            LineWobble::wobble,
-            LineWobble::bicubicWobble,
-            LineWobble::splobble,
-            LineWobble::quobble,
-            LineWobble::quobbleOctave2,
-            LineWobble::trobble,
-            (s, f) -> {
+            LineWobble::wobble,                                                                        //0
+            LineWobble::bicubicWobble,                                                                 //1
+            LineWobble::splobble,                                                                      //2
+            LineWobble::quobble,                                                                       //3
+            LineWobble::quobbleOctave2,                                                                //4
+            LineWobble::trobble,                                                                       //5
+            (s, f) -> {                                                                                //6
                 final long start = MathTools.longFloor(f), end = start + 1L;
-                return LineWobble.hobble(s ^ start * 0x9E3779B97F4A7C15L, s ^ end * 0x9E3779B97F4A7C15L, f - start);
+                return LineWobble.hobble(
+                        s ^ start * 0x9E3779B97F4A7C15L,
+                        s ^ end * 0x9E3779B97F4A7C15L, f - start);
             },
-            (i, f) -> LineWobble.wobble(i * 0x9E3779B97F4A7C15L, f),
-            (i, f) -> LineWobble.bicubicWobble(i * 0x9E3779B97F4A7C15L, f),
-            (i, f) -> LineWobble.splobble(i * 0x9E3779B97F4A7C15L, f),
-            (i, f) -> LineWobble.quobble(i * 0x9E3779B97F4A7C15L, f),
-            (i, f) -> LineWobble.quobbleOctave2(i * 0x9E3779B97F4A7C15L, f),
-            (i, f) -> LineWobble.trobble(i * 0x9E3779B97F4A7C15L, f),
-            (h, f) -> {
+            (i, f) -> LineWobble.wobble(i * 0x9E3779B97F4A7C15L, f),                                   //7
+            (i, f) -> LineWobble.bicubicWobble(i * 0x9E3779B97F4A7C15L, f),                            //8
+            (i, f) -> LineWobble.splobble(i * 0x9E3779B97F4A7C15L, f),                                 //9
+            (i, f) -> LineWobble.quobble(i * 0x9E3779B97F4A7C15L, f),                                  //10
+            (i, f) -> LineWobble.quobbleOctave2(i * 0x9E3779B97F4A7C15L, f),                           //11
+            (i, f) -> LineWobble.trobble(i * 0x9E3779B97F4A7C15L, f),                                  //12
+            (h, f) -> {                                                                                //13
                 final long start = MathTools.longFloor(f);
                 long i = h;
                 i = (i ^ (i << 21 | i >>> 43) ^ (i << 50 | i >>> 14)) + start;
@@ -69,7 +71,7 @@ public class LineGraphDemo extends ApplicationAdapter {
                 return (Hasher.randomize3(i) * (1f - s) + Hasher.randomize3(1L + i) * s) * 0x1p-63f;
             }
     };
-    public int currentWobble = 12;
+    public int currentWobble = 1;
     public int wobbleCount = wobbles.length;
     public int octaves = 1;
 

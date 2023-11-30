@@ -47,14 +47,14 @@ public class LineWobble {
         // gets a random start and endpoint. there's a sequence of start and end values for each seed, and changing the
         // seed changes the start and end values unpredictably (so use the same seed for one curving line).
         final long z = seed + floor * 0x6C8E9CF570932BD5L;
-        final double start = ((z ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L) * 0x0.fffffffffffffbp-63,
-                end = ((z + 0x6C8E9CF570932BD5L ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L) * 0x0.fffffffffffffbp-63;
+        final double start = ((z ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L),
+                end = ((z + 0x6C8E9CF570932BD5L ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L);
         // gets the fractional part of value
         value -= floor;
         // cubic interpolation to smooth the curve
         value *= value * (3.0 - 2.0 * value);
         // interpolate between start and end based on how far we are between the start and end points of this section
-        return (1.0 - value) * start + value * end;
+        return ((1.0 - value) * start + value * end) * 0x0.fffffffffffffbp-63;
     }
 
     /**
@@ -71,11 +71,11 @@ public class LineWobble {
     {
         final int floor = ((int)(value + 0x1p14) - 0x4000);
         final long z = seed + floor * 0x6C8E9CF570932BD5L;
-        final float start = ((z ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L) * 0x0.ffffffp-63f,
-                end = ((z + 0x6C8E9CF570932BD5L ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L) * 0x0.ffffffp-63f;
+        final float start = ((z ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L),
+                end = ((z + 0x6C8E9CF570932BD5L ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L);
         value -= floor;
         value *= value * (3f - 2f * value);
-        return (1f - value) * start + value * end;
+        return ((1f - value) * start + value * end) * 0x0.ffffffp-63f;
     }
 
     /**
@@ -90,11 +90,12 @@ public class LineWobble {
     {
         final int floor = (int) Math.floor(value);
         int z = seed + floor * 0xBE56D;
-        final double start = ((z ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x1D2BC3 * 0x0.fffffffffffffbp-31,
-                end = ((z + 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x1D2BC3 * 0x0.fffffffffffffbp-31;
+        final double
+                start = (((z ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35),
+                end = (((z + 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35);
         value -= floor;
         value *= value * (3.0 - 2.0 * value);
-        return (1.0 - value) * start + value * end;
+        return ((1.0 - value) * start + value * end) * 0x0.fffffffffffffbp-31;
     }
 
     /**
@@ -109,11 +110,12 @@ public class LineWobble {
     {
         final int floor = ((int)(value + 0x1p14) - 0x4000);
         int z = seed + floor * 0xBE56D;
-        final float start = ((z ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x1D2BC3 * 0x0.ffffffp-31f,
-                end = ((z + 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x1D2BC3 * 0x0.ffffffp-31f;
+        final float
+                start = (((z ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35),
+                end = (((z + 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35);
         value -= floor;
         value *= value * (3 - 2 * value);
-        return (1 - value) * start + value * end;
+        return ((1 - value) * start + value * end) * 0x0.ffffffp-31f;
     }
 
     /**
@@ -142,16 +144,16 @@ public class LineWobble {
 
         // 7.228014E-20f , or 0x0.5555554p-62f , is just inside {@code -2f/3f/Long.MIN_VALUE} .
         // it gets us about as close as we can go to 1.0 .
-        final float a = (m ^ n ^ o) * 7.228014E-20f;
-        final float b = (m + 0xD1B54A32D192ED03L ^ n + 0xABC98388FB8FAC03L ^ o + 0x8CB92BA72F3D8DD7L) * 7.228014E-20f;
-        final float c = (m + 0xA36A9465A325DA06L ^ n + 0x57930711F71F5806L ^ o + 0x1972574E5E7B1BAEL) * 7.228014E-20f;
-        final float d = (m + 0x751FDE9874B8C709L ^ n + 0x035C8A9AF2AF0409L ^ o + 0xA62B82F58DB8A985L) * 7.228014E-20f;
+        final float a = (m ^ n ^ o);
+        final float b = (m + 0xD1B54A32D192ED03L ^ n + 0xABC98388FB8FAC03L ^ o + 0x8CB92BA72F3D8DD7L);
+        final float c = (m + 0xA36A9465A325DA06L ^ n + 0x57930711F71F5806L ^ o + 0x1972574E5E7B1BAEL);
+        final float d = (m + 0x751FDE9874B8C709L ^ n + 0x035C8A9AF2AF0409L ^ o + 0xA62B82F58DB8A985L);
 
         // get the fractional part of t.
         t -= floor;
         // this is bicubic interpolation, inlined
         final float p = d - c + b - a;
-        return (t * (t * t * p + t * (a - b - p) + c - a) + b);
+        return (t * (t * t * p + t * (a - b - p) + c - a) + b) * 7.228014E-20f;
     }
 
     /**
@@ -179,15 +181,15 @@ public class LineWobble {
 
         // 7.7.228014483236334E-20 , or 0x1.5555555555428p-64 , is just inside {@code -2f/3f/Long.MIN_VALUE} .
         // it gets us about as close as we can go to 1.0 .
-        final double a = (m ^ n ^ o) * 7.228014483236334E-20;
-        final double b = (m + 0xD1B54A32D192ED03L ^ n + 0xABC98388FB8FAC03L ^ o + 0x8CB92BA72F3D8DD7L) * 7.228014483236334E-20;
-        final double c = (m + 0xA36A9465A325DA06L ^ n + 0x57930711F71F5806L ^ o + 0x1972574E5E7B1BAEL) * 7.228014483236334E-20;
-        final double d = (m + 0x751FDE9874B8C709L ^ n + 0x035C8A9AF2AF0409L ^ o + 0xA62B82F58DB8A985L) * 7.228014483236334E-20;
+        final double a = (m ^ n ^ o);
+        final double b = (m + 0xD1B54A32D192ED03L ^ n + 0xABC98388FB8FAC03L ^ o + 0x8CB92BA72F3D8DD7L);
+        final double c = (m + 0xA36A9465A325DA06L ^ n + 0x57930711F71F5806L ^ o + 0x1972574E5E7B1BAEL);
+        final double d = (m + 0x751FDE9874B8C709L ^ n + 0x035C8A9AF2AF0409L ^ o + 0xA62B82F58DB8A985L);
 
         t -= floor;
         // this is bicubic interpolation, inlined
         final double p = (d - c) - (a - b);
-        return (t * (t * t * p + t * ((a - b) - p) + (c - a)) + b);
+        return (t * (t * t * p + t * ((a - b) - p) + (c - a)) + b) * 7.228014483236334E-20;
     }
 
     /**
@@ -215,15 +217,15 @@ public class LineWobble {
 
         // 7.228014E-20f , or 0x0.5555554p-62f , is just inside {@code -2f/3f/Long.MIN_VALUE} .
         // it gets us about as close as we can go to 1.0 .
-        final float a = (m ^ n ^ o) * 7.228014E-20f;
-        final float b = (m + 0xD1B54A32D192ED03L ^ n + 0xABC98388FB8FAC03L ^ o + 0x8CB92BA72F3D8DD7L) * 7.228014E-20f;
-        final float c = (m + 0xA36A9465A325DA06L ^ n + 0x57930711F71F5806L ^ o + 0x1972574E5E7B1BAEL) * 7.228014E-20f;
-        final float d = (m + 0x751FDE9874B8C709L ^ n + 0x035C8A9AF2AF0409L ^ o + 0xA62B82F58DB8A985L) * 7.228014E-20f;
+        final float a = (m ^ n ^ o);
+        final float b = (m + 0xD1B54A32D192ED03L ^ n + 0xABC98388FB8FAC03L ^ o + 0x8CB92BA72F3D8DD7L);
+        final float c = (m + 0xA36A9465A325DA06L ^ n + 0x57930711F71F5806L ^ o + 0x1972574E5E7B1BAEL);
+        final float d = (m + 0x751FDE9874B8C709L ^ n + 0x035C8A9AF2AF0409L ^ o + 0xA62B82F58DB8A985L);
 
         t -= floor;
         // this is bicubic interpolation, inlined
         final float p = d - c + b - a;
-        return (t * (t * t * p + t * (a - b - p) + c - a) + b);
+        return (t * (t * t * p + t * (a - b - p) + c - a) + b) * 7.228014E-20f;
     }
 
     /**
@@ -251,15 +253,15 @@ public class LineWobble {
 
         // 7.7.228014483236334E-20 , or 0x1.5555555555428p-64 , is just inside {@code -2f/3f/Long.MIN_VALUE} .
         // it gets us about as close as we can go to 1.0 .
-        final double a = (m ^ n ^ o) * 7.228014483236334E-20;
-        final double b = (m + 0xD1B54A32D192ED03L ^ n + 0xABC98388FB8FAC03L ^ o + 0x8CB92BA72F3D8DD7L) * 7.228014483236334E-20;
-        final double c = (m + 0xA36A9465A325DA06L ^ n + 0x57930711F71F5806L ^ o + 0x1972574E5E7B1BAEL) * 7.228014483236334E-20;
-        final double d = (m + 0x751FDE9874B8C709L ^ n + 0x035C8A9AF2AF0409L ^ o + 0xA62B82F58DB8A985L) * 7.228014483236334E-20;
+        final double a = (m ^ n ^ o);
+        final double b = (m + 0xD1B54A32D192ED03L ^ n + 0xABC98388FB8FAC03L ^ o + 0x8CB92BA72F3D8DD7L);
+        final double c = (m + 0xA36A9465A325DA06L ^ n + 0x57930711F71F5806L ^ o + 0x1972574E5E7B1BAEL);
+        final double d = (m + 0x751FDE9874B8C709L ^ n + 0x035C8A9AF2AF0409L ^ o + 0xA62B82F58DB8A985L);
 
         t -= floor;
         // this is bicubic interpolation, inlined
         final double p = (d - c) - (a - b);
-        return (t * (t * t * p + t * ((a - b) - p) + (c - a)) + b);
+        return (t * (t * t * p + t * ((a - b) - p) + (c - a)) + b) * 7.228014483236334E-20;
     }
 
     /**
@@ -279,14 +281,14 @@ public class LineWobble {
         final int startBits = ((z ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x1D2BC3,
                 endBits = ((z + 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x1D2BC3,
                 mixBits = startBits + endBits;
-        final float start = startBits * 4.6566126E-10f, // 4.6566126E-10f == 0x0.ffffffp-31f
-                end = endBits * 4.6566126E-10f; // 4.6566126E-10f == 0x0.ffffffp-31f
+        final float start = startBits,
+                end = endBits;
         value -= floor;
         value = MathTools.barronSpline(value,
                 (mixBits & 0xFFFF) * 6.1035156E-5f + 1f, // 6.1035156E-5f == 0x1p-14f
                 (mixBits >>> 16) * 1.1444092E-5f + 0.125f); // 1.1444092E-5f == 0x1.8p-17f
         value *= value * (3f - 2f * value);
-        return (1 - value) * start + value * end;
+        return ((1 - value) * start + value * end) * 4.6566126E-10f; // 4.6566126E-10f == 0x0.ffffffp-31f
     }
 
     /**
@@ -305,12 +307,12 @@ public class LineWobble {
         final int startBits = ((z ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x1D2BC3,
                 endBits = ((z + 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x1D2BC3,
                 mixBits = startBits + endBits;
-        final double start = startBits * 0x0.fffffffffffffbp-31,
-                end = endBits * 0x0.fffffffffffffbp-31;
+        final double start = startBits,
+                end = endBits;
         value -= floor;
         value = MathTools.barronSpline(value, (mixBits & 0xFFFF) * 0x1p-14 + 1.0, (mixBits >>> 16) * 0x1.8p-17 + 0.125);
         value *= value * (3.0 - 2.0 * value);
-        return (1 - value) * start + value * end;
+        return ((1 - value) * start + value * end) * 0x0.fffffffffffffbp-31;
     }
 
     /**
@@ -329,12 +331,12 @@ public class LineWobble {
         final long startBits = ((z ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L),
                 endBits = ((z + 0x6C8E9CF570932BD5L ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L),
                 mixBits = startBits + endBits;
-        final float start = startBits * 0x0.ffffffp-63f,
-                end = endBits  * 0x0.ffffffp-63f;
+        final float start = startBits,
+                end = endBits;
         value -= floor;
         value = MathTools.barronSpline(value, (mixBits & 0xFFFFFFFFL) * 0x1p-30f + 1f, (mixBits & 0xFFFFL) * 0x1.8p-17f + 0.125f);
         value *= value * (3f - 2f * value);
-        return (1 - value) * start + value * end;
+        return ((1 - value) * start + value * end) * 0x0.ffffffp-63f;
     }
 
     /**
@@ -353,12 +355,12 @@ public class LineWobble {
         final long startBits = ((z ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L),
                 endBits = ((z + 0x6C8E9CF570932BD5L ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L),
                 mixBits = startBits + endBits;
-        final double start = startBits * 0x0.fffffffffffffbp-63,
-                end = endBits * 0x0.fffffffffffffbp-63;
+        final double start = startBits,
+                end = endBits;
         value -= floor;
         value = MathTools.barronSpline(value, (mixBits & 0xFFFFFFFFL) * 0x1p-30 + 1.0, (mixBits & 0xFFFFL) * 0x1.8p-17 + 0.125);
         value *= value * (3.0 - 2.0 * value);
-        return (1 - value) * start + value * end;
+        return ((1 - value) * start + value * end) * 0x0.fffffffffffffbp-63;
     }
 
     /**
@@ -377,11 +379,11 @@ public class LineWobble {
     {
         long mixBits = startBits + endBits;
         mixBits ^= mixBits >>> 32;
-        final float start = startBits * 0x0.ffffffp-63f,
-                end = endBits  * 0x0.ffffffp-63f;
+        final float start = startBits,
+                end = endBits;
         value = MathTools.barronSpline(value, (mixBits & 0xFFFFFFFFL) * 0x1p-30f + 1f, (mixBits & 0xFFFFL) * 0x1.8p-17f + 0.125f);
         value *= value * (3f - 2f * value);
-        return (1 - value) * start + value * end;
+        return ((1 - value) * start + value * end) * 0x0.ffffffp-63f;
     }
 
     /**
@@ -400,11 +402,11 @@ public class LineWobble {
     {
         long mixBits = startBits + endBits;
         mixBits ^= mixBits >>> 32;
-        final double start = startBits * 0x0.fffffffffffffbp-63,
-                end = endBits * 0x0.fffffffffffffbp-63;
+        final double start = startBits,
+                end = endBits;
         value = MathTools.barronSpline(value, (mixBits & 0xFFFFFFFFL) * 0x1p-30 + 1.0, (mixBits & 0xFFFFL) * 0x1.8p-17 + 0.125);
         value *= value * (3.0 - 2.0 * value);
-        return (1 - value) * start + value * end;
+        return ((1 - value) * start + value * end) * 0x0.fffffffffffffbp-63;
     }
 
     /**

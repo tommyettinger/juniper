@@ -188,7 +188,7 @@ public final class Dct {
 	 * @param background will contain ABGR packed float colors;  must have the same dimensions as {@code vector}
 	 */
 	public static void getColors(double[][] vector, float[][] background){
-		final int n = vector.length, mask = n - 1, half = n >>> 1;
+		final int n = vector.length;
 		double max = 0.0, mag, r;
 		for (int x = 0; x < n; x++) {
 			for (int y = 0; y < n; y++) {
@@ -220,7 +220,7 @@ public final class Dct {
 	public static final float WHITE = Float.intBitsToFloat(0xFEFFFFFF);
 
 	public static void getColorsThreshold(double[][] vector, float[][] background, float threshold){
-		final int n = vector.length, mask = n - 1, half = n >>> 1;
+		final int n = vector.length;
 		double max = 0.0, mag, r, i;
 		for (int x = 0; x < n; x++) {
 			for (int y = 0; y < n; y++) {
