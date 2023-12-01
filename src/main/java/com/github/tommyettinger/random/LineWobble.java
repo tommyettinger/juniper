@@ -722,9 +722,9 @@ public class LineWobble {
 //        int floor = (int) value;
 //        if(value < floor) --floor;
         // gets roughly-random values for the start and end, involving the seed also.
-        int z = seed + floor * 0xBE56D;
-        float start = (((z ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x1D2BC3 >>> 1) * 0x1p-31f,
-                end = (((z + 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x1D2BC3 >>> 1) * 0x1p-31f;
+        final int z = seed + imul(floor, 0x9E3779B9);
+        float start = (imul(z ^ 0xD1B54A35, 0x92B5C323) >>> 1) * 0x1p-31f;
+        float end = (imul(z + 0x9E3779B9 ^ 0xD1B54A35, 0x92B5C323) >>> 1) * 0x1p-31f;
 
         value -= floor;
         // makes the changes smoother by slowing down near start or end.
@@ -751,9 +751,9 @@ public class LineWobble {
     public static float wobbleAngleDeg(int seed, float value)
     {
         final int floor = ((int)(value + 0x1p14) - 0x4000);
-        int z = seed + floor * 0xBE56D;
-        float start = (((z ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x1D2BC3 >>> 1) * 0x1p-31f,
-                end = (((z + 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x1D2BC3 >>> 1) * 0x1p-31f;
+        final int z = seed + imul(floor, 0x9E3779B9);
+        float start = (imul(z ^ 0xD1B54A35, 0x92B5C323) >>> 1) * 0x1p-31f;
+        float end = (imul(z + 0x9E3779B9 ^ 0xD1B54A35, 0x92B5C323) >>> 1) * 0x1p-31f;
         value -= floor;
         value *= value * (3f - 2f * value);
         end = end - start + 1.5f;
@@ -777,9 +777,9 @@ public class LineWobble {
     public static float wobbleAngleTurns(int seed, float value)
     {
         final int floor = ((int)(value + 0x1p14) - 0x4000);
-        int z = seed + floor * 0xBE56D;
-        float start = (((z ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x1D2BC3 >>> 1) * 0x1p-31f,
-                end = (((z + 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x1D2BC3 >>> 1) * 0x1p-31f;
+        final int z = seed + imul(floor, 0x9E3779B9);
+        float start = (imul(z ^ 0xD1B54A35, 0x92B5C323) >>> 1) * 0x1p-31f;
+        float end = (imul(z + 0x9E3779B9 ^ 0xD1B54A35, 0x92B5C323) >>> 1) * 0x1p-31f;
         value -= floor;
         value *= value * (3f - 2f * value);
         end = end - start + 1.5f;
@@ -865,8 +865,8 @@ public class LineWobble {
     public static float wobbleWrapped(int seed, float value, int modulus)
     {
         final int floor = (int) value;
-        final float start = (((seed + floor % modulus) * 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35),
-                end = (((seed + (floor + 1) % modulus) * 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35);
+        final int start = imul(imul((seed + floor % modulus), 0x9E3779B9) ^ 0xD1B54A35, 0x92B5C323);
+        final int end = imul(imul((seed + (floor + 1) % modulus), 0x9E3779B9) ^ 0xD1B54A35, 0x92B5C323);
         value -= floor;
         value *= value * (3 - 2 * value);
         return ((1 - value) * start + value * end) * 0x0.ffffffp-31f;
@@ -894,8 +894,8 @@ public class LineWobble {
     public static float wobbleWrappedTight(int seed, float value, int modulus)
     {
         final int floor = (int) value;
-        final float start = (((seed + floor % modulus) * 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 >>> 1),
-                end = (((seed + (floor + 1) % modulus) * 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 >>> 1);
+        final int start = imul(imul((seed + floor % modulus), 0x9E3779B9) ^ 0xD1B54A35, 0x92B5C323) >>> 1;
+        final int end = imul(imul((seed + (floor + 1) % modulus), 0x9E3779B9) ^ 0xD1B54A35, 0x92B5C323) >>> 1;
         value -= floor;
         value *= value * (3 - 2 * value);
         return ((1 - value) * start + value * end) * 0x1.0p-31f;
