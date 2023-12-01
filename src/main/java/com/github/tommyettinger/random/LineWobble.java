@@ -90,10 +90,9 @@ public class LineWobble {
     public static double wobble(int seed, double value)
     {
         final int floor = (int) Math.floor(value);
-        int z = seed + floor * 0xBE56D;
-        final double
-                start = (((z ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35),
-                end = (((z + 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35);
+        final int z = seed + imul(floor, 0x9E3779B9);
+        final int start = imul(z ^ 0xD1B54A35, 0x92B5C323);
+        final int end = imul(z + 0x9E3779B9 ^ 0xD1B54A35, 0x92B5C323);
         value -= floor;
         value *= value * (3.0 - 2.0 * value);
         return ((1.0 - value) * start + value * end) * 0x0.fffffffffffffbp-31;
@@ -110,10 +109,9 @@ public class LineWobble {
     public static float wobble(int seed, float value)
     {
         final int floor = ((int)(value + 0x1p14) - 0x4000);
-        int z = seed + floor * 0xBE56D;
-        final float
-                start = (((z ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35),
-                end = (((z + 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35);
+        final int z = seed + imul(floor, 0x9E3779B9);
+        final int start = imul(z ^ 0xD1B54A35, 0x92B5C323);
+        final int end = imul(z + 0x9E3779B9 ^ 0xD1B54A35, 0x92B5C323);
         value -= floor;
         value *= value * (3 - 2 * value);
         return ((1 - value) * start + value * end) * 0x0.ffffffp-31f;
@@ -278,18 +276,16 @@ public class LineWobble {
     {
         // int fast floor, from libGDX; 16384 is 2 to the 14, or 0x1p14, or 0x4000
         final int floor = ((int)(value + 16384.0) - 16384);
-        int z = seed + floor * 0xBE56D;
-        final int startBits = ((z ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x1D2BC3,
-                endBits = ((z + 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x1D2BC3,
-                mixBits = startBits + endBits;
-        final float start = startBits,
-                end = endBits;
+        final int z = seed + imul(floor, 0x9E3779B9);
+        final int startBits = imul(z ^ 0xD1B54A35, 0x92B5C323);
+        final int endBits = imul(z + 0x9E3779B9 ^ 0xD1B54A35, 0x92B5C323);
+        final int mixBits = startBits + endBits;
         value -= floor;
         value = MathTools.barronSpline(value,
                 (mixBits & 0xFFFF) * 6.1035156E-5f + 1f, // 6.1035156E-5f == 0x1p-14f
                 (mixBits >>> 16) * 1.1444092E-5f + 0.125f); // 1.1444092E-5f == 0x1.8p-17f
         value *= value * (3f - 2f * value);
-        return ((1 - value) * start + value * end) * 4.6566126E-10f; // 4.6566126E-10f == 0x0.ffffffp-31f
+        return ((1 - value) * startBits + value * endBits) * 4.6566126E-10f; // 4.6566126E-10f == 0x0.ffffffp-31f
     }
 
     /**
@@ -304,16 +300,14 @@ public class LineWobble {
     public static double splobble(int seed, double value)
     {
         final int floor = (int)Math.floor(value);
-        int z = seed + floor * 0xBE56D;
-        final int startBits = ((z ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x1D2BC3,
-                endBits = ((z + 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x1D2BC3,
-                mixBits = startBits + endBits;
-        final double start = startBits,
-                end = endBits;
+        final int z = seed + imul(floor, 0x9E3779B9);
+        final int startBits = imul(z ^ 0xD1B54A35, 0x92B5C323);
+        final int endBits = imul(z + 0x9E3779B9 ^ 0xD1B54A35, 0x92B5C323);
+        final int mixBits = startBits + endBits;
         value -= floor;
         value = MathTools.barronSpline(value, (mixBits & 0xFFFF) * 0x1p-14 + 1.0, (mixBits >>> 16) * 0x1.8p-17 + 0.125);
         value *= value * (3.0 - 2.0 * value);
-        return ((1 - value) * start + value * end) * 0x0.fffffffffffffbp-31;
+        return ((1 - value) * startBits + value * endBits) * 0x0.fffffffffffffbp-31;
     }
 
     /**
@@ -332,12 +326,10 @@ public class LineWobble {
         final long startBits = ((z ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L),
                 endBits = ((z + 0x6C8E9CF570932BD5L ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L),
                 mixBits = startBits + endBits;
-        final float start = startBits,
-                end = endBits;
         value -= floor;
         value = MathTools.barronSpline(value, (mixBits & 0xFFFFFFFFL) * 0x1p-30f + 1f, (mixBits & 0xFFFFL) * 0x1.8p-17f + 0.125f);
         value *= value * (3f - 2f * value);
-        return ((1 - value) * start + value * end) * 0x0.ffffffp-63f;
+        return ((1 - value) * startBits + value * endBits) * 0x0.ffffffp-63f;
     }
 
     /**
@@ -356,12 +348,10 @@ public class LineWobble {
         final long startBits = ((z ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L),
                 endBits = ((z + 0x6C8E9CF570932BD5L ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L),
                 mixBits = startBits + endBits;
-        final double start = startBits,
-                end = endBits;
         value -= floor;
         value = MathTools.barronSpline(value, (mixBits & 0xFFFFFFFFL) * 0x1p-30 + 1.0, (mixBits & 0xFFFFL) * 0x1.8p-17 + 0.125);
         value *= value * (3.0 - 2.0 * value);
-        return ((1 - value) * start + value * end) * 0x0.fffffffffffffbp-63;
+        return ((1 - value) * startBits + value * endBits) * 0x0.fffffffffffffbp-63;
     }
 
     /**
@@ -380,11 +370,9 @@ public class LineWobble {
     {
         long mixBits = startBits + endBits;
         mixBits ^= mixBits >>> 32;
-        final float start = startBits,
-                end = endBits;
         value = MathTools.barronSpline(value, (mixBits & 0xFFFFFFFFL) * 0x1p-30f + 1f, (mixBits & 0xFFFFL) * 0x1.8p-17f + 0.125f);
         value *= value * (3f - 2f * value);
-        return ((1 - value) * start + value * end) * 0x0.ffffffp-63f;
+        return ((1 - value) * startBits + value * endBits) * 0x0.ffffffp-63f;
     }
 
     /**
@@ -403,11 +391,9 @@ public class LineWobble {
     {
         long mixBits = startBits + endBits;
         mixBits ^= mixBits >>> 32;
-        final double start = startBits,
-                end = endBits;
         value = MathTools.barronSpline(value, (mixBits & 0xFFFFFFFFL) * 0x1p-30 + 1.0, (mixBits & 0xFFFFL) * 0x1.8p-17 + 0.125);
         value *= value * (3.0 - 2.0 * value);
-        return ((1 - value) * start + value * end) * 0x0.fffffffffffffbp-63;
+        return ((1 - value) * startBits + value * endBits) * 0x0.fffffffffffffbp-63;
     }
 
     /**
