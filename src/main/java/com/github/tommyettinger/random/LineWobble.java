@@ -21,6 +21,7 @@ import com.github.tommyettinger.digital.BitConversion;
 import com.github.tommyettinger.digital.MathTools;
 import com.github.tommyettinger.digital.TrigTools;
 
+import static com.github.tommyettinger.digital.BitConversion.imul;
 import static com.github.tommyettinger.digital.TrigTools.*;
 
 /**
@@ -566,7 +567,7 @@ public class LineWobble {
         final long z = seed + floor * 0x6C8E9CF570932BD5L;
         final long start = ((z ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L),
                 end = ((z + 0x6C8E9CF570932BD5L ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L);
-        value = SIN_TABLE_D[(int) ((value - floor) * 4096.0 + 16384.5) - 16384 & TABLE_MASK];
+        value = SIN_TABLE_D[(int) ((value - floor) * 4096.0 + 0.5) & TABLE_MASK];
         value *= value;
         return ((1.0 - value) * start + value * end) * 0x0.fffffffffffffbp-63;
     }
@@ -583,7 +584,7 @@ public class LineWobble {
         final long z = seed + floor * 0x6C8E9CF570932BD5L;
         final long start = ((z ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L),
                 end = ((z + 0x6C8E9CF570932BD5L ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L);
-        value = SIN_TABLE[(int) ((value - floor) * 4096.0 + 16384.5) - 16384 & TABLE_MASK];
+        value = SIN_TABLE[(int) ((value - floor) * 4096f + 0.5f) & TABLE_MASK];
         value *= value;
         return ((1f - value) * start + value * end) * 0x0.ffffffp-63f;
     }
@@ -596,10 +597,10 @@ public class LineWobble {
     public static double trobble(int seed, double value)
     {
         final int floor = (int) Math.floor(value);
-        int z = seed + floor * 0xBE56D;
-        final int start = ((z ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35,
-                end = ((z + 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35;
-        value = SIN_TABLE_D[(int) ((value - floor) * 4096.0 + 16384.5) - 16384 & TABLE_MASK];
+        final int z = seed + imul(floor, 0x9E3779B9);
+        final int start = imul(z ^ 0xD1B54A35, 0x92B5C323);
+        final int end = imul(z + 0x9E3779B9 ^ 0xD1B54A35, 0x92B5C323);
+        value = SIN_TABLE_D[(int) ((value - floor) * 4096.0 + 0.5) & TABLE_MASK];
         value *= value;
         return ((1.0 - value) * start + value * end) * 0x0.fffffffffffffbp-31;
     }
@@ -613,13 +614,15 @@ public class LineWobble {
     public static float trobble(int seed, float value)
     {
         final int floor = ((int)(value + 0x1p14) - 0x4000);
-        int z = seed + floor * 0xBE56D;
-        final int start = ((z ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35,
-                end = ((z + 0xBE56D ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35) * 0x1D2BC3 ^ 0xD1B54A35;
-        value = SIN_TABLE[(int) ((value - floor) * 4096.0 + 16384.5) - 16384 & TABLE_MASK];
+        final int z = seed + imul(floor, 0x9E3779B9);
+        final int start = imul(z ^ 0xD1B54A35, 0x92B5C323);
+        final int end = imul(z + 0x9E3779B9 ^ 0xD1B54A35, 0x92B5C323);
+        value = SIN_TABLE[(int) ((value - floor) * 4096f + 0.5f) & TABLE_MASK];
         value *= value;
         return ((1f - value) * start + value * end) * 0x0.ffffffp-31f;
     }
+//        final int start = imul(imul((z ^ 0xD1B54A35), 0x915F77F3) ^ 0xD1B54A35, 0x93D765DB),
+//                end = imul(imul((z + 0x9E3779B9 ^ 0xD1B54A35), 0x915F77F3) ^ 0xD1B54A35, 0x93D765DB);
 
     /**
      * A 1D "noise" method that produces smooth transitions like a sine wave, but also wrapping around at pi * 2 so this
