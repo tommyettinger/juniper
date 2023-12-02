@@ -48,21 +48,25 @@ Several high-quality and very-fast random number generators are here, such as
 `com.github.tommyettinger.random.FlowRandom`, `com.github.tommyettinger.random.DistinctRandom`,
 `com.github.tommyettinger.random.AceRandom`, and `com.github.tommyettinger.random.PasarRandom`. These extend
 the abstract class `com.github.tommyettinger.random.EnhancedRandom`, and that extends `java.util.Random` for
-compatibility. The simplest starting point is DistinctRandom; it is much like Java 8's SplittableRandom algorithm, but
-doesn't support splitting (since the possibility of low-quality splits is a major criticism of SplittableRandom), and
-otherwise uses the same style of code. It simply adds to a counter by a large constant, takes the current value of that
-counter, gets a unary hash of it using a similar algorithm to MurmurHash's finalizer step, and returns that. "Unary
-hash" is another way of saying "a function that takes an n-bit input and produces a random-seeming n-bit output." The
+compatibility.
+
+The simplest starting point is DistinctRandom; it is much like Java 8's SplittableRandom algorithm, but doesn't support
+splitting (since the possibility of low-quality splits is a major criticism of SplittableRandom), and otherwise uses the
+same style of code. It simply adds to a counter by a large constant, takes the current value of that counter, gets a
+unary hash of it using a similar algorithm to MurmurHash's finalizer step, and returns that. "Unary hash" is another way
+of saying "a function that takes an n-bit input and transforms it into a random-seeming n-bit output." The
 main reasons you might want DistinctRandom are that it has exactly one `long` of state, and that it produces every
 possible output from `nextLong()` exactly once over its cycle, with no repeats until potentially years later.
 DistinctRandom is able to jump to any point in its cycle, which has a length of exactly 2 to the 64, in constant time
 using the `skip()` method.
 
 This ability to skip is also shared by FlowRandom, but FlowRandom has many possible cycles (2 to the 64 possible cycles,
-each of 2 to the 64 `long` outputs) called streams. FlowRandom is very similar to DistinctRandom in most ways, except
+each with 2 to the 64 `long` outputs) called streams. FlowRandom is very similar to DistinctRandom in most ways, except
 that it has two `long` states that each cycle with the same period. The relationship between the states is what
 determines the current stream, and you can access a FlowRandom's stream with `getStream()` or change it with
 `setStream()` or `shiftStream()`. Streams here are not correlated at all, as far as I have been able to determine.
+FlowRandom isn't as fast as some other generators here that have streams (such as LaserRandom), but it seems to be much
+more robust statistically when its stream changes.
 
 WhiskerRandom is often considerably faster than DistinctRandom (which is no slouch either), and generally has very high
 quality, but does not have a guaranteed cycle length -- a given seed could be found that has an unusually short cycle,
@@ -245,15 +249,15 @@ cipher is just going to get ripped apart by any standard Java agent, so... don't
 With Gradle, the dependency (of the core module, if you have multiple) is:
 
 ```
-api "com.github.tommyettinger:juniper:0.4.2"
+api "com.github.tommyettinger:juniper:0.4.3"
 ```
 
 In a libGDX project that has a GWT/HTML backend, the `html/build.gradle` file
 should additionally have:
 
 ```
-implementation "com.github.tommyettinger:digital:0.4.3:sources"
-implementation "com.github.tommyettinger:juniper:0.4.2:sources"
+implementation "com.github.tommyettinger:digital:0.4.5:sources"
+implementation "com.github.tommyettinger:juniper:0.4.3:sources"
 ```
 
 And the `GdxDefinition.gwt.xml` file should have:
@@ -269,7 +273,7 @@ If you don't use Gradle, then with Maven, the dependency is:
 <dependency>
   <groupId>com.github.tommyettinger</groupId>
   <artifactId>juniper</artifactId>
-  <version>0.4.2</version>
+  <version>0.4.3</version>
 </dependency>
 ```
 

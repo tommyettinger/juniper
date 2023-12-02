@@ -553,7 +553,7 @@ public class LineWobble {
         final long z = seed + floor * 0x6C8E9CF570932BD5L;
         final long start = ((z ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L),
                 end = ((z + 0x6C8E9CF570932BD5L ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L);
-        value = SIN_TABLE_D[(int) ((value - floor) * 4096.0 + 0.5) & TABLE_MASK];
+        value = SIN_TABLE_D[(int) ((value - floor) * 4096.0) & TABLE_MASK];
         value *= value;
         return ((1.0 - value) * start + value * end) * 0x0.fffffffffffffbp-63;
     }
@@ -570,7 +570,7 @@ public class LineWobble {
         final long z = seed + floor * 0x6C8E9CF570932BD5L;
         final long start = ((z ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L),
                 end = ((z + 0x6C8E9CF570932BD5L ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L);
-        value = SIN_TABLE[(int) ((value - floor) * 4096f + 0.5f) & TABLE_MASK];
+        value = SIN_TABLE[(int) ((value - floor) * 4096f) & TABLE_MASK];
         value *= value;
         return ((1f - value) * start + value * end) * 0x0.ffffffp-63f;
     }
@@ -586,7 +586,7 @@ public class LineWobble {
         final int z = seed + imul(floor, 0x9E3779B9);
         final int start = imul(z ^ 0xD1B54A35, 0x92B5C323);
         final int end = imul(z + 0x9E3779B9 ^ 0xD1B54A35, 0x92B5C323);
-        value = SIN_TABLE_D[(int) ((value - floor) * 4096.0 + 0.5) & TABLE_MASK];
+        value = SIN_TABLE_D[(int) ((value - floor) * 4096.0) & TABLE_MASK];
         value *= value;
         return ((1.0 - value) * start + value * end) * 0x0.fffffffffffffbp-31;
     }
@@ -603,7 +603,7 @@ public class LineWobble {
         final int z = seed + imul(floor, 0x9E3779B9);
         final int start = imul(z ^ 0xD1B54A35, 0x92B5C323);
         final int end = imul(z + 0x9E3779B9 ^ 0xD1B54A35, 0x92B5C323);
-        value = SIN_TABLE[(int) ((value - floor) * 4096f + 0.5f) & TABLE_MASK];
+        value = SIN_TABLE[(int) ((value - floor) * 4096f) & TABLE_MASK];
         value *= value;
         return ((1f - value) * start + value * end) * 0x0.ffffffp-31f;
     }

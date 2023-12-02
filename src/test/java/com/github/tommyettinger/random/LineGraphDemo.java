@@ -71,7 +71,7 @@ public class LineGraphDemo extends ApplicationAdapter {
                 return (Hasher.randomize3(i) * (1f - s) + Hasher.randomize3(1L + i) * s) * 0x1p-63f;
             }
     };
-    public int currentWobble = 1;
+    public int currentWobble = 0;
     public int wobbleCount = wobbles.length;
     public int octaves = 1;
 
