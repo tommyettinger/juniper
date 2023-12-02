@@ -40,6 +40,7 @@ public final class Generators {
         randomList.add(new Resolute32Random(1, 1, 1));
         randomList.add(new LowFlow1Random(1, 1));
         randomList.add(new LowFlow2Random(1, 1));
+        randomList.add(new LowFlow3Random(1, 1));
     }
     public static int randomCount = randomList.size();
 
