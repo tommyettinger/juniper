@@ -275,7 +275,7 @@ public class Random {
    * @see #Random(long)
    */
   public synchronized void setSeed(long seed) {
-    setSeed((int) ((seed >> 24) & 0xffffff), (int) (seed & 0xffffff));
+    setSeed(((int) (seed >> 24) & 0xffffff) ^ 0x5de, (int) (seed & 0xffffff) ^ 0xece66d);
   }
 
   /**
@@ -332,5 +332,9 @@ public class Random {
     this.seedhi = seedhi ^ 0x5de;
     this.seedlo = seedlo ^ 0xece66d;
     haveNextNextGaussian = false;
+  }
+
+  public long getSeed() {
+    return ((long) seedhi & 0xFFFFFFL) << 24 | ((long) seedlo & 0xFFFFFFL);
   }
 }

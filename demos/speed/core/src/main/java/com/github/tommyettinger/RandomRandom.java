@@ -21,13 +21,9 @@ import com.github.tommyettinger.random.EnhancedRandom;
 
 /**
  * An EnhancedRandom that simply wraps a {@link Random} instance.
- * Note that {@link #copy()} does not actually copy this.
- * {@link #getSelectedState(int)}, {@link #setSelectedState(int, long)},
- * and all other methods that handle the state directly will throw an
- * UnsupportedOperationException.
  */
 public class RandomRandom extends EnhancedRandom {
-    public Random base = new Random();
+    public Random base = new Random(1234567890L);
 
     public RandomRandom() {
         this(seedFromMath());
@@ -86,7 +82,27 @@ public class RandomRandom extends EnhancedRandom {
     }
 
     @Override
+    public int getStateCount() {
+        return 1;
+    }
+
+    @Override
+    public long getSelectedState(int selection) {
+        return base.getSeed();
+    }
+
+    @Override
+    public void setSelectedState(int selection, long value) {
+        base.setSeed(value);
+    }
+
+    @Override
+    public void setState(long state) {
+        base.setSeed(state);
+    }
+
+    @Override
     public EnhancedRandom copy() {
-        return new RandomRandom(seedFromMath());
+        return new RandomRandom(base.getSeed());
     }
 }
