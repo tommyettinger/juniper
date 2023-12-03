@@ -1,4 +1,4 @@
-package com.github.tommyettinger.lwjgl3;
+package com.github.tommyettinger.random;
 
 import com.github.tommyettinger.random.ChopRandom;
 
