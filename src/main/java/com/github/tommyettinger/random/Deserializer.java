@@ -73,6 +73,7 @@ public final class Deserializer {
         register(new FlowRandom(1, 2));
         register(new RomuTrioRandom(1, 2, 3));
         register(new TricycleRandom(1, 2, 3));
+        register(new Respite32Random(1, 2, 3));
         register(new ChopRandom(1, 2, 3, 4));
         register(new Jsf32Random(1));
         register(new TrimRandom(1, 2, 3, 4));
@@ -84,6 +85,7 @@ public final class Deserializer {
         register(new PouchRandom(1, 2, 3, 4));
         register(new WhiskerRandom(1, 2, 3, 4));
         register(new ScruffRandom(1, 2, 3, 4));
+        register(new Sfc64Random(1, 2, 3, 4));
         register(new PasarRandom(1, 2, 3, 4, 5));
         register(new Crand64Random(1, 2, 3, 4, 5));
         register(new AceRandom(1, 2, 3, 4, 5));
