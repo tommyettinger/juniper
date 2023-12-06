@@ -16,11 +16,15 @@
 
 package com.github.tommyettinger.random;
 
+import com.badlogic.gdx.Files;
+import com.badlogic.gdx.files.FileHandle;
 import com.github.tommyettinger.digital.ArrayTools;
 import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.digital.TextTools;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  */
@@ -499,6 +503,7 @@ Lowest mode: 81.92187 has mean amount 0.0184360742  FAIL 💀 for Xoshiro256Star
 
      */
     public static void main(String[] arg) {
+        StringBuilder sb = new StringBuilder(1024);
         EnhancedRandom[][] g = new EnhancedRandom[256][256];
         ArrayList<EnhancedRandom> rs = Generators.randomList;
         rs.sort((l, r) -> l.getClass().getSimpleName().compareTo(r.getClass().getSimpleName()));
@@ -522,6 +527,17 @@ Lowest mode: 81.92187 has mean amount 0.0184360742  FAIL 💀 for Xoshiro256Star
                     + Base.BASE10.decimal(evaluator.actualMode, 8)
                     + " has mean amount " + Base.BASE10.decimal(evaluator.actualAmount, 12)
                     + (result > 0.0 ? "  PASS 👍 for " : "  FAIL 💀 for ") + r.getClass().getSimpleName());
+            sb.append("Lowest mode: ");
+            Base.BASE10.appendDecimal(sb, evaluator.actualMode, 8);
+            sb.append(" has mean amount ");
+            Base.BASE10.appendDecimal(sb, evaluator.actualAmount, 12);
+            sb.append(result > 0.0 ? "  PASS 👍 for " : "  FAIL 💀 for ")
+                    .append(r.getClass().getSimpleName()).append('\n');
         }
+        Date date = new Date();
+        FileHandle loc = new FileHandle(new File("results/").getAbsoluteFile());
+        loc.mkdirs();
+        loc = loc.child("InitialCorrelation-" + date.getTime() + '-' + date.toString().replace(':', '-') + ".txt");
+        loc.writeString(sb.toString(), false, "UTF-8");
     }
 }
