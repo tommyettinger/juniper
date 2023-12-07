@@ -1,3 +1,12 @@
+[0.5.0]
+- [SEED BREAKING, POTENTIALLY] When the EnhancedRandom object isn't specified, Distribution types, DistributedRandom, and InterpolatedRandom now default to AceRandom instead of WhiskerRandom. This happens even if a seed is specified, but only when no EnhancedRandom was provided.
+- Deserializer was missing some registrations; these are where they should be now.
+
+[0.4.3]
+- Add FlowRandom to non-testing generators, since it passes PractRand testing flawlessly.
+- Fix LineWobble on GWT, usually by using BitConversion.imul().
+- Add trobble() to LineWobble; it's a trigonometric wobble.
+
 [0.4.2]
 - Update digital dependency to 0.4.3, which allows Juniper to be used on GWT again.
 
