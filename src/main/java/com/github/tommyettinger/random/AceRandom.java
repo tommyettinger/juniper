@@ -22,7 +22,8 @@ package com.github.tommyettinger.random;
  * operations. Has a state that runs like a counter, guaranteeing a minimum period of 2 to the 64. This passes roughly
  * 180 petabytes of intensive testing on the GPU with ReMort, as well as 64TB of PractRand's broad spectrum of tests.
  * It can sometimes be the fastest generator here, outpacing {@link WhiskerRandom} on Java 19 on occasion, but it isn't
- * quite as fast as Whisker on older JDKs. Whisker doesn't have a guaranteed minimum period, though, and this is
+ * quite as fast as Whisker on older JDKs, or as fast as {@link PouchRandom} in most cases. Whisker doesn't have a
+ * guaranteed minimum period, Pouch has a lower guaranteed minimum period, and this is
  * usually faster than {@link PasarRandom}, another 5-state generator with a minimum period of 2 to the 64. The maximum
  * and/or expected periods for both PasarRandom and AceRandom are far larger than they would need to be, even if run for
  * decades on current hardware. The minimum period alone would take multiple years to exhaust if using a CPU, let alone
@@ -37,7 +38,8 @@ package com.github.tommyettinger.random;
  * stripes. {@link ScruffRandom} can also show stripe artifacts, typically on every third generation if given a very
  * non-random initial state. The reason AceRandom does better probably has to do with how it mixes its five states more
  * than the others - WhiskerRandom and ScruffRandom each only mix one pair of states per generation, and PasarRandom
- * only mixes two pairs of states, but AceRandom mixes three pairs.
+ * only mixes two pairs of states, but AceRandom mixes three pairs. Ace looks about as random as PouchRandom once
+ * sufficient values have been generated (about 30 longs usually works).
  * <br>
  * This implements all optional methods in EnhancedRandom except {@link #skip(long)}; it does implement
  * {@link #previousLong()} without using skip().
@@ -94,6 +96,32 @@ public class AceRandom extends EnhancedRandom {
 	 */
 	public AceRandom(long seed) {
 		setSeed(seed);
+	}
+
+	/**
+	 * Creates a new AceRandom with the given two states; all {@code long} values are permitted.
+	 * These states will be used verbatim, and the third, fourth, and fifth states will be assigned
+	 * {@code stateA + stateB}, {@code stateA ^ stateB}, and {@code stateB - stateA}, respectively.
+	 *
+	 * @param stateA any {@code long} value
+	 * @param stateB any {@code long} value
+	 */
+	public AceRandom(long stateA, long stateB) {
+		this(stateA, stateB, stateA + stateB, stateA ^ stateB, stateB - stateA);
+	}
+
+
+	/**
+	 * Creates a new AceRandom with the given three states; all {@code long} values are permitted.
+	 * These states will be used verbatim, and the fourth and fifth states will be assigned
+	 * {@code stateA + stateC} and {@code stateB ^ stateC}, respectively.
+	 *
+	 * @param stateA any {@code long} value
+	 * @param stateB any {@code long} value
+	 * @param stateC any {@code long} value
+	 */
+	public AceRandom(long stateA, long stateB, long stateC) {
+		this(stateA, stateB, stateC, stateA + stateC, stateB ^ stateC);
 	}
 
 	/**
@@ -279,10 +307,63 @@ public class AceRandom extends EnhancedRandom {
 	}
 
 	/**
+	 * Delegates to {@link #setSeed(long)}, using a hash function on the input to get a variety of initial states.
+	 * To set the states all to exactly what you want, use {@link #setState(long, long, long, long, long)}.
+	 *
+	 * @see #setSeed(long)
+	 * @param state the long value to pass to {@link #setSeed(long)}
+	 */
+	@Override
+	public void setState(long state) {
+		setSeed(state);
+	}
+
+	/**
+	 * Sets the state completely to the given two state variables.
+	 * The third state variable will be set as if you had called {@code setStateE(stateA + stateB)}.
+	 * The fourth state variable will be set as if you had called {@code setStateE(stateA ^ stateB)}.
+	 * The fifth state variable will be set as if you had called {@code setStateE(stateB - stateA)}.
+	 * This is the same as calling {@link #setStateA(long)}, {@link #setStateB(long)},
+	 * {@link #setStateC(long)}, {@link #setStateD(long)}, and {@link #setStateE(long)} (as mentioned) as a group.
+	 * To set the states all to exactly what you want, use {@link #setState(long, long, long, long, long)}.
+	 *
+	 * @param stateA the first state; can be any long
+	 * @param stateB the second state; can be any long
+	 */
+	public void setState (long stateA, long stateB) {
+		this.stateA = stateA;
+		this.stateB = stateB;
+		this.stateC = stateA + stateB;
+		this.stateD = stateA ^ stateB;
+		this.stateE = stateB - stateA;
+	}
+
+	/**
+	 * Sets the state completely to the given three state variables.
+	 * The fourth state variable will be set as if you had called {@code setStateE(stateA + stateC)}.
+	 * The fifth state variable will be set as if you had called {@code setStateE(stateB ^ stateC)}.
+	 * This is the same as calling {@link #setStateA(long)}, {@link #setStateB(long)},
+	 * {@link #setStateC(long)}, {@link #setStateD(long)}, and {@link #setStateE(long)} (as mentioned) as a group.
+	 * To set the states all to exactly what you want, use {@link #setState(long, long, long, long, long)}.
+	 *
+	 * @param stateA the first state; can be any long
+	 * @param stateB the second state; can be any long
+	 * @param stateC the third state; can be any long
+	 */
+	public void setState (long stateA, long stateB, long stateC) {
+		this.stateA = stateA;
+		this.stateB = stateB;
+		this.stateC = stateC;
+		this.stateD = stateA + stateC;
+		this.stateE = stateB ^ stateC;
+	}
+
+	/**
 	 * Sets the state completely to the given four state variables. The fifth state variable will be set as if you had
 	 * called {@code setStateE(stateA + stateC ^ stateB + stateD)}.
 	 * This is the same as calling {@link #setStateA(long)}, {@link #setStateB(long)},
 	 * {@link #setStateC(long)}, {@link #setStateD(long)}, and {@link #setStateE(long)} (as mentioned) as a group.
+	 * To set the states all to exactly what you want, use {@link #setState(long, long, long, long, long)}.
 	 *
 	 * @param stateA the first state; can be any long
 	 * @param stateB the second state; can be any long
