@@ -18,7 +18,7 @@
 package com.github.tommyettinger.random.distribution;
 
 import com.github.tommyettinger.random.EnhancedRandom;
-import com.github.tommyettinger.random.WhiskerRandom;
+import com.github.tommyettinger.random.AceRandom;
 
 /**
  * A two-parameter distribution with range from 0 (exclusive) to positive infinity.
@@ -59,17 +59,17 @@ public class LogNormalDistribution extends Distribution {
     }
 
     /**
-     * Uses a {@link WhiskerRandom}, mu = 0.0, sigma = 1.0 .
+     * Uses an {@link AceRandom}, mu = 0.0, sigma = 1.0 .
      */
     public LogNormalDistribution() {
-        this(new WhiskerRandom(), 0.0, 1.0);
+        this(new AceRandom(), 0.0, 1.0);
     }
 
     /**
-     * Uses a {@link WhiskerRandom} and the given mu and sigma.
+     * Uses an {@link AceRandom} and the given mu and sigma.
      */
     public LogNormalDistribution(double mu, double sigma) {
-        this(new WhiskerRandom(), mu, sigma);
+        this(new AceRandom(), mu, sigma);
     }
 
     /**

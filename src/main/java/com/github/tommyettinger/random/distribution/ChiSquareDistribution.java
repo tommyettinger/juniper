@@ -19,7 +19,7 @@ package com.github.tommyettinger.random.distribution;
 
 import com.github.tommyettinger.digital.MathTools;
 import com.github.tommyettinger.random.EnhancedRandom;
-import com.github.tommyettinger.random.WhiskerRandom;
+import com.github.tommyettinger.random.AceRandom;
 
 /**
  * A one-parameter distribution with range from 0 exclusive to positive infinity.
@@ -47,17 +47,17 @@ public class ChiSquareDistribution extends Distribution {
     }
 
     /**
-     * Uses a {@link WhiskerRandom}, alpha = 1 .
+     * Uses an {@link AceRandom}, alpha = 1 .
      */
     public ChiSquareDistribution() {
-        this(new WhiskerRandom(), 1);
+        this(new AceRandom(), 1);
     }
 
     /**
-     * Uses a {@link WhiskerRandom} and the given alpha.
+     * Uses an {@link AceRandom} and the given alpha.
      */
     public ChiSquareDistribution(int alpha) {
-        this(new WhiskerRandom(), alpha);
+        this(new AceRandom(), alpha);
     }
 
     /**

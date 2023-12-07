@@ -19,7 +19,7 @@ package com.github.tommyettinger.random.distribution;
 
 import com.github.tommyettinger.digital.MathTools;
 import com.github.tommyettinger.random.EnhancedRandom;
-import com.github.tommyettinger.random.WhiskerRandom;
+import com.github.tommyettinger.random.AceRandom;
 
 /**
  * A two-parameter distribution with infinite range.
@@ -57,17 +57,17 @@ public class LaplaceDistribution extends Distribution {
     }
 
     /**
-     * Uses a {@link WhiskerRandom}, alpha = 1.0, mu = 0.0 .
+     * Uses an {@link AceRandom}, alpha = 1.0, mu = 0.0 .
      */
     public LaplaceDistribution() {
-        this(new WhiskerRandom(), 1.0, 1.0);
+        this(new AceRandom(), 1.0, 1.0);
     }
 
     /**
-     * Uses a {@link WhiskerRandom} and the given alpha and mu.
+     * Uses an {@link AceRandom} and the given alpha and mu.
      */
     public LaplaceDistribution(double alpha, double mu) {
-        this(new WhiskerRandom(), alpha, mu);
+        this(new AceRandom(), alpha, mu);
     }
 
     /**

@@ -18,7 +18,7 @@
 package com.github.tommyettinger.random.distribution;
 
 import com.github.tommyettinger.random.EnhancedRandom;
-import com.github.tommyettinger.random.WhiskerRandom;
+import com.github.tommyettinger.random.AceRandom;
 
 /**
  * A one-parameter distribution with range from 0 exclusive to positive infinity.
@@ -46,17 +46,17 @@ public class RayleighDistribution extends Distribution {
     }
 
     /**
-     * Uses a {@link WhiskerRandom}, sigma = 1.0 .
+     * Uses an {@link AceRandom}, sigma = 1.0 .
      */
     public RayleighDistribution() {
-        this(new WhiskerRandom(), 1);
+        this(new AceRandom(), 1);
     }
 
     /**
-     * Uses a {@link WhiskerRandom} and the given sigma.
+     * Uses an {@link AceRandom} and the given sigma.
      */
     public RayleighDistribution(double sigma) {
-        this(new WhiskerRandom(), sigma);
+        this(new AceRandom(), sigma);
     }
 
     /**

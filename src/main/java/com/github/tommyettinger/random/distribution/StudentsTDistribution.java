@@ -18,7 +18,7 @@
 package com.github.tommyettinger.random.distribution;
 
 import com.github.tommyettinger.random.EnhancedRandom;
-import com.github.tommyettinger.random.WhiskerRandom;
+import com.github.tommyettinger.random.AceRandom;
 
 /**
  * A one-parameter distribution with range from negative infinity to positive infinity.
@@ -46,17 +46,17 @@ public class StudentsTDistribution extends Distribution {
     }
 
     /**
-     * Uses a {@link WhiskerRandom}, nu = 1.0 .
+     * Uses an {@link AceRandom}, nu = 1.0 .
      */
     public StudentsTDistribution() {
-        this(new WhiskerRandom(), 1);
+        this(new AceRandom(), 1);
     }
 
     /**
-     * Uses a {@link WhiskerRandom} and the given nu.
+     * Uses an {@link AceRandom} and the given nu.
      */
     public StudentsTDistribution(double nu) {
-        this(new WhiskerRandom(), nu);
+        this(new AceRandom(), nu);
     }
 
     /**

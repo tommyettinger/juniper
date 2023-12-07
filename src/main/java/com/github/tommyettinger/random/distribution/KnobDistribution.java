@@ -19,7 +19,7 @@ package com.github.tommyettinger.random.distribution;
 
 import com.github.tommyettinger.digital.MathTools;
 import com.github.tommyettinger.random.EnhancedRandom;
-import com.github.tommyettinger.random.WhiskerRandom;
+import com.github.tommyettinger.random.AceRandom;
 
 /**
  * A three-parameter distribution with infinite range, which allows interpolating between a
@@ -71,17 +71,17 @@ public class KnobDistribution extends Distribution {
     }
 
     /**
-     * Uses a {@link WhiskerRandom}, mu = 0.0, sigma = 1.0, iota = 0.5 .
+     * Uses an {@link AceRandom}, mu = 0.0, sigma = 1.0, iota = 0.5 .
      */
     public KnobDistribution() {
-        this(new WhiskerRandom(), 0.0, 1.0, 0.5);
+        this(new AceRandom(), 0.0, 1.0, 0.5);
     }
 
     /**
-     * Uses a {@link WhiskerRandom} and the given mu sigma, and iota.
+     * Uses an {@link AceRandom} and the given mu sigma, and iota.
      */
     public KnobDistribution(double mu, double sigma, double iota) {
-        this(new WhiskerRandom(), mu, sigma, iota);
+        this(new AceRandom(), mu, sigma, iota);
     }
 
     /**

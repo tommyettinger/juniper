@@ -18,7 +18,7 @@
 package com.github.tommyettinger.random.distribution;
 
 import com.github.tommyettinger.random.EnhancedRandom;
-import com.github.tommyettinger.random.WhiskerRandom;
+import com.github.tommyettinger.random.AceRandom;
 
 /**
  * A two-parameter distribution with infinite range, also called the Gaussian distribution.
@@ -56,17 +56,17 @@ public class NormalDistribution extends Distribution {
     }
 
     /**
-     * Uses a {@link WhiskerRandom}, mu = 0.0, sigma = 1.0 .
+     * Uses an {@link AceRandom}, mu = 0.0, sigma = 1.0 .
      */
     public NormalDistribution() {
-        this(new WhiskerRandom(), 0.0, 1.0);
+        this(new AceRandom(), 0.0, 1.0);
     }
 
     /**
-     * Uses a {@link WhiskerRandom} and the given mu and sigma.
+     * Uses an {@link AceRandom} and the given mu and sigma.
      */
     public NormalDistribution(double mu, double sigma) {
-        this(new WhiskerRandom(), mu, sigma);
+        this(new AceRandom(), mu, sigma);
     }
 
     /**

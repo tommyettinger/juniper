@@ -19,7 +19,7 @@ package com.github.tommyettinger.random.distribution;
 
 import com.github.tommyettinger.digital.TrigTools;
 import com.github.tommyettinger.random.EnhancedRandom;
-import com.github.tommyettinger.random.WhiskerRandom;
+import com.github.tommyettinger.random.AceRandom;
 
 /**
  * A two-parameter distribution with range between 0 inclusive and 1 exclusive.
@@ -69,17 +69,17 @@ public class LumpDistribution extends Distribution {
     }
 
     /**
-     * Uses a {@link WhiskerRandom}, alpha = 0.0, beta = 0.25 .
+     * Uses an {@link AceRandom}, alpha = 0.0, beta = 0.25 .
      */
     public LumpDistribution() {
-        this(new WhiskerRandom(), 0.0, 0.25);
+        this(new AceRandom(), 0.0, 0.25);
     }
 
     /**
-     * Uses a {@link WhiskerRandom} and the given alpha and beta.
+     * Uses an {@link AceRandom} and the given alpha and beta.
      */
     public LumpDistribution(double alpha, double beta) {
-        this(new WhiskerRandom(), alpha, beta);
+        this(new AceRandom(), alpha, beta);
     }
 
     /**

@@ -19,7 +19,7 @@ package com.github.tommyettinger.random.distribution;
 
 import com.github.tommyettinger.digital.MathTools;
 import com.github.tommyettinger.random.EnhancedRandom;
-import com.github.tommyettinger.random.WhiskerRandom;
+import com.github.tommyettinger.random.AceRandom;
 
 /**
  * A two-parameter discrete distribution with integer range between the given parameters, both inclusive.
@@ -57,17 +57,17 @@ public class DiscreteUniformDistribution extends Distribution {
     }
 
     /**
-     * Uses a {@link WhiskerRandom}, alpha = 0, beta = 1 .
+     * Uses an {@link AceRandom}, alpha = 0, beta = 1 .
      */
     public DiscreteUniformDistribution() {
-        this(new WhiskerRandom(), 0, 1);
+        this(new AceRandom(), 0, 1);
     }
 
     /**
-     * Uses a {@link WhiskerRandom} and the given alpha and beta.
+     * Uses an {@link AceRandom} and the given alpha and beta.
      */
     public DiscreteUniformDistribution(int alpha, int beta) {
-        this(new WhiskerRandom(), alpha, beta);
+        this(new AceRandom(), alpha, beta);
     }
 
     /**

@@ -19,7 +19,7 @@ package com.github.tommyettinger.random.distribution;
 
 import com.github.tommyettinger.digital.MathTools;
 import com.github.tommyettinger.random.EnhancedRandom;
-import com.github.tommyettinger.random.WhiskerRandom;
+import com.github.tommyettinger.random.AceRandom;
 
 /**
  * A discrete two-parameter distribution with range from integer 1 to {@link #alpha}.
@@ -70,17 +70,17 @@ public class ZipfianDistribution extends Distribution {
     }
 
     /**
-     * Uses a {@link WhiskerRandom}, alpha = 16, skew = 0.5 .
+     * Uses an {@link AceRandom}, alpha = 16, skew = 0.5 .
      */
     public ZipfianDistribution() {
-        this(new WhiskerRandom(), 16, 0.5);
+        this(new AceRandom(), 16, 0.5);
     }
 
     /**
-     * Uses a {@link WhiskerRandom} and the given alpha and skew.
+     * Uses an {@link AceRandom} and the given alpha and skew.
      */
     public ZipfianDistribution(long alpha, double skew) {
-        this(new WhiskerRandom(), alpha, skew);
+        this(new AceRandom(), alpha, skew);
     }
 
     /**

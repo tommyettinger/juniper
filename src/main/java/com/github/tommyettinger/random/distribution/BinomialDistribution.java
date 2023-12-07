@@ -18,7 +18,7 @@
 package com.github.tommyettinger.random.distribution;
 
 import com.github.tommyettinger.random.EnhancedRandom;
-import com.github.tommyettinger.random.WhiskerRandom;
+import com.github.tommyettinger.random.AceRandom;
 
 /**
  * A two-parameter discrete distribution with integer range from 0 (inclusive) to beta (inclusive).
@@ -56,17 +56,17 @@ public class BinomialDistribution extends Distribution {
     }
 
     /**
-     * Uses a {@link WhiskerRandom}, alpha = 0.5, beta = 1 .
+     * Uses an {@link AceRandom}, alpha = 0.5, beta = 1 .
      */
     public BinomialDistribution() {
-        this(new WhiskerRandom(), 0.5, 1);
+        this(new AceRandom(), 0.5, 1);
     }
 
     /**
-     * Uses a {@link WhiskerRandom} and the given beta and alpha.
+     * Uses an {@link AceRandom} and the given beta and alpha.
      */
     public BinomialDistribution(double alpha, int beta) {
-        this(new WhiskerRandom(), alpha, beta);
+        this(new AceRandom(), alpha, beta);
     }
 
     /**

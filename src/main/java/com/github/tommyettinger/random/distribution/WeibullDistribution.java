@@ -19,7 +19,7 @@ package com.github.tommyettinger.random.distribution;
 
 import com.github.tommyettinger.digital.MathTools;
 import com.github.tommyettinger.random.EnhancedRandom;
-import com.github.tommyettinger.random.WhiskerRandom;
+import com.github.tommyettinger.random.AceRandom;
 
 /**
  * A two-parameter distribution with range from 0 (inclusive) to positive infinity.
@@ -57,17 +57,17 @@ public class WeibullDistribution extends Distribution {
     }
 
     /**
-     * Uses a {@link WhiskerRandom}, alpha = 1.0, lambda = 1.0 .
+     * Uses an {@link AceRandom}, alpha = 1.0, lambda = 1.0 .
      */
     public WeibullDistribution() {
-        this(new WhiskerRandom(), 1.0, 1.0);
+        this(new AceRandom(), 1.0, 1.0);
     }
 
     /**
-     * Uses a {@link WhiskerRandom} and the given alpha and lambda.
+     * Uses an {@link AceRandom} and the given alpha and lambda.
      */
     public WeibullDistribution(double alpha, double lambda) {
-        this(new WhiskerRandom(), alpha, lambda);
+        this(new AceRandom(), alpha, lambda);
     }
 
     /**

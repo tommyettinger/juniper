@@ -18,7 +18,7 @@
 package com.github.tommyettinger.random.distribution;
 
 import com.github.tommyettinger.random.EnhancedRandom;
-import com.github.tommyettinger.random.WhiskerRandom;
+import com.github.tommyettinger.random.AceRandom;
 
 /**
  * A two-parameter distribution with range from 0 to 1, both exclusive.
@@ -58,17 +58,17 @@ public class ArcsineDistribution extends Distribution {
     }
 
     /**
-     * Uses a {@link WhiskerRandom}, alpha = 0.0, beta = 1.0 .
+     * Uses an {@link AceRandom}, alpha = 0.0, beta = 1.0 .
      */
     public ArcsineDistribution() {
-        this(new WhiskerRandom(), 0.0, 1.0);
+        this(new AceRandom(), 0.0, 1.0);
     }
 
     /**
-     * Uses a {@link WhiskerRandom} and the given alpha and beta.
+     * Uses an {@link AceRandom} and the given alpha and beta.
      */
     public ArcsineDistribution(double alpha, double beta) {
-        this(new WhiskerRandom(), alpha, beta);
+        this(new AceRandom(), alpha, beta);
     }
 
     /**

@@ -19,7 +19,7 @@ package com.github.tommyettinger.random.distribution;
 
 import com.github.tommyettinger.digital.MathTools;
 import com.github.tommyettinger.random.EnhancedRandom;
-import com.github.tommyettinger.random.WhiskerRandom;
+import com.github.tommyettinger.random.AceRandom;
 
 /**
  * A two-parameter distribution with range from 0 to positive infinity.
@@ -57,17 +57,17 @@ public class BetaPrimeDistribution extends Distribution {
     }
 
     /**
-     * Uses a {@link WhiskerRandom}, alpha = 2.0, beta = 2.0 .
+     * Uses an {@link AceRandom}, alpha = 2.0, beta = 2.0 .
      */
     public BetaPrimeDistribution() {
-        this(new WhiskerRandom(), 2.0, 2.0);
+        this(new AceRandom(), 2.0, 2.0);
     }
 
     /**
-     * Uses a {@link WhiskerRandom} and the given alpha and beta.
+     * Uses an {@link AceRandom} and the given alpha and beta.
      */
     public BetaPrimeDistribution(double alpha, double beta) {
-        this(new WhiskerRandom(), alpha, beta);
+        this(new AceRandom(), alpha, beta);
     }
 
     /**

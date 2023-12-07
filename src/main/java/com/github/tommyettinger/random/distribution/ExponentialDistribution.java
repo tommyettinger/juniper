@@ -18,7 +18,7 @@
 package com.github.tommyettinger.random.distribution;
 
 import com.github.tommyettinger.random.EnhancedRandom;
-import com.github.tommyettinger.random.WhiskerRandom;
+import com.github.tommyettinger.random.AceRandom;
 
 /**
  * A one-parameter distribution with range from 0 exclusive to positive infinity.
@@ -46,17 +46,17 @@ public class ExponentialDistribution extends Distribution {
     }
 
     /**
-     * Uses a {@link WhiskerRandom}, lambda = 1.0 .
+     * Uses an {@link AceRandom}, lambda = 1.0 .
      */
     public ExponentialDistribution() {
-        this(new WhiskerRandom(), 1);
+        this(new AceRandom(), 1);
     }
 
     /**
-     * Uses a {@link WhiskerRandom} and the given lambda.
+     * Uses an {@link AceRandom} and the given lambda.
      */
     public ExponentialDistribution(double lambda) {
-        this(new WhiskerRandom(), lambda);
+        this(new AceRandom(), lambda);
     }
 
     /**
