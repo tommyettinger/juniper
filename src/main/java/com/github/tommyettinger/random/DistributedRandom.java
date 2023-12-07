@@ -91,7 +91,7 @@ public class DistributedRandom extends EnhancedRandom {
     }
 
     public DistributedRandom(long seed) {
-        distribution = new ContinuousUniformDistribution(new WhiskerRandom(seed), 0.0, 1.0);
+        distribution = new ContinuousUniformDistribution(new AceRandom(seed), 0.0, 1.0);
         reduction = ReductionMode.FRACTION;
     }
 
@@ -105,13 +105,13 @@ public class DistributedRandom extends EnhancedRandom {
      * @param random referenced directly; if you don't want this, use a {@link EnhancedRandom#copy()}
      */
     public DistributedRandom(EnhancedRandom random) {
-        if(random == null) random = new WhiskerRandom();
+        if(random == null) random = new AceRandom();
         distribution = new ContinuousUniformDistribution(random, 0.0, 1.0);
         reduction = ReductionMode.FRACTION;
     }
 
     public DistributedRandom(long stateA, long stateB, long stateC, long stateD) {
-        distribution = new ContinuousUniformDistribution(new WhiskerRandom(stateA, stateB, stateC, stateD), 0.0, 1.0);
+        distribution = new ContinuousUniformDistribution(new AceRandom(stateA, stateB, stateC, stateD), 0.0, 1.0);
         reduction = ReductionMode.FRACTION;
     }
 
@@ -145,7 +145,7 @@ public class DistributedRandom extends EnhancedRandom {
 
     public DistributedRandom(Distribution distribution, ReductionMode reductionMode, long stateA, long stateB, long stateC, long stateD) {
         this.distribution = distribution.copy();
-        this.distribution.generator = new WhiskerRandom(stateA, stateB, stateC, stateD);
+        this.distribution.generator = new AceRandom(stateA, stateB, stateC, stateD);
         if(reductionMode != null) reduction = reductionMode;
         else reduction = ReductionMode.FRACTION;
     }

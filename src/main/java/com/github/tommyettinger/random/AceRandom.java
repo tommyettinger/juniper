@@ -97,6 +97,20 @@ public class AceRandom extends EnhancedRandom {
 	}
 
 	/**
+	 * Creates a new AceRandom with the given four states; all {@code long} values are permitted.
+	 * These states will be used verbatim, and the fifth state will be assigned
+	 * {@code stateA + stateC ^ stateB + stateD}.
+	 *
+	 * @param stateA any {@code long} value
+	 * @param stateB any {@code long} value
+	 * @param stateC any {@code long} value
+	 * @param stateD any {@code long} value
+	 */
+	public AceRandom(long stateA, long stateB, long stateC, long stateD) {
+		this(stateA, stateB, stateC, stateD, stateA + stateC ^ stateB + stateD);
+	}
+
+	/**
 	 * Creates a new AceRandom with the given five states; all {@code long} values are permitted.
 	 * These states will be used verbatim.
 	 *
@@ -262,6 +276,25 @@ public class AceRandom extends EnhancedRandom {
 	 */
 	public void setStateE (long stateE) {
 		this.stateE = stateE;
+	}
+
+	/**
+	 * Sets the state completely to the given four state variables. The fifth state variable will be set as if you had
+	 * called {@code setStateE(stateA + stateC ^ stateB + stateD)}.
+	 * This is the same as calling {@link #setStateA(long)}, {@link #setStateB(long)},
+	 * {@link #setStateC(long)}, {@link #setStateD(long)}, and {@link #setStateE(long)} (as mentioned) as a group.
+	 *
+	 * @param stateA the first state; can be any long
+	 * @param stateB the second state; can be any long
+	 * @param stateC the third state; can be any long
+	 * @param stateD the fourth state; can be any long
+	 */
+	public void setState (long stateA, long stateB, long stateC, long stateD) {
+		this.stateA = stateA;
+		this.stateB = stateB;
+		this.stateC = stateC;
+		this.stateD = stateD;
+		this.stateE = stateA + stateC ^ stateB + stateD;
 	}
 
 	/**

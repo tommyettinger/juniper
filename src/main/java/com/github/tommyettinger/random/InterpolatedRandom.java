@@ -36,12 +36,12 @@ public class InterpolatedRandom extends EnhancedRandom {
 
     public InterpolatedRandom() {
         interpolator = Interpolations.linear;
-        random = new WhiskerRandom();
+        random = new AceRandom();
     }
 
     public InterpolatedRandom(long seed) {
         interpolator = Interpolations.linear;
-        random = new WhiskerRandom(seed);
+        random = new AceRandom(seed);
     }
 
     /**
@@ -51,23 +51,23 @@ public class InterpolatedRandom extends EnhancedRandom {
      * @param random referenced directly; if you don't want this, use a {@link EnhancedRandom#copy()}
      */
     public InterpolatedRandom(EnhancedRandom random) {
-        if(random == null) this.random = new WhiskerRandom();
+        if(random == null) this.random = new AceRandom();
         interpolator = Interpolations.linear;
     }
 
     public InterpolatedRandom(long stateA, long stateB, long stateC, long stateD) {
         interpolator = Interpolations.linear;
-        random = new WhiskerRandom(stateA, stateB, stateC, stateD);
+        random = new AceRandom(stateA, stateB, stateC, stateD);
     }
 
     public InterpolatedRandom(Interpolator interpolator) {
         this.interpolator = interpolator;
-        random = new WhiskerRandom();
+        random = new AceRandom();
     }
 
     public InterpolatedRandom(Interpolator interpolator, long seed) {
         this.interpolator = interpolator;
-        random = new WhiskerRandom(seed);
+        random = new AceRandom(seed);
     }
 
     /**
@@ -80,12 +80,12 @@ public class InterpolatedRandom extends EnhancedRandom {
     public InterpolatedRandom(Interpolator interpolator, EnhancedRandom random) {
         this.interpolator = interpolator;
         if(random != null) this.random = random;
-        else this.random = new WhiskerRandom();
+        else this.random = new AceRandom();
     }
 
     public InterpolatedRandom(Interpolator interpolator, long stateA, long stateB, long stateC, long stateD) {
         this.interpolator = interpolator;
-        this.random = new WhiskerRandom(stateA, stateB, stateC, stateD);
+        this.random = new AceRandom(stateA, stateB, stateC, stateD);
     }
 
     @Override
