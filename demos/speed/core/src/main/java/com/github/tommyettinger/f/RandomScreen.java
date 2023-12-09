@@ -75,7 +75,7 @@ public class RandomScreen extends ScreenAdapter {
             iterations = 0;
         }
         iterations += 1;
-        for (int i = 0; i < 0x80000; i++) {
+        for (int i = 0; i < SpeedDemo.STEPS; i++) {
             int m = (int) (random.nextFloat() * 512);
             if(m >= 0 && m < 512)
                 amounts[m]++;

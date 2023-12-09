@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class SpeedDemo extends Game {
     public static final int SCREEN_WIDTH = 512;
     public static final int SCREEN_HEIGHT = 520;
+    public static final int STEPS = 0x80000;
 
     private Screen[] screens;
     private int screenIndex;
@@ -42,6 +43,10 @@ public class SpeedDemo extends Game {
                 new com.github.tommyettinger.ul.RandomScreen(this),
                 new com.github.tommyettinger.ul.ChopScreen(this),
                 new com.github.tommyettinger.ul.AceScreen(this),
+//                new com.github.tommyettinger.t.MathScreen(this),
+//                new com.github.tommyettinger.t.MathUtilsScreen(this),
+//                new com.github.tommyettinger.t.TrigScreen(this),
+//                new com.github.tommyettinger.t.TrigSmootherScreen(this),
         };
         screenIndex = 0;
         setScreen(screens[screenIndex]);
