@@ -244,40 +244,75 @@ public class Gabber32Random extends EnhancedRandom {
 		this.stateC = (int)stateC;
 		this.stateD = (int)stateD;
 	}
+	//0x6C8E9CF5
+	//0x7FEB352D
+	//0x91E10DA5
+	//0xDB4F0B91
+	//0xBBE05633
+	//0xA0F2EC75
+	//0x89E18285
 
 	@Override
 	public long nextLong () {
 		int x, y, z, w;
-		x = (stateA += (0x9E3779BB));
-		y = (stateB += (x ^ (x <<  3 | x >>> 32 -  3) ^ (x << 14 | x >>> 32 - 14) ^ Integer.numberOfLeadingZeros(x     )));
-		z = (stateC += (y ^ (y << 10 | y >>> 32 - 10) ^ (y << 17 | y >>> 32 - 17) ^ Integer.numberOfLeadingZeros(x &= y)));
-		w = (stateD += (z ^ (z << 21 | z >>> 32 - 21) ^ (z << 28 | z >>> 32 - 28) ^ Integer.numberOfLeadingZeros(x &= z)));
-		int hi = (w ^ (w << 12 | w >>> 20) ^ (w << 23 | w >>> 9));
-		x = (stateA += (0x9E3779BB));
-		y = (stateB += (x ^ (x <<  3 | x >>> 32 -  3) ^ (x << 14 | x >>> 32 - 14) ^ Integer.numberOfLeadingZeros(x     )));
-		z = (stateC += (y ^ (y << 10 | y >>> 32 - 10) ^ (y << 17 | y >>> 32 - 17) ^ Integer.numberOfLeadingZeros(x &= y)));
-		w = (stateD += (z ^ (z << 21 | z >>> 32 - 21) ^ (z << 28 | z >>> 32 - 28) ^ Integer.numberOfLeadingZeros(x &= z)));
-		int lo = (w ^ (w << 12 | w >>> 20) ^ (w << 23 | w >>> 9));
+		x = (stateA += (0xDB4F0B91));
+		y = (stateB += (x|1) * (Integer.numberOfLeadingZeros(x     ) + 0xBBE05633));
+		z = (stateC += (y|1) * (Integer.numberOfLeadingZeros(x &= y) + 0xA0F2EC75));
+		w = (stateD += (z|1) * (Integer.numberOfLeadingZeros(x &= z) + 0x89E18285));
+		int hi = (w ^ (w << 21 | w >>> 11) ^ (w << 29 | w >>>  3));
+		x = (stateA += (0xDB4F0B91));
+		y = (stateB += (x|1) * (Integer.numberOfLeadingZeros(x     ) + 0xBBE05633));
+		z = (stateC += (y|1) * (Integer.numberOfLeadingZeros(x &= y) + 0xA0F2EC75));
+		w = (stateD += (z|1) * (Integer.numberOfLeadingZeros(x &= z) + 0x89E18285));
+		int lo = (w ^ (w << 21 | w >>> 11) ^ (w << 29 | w >>>  3));
 		return (long)hi << 32 ^ lo;
+
+//		int x, y, z, w;
+//		x = (stateA += (0x9E3779BB));
+//		y = (stateB += ((x << 12 | x >>> 32 - 12) ^ Integer.numberOfLeadingZeros(x     )));
+//		z = (stateC += ((y <<  7 | y >>> 32 -  7) ^ Integer.numberOfLeadingZeros(x &= y)));
+//		w = (stateD += ((z << 29 | z >>> 32 - 29) ^ Integer.numberOfLeadingZeros(x &= z)));
+//		int hi = x + (w ^ (w << 12 | w >>> 20) ^ (w << 23 | w >>> 9));
+//		x = (stateA += (0x9E3779BB));
+//		y = (stateB += ((x << 12 | x >>> 32 - 12) ^ Integer.numberOfLeadingZeros(x     )));
+//		z = (stateC += ((y <<  7 | y >>> 32 -  7) ^ Integer.numberOfLeadingZeros(x &= y)));
+//		w = (stateD += ((z << 29 | z >>> 32 - 29) ^ Integer.numberOfLeadingZeros(x &= z)));
+//		int lo = x + (w ^ (w << 12 | w >>> 20) ^ (w << 23 | w >>>  9));
+//		return (long)hi << 32 ^ lo;
+
+//		int x, y, z, w;
+//		x = (stateA += (0x9E3779BB));
+//		y = (stateB += (x ^ (x <<  3 | x >>> 32 -  3) ^ (x << 14 | x >>> 32 - 14) ^ Integer.numberOfLeadingZeros(x     )));
+//		z = (stateC += (y ^ (y << 10 | y >>> 32 - 10) ^ (y << 17 | y >>> 32 - 17) ^ Integer.numberOfLeadingZeros(x &= y)));
+//		w = (stateD += (z ^ (z << 21 | z >>> 32 - 21) ^ (z << 28 | z >>> 32 - 28) ^ Integer.numberOfLeadingZeros(x &= z)));
+//		int hi = (w ^ (w << 12 | w >>> 20) ^ (w << 23 | w >>> 9));
+//		x = (stateA += (0x9E3779BB));
+//		y = (stateB += (x ^ (x <<  3 | x >>> 32 -  3) ^ (x << 14 | x >>> 32 - 14) ^ Integer.numberOfLeadingZeros(x     )));
+//		z = (stateC += (y ^ (y << 10 | y >>> 32 - 10) ^ (y << 17 | y >>> 32 - 17) ^ Integer.numberOfLeadingZeros(x &= y)));
+//		w = (stateD += (z ^ (z << 21 | z >>> 32 - 21) ^ (z << 28 | z >>> 32 - 28) ^ Integer.numberOfLeadingZeros(x &= z)));
+//		int lo = (w ^ (w << 12 | w >>> 20) ^ (w << 23 | w >>> 9));
+//		return (long)hi << 32 ^ lo;
 	}
 
 	@Override
 	public int next (int bits) {
-		int x = (stateA += (0x9E3779BB));
-		int y = (stateB += (x ^ (x <<  3 | x >>> 32 -  3) ^ (x << 14 | x >>> 32 - 14) ^ Integer.numberOfLeadingZeros(x     )));
-		int z = (stateC += (y ^ (y << 10 | y >>> 32 - 10) ^ (y << 17 | y >>> 32 - 17) ^ Integer.numberOfLeadingZeros(x &= y)));
-		int w = (stateD += (z ^ (z << 21 | z >>> 32 - 21) ^ (z << 28 | z >>> 32 - 28) ^ Integer.numberOfLeadingZeros(x &= z)));
-		w ^= (w << 12 | w >>> 20) ^ (w << 23 | w >>> 9);
+		int x, y, z, w;
+		x = (stateA += (0xDB4F0B91));
+		y = (stateB += (x|1) * (Integer.numberOfLeadingZeros(x     ) + 0xBBE05633));
+		z = (stateC += (y|1) * (Integer.numberOfLeadingZeros(x &= y) + 0xA0F2EC75));
+		w = (stateD += (z|1) * (Integer.numberOfLeadingZeros(x &= z) + 0x89E18285));
+		w ^= (w << 21 | w >>> 11) ^ (w << 29 | w >>>  3);
 		return (w) >>> (32 - bits);
 	}
 
 	@Override
 	public int nextInt () {
-		int x = (stateA += (0x9E3779BB));
-		int y = (stateB += (x ^ (x <<  3 | x >>> 32 -  3) ^ (x << 14 | x >>> 32 - 14) ^ Integer.numberOfLeadingZeros(x     )));
-		int z = (stateC += (y ^ (y << 10 | y >>> 32 - 10) ^ (y << 17 | y >>> 32 - 17) ^ Integer.numberOfLeadingZeros(x &= y)));
-		int w = (stateD += (z ^ (z << 21 | z >>> 32 - 21) ^ (z << 28 | z >>> 32 - 28) ^ Integer.numberOfLeadingZeros(x &= z)));
-		w ^= (w << 12 | w >>> 20) ^ (w << 23 | w >>> 9);
+		int x, y, z, w;
+		x = (stateA += (0xDB4F0B91));
+		y = (stateB += (x|1) * (Integer.numberOfLeadingZeros(x     ) + 0xBBE05633));
+		z = (stateC += (y|1) * (Integer.numberOfLeadingZeros(x &= y) + 0xA0F2EC75));
+		w = (stateD += (z|1) * (Integer.numberOfLeadingZeros(x &= z) + 0x89E18285));
+		w ^= (w << 21 | w >>> 11) ^ (w << 29 | w >>>  3);
 		return w;
 	}
 
