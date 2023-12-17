@@ -252,12 +252,12 @@ public class Gabber32Random extends EnhancedRandom {
 		y = (stateB += (x ^ (x <<  3 | x >>> 32 -  3) ^ (x << 14 | x >>> 32 - 14) ^ Integer.numberOfLeadingZeros(x     )));
 		z = (stateC += (y ^ (y << 10 | y >>> 32 - 10) ^ (y << 17 | y >>> 32 - 17) ^ Integer.numberOfLeadingZeros(x &= y)));
 		w = (stateD += (z ^ (z << 21 | z >>> 32 - 21) ^ (z << 28 | z >>> 32 - 28) ^ Integer.numberOfLeadingZeros(x &= z)));
-		int hi = x ^ w ^ (w << 12 | w >>> 20) ^ (w << 23 | w >>> 9);
+		int hi = (w ^ (w << 12 | w >>> 20) ^ (w << 23 | w >>> 9));
 		x = (stateA += (0x9E3779BB));
 		y = (stateB += (x ^ (x <<  3 | x >>> 32 -  3) ^ (x << 14 | x >>> 32 - 14) ^ Integer.numberOfLeadingZeros(x     )));
 		z = (stateC += (y ^ (y << 10 | y >>> 32 - 10) ^ (y << 17 | y >>> 32 - 17) ^ Integer.numberOfLeadingZeros(x &= y)));
 		w = (stateD += (z ^ (z << 21 | z >>> 32 - 21) ^ (z << 28 | z >>> 32 - 28) ^ Integer.numberOfLeadingZeros(x &= z)));
-		int lo = x ^ w ^ (w << 12 | w >>> 20) ^ (w << 23 | w >>> 9);
+		int lo = (w ^ (w << 12 | w >>> 20) ^ (w << 23 | w >>> 9));
 		return (long)hi << 32 ^ lo;
 	}
 
@@ -267,8 +267,8 @@ public class Gabber32Random extends EnhancedRandom {
 		int y = (stateB += (x ^ (x <<  3 | x >>> 32 -  3) ^ (x << 14 | x >>> 32 - 14) ^ Integer.numberOfLeadingZeros(x     )));
 		int z = (stateC += (y ^ (y << 10 | y >>> 32 - 10) ^ (y << 17 | y >>> 32 - 17) ^ Integer.numberOfLeadingZeros(x &= y)));
 		int w = (stateD += (z ^ (z << 21 | z >>> 32 - 21) ^ (z << 28 | z >>> 32 - 28) ^ Integer.numberOfLeadingZeros(x &= z)));
-		x ^= w ^ (w << 12 | w >>> 20) ^ (w << 23 | w >>> 9);
-		return (x) >>> (32 - bits);
+		w ^= (w << 12 | w >>> 20) ^ (w << 23 | w >>> 9);
+		return (w) >>> (32 - bits);
 	}
 
 	@Override
@@ -277,8 +277,8 @@ public class Gabber32Random extends EnhancedRandom {
 		int y = (stateB += (x ^ (x <<  3 | x >>> 32 -  3) ^ (x << 14 | x >>> 32 - 14) ^ Integer.numberOfLeadingZeros(x     )));
 		int z = (stateC += (y ^ (y << 10 | y >>> 32 - 10) ^ (y << 17 | y >>> 32 - 17) ^ Integer.numberOfLeadingZeros(x &= y)));
 		int w = (stateD += (z ^ (z << 21 | z >>> 32 - 21) ^ (z << 28 | z >>> 32 - 28) ^ Integer.numberOfLeadingZeros(x &= z)));
-		x ^= w ^ (w << 12 | w >>> 20) ^ (w << 23 | w >>> 9);
-		return x;
+		w ^= (w << 12 | w >>> 20) ^ (w << 23 | w >>> 9);
+		return w;
 	}
 
 	@Override
