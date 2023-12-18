@@ -245,27 +245,17 @@ public class Gobbler32Random extends EnhancedRandom {
 		y = (stateB += (x << 21 | x >>> 11) ^ (Integer.numberOfLeadingZeros(x     )));
 		z = (stateC += (y << 21 | y >>> 11) ^ (Integer.numberOfLeadingZeros(x &= y)));
 		w = (stateD += (z << 21 | z >>> 11) ^ (Integer.numberOfLeadingZeros(x &= z)));
-		w += (x << 5 | x >>> 27);
-		w ^= w >>> 17;
-		w *= 0xed5ad4bb;
-		w ^= w >>> 11;
-		w *= 0xac4c1b51;
+		w = (w + (x << 5 | x >>> 27)) * 0x21f0aaad;
+		w = (w ^ w >>> 15) * 0x735a2d97;
 		w ^= w >>> 15;
-		w *= 0x31848bab;
-		w ^= w >>> 14;
 		int hi = w;
 		x = (stateA += 0xDB4F0B91);
 		y = (stateB += (x << 21 | x >>> 11) ^ (Integer.numberOfLeadingZeros(x     )));
 		z = (stateC += (y << 21 | y >>> 11) ^ (Integer.numberOfLeadingZeros(x &= y)));
 		w = (stateD += (z << 21 | z >>> 11) ^ (Integer.numberOfLeadingZeros(x &= z)));
-		w += (x << 5 | x >>> 27);
-		w ^= w >>> 17;
-		w *= 0xed5ad4bb;
-		w ^= w >>> 11;
-		w *= 0xac4c1b51;
+		w = (w + (x << 5 | x >>> 27)) * 0x21f0aaad;
+		w = (w ^ w >>> 15) * 0x735a2d97;
 		w ^= w >>> 15;
-		w *= 0x31848bab;
-		w ^= w >>> 14;
 		int lo = w;
 		return (long)hi << 32 ^ (lo & 0xFFFFFFFFL);
 	}
@@ -277,32 +267,22 @@ public class Gobbler32Random extends EnhancedRandom {
 		y = (stateB += (x << 21 | x >>> 11) ^ (Integer.numberOfLeadingZeros(x     )));
 		z = (stateC += (y << 21 | y >>> 11) ^ (Integer.numberOfLeadingZeros(x &= y)));
 		w = (stateD += (z << 21 | z >>> 11) ^ (Integer.numberOfLeadingZeros(x &= z)));
-		w += (x << 5 | x >>> 27);
-		w ^= w >>> 17;
-		w *= 0xed5ad4bb;
-		w ^= w >>> 11;
-		w *= 0xac4c1b51;
+		w = (w + (x << 5 | x >>> 27)) * 0x21f0aaad;
+		w = (w ^ w >>> 15) * 0x735a2d97;
 		w ^= w >>> 15;
-		w *= 0x31848bab;
-		w ^= w >>> 14;
 		return (w) >>> (32 - bits);
 	}
 
 	@Override
 	public int nextInt () {
 		int x, y, z, w;
-		x = (stateA += 0xDB4F0B91);
-		y = (stateB += (x << 21 | x >>> 11) ^ (Integer.numberOfLeadingZeros(x     )));
-		z = (stateC += (y << 21 | y >>> 11) ^ (Integer.numberOfLeadingZeros(x &= y)));
-		w = (stateD += (z << 21 | z >>> 11) ^ (Integer.numberOfLeadingZeros(x &= z)));
-		w += (x << 5 | x >>> 27);
-		w ^= w >>> 17;
-		w *= 0xed5ad4bb;
-		w ^= w >>> 11;
-		w *= 0xac4c1b51;
+		x = (stateA += 0x9E3779BB);
+		y = (stateB += x + (Integer.numberOfLeadingZeros(x     )));
+		z = (stateC += y + (Integer.numberOfLeadingZeros(x &= y)));
+		w = (stateD += z + (Integer.numberOfLeadingZeros(x &= z)));
+		w = (w + (x << 5 | x >>> 27)) * 0x21f0aaad;
+		w = (w ^ w >>> 15) * 0x735a2d97;
 		w ^= w >>> 15;
-		w *= 0x31848bab;
-		w ^= w >>> 14;
 		return w;
 
 	}
