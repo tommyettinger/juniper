@@ -242,21 +242,17 @@ public class Gobbler32Random extends EnhancedRandom {
 	public long nextLong () {
 		int x, y, z, w;
 		x = (stateA += 0xDB4F0B91);
-		y = (stateB += (x << 21 | x >>> 11) ^ (Integer.numberOfLeadingZeros(x     )));
-		z = (stateC += (y << 21 | y >>> 11) ^ (Integer.numberOfLeadingZeros(x &= y)));
-		w = (stateD += (z << 21 | z >>> 11) ^ (Integer.numberOfLeadingZeros(x &= z)));
-		w = (w + (x << 5 | x >>> 27)) * 0x21f0aaad;
-		w = (w ^ w >>> 15) * 0x735a2d97;
-		w ^= w >>> 15;
-		int hi = w;
+		y = (stateB += (x << 21 | x >>> 11) + (Integer.numberOfLeadingZeros(x     )));
+		z = (stateC += (y << 21 | y >>> 11) + (Integer.numberOfLeadingZeros(x &= y)));
+		w = (stateD += (z << 21 | z >>> 11) + (Integer.numberOfLeadingZeros(x &= z)));
+		x += (w ^ (w << 6 | w >>> 26) ^ (w << 26 | w >>> 6));
+		int hi = (x ^ (x << 3 | x >>> 29) ^ (x << 19 | x >>> 13));
 		x = (stateA += 0xDB4F0B91);
-		y = (stateB += (x << 21 | x >>> 11) ^ (Integer.numberOfLeadingZeros(x     )));
-		z = (stateC += (y << 21 | y >>> 11) ^ (Integer.numberOfLeadingZeros(x &= y)));
-		w = (stateD += (z << 21 | z >>> 11) ^ (Integer.numberOfLeadingZeros(x &= z)));
-		w = (w + (x << 5 | x >>> 27)) * 0x21f0aaad;
-		w = (w ^ w >>> 15) * 0x735a2d97;
-		w ^= w >>> 15;
-		int lo = w;
+		y = (stateB += (x << 21 | x >>> 11) + (Integer.numberOfLeadingZeros(x     )));
+		z = (stateC += (y << 21 | y >>> 11) + (Integer.numberOfLeadingZeros(x &= y)));
+		w = (stateD += (z << 21 | z >>> 11) + (Integer.numberOfLeadingZeros(x &= z)));
+		x += (w ^ (w << 6 | w >>> 26) ^ (w << 26 | w >>> 6));
+		int lo = (x ^ (x << 3 | x >>> 29) ^ (x << 19 | x >>> 13));
 		return (long)hi << 32 ^ (lo & 0xFFFFFFFFL);
 	}
 
@@ -264,27 +260,24 @@ public class Gobbler32Random extends EnhancedRandom {
 	public int next (int bits) {
 		int x, y, z, w;
 		x = (stateA += 0xDB4F0B91);
-		y = (stateB += (x << 21 | x >>> 11) ^ (Integer.numberOfLeadingZeros(x     )));
-		z = (stateC += (y << 21 | y >>> 11) ^ (Integer.numberOfLeadingZeros(x &= y)));
-		w = (stateD += (z << 21 | z >>> 11) ^ (Integer.numberOfLeadingZeros(x &= z)));
-		w = (w + (x << 5 | x >>> 27)) * 0x21f0aaad;
-		w = (w ^ w >>> 15) * 0x735a2d97;
-		w ^= w >>> 15;
-		return (w) >>> (32 - bits);
+		y = (stateB += (x << 21 | x >>> 11) + (Integer.numberOfLeadingZeros(x     )));
+		z = (stateC += (y << 21 | y >>> 11) + (Integer.numberOfLeadingZeros(x &= y)));
+		w = (stateD += (z << 21 | z >>> 11) + (Integer.numberOfLeadingZeros(x &= z)));
+		x += (w ^ (w << 6 | w >>> 26) ^ (w << 26 | w >>> 6));
+		x ^= (x << 3 | x >>> 29) ^ (x << 19 | x >>> 13);
+		return x >>> (32 - bits);
 	}
 
 	@Override
 	public int nextInt () {
 		int x, y, z, w;
-		x = (stateA += 0x9E3779BB);
-		y = (stateB += x + (Integer.numberOfLeadingZeros(x     )));
-		z = (stateC += y + (Integer.numberOfLeadingZeros(x &= y)));
-		w = (stateD += z + (Integer.numberOfLeadingZeros(x &= z)));
-		w = (w + (x << 5 | x >>> 27)) * 0x21f0aaad;
-		w = (w ^ w >>> 15) * 0x735a2d97;
-		w ^= w >>> 15;
-		return w;
-
+		x = (stateA += 0xDB4F0B91);
+		y = (stateB += (x << 21 | x >>> 11) + (Integer.numberOfLeadingZeros(x     )));
+		z = (stateC += (y << 21 | y >>> 11) + (Integer.numberOfLeadingZeros(x &= y)));
+		w = (stateD += (z << 21 | z >>> 11) + (Integer.numberOfLeadingZeros(x &= z)));
+		x += (w ^ (w << 6 | w >>> 26) ^ (w << 26 | w >>> 6));
+		x ^= (x << 3 | x >>> 29) ^ (x << 19 | x >>> 13);
+		return x;
 	}
 
 	@Override

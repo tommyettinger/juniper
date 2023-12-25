@@ -1,0 +1,2 @@
+Lowest mode: 115.9062 has mean amount 0.0310873985  PASS 👍 for AceRandom
+Lowest mode: 92.84375 has mean amount 0.0272290930  FAIL 💀 for Gobbler32Random

@@ -1,0 +1,1 @@
+Lowest mode: 113.6562 has mean amount 0.0305308178  FAIL 💀 for Gobbler32Random
