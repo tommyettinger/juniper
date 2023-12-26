@@ -267,14 +267,13 @@ public class Gobbler32Random extends EnhancedRandom {
 		x ^= (x << 3 | x >>> 29) ^ (x << 19 | x >>> 13);
 		return x >>> (32 - bits);
 	}
-
 	@Override
 	public int nextInt () {
 		int x, y, z, w;
 		x = (stateA += 0xDB4F0B91);
-		y = (stateB += (x << 21 | x >>> 11) + (Integer.numberOfLeadingZeros(x     )));
-		z = (stateC += (y << 21 | y >>> 11) + (Integer.numberOfLeadingZeros(x &= y)));
-		w = (stateD += (z << 21 | z >>> 11) + (Integer.numberOfLeadingZeros(x |= z)));
+		y = (stateB += (x << 21 | x >>> 11) * (Integer.numberOfLeadingZeros(x     )));
+		z = (stateC += (y << 21 | y >>> 11) * (Integer.numberOfLeadingZeros(x &= y)));
+		w = (stateD += (z << 21 | z >>> 11) * (Integer.numberOfLeadingZeros(x &= z)));
 		x += (w ^ Integer.rotateLeft(w, r1) ^ Integer.rotateLeft(w, r2));
 		return x;
 	}
