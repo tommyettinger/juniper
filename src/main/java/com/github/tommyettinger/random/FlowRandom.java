@@ -139,24 +139,28 @@ public class FlowRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * This initializes both states of the generator to random values based on the given seed.
-	 * (2 to the 64) possible initial generator states can be produced here.
+	 * This initializes both states of the generator to different values; one is {@code seed}, the other is
+	 * {@code ~seed}. (2 to the 64) possible initial generator states can be produced here. The initial states don't
+	 * need to be randomized at all because of the structure of this generator (the hashing stage it does last is meant
+	 * to make input patterns unrecognizable).
 	 *
 	 * @param seed the initial seed; may be any long
 	 */
 	@Override
 	public void setSeed (long seed) {
-		// This is based on MX3, but pulls out values and assigns them to states mid-way, sometimes XORing them.
-		seed += 0x9E3779B97F4A7C15L;
-		seed ^= seed >>> 32;
-		seed *= 0xbea225f9eb34556dL;
-		seed ^= seed >>> 29;
-		seed *= 0xbea225f9eb34556dL;
-		stateA = (seed ^ 0xC6BC279692B5C323L);
-		seed ^= seed >>> 32;
-		seed *= 0xbea225f9eb34556dL;
-		seed ^= seed >>> 29;
-		stateB = (seed ^ ~0xC6BC279692B5C323L);
+		stateA = seed;
+		stateB = ~seed;
+//		// This is based on MX3, but pulls out values and assigns them to states mid-way, sometimes XORing them.
+//		seed += 0x9E3779B97F4A7C15L;
+//		seed ^= seed >>> 32;
+//		seed *= 0xbea225f9eb34556dL;
+//		seed ^= seed >>> 29;
+//		seed *= 0xbea225f9eb34556dL;
+//		stateA = (seed ^ 0xC6BC279692B5C323L);
+//		seed ^= seed >>> 32;
+//		seed *= 0xbea225f9eb34556dL;
+//		seed ^= seed >>> 29;
+//		stateB = (seed ^ ~0xC6BC279692B5C323L);
 	}
 
 	public long getStateA () {
