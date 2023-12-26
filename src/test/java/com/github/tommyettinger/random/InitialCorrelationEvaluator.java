@@ -59,7 +59,7 @@ public class InitialCorrelationEvaluator {
         imag = new double[randoms.length][randoms[0].length];
         actualAmount = 0;
         actualMode = 0;
-        for (int bit = 0; bit < 64; bit++) {
+        for (int bit = 0; bit < 32; bit++) {
             steps = 0;
             for (int x = 0; x < randomGrid.length; x++) {
                 for (int y = 0; y < randomGrid[0].length; y++) {
@@ -72,7 +72,7 @@ public class InitialCorrelationEvaluator {
             for (int i = 0; i < firstStepUsed; i++) {
                 for (int x = 0; x < randoms.length; x++) {
                     for (int y = 0; y < randoms[x].length; y++) {
-                        randoms[x][y].nextLong();
+                        randoms[x][y].nextInt();
                     }
                 }
             }
@@ -86,25 +86,22 @@ public class InitialCorrelationEvaluator {
             actualAmount += amountSum / steps;
             actualMode += minMode / steps;
         }
-        actualMode *= 0.5; // not sure why this is needed to get similar behavior to before...
+//        actualMode *= 0.5; // not sure why this is needed to get similar behavior to before...
         return 1.0 - Math.abs(actualMode - 115.5) - (actualAmount - 0.031) * 10;
     }
     public void step(int bit) {
         ++steps;
         ArrayTools.fill(imag, 0.0);
 
-        long v;
-
         for (int x = 0; x < randoms.length; x++) {
             for (int y = 0; y < randoms[x].length; y++) {
-                v = randoms[x][y].nextLong() >>> bit & 1L;
-                real[x][y] = v;
+                real[x][y] = randoms[x][y].nextInt() >>> bit & 1;
             }
         }
         Fft.transformWindowless2D(real, imag);
         Fft.getHistogram(real, imag);
         mode = Fft.maxIndex(Fft.histogram);
-        amount = Fft.histogram[mode] * 0x1p-6 / (randoms.length * randoms[0].length);
+        amount = Fft.histogram[mode] * 0x1p-5 / (randoms.length * randoms[0].length);
     }
     /**
      * Narrow-purpose; takes an x and a y value, each between 0 and 65535 inclusive, and interleaves their bits so the
@@ -504,11 +501,11 @@ Lowest mode: 115.6250 has mean amount 0.0310974493  PASS 👍 for Xoshiro256MX3R
 Lowest mode: 81.92187 has mean amount 0.0184360742  FAIL 💀 for Xoshiro256StarStarRandom
 
      */
-    public static void mainOld(String[] arg) {
+    public static void main(String[] arg) {
         StringBuilder sb = new StringBuilder(1024);
         EnhancedRandom[][] g = new EnhancedRandom[256][256];
 
-        ArrayList<EnhancedRandom> rs = ObjectList.with(new Gobbler32Random(1, 1, 1, 1));
+        ArrayList<EnhancedRandom> rs = ObjectList.with(new FlowRandom(1, 1));
 //                , new AceRandom(1, 1, 1, 1, 1));
 //        ArrayList<EnhancedRandom> rs = Generators.randomList;
 
@@ -518,13 +515,18 @@ Lowest mode: 81.92187 has mean amount 0.0184360742  FAIL 💀 for Xoshiro256Star
             for (int x = 0; x < g.length; x++) {
                 for (int y = 0; y < g[x].length; y++) {
                     g[x][y] = r.copy();
-                    if(r.getStateCount() == 1)
-                        g[x][y].setState(interleaveBits(x, y));
-//                        g[x][y].setState(x << 16 ^ y);
-//                        g[x][y].setState(y + ((x + y) * (x + y + 1L) >> 1)); // Cantor pairing function
-                    else
-//                        g[x][y].setState((long)x<<1|1L, (long)y<<1|1L, 1L, 1L, 1L);
-                        g[x][y].setState(x, y, 1L, 1L, 1L);
+                    long b =
+//                            y + ((x + y) * (x + y + 1L) >> 1);
+                            x << 16 ^ y;
+//                            interleaveBits(x, y);
+                    g[x][y].setSeed(b);
+//                    if(r.getStateCount() == 1)
+//                        g[x][y].setState(interleaveBits(x, y));
+////                        g[x][y].setState(x << 16 ^ y);
+////                        g[x][y].setState(y + ((x + y) * (x + y + 1L) >> 1)); // Cantor pairing function
+//                    else
+////                        g[x][y].setState((long)x<<1|1L, (long)y<<1|1L, 1L, 1L, 1L);
+//                        g[x][y].setState(x, y, 1L, 1L, 1L);
                 }
             }
             InitialCorrelationEvaluator evaluator = new InitialCorrelationEvaluator();
@@ -547,12 +549,11 @@ Lowest mode: 81.92187 has mean amount 0.0184360742  FAIL 💀 for Xoshiro256Star
         loc.writeString(sb.toString(), false, "UTF-8");
     }
 
-    public static void main(String[] arg) {
-        StringBuilder sb = new StringBuilder(1024);
+    public static void mainGobble(String[] arg) {
         EnhancedRandom[][] g = new EnhancedRandom[256][256];
 
         Gobbler32Random r = new Gobbler32Random(1, 1, 1, 1);
-        for (int r1 = 1; r1 < 32; r1++) {
+        for (int r1 = 3; r1 < 32; r1++) {
             r.r1 = r1;
             for (int r2 = r1 + 1; r2 < 32; r2++) {
                 r.r2 = r2;
