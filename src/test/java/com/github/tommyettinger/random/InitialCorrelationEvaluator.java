@@ -504,12 +504,11 @@ Lowest mode: 115.6250 has mean amount 0.0310974493  PASS 👍 for Xoshiro256MX3R
 Lowest mode: 81.92187 has mean amount 0.0184360742  FAIL 💀 for Xoshiro256StarStarRandom
 
      */
-    public static void main(String[] arg) {
+    public static void mainOld(String[] arg) {
         StringBuilder sb = new StringBuilder(1024);
         EnhancedRandom[][] g = new EnhancedRandom[256][256];
 
-        ArrayList<EnhancedRandom> rs = ObjectList.with(new Gobbler32Random(1, 1, 1, 1)
-        );
+        ArrayList<EnhancedRandom> rs = ObjectList.with(new Gobbler32Random(1, 1, 1, 1));
 //                , new AceRandom(1, 1, 1, 1, 1));
 //        ArrayList<EnhancedRandom> rs = Generators.randomList;
 
@@ -546,5 +545,30 @@ Lowest mode: 81.92187 has mean amount 0.0184360742  FAIL 💀 for Xoshiro256Star
         loc.mkdirs();
         loc = loc.child("InitialCorrelation-" + date.getTime() + '-' + date.toString().replace(':', '-') + ".txt");
         loc.writeString(sb.toString(), false, "UTF-8");
+    }
+
+    public static void main(String[] arg) {
+        StringBuilder sb = new StringBuilder(1024);
+        EnhancedRandom[][] g = new EnhancedRandom[256][256];
+
+        Gobbler32Random r = new Gobbler32Random(1, 1, 1, 1);
+        for (int r1 = 1; r1 < 32; r1++) {
+            r.r1 = r1;
+            for (int r2 = r1 + 1; r2 < 32; r2++) {
+                r.r2 = r2;
+                for (int x = 0; x < g.length; x++) {
+                    for (int y = 0; y < g[x].length; y++) {
+                        g[x][y] = r.copy();
+                        g[x][y].setState(x, y, 1L, 1L, 1L);
+                    }
+                }
+                InitialCorrelationEvaluator evaluator = new InitialCorrelationEvaluator();
+                double result = evaluator.run(g, 32, 64);
+                System.out.println("Lowest mode: "
+                        + Base.BASE10.decimal(evaluator.actualMode, 8)
+                        + " has mean amount " + Base.BASE10.decimal(evaluator.actualAmount, 12)
+                        + (result > 0.0 ? "  PASS 👍 for " : "  FAIL 💀 for ") + r1 + ", " + r2);
+            }
+        }
     }
 }

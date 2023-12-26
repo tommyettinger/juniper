@@ -41,6 +41,8 @@ public class Gobbler32Random extends EnhancedRandom {
 	 */
 	protected int stateD;
 
+	public int r1 = 1, r2 = 2;
+
 	/**
 	 * Creates a new Gabber32Random with a random state.
 	 */
@@ -245,14 +247,12 @@ public class Gobbler32Random extends EnhancedRandom {
 		y = (stateB += (x << 21 | x >>> 11) + (Integer.numberOfLeadingZeros(x     )));
 		z = (stateC += (y << 21 | y >>> 11) + (Integer.numberOfLeadingZeros(x &= y)));
 		w = (stateD += (z << 21 | z >>> 11) + (Integer.numberOfLeadingZeros(x &= z)));
-		x += (w ^ (w << 6 | w >>> 26) ^ (w << 26 | w >>> 6));
-		int hi = (x ^ (x << 3 | x >>> 29) ^ (x << 19 | x >>> 13));
+		int hi = x + (w ^ Integer.rotateLeft(w, r1) ^ Integer.rotateLeft(w, r2));
 		x = (stateA += 0xDB4F0B91);
 		y = (stateB += (x << 21 | x >>> 11) + (Integer.numberOfLeadingZeros(x     )));
 		z = (stateC += (y << 21 | y >>> 11) + (Integer.numberOfLeadingZeros(x &= y)));
 		w = (stateD += (z << 21 | z >>> 11) + (Integer.numberOfLeadingZeros(x &= z)));
-		x += (w ^ (w << 6 | w >>> 26) ^ (w << 26 | w >>> 6));
-		int lo = (x ^ (x << 3 | x >>> 29) ^ (x << 19 | x >>> 13));
+		int lo = x + (w ^ Integer.rotateLeft(w, r1) ^ Integer.rotateLeft(w, r2));
 		return (long)hi << 32 ^ (lo & 0xFFFFFFFFL);
 	}
 
@@ -340,7 +340,10 @@ public class Gobbler32Random extends EnhancedRandom {
 
 	@Override
 	public Gobbler32Random copy () {
-		return new Gobbler32Random(stateA, stateB, stateC, stateD);
+		Gobbler32Random cpy = new Gobbler32Random(stateA, stateB, stateC, stateD);
+		cpy.r1 = r1;
+		cpy.r2 = r2;
+		return cpy;
 	}
 
 	@Override
