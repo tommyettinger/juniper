@@ -501,11 +501,11 @@ Lowest mode: 115.6250 has mean amount 0.0310974493  PASS 👍 for Xoshiro256MX3R
 Lowest mode: 81.92187 has mean amount 0.0184360742  FAIL 💀 for Xoshiro256StarStarRandom
 
      */
-    public static void mainMany(String[] arg) {
+    public static void main(String[] arg) {
         StringBuilder sb = new StringBuilder(1024);
         EnhancedRandom[][] g = new EnhancedRandom[256][256];
 
-        ArrayList<EnhancedRandom> rs = ObjectList.with(new FlowRandom(1, 1));
+        ArrayList<EnhancedRandom> rs = ObjectList.with(new Gobbler32Random(1, 1, 1, 1));
 //                , new AceRandom(1, 1, 1, 1, 1));
 //        ArrayList<EnhancedRandom> rs = Generators.randomList;
 
@@ -515,18 +515,18 @@ Lowest mode: 81.92187 has mean amount 0.0184360742  FAIL 💀 for Xoshiro256Star
             for (int x = 0; x < g.length; x++) {
                 for (int y = 0; y < g[x].length; y++) {
                     g[x][y] = r.copy();
-                    long b =
+//                    long b =
 //                            y + ((x + y) * (x + y + 1L) >> 1);
-                            x << 16 ^ y;
+//                            x << 16 ^ y;
 //                            interleaveBits(x, y);
-                    g[x][y].setSeed(b);
-//                    if(r.getStateCount() == 1)
-//                        g[x][y].setState(interleaveBits(x, y));
+//                    g[x][y].setSeed(b);
+                    if(r.getStateCount() == 1)
+                        g[x][y].setState(interleaveBits(x, y));
 ////                        g[x][y].setState(x << 16 ^ y);
 ////                        g[x][y].setState(y + ((x + y) * (x + y + 1L) >> 1)); // Cantor pairing function
-//                    else
+                    else
 ////                        g[x][y].setState((long)x<<1|1L, (long)y<<1|1L, 1L, 1L, 1L);
-//                        g[x][y].setState(x, y, 1L, 1L, 1L);
+                        g[x][y].setState(x, y, 1L, 1L, 1L);
                 }
             }
             InitialCorrelationEvaluator evaluator = new InitialCorrelationEvaluator();
@@ -549,7 +549,7 @@ Lowest mode: 81.92187 has mean amount 0.0184360742  FAIL 💀 for Xoshiro256Star
         loc.writeString(sb.toString(), false, "UTF-8");
     }
 
-    public static void main(String[] arg) {
+    public static void mainGobbler(String[] arg) {
         EnhancedRandom[][] g = new EnhancedRandom[256][256];
 
         Gobbler32Random r = new Gobbler32Random(1, 1, 1, 1);

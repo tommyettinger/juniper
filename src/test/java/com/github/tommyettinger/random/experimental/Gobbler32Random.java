@@ -17,6 +17,7 @@
 
 package com.github.tommyettinger.random.experimental;
 
+import com.github.tommyettinger.digital.BitConversion;
 import com.github.tommyettinger.random.EnhancedRandom;
 
 /**
@@ -269,13 +270,15 @@ public class Gobbler32Random extends EnhancedRandom {
 	}
 	@Override
 	public int nextInt () {
+		// Should use BitConversion.imul() and BitConversion.countLeadingZeros() on GWT via super-source.
+		// Should also avoid overflow on counters by using bitwise ops after adding (on GWT).
 		int x, y, z, w;
 		x = (stateA += 0xDB4F0B91);
-		y = (stateB += (x << 21 | x >>> 11) * (Integer.numberOfLeadingZeros(x     )));
-		z = (stateC += (y << 21 | y >>> 11) * (Integer.numberOfLeadingZeros(x &= y)));
-		w = (stateD += (z << 21 | z >>> 11) * (Integer.numberOfLeadingZeros(x &= z)));
-		x += (w ^ Integer.rotateLeft(w, r1) ^ Integer.rotateLeft(w, r2));
-		return x;
+		y = (stateB += (x << 21 | x >>> 11) + (0x9E3779BD * (Integer.numberOfLeadingZeros(x     ))));
+		z = (stateC += (y << 21 | y >>> 11) + (0x9E3779BD * (Integer.numberOfLeadingZeros(x &= y))));
+		w = (stateD += (z << 21 | z >>> 11) + (0x9E3779BD * (Integer.numberOfLeadingZeros(x &= z))));
+//		x += (w ^ Integer.rotateLeft(w, r1) ^ Integer.rotateLeft(w, r2));
+		return x ^ w;
 	}
 
 	@Override

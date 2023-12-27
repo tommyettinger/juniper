@@ -1,0 +1,1 @@
+Lowest mode: 115.5937 has mean amount 0.0311089456  PASS 👍 for Gobbler32Random
