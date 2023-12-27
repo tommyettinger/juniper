@@ -47,7 +47,7 @@ public class FFTVisualizer extends ApplicationAdapter {
     public static String title = "";
     public static boolean dctMode = false;
     public static int randomCount = randoms.length;
-    public static int modeCount = 2;
+    public static int modeCount = 3;
     private int currentRandom = 0;
     private int currentMode = 0;
     private int selectedBit = 0;
@@ -189,6 +189,16 @@ public class FFTVisualizer extends ApplicationAdapter {
                 }
                 break;
             case 1:
+                for (int x = 0; x < width; x++) {
+                    for (int y = 0; y < height; y++) {
+                        bt = randoms[currentRandom][x][y].nextInt() & 255;
+                        real[x][y] = bt * I255;
+                        renderer.color(previousGrid[x][y] = basicPrepare(bt));
+                        renderer.vertex(x, y, 0);
+                    }
+                }
+                break;
+            case 2:
                 for (int x = 0; x < width; x++) {
                     for (int y = 0; y < height; y++) {
                         bt = (int) (-(randoms[currentRandom][x][y].nextLong() & 1L << selectedBit) >> 63) & 255;
