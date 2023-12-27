@@ -245,12 +245,12 @@ public class Gobbler32Random extends EnhancedRandom {
 		y = (stateB += (x << 21 | x >>> 11) + (0x9E3779BD * (Integer.numberOfLeadingZeros(x     ))));
 		z = (stateC += (y << 21 | y >>> 11) + (0x9E3779BD * (Integer.numberOfLeadingZeros(x &= y))));
 		w = (stateD += (z << 21 | z >>> 11) + (0x9E3779BD * (Integer.numberOfLeadingZeros(x &  z))));
-		int hi = w;
+		int hi = w ^ (w << 7 | w >>> 25) ^ (w << 24 | w >>> 8);
 		x = (stateA += 0xDB4F0B91);
 		y = (stateB += (x << 21 | x >>> 11) + (0x9E3779BD * (Integer.numberOfLeadingZeros(x     ))));
 		z = (stateC += (y << 21 | y >>> 11) + (0x9E3779BD * (Integer.numberOfLeadingZeros(x &= y))));
 		w = (stateD += (z << 21 | z >>> 11) + (0x9E3779BD * (Integer.numberOfLeadingZeros(x &  z))));
-		int lo = w;
+		int lo = w ^ (w << 7 | w >>> 25) ^ (w << 24 | w >>> 8);
 		return (long)hi << 32 ^ (lo & 0xFFFFFFFFL);
 	}
 
@@ -261,7 +261,7 @@ public class Gobbler32Random extends EnhancedRandom {
 		y = (stateB += (x << 21 | x >>> 11) + (0x9E3779BD * (Integer.numberOfLeadingZeros(x     ))));
 		z = (stateC += (y << 21 | y >>> 11) + (0x9E3779BD * (Integer.numberOfLeadingZeros(x &= y))));
 		w = (stateD += (z << 21 | z >>> 11) + (0x9E3779BD * (Integer.numberOfLeadingZeros(x &  z))));
-		return w >>> (32 - bits);
+		return (w ^ (w << 7 | w >>> 25) ^ (w << 24 | w >>> 8)) >>> (32 - bits);
 	}
 	@Override
 	public int nextInt () {
@@ -272,7 +272,7 @@ public class Gobbler32Random extends EnhancedRandom {
 		y = (stateB += (x << 21 | x >>> 11) + (0x9E3779BD * (Integer.numberOfLeadingZeros(x     ))));
 		z = (stateC += (y << 21 | y >>> 11) + (0x9E3779BD * (Integer.numberOfLeadingZeros(x &= y))));
 		w = (stateD += (z << 21 | z >>> 11) + (0x9E3779BD * (Integer.numberOfLeadingZeros(x &  z))));
-		return w;
+		return (w ^ (w << 7 | w >>> 25) ^ (w << 24 | w >>> 8));
 	}
 
 	@Override
