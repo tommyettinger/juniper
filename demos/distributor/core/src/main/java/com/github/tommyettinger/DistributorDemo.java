@@ -36,6 +36,7 @@ public class DistributorDemo extends Game {
         alternateNormal = new NormalAlternateScreen(this);
         alternateTriangular = new TriangleVariantsScreen(this);
         screens = new Screen[]{
+                new KumaraswamySmoothScreen(this),
                 new BetaScreen(this), new KumaraswamyScreen(this), new LumpScreen(this),
                 new NormalScreen(this), new RaisedNormalScreen(this), new ProductNormalScreen(this),
                 new CauchyScreen(this), new LogCauchyScreen(this), new ErlangScreen(this),
@@ -50,7 +51,7 @@ public class DistributorDemo extends Game {
                 new GdxCosScreen(this), new MathCosScreen(this), new DigitalCosScreen(this), new DigitalCosSmoothScreen(this),
                 new DigitalCosSmootherScreen(this), 
         };
-        screenIndex = screens.length - 5;
+        screenIndex = 0;
         setScreen(screens[screenIndex]);
     }
     public void nextScreen(){
