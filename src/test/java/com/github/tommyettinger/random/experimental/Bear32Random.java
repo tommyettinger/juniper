@@ -22,10 +22,14 @@ import com.github.tommyettinger.random.EnhancedRandom;
 
 /**
  * A random number generator that is optimized for performance on 32-bit machines and with Google Web Toolkit, this uses
- * {@link Integer#numberOfLeadingZeros(int)} or its GWT equivalent, and has a period of exactly 2 to the 128. It passes
- * 64TB of PractRand testing with no anomalies. All states are permitted. All optional methods are implemented except
- * {@link EnhancedRandom#skip(long)}; {@link #previousLong()} is implemented without using skip(), and so is
- * {@link #previousInt()}.
+ * {@link Integer#numberOfLeadingZeros(int)} or its GWT equivalent, and has a period of exactly 2 to the 128.
+ * All states are permitted. All optional methods are implemented except {@link EnhancedRandom#skip(long)};
+ * {@link #previousLong()} is implemented without using skip(), and so is {@link #previousInt()}.
+ * <br>
+ * While a similar version passes 64TB of PractRand testing with no anomalies, if the initial states are numerically
+ * similar, it takes a relatively long time (30 calls to {@link #nextInt()}) for the correlation to fully disappear in
+ * that version. Relatively small changes allow this to decorrelate more quickly (14 calls), so those changes are being
+ * tested now. If a new version can't be found that passes PractRand with no anomalies, the old version will be used.
  */
 public class Bear32Random extends EnhancedRandom {
 	/**
@@ -242,18 +246,18 @@ public class Bear32Random extends EnhancedRandom {
 	public long nextLong () {
 		int x, y, z, w;
 		x = (stateA = 0 | stateA + 0x9E3779B9);
-		y = (stateB = 0 | stateB + (x + BitConversion.countLeadingZeros(x)));
-		z = (stateC = 0 | stateC + (y + BitConversion.countLeadingZeros(x &= y)));
-		w = (stateD = 0 | stateD + (z + BitConversion.countLeadingZeros(x &= z)));
-		x = BitConversion.imul(w + (x << 21 | x >>> 11), 0x2C1B3C6D);
+		y = (stateB = 0 | stateB + (x ^ BitConversion.countLeadingZeros(x)));
+		z = (stateC = 0 | stateC + (y ^ BitConversion.countLeadingZeros(x &= y)));
+		w = (stateD = 0 | stateD + (z ^ BitConversion.countLeadingZeros(x &= z)));
+		x = BitConversion.imul(w + (x << 13 | x >>> 19), 0x2C1B3C6D);
 		x = BitConversion.imul(x ^ x >>> 12, 0x297A2D39);
 		x ^= x >>> 15;
 		int hi = x;
 		x = (stateA = 0 | stateA + 0x9E3779B9);
-		y = (stateB = 0 | stateB + (x + BitConversion.countLeadingZeros(x)));
-		z = (stateC = 0 | stateC + (y + BitConversion.countLeadingZeros(x &= y)));
-		w = (stateD = 0 | stateD + (z + BitConversion.countLeadingZeros(x &= z)));
-		x = BitConversion.imul(w + (x << 21 | x >>> 11), 0x2C1B3C6D);
+		y = (stateB = 0 | stateB + (x ^ BitConversion.countLeadingZeros(x)));
+		z = (stateC = 0 | stateC + (y ^ BitConversion.countLeadingZeros(x &= y)));
+		w = (stateD = 0 | stateD + (z ^ BitConversion.countLeadingZeros(x &= z)));
+		x = BitConversion.imul(w + (x << 13 | x >>> 19), 0x2C1B3C6D);
 		x = BitConversion.imul(x ^ x >>> 12, 0x297A2D39);
 		x ^= x >>> 15;
 		int lo = x;
@@ -268,10 +272,10 @@ public class Bear32Random extends EnhancedRandom {
 	public int next (int bits) {
 		int x, y, z, w;
 		x = (stateA = 0 | stateA + 0x9E3779B9);
-		y = (stateB = 0 | stateB + (x + BitConversion.countLeadingZeros(x)));
-		z = (stateC = 0 | stateC + (y + BitConversion.countLeadingZeros(x &= y)));
-		w = (stateD = 0 | stateD + (z + BitConversion.countLeadingZeros(x &= z)));
-		x = BitConversion.imul(w + (x << 21 | x >>> 11), 0x2C1B3C6D);
+		y = (stateB = 0 | stateB + (x ^ BitConversion.countLeadingZeros(x)));
+		z = (stateC = 0 | stateC + (y ^ BitConversion.countLeadingZeros(x &= y)));
+		w = (stateD = 0 | stateD + (z ^ BitConversion.countLeadingZeros(x &= z)));
+		x = BitConversion.imul(w + (x << 13 | x >>> 19), 0x2C1B3C6D);
 		x = BitConversion.imul(x ^ x >>> 12, 0x297A2D39);
 		x ^= x >>> 15;
 		return (x) >>> (32 - bits);
@@ -281,10 +285,10 @@ public class Bear32Random extends EnhancedRandom {
 	public int nextInt () {
 		int x, y, z, w;
 		x = (stateA = 0 | stateA + 0x9E3779B9);
-		y = (stateB = 0 | stateB + (x + BitConversion.countLeadingZeros(x)));
-		z = (stateC = 0 | stateC + (y + BitConversion.countLeadingZeros(x &= y)));
-		w = (stateD = 0 | stateD + (z + BitConversion.countLeadingZeros(x &= z)));
-		x = BitConversion.imul(w + (x << 21 | x >>> 11), 0x2C1B3C6D);
+		y = (stateB = 0 | stateB + (x ^ BitConversion.countLeadingZeros(x)));
+		z = (stateC = 0 | stateC + (y ^ BitConversion.countLeadingZeros(x &= y)));
+		w = (stateD = 0 | stateD + (z ^ BitConversion.countLeadingZeros(x &= z)));
+		x = BitConversion.imul(w + (x << 13 | x >>> 19), 0x2C1B3C6D);
 		x = BitConversion.imul(x ^ x >>> 12, 0x297A2D39);
 		x ^= x >>> 15;
 		return x;
@@ -298,27 +302,27 @@ public class Bear32Random extends EnhancedRandom {
 		z = stateC;
 		w = stateD;
 		m = x & y & z;
-		m = BitConversion.imul(w + (m << 21 | m >>> 11), 0x2C1B3C6D);
+		m = BitConversion.imul(w + (m << 13 | m >>> 19), 0x2C1B3C6D);
 		m = BitConversion.imul(m ^ m >>> 12, 0x297A2D39);
 		m ^= m >>> 15;
 		int lo = m;
 		stateA = 0 | x - 0x9E3779B9;
-		stateB = 0 | y - (x + BitConversion.countLeadingZeros(x));
-		stateC = 0 | z - (y + BitConversion.countLeadingZeros(x &= y));
-		stateD = 0 | w - (z + BitConversion.countLeadingZeros(x &  z));
+		stateB = 0 | y - (x ^ BitConversion.countLeadingZeros(x));
+		stateC = 0 | z - (y ^ BitConversion.countLeadingZeros(x &= y));
+		stateD = 0 | w - (z ^ BitConversion.countLeadingZeros(x &  z));
 		x = stateA;
 		y = stateB;
 		z = stateC;
 		w = stateD;
 		m = x & y & z;
-		m = BitConversion.imul(w + (m << 21 | m >>> 11), 0x2C1B3C6D);
+		m = BitConversion.imul(w + (m << 13 | m >>> 19), 0x2C1B3C6D);
 		m = BitConversion.imul(m ^ m >>> 12, 0x297A2D39);
 		m ^= m >>> 15;
 		int hi = m;
 		stateA = 0 | x - 0x9E3779B9;
-		stateB = 0 | y - (x + BitConversion.countLeadingZeros(x));
-		stateC = 0 | z - (y + BitConversion.countLeadingZeros(x &= y));
-		stateD = 0 | w - (z + BitConversion.countLeadingZeros(x &  z));
+		stateB = 0 | y - (x ^ BitConversion.countLeadingZeros(x));
+		stateC = 0 | z - (y ^ BitConversion.countLeadingZeros(x &= y));
+		stateD = 0 | w - (z ^ BitConversion.countLeadingZeros(x &  z));
 		return (long)(hi) << 32 ^ (lo);
 	}
 
@@ -329,13 +333,13 @@ public class Bear32Random extends EnhancedRandom {
 		z = stateC;
 		w = stateD;
 		m = x & y & z;
-		m = BitConversion.imul(w + (m << 21 | m >>> 11), 0x2C1B3C6D);
+		m = BitConversion.imul(w + (m << 13 | m >>> 19), 0x2C1B3C6D);
 		m = BitConversion.imul(m ^ m >>> 12, 0x297A2D39);
 		m ^= m >>> 15;
 		stateA = 0 | x - 0x9E3779B9;
-		stateB = 0 | y - (x + BitConversion.countLeadingZeros(x));
-		stateC = 0 | z - (y + BitConversion.countLeadingZeros(x &= y));
-		stateD = 0 | w - (z + BitConversion.countLeadingZeros(x &  z));
+		stateB = 0 | y - (x ^ BitConversion.countLeadingZeros(x));
+		stateC = 0 | z - (y ^ BitConversion.countLeadingZeros(x &= y));
+		stateD = 0 | w - (z ^ BitConversion.countLeadingZeros(x &  z));
 		return m;
 	}
 
