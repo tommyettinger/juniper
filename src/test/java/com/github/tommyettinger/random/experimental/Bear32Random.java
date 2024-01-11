@@ -23,7 +23,9 @@ import com.github.tommyettinger.random.EnhancedRandom;
 /**
  * A random number generator that is optimized for performance on 32-bit machines and with Google Web Toolkit, this uses
  * {@link Integer#numberOfLeadingZeros(int)} or its GWT equivalent, and has a period of exactly 2 to the 128. It passes
- * 64TB of PractRand testing with no anomalies. All states are permitted.
+ * 64TB of PractRand testing with no anomalies. All states are permitted. All optional methods are implemented except
+ * {@link EnhancedRandom#skip(long)}; {@link #previousLong()} is implemented without using skip(), and so is
+ * {@link #previousInt()}.
  */
 public class Bear32Random extends EnhancedRandom {
 	/**
@@ -286,6 +288,55 @@ public class Bear32Random extends EnhancedRandom {
 		x = BitConversion.imul(x ^ x >>> 12, 0x297A2D39);
 		x ^= x >>> 15;
 		return x;
+	}
+
+	@Override
+	public long previousLong() {
+		int x, y, z, w, m;
+		x = stateA;
+		y = stateB;
+		z = stateC;
+		w = stateD;
+		m = x & y & z;
+		m = BitConversion.imul(w + (m << 21 | m >>> 11), 0x2C1B3C6D);
+		m = BitConversion.imul(m ^ m >>> 12, 0x297A2D39);
+		m ^= m >>> 15;
+		int lo = m;
+		stateA = 0 | x - 0x9E3779B9;
+		stateB = 0 | y - (x + BitConversion.countLeadingZeros(x));
+		stateC = 0 | z - (y + BitConversion.countLeadingZeros(x &= y));
+		stateD = 0 | w - (z + BitConversion.countLeadingZeros(x &  z));
+		x = stateA;
+		y = stateB;
+		z = stateC;
+		w = stateD;
+		m = x & y & z;
+		m = BitConversion.imul(w + (m << 21 | m >>> 11), 0x2C1B3C6D);
+		m = BitConversion.imul(m ^ m >>> 12, 0x297A2D39);
+		m ^= m >>> 15;
+		int hi = m;
+		stateA = 0 | x - 0x9E3779B9;
+		stateB = 0 | y - (x + BitConversion.countLeadingZeros(x));
+		stateC = 0 | z - (y + BitConversion.countLeadingZeros(x &= y));
+		stateD = 0 | w - (z + BitConversion.countLeadingZeros(x &  z));
+		return (long)(hi) << 32 ^ (lo);
+	}
+
+	public int previousInt() {
+		int x, y, z, w, m;
+		x = stateA;
+		y = stateB;
+		z = stateC;
+		w = stateD;
+		m = x & y & z;
+		m = BitConversion.imul(w + (m << 21 | m >>> 11), 0x2C1B3C6D);
+		m = BitConversion.imul(m ^ m >>> 12, 0x297A2D39);
+		m ^= m >>> 15;
+		stateA = 0 | x - 0x9E3779B9;
+		stateB = 0 | y - (x + BitConversion.countLeadingZeros(x));
+		stateC = 0 | z - (y + BitConversion.countLeadingZeros(x &= y));
+		stateD = 0 | w - (z + BitConversion.countLeadingZeros(x &  z));
+		return m;
 	}
 
 	@Override
