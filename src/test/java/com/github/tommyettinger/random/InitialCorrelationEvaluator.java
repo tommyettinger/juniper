@@ -22,6 +22,7 @@ import com.github.tommyettinger.digital.ArrayTools;
 import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.digital.TextTools;
 import com.github.tommyettinger.ds.ObjectList;
+import com.github.tommyettinger.random.experimental.Bear32Random;
 import com.github.tommyettinger.random.experimental.Gobbler32Random;
 
 import java.io.File;
@@ -505,7 +506,7 @@ Lowest mode: 81.92187 has mean amount 0.0184360742  FAIL 💀 for Xoshiro256Star
         StringBuilder sb = new StringBuilder(1024);
         EnhancedRandom[][] g = new EnhancedRandom[256][256];
 
-        ArrayList<EnhancedRandom> rs = ObjectList.with(new Gobbler32Random(1, 1, 1, 1));
+        ArrayList<EnhancedRandom> rs = ObjectList.with(new Bear32Random(1, 1, 1, 1));
 //                , new AceRandom(1, 1, 1, 1, 1));
 //        ArrayList<EnhancedRandom> rs = Generators.randomList;
 

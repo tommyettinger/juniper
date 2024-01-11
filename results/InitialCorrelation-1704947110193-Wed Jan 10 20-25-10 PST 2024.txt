@@ -1,0 +1,1 @@
+Lowest mode: 115.6562 has mean amount 0.0311218351  PASS 👍 for Bear32Random

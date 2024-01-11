@@ -244,18 +244,22 @@ public class Bear32Random extends EnhancedRandom {
 		z = (stateC = 0 | stateC + (y + BitConversion.countLeadingZeros(x &= y)));
 		w = (stateD = 0 | stateD + (z + BitConversion.countLeadingZeros(x &= z)));
 		x = BitConversion.imul(w + (x << 21 | x >>> 11), 0x2C1B3C6D);
-		x = BitConversion.imul(x ^ x >> 12, 0x297A2D39);
-		x ^= x >> 15;
+		x = BitConversion.imul(x ^ x >>> 12, 0x297A2D39);
+		x ^= x >>> 15;
 		int hi = x;
 		x = (stateA = 0 | stateA + 0x9E3779B9);
 		y = (stateB = 0 | stateB + (x + BitConversion.countLeadingZeros(x)));
 		z = (stateC = 0 | stateC + (y + BitConversion.countLeadingZeros(x &= y)));
 		w = (stateD = 0 | stateD + (z + BitConversion.countLeadingZeros(x &= z)));
 		x = BitConversion.imul(w + (x << 21 | x >>> 11), 0x2C1B3C6D);
-		x = BitConversion.imul(x ^ x >> 12, 0x297A2D39);
-		x ^= x >> 15;
+		x = BitConversion.imul(x ^ x >>> 12, 0x297A2D39);
+		x ^= x >>> 15;
 		int lo = x;
-		return (long)hi << 32 ^ lo;
+		return (long)(hi) << 32 ^ (lo);
+		// These could be used instead of the above two lines:
+//		int lo = x ^ (hi << 16 | hi >>> 16);
+//		return (long)(hi ^ (x << 13 | x >>> 19)) << 32 | (lo & 0xFFFFFFFFL);
+		// This would make long outputs random and decorrelated from the very start, but not int outputs.
 	}
 
 	@Override
@@ -266,8 +270,8 @@ public class Bear32Random extends EnhancedRandom {
 		z = (stateC = 0 | stateC + (y + BitConversion.countLeadingZeros(x &= y)));
 		w = (stateD = 0 | stateD + (z + BitConversion.countLeadingZeros(x &= z)));
 		x = BitConversion.imul(w + (x << 21 | x >>> 11), 0x2C1B3C6D);
-		x = BitConversion.imul(x ^ x >> 12, 0x297A2D39);
-		x ^= x >> 15;
+		x = BitConversion.imul(x ^ x >>> 12, 0x297A2D39);
+		x ^= x >>> 15;
 		return (x) >>> (32 - bits);
 	}
 
@@ -279,8 +283,8 @@ public class Bear32Random extends EnhancedRandom {
 		z = (stateC = 0 | stateC + (y + BitConversion.countLeadingZeros(x &= y)));
 		w = (stateD = 0 | stateD + (z + BitConversion.countLeadingZeros(x &= z)));
 		x = BitConversion.imul(w + (x << 21 | x >>> 11), 0x2C1B3C6D);
-		x = BitConversion.imul(x ^ x >> 12, 0x297A2D39);
-		x ^= x >> 15;
+		x = BitConversion.imul(x ^ x >>> 12, 0x297A2D39);
+		x ^= x >>> 15;
 		return x;
 	}
 
