@@ -1,5 +1,7 @@
 package com.github.tommyettinger.random.cipher;
 
+import java.nio.ByteBuffer;
+
 /**
  * An implementation of the <a href="https://en.wikipedia.org/wiki/Speck_(cipher)">Speck Cipher</a> that can encrypt
  * and decrypt using either CBC or CTR modes. Speck is designed to be small and fast when implemented in software.
@@ -79,6 +81,40 @@ public final class SpeckCipher {
                 case 2:  bytes[index + 1] ^= (byte) (data >>> 48);
                 case 1:  bytes[index    ] ^= (byte) (data >>> 56);
             }
+        }
+    }
+
+    private static void xorIntoByteBuffer(ByteBuffer bytes, int index, long data) {
+        switch (bytes.limit() - index) {
+            default:
+                bytes.putLong(index, bytes.getLong(index) ^ data);
+                break;
+            case 7:
+                bytes.putInt(index, bytes.getInt(index) ^ (int) data);
+                bytes.putShort(index + 4, (short) (bytes.getShort(index + 4) ^ data >>> 32));
+                bytes.put(index + 6, (byte) (bytes.get(index + 6) ^ data >>> 48));
+                break;
+            case 6:
+                bytes.putInt(index, bytes.getInt(index) ^ (int) data);
+                bytes.putShort(index + 4, (short) (bytes.getShort(index + 4) ^ data >>> 32));
+                break;
+            case 5:
+                bytes.putInt(index, bytes.getInt(index) ^ (int) data);
+                bytes.put(index + 4, (byte) (bytes.get(index + 4) ^ data >>> 32));
+                break;
+            case 4:
+                bytes.putInt(index, bytes.getInt(index) ^ (int) data);
+                break;
+            case 3:
+                bytes.putShort(index, (short) (bytes.getShort(index) ^ data));
+                bytes.put(index + 2, (byte) (bytes.get(index + 2) ^ data >>> 16));
+                break;
+            case 2:
+                bytes.putShort(index, (short) (bytes.getShort(index) ^ data));
+                break;
+            case 1:
+                bytes.put(index, (byte) (bytes.get(index) ^ data));
+                break;
         }
     }
 
@@ -174,8 +210,8 @@ public final class SpeckCipher {
             b0 = last0;
             b1 = last1;
         } else if(plaintext.length - plainOffset >= 2) {
-            b0 = plaintext[plainOffset + 1] ^ last1;
             b1 = plaintext[plainOffset] ^ last0;
+            b0 = plaintext[plainOffset + 1] ^ last1;
         } else if(plaintext.length - plainOffset >= 1) {
             b0 = last1;
             b1 = plaintext[plainOffset] ^ last0;
@@ -209,8 +245,8 @@ public final class SpeckCipher {
             b0 = last0;
             b1 = last1;
         } else {
-            b0 = fromBytes(plaintext, plainOffset + 8) ^ last1;
             b1 = fromBytes(plaintext, plainOffset) ^ last0;
+            b0 = fromBytes(plaintext, plainOffset + 8) ^ last1;
         }
         for (int i = 0; i < 34; i++) {
             b1 = (b1 << 56 | b1 >>> 8) + b0 ^ key[i];
@@ -219,6 +255,7 @@ public final class SpeckCipher {
         intoBytes(ciphertext, cipherOffset, b1);
         intoBytes(ciphertext, cipherOffset + 8, b0);
     }
+
     /**
      * A usually-internal decryption step. You should use either CBC or CTR mode to actually decrypt a piece of
      * plaintext, with {@link #decryptCBC(long, long, long, long, long, long, long[], int, long[], int, int)} or
@@ -730,7 +767,7 @@ public final class SpeckCipher {
      * times will never return the same long unless nonce are requested for years from one generator, so it is a good
      * option to produce nonce data. The rest of the arguments are about the data being decrypted. The ciphertext is the
      * byte array that contains coded data, and should have been encrypted by
-     * {@link #encryptCTR(long, long, long, long, long, byte[], int, byte[], int, int)}. The ciphertext will be modified
+     * {@link #encryptInPlaceCTR(long, long, long, long, long, byte[], int, int)}. The ciphertext will be modified
      * in-place to become the plaintext. The cipheroffset is which index to start reading from in ciphertext. Lastly,
      * the textLength is how many byte items to decrypt from ciphertext; this can be less than ciphertext's length.
      * <br>
@@ -749,6 +786,76 @@ public final class SpeckCipher {
      */
     public static void decryptInPlaceCTR(long k1, long k2, long k3, long k4, long nonce,
                                   byte[] ciphertext, int cipherOffset, int textLength) {
+        encryptInPlaceCTR(k1, k2, k3, k4, nonce, ciphertext, cipherOffset, textLength);
+    }
+
+
+    /**
+     * Encrypts a "plaintext" ByteBuffer in-place, making it a coded "ciphertext" ByteBuffer.
+     * This takes four {@code long}s as its key (256-bits), and also requires one unique (never used again) long as
+     * the nonce. How you generate keys is up to you, but the keys must be kept secret for encryption to stay secure.
+     * To generate nonce, secrecy isn't as important as uniqueness; calling DistinctRandom.nextLong() even many
+     * times will never return the same long unless nonce are requested for years from one generator, so it is a good
+     * option to produce nonce data. The rest of the arguments are about the data being encrypted. The plaintext is the
+     * ByteBuffer to encrypt; it will be modified here. The plainOffset is which index in plaintext to start reading
+     * from and writing to. Lastly, the textLength is how many byte items to encrypt from
+     * plaintext; this can be less than plaintext's length.
+     * <br>
+     * This uses CTR mode, so it takes one nonce instead of how CBC mode takes two IVs. If the IVs/nonce aren't
+     * sufficiently random, CBC mode produces higher-quality outputs than CTR mode. CBC mode may be slightly faster,
+     * though this isn't clear yet. CTR mode doesn't need its ciphertext to have padding.
+     * @param k1 a secret long; part of the key
+     * @param k2 a secret long; part of the key
+     * @param k3 a secret long; part of the key
+     * @param k4 a secret long; part of the key
+     * @param nonce a long that must never be reused as nonce again under the same key; needed to decrypt
+     * @param plaintext the ByteBuffer to encrypt in-place; will be modified
+     * @param plainOffset which index to start reading from and writing to in plaintext
+     * @param textLength how many byte items to read and encrypt from plaintext
+     */
+    public static void encryptInPlaceCTR(long k1, long k2, long k3, long k4, long nonce,
+                                         ByteBuffer plaintext, int plainOffset, int textLength) {
+        int blocks = textLength + 15 >>> 4, i = 0;
+        long[] kx = expandKey(k1, k2, k3, k4), c = new long[2];
+        long counter = 0L;
+        do {
+            encrypt(kx, nonce, counter++, null, 0, c, 0);
+
+            xorIntoByteBuffer(plaintext, plainOffset, c[0]);
+            xorIntoByteBuffer(plaintext, plainOffset + 8, c[1]);
+
+            plainOffset+=16;
+            i++;
+        } while(i < blocks);
+    }
+
+    /**
+     * Decrypts a coded "ciphertext" ByteBuffer and changes it in-place to a "plaintext" ByteBuffer.
+     * This takes four {@code long}s as its key (256-bits), and also requires one unique (never used again) long as
+     * the nonce. How you generate keys is up to you, but the keys must be kept secret for encryption to stay secure.
+     * To generate nonce, secrecy isn't as important as uniqueness; calling DistinctRandom.nextLong() even many
+     * times will never return the same long unless nonce are requested for years from one generator, so it is a good
+     * option to produce nonce data. The rest of the arguments are about the data being decrypted. The ciphertext is the
+     * ByteBuffer that contains coded data, and should have been encrypted by
+     * {@link #encryptInPlaceCTR(long, long, long, long, long, ByteBuffer, int, int)}. The ciphertext will be modified
+     * in-place to become the plaintext. The cipheroffset is which index to start reading from in ciphertext. Lastly,
+     * the textLength is how many byte items to decrypt from ciphertext; this can be less than ciphertext's length.
+     * <br>
+     * This uses CTR mode, so it takes one nonce instead of how CBC mode takes two IVs. If the IVs/nonce aren't
+     * sufficiently random, CBC mode produces higher-quality outputs than CTR mode. CBC mode may be slightly faster,
+     * though this isn't clear yet. CTR mode doesn't need its ciphertext to have padding. CBC mode requires textLength
+     * to be a multiple of 16 when decrypting (usually guaranteed by padding).
+     * @param k1 a secret long; part of the key
+     * @param k2 a secret long; part of the key
+     * @param k3 a secret long; part of the key
+     * @param k4 a secret long; part of the key
+     * @param nonce a long that was used as nonce to encrypt this specific data
+     * @param ciphertext the ByteBuffer to read encrypted data from; will be modified in-place
+     * @param cipherOffset which index to start reading from and writing to in ciphertext
+     * @param textLength how many byte items to read and decrypt from ciphertext
+     */
+    public static void decryptInPlaceCTR(long k1, long k2, long k3, long k4, long nonce,
+                                  ByteBuffer ciphertext, int cipherOffset, int textLength) {
         encryptInPlaceCTR(k1, k2, k3, k4, nonce, ciphertext, cipherOffset, textLength);
     }
 
