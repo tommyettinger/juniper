@@ -251,18 +251,13 @@ public class ReverseWrapper extends EnhancedRandom {
     }
 
     /**
-     * Returns the next pseudorandom, uniformly distributed {@code long}
-     * value from this random number generator's sequence. The general
+     * Returns the previous pseudorandom, uniformly distributed {@code long}
+     * value from the wrapped random number generator's sequence. The general
      * contract of {@code nextLong} is that one {@code long} value is
      * pseudorandomly generated and returned.
-     * <br>
-     * The only methods that need to be implemented by this interface are
-     * this and {@link #copy()}, though other methods can be implemented
-     * as appropriate for generators that, for instance, natively produce
-     * ints rather than longs.
      *
-     * @return the next pseudorandom, uniformly distributed {@code long}
-     * value from this random number generator's sequence
+     * @return the previous pseudorandom, uniformly distributed {@code long}
+     * value from the wrapped random number generator's sequence
      */
     @Override
     public long nextLong() {
@@ -270,15 +265,42 @@ public class ReverseWrapper extends EnhancedRandom {
     }
 
     /**
+     * Returns the previous pseudorandom, uniformly distributed {@code int}
+     * value from the wrapped random number generator's sequence. The general
+     * contract of {@code nextInt} is that one {@code int} value is
+     * pseudorandomly generated and returned. All 2<sup>32</sup> possible
+     * {@code int} values are produced with (approximately) equal probability.
+     *
+     * @return the previous pseudorandom, uniformly distributed {@code int}
+     * value from the wrapped random number generator's sequence
+     */
+    @Override
+    public int nextInt() {
+        return wrapped.previousInt();
+    }
+
+    /**
      * Delegates to the {@link EnhancedRandom#nextLong()} method of the wrapped generator; this is the
      * counterpart to how {@link #nextLong()} here delegates to the {@link EnhancedRandom#previousLong()}
      * method of the wrapped generator.
      *
-     * @return the previous number this would have produced with {@link #nextLong()}
+     * @return the number that {@code wrapped.nextLong()} would produce
      */
     @Override
     public long previousLong() {
         return wrapped.nextLong();
+    }
+
+    /**
+     * Delegates to the {@link EnhancedRandom#nextInt()} method of the wrapped generator; this is the
+     * counterpart to how {@link #nextInt()} here delegates to the {@link EnhancedRandom#previousInt()} ()}
+     * method of the wrapped generator.
+     *
+     * @return the number that {@code wrapped.nextLong()} would produce
+     */
+    @Override
+    public int previousInt() {
+        return wrapped.nextInt();
     }
 
     /**

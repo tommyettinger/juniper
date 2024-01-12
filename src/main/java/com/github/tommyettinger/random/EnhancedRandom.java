@@ -1007,16 +1007,52 @@ public abstract class EnhancedRandom extends Random {
 
 	/**
 	 * Optional; moves the state to its previous value and returns the previous long that would have been produced by
-	 * {@link #nextLong()}. This is often equivalent to calling {@link #skip(long)} with -1L, but not always; some
+	 * {@link #nextLong()}. This can be equivalent to calling {@link #skip(long)} with -1L, but not always; many
 	 * generators can't efficiently skip long distances, but can step back by one value.
-	 *
-	 * <p>The public implementation calls {@link #skip(long)} with -1L, and if skip() has not been implemented
+	 * <br>
+	 * Generators that natively generate {@code int} results typically produce {@code long} values by generating an int
+	 * for the high 32 bits and an int for the low 32 bits. When producing the previous long, the order the high and low
+	 * bits are generated, such as by {@link #previousInt()}, should be reversed. Generators that natively produce
+	 * {@code long} values usually don't need to implement {@link #previousInt()}, but those that produce {@code int}
+	 * usually should implement it, and may optionally call previousInt() twice in this method.
+	 * <br>
+	 * If you know how to implement the reverse of a particular random number generator, it is recommended you do so
+	 * here, rather than rely on skip(). This isn't always easy, but should always be possible for any decent PRNG (some
+	 * historical PRNGs, such as the Middle-Square PRNG, cannot be reversed at all). If a generator cannot be reversed
+	 * because multiple initial states can transition to the same subsequent state, it is known to have statistical
+	 * problems that are not necessarily present in a generator that matches one initial state to one subsequent state.
+	 * <br>
+	 * The public implementation calls {@link #skip(long)} with -1L, and if skip() has not been implemented
 	 * differently, then it will throw an UnsupportedOperationException.
 	 *
 	 * @return the previous number this would have produced with {@link #nextLong()}
 	 */
 	public long previousLong () {
 		return skip(-1L);
+	}
+
+	/**
+	 * Optional; moves the state to its previous value and returns the previous int that would have been produced by
+	 * {@link #nextInt()}. This can be equivalent to calling {@link #previousLong()} and casting to int, but not always;
+	 * generators that natively generate {@code int} results typically move the state once in nextInt() and twice in
+	 * nextLong(), and should move the state back once here.
+	 * <br>
+	 * If {@link #nextInt()} is implemented using a call to {@link #nextLong()}, the implementation in this class is
+	 * almost always sufficient and correct. If nextInt() changes state differently from nextLong(), then this should be
+	 * implemented, if feasible, and {@link #previousLong()} can be implemented using this method.
+	 * If you know how to implement the reverse of a particular random number generator, it is recommended you do so
+	 * here, rather than rely on skip(). This isn't always easy, but should always be possible for any decent PRNG (some
+	 * historical PRNGs, such as the Middle-Square PRNG, cannot be reversed at all). If a generator cannot be reversed
+	 * because multiple initial states can transition to the same subsequent state, it is known to have statistical
+	 * problems that are not necessarily present in a generator that matches one initial state to one subsequent state.
+	 * <br>
+	 * The public implementation calls {@link #previousLong()} and casts it to int, and if previousLong() and skip()
+	 * have not been implemented differently, then it will throw an UnsupportedOperationException.
+	 *
+	 * @return the previous number this would have produced with {@link #nextInt()}
+	 */
+	public int previousInt () {
+		return (int)previousLong();
 	}
 
 	/**
