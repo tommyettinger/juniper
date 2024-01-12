@@ -21,10 +21,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -58,6 +55,7 @@ public class CipherTest extends ApplicationAdapter {
         image = new Pixmap(Gdx.files.internal("Cat_BW.png"));
         buffer = image.getPixels();
         SpeckCipher.encryptInPlaceCTR(k1, k2, k3, k4, latestNonce = nonsense.nextLong(), buffer, 0, buffer.limit());
+        PixmapIO.writePNG(Gdx.files.local("Scrambled.png"), image, 2, false);
         texture = new Texture(image);
 
         InputAdapter input = new InputAdapter() {
@@ -68,6 +66,12 @@ public class CipherTest extends ApplicationAdapter {
                     case P: // pause
                         keepGoing = !keepGoing;
                         break;
+                    case R:
+                        image.dispose();
+                        image = new Pixmap(Gdx.files.local("Scrambled.png"));
+                        buffer = image.getPixels();
+                        texture.draw(image, 0, 0);
+                        break;
                     case D:
                         SpeckCipher.decryptInPlaceCTR(k1, k2, k3, k4, latestNonce, buffer, 0, buffer.limit());
                         texture.draw(image, 0, 0);
@@ -75,6 +79,7 @@ public class CipherTest extends ApplicationAdapter {
                     case E:
                     case ENTER:
                         SpeckCipher.encryptInPlaceCTR(k1, k2, k3, k4, latestNonce = nonsense.nextLong(), buffer, 0, buffer.limit());
+                        PixmapIO.writePNG(Gdx.files.local("Scrambled.png"), image, 2, false);
                         texture.draw(image, 0, 0);
                         break;
                     case Q: // quit
@@ -106,7 +111,7 @@ public class CipherTest extends ApplicationAdapter {
 
     public static void main(String[] arg) {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-        config.setTitle("Juniper Correlation Analysis");
+        config.setTitle("Speck Cipher on a Pixmap");
         config.setWindowedMode(width, height);
         config.useVsync(false);
         config.setForegroundFPS(10);
