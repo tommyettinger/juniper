@@ -261,14 +261,14 @@ public class Jsf32Random extends EnhancedRandom {
 	public long nextLong () {
 		int e = stateA - (stateB << 27 | stateB >>> 5);
 		stateA = stateB ^ (stateC << 17 | stateC >>> 15);
-		stateB = stateC + stateD;
-		stateC = stateD + e;
-		final int h = stateD = e + stateA;
+		stateB = stateC + stateD | 0;
+		stateC = stateD + e | 0;
+		final int h = stateD = e + stateA | 0;
 		e = stateA - (stateB << 27 | stateB >>> 5);
 		stateA = stateB ^ (stateC << 17 | stateC >>> 15);
-		stateB = stateC + stateD;
-		stateC = stateD + e;
-		final int l = stateD = e + stateA;
+		stateB = stateC + stateD | 0;
+		stateC = stateD + e | 0;
+		final int l = stateD = e + stateA | 0;
 		return (long) h << 32 | (l & 0xFFFFFFFFL);
 	}
 
@@ -276,15 +276,15 @@ public class Jsf32Random extends EnhancedRandom {
 	public long previousLong () {
 		final int l = stateD;
 		int e = stateD - stateA;
-		final int h = stateD = stateC - e;
-		stateC = stateB - stateD;
+		final int h = stateD = stateC - e | 0;
+		stateC = stateB - stateD | 0;
 		stateB = stateA ^ (stateC << 17 | stateC >>> 15);
-		stateA = e + (stateB << 27 | stateB >>> 5);
+		stateA = e + (stateB << 27 | stateB >>> 5) | 0;
 		e = stateD - stateA;
-		stateD = stateC - e;
-		stateC = stateB - stateD;
+		stateD = stateC - e | 0;
+		stateC = stateB - stateD | 0;
 		stateB = stateA ^ (stateC << 17 | stateC >>> 15);
-		stateA = e + (stateB << 27 | stateB >>> 5);
+		stateA = e + (stateB << 27 | stateB >>> 5) | 0;
 		return (long) h << 32 | (l & 0xFFFFFFFFL);
 	}
 
@@ -292,10 +292,10 @@ public class Jsf32Random extends EnhancedRandom {
 	public int previousInt () {
 		final int l = stateD;
 		final int e = stateD - stateA;
-		stateD = stateC - e;
-		stateC = stateB - stateD;
+		stateD = stateC - e | 0;
+		stateC = stateB - stateD | 0;
 		stateB = stateA ^ (stateC << 17 | stateC >>> 15);
-		stateA = e + (stateB << 27 | stateB >>> 5);
+		stateA = e + (stateB << 27 | stateB >>> 5) | 0;
 		return l;
 	}
 
@@ -303,18 +303,18 @@ public class Jsf32Random extends EnhancedRandom {
 	public int next (int bits) {
 		final int e = stateA - (stateB << 27 | stateB >>> 5);
 		stateA = stateB ^ (stateC << 17 | stateC >>> 15);
-		stateB = stateC + stateD;
-		stateC = stateD + e;
-		return (stateD = e + stateA) >>> (32 - bits);
+		stateB = stateC + stateD | 0;
+		stateC = stateD + e | 0;
+		return (stateD = e + stateA | 0) >>> (32 - bits);
 	}
 
 	@Override
 	public int nextInt () {
 		final int e = stateA - (stateB << 27 | stateB >>> 5);
 		stateA = stateB ^ (stateC << 17 | stateC >>> 15);
-		stateB = stateC + stateD;
-		stateC = stateD + e;
-		return stateD = e + stateA;
+		stateB = stateC + stateD | 0;
+		stateC = stateD + e | 0;
+		return stateD = e + stateA | 0;
 	}
 
 	@Override
@@ -397,33 +397,4 @@ public class Jsf32Random extends EnhancedRandom {
 	public String toString () {
 		return "Jsf32Random{" + "stateA=" + (stateA) + ", stateB=" + (stateB) + ", stateC=" + (stateC) + ", stateD=" + (stateD) + "}";
 	}
-
-//	public static void main(String[] args) {
-//		Jsf32Random random = new Jsf32Random(1L);
-//		long n0 = random.nextLong();
-//		long n1 = random.nextLong();
-//		long n2 = random.nextLong();
-//		long n3 = random.nextLong();
-//		long n4 = random.nextLong();
-//		long n5 = random.nextLong();
-//		long p5 = random.previousLong();
-//		long p4 = random.previousLong();
-//		long p3 = random.previousLong();
-//		long p2 = random.previousLong();
-//		long p1 = random.previousLong();
-//		long p0 = random.previousLong();
-//		System.out.println(n0 == p0);
-//		System.out.println(n1 == p1);
-//		System.out.println(n2 == p2);
-//		System.out.println(n3 == p3);
-//		System.out.println(n4 == p4);
-//		System.out.println(n5 == p5);
-//		System.out.println(n0 + " vs. " + p0);
-//		System.out.println(n1 + " vs. " + p1);
-//		System.out.println(n2 + " vs. " + p2);
-//		System.out.println(n3 + " vs. " + p3);
-//		System.out.println(n4 + " vs. " + p4);
-//		System.out.println(n5 + " vs. " + p5);
-//	}
-
 }
