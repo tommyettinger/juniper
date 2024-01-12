@@ -296,8 +296,24 @@ public class Xoshiro128PlusPlusRandom extends EnhancedRandom {
 		pd = (pd << 7 | pd >>> 25) + pa;
 		pb = pc - pb;
 		pb = (pb << 13 | pb >>> 19) + pc;
-		return (long) pd << 32 ^ (pb & 0xFFFFFFFFL);
+		return (long) pd << 32 | (pb & 0xFFFFFFFFL);
+	}
 
+	@Override
+	public int previousInt () {
+		stateD = (stateD << 21 | stateD >>> 11); // stateD has d ^ b
+		int pa = stateA ^= stateD; // StateA has a
+		stateC ^= stateB; // StateC has b ^ b << 9
+		stateC ^= stateC << 9;
+		stateC ^= stateC << 18; // StateC has b
+		stateB ^= stateA; // StateB has b ^ c
+		stateC ^= stateB;// StateC has c
+		stateB ^= stateC;// StateB has b
+		int pd = stateD ^= stateB; // StateD has d
+
+		pd = pa + pd;
+		pd = (pd << 7 | pd >>> 25) + pa;
+		return pd;
 	}
 
 	@Override
