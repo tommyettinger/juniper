@@ -327,6 +327,7 @@ public class Respite32Random extends EnhancedRandom {
 		return a;
 	}
 
+	@Override
 	public int previousInt() {
 		int a = stateA;
 		int b = stateB;

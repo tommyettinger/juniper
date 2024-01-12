@@ -252,6 +252,7 @@ public class Respite32Random extends EnhancedRandom {
 		return a;
 	}-*/;
 
+	@Override
 	public native int previousInt() /*-{
 		var a = this.@com.github.tommyettinger.random.Respite32Random::stateA;
 		var b = this.@com.github.tommyettinger.random.Respite32Random::stateB;

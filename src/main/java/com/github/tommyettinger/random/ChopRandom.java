@@ -315,6 +315,18 @@ public class ChopRandom extends EnhancedRandom {
 	}
 
 	@Override
+	public int previousInt() {
+		final int ga = stateA;
+		final int gb = stateB;
+		final int gc = stateC;
+		stateC = (gb >>> 11 | gb << 21) ^ (stateD -= 0xADB5B165);
+		stateB = (ga >>> 26 | ga << 6) ^ stateC;
+		stateA = gc ^ stateB + stateC;
+
+		return stateC;
+	}
+
+	@Override
 	public int next (int bits) {
 		final int fa = stateA;
 		final int fb = stateB;
