@@ -263,20 +263,20 @@ public class Jsf32Random extends EnhancedRandom {
 		stateA = stateB ^ (stateC << 17 | stateC >>> 15);
 		stateB = stateC + stateD;
 		stateC = stateD + e;
-		int h = stateD = e + stateA;
+		final int h = stateD = e + stateA;
 		e = stateA - (stateB << 27 | stateB >>> 5);
 		stateA = stateB ^ (stateC << 17 | stateC >>> 15);
 		stateB = stateC + stateD;
 		stateC = stateD + e;
-		int l = stateD = e + stateA;
+		final int l = stateD = e + stateA;
 		return (long) h << 32 ^ (l & 0xFFFFFFFFL);
 	}
 
 	@Override
 	public long previousLong () {
-		int l = stateD;
+		final int l = stateD;
 		int e = stateD - stateA;
-		int h = stateD = stateC - e;
+		final int h = stateD = stateC - e;
 		stateC = stateB - stateD;
 		stateB = stateA ^ (stateC << 17 | stateC >>> 15);
 		stateA = e + (stateB << 27 | stateB >>> 5);
@@ -289,8 +289,19 @@ public class Jsf32Random extends EnhancedRandom {
 	}
 
 	@Override
+	public int previousInt () {
+		final int l = stateD;
+		final int e = stateD - stateA;
+		stateD = stateC - e;
+		stateC = stateB - stateD;
+		stateB = stateA ^ (stateC << 17 | stateC >>> 15);
+		stateA = e + (stateB << 27 | stateB >>> 5);
+		return l;
+	}
+
+	@Override
 	public int next (int bits) {
-		int e = stateA - (stateB << 27 | stateB >>> 5);
+		final int e = stateA - (stateB << 27 | stateB >>> 5);
 		stateA = stateB ^ (stateC << 17 | stateC >>> 15);
 		stateB = stateC + stateD;
 		stateC = stateD + e;
@@ -299,7 +310,7 @@ public class Jsf32Random extends EnhancedRandom {
 
 	@Override
 	public int nextInt () {
-		int e = stateA - (stateB << 27 | stateB >>> 5);
+		final int e = stateA - (stateB << 27 | stateB >>> 5);
 		stateA = stateB ^ (stateC << 17 | stateC >>> 15);
 		stateB = stateC + stateD;
 		stateC = stateD + e;
