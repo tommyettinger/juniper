@@ -107,16 +107,6 @@ public class SpeckEncryptedFileHandle extends FileHandle {
 	@Override
 	public OutputStream write(boolean append) {
 		throw new UnsupportedOperationException("SpeckEncryptedFileHandle cannot be used to obtain an OutputStream.");
-//		if (file.type() == Files.FileType.Classpath) throw new GdxRuntimeException("Cannot write to a classpath file: " + file.file());
-//		if (file.type() == Files.FileType.Internal) throw new GdxRuntimeException("Cannot write to an internal file: " + file.file());
-//		file.parent().mkdirs();
-//		try {
-//			return new FileOutputStream(file.file(), append);
-//		} catch (Exception ex) {
-//			if (file.file().isDirectory())
-//				throw new GdxRuntimeException("Cannot open a stream to a directory: " + file.file() + " (" + file.type() + ")", ex);
-//			throw new GdxRuntimeException("Error writing file: " + file.file() + " (" + file.type() + ")", ex);
-//		}
 	}
 
 	@Override
@@ -126,12 +116,12 @@ public class SpeckEncryptedFileHandle extends FileHandle {
 
 	@Override
 	public void writeBytes(byte[] bytes, boolean append) {
-		file.writeBytes(SpeckCipher.encryptInPlaceCTR(k1, k2, k3, k4, n0, bytes, 0, bytes.length), append);
+		file.writeBytes(SpeckCipher.encryptCTR(k1, k2, k3, k4, n0, bytes, 0, new byte[bytes.length], 0, bytes.length), append);
 	}
 
 	@Override
 	public void writeBytes(byte[] bytes, int offset, int length, boolean append) {
-		file.writeBytes(SpeckCipher.encryptInPlaceCTR(k1, k2, k3, k4, n0, bytes, offset, length), offset, length, append);
+		file.writeBytes(SpeckCipher.encryptCTR(k1, k2, k3, k4, n0, bytes, offset, new byte[length], 0, length), 0, length, append);
 	}
 
 	@Override
@@ -236,14 +226,16 @@ public class SpeckEncryptedFileHandle extends FileHandle {
 
 	@Override
 	public void writeString(String string, boolean append) {
-		writeBytes(string.getBytes(), append);
+		final byte[] bytes = string.getBytes();
+		file.writeBytes(SpeckCipher.encryptInPlaceCTR(k1, k2, k3, k4, n0, bytes, 0, bytes.length), append);
 	}
 
 	@Override
 	public void writeString(String string, boolean append, String charset) {
         try {
-            writeBytes(string.getBytes(charset), append);
-        } catch (UnsupportedEncodingException e) {
+			final byte[] bytes = string.getBytes(charset);
+			file.writeBytes(SpeckCipher.encryptInPlaceCTR(k1, k2, k3, k4, n0, bytes, 0, bytes.length), append);
+		} catch (UnsupportedEncodingException e) {
 			throw new GdxRuntimeException("Error (incorrect encoding) writing file " + file);
         }
     }
