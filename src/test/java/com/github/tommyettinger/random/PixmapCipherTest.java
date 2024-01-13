@@ -32,7 +32,7 @@ import java.nio.ByteBuffer;
 
 import static com.badlogic.gdx.Input.Keys.*;
 
-public class CipherTest extends ApplicationAdapter {
+public class PixmapCipherTest extends ApplicationAdapter {
     public static String title = "";
     private static final int width = 459, height = 816;
 
@@ -116,6 +116,6 @@ public class CipherTest extends ApplicationAdapter {
         config.useVsync(false);
         config.setForegroundFPS(10);
         config.setResizable(false);
-        new Lwjgl3Application(new CipherTest(), config);
+        new Lwjgl3Application(new PixmapCipherTest(), config);
     }
 }

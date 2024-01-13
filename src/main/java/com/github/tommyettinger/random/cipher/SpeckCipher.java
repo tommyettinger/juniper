@@ -743,7 +743,7 @@ public final class SpeckCipher {
      * @param plainOffset which index to start reading from and writing to in plaintext
      * @param textLength how many byte items to read and encrypt from plaintext
      */
-    public static void encryptInPlaceCTR(long k1, long k2, long k3, long k4, long nonce,
+    public static byte[] encryptInPlaceCTR(long k1, long k2, long k3, long k4, long nonce,
                                   byte[] plaintext, int plainOffset, int textLength) {
         int blocks = textLength + 15 >>> 4, i = 0;
         long[] kx = expandKey(k1, k2, k3, k4), c = new long[2];
@@ -757,6 +757,7 @@ public final class SpeckCipher {
             plainOffset+=16;
             i++;
         } while(i < blocks);
+        return plaintext; // now it is encrypted
     }
 
     /**
@@ -784,9 +785,9 @@ public final class SpeckCipher {
      * @param cipherOffset which index to start reading from and writing to in ciphertext
      * @param textLength how many byte items to read and decrypt from ciphertext
      */
-    public static void decryptInPlaceCTR(long k1, long k2, long k3, long k4, long nonce,
+    public static byte[] decryptInPlaceCTR(long k1, long k2, long k3, long k4, long nonce,
                                   byte[] ciphertext, int cipherOffset, int textLength) {
-        encryptInPlaceCTR(k1, k2, k3, k4, nonce, ciphertext, cipherOffset, textLength);
+        return encryptInPlaceCTR(k1, k2, k3, k4, nonce, ciphertext, cipherOffset, textLength);
     }
 
 
