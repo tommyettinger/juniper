@@ -6,7 +6,16 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.github.tommyettinger.digital.Hasher;
 import com.github.tommyettinger.random.cipher.SpeckCipher;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Reader;
+import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 
 /**
  * A basic way to encrypt a {@link FileHandle} using {@link SpeckCipher}. The supported operations are mostly limited to
@@ -17,6 +26,9 @@ import java.io.*;
  * {@link #writeString(String, boolean, String)} and {@link #readString(String)} to read and write Strings, but you must
  * be careful to avoid version control (such as Git) changing line endings in encrypted text files. For those, using a
  * file extension like {@code .dat} is a good idea to avoid your data being sometime changed irreversibly.
+ * <br>
+ * You may want to use this class to encrypt or decrypt files on platforms that don't have the javax.crypto package.
+ * That is probably the most valid usage of the class at this point.
  * <br>
  * This uses four {@code long} items as its key, and additionally generates one long nonce from the key and the relative
  * path of the given FileHandle. Don't expect much meaningful security out of this, but this is enough to prevent the
@@ -31,13 +43,45 @@ public class SpeckEncryptedFileHandle extends FileHandle {
 	private final FileHandle file;
 	private final long k1, k2, k3, k4, n0;
 
+	/**
+	 * Creates a SpeckEncryptedFileHandle that can write encrypted data to the wrapped FileHandle or read and decrypt
+	 * encrypted data from the wrapped FileHandle. The four-part key and the FileHandle's {@link FileHandle#path()}
+	 * must all be the same between encryption and decryption for them to refer to the same unencrypted file. This
+	 * overload is meant to be used when the path will be the same for reading and writing. If the path may be
+	 * different, use {@link #SpeckEncryptedFileHandle(FileHandle, long, long, long, long, String)} with either only
+	 * the first path or some other source of a unique String.
+	 *
+	 * @param file the FileHandle to wrap; may be any type, such as {@link Files.FileType#Internal}
+	 * @param k1 part 1 of the key; may be any long
+	 * @param k2 part 2 of the key; may be any long
+	 * @param k3 part 3 of the key; may be any long
+	 * @param k4 part 4 of the key; may be any long
+	 */
 	public SpeckEncryptedFileHandle(FileHandle file, long k1, long k2, long k3, long k4) {
+		this(file, k1, k2, k3, k4, file.path());
+	}
+
+	/**
+	 * Creates a SpeckEncryptedFileHandle that can write encrypted data to the wrapped FileHandle or read and decrypt
+	 * encrypted data from the wrapped FileHandle. The four-part key and the {@code unique} String must all be the same
+	 * between encryption and decryption for them to refer to the same unencrypted file. This overload is meant to be
+	 * used when reading and writing to different paths; the unique String should be generated from only one of the
+	 * paths, if you generate it from a path at all.
+	 *
+	 * @param file the FileHandle to wrap; may be any type, such as {@link Files.FileType#Internal}
+	 * @param k1 part 1 of the key; may be any long
+	 * @param k2 part 2 of the key; may be any long
+	 * @param k3 part 3 of the key; may be any long
+	 * @param k4 part 4 of the key; may be any long
+	 * @param unique any String that is likely to be unique for a given key, such as the path to the wrapped file
+	 */
+	public SpeckEncryptedFileHandle(FileHandle file, long k1, long k2, long k3, long k4, String unique) {
 		this.file = file;
 		this.k1 = k1;
 		this.k2 = k2;
 		this.k3 = k3;
 		this.k4 = k4;
-		n0 = k1 + k2 ^ k3 - (k4 ^ Hasher.hash64(k1 ^ k2 ^ k3 ^ k4, file.path()));
+		n0 = k1 + k2 ^ k3 - (k4 ^ Hasher.hash64(k1 ^ k2 ^ k3 ^ k4, unique));
 	}
 
 	public int readBytes(byte[] bytes, int offset, int size) {
