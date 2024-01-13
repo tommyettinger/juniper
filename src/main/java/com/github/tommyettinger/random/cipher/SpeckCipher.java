@@ -265,6 +265,48 @@ public final class SpeckCipher {
     }
 
     /**
+     * A usually-internal encryption step. You should use either CBC or CTR mode to actually encrypt a piece of
+     * plaintext, with {@link #encryptCBC(long, long, long, long, long, long, byte[], int, byte[], int, int)}  or
+     * {@link #encryptCTR(long, long, long, long, long, byte[], int, byte[], int, int)}.
+     * @param key an expanded key, as produced by {@link #expandKey(long, long, long, long)}
+     * @param iv0 the first IV
+     * @param iv1 the second IV
+     * @param plaintext the plaintext array, as byte items; will be modified
+     * @param plainOffset the index to start writing to (with XOR) in plaintext
+     */
+    public static void encryptWithXor(long[] key, long iv0, long iv1, byte[] plaintext, int plainOffset) {
+        long b0 = iv0, b1 = iv1;
+
+        for (int i = 0; i < 34; i++) {
+            b1 = (b1 << 56 | b1 >>> 8) + b0 ^ key[i];
+            b0 = (b0 << 3 | b0 >>> 61) ^ b1;
+        }
+        xorIntoBytes(plaintext, plainOffset, b1);
+        xorIntoBytes(plaintext, plainOffset + 8, b0);
+    }
+
+    /**
+     * A usually-internal encryption step. You should use either CBC or CTR mode to actually encrypt a piece of
+     * plaintext, with {@link #encryptCBC(long, long, long, long, long, long, byte[], int, byte[], int, int)}  or
+     * {@link #encryptCTR(long, long, long, long, long, byte[], int, byte[], int, int)}.
+     * @param key an expanded key, as produced by {@link #expandKey(long, long, long, long)}
+     * @param iv0 the first IV
+     * @param iv1 the second IV
+     * @param plaintext the plaintext array, as byte items; will be modified
+     * @param plainOffset the index to start writing to (with XOR) in plaintext
+     */
+    public static void encryptWithXor(long[] key, long iv0, long iv1, ByteBuffer plaintext, int plainOffset) {
+        long b0 = iv0, b1 = iv1;
+
+        for (int i = 0; i < 34; i++) {
+            b1 = (b1 << 56 | b1 >>> 8) + b0 ^ key[i];
+            b0 = (b0 << 3 | b0 >>> 61) ^ b1;
+        }
+        xorIntoByteBuffer(plaintext, plainOffset, b1);
+        xorIntoByteBuffer(plaintext, plainOffset + 8, b0);
+    }
+
+    /**
      * A usually-internal decryption step. You should use either CBC or CTR mode to actually decrypt a piece of
      * plaintext, with {@link #decryptCBC(long, long, long, long, long, long, long[], int, long[], int, int)} or
      * {@link #decryptCTR(long, long, long, long, long, long[], int, long[], int, int)}.
@@ -765,13 +807,10 @@ public final class SpeckCipher {
     public static byte[] encryptInPlaceCTR(long k1, long k2, long k3, long k4, long nonce,
                                   byte[] plaintext, int plainOffset, int textLength) {
         int blocks = textLength + 15 >>> 4, i = 0;
-        long[] kx = expandKey(k1, k2, k3, k4), c = new long[2];
+        long[] kx = expandKey(k1, k2, k3, k4);
         long counter = 0L;
         do {
-            encrypt(kx, nonce, counter++, null, 0, c, 0);
-
-            xorIntoBytes(plaintext, plainOffset, c[0]);
-            xorIntoBytes(plaintext, plainOffset + 8, c[1]);
+            encryptWithXor(kx, nonce, counter++, plaintext, plainOffset);
 
             plainOffset+=16;
             i++;
@@ -837,13 +876,10 @@ public final class SpeckCipher {
     public static ByteBuffer encryptInPlaceCTR(long k1, long k2, long k3, long k4, long nonce,
                                          ByteBuffer plaintext, int plainOffset, int textLength) {
         int blocks = textLength + 15 >>> 4, i = 0;
-        long[] kx = expandKey(k1, k2, k3, k4), c = new long[2];
+        long[] kx = expandKey(k1, k2, k3, k4);
         long counter = 0L;
         do {
-            encrypt(kx, nonce, counter++, null, 0, c, 0);
-
-            xorIntoByteBuffer(plaintext, plainOffset, c[0]);
-            xorIntoByteBuffer(plaintext, plainOffset + 8, c[1]);
+            encryptWithXor(kx, nonce, counter++, plaintext, plainOffset);
 
             plainOffset+=16;
             i++;
