@@ -84,6 +84,14 @@ public final class SpeckCipher {
         }
     }
 
+    private static void xorBytePairs(byte[] into, int indexInto, byte[] with, int indexWith, int length) {
+        for (int x = 0, n = Math.min(length, Math.min(into.length - indexInto, with.length - indexWith));
+             x < n;
+             x++, indexInto++, indexWith++) {
+            into[indexInto] ^= with[indexWith];
+        }
+    }
+
     private static void xorIntoByteBuffer(ByteBuffer bytes, int index, long data) {
         switch (bytes.limit() - index) {
             default:
@@ -569,11 +577,12 @@ public final class SpeckCipher {
         do {
             encrypt(kx, nonce, counter++, null, 0, ciphertext, cipherOffset);
 
-            xorIntoBytes(ciphertext, cipherOffset, fromBytes(plaintext, plainOffset));
-            xorIntoBytes(ciphertext, cipherOffset + 8, fromBytes(plaintext, plainOffset + 8));
+            for (int x = 0, n = Math.min(16, Math.min(ciphertext.length - cipherOffset, plaintext.length - plainOffset));
+                 x < n;
+                 x++, cipherOffset++, plainOffset++) {
+                ciphertext[cipherOffset] ^= plaintext[plainOffset];
+            }
 
-            plainOffset+=16;
-            cipherOffset+=16;
             i++;
         } while(i < blocks);
         return ciphertext;
@@ -616,11 +625,12 @@ public final class SpeckCipher {
         do {
             encrypt(kx, nonce, nonce2 ^ (counter += 0x100000000L), null, 0, ciphertext, cipherOffset);
 
-            xorIntoBytes(ciphertext, cipherOffset, fromBytes(plaintext, plainOffset));
-            xorIntoBytes(ciphertext, cipherOffset + 8, fromBytes(plaintext, plainOffset + 8));
+            for (int x = 0, n = Math.min(16, Math.min(ciphertext.length - cipherOffset, plaintext.length - plainOffset));
+                 x < n;
+                 x++, cipherOffset++, plainOffset++) {
+                ciphertext[cipherOffset] ^= plaintext[plainOffset];
+            }
 
-            plainOffset+=16;
-            cipherOffset+=16;
             i++;
         } while(i < blocks);
         return ciphertext;
