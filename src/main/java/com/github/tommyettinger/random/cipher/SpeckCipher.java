@@ -163,31 +163,31 @@ public final class SpeckCipher {
      * @return a 34-item long array that should, of course, be kept secret to be used cryptographically
      */
     public static long[] expandKey(long k1, long k2, long k3, long k4) {
-        long item;
-        long[] k = new long[34], tk = new long[]{k4, k3, k2, k1};
+        long item, tk0 = k4, tk1 = k3, tk2 = k2, tk3 = k1;
+        long[] k = new long[34];
         k[0] = k4;
         // corresponds to 34 rounds
         for (int i = 0, c = 0; i < 11; i++) {
-            item = tk[1];
-            tk[1] = (item << 56 | item >>> 8) + tk[0] ^ c;
-            item = tk[0];
-            tk[0] = (item << 3 | item >>> 61) ^ tk[1];
+            item = tk1;
+            tk1 = (item << 56 | item >>> 8) + tk0 ^ c;
+            item = tk0;
+            tk0 = (item << 3 | item >>> 61) ^ tk1;
             ++c;
-            k[c] = tk[0];
+            k[c] = tk0;
 
-            item = tk[2];
-            tk[2] = (item << 56 | item >>> 8) + tk[0] ^ c;
-            item = tk[0];
-            tk[0] = (item << 3 | item >>> 61) ^ tk[2];
+            item = tk2;
+            tk2 = (item << 56 | item >>> 8) + tk0 ^ c;
+            item = tk0;
+            tk0 = (item << 3 | item >>> 61) ^ tk2;
             ++c;
-            k[c] = tk[0];
+            k[c] = tk0;
 
-            item = tk[3];
-            tk[3] = (item << 56 | item >>> 8) + tk[0] ^ c;
-            item = tk[0];
-            tk[0] = (item << 3 | item >>> 61) ^ tk[3];
+            item = tk3;
+            tk3 = (item << 56 | item >>> 8) + tk0 ^ c;
+            item = tk0;
+            tk0 = (item << 3 | item >>> 61) ^ tk3;
             ++c;
-            k[c] = tk[0];
+            k[c] = tk0;
         }
         return k;
     }
@@ -523,7 +523,7 @@ public final class SpeckCipher {
         long counter = 0L;
         do {
             encrypt(kx, nonce, counter++, null, 0, ciphertext, cipherOffset);
-            ciphertext[cipherOffset]   ^= plaintext[plainOffset]  ;
+            ciphertext[cipherOffset] ^= plaintext[plainOffset]  ;
             if(plainOffset + 1 < plaintext.length && cipherOffset + 1 < ciphertext.length)
                 ciphertext[cipherOffset+1] ^= plaintext[plainOffset+1];
             plainOffset+=2;
