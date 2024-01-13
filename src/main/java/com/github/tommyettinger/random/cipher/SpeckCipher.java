@@ -171,29 +171,23 @@ public final class SpeckCipher {
      * @return a 34-item long array that should, of course, be kept secret to be used cryptographically
      */
     public static long[] expandKey(long k1, long k2, long k3, long k4) {
-        long item, tk0 = k4, tk1 = k3, tk2 = k2, tk3 = k1;
+        long tk0 = k4, tk1 = k3, tk2 = k2, tk3 = k1;
         long[] k = new long[34];
         k[0] = k4;
         // corresponds to 34 rounds
         for (int i = 0, c = 0; i < 11; i++) {
-            item = tk1;
-            tk1 = (item << 56 | item >>> 8) + tk0 ^ c;
-            item = tk0;
-            tk0 = (item << 3 | item >>> 61) ^ tk1;
+            tk1 = (tk1 << 56 | tk1 >>> 8) + tk0 ^ c;
+            tk0 = (tk0 << 3 | tk0 >>> 61) ^ tk1;
             ++c;
             k[c] = tk0;
 
-            item = tk2;
-            tk2 = (item << 56 | item >>> 8) + tk0 ^ c;
-            item = tk0;
-            tk0 = (item << 3 | item >>> 61) ^ tk2;
+            tk2 = (tk2 << 56 | tk2 >>> 8) + tk0 ^ c;
+            tk0 = (tk0 << 3 | tk0 >>> 61) ^ tk2;
             ++c;
             k[c] = tk0;
 
-            item = tk3;
-            tk3 = (item << 56 | item >>> 8) + tk0 ^ c;
-            item = tk0;
-            tk0 = (item << 3 | item >>> 61) ^ tk3;
+            tk3 = (tk3 << 56 | tk3 >>> 8) + tk0 ^ c;
+            tk0 = (tk0 << 3 | tk0 >>> 61) ^ tk3;
             ++c;
             k[c] = tk0;
         }
@@ -382,8 +376,9 @@ public final class SpeckCipher {
      * @param ciphertext the long array to write encrypted data to; will be modified, and should be padded
      * @param cipherOffset which index to start writing to in ciphertext
      * @param textLength how many long items to read and encrypt from plaintext
+     * @return ciphertext, after modifications
      */
-    public static void encryptCBC(long k1, long k2, long k3, long k4, long iv1, long iv2,
+    public static long[] encryptCBC(long k1, long k2, long k3, long k4, long iv1, long iv2,
                            long[] plaintext, int plainOffset, long[] ciphertext, int cipherOffset, int textLength) {
         int blocks = textLength + 1 >>> 1, i = 0;
         long[] kx = expandKey(k1, k2, k3, k4);
@@ -396,6 +391,7 @@ public final class SpeckCipher {
             cipherOffset+=2;
             i++;
         } while(i < blocks);
+        return ciphertext;
     }
 
     /**
@@ -425,8 +421,9 @@ public final class SpeckCipher {
      * @param ciphertext the byte array to write encrypted data to; will be modified, and should be padded
      * @param cipherOffset which index to start writing to in ciphertext
      * @param textLength how many byte items to read and encrypt from plaintext
+     * @return ciphertext, after modifications
      */
-    public static void encryptCBC(long k1, long k2, long k3, long k4, long iv1, long iv2,
+    public static byte[] encryptCBC(long k1, long k2, long k3, long k4, long iv1, long iv2,
                            byte[] plaintext, int plainOffset, byte[] ciphertext, int cipherOffset, int textLength) {
         int blocks = textLength + 15 >>> 4, i = 0;
         long[] kx = expandKey(k1, k2, k3, k4);
@@ -440,6 +437,7 @@ public final class SpeckCipher {
             cipherOffset+=16;
             i++;
         } while(i < blocks);
+        return ciphertext;
     }
 
     /**
@@ -472,8 +470,9 @@ public final class SpeckCipher {
      * @param ciphertext the long array to read coded data from
      * @param cipherOffset which index to start reading from in ciphertext
      * @param textLength how many long items to read from ciphertext
+     * @return plaintext, after modifications
      */
-    public static void decryptCBC(long k1, long k2, long k3, long k4, long iv1, long iv2,
+    public static long[] decryptCBC(long k1, long k2, long k3, long k4, long iv1, long iv2,
                            long[] plaintext, int plainOffset, long[] ciphertext, int cipherOffset, int textLength) {
         int blocks = textLength + 1 >>> 1, i = 0;
         long[] kx = expandKey(k1, k2, k3, k4);
@@ -489,6 +488,7 @@ public final class SpeckCipher {
             cipherOffset += 2;
             i++;
         } while (i < blocks);
+        return plaintext;
     }
 
     /**
@@ -519,8 +519,9 @@ public final class SpeckCipher {
      * @param ciphertext the byte array to read coded data from
      * @param cipherOffset which index to start reading from in ciphertext
      * @param textLength how many byte items to read from ciphertext
+     * @return plaintext, after modifications
      */
-    public static void decryptCBC(long k1, long k2, long k3, long k4, long iv1, long iv2,
+    public static byte[] decryptCBC(long k1, long k2, long k3, long k4, long iv1, long iv2,
                                   byte[] plaintext, int plainOffset, byte[] ciphertext, int cipherOffset, int textLength) {
         if((textLength & 15) != 0) throw new UnsupportedOperationException("textLength must be a multiple of 16");
         int blocks = textLength + 15 >>> 4, i = 0;
@@ -536,6 +537,7 @@ public final class SpeckCipher {
             cipherOffset += 16;
             i++;
         } while (i < blocks);
+        return plaintext;
     }
 
     /**
