@@ -229,6 +229,7 @@ public final class SpeckCipher {
         if(cipherOffset + 1 < ciphertext.length)
             ciphertext[cipherOffset + 1] = b0;
     }
+
     /**
      * A usually-internal encryption step. You should use either CBC or CTR mode to actually encrypt a piece of
      * plaintext, with {@link #encryptCBC(long, long, long, long, long, long, byte[], int, byte[], int, int)}  or
