@@ -24,7 +24,6 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.utils.UIUtils;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -71,7 +70,7 @@ public class LineGraphDemo extends ApplicationAdapter {
                 return (Hasher.randomize3(i) * (1f - s) + Hasher.randomize3(1L + i) * s) * 0x1p-63f;
             }
     };
-    public int currentWobble = 0;
+    public int currentWobble = 8;
     public int wobbleCount = wobbles.length;
     public int octaves = 1;
 
@@ -123,7 +122,7 @@ public class LineGraphDemo extends ApplicationAdapter {
     @Override
     public void create() {
         Gdx.gl.glDisable(GL20.GL_BLEND);
-        renderer = new ImmediateModeRenderer20(width * 256 * 3, false, true, 0);
+        renderer = new ImmediateModeRenderer20(width * 256 * 3 + 128, false, true, 0);
         view = new ScreenViewport();
         InputAdapter input = new InputAdapter() {
             @Override
@@ -251,6 +250,18 @@ public class LineGraphDemo extends ApplicationAdapter {
 //        }
 //        renderer.end();
         renderer.begin(view.getCamera().combined, GL20.GL_LINES);
+        renderer.color(GRAY);
+        renderer.vertex(0, half, 0);
+        renderer.color(GRAY);
+        renderer.vertex(width, half, 0);
+        renderer.color(GRAY);
+        renderer.vertex(0, half + (int) 0x.fcp7f, 0);
+        renderer.color(GRAY);
+        renderer.vertex(width, half + (int) 0x.fcp7f, 0);
+        renderer.color(GRAY);
+        renderer.vertex(0, half - (int) 0x.fcp7f, 0);
+        renderer.color(GRAY);
+        renderer.vertex(width, half - (int) 0x.fcp7f, 0);
         for (int index = 0; index < lineSize;) {
             float color = heights[index++];
             for (int i = 0; i < width - 1; i++) {
@@ -278,6 +289,18 @@ public class LineGraphDemo extends ApplicationAdapter {
 //            }
 //            renderer.end();
             renderer.begin(view.getCamera().combined, GL20.GL_LINES);
+            renderer.color(GRAY);
+            renderer.vertex(0, half, 0);
+            renderer.color(GRAY);
+            renderer.vertex(width, half, 0);
+            renderer.color(GRAY);
+            renderer.vertex(0, half + (int) 0x.fcp7f, 0);
+            renderer.color(GRAY);
+            renderer.vertex(width, half + (int) 0x.fcp7f, 0);
+            renderer.color(GRAY);
+            renderer.vertex(0, half - (int) 0x.fcp7f, 0);
+            renderer.color(GRAY);
+            renderer.vertex(width, half - (int) 0x.fcp7f, 0);
             for (int index = 0; index < lineSize;) {
                 float color = heights[index++];
                 for (int i = 0; i < width - 1; i++) {
