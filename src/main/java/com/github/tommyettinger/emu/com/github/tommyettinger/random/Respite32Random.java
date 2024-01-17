@@ -221,14 +221,14 @@ public class Respite32Random extends EnhancedRandom {
 	@Override
 	public long nextLong () {
 		long h = nextInt();
-		return h << 32 ^ (nextInt() & 0xFFFFFFFFL);
+		return h << 32 | (nextInt() & 0xFFFFFFFFL);
 	}
 
 	@Override
 	public long previousLong () {
 		long l = (previousInt() & 0xFFFFFFFFL);
 		long h = previousInt();
-		return h << 32 ^ l;
+		return h << 32 | l;
 	}
 
 	@Override

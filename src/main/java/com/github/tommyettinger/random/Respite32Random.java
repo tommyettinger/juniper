@@ -253,7 +253,7 @@ public class Respite32Random extends EnhancedRandom {
 		a = (a << 3 | a >>> 29) ^ b;
 		b = (b << 24 | b >>> 8) + a ^ c;
 		a = (a << 3 | a >>> 29) ^ b;
-		return h << 32 ^ (a & 0xFFFFFFFFL);
+		return h << 32 | (a & 0xFFFFFFFFL);
 	}
 
 	@Override
@@ -292,7 +292,7 @@ public class Respite32Random extends EnhancedRandom {
 		stateA -= 0x91E10DA5;
 		stateB -= 0x6C8E9CF5 ^ Integer.numberOfLeadingZeros(a);
 		stateC -= 0x7FEB352D ^ Integer.numberOfLeadingZeros(a&b);
-		return h << 32 ^ l;
+		return h << 32 | l;
 	}
 
 	@Override
