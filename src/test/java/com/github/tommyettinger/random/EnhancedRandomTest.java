@@ -1,7 +1,6 @@
 package com.github.tommyettinger.random;
 
 import com.github.tommyettinger.digital.ArrayTools;
-import com.github.tommyettinger.random.experimental.Bear32Random;
 import com.github.tommyettinger.random.experimental.RespectRandom;
 import org.junit.Assert;
 import org.junit.Test;

@@ -38,15 +38,15 @@ public class Respite32Random extends EnhancedRandom {
 	/**
 	 * The first state; may be any int.
 	 */
-	protected int stateA;
+	public int stateA;
 	/**
 	 * The second state; may be any int.
 	 */
-	protected int stateB;
+	public int stateB;
 	/**
 	 * The third state; may be any int.
 	 */
-	protected int stateC;
+	public int stateC;
 
 	/**
 	 * Creates a new Respite32Random with a random state.

@@ -15,10 +15,9 @@
  *
  */
 
-package com.github.tommyettinger.random.experimental;
+package com.github.tommyettinger.random;
 
 import com.github.tommyettinger.digital.BitConversion;
-import com.github.tommyettinger.random.EnhancedRandom;
 
 /**
  * A random number generator that is optimized for performance on 32-bit machines and with Google Web Toolkit, this uses
@@ -26,28 +25,30 @@ import com.github.tommyettinger.random.EnhancedRandom;
  * All states are permitted. All optional methods are implemented except {@link EnhancedRandom#skip(long)};
  * {@link #previousLong()} is implemented without using skip(), and so is {@link #previousInt()}.
  * <br>
- * While a similar version passes 64TB of PractRand testing with no anomalies, if the initial states are numerically
- * similar, it takes a relatively long time (30 calls to {@link #nextInt()}) for the correlation to fully disappear in
- * that version. Relatively small changes allow this to decorrelate more quickly (14 calls), so those changes are being
- * tested now. If a new version can't be found that passes PractRand with no anomalies, the old version will be used.
+ * This passes 64TB of PractRand testing with no anomalies. If the initial states are small and numerically similar, it
+ * takes about 7 calls to {@link #nextLong()} (or about 14 to {@link #nextInt()}) for those states to shake off all
+ * easily-detectable correlation. Compare this with {@link AceRandom}, which takes about 18 calls to nextLong(),
+ * {@link WhiskerRandom}, which never (or at least, extremely gradually) shakes off correlation from initially
+ * correlated states, or any of {@link DistinctRandom}/{@link FlowRandom}/{@link Xoshiro256MX3Random}, which avoid
+ * detectable correlation from the start.
  */
 public class Bear32Random extends EnhancedRandom {
 	/**
 	 * The first state; can be any int.
 	 */
-	protected int stateA;
+	public int stateA;
 	/**
 	 * The second state; can be any int.
 	 */
-	protected int stateB;
+	public int stateB;
 	/**
 	 * The third state; can be any int.
 	 */
-	protected int stateC;
+	public int stateC;
 	/**
 	 * The fourth state; can be any int.
 	 */
-	protected int stateD;
+	public int stateD;
 
 	/**
 	 * Creates a new Bear32Random with a random state.
@@ -261,7 +262,7 @@ public class Bear32Random extends EnhancedRandom {
 		x = BitConversion.imul(x ^ x >>> 12, 0x297A2D39);
 		x ^= x >>> 15;
 		int lo = x;
-		return (long)(hi) << 32 ^ (lo);
+		return (long)(hi) << 32 | (lo & 0xFFFFFFFFL);
 		// These could be used instead of the above two lines:
 //		int lo = x ^ (hi << 16 | hi >>> 16);
 //		return (long)(hi ^ (x << 13 | x >>> 19)) << 32 | (lo & 0xFFFFFFFFL);
@@ -323,7 +324,7 @@ public class Bear32Random extends EnhancedRandom {
 		stateB = 0 | y - (x ^ BitConversion.countLeadingZeros(x));
 		stateC = 0 | z - (y ^ BitConversion.countLeadingZeros(x &= y));
 		stateD = 0 | w - (z ^ BitConversion.countLeadingZeros(x &  z));
-		return (long)(hi) << 32 ^ (lo);
+		return (long)(hi) << 32 | (lo & 0xFFFFFFFFL);
 	}
 
 	public int previousInt() {

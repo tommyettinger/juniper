@@ -16,14 +16,9 @@
 
 package com.github.tommyettinger.random;
 
-import com.badlogic.gdx.Files;
 import com.badlogic.gdx.files.FileHandle;
 import com.github.tommyettinger.digital.ArrayTools;
 import com.github.tommyettinger.digital.Base;
-import com.github.tommyettinger.digital.TextTools;
-import com.github.tommyettinger.ds.ObjectList;
-import com.github.tommyettinger.random.experimental.Bear32Random;
-import com.github.tommyettinger.random.experimental.Gobbler32Random;
 
 import java.io.File;
 import java.util.ArrayList;
