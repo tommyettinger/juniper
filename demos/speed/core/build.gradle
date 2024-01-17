@@ -7,3 +7,6 @@ dependencies {
 	api "com.github.tommyettinger:juniper:$juniperVersion"
 	testImplementation "junit:junit:4.13.2"
 }
+
+idea.module.excludeDirs += [file("src/main/java/com/github/emu/")]
+[compileJava, compileTestJava, javadoc]*.exclude("com/github/emu")

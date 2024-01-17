@@ -86,7 +86,7 @@ public class Bear32RandomJS extends EnhancedRandom {
 
 	@Override
 	public String getTag() {
-		return "BeaR";
+		return "BeJR";
 	}
 
 	/**
