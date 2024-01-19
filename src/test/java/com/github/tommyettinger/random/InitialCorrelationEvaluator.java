@@ -99,24 +99,6 @@ public class InitialCorrelationEvaluator {
         mode = Fft.maxIndex(Fft.histogram);
         amount = Fft.histogram[mode] * 0x1p-5 / (randoms.length * randoms[0].length);
     }
-    /**
-     * Narrow-purpose; takes an x and a y value, each between 0 and 65535 inclusive, and interleaves their bits so the
-     * least significant bit and every other bit after it are filled with the bits of x, while the
-     * second-least-significant bit and every other bit after that are filled with the bits of y. Essentially, this
-     * takes two numbers with bits labeled like {@code a b c} for x and {@code R S T} for y and makes a number with
-     * those bits arranged like {@code R a S b T c}.
-     * @param x an int between 0 and 65535, inclusive
-     * @param y an int between 0 and 65535, inclusive
-     * @return an int that interleaves x and y, with x in the least significant bit position
-     */
-    public static int interleaveBits(int x, int y)
-    {
-        x |= y << 16;
-        x =    ((x & 0x0000ff00) << 8) | ((x >>> 8) & 0x0000ff00) | (x & 0xff0000ff);
-        x =    ((x & 0x00f000f0) << 4) | ((x >>> 4) & 0x00f000f0) | (x & 0xf00ff00f);
-        x =    ((x & 0x0c0c0c0c) << 2) | ((x >>> 2) & 0x0c0c0c0c) | (x & 0xc3c3c3c3);
-        return ((x & 0x22222222) << 1) | ((x >>> 1) & 0x22222222) | (x & 0x99999999);
-    }
 
     // MizuchiRandom(x, y * 2L): Most frequent FFT level: 105.625 has amount 2041.03125
     // MizuchiRandom(x, y): Most frequent FFT level: 105.3125 has amount 1369.96875
@@ -516,7 +498,7 @@ Lowest mode: 81.92187 has mean amount 0.0184360742  FAIL 💀 for Xoshiro256Star
 //                            interleaveBits(x, y);
 //                    g[x][y].setSeed(b);
                     if(r.getStateCount() == 1)
-                        g[x][y].setState(interleaveBits(x, y));
+                        g[x][y].setState(CorrelationVisualizer.interleaveBits(x, y));
 ////                        g[x][y].setState(x << 16 ^ y);
 ////                        g[x][y].setState(y + ((x + y) * (x + y + 1L) >> 1)); // Cantor pairing function
                     else

@@ -61,7 +61,7 @@ public class CorrelationVisualizer extends ApplicationAdapter {
                 g[x][y] = base.copy();
                 switch (g[x][y].getStateCount()) {
                     case 1:
-                        g[x][y].setState(x << 16 ^ y);
+                        g[x][y].setState(interleaveBits(x, y));
                         break;
                     case 2:
                         g[x][y].setState((long)x<<1|1, (long)y<<1|1);
@@ -122,6 +122,25 @@ public class CorrelationVisualizer extends ApplicationAdapter {
 
     private Viewport view;
     private boolean keepGoing = true;
+
+    /**
+     * Narrow-purpose; takes an x and a y value, each between 0 and 65535 inclusive, and interleaves their bits so the
+     * least significant bit and every other bit after it are filled with the bits of x, while the
+     * second-least-significant bit and every other bit after that are filled with the bits of y. Essentially, this
+     * takes two numbers with bits labeled like {@code a b c} for x and {@code R S T} for y and makes a number with
+     * those bits arranged like {@code R a S b T c}.
+     * @param x an int between 0 and 65535, inclusive
+     * @param y an int between 0 and 65535, inclusive
+     * @return an int that interleaves x and y, with x in the least significant bit position
+     */
+    public static int interleaveBits(int x, int y)
+    {
+        x |= y << 16;
+        x =    ((x & 0x0000ff00) << 8) | ((x >>> 8) & 0x0000ff00) | (x & 0xff0000ff);
+        x =    ((x & 0x00f000f0) << 4) | ((x >>> 4) & 0x00f000f0) | (x & 0xf00ff00f);
+        x =    ((x & 0x0c0c0c0c) << 2) | ((x >>> 2) & 0x0c0c0c0c) | (x & 0xc3c3c3c3);
+        return ((x & 0x22222222) << 1) | ((x >>> 1) & 0x22222222) | (x & 0x99999999);
+    }
 
     @Override
     public void create() {

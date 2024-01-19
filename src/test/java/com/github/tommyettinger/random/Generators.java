@@ -45,6 +45,7 @@ public final class Generators {
         randomList.add(new Gaffer32Random(1, 1));
         randomList.add(new Gobbler32Random(1, 1, 1, 1));
         randomList.add(new Bear32Random(1, 1, 1, 1));
+        randomList.add(new LCG48Random(1));
     }
     public static int randomCount = randomList.size();
 
