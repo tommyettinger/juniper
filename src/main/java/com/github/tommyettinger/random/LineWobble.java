@@ -27,7 +27,19 @@ import static com.github.tommyettinger.digital.TrigTools.*;
 /**
  * Provides 1D noise methods that can be queried at any point on a line to get a continuous random value.
  * These each use some form of low-quality, high-speed unary hash on the floor and ceiling of a float or double value,
- * then interpolate between the hash results.
+ * then interpolate between the hash results. Some of these work on angles (so they wrap like a line around a circle)
+ * instead of normal lines.
+ * <br>
+ * Some methods here were named... hastily, but the names stuck.
+ * <ul>
+ *     <li>{@link #wobble(int, float)} is straightforward; it uses a hermite spline to interpolate two points.</li>
+ *     <li>{@link #bicubicWobble(int, float)} uses bicubic interpolation on 4 points, and tends to be smooth.</li>
+ *     <li>{@link #quobble(int, float)} uses an unusual method that requires less randomization, but returns to 0 predictably.</li>
+ *     <li>{@link #quobbleOctave2(int, float)} is the above quobble() called twice at different frequencies and weights.</li>
+ *     <li>{@link #splobble(int, float)} can be much more sharp or smooth, varying randomly over its length.</li>
+ *     <li>{@link #hobble(long, long, float)} is like splobble(), but allows specifying the random bits manually.</li>
+ *     <li>{@link #trobble(int, float)} is a trigonometric wobble, using the sine table to smoothly transition.</li>
+ * </ul>
  */
 public class LineWobble {
 
@@ -705,24 +717,7 @@ public class LineWobble {
      */
     public static float wobbleAngle(int seed, float value)
     {
-        // int fast floor, from libGDX
-        final int floor = ((int)(value + 0x1p14) - 0x4000);
-        // the above is equivalent to the following for floats between -16384 and 2147467263:
-//        int floor = (int) value;
-//        if(value < floor) --floor;
-        // gets roughly-random values for the start and end, involving the seed also.
-        final int z = seed + imul(floor, 0x9E3779B9);
-        float start = (imul(z ^ 0xD1B54A35, 0x92B5C323) >>> 1) * 0x1p-31f;
-        float end = (imul(z + 0x9E3779B9 ^ 0xD1B54A35, 0x92B5C323) >>> 1) * 0x1p-31f;
-
-        value -= floor;
-        // makes the changes smoother by slowing down near start or end.
-        value *= value * (3f - 2f * value);
-        // lerpAngle code
-        end = end - start + 1.5f;
-        end -= (int)end + 0.5f;
-        start += end * value + 1;
-        return (start - (int)start) * 6.283185307179586f;
+        return wobbleAngleTurns(seed, value) * 6.283185307179586f;
     }
 
     /**
@@ -739,16 +734,7 @@ public class LineWobble {
      */
     public static float wobbleAngleDeg(int seed, float value)
     {
-        final int floor = ((int)(value + 0x1p14) - 0x4000);
-        final int z = seed + imul(floor, 0x9E3779B9);
-        float start = (imul(z ^ 0xD1B54A35, 0x92B5C323) >>> 1) * 0x1p-31f;
-        float end = (imul(z + 0x9E3779B9 ^ 0xD1B54A35, 0x92B5C323) >>> 1) * 0x1p-31f;
-        value -= floor;
-        value *= value * (3f - 2f * value);
-        end = end - start + 1.5f;
-        end -= (int)end + 0.5f;
-        start += end * value + 1;
-        return (start - (int)start) * 360.0f;
+        return wobbleAngleTurns(seed, value) * 360.0f;
     }
 
     /**
