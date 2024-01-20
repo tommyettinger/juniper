@@ -639,16 +639,7 @@ public class LineWobble {
      */
     public static float wobbleAngle(long seed, float value)
     {
-        final int floor = ((int)(value + 0x1p14) - 0x4000);
-        final long z = seed + floor * 0x6C8E9CF570932BD5L;
-        float start = (((z ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L) >>> 1) * 0x1p-63f,
-                end = (((z + 0x6C8E9CF570932BD5L ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L) >>> 1) * 0x1p-63f;
-        value -= floor;
-        value *= value * (3f - 2f * value);
-        end = end - start + 1.5f;
-        end -= (int)end + 0.5f;
-        start += end * value + 1;
-        return (start - (int)start) * 6.283185307179586f;
+        return wobbleAngleTurns(seed, value) * 6.283185307179586f;
     }
 
     /**
@@ -665,16 +656,7 @@ public class LineWobble {
      */
     public static float wobbleAngleDeg(long seed, float value)
     {
-        final int floor = ((int)(value + 0x1p14) - 0x4000);
-        final long z = seed + floor * 0x6C8E9CF570932BD5L;
-        float start = (((z ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L) >>> 1) * 0x1p-63f,
-                end = (((z + 0x6C8E9CF570932BD5L ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L) >>> 1) * 0x1p-63f;
-        value -= floor;
-        value *= value * (3f - 2f * value);
-        end = end - start + 1.5f;
-        end -= (int)end + 0.5f;
-        start += end * value + 1;
-        return (start - (int)start) * 360.0f;
+        return wobbleAngleTurns(seed, value) * 360.0f;
     }
 
     /**
@@ -810,6 +792,53 @@ public class LineWobble {
         value *= value * (3f - 2f * value);
         float start = (startBits >>> 1) * 4.6566126E-10f; // 4.6566126E-10f == 0x0.ffffffp-31f
         float end   = (endBits   >>> 1) * 4.6566126E-10f; // 4.6566126E-10f == 0x0.ffffffp-31f
+        end = end - start + 1.5f;
+        end -= (int)end + 0.5f;
+        start += end * value + 1;
+        return (start - (int)start);
+    }
+
+    /**
+     * Like {@link #splobble(long, float)}, this is a 1D wobble that can become more sharp or more gradual at different
+     * points on its length, but this produces a (wrapping) angle measured in radians.
+     * @param seed a long seed that will determine the pattern of peaks and valleys this will generate as value changes; this should not change between calls
+     * @param value a float that typically changes slowly, by less than 1.0, with possible direction changes at integer inputs
+     * @return a pseudo-random float between 0.0f and 6.283185307179586f (both inclusive), smoothly changing with value and wrapping
+     */
+    public static float splobbleAngle(long seed, float value) {
+        return splobbleAngleTurns(seed, value) * PI2;
+    }
+
+    /**
+     * Like {@link #splobble(long, float)}, this is a 1D wobble that can become more sharp or more gradual at different
+     * points on its length, but this produces a (wrapping) angle measured in degrees.
+     * @param seed a long seed that will determine the pattern of peaks and valleys this will generate as value changes; this should not change between calls
+     * @param value a float that typically changes slowly, by less than 1.0, with possible direction changes at integer inputs
+     * @return a pseudo-random float between 0.0f and 360.0f (both inclusive), smoothly changing with value and wrapping
+     */
+    public static float splobbleAngleDeg(long seed, float value) {
+        return splobbleAngleTurns(seed, value) * 360;
+    }
+
+    /**
+     * Like {@link #splobble(long, float)}, this is a 1D wobble that can become more sharp or more gradual at different
+     * points on its length, but this produces a (wrapping) angle measured in turns.
+     * @param seed a long seed that will determine the pattern of peaks and valleys this will generate as value changes; this should not change between calls
+     * @param value a float that typically changes slowly, by less than 1.0, with possible direction changes at integer inputs
+     * @return a pseudo-random float between 0.0f and 1.0f (both inclusive), smoothly changing with value and wrapping
+     */
+    public static float splobbleAngleTurns(long seed, float value)
+    {
+        final long floor = ((long)(value + 0x1p14) - 0x4000);
+        final long z = seed + floor * 0x6C8E9CF570932BD5L;
+        final long startBits = ((z ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L),
+                endBits = ((z + 0x6C8E9CF570932BD5L ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5C323L ^ 0x9E3779B97F4A7C15L),
+                mixBits = startBits + endBits;
+        value -= floor;
+        value = MathTools.barronSpline(value, (mixBits & 0xFFFFFFFFL) * 0x1p-30f + 1f, (mixBits & 0xFFFFL) * 0x1.8p-17f + 0.125f);
+        value *= value * (3f - 2f * value);
+        float start = (startBits >>> 1) * 0x0.ffffffp-63f;
+        float end   = (endBits   >>> 1) * 0x0.ffffffp-63f;
         end = end - start + 1.5f;
         end -= (int)end + 0.5f;
         start += end * value + 1;
