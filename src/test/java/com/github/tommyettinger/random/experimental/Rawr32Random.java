@@ -17,6 +17,7 @@
 
 package com.github.tommyettinger.random.experimental;
 
+import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.random.*;
 
 /**
@@ -250,10 +251,10 @@ public class Rawr32Random extends EnhancedRandom {
 	@Override
 	public long nextLong () {
 		int x = stateA;
-        int y = stateB;
-        int z = stateC;
-        int w = stateD;
-        int tempA = x + 0x9E3779B9;
+		int y = stateB;
+		int z = stateC;
+		int w = stateD;
+		int tempA = x + 0x9E3779B9;
 		int tempB = y + Integer.numberOfLeadingZeros(x);
 		int tempC = (w << 3 | w >>> 29) - x;
 		int tempD = (z << 24 | z >>> 8) ^ y;
@@ -276,7 +277,10 @@ public class Rawr32Random extends EnhancedRandom {
 
 	@Override
 	public int next (int bits) {
-		int x = stateA, y = stateB, z = stateC, w = stateD;
+		int x = stateA;
+		int y = stateB;
+		int z = stateC;
+		int w = stateD;
 		stateA = x + 0x9E3779B9;
 		stateB = y + Integer.numberOfLeadingZeros(x);
 		stateC = (w << 3 | w >>> 29) - x;
@@ -288,7 +292,10 @@ public class Rawr32Random extends EnhancedRandom {
 
 	@Override
 	public int nextInt () {
-		int x = stateA, y = stateB, z = stateC, w = stateD;
+		int x = stateA;
+		int y = stateB;
+		int z = stateC;
+		int w = stateD;
 		stateA = x + 0x9E3779B9;
 		stateB = y + Integer.numberOfLeadingZeros(x);
 		stateC = (w << 3 | w >>> 29) - x;
@@ -298,54 +305,32 @@ public class Rawr32Random extends EnhancedRandom {
 		return x - (y << 21 | y >>> 11);
 	}
 
-//	@Override
-//	public long previousLong() {
-//		int x, y, z, w, m;
-//		x = stateA;
-//		y = stateB;
-//		z = stateC;
-//		w = stateD;
-//		m = x & y & z;
-//		m = (w + (m << 13 | m >>> 19)) * 0x2C1B3C6D;
-//		m = (m ^ m >>> 12) * 0x297A2D39;
-//		m ^= m >>> 15;
-//		int lo = m;
-//		stateA = x - 0x9E3779B9;
-//		stateB = y - (x ^ Integer.numberOfLeadingZeros(x));
-//		stateC = z - (y ^ Integer.numberOfLeadingZeros(x &= y));
-//		stateD = w - (z ^ Integer.numberOfLeadingZeros(x & z));
-//		x = stateA;
-//		y = stateB;
-//		z = stateC;
-//		w = stateD;
-//		m = x & y & z;
-//		m = (w + (m << 13 | m >>> 19)) * 0x2C1B3C6D;
-//		m = (m ^ m >>> 12) * 0x297A2D39;
-//		m ^= m >>> 15;
-//		int hi = m;
-//		stateA = x - 0x9E3779B9;
-//		stateB = y - (x ^ Integer.numberOfLeadingZeros(x));
-//		stateC = z - (y ^ Integer.numberOfLeadingZeros(x &= y));
-//		stateD = w - (z ^ Integer.numberOfLeadingZeros(x & z));
-//		return (long)(hi) << 32 | (lo & 0xFFFFFFFFL);
-//	}
-//
-//	public int previousInt() {
-//		int x, y, z, w, m;
-//		x = stateA;
-//		y = stateB;
-//		z = stateC;
-//		w = stateD;
-//		m = x & y & z;
-//		m = (w + (m << 13 | m >>> 19)) * 0x2C1B3C6D;
-//		m = (m ^ m >>> 12) * 0x297A2D39;
-//		m ^= m >>> 15;
-//		stateA = x - 0x9E3779B9;
-//		stateB = y - (x ^ Integer.numberOfLeadingZeros(x));
-//		stateC = z - (y ^ Integer.numberOfLeadingZeros(x &= y));
-//		stateD = w - (z ^ Integer.numberOfLeadingZeros(x & z));
-//		return m;
-//	}
+	@Override
+	public long previousLong() {
+		int lo = previousInt();
+		int hi = previousInt();
+		return (long)(hi) << 32 | (lo & 0xFFFFFFFFL);
+	}
+
+	public int previousInt() {
+		int x;
+		int y;
+		int z = stateC;
+		int w = stateD;
+		stateA -= 0x9E3779B9;
+		stateB -= Integer.numberOfLeadingZeros(stateA);
+		w ^= stateB;
+		z += stateA;
+		stateC = (w << 8 | w >>> 24);
+		stateD = (z << 29 | z >>> 3);
+		x = stateA;
+		y = stateB;
+		z = stateC;
+		w = stateD;
+		x ^= (w << 29 | w >>>  3) + y;
+		y += (z << 19 | z >>> 13) ^ x;
+		return x - (y << 21 | y >>> 11);
+	}
 
 	@Override
 	public int nextInt (int bound) {
@@ -425,4 +410,43 @@ public class Rawr32Random extends EnhancedRandom {
 	public String toString () {
 		return "Rawr32Random{" + "stateA=" + (stateA) + ", stateB=" + (stateB) + ", stateC=" + (stateC) + ", stateD=" + (stateD) + "}";
 	}
+
+//	public static void main(String[] args) {
+//		Rawr32Random random = new Rawr32Random(1L);
+//		int n0 = random.nextInt();
+//		int n1 = random.nextInt();
+//		int n2 = random.nextInt();
+//		int n3 = random.nextInt();
+//		int n4 = random.nextInt();
+//		int n5 = random.nextInt();
+//		int n6 = random.nextInt();
+//		int p6 = random.previousInt();
+//		int p5 = random.previousInt();
+//		int p4 = random.previousInt();
+//		int p3 = random.previousInt();
+//		int p2 = random.previousInt();
+//		int p1 = random.previousInt();
+//		int p0 = random.previousInt();
+//		System.out.println(n0 == p0);
+//		System.out.println(n1 == p1);
+//		System.out.println(n2 == p2);
+//		System.out.println(n3 == p3);
+//		System.out.println(n4 == p4);
+//		System.out.println(n5 == p5);
+//		System.out.println(n6 == p6);
+//		System.out.println(n0 + " vs. " + p0);
+//		System.out.println(n1 + " vs. " + p1);
+//		System.out.println(n2 + " vs. " + p2);
+//		System.out.println(n3 + " vs. " + p3);
+//		System.out.println(n4 + " vs. " + p4);
+//		System.out.println(n5 + " vs. " + p5);
+//		System.out.println(n6 + " vs. " + p6);
+//
+//		random.setState(1, 2, 3, 4);
+//		System.out.println(random);
+//		random.nextInt();
+//		System.out.println(random);
+//		random.previousInt();
+//		System.out.println(random);
+//	}
 }

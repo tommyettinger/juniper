@@ -301,6 +301,7 @@ public class MunchRandom extends EnhancedRandom {
 		long n4 = random.nextLong();
 		long n5 = random.nextLong();
 		long n6 = random.nextLong();
+		long p6 = random.previousLong();
 		long p5 = random.previousLong();
 		long p4 = random.previousLong();
 		long p3 = random.previousLong();
@@ -313,11 +314,13 @@ public class MunchRandom extends EnhancedRandom {
 		System.out.println(n3 == p3);
 		System.out.println(n4 == p4);
 		System.out.println(n5 == p5);
+		System.out.println(n6 == p6);
 		System.out.println(n0 + " vs. " + p0);
 		System.out.println(n1 + " vs. " + p1);
 		System.out.println(n2 + " vs. " + p2);
 		System.out.println(n3 + " vs. " + p3);
 		System.out.println(n4 + " vs. " + p4);
 		System.out.println(n5 + " vs. " + p5);
+		System.out.println(n6 + " vs. " + p6);
 	}
 }
