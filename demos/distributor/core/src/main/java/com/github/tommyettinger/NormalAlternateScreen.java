@@ -477,12 +477,14 @@ public class NormalAlternateScreen extends ScreenAdapter {
     }
 
     public double huhWha() {
-        // 0x7FF8000000000000L is positive infinity, anything higher is NaN.
+//        // 0x7FF8000000000000L is positive infinity, anything higher is NaN.
+//        long rand = dist.generator.nextLong();
+//        long sign = rand & 0x8000000000000000L;
+//        rand <<= 1;
+//        final long randLow = rand & 0xFFFFFFFFL;
+//        final long randHigh = (rand >>> 32);
+//        return BitConversion.longBitsToDouble(sign ^ (randLow * 0x7FF80000L >>> 32) + randHigh * 0x7FF80000L);
         long rand = dist.generator.nextLong();
-        long sign = rand & 0x8000000000000000L;
-        rand <<= 1;
-        final long randLow = rand & 0xFFFFFFFFL;
-        final long randHigh = (rand >>> 32);
-        return BitConversion.longBitsToDouble(sign ^ (randLow * 0x7FF80000L >>> 32) + randHigh * 0x7FF80000L);
+        return BitConversion.longBitsToDouble((rand * 0xD1342543DE82EF95L + 0xC6AC29E4C6AC29E5L >>> 59) + (0x400L - 16) << 52 | (rand & 0x800FFFFFFFFFFFFFL));
     }
 }
