@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.UIUtils;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.github.tommyettinger.digital.BitConversion;
 import com.github.tommyettinger.digital.MathTools;
 import com.github.tommyettinger.random.EnhancedRandom;
 import com.github.tommyettinger.random.distribution.NormalDistribution;
@@ -88,12 +89,12 @@ public class NormalAlternateScreen extends ScreenAdapter {
         }
         else if(Gdx.input.isKeyJustPressed(Input.Keys.J))
         {
-            mode = (mode + 9) % 10;
+            mode = (mode + 10) % 11;
             return;
         }
         else if(Gdx.input.isKeyJustPressed(Input.Keys.K))
         {
-            mode = (mode + 1) % 10;
+            mode = (mode + 1) % 11;
             return;
         }
         else if(Gdx.input.isKeyJustPressed(Input.Keys.SLASH))
@@ -220,6 +221,15 @@ public class NormalAlternateScreen extends ScreenAdapter {
                             (dist.generator.nextExclusiveSignedDouble() * (1.0 - c)
                                     + c * Ziggurat.normal(dist.generator.nextLong())
                             ))
+                            * 128 + 256);
+                    if (m >= 0 && m < 512)
+                        amounts[m]++;
+                }
+                break;
+            case 10:
+                for (int i = 0; i < RUNS; i++) {
+                    int m = (int) ((dist.getMu() + dist.getSigma() *
+                            huhWha())
                             * 128 + 256);
                     if (m >= 0 && m < 512)
                         amounts[m]++;
@@ -464,5 +474,15 @@ public class NormalAlternateScreen extends ScreenAdapter {
             s = v1 * v1 + v2 * v2;
         } while (s >= 1 || s == 0);
         return v1 * Math.sqrt(-2 * Math.log(s) / s);
+    }
+
+    public double huhWha() {
+        // 0x7FF8000000000000L is positive infinity, anything higher is NaN.
+        long rand = dist.generator.nextLong();
+        long sign = rand & 0x8000000000000000L;
+        rand <<= 1;
+        final long randLow = rand & 0xFFFFFFFFL;
+        final long randHigh = (rand >>> 32);
+        return BitConversion.longBitsToDouble(sign ^ (randLow * 0x7FF80000L >>> 32) + randHigh * 0x7FF80000L);
     }
 }
