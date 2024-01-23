@@ -263,7 +263,7 @@ public class CorrelationAnalyst extends ApplicationAdapter {
                         break;
                     case I: // image
                         if(image == null) {
-                            image = new Pixmap(Gdx.files.internal("Cat_BW.png"));
+                            image = new Pixmap(Gdx.files.internal("Cat_Gray.png"));
                             int h = image.getHeight(), w = image.getWidth();
                             for (int y = 0; y < h && y < height; y++) {
                                 for (int x = 0; x < w && x < width; x++) {

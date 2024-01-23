@@ -23,6 +23,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
 import com.badlogic.gdx.scenes.scene2d.utils.UIUtils;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -56,17 +57,19 @@ public class FFTVisualizer extends ApplicationAdapter {
     private boolean keepGoing = true;
     private ImmediateModeRenderer20 renderer;
 
-    private static final int width = 256, height = 256;
+    private static int width = 256, height = 256;
     private static final double I255 = 1.0 / 255.0;
 
     // packed float colors
-    private static final float[][] previousGrid = new float[width << 1][height];
-    private static final float[][] colors = new float[width][height];
-
-    private static final double[][] real = new double[width][height], imag = new double[width][height];
+    private static float[][] previousGrid = new float[width << 1][height];
+    private static float[][] colors = new float[width][height];
+    private static double[][] real = new double[width][height];
+    private static double[][] imag = new double[width][height];
     private static final int[] freq = new int[256];
     private static final float LIGHT_YELLOW = Color.toFloatBits(1f, 1f, 0.4f, 1f);
     private static final float LIGHT_PURPLE = Color.toFloatBits(1f, 0.5f, 1f, 1f);
+
+    private static Pixmap image;
 
     public float basicPrepare(int bt)
     {
@@ -103,7 +106,8 @@ public class FFTVisualizer extends ApplicationAdapter {
                     case N: // next
                     case EQUALS:
                     case ENTER:
-                        currentRandom = ((currentRandom + (UIUtils.shift() ? randomCount - 1 : 1)) % randomCount);
+                        currentRandom = ((currentRandom +
+                                (UIUtils.shift() ? randomCount - (UIUtils.ctrl() ? 10 : 1) : (UIUtils.ctrl() ? 10 : 1))) % randomCount);
                         refreshGrid();
                         title = randoms[currentRandom][0][0].getClass().getSimpleName()
                                 + " on mode " + currentMode + " selecting bit " + selectedBit;
@@ -112,7 +116,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                         if (!keepGoing) putMap();
                         break;
                     case LEFT:
-                        currentRandom = ((currentRandom + randomCount - 1) % randomCount);
+                        currentRandom = ((currentRandom + randomCount - (UIUtils.ctrl() ? 10 : 1)) % randomCount);
                         refreshGrid();
                         title = randoms[currentRandom][0][0].getClass().getSimpleName()
                                 + " on mode " + currentMode + " selecting bit " + selectedBit;
@@ -121,7 +125,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                         if (!keepGoing) putMap();
                         break;
                     case RIGHT:
-                        currentRandom = ((currentRandom + 1) % randomCount);
+                        currentRandom = ((currentRandom + (UIUtils.ctrl() ? 10 : 1)) % randomCount);
                         refreshGrid();
                         title = randoms[currentRandom][0][0].getClass().getSimpleName()
                                 + " on mode " + currentMode + " selecting bit " + selectedBit;
@@ -159,6 +163,34 @@ public class FFTVisualizer extends ApplicationAdapter {
                     case D:
                         dctMode = !dctMode;
                         break;
+                    case I: // image
+                        if(image == null) {
+                            image = new Pixmap(Gdx.files.internal("Cat_Gray.png"));
+                            int h = image.getHeight(), w = image.getWidth();
+                            renderer.dispose();
+                            width = w;
+                            height = h;
+                            renderer = new ImmediateModeRenderer20(width * height * 2, false, true, 0);
+                            previousGrid = new float[width << 1][height];
+                            colors = new float[width][height];
+                            real = new double[width][height];
+                            imag = new double[width][height];
+                            for (int y = 0; y < height; y++) {
+                                for (int x = 0; x < width; x++) {
+                                    int color = image.getPixel(x, h - 1 - y),
+                                            bt = (color >>> 24) * 3 + (color >>> 16 & 255) * 4 + (color >>> 8 & 255);
+                                    real[x][y] = (bt) / 2040.0;
+                                    previousGrid[x][y] = basicPrepare(bt + 4 >>> 3);
+                                }
+                            }
+                            Gdx.graphics.setWindowedMode(width << 1, height);
+                        }
+                        else {
+                            image.dispose();
+                            image = null;
+                        }
+                        break;
+
                     case Q: // quit
                     case ESCAPE: {
                         Gdx.app.exit();
@@ -177,37 +209,50 @@ public class FFTVisualizer extends ApplicationAdapter {
         ArrayTools.fill(imag, 0.0);
 
         int bt;
-        switch (currentMode) {
-            case 0:
-                for (int x = 0; x < width; x++) {
-                    for (int y = 0; y < height; y++) {
-                        bt = (int) randoms[currentRandom][x][y].nextLong() & 255;
-                        real[x][y] = bt * I255;
-                        renderer.color(previousGrid[x][y] = basicPrepare(bt));
-                        renderer.vertex(x, y, 0);
+        if(image == null) {
+            switch (currentMode) {
+                case 0:
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            bt = (int) randoms[currentRandom][x][y].nextLong() & 255;
+                            real[x][y] = bt * I255;
+                            renderer.color(previousGrid[x][y] = basicPrepare(bt));
+                            renderer.vertex(x, y, 0);
+                        }
                     }
-                }
-                break;
-            case 1:
-                for (int x = 0; x < width; x++) {
-                    for (int y = 0; y < height; y++) {
-                        bt = randoms[currentRandom][x][y].nextInt() & 255;
-                        real[x][y] = bt * I255;
-                        renderer.color(previousGrid[x][y] = basicPrepare(bt));
-                        renderer.vertex(x, y, 0);
+                    break;
+                case 1:
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            bt = randoms[currentRandom][x][y].nextInt() & 255;
+                            real[x][y] = bt * I255;
+                            renderer.color(previousGrid[x][y] = basicPrepare(bt));
+                            renderer.vertex(x, y, 0);
+                        }
                     }
-                }
-                break;
-            case 2:
-                for (int x = 0; x < width; x++) {
-                    for (int y = 0; y < height; y++) {
-                        bt = (int) (-(randoms[currentRandom][x][y].nextLong() & 1L << selectedBit) >> 63) & 255;
-                        real[x][y] = bt * I255;
-                        renderer.color(previousGrid[x][y] = basicPrepare(bt));
-                        renderer.vertex(x, y, 0);
+                    break;
+                case 2:
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            bt = (int) (-(randoms[currentRandom][x][y].nextLong() & 1L << selectedBit) >> 63) & 255;
+                            real[x][y] = bt * I255;
+                            renderer.color(previousGrid[x][y] = basicPrepare(bt));
+                            renderer.vertex(x, y, 0);
+                        }
                     }
+                    break;
+            }
+        } else {
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    int color = image.getPixel(x, height - 1 - y);
+                    bt = (color >>> 24) * 3 + (color >>> 16 & 255) * 4 + (color >>> 8 & 255);
+                    real[x][y] = (bt) / 2040.0;
+                    previousGrid[x][y] = basicPrepare(bt + 4 >>> 3);
+                    renderer.color(previousGrid[x][y]);
+                    renderer.vertex(x, y, 0);
                 }
-                break;
+            }
         }
 
         if (dctMode) {
@@ -216,11 +261,11 @@ public class FFTVisualizer extends ApplicationAdapter {
         }
         else {
             Fft.transformWindowless2D(real, imag);
-            Fft.getColors(real, imag, colors);
+            Fft.getColors(real, imag, colors, image == null);
         }
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                renderer.color(previousGrid[x+width][y] = colors[x][y]);
+                renderer.color(previousGrid[x+width][y] = colors[x][height-1-y]);
                 renderer.vertex(x + width, y, 0);
             }
         }

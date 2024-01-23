@@ -146,7 +146,7 @@ public final class Fft {
 	public static void transformWindowless2D(double[][] real, double[][] imag){
 		final int n = real.length;
 		for (int x = 0; x < n; x++) {
-			transformRadix2(real[x], imag[x]);
+			transform(real[x], imag[x]);
 		}
 		double swap;
 		for (int x = 0; x < n; x++) {
@@ -160,7 +160,7 @@ public final class Fft {
 			}
 		}
 		for (int x = 0; x < n; x++) {
-			transformRadix2(real[x], imag[x]);
+			transform(real[x], imag[x]);
 		}
 	}
 
@@ -170,13 +170,13 @@ public final class Fft {
 	 * @param imag must have the same dimensions as {@code real}
 	 * @param background will contain ABGR packed float colors;  must have the same dimensions as {@code real}
 	 */
-	public static void getColors(double[][] real, double[][] imag, float[][] background){
-		final int n = real.length, mask = n - 1, half = n >>> 1;
+	public static void getColors(double[][] real, double[][] imag, float[][] background, boolean offset){
+		final int n = real.length, half = offset ? n >>> 1 : 0, lim = real[0].length, halfLim = offset ? lim >>> 1 : 0;
 		double max = 0.0, mag, r, i;
 		for (int x = 0; x < n; x++) {
-			for (int y = 0; y < n; y++) {
-				r = real[x + half & mask][y + half & mask];
-				i = imag[x + half & mask][y + half & mask];
+			for (int y = 0; y < lim; y++) {
+				r = real[(x + half) % n][(y + halfLim) % lim];
+				i = imag[(x + half) % n][(y + halfLim) % lim];
 				mag = Math.sqrt(r * r + i * i);
 				max = Math.max(mag, max);
 				background[x][y] = (float) mag;
@@ -186,8 +186,8 @@ public final class Fft {
 		int cb;
 		Arrays.fill(histogram, 0);
 		for (int x = 0; x < n; x++) {
-			for (int y = 0; y < n; y++) {
-				cb = (int)(c * Math.log1p(background[x][y]));
+			for (int y = 0; y < lim; y++) {
+				cb = Math.min(255, (int)(c * Math.log1p(background[x][y])));
 				histogram[cb]++;
 				background[x][y] = Float.intBitsToFloat(cb * 0x010101 | 0xFE000000);
 			}
@@ -287,8 +287,8 @@ public final class Fft {
 		
 		// Postprocessing
 		for (int i = 0; i < n; i++) {
-			real[i] =  creal[i] * cosTable[i] + cimag[i] * sinTable[i];
-			imag[i] = -creal[i] * sinTable[i] + cimag[i] * cosTable[i];
+			real[i] = ( creal[i] * cosTable[i] + cimag[i] * sinTable[i]);
+			imag[i] = (-creal[i] * sinTable[i] + cimag[i] * cosTable[i]);
 		}
 	}
 	
@@ -321,14 +321,14 @@ public final class Fft {
 		yimag = yimag.clone();
 		transform(xreal, ximag);
 		transform(yreal, yimag);
-		
+
 		for (int i = 0; i < n; i++) {
 			double temp = xreal[i] * yreal[i] - ximag[i] * yimag[i];
 			ximag[i] = ximag[i] * yreal[i] + xreal[i] * yimag[i];
 			xreal[i] = temp;
 		}
 		inverseTransform(xreal, ximag);
-		
+
 		for (int i = 0; i < n; i++) {  // Scaling (because this FFT implementation omits it)
 			outreal[i] = xreal[i] / n;
 			outimag[i] = ximag[i] / n;
