@@ -17,8 +17,11 @@
 
 package com.github.tommyettinger.random.gdx;
 
+import com.badlogic.gdx.utils.Collections;
 import com.badlogic.gdx.utils.IntIntMap;
+import com.badlogic.gdx.utils.IntMap;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.github.tommyettinger.ds.IntObjectMap;
 import com.github.tommyettinger.ds.ObjectObjectMap;
 import org.junit.Assert;
 import org.junit.Test;
@@ -32,130 +35,201 @@ import java.util.Map;
  * Trying to replicate an issue with IntMap, or IntIntMap, with libGDX.
  */
 public class IntMapIssueTest {
+	private static void putGdx(IntIntMap map, int key, int value){
+		map.put(key, value);
+		if((key * 421 >>> 5) % 31 >= 10)
+			map.remove(key-1, -1);
+		System.out.println(map.get(655369993, -1));
+	}
+
+	private static void putJdk(HashMap<Integer, Integer> map, int key, int value){
+		map.put(key, value);
+		if((key * 421 >>> 5) % 31 >= 10)
+			map.remove(key-1);
+		System.out.println(map.get(655369993));
+	}
+
+	private static void putDs(com.github.tommyettinger.ds.IntIntMap map, int key, int value){
+		map.put(key, value);
+		if((key * 421 >>> 5) % 31 >= 10)
+			map.remove(key-1);
+		System.out.println(map.get(655369993));
+	}
+
 	@Test
 	public void testGdx() {
 		IntIntMap map = new IntIntMap(24, 0.8f);
-		//655304458, 655238926, 655501067, 655369995, 655304463, 655238923, 655501064, 655369998, 655369992, 655238920, 655238928, 655435529, 655304457, 655304465, 655501066, 655369994, 655304462, 655238922, 655435531, 655369999, 655304459, 655238927, 655370000, 655435528, 655304464, 655304456, 655501065, 655238929, 655369993, 655238921, 655370001, 655435530
-		map.put(655238920, 655238920);
-		map.put(655238921, 655238921);
-		map.put(655238922, 655238922);
-		map.put(655238923, 655238923);
-		map.put(655238926, 655238926);
-		map.put(655238927, 655238927);
-		map.put(655238928, 655238928);
-		map.put(655238929, 655238929);
-		map.put(655304456, 655304456);
-		map.put(655304457, 655304457);
-		map.put(655304458, 655304458);
-		map.put(655304459, 655304459);
-		map.put(655304462, 655304462);
-		map.put(655304463, 655304463);
-		map.put(655304464, 655304464);
-		map.put(655304465, 655304465);
-		map.put(655369992, 655369992);
-		map.put(655369993, 655369993);
-		map.put(655369994, 655369994);
-		map.put(655369995, 655369995);
-		map.put(655369998, 655369998);
-		map.put(655369999, 655369999);
-		map.put(655370000, 655370000);
-		map.put(655370001, 655370001);
-		map.put(655435528, 655435528);
-		map.put(655435529, 655435529);
-		map.put(655435530, 655435530);
-		map.put(655435531, 655435531);
-		map.put(655501064, 655501064);
-		map.put(655501065, 655501065);
-		map.put(655501066, 655501066);
-		map.put(655501067, 655501067);
+		putGdx(map, 655238920, 655238920);
+		putGdx(map, 655238921, 655238921);
+		putGdx(map, 655238922, 655238922);
+		putGdx(map, 655238923, 655238923);
+		putGdx(map, 655238926, 655238926);
+		putGdx(map, 655238927, 655238927);
+		putGdx(map, 655238928, 655238928);
+		putGdx(map, 655238929, 655238929);
+		putGdx(map, 655304456, 655304456);
+		putGdx(map, 655304457, 655304457);
+		putGdx(map, 655304458, 655304458);
+		putGdx(map, 655304459, 655304459);
+		putGdx(map, 655304462, 655304462);
+		putGdx(map, 655304463, 655304463);
+		putGdx(map, 655304464, 655304464);
+		putGdx(map, 655304465, 655304465);
+		putGdx(map, 655369992, 655369992);
+		putGdx(map, 655369993, 655369993);
+		putGdx(map, 655369994, 655369994);
+		putGdx(map, 655369995, 655369995);
+		putGdx(map, 655369998, 655369998);
+		putGdx(map, 655369999, 655369999);
+		putGdx(map, 655370000, 655370000);
+		putGdx(map, 655370001, 655370001);
+		putGdx(map, 655435528, 655435528);
+		putGdx(map, 655435529, 655435529);
+		putGdx(map, 655435530, 655435530);
+		putGdx(map, 655435531, 655435531);
+		putGdx(map, 655501064, 655501064);
+		putGdx(map, 655501065, 655501065);
+		putGdx(map, 655501066, 655501066);
+		putGdx(map, 655501067, 655501067);
 		// not in the original
-		map.put(655501068, 655501068);
+		putGdx(map, 655501068, 655501068);
 
 		System.out.println("size = " + map.size);
-		Assert.assertEquals(33, map.size);
+		Assert.assertEquals(18, map.size);
+	}
+	@Test
+	public void testJdk() {
+		HashMap<Integer, Integer> map = new HashMap<>(24, 0.8f);
+
+		putJdk(map, 655238920, 655238920);
+		putJdk(map, 655238921, 655238921);
+		putJdk(map, 655238922, 655238922);
+		putJdk(map, 655238923, 655238923);
+		putJdk(map, 655238926, 655238926);
+		putJdk(map, 655238927, 655238927);
+		putJdk(map, 655238928, 655238928);
+		putJdk(map, 655238929, 655238929);
+		putJdk(map, 655304456, 655304456);
+		putJdk(map, 655304457, 655304457);
+		putJdk(map, 655304458, 655304458);
+		putJdk(map, 655304459, 655304459);
+		putJdk(map, 655304462, 655304462);
+		putJdk(map, 655304463, 655304463);
+		putJdk(map, 655304464, 655304464);
+		putJdk(map, 655304465, 655304465);
+		putJdk(map, 655369992, 655369992);
+		putJdk(map, 655369993, 655369993);
+		putJdk(map, 655369994, 655369994);
+		putJdk(map, 655369995, 655369995);
+		putJdk(map, 655369998, 655369998);
+		putJdk(map, 655369999, 655369999);
+		putJdk(map, 655370000, 655370000);
+		putJdk(map, 655370001, 655370001);
+		putJdk(map, 655435528, 655435528);
+		putJdk(map, 655435529, 655435529);
+		putJdk(map, 655435530, 655435530);
+		putJdk(map, 655435531, 655435531);
+		putJdk(map, 655501064, 655501064);
+		putJdk(map, 655501065, 655501065);
+		putJdk(map, 655501066, 655501066);
+		putJdk(map, 655501067, 655501067);
+		// not in the original
+		putJdk(map, 655501068, 655501068);
+
+		System.out.println("size = " + map.size());
+		Assert.assertEquals(18, map.size());
 	}
 
 	@Test
 	public void testJdkgdxds() {
 		com.github.tommyettinger.ds.IntIntMap map = new com.github.tommyettinger.ds.IntIntMap(24, 0.8f);
 
-		map.put(655238920, 655238920);
-		map.put(655238921, 655238921);
-		map.put(655238922, 655238922);
-		map.put(655238923, 655238923);
-		map.put(655238926, 655238926);
-		map.put(655238927, 655238927);
-		map.put(655238928, 655238928);
-		map.put(655238929, 655238929);
-		map.put(655304456, 655304456);
-		map.put(655304457, 655304457);
-		map.put(655304458, 655304458);
-		map.put(655304459, 655304459);
-		map.put(655304462, 655304462);
-		map.put(655304463, 655304463);
-		map.put(655304464, 655304464);
-		map.put(655304465, 655304465);
-		map.put(655369992, 655369992);
-		map.put(655369993, 655369993);
-		map.put(655369994, 655369994);
-		map.put(655369995, 655369995);
-		map.put(655369998, 655369998);
-		map.put(655369999, 655369999);
-		map.put(655370000, 655370000);
-		map.put(655370001, 655370001);
-		map.put(655435528, 655435528);
-		map.put(655435529, 655435529);
-		map.put(655435530, 655435530);
-		map.put(655435531, 655435531);
-		map.put(655501064, 655501064);
-		map.put(655501065, 655501065);
-		map.put(655501066, 655501066);
-		map.put(655501067, 655501067);
-		map.put(655501068, 655501068);
+		putDs(map, 655238920, 655238920);
+		putDs(map, 655238921, 655238921);
+		putDs(map, 655238922, 655238922);
+		putDs(map, 655238923, 655238923);
+		putDs(map, 655238926, 655238926);
+		putDs(map, 655238927, 655238927);
+		putDs(map, 655238928, 655238928);
+		putDs(map, 655238929, 655238929);
+		putDs(map, 655304456, 655304456);
+		putDs(map, 655304457, 655304457);
+		putDs(map, 655304458, 655304458);
+		putDs(map, 655304459, 655304459);
+		putDs(map, 655304462, 655304462);
+		putDs(map, 655304463, 655304463);
+		putDs(map, 655304464, 655304464);
+		putDs(map, 655304465, 655304465);
+		putDs(map, 655369992, 655369992);
+		putDs(map, 655369993, 655369993);
+		putDs(map, 655369994, 655369994);
+		putDs(map, 655369995, 655369995);
+		putDs(map, 655369998, 655369998);
+		putDs(map, 655369999, 655369999);
+		putDs(map, 655370000, 655370000);
+		putDs(map, 655370001, 655370001);
+		putDs(map, 655435528, 655435528);
+		putDs(map, 655435529, 655435529);
+		putDs(map, 655435530, 655435530);
+		putDs(map, 655435531, 655435531);
+		putDs(map, 655501064, 655501064);
+		putDs(map, 655501065, 655501065);
+		putDs(map, 655501066, 655501066);
+		putDs(map, 655501067, 655501067);
+		putDs(map, 655501068, 655501068);
 
 		System.out.println("size = " + map.size());
-		Assert.assertEquals(33, map.size());
+		Assert.assertEquals(18, map.size());
 	}
 
 	@Test
-	public void testJdk() {
-		HashMap<Integer, Integer> map = new HashMap<>();
+	public void testGdxManual() {
+		Collections.allocateIterators = true;
+		IntMap<Integer> map = new IntMap<>(5, 0.8f);
+		map.put(1, 1);
+		map.put(2, 2);
+		map.put(3, 3);
+		map.put(4, 4);
+		map.put(5, 5);
+		map.put(6, 6);
 
-		map.put(655238920, 655238920);
-		map.put(655238921, 655238921);
-		map.put(655238922, 655238922);
-		map.put(655238923, 655238923);
-		map.put(655238926, 655238926);
-		map.put(655238927, 655238927);
-		map.put(655238928, 655238928);
-		map.put(655238929, 655238929);
-		map.put(655304456, 655304456);
-		map.put(655304457, 655304457);
-		map.put(655304458, 655304458);
-		map.put(655304459, 655304459);
-		map.put(655304462, 655304462);
-		map.put(655304463, 655304463);
-		map.put(655304464, 655304464);
-		map.put(655304465, 655304465);
-		map.put(655369992, 655369992);
-		map.put(655369993, 655369993);
-		map.put(655369994, 655369994);
-		map.put(655369995, 655369995);
-		map.put(655369998, 655369998);
-		map.put(655369999, 655369999);
-		map.put(655370000, 655370000);
-		map.put(655370001, 655370001);
-		map.put(655435528, 655435528);
-		map.put(655435529, 655435529);
-		map.put(655435530, 655435530);
-		map.put(655435531, 655435531);
-		map.put(655501064, 655501064);
-		map.put(655501065, 655501065);
-		map.put(655501066, 655501066);
-		map.put(655501067, 655501067);
-		map.put(655501068, 655501068);
+		IntMap.Entries<Integer> it = map.entries();
+		int ctr = 0;
+		while (it.hasNext && ctr < 4) {
+			IntMap.Entries<Integer> it2 = map.entries();
+			if(it2.hasNext()) it2.next();
+			IntMap.Entry<Integer> item = it.next();
+			map.remove(item.key);
+			it.remove();
+			ctr++;
+		}
+
+		System.out.println("size = " + map.size);
+		Assert.assertEquals(-2, map.size); // THIS IS NOT WHAT IT SHOULD ACTUALLY BE
+	}
+
+	@Test(expected = RuntimeException.class)
+	public void testJdkgdxdsManual() {
+		com.github.tommyettinger.ds.IntObjectMap<Integer> map = new com.github.tommyettinger.ds.IntObjectMap<>(5, 0.8f);
+		map.put(1, 1);
+		map.put(2, 2);
+		map.put(3, 3);
+		map.put(4, 4);
+		map.put(5, 5);
+		map.put(6, 6);
+
+		IntObjectMap.EntryIterator<Integer> it = map.entrySet().iterator();
+		int ctr = 0;
+		while (it.hasNext && ctr < 4) {
+			IntObjectMap.EntryIterator<Integer> it2 = map.entrySet().iterator();
+			if(it2.hasNext()) it2.next();
+			IntObjectMap.Entry<Integer> item = it.next();
+			map.remove(item.key);
+			it.remove();
+			ctr++;
+		}
 
 		System.out.println("size = " + map.size());
-		Assert.assertEquals(33, map.size());
+		Assert.assertEquals(-2, map.size());
 	}
 }
