@@ -15,7 +15,7 @@
  *
  */
 
-package com.github.tommyettinger.random;
+package com.github.tommyettinger.random.gdx;
 
 import com.badlogic.gdx.utils.ObjectMap;
 import com.github.tommyettinger.ds.ObjectObjectMap;
