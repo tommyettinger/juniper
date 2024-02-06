@@ -341,6 +341,8 @@ public abstract class EnhancedRandom extends Random {
 	 * {@code int} values are produced with (approximately) equal
 	 * probability.
 	 * <br>
+	 * This method clamps bound to be at least 0; it never returns a negative int.
+	 * <br>
 	 * It should be mentioned that the technique this uses has some bias, depending
 	 * on {@code bound}, but it typically isn't measurable without specifically looking
 	 * for it. Using the method this does allows this method to always advance the state
@@ -357,6 +359,33 @@ public abstract class EnhancedRandom extends Random {
 	 */
 	public int nextInt (int bound) {
 		return (int)(bound * (nextLong() & 0xFFFFFFFFL) >> 32) & ~(bound >> 31);
+	}
+
+	/**
+	 * Returns a pseudorandom, uniformly distributed {@code int} value
+	 * between 0 (inclusive) and the specified value (exclusive), drawn from
+	 * this random number generator's sequence.  The general contract of
+	 * {@code nextInt} is that one {@code int} value in the specified range
+	 * is pseudorandomly generated and returned.  All {@code bound} possible
+	 * {@code int} values are produced with (approximately) equal
+	 * probability.
+	 * <br>
+	 * This method treats the outer bound as unsigned, so if a negative int is passed as
+	 * {@code bound}, it will be treated as positive and larger than {@link Integer#MAX_VALUE}.
+	 * That means this can produce results that are positive or negative, but when you
+	 * mask the result and the bound with {@code 0xFFFFFFFFL} (to treat them as unsigned),
+	 * the result will always be between {@code 0L} (inclusive) and the masked bound
+	 * (exclusive).
+	 * <br>
+	 * This is primarily useful as a building block for other methods in this class.
+	 *
+	 * @param bound the upper bound (exclusive); treated as unsigned
+	 * @return the next pseudorandom, uniformly distributed {@code int}
+	 * value between zero (inclusive) and {@code bound} (exclusive), treated as
+	 * unsigned, from this random number generator's sequence
+	 */
+	public int nextUnsignedInt (int bound) {
+		return (int)((bound & 0xFFFFFFFFL) * (nextLong() & 0xFFFFFFFFL) >>> 32);
 	}
 
 	/**
@@ -381,11 +410,7 @@ public abstract class EnhancedRandom extends Random {
 	 * Returns a pseudorandom, uniformly distributed {@code int} value between the
 	 * specified {@code innerBound} (inclusive) and the specified {@code outerBound}
 	 * (exclusive). If {@code outerBound} is less than or equal to {@code innerBound},
-	 * this always returns {@code innerBound}. This is significantly slower than
-	 * {@link #nextInt(int)} or {@link #nextSignedInt(int)},
-	 * because this handles even ranges that go from large negative numbers to large
-	 * positive numbers, and since that would be larger than the largest possible int,
-	 * this has to use {@link #nextLong(long, long)}.
+	 * this always returns {@code innerBound}.
 	 *
 	 * <br> For any case where outerBound might be valid but less than innerBound, you
 	 * can use {@link #nextSignedInt(int, int)}. If outerBound is less than innerBound
@@ -397,19 +422,14 @@ public abstract class EnhancedRandom extends Random {
 	 * @see #nextInt(int) Here's a note about the bias present in the bounded generation.
 	 */
 	public int nextInt (int innerBound, int outerBound) {
-		return (int)nextLong(innerBound, outerBound);
+		return (int)(innerBound + (nextUnsignedInt(outerBound - innerBound) & ~((long)outerBound - (long)innerBound >> 63)));
 	}
 
 	/**
 	 * Returns a pseudorandom, uniformly distributed {@code int} value between the
 	 * specified {@code innerBound} (inclusive) and the specified {@code outerBound}
 	 * (exclusive). This is meant for cases where either bound may be negative,
-	 * especially if the bounds are unknown or may be user-specified. It is slightly
-	 * slower than {@link #nextInt(int, int)}, and significantly slower than
-	 * {@link #nextInt(int)} or {@link #nextSignedInt(int)}. This last part is
-	 * because this handles even ranges that go from large negative numbers to large
-	 * positive numbers, and since that range is larger than the largest possible int,
-	 * this has to use {@link #nextSignedLong(long, long)}.
+	 * especially if the bounds are unknown or may be user-specified.
 	 *
 	 * @param innerBound the inclusive inner bound; may be any int, allowing negative
 	 * @param outerBound the exclusive outer bound; may be any int, allowing negative
@@ -417,7 +437,7 @@ public abstract class EnhancedRandom extends Random {
 	 * @see #nextInt(int) Here's a note about the bias present in the bounded generation.
 	 */
 	public int nextSignedInt (int innerBound, int outerBound) {
-		return (int)nextSignedLong(innerBound, outerBound);
+		return innerBound + nextUnsignedInt(outerBound - innerBound);
 	}
 
 	/**
@@ -1430,7 +1450,7 @@ public abstract class EnhancedRandom extends Random {
 	 * @throws IndexOutOfBoundsException if array is empty
 	 */
 	public <T> T randomElement (T[] array) {
-		return array[nextInt(array.length)];
+		return array[nextSignedInt(array.length)];
 	}
 
 	/**
@@ -1442,7 +1462,7 @@ public abstract class EnhancedRandom extends Random {
 	 * @return a randomly-selected item from list
 	 */
 	public <T> T randomElement (List<T> list) {
-		return list.get(nextInt(list.size()));
+		return list.get(nextSignedInt(list.size()));
 	}
 
 	/**
@@ -1465,7 +1485,7 @@ public abstract class EnhancedRandom extends Random {
 		offset = Math.min(Math.max(0, offset), items.length);
 		length = Math.min(items.length - offset, Math.max(0, length));
 		for (int i = offset + length - 1; i > offset; i--) {
-			int ii = nextInt(offset, i + 1);
+			int ii = nextSignedInt(offset, i + 1);
 			int temp = items[i];
 			items[i] = items[ii];
 			items[ii] = temp;
@@ -1492,7 +1512,7 @@ public abstract class EnhancedRandom extends Random {
 		offset = Math.min(Math.max(0, offset), items.length);
 		length = Math.min(items.length - offset, Math.max(0, length));
 		for (int i = offset + length - 1; i > offset; i--) {
-			int ii = nextInt(offset, i + 1);
+			int ii = nextSignedInt(offset, i + 1);
 			long temp = items[i];
 			items[i] = items[ii];
 			items[ii] = temp;
@@ -1519,7 +1539,7 @@ public abstract class EnhancedRandom extends Random {
 		offset = Math.min(Math.max(0, offset), items.length);
 		length = Math.min(items.length - offset, Math.max(0, length));
 		for (int i = offset + length - 1; i > offset; i--) {
-			int ii = nextInt(offset, i + 1);
+			int ii = nextSignedInt(offset, i + 1);
 			float temp = items[i];
 			items[i] = items[ii];
 			items[ii] = temp;
@@ -1546,7 +1566,7 @@ public abstract class EnhancedRandom extends Random {
 		offset = Math.min(Math.max(0, offset), items.length);
 		length = Math.min(items.length - offset, Math.max(0, length));
 		for (int i = offset + length - 1; i > offset; i--) {
-			int ii = nextInt(offset, i + 1);
+			int ii = nextSignedInt(offset, i + 1);
 			char temp = items[i];
 			items[i] = items[ii];
 			items[ii] = temp;
@@ -1573,7 +1593,7 @@ public abstract class EnhancedRandom extends Random {
 		offset = Math.min(Math.max(0, offset), items.length);
 		length = Math.min(items.length - offset, Math.max(0, length));
 		for (int i = offset + length - 1; i > offset; i--) {
-			int ii = nextInt(offset, i + 1);
+			int ii = nextSignedInt(offset, i + 1);
 			byte temp = items[i];
 			items[i] = items[ii];
 			items[ii] = temp;
@@ -1600,7 +1620,7 @@ public abstract class EnhancedRandom extends Random {
 		offset = Math.min(Math.max(0, offset), items.length);
 		length = Math.min(items.length - offset, Math.max(0, length));
 		for (int i = offset + length - 1; i > offset; i--) {
-			int ii = nextInt(offset, i + 1);
+			int ii = nextSignedInt(offset, i + 1);
 			double temp = items[i];
 			items[i] = items[ii];
 			items[ii] = temp;
@@ -1627,7 +1647,7 @@ public abstract class EnhancedRandom extends Random {
 		offset = Math.min(Math.max(0, offset), items.length);
 		length = Math.min(items.length - offset, Math.max(0, length));
 		for (int i = offset + length - 1; i > offset; i--) {
-			int ii = nextInt(offset, i + 1);
+			int ii = nextSignedInt(offset, i + 1);
 			short temp = items[i];
 			items[i] = items[ii];
 			items[ii] = temp;
@@ -1654,7 +1674,7 @@ public abstract class EnhancedRandom extends Random {
 		offset = Math.min(Math.max(0, offset), items.length);
 		length = Math.min(items.length - offset, Math.max(0, length));
 		for (int i = offset + length - 1; i > offset; i--) {
-			int ii = nextInt(offset, i + 1);
+			int ii = nextSignedInt(offset, i + 1);
 			boolean temp = items[i];
 			items[i] = items[ii];
 			items[ii] = temp;
@@ -1681,7 +1701,7 @@ public abstract class EnhancedRandom extends Random {
 		offset = Math.min(Math.max(0, offset), items.length);
 		length = Math.min(items.length - offset, Math.max(0, length));
 		for (int i = offset + length - 1; i > offset; i--) {
-			int ii = nextInt(offset, i + 1);
+			int ii = nextSignedInt(offset, i + 1);
 			T temp = items[i];
 			items[i] = items[ii];
 			items[ii] = temp;

@@ -1,6 +1,7 @@
 package com.github.tommyettinger.random;
 
 import com.github.tommyettinger.digital.ArrayTools;
+import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.random.experimental.Rawr32Random;
 import com.github.tommyettinger.random.experimental.RespectRandom;
 import org.junit.Assert;
@@ -1019,6 +1020,16 @@ public class EnhancedRandomTest {
 		Assert.assertEquals(npn, npnp);
 	}
 
+	@Test
+	public void testBoundedInt() {
+		DistinctRandom random = new DistinctRandom(12345L);
+		int inner = 0x90000000, outer = 0x70000000;
+		int bounded = random.nextInt(inner, outer);
+//		System.out.println("Result: " + Base.BASE16.unsigned(bounded));
+		bounded = random.nextInt(outer, inner);
+//		System.out.println("Result: " + Base.BASE16.unsigned(bounded));
+
+	}
 
 	@Test
 	public void testDistinctBoundedLong() {
@@ -1038,17 +1049,28 @@ public class EnhancedRandomTest {
 	public void testDistinctBoundedInt() {
 		DistinctRandom random = new DistinctRandom(123L);
 		int inner = -1879048192, outer = 1879048192;
+		boolean foundNegative = false, foundPositive = false;
 		for (int i = 0; i < 1024; i++) {
 			int bounded = random.nextInt(inner, outer);
+			foundNegative |= bounded < 0;
+			foundPositive |= bounded >= 0;
 			Assert.assertTrue(bounded >= inner && bounded < outer);
 		}
+		Assert.assertTrue("Did not find a negative result", foundNegative);
+		Assert.assertTrue("Did not find a positive result", foundPositive);
+		foundNegative = false;
+		foundPositive = false;
 		for (int i = 0; i < 1024; i++) {
 			int bounded = random.nextSignedInt(inner, outer);
+			foundNegative |= bounded < 0;
+			foundPositive |= bounded >= 0;
 			Assert.assertTrue(bounded >= inner && bounded < outer);
 		}
+		Assert.assertTrue("Did not find a negative result", foundNegative);
+		Assert.assertTrue("Did not find a positive result", foundPositive);
 		for (int i = 0; i < 1024; i++) {
 			int bounded = random.nextInt(outer, inner);
-			Assert.assertEquals(bounded, outer);
+			Assert.assertEquals(outer, bounded);
 		}
 	}
 

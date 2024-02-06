@@ -348,6 +348,41 @@ public class LaserRandom extends EnhancedRandom {
 		final long z = (s ^ s >>> 31) * (stateB += 0x9E3779B97F4A7C16L);
 		return (int)(bound * ((z ^ z >>> 26 ^ z >>> 6) & 0xFFFFFFFFL) >> 32) & ~(bound >> 31);
 	}
+	/**
+	 * Returns a pseudorandom, uniformly distributed {@code int} value
+	 * between 0 (inclusive) and the specified value (exclusive), drawn from
+	 * this random number generator's sequence.  The general contract of
+	 * {@code nextInt} is that one {@code int} value in the specified range
+	 * is pseudorandomly generated and returned.  All {@code bound} possible
+	 * {@code int} values are produced with (approximately) equal
+	 * probability.
+	 * <br>
+	 * This method treats the outer bound as unsigned, so if a negative int is passed as
+	 * {@code bound}, it will be treated as positive and larger than {@link Integer#MAX_VALUE}.
+	 * That means this can produce results that are positive or negative, but when you
+	 * mask the result and the bound with {@code 0xFFFFFFFFL} (to treat them as unsigned),
+	 * the result will always be between {@code 0L} (inclusive) and the masked bound
+	 * (exclusive).
+	 * <br>
+	 * It should be mentioned that the technique this uses has some bias, depending
+	 * on {@code bound}, but it typically isn't measurable without specifically looking
+	 * for it. Using this technique allows this method to always advance the state
+	 * by one step, instead of a varying and unpredictable amount with the more typical
+	 * ways of rejection-sampling random numbers and only using numbers that can produce
+	 * an int within the bound without bias.
+	 * See <a href="https://www.pcg-random.org/posts/bounded-rands.html">M.E. O'Neill's
+	 * blog about random numbers</a> for discussion of alternative, unbiased methods.
+	 *
+	 * @param bound the upper bound (exclusive). If negative or 0, this always returns 0.
+	 * @return the next pseudorandom, uniformly distributed {@code int}
+	 * value between zero (inclusive) and {@code bound} (exclusive)
+	 * from this random number generator's sequence
+	 */
+	public int nextUnsignedInt (int bound) {
+		final long s = stateA += 0xC6BC279692B5C323L;
+		final long z = (s ^ s >>> 31) * (stateB += 0x9E3779B97F4A7C16L);
+		return (int)((bound & 0xFFFFFFFFL) * ((z ^ z >>> 26 ^ z >>> 6) & 0xFFFFFFFFL) >>> 32);
+	}
 
 	/**
 	 * Returns a pseudorandom, uniformly distributed {@code int} value between an
@@ -373,9 +408,7 @@ public class LaserRandom extends EnhancedRandom {
 	 * Returns a pseudorandom, uniformly distributed {@code int} value between the
 	 * specified {@code innerBound} (inclusive) and the specified {@code outerBound}
 	 * (exclusive). If {@code outerBound} is less than or equal to {@code innerBound},
-	 * this always returns {@code innerBound}. Internally, this calls
-	 * {@link #nextLong(long, long)} and casts it to int (because the range between
-	 * innerBound and outerBound can be greater than the largest int).
+	 * this always returns {@code innerBound}.
 	 *
 	 * <br> For any case where outerBound might be valid but less than innerBound, you
 	 * can use {@link #nextSignedInt(int, int)}.
@@ -386,17 +419,14 @@ public class LaserRandom extends EnhancedRandom {
 	 * @see #nextInt(int) Here's a note about the bias present in the bounded generation.
 	 */
 	public int nextInt (int innerBound, int outerBound) {
-		return (int)nextLong(innerBound, outerBound);
+		return (int)(innerBound + (nextUnsignedInt(outerBound - innerBound) & ~((long)outerBound - (long)innerBound >> 63)));
 	}
 
 	/**
 	 * Returns a pseudorandom, uniformly distributed {@code int} value between the
 	 * specified {@code innerBound} (inclusive) and the specified {@code outerBound}
 	 * (exclusive). This is meant for cases where either bound may be negative,
-	 * especially if the bounds are unknown or may be user-specified. It is slightly
-	 * slower than {@link #nextInt(int, int)}. Internally, this calls
-	 * {@link #nextSignedLong(long, long)} and casts it to int (because the range
-	 * between innerBound and outerBound can be greater than the largest int).
+	 * especially if the bounds are unknown or may be user-specified.
 	 *
 	 * @param innerBound the inclusive inner bound; may be any int, allowing negative
 	 * @param outerBound the exclusive outer bound; may be any int, allowing negative
@@ -404,7 +434,7 @@ public class LaserRandom extends EnhancedRandom {
 	 * @see #nextInt(int) Here's a note about the bias present in the bounded generation.
 	 */
 	public int nextSignedInt (int innerBound, int outerBound) {
-		return (int)nextSignedLong(innerBound, outerBound);
+		return innerBound + nextUnsignedInt(outerBound - innerBound);
 	}
 
 	/**
