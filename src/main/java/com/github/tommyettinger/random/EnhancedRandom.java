@@ -895,7 +895,7 @@ public abstract class EnhancedRandom extends Random {
 	public float nextExclusiveFloat () {
 		final long bits = nextLong();
 		return BitConversion.intBitsToFloat(126 - BitConversion.countLeadingZeros(bits) << 23 | ((int)bits & 0x7FFFFF));
-//		return BitConversion.intBitsToFloat(126 - Long.numberOfTrailingZeros(bits) << 23 | (int)(bits >>> 41));
+//		return Float.intBitsToFloat(126 - Long.numberOfTrailingZeros(bits) << 23 | (int)(bits >>> 41));
 	}
 
 	/**
