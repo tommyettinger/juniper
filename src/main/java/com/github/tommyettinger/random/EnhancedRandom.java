@@ -1450,7 +1450,7 @@ public abstract class EnhancedRandom extends Random {
 	 * @throws IndexOutOfBoundsException if array is empty
 	 */
 	public <T> T randomElement (T[] array) {
-		return array[nextSignedInt(array.length)];
+		return array[nextInt(array.length)];
 	}
 
 	/**
@@ -1462,7 +1462,7 @@ public abstract class EnhancedRandom extends Random {
 	 * @return a randomly-selected item from list
 	 */
 	public <T> T randomElement (List<T> list) {
-		return list.get(nextSignedInt(list.size()));
+		return list.get(nextInt(list.size()));
 	}
 
 	/**
@@ -1471,7 +1471,12 @@ public abstract class EnhancedRandom extends Random {
 	 * @param items an int array; must be non-null
 	 */
 	public void shuffle (int[] items) {
-		shuffle(items, 0, items.length);
+		for (int i = items.length - 1; i > 0; i--) {
+			int ii = nextInt(i + 1);
+			int temp = items[i];
+			items[i] = items[ii];
+			items[ii] = temp;
+		}
 	}
 
 	/**
@@ -1485,7 +1490,7 @@ public abstract class EnhancedRandom extends Random {
 		offset = Math.min(Math.max(0, offset), items.length);
 		length = Math.min(items.length - offset, Math.max(0, length));
 		for (int i = offset + length - 1; i > offset; i--) {
-			int ii = nextSignedInt(offset, i + 1);
+			int ii = offset + nextInt(i + 1 - offset);
 			int temp = items[i];
 			items[i] = items[ii];
 			items[ii] = temp;
@@ -1498,7 +1503,12 @@ public abstract class EnhancedRandom extends Random {
 	 * @param items a long array; must be non-null
 	 */
 	public void shuffle (long[] items) {
-		shuffle(items, 0, items.length);
+		for (int i = items.length - 1; i > 0; i--) {
+			int ii = nextInt(i + 1);
+			long temp = items[i];
+			items[i] = items[ii];
+			items[ii] = temp;
+		}
 	}
 
 	/**
@@ -1512,7 +1522,7 @@ public abstract class EnhancedRandom extends Random {
 		offset = Math.min(Math.max(0, offset), items.length);
 		length = Math.min(items.length - offset, Math.max(0, length));
 		for (int i = offset + length - 1; i > offset; i--) {
-			int ii = nextSignedInt(offset, i + 1);
+			int ii = offset + nextInt(i + 1 - offset);
 			long temp = items[i];
 			items[i] = items[ii];
 			items[ii] = temp;
@@ -1525,7 +1535,12 @@ public abstract class EnhancedRandom extends Random {
 	 * @param items a float array; must be non-null
 	 */
 	public void shuffle (float[] items) {
-		shuffle(items, 0, items.length);
+		for (int i = items.length - 1; i > 0; i--) {
+			int ii = nextInt(i + 1);
+			float temp = items[i];
+			items[i] = items[ii];
+			items[ii] = temp;
+		}
 	}
 
 	/**
@@ -1539,7 +1554,7 @@ public abstract class EnhancedRandom extends Random {
 		offset = Math.min(Math.max(0, offset), items.length);
 		length = Math.min(items.length - offset, Math.max(0, length));
 		for (int i = offset + length - 1; i > offset; i--) {
-			int ii = nextSignedInt(offset, i + 1);
+			int ii = offset + nextInt(i + 1 - offset);
 			float temp = items[i];
 			items[i] = items[ii];
 			items[ii] = temp;
@@ -1552,7 +1567,12 @@ public abstract class EnhancedRandom extends Random {
 	 * @param items a char array; must be non-null
 	 */
 	public void shuffle (char[] items) {
-		shuffle(items, 0, items.length);
+		for (int i = items.length - 1; i > 0; i--) {
+			int ii = nextInt(i + 1);
+			char temp = items[i];
+			items[i] = items[ii];
+			items[ii] = temp;
+		}
 	}
 
 	/**
@@ -1566,7 +1586,7 @@ public abstract class EnhancedRandom extends Random {
 		offset = Math.min(Math.max(0, offset), items.length);
 		length = Math.min(items.length - offset, Math.max(0, length));
 		for (int i = offset + length - 1; i > offset; i--) {
-			int ii = nextSignedInt(offset, i + 1);
+			int ii = offset + nextInt(i + 1 - offset);
 			char temp = items[i];
 			items[i] = items[ii];
 			items[ii] = temp;
@@ -1579,7 +1599,12 @@ public abstract class EnhancedRandom extends Random {
 	 * @param items a byte array; must be non-null
 	 */
 	public void shuffle (byte[] items) {
-		shuffle(items, 0, items.length);
+		for (int i = items.length - 1; i > 0; i--) {
+			int ii = nextInt(i + 1);
+			byte temp = items[i];
+			items[i] = items[ii];
+			items[ii] = temp;
+		}
 	}
 
 	/**
@@ -1593,7 +1618,7 @@ public abstract class EnhancedRandom extends Random {
 		offset = Math.min(Math.max(0, offset), items.length);
 		length = Math.min(items.length - offset, Math.max(0, length));
 		for (int i = offset + length - 1; i > offset; i--) {
-			int ii = nextSignedInt(offset, i + 1);
+			int ii = offset + nextInt(i + 1 - offset);
 			byte temp = items[i];
 			items[i] = items[ii];
 			items[ii] = temp;
@@ -1606,7 +1631,12 @@ public abstract class EnhancedRandom extends Random {
 	 * @param items a double array; must be non-null
 	 */
 	public void shuffle (double[] items) {
-		shuffle(items, 0, items.length);
+		for (int i = items.length - 1; i > 0; i--) {
+			int ii = nextInt(i + 1);
+			double temp = items[i];
+			items[i] = items[ii];
+			items[ii] = temp;
+		}
 	}
 
 	/**
@@ -1620,7 +1650,7 @@ public abstract class EnhancedRandom extends Random {
 		offset = Math.min(Math.max(0, offset), items.length);
 		length = Math.min(items.length - offset, Math.max(0, length));
 		for (int i = offset + length - 1; i > offset; i--) {
-			int ii = nextSignedInt(offset, i + 1);
+			int ii = offset + nextInt(i + 1 - offset);
 			double temp = items[i];
 			items[i] = items[ii];
 			items[ii] = temp;
@@ -1633,7 +1663,12 @@ public abstract class EnhancedRandom extends Random {
 	 * @param items a short array; must be non-null
 	 */
 	public void shuffle (short[] items) {
-		shuffle(items, 0, items.length);
+		for (int i = items.length - 1; i > 0; i--) {
+			int ii = nextInt(i + 1);
+			short temp = items[i];
+			items[i] = items[ii];
+			items[ii] = temp;
+		}
 	}
 
 	/**
@@ -1647,7 +1682,7 @@ public abstract class EnhancedRandom extends Random {
 		offset = Math.min(Math.max(0, offset), items.length);
 		length = Math.min(items.length - offset, Math.max(0, length));
 		for (int i = offset + length - 1; i > offset; i--) {
-			int ii = nextSignedInt(offset, i + 1);
+			int ii = offset + nextInt(i + 1 - offset);
 			short temp = items[i];
 			items[i] = items[ii];
 			items[ii] = temp;
@@ -1660,7 +1695,12 @@ public abstract class EnhancedRandom extends Random {
 	 * @param items a boolean array; must be non-null
 	 */
 	public void shuffle (boolean[] items) {
-		shuffle(items, 0, items.length);
+		for (int i = items.length - 1; i > 0; i--) {
+			int ii = nextInt(i + 1);
+			boolean temp = items[i];
+			items[i] = items[ii];
+			items[ii] = temp;
+		}
 	}
 
 	/**
@@ -1674,7 +1714,7 @@ public abstract class EnhancedRandom extends Random {
 		offset = Math.min(Math.max(0, offset), items.length);
 		length = Math.min(items.length - offset, Math.max(0, length));
 		for (int i = offset + length - 1; i > offset; i--) {
-			int ii = nextSignedInt(offset, i + 1);
+			int ii = offset + nextInt(i + 1 - offset);
 			boolean temp = items[i];
 			items[i] = items[ii];
 			items[ii] = temp;
@@ -1687,7 +1727,12 @@ public abstract class EnhancedRandom extends Random {
 	 * @param items an array of some reference type; must be non-null but may contain null items
 	 */
 	public <T> void shuffle (T[] items) {
-		shuffle(items, 0, items.length);
+		for (int i = items.length - 1; i > 0; i--) {
+			int ii = nextInt(i + 1);
+			T temp = items[i];
+			items[i] = items[ii];
+			items[ii] = temp;
+		}
 	}
 
 	/**
@@ -1701,10 +1746,42 @@ public abstract class EnhancedRandom extends Random {
 		offset = Math.min(Math.max(0, offset), items.length);
 		length = Math.min(items.length - offset, Math.max(0, length));
 		for (int i = offset + length - 1; i > offset; i--) {
-			int ii = nextSignedInt(offset, i + 1);
+			int ii = offset + nextInt(i + 1 - offset);
 			T temp = items[i];
 			items[i] = items[ii];
 			items[ii] = temp;
+		}
+	}
+
+	/**
+	 * Shuffles the given List in-place pseudo-randomly, using this to determine how to shuffle.
+	 *
+	 * @param items a List of some type {@code T}; must be non-null but may contain null items
+	 */
+	public <T> void shuffle (List<T> items) {
+		for (int i = items.size() - 1; i > 0; i--) {
+			int ii = nextInt(i + 1);
+			T temp = items.get(i);
+			items.set(i, items.get(ii));
+			items.set(ii, temp);
+		}
+	}
+
+	/**
+	 * Shuffles a section of the given List in-place pseudo-randomly, using this to determine how to shuffle.
+	 *
+	 * @param items  a List of some type {@code T}; must be non-null but may contain null items
+	 * @param offset the index of the first element of the array that can be shuffled
+	 * @param length the length of the section to shuffle
+	 */
+	public <T> void shuffle (List<T> items, int offset, int length) {
+		offset = Math.min(Math.max(0, offset), items.size());
+		length = Math.min(items.size() - offset, Math.max(0, length));
+		for (int i = offset + length - 1; i > offset; i--) {
+			int ii = offset + nextInt(i + 1 - offset);
+			T temp = items.get(i);
+			items.set(i, items.get(ii));
+			items.set(ii, temp);
 		}
 	}
 
