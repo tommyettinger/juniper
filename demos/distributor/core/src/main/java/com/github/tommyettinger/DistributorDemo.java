@@ -13,7 +13,7 @@ public class DistributorDemo extends Game {
     public static final int SCREEN_HEIGHT = 520;
 
     private Screen[] screens;
-    public Screen alternateCauchy, alternateArcsine, alternateNormal, alternateTriangular;
+    public Screen alternateCauchy, alternateArcsine, alternateNormal, alternateTriangular, corner;
     private int screenIndex;
     public static double a = 1.0, b = 1.0, c = 1.0;
     public EnhancedRandom[] randoms = new EnhancedRandom[]{new Respite32Random(), new Jsf32Random(), new ChopRandom(),
@@ -36,6 +36,7 @@ public class DistributorDemo extends Game {
         alternateArcsine = new ArcsineAlternateScreen(this);
         alternateNormal = new NormalAlternateScreen(this);
         alternateTriangular = new TriangleVariantsScreen(this);
+        corner = new CornerScreen(this);
         screens = new Screen[]{
 //                new KumaraswamySmoothScreen(this),
                 new KumaraswamyScreen(this), new BetaScreen(this), new LumpScreen(this),

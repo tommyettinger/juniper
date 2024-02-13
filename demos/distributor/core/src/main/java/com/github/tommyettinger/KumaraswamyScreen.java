@@ -60,6 +60,11 @@ public class KumaraswamyScreen extends ScreenAdapter {
             mainGame.nextScreen();
             return;
         }
+        else if(Gdx.input.isKeyJustPressed(Input.Keys.SLASH))
+        {
+            mainGame.setScreen(mainGame.corner);
+            return;
+        }
         else if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             Gdx.app.exit();
             return;

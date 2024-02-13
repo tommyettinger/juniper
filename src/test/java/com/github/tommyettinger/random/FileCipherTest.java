@@ -103,7 +103,7 @@ public class FileCipherTest extends ApplicationAdapter {
 
     public static void main(String[] arg) {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-        config.setTitle("Speck Cipher on a Pixmap");
+        config.setTitle("Speck Cipher on a FileHandle");
         config.setWindowedMode(width, height);
         config.useVsync(false);
         config.setForegroundFPS(10);
