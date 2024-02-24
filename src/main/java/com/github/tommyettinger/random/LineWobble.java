@@ -141,17 +141,15 @@ public class LineWobble {
     {
         // int fast floor, from libGDX; 16384 is 2 to the 14, or 0x1p14, or 0x4000
         final int floor = ((int)(t + 16384.0) - 16384);
-        // what we add here ensures that at the very least, the upper half will have some non-zero bits.
-        int s = seed + 0x9E3779B9;
         // fancy XOR-rotate-rotate is a way to mix bits both up and down without multiplication.
-        s = (s ^ (s << 11 | s >>> 21) ^ (s << 25 | s >>> 7)) + floor;
+        seed = (seed ^ (seed << 11 | seed >>> 21) ^ (seed << 25 | seed >>> 7)) + floor;
         // we use a different technique here, relative to other wobble methods.
         // to avoid frequent multiplication and replace it with addition by constants, we track 3 variables, each of
         // which updates with a different large, negative int increment. when we want to get a result, we just XOR
         // m, n, and o, and use mainly the upper bits (by multiplying by a tiny fraction).
-        final int m = imul(s, 0xD1B54A33);
-        final int n = imul(s, 0xABC98383);
-        final int o = imul(s, 0x8CB92BA7);
+        final int m = imul(seed, 0xD1B54A33);
+        final int n = imul(seed, 0xABC98383);
+        final int o = imul(seed, 0x8CB92BA7);
 
         final float a = (m ^ n ^ o);
         final float b = (m + 0xD1B54A33 ^ n + 0xABC98383 ^ o + 0x8CB92BA7);
@@ -172,23 +170,21 @@ public class LineWobble {
      * This pretty much never produces steep changes between peaks and valleys; this may make it more useful for things
      * like generating terrain that can be walked across in a side-scrolling game.
      * @param seed any int
-     * @param t a distance traveled; should change by less than 1 between calls, and should be less than about 10000
+     * @param t a distance traveled; should change by less than 1 between calls
      * @return a smoothly-interpolated swaying value between -1 and 1, both exclusive
      */
     public static double bicubicWobble(int seed, double t)
     {
         final int floor = (int)Math.floor(t);
-        // what we add here ensures that at the very least, the upper half will have some non-zero bits.
-        int s = seed + 0x9E3779B9;
         // fancy XOR-rotate-rotate is a way to mix bits both up and down without multiplication.
-        s = (s ^ (s << 11 | s >>> 21) ^ (s << 25 | s >>> 7)) + floor;
+        seed = (seed ^ (seed << 11 | seed >>> 21) ^ (seed << 25 | seed >>> 7)) + floor;
         // we use a different technique here, relative to other wobble methods.
         // to avoid frequent multiplication and replace it with addition by constants, we track 3 variables, each of
         // which updates with a different large, negative int increment. when we want to get a result, we just XOR
         // m, n, and o, and use mainly the upper bits (by multiplying by a tiny fraction).
-        final int m = imul(s, 0xD1B54A33);
-        final int n = imul(s, 0xABC98383);
-        final int o = imul(s, 0x8CB92BA7);
+        final int m = imul(seed, 0xD1B54A33);
+        final int n = imul(seed, 0xABC98383);
+        final int o = imul(seed, 0x8CB92BA7);
 
         final double a = (m ^ n ^ o);
         final double b = (m + 0xD1B54A33 ^ n + 0xABC98383 ^ o + 0x8CB92BA7);
@@ -201,7 +197,7 @@ public class LineWobble {
         final double p = (d - c) - (a - b);
         // 3.1044085820515944E-10 , or 0x1.5555555555554p-32 , is just inside {@code -2.0/3.0/Integer.MIN_VALUE} .
         // it gets us about as close as we can go to 1.0 .
-        return (t * (t * t * p + t * (a - b - p) + c - a) + b) * 3.1044084E-10;
+        return (t * (t * t * p + t * (a - b - p) + c - a) + b) * 3.1044085820515944E-10;
     }
 
     /**
@@ -209,7 +205,7 @@ public class LineWobble {
      * This pretty much never produces steep changes between peaks and valleys; this may make it more useful for things
      * like generating terrain that can be walked across in a side-scrolling game.
      * @param seed any long
-     * @param t a distance traveled; should change by less than 1 between calls, and should be less than about 10000
+     * @param t a distance traveled; should change by less than 1 between calls
      * @return a smoothly-interpolated swaying value between -1 and 1, both exclusive
      */
     public static float bicubicWobble(long seed, float t)
@@ -236,7 +232,7 @@ public class LineWobble {
         t -= floor;
         // this is bicubic interpolation, inlined
         final float p = (d - c) - (a - b);
-        // 7.7.228014483236334E-20 , or 0x1.5555555555428p-64 , is just inside {@code -2f/3f/Long.MIN_VALUE} .
+        // 7.228014E-20f , or 0x1.555554p-64f , is just inside {@code -2f/3f/Long.MIN_VALUE} .
         // it gets us about as close as we can go to 1.0 .
         return (t * (t * t * p + t * (a - b - p) + c - a) + b) * 7.228014E-20f;
     }
@@ -246,7 +242,7 @@ public class LineWobble {
      * This pretty much never produces steep changes between peaks and valleys; this may make it more useful for things
      * like generating terrain that can be walked across in a side-scrolling game.
      * @param seed any long
-     * @param t a distance traveled; should change by less than 1 between calls, and should be less than about 10000
+     * @param t a distance traveled; should change by less than 1 between calls
      * @return a smoothly-interpolated swaying value between -1 and 1, both exclusive
      */
     public static double bicubicWobble(long seed, double t)
@@ -273,7 +269,7 @@ public class LineWobble {
         t -= floor;
         // this is bicubic interpolation, inlined
         final double p = (d - c) - (a - b);
-        // 7.7.228014483236334E-20 , or 0x1.5555555555428p-64 , is just inside {@code -2f/3f/Long.MIN_VALUE} .
+        // 7.228014483236334E-20 , or 0x1.5555555555428p-64 , is just inside {@code -2f/3f/Long.MIN_VALUE} .
         // it gets us about as close as we can go to 1.0 .
         return (t * (t * t * p + t * ((a - b) - p) + (c - a)) + b) * 7.228014483236334E-20;
     }
@@ -624,6 +620,165 @@ public class LineWobble {
     }
 //        final int start = imul(imul((z ^ 0xD1B54A35), 0x915F77F3) ^ 0xD1B54A35, 0x93D765DB),
 //                end = imul(imul((z + 0x9E3779B9 ^ 0xD1B54A35), 0x915F77F3) ^ 0xD1B54A35, 0x93D765DB);
+
+    /**
+     * Sway very smoothly using bicubic interpolation between 4 points (the two integers before t and the two after),
+     * and additional processing at the last step to push results closer to the min and max valid values. This is nearly
+     * the same as {@link #bicubicWobble(int, float)}, but it isn't at all as biased towards central results.
+     *
+     * @param t a distance traveled; should change by less than 1 between calls, and should be less than about 10000
+     * @param seed any int
+     * @return a smoothly-interpolated swaying value between -1 and 1, both exclusive
+     */
+    public static float smoothWobble(int seed, float t) {
+        // int fast floor, from libGDX; 16384 is 2 to the 14, or 0x1p14, or 0x4000
+        final int floor = ((int)(t + 16384.0) - 16384);
+        // fancy XOR-rotate-rotate is a way to mix bits both up and down without multiplication.
+        seed = (seed ^ (seed << 11 | seed >>> 21) ^ (seed << 25 | seed >>> 7)) + floor;
+        // we use a different technique here, relative to other wobble methods.
+        // to avoid frequent multiplication and replace it with addition by constants, we track 3 variables, each of
+        // which updates with a different large, negative int increment. when we want to get a result, we just XOR
+        // m, n, and o, and use mainly the upper bits (by multiplying by a tiny fraction).
+        final int m = imul(seed, 0xD1B54A33);
+        final int n = imul(seed, 0xABC98383);
+        final int o = imul(seed, 0x8CB92BA7);
+
+        final float a = (m ^ n ^ o);
+        final float b = (m + 0xD1B54A33 ^ n + 0xABC98383 ^ o + 0x8CB92BA7);
+        final float c = (m + 0xA36A9466 ^ n + 0x57930716 ^ o + 0x1972574E);
+        final float d = (m + 0x751FDE99 ^ n + 0x035C8A99 ^ o + 0xA62B82F5);
+
+        // get the fractional part of t.
+        t -= floor;
+        // this is bicubic interpolation, inlined
+        final float p = (d - c) - (a - b);
+        // 6.208817E-10f or 0x1.555555p-31f is just inside {@code -4f/3f/Integer.MIN_VALUE} .
+        // it gets us about as close as we can go to 2.0 .
+        t = (t * (t * t * p + t * (a - b - p) + c - a) + b) * 6.208817E-10f;
+        // a sigmoid function that ensures this essentially never returns outside the (-1,1) range.
+        // because t is twice what it usually is in bicubicWobble(), it can get closer to -1 and 1 here.
+        return t/(float)Math.sqrt(0.5f+t*t);
+    }
+
+    /**
+     * Sway very smoothly using bicubic interpolation between 4 points (the two integers before t and the two after),
+     * and additional processing at the last step to push results closer to the min and max valid values. This is nearly
+     * the same as {@link #bicubicWobble(int, double)}, but it isn't at all as biased towards central results.
+     *
+     * @param t a distance traveled; should change by less than 1 between calls
+     * @param seed any int
+     * @return a smoothly-interpolated swaying value between -1 and 1, both exclusive
+     */
+    public static double smoothWobble(int seed, double t)
+    {
+        final int floor = (int)Math.floor(t);
+        // fancy XOR-rotate-rotate is a way to mix bits both up and down without multiplication.
+        seed = (seed ^ (seed << 11 | seed >>> 21) ^ (seed << 25 | seed >>> 7)) + floor;
+        // we use a different technique here, relative to other wobble methods.
+        // to avoid frequent multiplication and replace it with addition by constants, we track 3 variables, each of
+        // which updates with a different large, negative int increment. when we want to get a result, we just XOR
+        // m, n, and o, and use mainly the upper bits (by multiplying by a tiny fraction).
+        final int m = imul(seed, 0xD1B54A33);
+        final int n = imul(seed, 0xABC98383);
+        final int o = imul(seed, 0x8CB92BA7);
+
+        final double a = (m ^ n ^ o);
+        final double b = (m + 0xD1B54A33 ^ n + 0xABC98383 ^ o + 0x8CB92BA7);
+        final double c = (m + 0xA36A9466 ^ n + 0x57930716 ^ o + 0x1972574E);
+        final double d = (m + 0x751FDE99 ^ n + 0x035C8A99 ^ o + 0xA62B82F5);
+
+        // get the fractional part of t.
+        t -= floor;
+        // this is bicubic interpolation, inlined
+        final double p = (d - c) - (a - b);
+        // 6.208817164103189E-10 , or 0x1.5555555555554p-31 , is just inside {@code -4.0/3.0/Integer.MIN_VALUE} .
+        // it gets us about as close as we can go to 1.0 .
+        t = (t * (t * t * p + t * (a - b - p) + c - a) + b) * 6.208817164103189E-10;
+        // a sigmoid function that ensures this essentially never returns outside the (-1,1) range.
+        // because t is twice what it usually is in bicubicWobble(), it can get closer to -1 and 1 here.
+        return t/Math.sqrt(0.5+t*t);
+    }
+
+    /**
+     * Sway very smoothly using bicubic interpolation between 4 points (the two integers before t and the two after),
+     * and additional processing at the last step to push results closer to the min and max valid values. This is nearly
+     * the same as {@link #bicubicWobble(long, float)}, but it isn't at all as biased towards central results.
+     *
+     * @param t a distance traveled; should change by less than 1 between calls
+     * @param seed any long
+     * @return a smoothly-interpolated swaying value between -1 and 1, both exclusive
+     */
+    public static float smoothWobble(long seed, float t) {
+        final long floor = (long) Math.floor(t);
+        // what we add here ensures that at the very least, the upper half will have some non-zero bits.
+        long s = ((seed & 0xFFFFFFFFL) ^ (seed >>> 32)) + 0x9E3779B97F4A7C15L;
+        // fancy XOR-rotate-rotate is a way to mix bits both up and down without multiplication.
+        s = (s ^ (s << 21 | s >>> 43) ^ (s << 50 | s >>> 14)) + floor;
+        // we use a different technique here, relative to other wobble methods.
+        // to avoid frequent multiplication and replace it with addition by constants, we track 3 variables, each of
+        // which updates with a different large, negative long increment. when we want to get a result, we just XOR
+        // m, n, and o, and use only the upper bits (by multiplying by a tiny fraction).
+        final long m = s * 0xD1B54A32D192ED03L;
+        final long n = s * 0xABC98388FB8FAC03L;
+        final long o = s * 0x8CB92BA72F3D8DD7L;
+
+        final float a = (m ^ n ^ o);
+        final float b = (m + 0xD1B54A32D192ED03L ^ n + 0xABC98388FB8FAC03L ^ o + 0x8CB92BA72F3D8DD7L);
+        final float c = (m + 0xA36A9465A325DA06L ^ n + 0x57930711F71F5806L ^ o + 0x1972574E5E7B1BAEL);
+        final float d = (m + 0x751FDE9874B8C709L ^ n + 0x035C8A9AF2AF0409L ^ o + 0xA62B82F58DB8A985L);
+
+        // get the fractional part of t.
+        t -= floor;
+        // this is bicubic interpolation, inlined
+        final float p = (d - c) - (a - b);
+        // 1.445603E-19f or 0x1.555556p-63f is just inside {@code -4f/3f/Long.MIN_VALUE} .
+        // it gets us about as close as we can go to 2.0 .
+        t = (t * (t * t * p + t * (a - b - p) + c - a) + b) * 1.445603E-19f;
+        // a sigmoid function that ensures this essentially never returns outside the (-1,1) range.
+        // because t is twice what it usually is in bicubicWobble(), it can get closer to -1 and 1 here.
+        return t/(float)Math.sqrt(0.5f+t*t);
+    }
+
+    /**
+     * Sway very smoothly using bicubic interpolation between 4 points (the two integers before t and the two after),
+     * and additional processing at the last step to push results closer to the min and max valid values. This is nearly
+     * the same as {@link #bicubicWobble(long, double)}, but it isn't at all as biased towards central results.
+     *
+     * @param t a distance traveled; should change by less than 1 between calls
+     * @param seed any long
+     * @return a smoothly-interpolated swaying value between -1 and 1, both exclusive
+     */
+    public static double smoothWobble(long seed, double t)
+    {
+        final long floor = (long)Math.floor(t);
+        // what we add here ensures that at the very least, the upper half will have some non-zero bits.
+        long s = ((seed & 0xFFFFFFFFL) ^ (seed >>> 32)) + 0x9E3779B97F4A7C15L;
+        // fancy XOR-rotate-rotate is a way to mix bits both up and down without multiplication.
+        s = (s ^ (s << 21 | s >>> 43) ^ (s << 50 | s >>> 14)) + floor;
+        // we use a different technique here, relative to other wobble methods.
+        // to avoid frequent multiplication and replace it with addition by constants, we track 3 variables, each of
+        // which updates with a different large, negative long increment. when we want to get a result, we just XOR
+        // m, n, and o, and use only the upper bits (by multiplying by a tiny fraction).
+        final long m = s * 0xD1B54A32D192ED03L;
+        final long n = s * 0xABC98388FB8FAC03L;
+        final long o = s * 0x8CB92BA72F3D8DD7L;
+
+        final double a = (m ^ n ^ o);
+        final double b = (m + 0xD1B54A32D192ED03L ^ n + 0xABC98388FB8FAC03L ^ o + 0x8CB92BA72F3D8DD7L);
+        final double c = (m + 0xA36A9465A325DA06L ^ n + 0x57930711F71F5806L ^ o + 0x1972574E5E7B1BAEL);
+        final double d = (m + 0x751FDE9874B8C709L ^ n + 0x035C8A9AF2AF0409L ^ o + 0xA62B82F58DB8A985L);
+
+        // get the fractional part of t.
+        t -= floor;
+        // this is bicubic interpolation, inlined
+        final double p = (d - c) - (a - b);
+        // 1.4456028966472667E-19 , or 0x1.5555555555428p-63 , is just inside {@code -4f/3f/Long.MIN_VALUE} .
+        // it gets us about as close as we can go to 1.0 .
+        t = (t * (t * t * p + t * ((a - b) - p) + (c - a)) + b) * 1.4456028966472667E-19;
+        // a sigmoid function that ensures this essentially never returns outside the (-1,1) range.
+        // because t is twice what it usually is in bicubicWobble(), it can get closer to -1 and 1 here.
+        return t/(float)Math.sqrt(0.5f+t*t);
+    }
 
     /**
      * A 1D "noise" method that produces smooth transitions like a sine wave, but also wrapping around at pi * 2 so this
