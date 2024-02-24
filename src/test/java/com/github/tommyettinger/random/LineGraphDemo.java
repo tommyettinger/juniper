@@ -24,6 +24,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.utils.UIUtils;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -49,19 +50,21 @@ public class LineGraphDemo extends ApplicationAdapter {
             LineWobble::quobble,                                                                       //3
             LineWobble::quobbleOctave2,                                                                //4
             LineWobble::trobble,                                                                       //5
-            (s, f) -> {                                                                                //6
+            LineWobble::smoothWobble,                                                                  //6
+            (s, f) -> {                                                                                //7
                 final long start = MathTools.longFloor(f), end = start + 1L;
                 return LineWobble.hobble(
                         s ^ start * 0x9E3779B97F4A7C15L,
                         s ^ end * 0x9E3779B97F4A7C15L, f - start);
             },
-            (i, f) -> LineWobble.wobble(i * 0x9E3779B97F4A7C15L, f),                                   //7
-            (i, f) -> LineWobble.bicubicWobble(i * 0x9E3779B97F4A7C15L, f),                            //8
-            (i, f) -> LineWobble.splobble(i * 0x9E3779B97F4A7C15L, f),                                 //9
-            (i, f) -> LineWobble.quobble(i * 0x9E3779B97F4A7C15L, f),                                  //10
-            (i, f) -> LineWobble.quobbleOctave2(i * 0x9E3779B97F4A7C15L, f),                           //11
-            (i, f) -> LineWobble.trobble(i * 0x9E3779B97F4A7C15L, f),                                  //12
-            (h, f) -> {                                                                                //13
+            (i, f) -> LineWobble.wobble(i * 0x9E3779B97F4A7C15L, f),                                   //8
+            (i, f) -> LineWobble.bicubicWobble(i * 0x9E3779B97F4A7C15L, f),                            //9
+            (i, f) -> LineWobble.splobble(i * 0x9E3779B97F4A7C15L, f),                                 //10
+            (i, f) -> LineWobble.quobble(i * 0x9E3779B97F4A7C15L, f),                                  //11
+            (i, f) -> LineWobble.quobbleOctave2(i * 0x9E3779B97F4A7C15L, f),                           //12
+            (i, f) -> LineWobble.trobble(i * 0x9E3779B97F4A7C15L, f),                                  //13
+            (i, f) -> LineWobble.smoothWobble(i * 0x9E3779B97F4A7C15L, f),                             //14
+            (h, f) -> {                                                                                //15
                 final long start = MathTools.longFloor(f);
                 long i = h;
                 i = (i ^ (i << 21 | i >>> 43) ^ (i << 50 | i >>> 14)) + start;
@@ -70,7 +73,7 @@ public class LineGraphDemo extends ApplicationAdapter {
                 return (Hasher.randomize3(i) * (1f - s) + Hasher.randomize3(1L + i) * s) * 0x1p-63f;
             }
     };
-    public int currentWobble = 8;
+    public int currentWobble = 6;
     public int wobbleCount = wobbles.length;
     public int octaves = 1;
 
@@ -102,7 +105,7 @@ public class LineGraphDemo extends ApplicationAdapter {
     private boolean keepGoing = true;
     private ImmediateModeRenderer20 renderer;
     private float traveled = 0f;
-    private float speed = (float)(0.75 / Math.E);
+    private float speed = 0.25f;
     private double speedControl = -1.0;
     private static final int width = 256, height = 256, half = height >>> 1;
 
@@ -236,19 +239,12 @@ public class LineGraphDemo extends ApplicationAdapter {
                 System.arraycopy(heights, 2, heights, 1, width * 86 - 2);
                 // iterates 52 times.
                 for (int i = 0, t = 0; i < 256; i += 5, t++) {
-//                    heights[width*t] = hueColor(i * 0x1p-8f);
-                    heights[width*t] = Float.intBitsToFloat(t * 0x010305 | 0xFE000000); // Halloween colors
+                    heights[width*t] = hueColor((i + traveled) * 0x1p-8f);
+//                    heights[width*t] = Float.intBitsToFloat(t * 0x010305 | 0xFE000000); // Halloween colors
                     heights[width * (t+1) - 1] = (int) (wobble.applyAsFloat(seed+t, traveled) * 0x.fcp7f);
                 }
                 break;
         }
-//        for (int x = 0; x < width; x++) {
-//            for (int y = 0; y < height; y++) {
-//                renderer.color(previousGrid[x][y]);
-//                renderer.vertex(x, y, 0);
-//            }
-//        }
-//        renderer.end();
         renderer.begin(view.getCamera().combined, GL20.GL_LINES);
         renderer.color(GRAY);
         renderer.vertex(0, half, 0);
@@ -280,14 +276,6 @@ public class LineGraphDemo extends ApplicationAdapter {
             putMap();
         }
         else {
-//            renderer.begin(view.getCamera().combined, GL_POINTS);
-//            for (int x = 0; x < width + width; x++) {
-//                for (int y = 0; y < height; y++) {
-//                    renderer.color(previousGrid[x][y]);
-//                    renderer.vertex(x, y, 0);
-//                }
-//            }
-//            renderer.end();
             renderer.begin(view.getCamera().combined, GL20.GL_LINES);
             renderer.color(GRAY);
             renderer.vertex(0, half, 0);
@@ -322,21 +310,16 @@ public class LineGraphDemo extends ApplicationAdapter {
         }
     }
 
-    /**
-     * Rotates the hue from red to orange, yellow, etc. using a Rodrigues rotation.
-     * <br>
-     * Credit for this challenging method goes to Andrey-Postelzhuk,
-     * <a href="https://forum.unity.com/threads/hue-saturation-brightness-contrast-shader.260649/">Unity Forums</a>.
-     * @param hue between 0.0f and 1.0f (in turns)
-     * @return a packed float color that should be a hue rotation of pure red
-     */
-    private static float hueColor(float hue) {
-        float k = 0.57735f, c = TrigTools.cosTurns(hue), s = TrigTools.sinTurns(hue), d = k * k * (1f - c);
-        float r = d+c, g = d+s*k, b = d-s*k; // result of: rgb * c + cross(k, rgb) * sin(hue)
-        return Float.intBitsToFloat(0xFE000000
-                | ((int)(255 * Math.max(0, b)) << 16)
-                | ((int)(255 * Math.max(0, g)) << 8)
-                | ((int)(255 * Math.max(0, r))));
+    public static float hueColor(float h) {
+        float hue = h - MathUtils.floor(h);
+        float x = Math.min(Math.max(Math.abs(hue * 6f - 3f) - 1f, 0f), 1f);
+        float y = hue + (2f / 3f);
+        float z = hue + (1f / 3f);
+        y -= (int) y;
+        z -= (int) z;
+        y = Math.min(Math.max(Math.abs(y * 6f - 3f) - 1f, 0f), 1f);
+        z = Math.min(Math.max(Math.abs(z * 6f - 3f) - 1f, 0f), 1f);
+        return Color.toFloatBits(x, y, z, 1f);
     }
 
     @Override
