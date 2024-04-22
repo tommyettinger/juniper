@@ -2,6 +2,7 @@ package com.github.tommyettinger.random;
 
 import com.github.tommyettinger.digital.Base;
 
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -593,6 +594,36 @@ public class ReverseWrapper extends EnhancedRandom {
     public <T> void shuffle(T[] items) {
         shuffle(items, 0, items.length);
     }
+
+    /**
+     * Shuffles the given List in-place pseudo-randomly, using this to determine how to shuffle.
+     *
+     * @param items a List of some type {@code T}; must be non-null but may contain null items
+     */
+    @Override
+    public <T> void shuffle(List<T> items) {
+        shuffle(items, 0, items.size());
+    }
+
+    /**
+     * Shuffles a section of the given List in-place pseudo-randomly, using this to determine how to shuffle.
+     *
+     * @param items  a List of some type {@code T}; must be non-null but may contain null items
+     * @param offset the index of the first element of the array that can be shuffled
+     * @param length the length of the section to shuffle
+     */
+    @Override
+    public <T> void shuffle(List<T> items, int offset, int length) {
+        offset = Math.min(Math.max(0, offset), items.size());
+        length = Math.min(items.size() - offset, Math.max(0, length));
+        for (int i = offset + 1, n = offset + length; i < n; i++) {
+            int ii = offset + nextInt(i + 1 - offset);
+            T temp = items.get(i);
+            items.set(i, items.get(ii));
+            items.set(ii, temp);
+        }
+    }
+
     /**
      * Creates a new EnhancedRandom with identical states to this one, so if the same EnhancedRandom methods are
      * called on this object and its copy (in the same order), the same outputs will be produced. This is not
