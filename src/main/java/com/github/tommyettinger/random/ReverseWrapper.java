@@ -505,6 +505,95 @@ public class ReverseWrapper extends EnhancedRandom {
     }
 
     /**
+     * Shuffles the given array in-place pseudo-randomly, using this to determine how to shuffle.
+     *
+     * @param items an int array; must be non-null
+     */
+    @Override
+    public void shuffle(int[] items) {
+        shuffle(items, 0, items.length);
+    }
+
+    /**
+     * Shuffles the given array in-place pseudo-randomly, using this to determine how to shuffle.
+     *
+     * @param items a long array; must be non-null
+     */
+    @Override
+    public void shuffle(long[] items) {
+        shuffle(items, 0, items.length);
+    }
+
+    /**
+     * Shuffles the given array in-place pseudo-randomly, using this to determine how to shuffle.
+     *
+     * @param items a float array; must be non-null
+     */
+    @Override
+    public void shuffle(float[] items) {
+        shuffle(items, 0, items.length);
+    }
+
+    /**
+     * Shuffles the given array in-place pseudo-randomly, using this to determine how to shuffle.
+     *
+     * @param items a char array; must be non-null
+     */
+    @Override
+    public void shuffle(char[] items) {
+        shuffle(items, 0, items.length);
+    }
+
+    /**
+     * Shuffles the given array in-place pseudo-randomly, using this to determine how to shuffle.
+     *
+     * @param items a byte array; must be non-null
+     */
+    @Override
+    public void shuffle(byte[] items) {
+        shuffle(items, 0, items.length);
+    }
+
+    /**
+     * Shuffles the given array in-place pseudo-randomly, using this to determine how to shuffle.
+     *
+     * @param items a double array; must be non-null
+     */
+    @Override
+    public void shuffle(double[] items) {
+        shuffle(items, 0, items.length);
+    }
+
+    /**
+     * Shuffles the given array in-place pseudo-randomly, using this to determine how to shuffle.
+     *
+     * @param items a short array; must be non-null
+     */
+    @Override
+    public void shuffle(short[] items) {
+        shuffle(items, 0, items.length);
+    }
+
+    /**
+     * Shuffles the given array in-place pseudo-randomly, using this to determine how to shuffle.
+     *
+     * @param items a boolean array; must be non-null
+     */
+    @Override
+    public void shuffle(boolean[] items) {
+        shuffle(items, 0, items.length);
+    }
+
+    /**
+     * Shuffles the given array in-place pseudo-randomly, using this to determine how to shuffle.
+     *
+     * @param items an array of some reference type; must be non-null but may contain null items
+     */
+    @Override
+    public <T> void shuffle(T[] items) {
+        shuffle(items, 0, items.length);
+    }
+    /**
      * Creates a new EnhancedRandom with identical states to this one, so if the same EnhancedRandom methods are
      * called on this object and its copy (in the same order), the same outputs will be produced. This is not
      * guaranteed to copy the inherited state of any parent class, so if you call methods that are
