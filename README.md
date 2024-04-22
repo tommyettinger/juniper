@@ -175,6 +175,9 @@ line, in various different formats. The names got a little silly there, but...
  - `hobble()` is like `splobble()` but takes the "before" and "after" values as `long`s directly without calculating them itself (it usually gets them from some sort of hash, hence the 'h' in the name), and
  - `quobble()` is a quartic curve that needs less hashing but is more predictable (written by Inigo Quilez).
 
+Using `biCubicWobble()` is the smoothest of these options, `splobble()` is arguably the most "natural", and `wobble()`
+is usually the fastest of these.
+
 ## Did I hear about distributions here?
 
 This library now has quite a lot of statistical distributions, each a subclass of `Distribution`. Each one holds an
@@ -249,15 +252,15 @@ cipher is just going to get ripped apart by any standard Java agent, so... don't
 With Gradle, the dependency (of the core module, if you have multiple) is:
 
 ```
-api "com.github.tommyettinger:juniper:0.5.0"
+api "com.github.tommyettinger:juniper:0.6.0"
 ```
 
 In a libGDX project that has a GWT/HTML backend, the `html/build.gradle` file
 should additionally have:
 
 ```
-implementation "com.github.tommyettinger:digital:0.4.5:sources"
-implementation "com.github.tommyettinger:juniper:0.5.0:sources"
+implementation "com.github.tommyettinger:digital:0.4.8:sources"
+implementation "com.github.tommyettinger:juniper:0.6.0:sources"
 ```
 
 And the `GdxDefinition.gwt.xml` file should have:
@@ -273,11 +276,12 @@ If you don't use Gradle, then with Maven, the dependency is:
 <dependency>
   <groupId>com.github.tommyettinger</groupId>
   <artifactId>juniper</artifactId>
-  <version>0.5.0</version>
+  <version>0.6.0</version>
 </dependency>
 ```
 
-There are also releases here on GitHub if you don't use any project management tool.
+There are also releases here on GitHub if you don't use any project management tool. You will need to obtain digital as
+well, of the appropriate version for the juniper release you picked.
 
 ## License
 

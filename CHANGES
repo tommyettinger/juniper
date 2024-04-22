@@ -2,6 +2,7 @@
 - [LARGE, SEED BREAKING] Calling nextInt or nextSignedInt on any EnhancedRandom with two parameters now uses a different, more efficient algorithm. This also changes other bounded int generation, including in shuffling methods.
 - [SEED BREAKING] FlowRandom is seeded differently now, in a way that's more consistent with other generators.
 - 32-bit-native generators that were super-sourced on GWT had some issues; these are fixed. Affects Bear32Random, ChopRandom, Jsf32Random, Respite32Random, and Xoshiro128PlusRandom.
+- Fix ReverseWrapper.shuffle() when it is given one parameter (an array or List).
 
 [0.5.0]
 - [SEED BREAKING, POTENTIALLY] When the EnhancedRandom object isn't specified, Distribution types, DistributedRandom, and InterpolatedRandom now default to AceRandom instead of WhiskerRandom. This happens even if a seed is specified, but only when no EnhancedRandom was provided.
