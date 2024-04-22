@@ -32,6 +32,12 @@ import java.nio.ByteBuffer;
 
 import static com.badlogic.gdx.Input.Keys.*;
 
+/**
+ * A small test to try encrypting a Pixmap's data using {@link SpeckCipher}, and then to decrypt it.
+ * In practice, the version of this in the similar library
+ * <a href="https://github.com/tommyettinger/cringe/blob/main/src/main/java/com/github/tommyettinger/cringe/EncryptedFileHandle.java">cringe</a>
+ * is much more useful.
+ */
 public class PixmapCipherTest extends ApplicationAdapter {
     public static String title = "";
     private static final int width = 459, height = 816;

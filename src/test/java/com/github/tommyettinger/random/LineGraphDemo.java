@@ -46,11 +46,11 @@ public class LineGraphDemo extends ApplicationAdapter {
     public IntFloatToFloatFunction[] wobbles = {
             LineWobble::wobble,                                                                        //0
             LineWobble::bicubicWobble,                                                                 //1
-            LineWobble::splobble,                                                                      //2
+            LineWobble::smoothWobble,                                                                  //2
             LineWobble::quobble,                                                                       //3
             LineWobble::quobbleOctave2,                                                                //4
             LineWobble::trobble,                                                                       //5
-            LineWobble::smoothWobble,                                                                  //6
+            LineWobble::splobble,                                                                      //6
             (s, f) -> {                                                                                //7
                 final long start = MathTools.longFloor(f), end = start + 1L;
                 return LineWobble.hobble(
@@ -73,7 +73,7 @@ public class LineGraphDemo extends ApplicationAdapter {
                 return (Hasher.randomize3(i) * (1f - s) + Hasher.randomize3(1L + i) * s) * 0x1p-63f;
             }
     };
-    public int currentWobble = 6;
+    public int currentWobble = 1;
     public int wobbleCount = wobbles.length;
     public int octaves = 1;
 
