@@ -55,26 +55,34 @@ public class FurySerializationTest {
             Assert.assertEquals(rl, dl, 0x1p-32);
         }
     }
+
     @Test
     public void testReverseWrapper() {
+        Fury fury = Fury.builder().withLanguage(Language.JAVA).build();
+        fury.register(EnhancedRandom.class);
+        fury.register(ReverseWrapper.class);
+        fury.register(AceRandom.class);
+
         AceRandom random = new AceRandom(123);
-        String randomSer = random.stringSerialize();
+        byte[] randomSer = fury.serializeJavaObject(random);
         long output0 = random.nextLong();
         int output1 = random.nextInt(100);
         float output2 = random.nextExclusiveFloat();
         ReverseWrapper reverse = new ReverseWrapper(random);
-        String reverseSer = reverse.stringSerialize();
+        byte[] reverseSer = fury.serializeJavaObject(reverse);
         float back2 = reverse.nextExclusiveFloat();
         int back1 = reverse.nextInt(100);
         long back0 = reverse.nextLong();
         Assert.assertEquals(output0, back0);
         Assert.assertEquals(output1, back1);
         Assert.assertEquals(output2, back2, Float.MIN_NORMAL);
-        random.stringDeserialize(randomSer);
-        reverse.stringDeserialize(reverseSer);
+        random = fury.deserializeJavaObject(randomSer, AceRandom.class);
+        reverse = fury.deserializeJavaObject(reverseSer, ReverseWrapper.class);
         output0 = random.nextLong();
         output1 = random.nextInt(100);
         output2 = random.nextExclusiveFloat();
+//        System.out.println(random.stringSerialize());
+//        System.out.println(reverse.wrapped.stringSerialize());
         back2 = reverse.nextExclusiveFloat();
         back1 = reverse.nextInt(100);
         back0 = reverse.nextLong();
