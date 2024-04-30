@@ -13,8 +13,16 @@ import java.util.Random;
  */
 public class KnownSequenceRandom extends EnhancedRandom {
 
+    /**
+     * The sequence of long values this draws results from. This is public for ease of serialization, but it should
+     * typically not be modified in a way that changes its length unless you call {@link #setState(long)} after.
+     */
     public LongSequence known;
 
+    /**
+     * The index into the sequence of values this draws results from. This is public for ease of serialization. To
+     * change this, using {@link #setState(long)} is recommended.
+     */
     public int index;
 
     public KnownSequenceRandom() {
@@ -71,7 +79,7 @@ public class KnownSequenceRandom extends EnhancedRandom {
     @Override
     public long nextLong() {
         final long r = known.get(index++);
-        if(index == known.size) index = 0;
+        if(index >= known.size) index = 0;
         return r;
     }
 
@@ -153,8 +161,30 @@ public class KnownSequenceRandom extends EnhancedRandom {
     @Override
     public long previousLong() {
         final long r = known.get(index--);
-        if(index == -1) index = known.size - 1;
+        if(index < 0) index = known.size - 1;
         return r;
+    }
+
+    /**
+     * Returns the current known sequence this draws its results from. While this can be modified, changing the length
+     * of the returned sequence is strongly discouraged, since it can cause indices to go out-of-bounds. If you do
+     * change the length of the returned sequence, you should call {@link #setState(long)} before obtaining any values
+     * from this generator.
+     * @return the current known sequence of long results
+     */
+    public LongSequence getKnown() {
+        return known;
+    }
+
+    /**
+     * Changes the known sequence this draws its results from. If the previous known sequence has a different length
+     * from the new known sequence, this resets the index in the sequence to 0.
+     * @param known a LongSequence that cannot be null and should generally not be empty
+     */
+    public void setKnown(LongSequence known) {
+        if(this.known.size != known.size)
+            index = 0;
+        this.known = known;
     }
 
     public StringBuilder appendSerialized(StringBuilder sb, Base base) {

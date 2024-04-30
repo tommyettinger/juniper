@@ -46,7 +46,13 @@ package com.github.tommyettinger.random;
  *      "An improved ziggurat method to generate normal random samples."
  *      University of Oxford: 77.
  */
-public class Ziggurat {
+public final class Ziggurat {
+    /**
+     * Should never be constructed.
+     */
+    private Ziggurat() {
+    }
+
     private static final int    TABLE_ITEMS = 256;
     private static final double R           = 3.65415288536100716461;
     private static final double INV_R       = 1.0 / R;
