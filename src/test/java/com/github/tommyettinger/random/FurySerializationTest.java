@@ -13,7 +13,7 @@ import java.util.List;
 
 public class FurySerializationTest {
     @Test
-    @Ignore
+//    @Ignore
     public void testRoundTrip() {
         Fury fury = Fury.builder().withLanguage(Language.JAVA).build();
         fury.register(EnhancedRandom.class);
@@ -23,10 +23,12 @@ public class FurySerializationTest {
         for (EnhancedRandom r : all) {
             Class<? extends EnhancedRandom> c = r.getClass();
             fury.register(c);
+        }
+        for (EnhancedRandom r : all) {
             byte[] bytes = fury.serializeJavaObject(r);
             r.nextLong();
             long rl = r.nextLong();
-            EnhancedRandom de = fury.deserializeJavaObject(bytes, c);
+            EnhancedRandom de = fury.deserializeJavaObject(bytes, r.getClass());
             System.out.println(de.stringSerialize());
             de.nextLong();
             long dl = de.nextLong();
