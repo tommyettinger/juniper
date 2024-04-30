@@ -21,6 +21,10 @@ import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.digital.BitConversion;
 import com.github.tommyettinger.digital.MathTools;
 
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import java.util.List;
 import java.util.Random;
 
@@ -28,7 +32,7 @@ import java.util.Random;
  * A superset of the functionality in {@link java.util.Random}, meant for random number generators
  * that would be too bare-bones with just Random's methods.
  */
-public abstract class EnhancedRandom extends Random {
+public abstract class EnhancedRandom extends Random implements Externalizable {
 
 	public EnhancedRandom() {
 		super();
@@ -1849,5 +1853,48 @@ public abstract class EnhancedRandom extends Random {
 			setSelectedState(getStateCount() - 1, base.readLong(data, idx + 1, data.indexOf('`', idx + 1)));
 		}
 		return this;
+	}
+
+	/**
+	 * The object implements the writeExternal method to save its contents
+	 * by calling the methods of DataOutput for its primitive values or
+	 * calling the writeObject method of ObjectOutput for objects, strings,
+	 * and arrays.
+	 *
+	 * @param out the stream to write the object to
+	 * @throws IOException Includes any I/O exceptions that may occur
+	 * @serialData <ul>
+	 *     <li>int stateCount; the number of states this EnhancedRandom has</li>
+	 *     <li>Repeat {@code stateCount} times:</li>
+	 *     <ul>
+	 *         <li>long state_n; the nth state used here.</li>
+	 *     </ul>
+	 * </ul>
+	 */
+	@GwtIncompatible
+	public void writeExternal(ObjectOutput out) throws IOException {
+		final int states = getStateCount();
+		out.writeInt(states);
+		for (int i = 0; i < states; i++) {
+			out.writeLong(getSelectedState(i));
+		}
+	}
+
+	/**
+	 * The object implements the readExternal method to restore its
+	 * contents by calling the methods of DataInput for primitive
+	 * types and readObject for objects, strings and arrays.  The
+	 * readExternal method must read the values in the same sequence
+	 * and with the same types as were written by writeExternal.
+	 *
+	 * @param in the stream to read data from in order to restore the object
+	 * @throws IOException            if I/O errors occur
+	 */
+	@GwtIncompatible
+	public void readExternal(ObjectInput in) throws IOException {
+		final int states = in.readInt();
+		for (int i = 0; i < states; i++) {
+			setSelectedState(i, in.readLong());
+		}
 	}
 }
