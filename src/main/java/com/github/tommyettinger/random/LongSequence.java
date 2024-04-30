@@ -62,7 +62,7 @@ public class LongSequence implements Externalizable {
         return size;
     }
 
-    protected void resize(int newCapacity) {
+    public void resize(int newCapacity) {
         newCapacity = MathTools.nextPowerOfTwo(newCapacity);
         if(newCapacity < 0) throw new RuntimeException("Requested capacity is too large; cannot resize.");
         if(items.length >= newCapacity) return;
@@ -216,7 +216,7 @@ public class LongSequence implements Externalizable {
         }
 
         @Override
-        protected void resize(int newCapacity) {
+        public void resize(int newCapacity) {
         }
 
         /**

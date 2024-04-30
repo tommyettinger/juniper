@@ -30,7 +30,7 @@ public class FurySerializationTest {
             System.out.println(de.stringSerialize());
             de.nextLong();
             long dl = de.nextLong();
-            Assert.assertEquals("Failure with tag " + r.getTag(), rl, dl);
+            Assert.assertEquals("Failure with expected\n  " + r.stringSerialize() + "\nand actual\n  " + de.stringSerialize(), rl, dl);
         }
     }
     @Test

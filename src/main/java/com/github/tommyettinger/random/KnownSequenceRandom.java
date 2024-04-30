@@ -2,6 +2,9 @@ package com.github.tommyettinger.random;
 
 import com.github.tommyettinger.digital.Base;
 
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import java.util.Random;
 
 /**
@@ -226,6 +229,52 @@ public class KnownSequenceRandom extends EnhancedRandom {
         index = base.readInt(data, data.indexOf('`')+1, tilde = data.indexOf('~'));
         known.stringDeserialize(data.substring(tilde+1), base);
         return this;
+    }
+
+    /**
+     * The object implements the writeExternal method to save its contents
+     * by calling the methods of DataOutput for its primitive values or
+     * calling the writeObject method of ObjectOutput for objects, strings,
+     * and arrays.
+     *
+     * @param out the stream to write the object to
+     * @throws IOException Includes any I/O exceptions that may occur
+     * @serialData <ul>
+     * <li>int stateCount; the number of states this EnhancedRandom has</li>
+     * <li>Repeat {@code stateCount} times:
+     *     <ul>
+     *         <li>long state_n; the nth state used here.</li>
+     *     </ul>
+     * </li>
+     * </ul>
+     */
+    @GwtIncompatible
+    public void writeExternal(ObjectOutput out) throws IOException {
+        out.writeInt(known.size);
+        for (int i = 0; i < known.size; i++) {
+            out.writeLong(known.items[i]);
+        }
+        out.writeInt(index);
+    }
+
+    /**
+     * The object implements the readExternal method to restore its
+     * contents by calling the methods of DataInput for primitive
+     * types and readObject for objects, strings and arrays.  The
+     * readExternal method must read the values in the same sequence
+     * and with the same types as were written by writeExternal.
+     *
+     * @param in the stream to read data from in order to restore the object
+     * @throws IOException if I/O errors occur
+     */
+    @GwtIncompatible
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        known.size = in.readInt();
+        known.resize(known.size);
+        for (int i = 0; i < known.size; i++) {
+            known.items[i] = in.readLong();
+        }
+        index = in.readInt();
     }
 
     @Override
