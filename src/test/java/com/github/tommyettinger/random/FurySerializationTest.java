@@ -85,15 +85,21 @@ public class FurySerializationTest {
 
     @Test
     public void testArchivalWrapper() {
+        Fury fury = Fury.builder().withLanguage(Language.JAVA).build();
+        fury.register(EnhancedRandom.class);
+        fury.register(AceRandom.class);
+        fury.register(ArchivalWrapper.class);
+        fury.register(LongSequence.class);
+
         AceRandom random = new AceRandom(123);
         ArchivalWrapper archive = new ArchivalWrapper(random);
         LongSequence output = new LongSequence(100);
         for (int i = 0; i < 100; i++) {
             output.add(archive.nextLong(1000000));
         }
-        String arcSer = archive.stringSerialize();
+        byte[] arcSer = fury.serializeJavaObject(archive);
         KnownSequenceRandom ksr = archive.getRepeatableRandom();
-        ArchivalWrapper archive2 = (ArchivalWrapper) Deserializer.deserialize(arcSer);
+        ArchivalWrapper archive2 = fury.deserializeJavaObject(arcSer, ArchivalWrapper.class);
         Assert.assertEquals(archive, archive2);
         KnownSequenceRandom ksr2 = archive2.getRepeatableRandom();
         for (int i = 0; i < 100; i++) {
@@ -102,13 +108,17 @@ public class FurySerializationTest {
     }
     @Test
     public void testArchivalWrapper2() {
+        Fury fury = Fury.builder().withLanguage(Language.JAVA).build();
+        fury.register(EnhancedRandom.class);
+        fury.register(DistinctRandom.class);
+        fury.register(ArchivalWrapper.class);
+        fury.register(LongSequence.class);
 
         ArchivalWrapper archive = new ArchivalWrapper(new DistinctRandom(-12345L));
 
-        String arcSer = archive.stringSerialize(Base.BASE10);
+        byte[] arcSer = fury.serializeJavaObject(archive);
 
-        ArchivalWrapper data2 = new ArchivalWrapper();
-        data2.stringDeserialize(arcSer, Base.BASE10);
+        ArchivalWrapper data2 = fury.deserializeJavaObject(arcSer, ArchivalWrapper.class);
 //        System.out.println("data...");
 //        System.out.println(archive);
 //        System.out.println("vs. data2...");

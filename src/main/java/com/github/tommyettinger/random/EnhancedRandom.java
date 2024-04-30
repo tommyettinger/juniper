@@ -1864,11 +1864,12 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * @param out the stream to write the object to
 	 * @throws IOException Includes any I/O exceptions that may occur
 	 * @serialData <ul>
-	 *     <li>int stateCount; the number of states this EnhancedRandom has</li>
-	 *     <li>Repeat {@code stateCount} times:</li>
-	 *     <ul>
-	 *         <li>long state_n; the nth state used here.</li>
-	 *     </ul>
+     * <li>int stateCount; the number of states this EnhancedRandom has</li>
+     * <li>Repeat {@code stateCount} times:
+     *     <ul>
+     *         <li>long state_n; the nth state used here.</li>
+     *     </ul>
+     * </li>
 	 * </ul>
 	 */
 	@GwtIncompatible
@@ -1891,7 +1892,7 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * @throws IOException            if I/O errors occur
 	 */
 	@GwtIncompatible
-	public void readExternal(ObjectInput in) throws IOException {
+	public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
 		final int states = in.readInt();
 		for (int i = 0; i < states; i++) {
 			setSelectedState(i, in.readLong());
