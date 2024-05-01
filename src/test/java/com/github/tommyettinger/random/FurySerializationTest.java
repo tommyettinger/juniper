@@ -71,6 +71,40 @@ public class FurySerializationTest {
     }
 
     @Test
+    public void testRoundTripDistributedRandom() {
+        Fury fury = Fury.builder().withLanguage(Language.JAVA).build();
+        fury.register(DistributedRandom.class);
+        List<Distribution> all = Deserializer.copyDistributions();
+        ArrayList<EnhancedRandom> randoms = Deserializer.copyRandoms();
+        // we can't nest a DistributedRandom, with its own Distribution, as the generator and sanely deserialize.
+        randoms.removeIf(r -> "DsrR".equals(r.getTag()) || "InrR".equals(r.getTag()));
+        WhiskerRandom rand = new WhiskerRandom(123456789L);
+
+        for (EnhancedRandom r : randoms) {
+            Class<? extends EnhancedRandom> c = r.getClass();
+            fury.register(c);
+        }
+        for (Distribution d : all) {
+            Class<? extends Distribution> c = d.getClass();
+            fury.register(c);
+        }
+
+        for(Distribution r : all) {
+            EnhancedRandom er = rand.randomElement(randoms).copy();
+            er.setSeed(rand.nextLong());
+            DistributedRandom dr = new DistributedRandom(r, DistributedRandom.ReductionMode.FRACTION, er);
+            byte[] s = fury.serializeJavaObject(dr);
+            dr.nextDouble();
+            double rl = dr.nextDouble();
+            DistributedRandom de = fury.deserializeJavaObject(s, DistributedRandom.class);
+            de.nextDouble();
+            double dl = de.nextDouble();
+            System.out.println(dr.stringSerialize() + "   " + de.stringSerialize());
+            Assert.assertEquals(rl, dl, 0x1p-32);
+        }
+    }
+
+    @Test
     public void testReverseWrapper() {
         Fury fury = Fury.builder().withLanguage(Language.JAVA).build();
         fury.register(EnhancedRandom.class);
