@@ -4,6 +4,7 @@ import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.random.distribution.Distribution;
 import io.fury.Fury;
 import io.fury.config.Language;
+import io.fury.memory.MemoryBuffer;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -35,23 +36,34 @@ public class FurySerializationTest {
             Assert.assertEquals("Failure with expected\n  " + r.stringSerialize() + "\nand actual\n  " + de.stringSerialize(), rl, dl);
         }
     }
+
     @Test
     public void testRoundTripDist() {
+        Fury fury = Fury.builder().withLanguage(Language.JAVA).build();
+        fury.register(EnhancedRandom.class);
         List<Distribution> all = Deserializer.copyDistributions();
         ArrayList<EnhancedRandom> randoms = Deserializer.copyRandoms();
         // we can't nest a DistributedRandom, with its own Distribution, as the generator and sanely deserialize.
         randoms.removeIf(r -> "DsrR".equals(r.getTag()) || "InrR".equals(r.getTag()));
         WhiskerRandom rand = new WhiskerRandom(123456789L);
-        Base base = Base.BASE10;
-                //Base.scrambledBase(new LaserRandom(123456789L));
+
+        for (EnhancedRandom r : randoms) {
+            Class<? extends EnhancedRandom> c = r.getClass();
+            fury.register(c);
+        }
+        for (Distribution d : all) {
+            Class<? extends Distribution> c = d.getClass();
+            fury.register(c);
+        }
+
         for(Distribution r : all) {
             r.generator = rand.randomElement(randoms).copy();
             r.generator.setSeed(rand.nextLong());
-            String s = r.stringSerialize(base);
+            byte[] s = fury.serializeJavaObject(r);
             r.nextDouble();
             double rl = r.nextDouble();
-            Distribution de = Deserializer.deserializeDistribution(s, base);
-            System.out.println(s + "   " + de.stringSerialize(base));
+            Distribution de = fury.deserializeJavaObject(s, r.getClass());
+            System.out.println(r.stringSerialize() + "   " + de.stringSerialize());
             de.nextDouble();
             double dl = de.nextDouble();
             Assert.assertEquals(rl, dl, 0x1p-32);
