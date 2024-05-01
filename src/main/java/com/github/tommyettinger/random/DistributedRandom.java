@@ -127,7 +127,7 @@ public class DistributedRandom extends EnhancedRandom {
 
     public DistributedRandom(Distribution distribution, ReductionMode reductionMode, long seed) {
         this.distribution = distribution.copy();
-        distribution.generator.setSeed(seed);
+        this.distribution.generator.setSeed(seed);
         if(reductionMode != null) reduction = reductionMode;
         else reduction = ReductionMode.FRACTION;
     }
@@ -142,7 +142,7 @@ public class DistributedRandom extends EnhancedRandom {
      */
     public DistributedRandom(Distribution distribution, ReductionMode reductionMode, EnhancedRandom random) {
         this.distribution = distribution.copy();
-        if(random != null) distribution.generator = random;
+        if(random != null) this.distribution.generator = random;
         if(reductionMode != null) reduction = reductionMode;
         else reduction = ReductionMode.FRACTION;
     }
