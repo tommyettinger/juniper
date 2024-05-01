@@ -175,8 +175,12 @@ line, in various different formats. The names got a little silly there, but...
  - `hobble()` is like `splobble()` but takes the "before" and "after" values as `long`s directly without calculating them itself (it usually gets them from some sort of hash, hence the 'h' in the name), and
  - `quobble()` is a quartic curve that needs less hashing but is more predictable (written by Inigo Quilez).
 
-Using `biCubicWobble()` is the smoothest of these options, `splobble()` is arguably the most "natural", and `wobble()`
-is usually the fastest of these.
+Using `bicubicWobble()` is the smoothest of these options, `splobble()` is arguably the most "natural", and `wobble()`
+is usually the fastest of these. One usage of these 1D noise functions is to use the results of *n* noise calls to
+produce *n* coordinates, such as x, y, and z, and use that as the position of a curving line that moves as the parameter
+to the noise calls increases. This line will stay within -1 to 1 for each coordinate. When doing this, the only wobble
+function that usually avoids sudden "spiky" acceleration in some direction would be `bicubicWobble()`, though it will
+also stay near the origin most of the time.
 
 ## Did I hear about distributions here?
 
@@ -247,12 +251,27 @@ and fast cipher released by the NSA (although the NSA isn't exactly a group I wo
 seems to be secure enough to stop the average criminal). Unless you can lock down your JVM rather well, any software
 cipher is just going to get ripped apart by any standard Java agent, so... don't bother with this.
 
+If you just want to obfuscate assets in a libGDX application, you can use [EncryptedFileHandle](https://github.com/tommyettinger/cringe/blob/main/src/main/java/com/github/tommyettinger/cringe/EncryptedFileHandle.java)
+in a different repo, cringe, that uses mostly the same code as SpeckCipher. Again, not terribly secure, but fine if you
+just want to make life a little harder for people copying your assets.
+
+## And everything can be serialized?
+
+Starting in 0.6.1, just about everything that can be serialized in the library can do so with either the existing String
+serialization, or the Externalizable interface. Externalizable was chosen primarily because
+[Apache Fury](https://fury.apache.org) can use it easily without needing an actual dependency on Fury in Juniper. We
+mark Externalizable method implementations as`GwtIncompatible` with an annotation, to prevent them from causing trouble
+with GWT. When used with Fury, you typically register any `EnhancedRandom` class or `Distribution` class you use, though
+generally you don't need to register `EnhancedRandom` or `Distribution` itself. In some cases you may need to register
+other classes, such as how `ArchivalWrapper` needs `LongSequence` registered. If a class has special requirements for
+Fury to serialize it, the `writeExternal()` JavaDocs will mention them.
+
 ## How to get it?
 
 With Gradle, the dependency (of the core module, if you have multiple) is:
 
 ```
-api "com.github.tommyettinger:juniper:0.6.0"
+api "com.github.tommyettinger:juniper:0.6.1"
 ```
 
 In a libGDX project that has a GWT/HTML backend, the `html/build.gradle` file
@@ -260,7 +279,7 @@ should additionally have:
 
 ```
 implementation "com.github.tommyettinger:digital:0.4.8:sources"
-implementation "com.github.tommyettinger:juniper:0.6.0:sources"
+implementation "com.github.tommyettinger:juniper:0.6.1:sources"
 ```
 
 And the `GdxDefinition.gwt.xml` file should have:
@@ -276,7 +295,7 @@ If you don't use Gradle, then with Maven, the dependency is:
 <dependency>
   <groupId>com.github.tommyettinger</groupId>
   <artifactId>juniper</artifactId>
-  <version>0.6.0</version>
+  <version>0.6.1</version>
 </dependency>
 ```
 
