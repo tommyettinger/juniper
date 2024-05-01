@@ -264,10 +264,7 @@ public class InterpolatedRandom extends EnhancedRandom {
     }
 
     /**
-     * The object implements the writeExternal method to save its contents
-     * by calling the methods of DataOutput for its primitive values or
-     * calling the writeObject method of ObjectOutput for objects, strings,
-     * and arrays.
+     * Needs the type of {@link #random} registered.
      *
      * @param out the stream to write the object to
      * @throws IOException Includes any I/O exceptions that may occur
