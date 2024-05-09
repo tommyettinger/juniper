@@ -19,6 +19,8 @@ package com.github.tommyettinger.random;
 import com.badlogic.gdx.files.FileHandle;
 import com.github.tommyettinger.digital.ArrayTools;
 import com.github.tommyettinger.digital.Base;
+import com.github.tommyettinger.ds.ObjectList;
+import com.github.tommyettinger.random.experimental.FrostyRandom;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -483,8 +485,9 @@ Lowest mode: 81.92187 has mean amount 0.0184360742  FAIL 💀 for Xoshiro256Star
         StringBuilder sb = new StringBuilder(1024);
         EnhancedRandom[][] g = new EnhancedRandom[256][256];
 
+        ArrayList<EnhancedRandom> rs = ObjectList.with(new FrostyRandom(1, 1));
 //        ArrayList<EnhancedRandom> rs = ObjectList.with(new Rawr32Random(1, 1, 1, 1));
-        ArrayList<EnhancedRandom> rs = Generators.randomList;
+//        ArrayList<EnhancedRandom> rs = Generators.randomList;
 
         rs.sort((l, r) -> l.getClass().getSimpleName().compareTo(r.getClass().getSimpleName()));
 //        rs.sort(Comparator.comparing(EnhancedRandom::getClass, Comparator.comparing(Class::getSimpleName)));
