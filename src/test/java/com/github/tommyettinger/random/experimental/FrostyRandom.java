@@ -210,9 +210,9 @@ public class FrostyRandom extends EnhancedRandom {
 	public long nextLong () {
 		long x = (stateA += 0xD1B54A32D192ED03L);
 		long y = (stateB += 0x8CB92BA72F3D8DD7L);
-		x = (y) ^    (y += (x ^ (x << 25 | x >>> 64 - 25) ^ (x << 50| x >>> 64 - 50)) + 0x9E3779B97F4A7C15L);
-		y = (x) ^    (x += (y ^ (y << 19 | y >>> 64 - 19) ^ (y << 41| y >>> 64 - 41)) + 0x9E3779B97F4A7C15L);
-		return (y) ^ (y +  (x ^ (x << 43 | x >>> 64 - 43) ^ (x << 54| x >>> 64 - 54)) + 0x9E3779B97F4A7C15L);
+		x =    (y ^ 0xF1357AEA2E62A9C5L) + (y ^= (x ^ (x << 25 | x >>> 64 - 25) ^ (x << 50| x >>> 64 - 50)) + 0xD3833E804F4C574BL);
+		y =    (x ^ 0xD3833E804F4C574BL) + (x ^= (y ^ (y << 19 | y >>> 64 - 19) ^ (y << 41| y >>> 64 - 41)) + 0x9E3779B97F4A7C15L);
+		return (y ^ 0x9E3779B97F4A7C15L) + (y ^  (x ^ (x << 43 | x >>> 64 - 43) ^ (x << 54| x >>> 64 - 54)) + 0xF1357AEA2E62A9C5L);
 	}
 
 	@Override
@@ -221,26 +221,26 @@ public class FrostyRandom extends EnhancedRandom {
 		long y = stateB;
 		stateA -= 0xD1B54A32D192ED03L;
 		stateB -= 0x8CB92BA72F3D8DD7L;
-		x = (y) ^    (y += (x ^ (x << 25 | x >>> 64 - 25) ^ (x << 50| x >>> 64 - 50)) + 0x9E3779B97F4A7C15L);
-		y = (x) ^    (x += (y ^ (y << 19 | y >>> 64 - 19) ^ (y << 41| y >>> 64 - 41)) + 0x9E3779B97F4A7C15L);
-		return (y) ^ (y +  (x ^ (x << 43 | x >>> 64 - 43) ^ (x << 54| x >>> 64 - 54)) + 0x9E3779B97F4A7C15L);
+		x =    (y ^ 0xF1357AEA2E62A9C5L) + (y ^= (x ^ (x << 25 | x >>> 64 - 25) ^ (x << 50| x >>> 64 - 50)) + 0xD3833E804F4C574BL);
+		y =    (x ^ 0xD3833E804F4C574BL) + (x ^= (y ^ (y << 19 | y >>> 64 - 19) ^ (y << 41| y >>> 64 - 41)) + 0x9E3779B97F4A7C15L);
+		return (y ^ 0x9E3779B97F4A7C15L) + (y ^  (x ^ (x << 43 | x >>> 64 - 43) ^ (x << 54| x >>> 64 - 54)) + 0xF1357AEA2E62A9C5L);
 	}
 
 	@Override
 	public int next (int bits) {
 		long x = (stateA += 0xD1B54A32D192ED03L);
 		long y = (stateB += 0x8CB92BA72F3D8DD7L);
-		x = (y) ^          (y += (x ^ (x << 25 | x >>> 64 - 25) ^ (x << 50| x >>> 64 - 50)) + 0x9E3779B97F4A7C15L);
-		y = (x) ^          (x += (y ^ (y << 19 | y >>> 64 - 19) ^ (y << 41| y >>> 64 - 41)) + 0x9E3779B97F4A7C15L);
-		return (int)((y) ^ (y +  (x ^ (x << 43 | x >>> 64 - 43) ^ (x << 54| x >>> 64 - 54)) + 0x9E3779B97F4A7C15L)) >>> (32 - bits);
+		x =          (y ^ 0xF1357AEA2E62A9C5L) + (y ^= (x ^ (x << 25 | x >>> 64 - 25) ^ (x << 50| x >>> 64 - 50)) + 0xD3833E804F4C574BL);
+		y =          (x ^ 0xD3833E804F4C574BL) + (x ^= (y ^ (y << 19 | y >>> 64 - 19) ^ (y << 41| y >>> 64 - 41)) + 0x9E3779B97F4A7C15L);
+		return (int)((y ^ 0x9E3779B97F4A7C15L) + (y ^  (x ^ (x << 43 | x >>> 64 - 43) ^ (x << 54| x >>> 64 - 54)) + 0xF1357AEA2E62A9C5L)) >>> (32 - bits);
 	}
 	@Override
 	public long skip (final long advance) {
 		long x = (stateA += 0xD1B54A32D192ED03L * advance);
 		long y = (stateB += 0x8CB92BA72F3D8DD7L * advance);
-		x = (y) ^    (y += (x ^ (x << 25 | x >>> 64 - 25) ^ (x << 50| x >>> 64 - 50)) + 0x9E3779B97F4A7C15L);
-		y = (x) ^    (x += (y ^ (y << 19 | y >>> 64 - 19) ^ (y << 41| y >>> 64 - 41)) + 0x9E3779B97F4A7C15L);
-		return (y) ^ (y +  (x ^ (x << 43 | x >>> 64 - 43) ^ (x << 54| x >>> 64 - 54)) + 0x9E3779B97F4A7C15L);
+		x =    (y ^ 0xF1357AEA2E62A9C5L) + (y ^= (x ^ (x << 25 | x >>> 64 - 25) ^ (x << 50| x >>> 64 - 50)) + 0xD3833E804F4C574BL);
+		y =    (x ^ 0xD3833E804F4C574BL) + (x ^= (y ^ (y << 19 | y >>> 64 - 19) ^ (y << 41| y >>> 64 - 41)) + 0x9E3779B97F4A7C15L);
+		return (y ^ 0x9E3779B97F4A7C15L) + (y ^  (x ^ (x << 43 | x >>> 64 - 43) ^ (x << 54| x >>> 64 - 54)) + 0xF1357AEA2E62A9C5L);
 	}
 	/**
 	 * Gets a long that identifies which of the 2 to the 64 possible streams this is on, before considering the keys.
