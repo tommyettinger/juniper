@@ -1,0 +1,1 @@
+Lowest mode: .0000000 has mean amount 0.0263001471  FAIL 💀 for FrostyRandom

@@ -210,9 +210,13 @@ public class FrostyRandom extends EnhancedRandom {
 	public long nextLong () {
 		long x = (stateA += 0xD1B54A32D192ED03L);
 		long y = (stateB += 0x8CB92BA72F3D8DD7L);
-		x =    (y ^ 0xF1357AEA2E62A9C5L) + (y ^= (x ^ (x << 25 | x >>> 64 - 25) ^ (x << 50| x >>> 64 - 50)) + 0xD3833E804F4C574BL);
-		y =    (x ^ 0xD3833E804F4C574BL) + (x ^= (y ^ (y << 19 | y >>> 64 - 19) ^ (y << 41| y >>> 64 - 41)) + 0x9E3779B97F4A7C15L);
-		return (y ^ 0x9E3779B97F4A7C15L) + (y ^  (x ^ (x << 43 | x >>> 64 - 43) ^ (x << 54| x >>> 64 - 54)) + 0xF1357AEA2E62A9C5L);
+//		y =    (x) + (x ^= (y ^ (y << 25 | y >>> 64 - 25) ^ (y << 50 | y >>> 64 - 50)) + 0xBEA225F9EB34556DL);
+//		x =    (y) + (y ^= (x ^ (x << 13 | x >>> 64 - 13) ^ (x << 37 | x >>> 64 - 37)) + 0xD3833E804F4C574BL);
+		y = ((y <<  3 | y >>> 61) ^ (x = ((x << 56 | x >>>  8) + y ^ 0xBEA225F9EB34556DL))) + (x << 34 | x >>> 30);
+		x = ((x << 53 | x >>> 11) ^ (y = ((y << 26 | y >>> 38) + x ^ 0xD3833E804F4C574BL))) + (y << 17 | y >>> 47);
+		y = ((y << 23 | y >>> 41) ^ (x = ((x << 46 | x >>> 18) + y ^ 0x9E3779B97F4A7C15L))) + (x << 20 | x >>> 44);
+		x = ((x << 13 | x >>> 51) ^ (y = ((y <<  6 | y >>> 58) + x ^ 0xF1357AEA2E62A9C5L))) + (y << 57 | y >>>  7);
+		return x;
 	}
 
 	@Override
@@ -221,26 +225,32 @@ public class FrostyRandom extends EnhancedRandom {
 		long y = stateB;
 		stateA -= 0xD1B54A32D192ED03L;
 		stateB -= 0x8CB92BA72F3D8DD7L;
-		x =    (y ^ 0xF1357AEA2E62A9C5L) + (y ^= (x ^ (x << 25 | x >>> 64 - 25) ^ (x << 50| x >>> 64 - 50)) + 0xD3833E804F4C574BL);
-		y =    (x ^ 0xD3833E804F4C574BL) + (x ^= (y ^ (y << 19 | y >>> 64 - 19) ^ (y << 41| y >>> 64 - 41)) + 0x9E3779B97F4A7C15L);
-		return (y ^ 0x9E3779B97F4A7C15L) + (y ^  (x ^ (x << 43 | x >>> 64 - 43) ^ (x << 54| x >>> 64 - 54)) + 0xF1357AEA2E62A9C5L);
+		y = ((y <<  3 | y >>> 61) ^ (x = ((x << 56 | x >>>  8) + y ^ 0xBEA225F9EB34556DL))) + (x << 34 | x >>> 30);
+		x = ((x << 53 | x >>> 11) ^ (y = ((y << 26 | y >>> 38) + x ^ 0xD3833E804F4C574BL))) + (y << 17 | y >>> 47);
+		y = ((y << 23 | y >>> 41) ^ (x = ((x << 46 | x >>> 18) + y ^ 0x9E3779B97F4A7C15L))) + (x << 20 | x >>> 44);
+		x = ((x << 13 | x >>> 51) ^ (y = ((y <<  6 | y >>> 58) + x ^ 0xF1357AEA2E62A9C5L))) + (y << 57 | y >>>  7);
+		return x;
 	}
 
 	@Override
 	public int next (int bits) {
 		long x = (stateA += 0xD1B54A32D192ED03L);
 		long y = (stateB += 0x8CB92BA72F3D8DD7L);
-		x =          (y ^ 0xF1357AEA2E62A9C5L) + (y ^= (x ^ (x << 25 | x >>> 64 - 25) ^ (x << 50| x >>> 64 - 50)) + 0xD3833E804F4C574BL);
-		y =          (x ^ 0xD3833E804F4C574BL) + (x ^= (y ^ (y << 19 | y >>> 64 - 19) ^ (y << 41| y >>> 64 - 41)) + 0x9E3779B97F4A7C15L);
-		return (int)((y ^ 0x9E3779B97F4A7C15L) + (y ^  (x ^ (x << 43 | x >>> 64 - 43) ^ (x << 54| x >>> 64 - 54)) + 0xF1357AEA2E62A9C5L)) >>> (32 - bits);
+		y = ((y <<  3 | y >>> 61) ^ (x = ((x << 56 | x >>>  8) + y ^ 0xBEA225F9EB34556DL))) + (x << 34 | x >>> 30);
+		x = ((x << 53 | x >>> 11) ^ (y = ((y << 26 | y >>> 38) + x ^ 0xD3833E804F4C574BL))) + (y << 17 | y >>> 47);
+		y = ((y << 23 | y >>> 41) ^ (x = ((x << 46 | x >>> 18) + y ^ 0x9E3779B97F4A7C15L))) + (x << 20 | x >>> 44);
+		x = ((x << 13 | x >>> 51) ^ (y = ((y <<  6 | y >>> 58) + x ^ 0xF1357AEA2E62A9C5L))) + (y << 57 | y >>>  7);
+		return (int)x >>> (32 - bits);
 	}
 	@Override
 	public long skip (final long advance) {
 		long x = (stateA += 0xD1B54A32D192ED03L * advance);
 		long y = (stateB += 0x8CB92BA72F3D8DD7L * advance);
-		x =    (y ^ 0xF1357AEA2E62A9C5L) + (y ^= (x ^ (x << 25 | x >>> 64 - 25) ^ (x << 50| x >>> 64 - 50)) + 0xD3833E804F4C574BL);
-		y =    (x ^ 0xD3833E804F4C574BL) + (x ^= (y ^ (y << 19 | y >>> 64 - 19) ^ (y << 41| y >>> 64 - 41)) + 0x9E3779B97F4A7C15L);
-		return (y ^ 0x9E3779B97F4A7C15L) + (y ^  (x ^ (x << 43 | x >>> 64 - 43) ^ (x << 54| x >>> 64 - 54)) + 0xF1357AEA2E62A9C5L);
+		y = ((y <<  3 | y >>> 61) ^ (x = ((x << 56 | x >>>  8) + y ^ 0xBEA225F9EB34556DL))) + (x << 34 | x >>> 30);
+		x = ((x << 53 | x >>> 11) ^ (y = ((y << 26 | y >>> 38) + x ^ 0xD3833E804F4C574BL))) + (y << 17 | y >>> 47);
+		y = ((y << 23 | y >>> 41) ^ (x = ((x << 46 | x >>> 18) + y ^ 0x9E3779B97F4A7C15L))) + (x << 20 | x >>> 44);
+		x = ((x << 13 | x >>> 51) ^ (y = ((y <<  6 | y >>> 58) + x ^ 0xF1357AEA2E62A9C5L))) + (y << 57 | y >>>  7);
+		return x;
 	}
 	/**
 	 * Gets a long that identifies which of the 2 to the 64 possible streams this is on, before considering the keys.
