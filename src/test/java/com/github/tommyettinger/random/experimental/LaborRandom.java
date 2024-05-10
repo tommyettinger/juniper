@@ -267,22 +267,18 @@ public class LaborRandom extends EnhancedRandom {
 		return a;
 	}
 	/**
-	 * Gets a long that identifies which of the 2 to the 64 possible streams this is on, before considering the keys.
-	 * If the streams are different for two generators, their output (after enough keys have been incorporated) should
-	 * be very different. With 1 or 0 keys, two different streams that have numerically similar states (like 0,1 and
-	 * 0,2) are likely to be correlated.
-	 * <br>
+	 * Gets a long that identifies which of the 2 to the 64 possible streams this is on.
 	 * This takes constant time.
 	 *
-	 * @return a long that identifies which stream the main state of the generator is on (not considering keys)
+	 * @return a long that identifies which stream the main state of the generator is on
 	 */
 	public long getStream() {
 		return stateB * 0x06106CCFA448E5ABL - stateA * 0xF1DE83E19937733DL;
 	}
 
 	/**
-	 * Changes the generator's stream to any of the 2 to the 64 possible streams this can be on, before considering the
-	 * keys. The {@code stream} this takes uses the same numbering convention used by {@link #getStream()} and
+	 * Changes the generator's stream to any of the 2 to the 64 possible streams this can be on.
+	 * The {@code stream} this takes uses the same numbering convention used by {@link #getStream()} and
 	 * {@link #shiftStream(long)}. This makes an absolute change to the stream, while shiftStream() is relative.
 	 * <br>
 	 * This takes constant time.
@@ -294,8 +290,8 @@ public class LaborRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Adjusts the generator's stream "up" or "down" to any of the 2 to the 64 possible streams this can be on, before
-	 * considering the keys. The {@code difference} this takes will be the difference between the result of
+	 * Adjusts the generator's stream "up" or "down" to any of the 2 to the 64 possible streams this can be on.
+	 * The {@code difference} this takes will be the difference between the result of
 	 * {@link #getStream()} before the shift, and after the shift. This makes a relative change to the stream, while
 	 * setStream() is absolute.
 	 * <br>
