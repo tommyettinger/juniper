@@ -308,7 +308,7 @@ public class FFTVisualizer extends ApplicationAdapter {
         if(Gdx.input.isKeyPressed(A)){ // Analysis (of random numbers, left side)
             analyze(freq, LIGHT_YELLOW);
         }
-        if(Gdx.input.isKeyPressed(H)){ // Histogram (of DFT or DCT, right side)
+        if(!Gdx.input.isKeyPressed(H)){ // Histogram (of DFT or DCT, right side)
             analyze(Fft.histogram, LIGHT_PURPLE);
         }
 

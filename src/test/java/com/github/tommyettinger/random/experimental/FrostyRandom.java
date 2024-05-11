@@ -205,13 +205,13 @@ public class FrostyRandom extends EnhancedRandom {
 		this.stateA = stateA;
 		this.stateB = stateB;
 	}
+//		y =    (x) + (x ^= (y ^ (y << 25 | y >>> 64 - 25) ^ (y << 50 | y >>> 64 - 50)) + 0xBEA225F9EB34556DL);
+//		x =    (y) + (y ^= (x ^ (x << 13 | x >>> 64 - 13) ^ (x << 37 | x >>> 64 - 37)) + 0xD3833E804F4C574BL);
 
 	@Override
 	public long nextLong () {
 		long x = (stateA += 0xD1B54A32D192ED03L);
 		long y = (stateB += 0x8CB92BA72F3D8DD7L);
-//		y =    (x) + (x ^= (y ^ (y << 25 | y >>> 64 - 25) ^ (y << 50 | y >>> 64 - 50)) + 0xBEA225F9EB34556DL);
-//		x =    (y) + (y ^= (x ^ (x << 13 | x >>> 64 - 13) ^ (x << 37 | x >>> 64 - 37)) + 0xD3833E804F4C574BL);
 		y = ((y <<  3 | y >>> 61) ^ (x = ((x << 56 | x >>>  8) + y ^ 0xBEA225F9EB34556DL))) + (x << 34 | x >>> 30);
 		x = ((x << 53 | x >>> 11) ^ (y = ((y << 26 | y >>> 38) + x ^ 0xD3833E804F4C574BL))) + (y << 17 | y >>> 47);
 		y = ((y << 23 | y >>> 41) ^ (x = ((x << 46 | x >>> 18) + y ^ 0x9E3779B97F4A7C15L))) + (x << 20 | x >>> 44);
