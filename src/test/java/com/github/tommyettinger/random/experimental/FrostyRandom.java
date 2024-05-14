@@ -207,17 +207,25 @@ public class FrostyRandom extends EnhancedRandom {
 	}
 //		y =    (x) + (x ^= (y ^ (y << 25 | y >>> 64 - 25) ^ (y << 50 | y >>> 64 - 50)) + 0xBEA225F9EB34556DL);
 //		x =    (y) + (y ^= (x ^ (x << 13 | x >>> 64 - 13) ^ (x << 37 | x >>> 64 - 37)) + 0xD3833E804F4C574BL);
+// ^ (x << 34 | x >>> 30);
+// ^ (y << 17 | y >>> 47);
+// ^ (x << 20 | x >>> 44);
+// ^ (y << 57 | y >>>  7);
 
 	@Override
 	public long nextLong () {
 		long x = (stateA += 0xD1B54A32D192ED03L);
 		long y = (stateB += 0x8CB92BA72F3D8DD7L);
-		y = ((y <<  3 | y >>> 61) ^ (x = ((x << 56 | x >>>  8) + y ^ 0xBEA225F9EB34556DL))) + (x << 34 | x >>> 30);
-		x = ((x << 53 | x >>> 11) ^ (y = ((y << 26 | y >>> 38) + x ^ 0xD3833E804F4C574BL))) + (y << 17 | y >>> 47);
-		y = ((y << 23 | y >>> 41) ^ (x = ((x << 46 | x >>> 18) + y ^ 0x9E3779B97F4A7C15L))) + (x << 20 | x >>> 44);
-		x = ((x << 13 | x >>> 51) ^ (y = ((y <<  6 | y >>> 58) + x ^ 0xF1357AEA2E62A9C5L))) + (y << 57 | y >>>  7);
+		y = ((y <<  3 | y >>> 61) ^ (x = ((x << 56 | x >>>  8) + y ^ 0xBEA225F9EB34556DL)));
+		x = ((x << 53 | x >>> 11) ^ (y = ((y << 26 | y >>> 38) + x ^ 0xD3833E804F4C574BL)));
+		y = ((y << 23 | y >>> 41) ^ (x = ((x << 46 | x >>> 18) + y ^ 0x9E3779B97F4A7C15L)));
+		x = ((x << 13 | x >>> 51) ^ (y = ((y <<  6 | y >>> 58) + x ^ 0xF1357AEA2E62A9C5L)));
+		final int r = (int)y;
+		x = (x << r | x >>> -r);
 		return x;
 	}
+//		final int q = (int)x;
+//		y = (y << q | y >>> -q);
 
 	@Override
 	public long previousLong () {
@@ -225,10 +233,12 @@ public class FrostyRandom extends EnhancedRandom {
 		long y = stateB;
 		stateA -= 0xD1B54A32D192ED03L;
 		stateB -= 0x8CB92BA72F3D8DD7L;
-		y = ((y <<  3 | y >>> 61) ^ (x = ((x << 56 | x >>>  8) + y ^ 0xBEA225F9EB34556DL))) + (x << 34 | x >>> 30);
-		x = ((x << 53 | x >>> 11) ^ (y = ((y << 26 | y >>> 38) + x ^ 0xD3833E804F4C574BL))) + (y << 17 | y >>> 47);
-		y = ((y << 23 | y >>> 41) ^ (x = ((x << 46 | x >>> 18) + y ^ 0x9E3779B97F4A7C15L))) + (x << 20 | x >>> 44);
-		x = ((x << 13 | x >>> 51) ^ (y = ((y <<  6 | y >>> 58) + x ^ 0xF1357AEA2E62A9C5L))) + (y << 57 | y >>>  7);
+		y = ((y <<  3 | y >>> 61) ^ (x = ((x << 56 | x >>>  8) + y ^ 0xBEA225F9EB34556DL)));
+		x = ((x << 53 | x >>> 11) ^ (y = ((y << 26 | y >>> 38) + x ^ 0xD3833E804F4C574BL)));
+		y = ((y << 23 | y >>> 41) ^ (x = ((x << 46 | x >>> 18) + y ^ 0x9E3779B97F4A7C15L)));
+		x = ((x << 13 | x >>> 51) ^ (y = ((y <<  6 | y >>> 58) + x ^ 0xF1357AEA2E62A9C5L)));
+		final int r = (int)y;
+		x = (x << r | x >>> -r);
 		return x;
 	}
 
@@ -236,20 +246,24 @@ public class FrostyRandom extends EnhancedRandom {
 	public int next (int bits) {
 		long x = (stateA += 0xD1B54A32D192ED03L);
 		long y = (stateB += 0x8CB92BA72F3D8DD7L);
-		y = ((y <<  3 | y >>> 61) ^ (x = ((x << 56 | x >>>  8) + y ^ 0xBEA225F9EB34556DL))) + (x << 34 | x >>> 30);
-		x = ((x << 53 | x >>> 11) ^ (y = ((y << 26 | y >>> 38) + x ^ 0xD3833E804F4C574BL))) + (y << 17 | y >>> 47);
-		y = ((y << 23 | y >>> 41) ^ (x = ((x << 46 | x >>> 18) + y ^ 0x9E3779B97F4A7C15L))) + (x << 20 | x >>> 44);
-		x = ((x << 13 | x >>> 51) ^ (y = ((y <<  6 | y >>> 58) + x ^ 0xF1357AEA2E62A9C5L))) + (y << 57 | y >>>  7);
+		y = ((y <<  3 | y >>> 61) ^ (x = ((x << 56 | x >>>  8) + y ^ 0xBEA225F9EB34556DL)));
+		x = ((x << 53 | x >>> 11) ^ (y = ((y << 26 | y >>> 38) + x ^ 0xD3833E804F4C574BL)));
+		y = ((y << 23 | y >>> 41) ^ (x = ((x << 46 | x >>> 18) + y ^ 0x9E3779B97F4A7C15L)));
+		x = ((x << 13 | x >>> 51) ^ (y = ((y <<  6 | y >>> 58) + x ^ 0xF1357AEA2E62A9C5L)));
+		final int r = (int)y;
+		x = (x << r | x >>> -r);
 		return (int)x >>> (32 - bits);
 	}
 	@Override
 	public long skip (final long advance) {
 		long x = (stateA += 0xD1B54A32D192ED03L * advance);
 		long y = (stateB += 0x8CB92BA72F3D8DD7L * advance);
-		y = ((y <<  3 | y >>> 61) ^ (x = ((x << 56 | x >>>  8) + y ^ 0xBEA225F9EB34556DL))) + (x << 34 | x >>> 30);
-		x = ((x << 53 | x >>> 11) ^ (y = ((y << 26 | y >>> 38) + x ^ 0xD3833E804F4C574BL))) + (y << 17 | y >>> 47);
-		y = ((y << 23 | y >>> 41) ^ (x = ((x << 46 | x >>> 18) + y ^ 0x9E3779B97F4A7C15L))) + (x << 20 | x >>> 44);
-		x = ((x << 13 | x >>> 51) ^ (y = ((y <<  6 | y >>> 58) + x ^ 0xF1357AEA2E62A9C5L))) + (y << 57 | y >>>  7);
+		y = ((y <<  3 | y >>> 61) ^ (x = ((x << 56 | x >>>  8) + y ^ 0xBEA225F9EB34556DL)));
+		x = ((x << 53 | x >>> 11) ^ (y = ((y << 26 | y >>> 38) + x ^ 0xD3833E804F4C574BL)));
+		y = ((y << 23 | y >>> 41) ^ (x = ((x << 46 | x >>> 18) + y ^ 0x9E3779B97F4A7C15L)));
+		x = ((x << 13 | x >>> 51) ^ (y = ((y <<  6 | y >>> 58) + x ^ 0xF1357AEA2E62A9C5L)));
+		final int r = (int)y;
+		x = (x << r | x >>> -r);
 		return x;
 	}
 	/**
