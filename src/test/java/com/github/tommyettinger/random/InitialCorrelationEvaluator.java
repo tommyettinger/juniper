@@ -82,7 +82,7 @@ public class InitialCorrelationEvaluator {
                 minMode = Math.min(mode, minMode);
             }
             actualAmount += amountSum / steps;
-            actualMode += minMode / steps;
+            actualMode = minMode;
         }
 //        actualMode *= 0.5; // not sure why this is needed to get similar behavior to before...
         return 1.0 - Math.abs(actualMode - 115.5) - (actualAmount - 0.031) * 10;
@@ -485,9 +485,9 @@ Lowest mode: 81.92187 has mean amount 0.0184360742  FAIL 💀 for Xoshiro256Star
         StringBuilder sb = new StringBuilder(1024);
         EnhancedRandom[][] g = new EnhancedRandom[256][256];
 
-        ArrayList<EnhancedRandom> rs = ObjectList.with(new FrostyRandom(1, 1));
+//        ArrayList<EnhancedRandom> rs = ObjectList.with(new FrostyRandom(1, 1));
 //        ArrayList<EnhancedRandom> rs = ObjectList.with(new Rawr32Random(1, 1, 1, 1));
-//        ArrayList<EnhancedRandom> rs = Generators.randomList;
+        ArrayList<EnhancedRandom> rs = Generators.randomList;
 
         rs.sort((l, r) -> l.getClass().getSimpleName().compareTo(r.getClass().getSimpleName()));
 //        rs.sort(Comparator.comparing(EnhancedRandom::getClass, Comparator.comparing(Class::getSimpleName)));
