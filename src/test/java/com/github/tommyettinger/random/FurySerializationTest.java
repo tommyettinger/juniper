@@ -2,9 +2,9 @@ package com.github.tommyettinger.random;
 
 import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.random.distribution.Distribution;
-import io.fury.Fury;
-import io.fury.config.Language;
-import io.fury.memory.MemoryBuffer;
+import org.apache.fury.Fury;
+import org.apache.fury.config.Language;
+import org.apache.fury.memory.MemoryBuffer;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
