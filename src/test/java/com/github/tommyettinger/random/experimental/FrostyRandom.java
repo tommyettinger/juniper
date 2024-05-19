@@ -216,14 +216,11 @@ public class FrostyRandom extends EnhancedRandom {
 	public long nextLong () {
 		long x = (stateA += 0xD1B54A32D192ED03L);
 		long y = (stateB += 0x8CB92BA72F3D8DD7L);
-		y = ((y <<  3 | y >>> 61) ^ (x = ((x << 56 | x >>>  8) + y))); // ^ 0xBEA225F9EB34556DL
-		x = ((x << 53 | x >>> 11) ^ (y = ((y << 26 | y >>> 38) + x))); // ^ 0xD3833E804F4C574BL
-		y = ((y << 23 | y >>> 41) ^ (x = ((x << 46 | x >>> 18) + y))); // ^ 0x9E3779B97F4A7C15L
-		x = ((x << 13 | x >>> 51) ^ (y = ((y <<  6 | y >>> 58) + x))); // ^ 0xF1357AEA2E62A9C5L
-		int r, q;
-		r = (int)y;
-		q = (r << 15 | r >>> 17);
-		x ^= (x << r | x >>> -r) ^ (x << q | x >>> -q);
+
+		y = (y <<  3 | y >>> 64 -  3) ^ (x = (x << 56 | x >>> 64 - 56) + y ^ 0xBEA225F9EB34556DL) + (x << 37 | x >>> 64 - 37);
+		x = (x << 11 | x >>> 64 - 11) ^ (y = (y << 41 | y >>> 64 - 41) + x ^ 0xA62B82F58DB8A985L) + (y << 29 | y >>> 64 - 29);
+		y = (y << 12 | y >>> 64 - 12) ^ (x = (x << 43 | x >>> 64 - 43) + y ^ 0x9E3779B97F4A7C15L) + (x << 59 | x >>> 64 - 59);
+		x = (x << 50 | x >>> 64 - 50) ^ (y = (y << 52 | y >>> 64 - 52) + x ^ 0xF1357AEA2E62A9C5L) + (y << 23 | y >>> 64 - 23);
 		return x;
 	}
 //		r = (int)x;
@@ -251,14 +248,18 @@ public class FrostyRandom extends EnhancedRandom {
 	public int next (int bits) {
 		long x = (stateA += 0xD1B54A32D192ED03L);
 		long y = (stateB += 0x8CB92BA72F3D8DD7L);
-		y = ((y <<  3 | y >>> 61) ^ (x = ((x << 56 | x >>>  8) + y)));
-		x = ((x << 53 | x >>> 11) ^ (y = ((y << 26 | y >>> 38) + x)));
-		y = ((y << 23 | y >>> 41) ^ (x = ((x << 46 | x >>> 18) + y)));
-		x = ((x << 13 | x >>> 51) ^ (y = ((y <<  6 | y >>> 58) + x)));
-		int r, q;
-		r = (int)y;
-		q = (r << 15 | r >>> 17);
-		x ^= (x << r | x >>> -r) ^ (x << q | x >>> -q);
+		y = ((y <<  3 | y >>> 64 -  3) ^ (x = ((x << 56 | x >>> 64 - 56) + y))); // ^ 0xBEA225F9EB34556DL
+		x = ((x <<  7 | x >>> 64 -  7) ^ (y = ((y << 42 | y >>> 64 - 42) + x))); // ^ 0xD3833E804F4C574BL
+		y = ((y << 19 | y >>> 64 - 19) ^ (x = ((x << 30 | x >>> 64 - 30) + y))); // ^ 0x9E3779B97F4A7C15L
+		x = ((x << 55 | x >>> 64 - 55) ^ (y = ((y << 20 | y >>> 64 - 20) + x))); // ^ 0xF1357AEA2E62A9C5L
+		y += (x << 25 | x >>> 64 - 25);
+		x += (y << 52 | y >>> 64 - 52);
+		y ^= (x << 44 | x >>> 64 - 44);
+		x ^= (y << 17 | y >>> 64 - 17);
+		//y = rotate64(y,  3) ^ (x = (rotate64(x, 56) + y));
+		//x = rotate64(x,  7) ^ (y = (rotate64(y, 42) + x));
+		//y = rotate64(y, 19) ^ (x = (rotate64(x, 30) + y));
+		//x = rotate64(x, 55) ^ (y = (rotate64(y, 20) + x));
 		return (int)x >>> (32 - bits);
 	}
 	@Override
