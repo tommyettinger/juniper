@@ -254,19 +254,17 @@ public class TyrantRandom extends EnhancedRandom {
 	@Override
 	public long previousLong () {
 		long a = stateA;
-        long b = stateB;
-        stateA -= 0x9E3779B97F4A7C15L;
-		stateB -= BitConversion.countLeadingZeros(a);
-		stateC -= BitConversion.countLeadingZeros(a|b);
-		a = stateA;
-		b = stateB;
+		long b = stateB;
 		long c = stateC;
+		stateA -= 0x9E3779B97F4A7C15L;
+		stateB -= BitConversion.countLeadingZeros(a);
+		stateC -= BitConversion.countLeadingZeros(a | b);
 		a ^= (b << 11 | b >>> 53) + c;
 		a += (c << 50 | c >>> 14) ^ b;
 		b += (a << 41 | a >>> 23) ^ c;
 		b += (c << 12 | c >>> 52) ^ a;
 		c ^= (a << 17 | a >>> 47) + b;
-		c ^= (b << 58 | b >>>  6) + a;
+		c ^= (b << 58 | b >>> 6) + a;
 		for (int i = 0; i < 5; i++) {
 			b = ((b << 56 | b >>> 8) + a ^ c);
 			a = ((a << 3 | a >>> 61) ^ b);
@@ -322,7 +320,6 @@ public class TyrantRandom extends EnhancedRandom {
 		long n3 = random.nextLong();
 		long n4 = random.nextLong();
 		long n5 = random.nextLong();
-		long n6 = random.nextLong();
 		long p5 = random.previousLong();
 		long p4 = random.previousLong();
 		long p3 = random.previousLong();

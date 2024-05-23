@@ -78,7 +78,7 @@ public class Gobbler32Random extends EnhancedRandom {
 
 	@Override
 	public String getTag() {
-		return "GbbR";
+		return "GobR";
 	}
 
 	/**

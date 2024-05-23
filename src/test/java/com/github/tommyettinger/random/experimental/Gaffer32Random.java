@@ -66,7 +66,7 @@ public class Gaffer32Random extends EnhancedRandom {
 
 	@Override
 	public String getTag() {
-		return "GbbR";
+		return "GffR";
 	}
 
 	/**

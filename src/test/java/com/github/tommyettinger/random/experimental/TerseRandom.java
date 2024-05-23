@@ -260,9 +260,12 @@ public class TerseRandom extends EnhancedRandom {
 
 	@Override
 	public long skip(long advance) {
-		long a = (stateA += 0x9E3779B97F4A7C15L * advance);
-		long b = (stateB += 0xD1B54A32D192ED03L * advance);
-		long c = (stateC += 0xC13FA9A902A6328FL * advance);
+		long a = stateA;
+		long b = stateB;
+		long c = stateC;
+		stateA += 0x9E3779B97F4A7C15L * advance;
+		stateB += 0xD1B54A32D192ED03L * advance;
+		stateC += 0xC13FA9A902A6328FL * advance;
 		for (int i = 0; i < 9; i++) {
 			b = ((b << 56 | b >>> 8) + a ^ c);
 			a = ((a << 3 | a >>> 61) ^ b);
@@ -272,9 +275,12 @@ public class TerseRandom extends EnhancedRandom {
 
 	@Override
 	public long previousLong () {
-        long a = stateA -= 0x9E3779B97F4A7C15L;
-		long b = stateB -= 0xD1B54A32D192ED03L;
-		long c = stateC -= 0xC13FA9A902A6328FL;
+		long a = stateA;
+		long b = stateB;
+		long c = stateC;
+		stateA -= 0x9E3779B97F4A7C15L;
+		stateB -= 0xD1B54A32D192ED03L;
+		stateC -= 0xC13FA9A902A6328FL;
 		for (int i = 0; i < 9; i++) {
 			b = ((b << 56 | b >>> 8) + a ^ c);
 			a = ((a << 3 | a >>> 61) ^ b);
@@ -328,7 +334,6 @@ public class TerseRandom extends EnhancedRandom {
 		long n3 = random.nextLong();
 		long n4 = random.nextLong();
 		long n5 = random.nextLong();
-		long n6 = random.nextLong();
 		long p5 = random.previousLong();
 		long p4 = random.previousLong();
 		long p3 = random.previousLong();

@@ -238,13 +238,11 @@ public class SpurRandom extends EnhancedRandom {
 	@Override
 	public long previousLong () {
 		long a = stateA;
-        long b = stateB;
-        stateA = 0x572B5EE77A54E3BDL * (stateA - 0x9E3779B97F4A7C15L);
-		stateB = 0x94947AB6A1E94BFDL * (stateB - BitConversion.countLeadingZeros(a));
-		stateC = 0xBE21F44C6018E14DL * (stateC - BitConversion.countLeadingZeros(a&b));
-		a = stateA;
-		b = stateB;
+		long b = stateB;
 		long c = stateC;
+		stateA = 0x572B5EE77A54E3BDL * (a - 0x9E3779B97F4A7C15L);
+		stateB = 0x94947AB6A1E94BFDL * (b - BitConversion.countLeadingZeros(a));
+		stateC = 0xBE21F44C6018E14DL * (c - BitConversion.countLeadingZeros(a & b));
 		return (a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ c);
 	}
 
@@ -288,7 +286,6 @@ public class SpurRandom extends EnhancedRandom {
 		long n3 = random.nextLong();
 		long n4 = random.nextLong();
 		long n5 = random.nextLong();
-		long n6 = random.nextLong();
 		long p5 = random.previousLong();
 		long p4 = random.previousLong();
 		long p3 = random.previousLong();
