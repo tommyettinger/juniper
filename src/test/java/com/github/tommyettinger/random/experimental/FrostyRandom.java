@@ -30,21 +30,31 @@ import com.github.tommyettinger.random.EnhancedRandom;
  * Even though a period of 2 to the 64 is just "good enough," it's tens of thousands of times longer
  * than java.util.Random, and equivalent to any individual SplittableRandom. The speed of this
  * generator is unknown, but probably isn't great, especially compared to designs that take advantage
- * of instruction-level parallelism. The streams are meant to avoid correlation, especially when
- * compared to LaserRandom (which has very correlated streams, but the same state size and period).
+ * of instruction-level parallelism, like {@link com.github.tommyettinger.random.AceRandom} or
+ * {@link LaceRandom} (the latter of which also uses only ARX operations). The streams are meant to
+ * avoid correlation, especially when compared to LaserRandom (which has very correlated streams, and
+ * half as many as this has, but the same state size and period).
  * <br>
- * Has passed 64TB of PractRand without anomalies. Any individual stream will return
+ * This has passed 64TB of PractRand without anomalies. Any individual stream will return
  * 2 to the 64 {@code long} results before repeating, but within a stream, some
  * results will appear multiple times, and other results not at all. If you
  * append all streams to each other to form one sequence of length 2 to the 128,
  * that sequence will be 1-dimensionally equidistributed; that is, each long
  * result will appear as often as any other (2 to the 64 times).
  * <br>
- * Uses a simple 3-round Feistel cipher with a bijective round function, giving
- * it the two different Weyl sequences (counters) this has for its
- * state. Using just one sequence is enough to pass a large amount of PractRand,
- * but a generator like DistinctRandom would have to change which sequence it uses to have
- * multiple streams. Some sequences are no good, like using an increment of 1;
+ * Uses a simple construction that is similar to the Speck cipher, but only run for 4 rounds, passing
+ * it the two different Weyl sequences (counters) this has for its stateA and stateB. Unlike a typical
+ * usage of Speck, the equivalent to a key is hardcoded here, since this isn't being used as a cipher.
+ * If you wanted to alter FrostyRandom while keeping most of its qualities, changing the constants
+ * {@code 0xBEA225F9EB34556DL}, {@code 0xA62B82F58DB8A985L}, {@code 0x9E3779B97F4A7C15L} and {@code 0xF1357AEA2E62A9C5L}
+ * provides one way you might produce a previously-unknown generator from this algorithm. Changing the increments
+ * {@code 0xD1B54A32D192ED03L} and {@code 0x8CB92BA72F3D8DD7L} is not recommended, because you would also need to
+ * rewrite {@link #getStream()}, {@link #setStream(long)}, and {@link #shiftStream(long)}.
+ * <br>
+ * Using just one 64-bit counter and hashing it to get each output, which is what DistinctRandom does,
+ * is enough to pass a large amount of PractRand. However, a generator like DistinctRandom would have
+ * to change which sequence it uses to have multiple streams, which is what Java 8's {@code SplittableRandom}
+ * class does. Some sequences are no good, like using an increment of 1 or {@code 0xAAAAAAAAAAAAAAABL};
  * this generator uses a pair of Weyl sequences that are known to work well,
  * and never uses unknown or untested sequences. The relationship between the
  * two sequences is what determines the current stream.
@@ -207,25 +217,26 @@ public class FrostyRandom extends EnhancedRandom {
 	}
 //		y =    (x) + (x ^= (y ^ (y << 25 | y >>> 64 - 25) ^ (y << 50 | y >>> 64 - 50)) + 0xBEA225F9EB34556DL);
 //		x =    (y) + (y ^= (x ^ (x << 13 | x >>> 64 - 13) ^ (x << 37 | x >>> 64 - 37)) + 0xD3833E804F4C574BL);
+
 // ^ (x << 34 | x >>> 30);
 // ^ (y << 17 | y >>> 47);
 // ^ (x << 20 | x >>> 44);
 // ^ (y << 57 | y >>>  7);
 
+//		r = (int)x;
+//		q = r ^ 63;
+//		y ^= (y << r | y >>> -r) ^ (y << q | y >>> -q);
+
 	@Override
 	public long nextLong () {
 		long x = (stateA += 0xD1B54A32D192ED03L);
 		long y = (stateB += 0x8CB92BA72F3D8DD7L);
-
-		y = (y <<  3 | y >>> 64 -  3) ^ (x = (x << 56 | x >>> 64 - 56) + y ^ 0xBEA225F9EB34556DL) + (x << 37 | x >>> 64 - 37);
-		x = (x << 11 | x >>> 64 - 11) ^ (y = (y << 41 | y >>> 64 - 41) + x ^ 0xA62B82F58DB8A985L) + (y << 29 | y >>> 64 - 29);
-		y = (y << 12 | y >>> 64 - 12) ^ (x = (x << 43 | x >>> 64 - 43) + y ^ 0x9E3779B97F4A7C15L) + (x << 59 | x >>> 64 - 59);
-		x = (x << 50 | x >>> 64 - 50) ^ (y = (y << 52 | y >>> 64 - 52) + x ^ 0xF1357AEA2E62A9C5L) + (y << 23 | y >>> 64 - 23);
+		y = (y <<  3 | y >>> 61) ^ (x = (x << 56 | x >>>  8) + y ^ 0xBEA225F9EB34556DL) + (x << 37 | x >>> 27);
+		x = (x << 11 | x >>> 53) ^ (y = (y << 41 | y >>> 23) + x ^ 0xA62B82F58DB8A985L) + (y << 29 | y >>> 35);
+		y = (y << 12 | y >>> 52) ^ (x = (x << 43 | x >>> 21) + y ^ 0x9E3779B97F4A7C15L) + (x << 59 | x >>>  5);
+		x = (x << 50 | x >>> 14) ^ (y = (y << 52 | y >>> 12) + x ^ 0xF1357AEA2E62A9C5L) + (y << 23 | y >>> 41);
 		return x;
 	}
-//		r = (int)x;
-//		q = r ^ 63;
-//		y ^= (y << r | y >>> -r) ^ (y << q | y >>> -q);
 
 	@Override
 	public long previousLong () {
@@ -233,14 +244,10 @@ public class FrostyRandom extends EnhancedRandom {
 		long y = stateB;
 		stateA -= 0xD1B54A32D192ED03L;
 		stateB -= 0x8CB92BA72F3D8DD7L;
-		y = ((y <<  3 | y >>> 61) ^ (x = ((x << 56 | x >>>  8) + y)));
-		x = ((x << 53 | x >>> 11) ^ (y = ((y << 26 | y >>> 38) + x)));
-		y = ((y << 23 | y >>> 41) ^ (x = ((x << 46 | x >>> 18) + y)));
-		x = ((x << 13 | x >>> 51) ^ (y = ((y <<  6 | y >>> 58) + x)));
-		int r, q;
-		r = (int)y;
-		q = (r << 15 | r >>> 17);
-		x ^= (x << r | x >>> -r) ^ (x << q | x >>> -q);
+		y = (y <<  3 | y >>> 61) ^ (x = (x << 56 | x >>>  8) + y ^ 0xBEA225F9EB34556DL) + (x << 37 | x >>> 27);
+		x = (x << 11 | x >>> 53) ^ (y = (y << 41 | y >>> 23) + x ^ 0xA62B82F58DB8A985L) + (y << 29 | y >>> 35);
+		y = (y << 12 | y >>> 52) ^ (x = (x << 43 | x >>> 21) + y ^ 0x9E3779B97F4A7C15L) + (x << 59 | x >>>  5);
+		x = (x << 50 | x >>> 14) ^ (y = (y << 52 | y >>> 12) + x ^ 0xF1357AEA2E62A9C5L) + (y << 23 | y >>> 41);
 		return x;
 	}
 
@@ -248,32 +255,20 @@ public class FrostyRandom extends EnhancedRandom {
 	public int next (int bits) {
 		long x = (stateA += 0xD1B54A32D192ED03L);
 		long y = (stateB += 0x8CB92BA72F3D8DD7L);
-		y = ((y <<  3 | y >>> 64 -  3) ^ (x = ((x << 56 | x >>> 64 - 56) + y))); // ^ 0xBEA225F9EB34556DL
-		x = ((x <<  7 | x >>> 64 -  7) ^ (y = ((y << 42 | y >>> 64 - 42) + x))); // ^ 0xD3833E804F4C574BL
-		y = ((y << 19 | y >>> 64 - 19) ^ (x = ((x << 30 | x >>> 64 - 30) + y))); // ^ 0x9E3779B97F4A7C15L
-		x = ((x << 55 | x >>> 64 - 55) ^ (y = ((y << 20 | y >>> 64 - 20) + x))); // ^ 0xF1357AEA2E62A9C5L
-		y += (x << 25 | x >>> 64 - 25);
-		x += (y << 52 | y >>> 64 - 52);
-		y ^= (x << 44 | x >>> 64 - 44);
-		x ^= (y << 17 | y >>> 64 - 17);
-		//y = rotate64(y,  3) ^ (x = (rotate64(x, 56) + y));
-		//x = rotate64(x,  7) ^ (y = (rotate64(y, 42) + x));
-		//y = rotate64(y, 19) ^ (x = (rotate64(x, 30) + y));
-		//x = rotate64(x, 55) ^ (y = (rotate64(y, 20) + x));
+		y = (y <<  3 | y >>> 61) ^ (x = (x << 56 | x >>>  8) + y ^ 0xBEA225F9EB34556DL) + (x << 37 | x >>> 27);
+		x = (x << 11 | x >>> 53) ^ (y = (y << 41 | y >>> 23) + x ^ 0xA62B82F58DB8A985L) + (y << 29 | y >>> 35);
+		y = (y << 12 | y >>> 52) ^ (x = (x << 43 | x >>> 21) + y ^ 0x9E3779B97F4A7C15L) + (x << 59 | x >>>  5);
+		x = (x << 50 | x >>> 14) ^ (y = (y << 52 | y >>> 12) + x ^ 0xF1357AEA2E62A9C5L) + (y << 23 | y >>> 41);
 		return (int)x >>> (32 - bits);
 	}
 	@Override
 	public long skip (final long advance) {
 		long x = (stateA += 0xD1B54A32D192ED03L * advance);
 		long y = (stateB += 0x8CB92BA72F3D8DD7L * advance);
-		y = ((y <<  3 | y >>> 61) ^ (x = ((x << 56 | x >>>  8) + y)));
-		x = ((x << 53 | x >>> 11) ^ (y = ((y << 26 | y >>> 38) + x)));
-		y = ((y << 23 | y >>> 41) ^ (x = ((x << 46 | x >>> 18) + y)));
-		x = ((x << 13 | x >>> 51) ^ (y = ((y <<  6 | y >>> 58) + x)));
-		int r, q;
-		r = (int)y;
-		q = (r << 15 | r >>> 17);
-		x ^= (x << r | x >>> -r) ^ (x << q | x >>> -q);
+		y = (y <<  3 | y >>> 61) ^ (x = (x << 56 | x >>>  8) + y ^ 0xBEA225F9EB34556DL) + (x << 37 | x >>> 27);
+		x = (x << 11 | x >>> 53) ^ (y = (y << 41 | y >>> 23) + x ^ 0xA62B82F58DB8A985L) + (y << 29 | y >>> 35);
+		y = (y << 12 | y >>> 52) ^ (x = (x << 43 | x >>> 21) + y ^ 0x9E3779B97F4A7C15L) + (x << 59 | x >>>  5);
+		x = (x << 50 | x >>> 14) ^ (y = (y << 52 | y >>> 12) + x ^ 0xF1357AEA2E62A9C5L) + (y << 23 | y >>> 41);
 		return x;
 	}
 	/**
@@ -334,7 +329,7 @@ public class FrostyRandom extends EnhancedRandom {
 	}
 
 	public String toString () {
-		return "FrostyRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L}";
+		return "FrostyRandom{stateA=" + (stateA) + "L, stateB=" + (stateB) + "L}";
 	}
 
 //	public static void main(String[] args) {
