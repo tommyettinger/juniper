@@ -232,7 +232,7 @@ public class Chill32Random extends EnhancedRandom {
 		x = (x << 14 | x >>> 18) ^ (y = (y << 29 | y >>>  3) + x ^ z) + (y << 11 | y >>> 21);
 		y = (y << 19 | y >>> 13) ^ (x = (x <<  5 | x >>> 27) + y ^ z) + (x << 29 | x >>>  3);
 		x = (x << 17 | x >>> 15) ^ (y = (y << 11 | y >>> 21) + x ^ z) + (y << 23 | y >>>  9);
-		return (long)y << 32 | x;
+		return (long)y << 32 ^ x;
 	}
 
 	@Override
@@ -247,7 +247,7 @@ public class Chill32Random extends EnhancedRandom {
 		x = (x << 14 | x >>> 18) ^ (y = (y << 29 | y >>>  3) + x ^ z) + (y << 11 | y >>> 21);
 		y = (y << 19 | y >>> 13) ^ (x = (x <<  5 | x >>> 27) + y ^ z) + (x << 29 | x >>>  3);
 		x = (x << 17 | x >>> 15) ^ (y = (y << 11 | y >>> 21) + x ^ z) + (y << 23 | y >>>  9);
-		return (long)y << 32 | x;
+		return (long)y << 32 ^ x;
 	}
 
 	@Override
