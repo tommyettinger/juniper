@@ -17,11 +17,13 @@
 
 package com.github.tommyettinger.random.experimental;
 
-import com.github.tommyettinger.random.*;
+import com.github.tommyettinger.digital.BitConversion;
+import com.github.tommyettinger.random.EnhancedRandom;
+import com.github.tommyettinger.random.Xoshiro128PlusPlusRandom;
 
-/*
+/**
  * A random number generator that is optimized for performance on 32-bit machines and with Google Web Toolkit,
- * Respite32Random is a 32-bit-native generator here that doesn't have any shorter subcycles (because it only has one
+ * Respite32Random is a 32-bit-native generator that doesn't have any shorter subcycles (because it only has one
  * cycle, of length 2 to the 96). It effectively shares this property with {@link Xoshiro128PlusPlusRandom}, except that
  * Xoshiro128PlusPlusRandom doesn't permit the state to be all 0s, while Respite32Random isn't adversely affected by
  * that condition. This generator has three {@code int} states and doesn't use any
@@ -29,26 +31,14 @@ import com.github.tommyettinger.random.*;
  * on most platforms, or the JS function {@code Math.clz32()} on GWT. This only counts leading zeros for the purposes of
  * its state transition (for stateB and stateC), and using it the way this does is what allows the period to be so high.
  * <br>
- * This algorithm hasn't been tested with ReMort, but passes 64TB of PractRand testing with no anomalies. Numerically
- * similar initial states tend to be correlated with each other, even in the long term. This property is shared with
- * many other generators, such as {@link Xoshiro256StarStarRandom}, and the correlation isn't as severe as it is in
- * {@link WhiskerRandom}. Of the 32-bit-native generators, {@link ChopRandom} and {@link Jsf32Random} do not have
- * correlations I can find, but {@link Xoshiro128PlusPlusRandom} does have noticeable correlation between numerically
- * similar initial states.
+ * This algorithm passes 64TB of PractRand testing with no anomalies. It was tested as a 64-bit generator (using both
+ * 64-bit and 32-bit "folding modes"), because this is designed to be much faster at calling {@link #nextLong()} on any
+ * platform. Essentially, it always generates 64 bits of result, but only uses 32 of them from {@link #nextInt()} (and
+ * doesn't need to produce a {@code long} on GWT in nextInt(), which is a slow task).
  * <br>
  * This implements all optional methods in EnhancedRandom except {@link #skip(long)}.
- * <br>
- * The name comes from how this was a short break from generators that use 64-bit math, and also because it sounds
- * similar to "respect" -- RespectRandom is a closely-related generator that is still in development. Respite and its
- * relatives use the Speck cipher's round function to reliably randomize multiple states.
  */
-
-/**
- * An experiment to try to improve {@link Respite32Random}.
- * This should be super-sourced on GWT, using {@code Math.clz32()} and {@code Math.imul()}.
- *
- */
-public class Recipe32Random extends EnhancedRandom {
+public class Chill32Random extends EnhancedRandom {
 
 	/**
 	 * The first state; may be any int.
@@ -64,31 +54,31 @@ public class Recipe32Random extends EnhancedRandom {
 	protected int stateC;
 
 	/**
-	 * Creates a new Recipe32Random with a random state.
+	 * Creates a new Chill32Random with a random state.
 	 */
-	public Recipe32Random() {
-		this(EnhancedRandom.seedFromMath());
+	public Chill32Random() {
+		this((int)EnhancedRandom.seedFromMath(), (int)EnhancedRandom.seedFromMath(), (int)EnhancedRandom.seedFromMath());
 	}
 
 	/**
-	 * Creates a new Recipe32Random with the given seed; all {@code long} values are permitted.
+	 * Creates a new Chill32Random with the given seed; all {@code long} values are permitted.
 	 * The seed will be passed to {@link #setSeed(long)} to attempt to adequately distribute the seed randomly.
 	 *
 	 * @param seed any {@code long} value
 	 */
-	public Recipe32Random(long seed) {
+	public Chill32Random(long seed) {
 		super(seed);
 		setSeed(seed);
 	}
 
 	/**
-	 * Creates a new Recipe32Random with the given three states. All {@code int} values are permitted.
+	 * Creates a new Chill32Random with the given three states. All {@code int} values are permitted.
 	 *
 	 * @param stateA any {@code int} value
 	 * @param stateB any {@code int} value
 	 * @param stateC any {@code int} value
 	 */
-	public Recipe32Random(int stateA, int stateB, int stateC) {
+	public Chill32Random(int stateA, int stateB, int stateC) {
 		super(stateA);
 		this.stateA = stateA;
 		this.stateB = stateB;
@@ -97,7 +87,7 @@ public class Recipe32Random extends EnhancedRandom {
 
 	@Override
 	public String getTag() {
-		return "Re3R";
+		return "Ch3R";
 	}
 
 	/**
@@ -235,96 +225,67 @@ public class Recipe32Random extends EnhancedRandom {
 
 	@Override
 	public long nextLong () {
-		int a = (stateA += 0x91E10DA5);
-		int b = (stateB += 0x6C8E9CF5 ^ Integer.numberOfLeadingZeros(a));
-		int c = (stateC += 0x7FEB352D ^ Integer.numberOfLeadingZeros(a&b));
-		a = (a << 3 | a >>> 29) ^ ((b << 24 | b >>> 8) + a ^ c);
-		a = (a ^ a >>> 16) * 0x21f0aaad;
-		a = (a ^ a >>> 15) * 0x735a2d97;
-		a ^= a >>> 15;
-		long h = a;
-		a = (stateA += 0x91E10DA5);
-		b = (stateB += 0x6C8E9CF5 ^ Integer.numberOfLeadingZeros(a));
-		c = (stateC += 0x7FEB352D ^ Integer.numberOfLeadingZeros(a&b));
-		a = (a << 3 | a >>> 29) ^ ((b << 24 | b >>> 8) + a ^ c);
-		a = (a ^ a >>> 16) * 0x21f0aaad;
-		a = (a ^ a >>> 15) * 0x735a2d97;
-		a ^= a >>> 15;
-		return h << 32 ^ (a & 0xFFFFFFFFL);
+		int x = (stateA = stateA + 0xD192ED03 ^ 0xBEA225FA);
+		int y = (stateB = stateB + BitConversion.countLeadingZeros(x) ^ 0xA62B82F6);
+		int z = (stateC = stateC + BitConversion.countLeadingZeros(x & y) ^ 0x9E3779BA);
+		y = (y <<  3 | y >>> 29) ^ (x = (x << 24 | x >>>  8) + y ^ z) + (x <<  7 | x >>> 25);
+		x = (x << 14 | x >>> 18) ^ (y = (y << 29 | y >>>  3) + x ^ z) + (y << 11 | y >>> 21);
+		y = (y << 19 | y >>> 13) ^ (x = (x <<  5 | x >>> 27) + y ^ z) + (x << 29 | x >>>  3);
+		x = (x << 17 | x >>> 15) ^ (y = (y << 11 | y >>> 21) + x ^ z) + (y << 23 | y >>>  9);
+		return (long)y << 32 | x;
 	}
 
 	@Override
 	public long previousLong () {
-		int a = stateA;
-		int b = stateB;
-		int c = stateC;
-		a = (a << 3 | a >>> 29) ^ ((b << 24 | b >>> 8) + a ^ c);
-		a = (a ^ a >>> 16) * 0x21f0aaad;
-		a = (a ^ a >>> 15) * 0x735a2d97;
-		a ^= a >>> 15;
-		long l = (a & 0xFFFFFFFFL);
-		a = stateA;
-		b = stateB;
-		stateA -= 0x91E10DA5;
-		stateB -= 0x6C8E9CF5 ^ Integer.numberOfLeadingZeros(a);
-		stateC -= 0x7FEB352D ^ Integer.numberOfLeadingZeros(a&b);
-		a = stateA;
-		b = stateB;
-		c = stateC;
-		a = (a << 3 | a >>> 29) ^ ((b << 24 | b >>> 8) + a ^ c);
-		a = (a ^ a >>> 16) * 0x21f0aaad;
-		a = (a ^ a >>> 15) * 0x735a2d97;
-		a ^= a >>> 15;
-		long h = a;
-		a = stateA;
-		b = stateB;
-		stateA -= 0x91E10DA5;
-		stateB -= 0x6C8E9CF5 ^ Integer.numberOfLeadingZeros(a);
-		stateC -= 0x7FEB352D ^ Integer.numberOfLeadingZeros(a&b);
-		return h << 32 ^ l;
+		int x = stateA;
+		int y = stateB;
+		int z = stateC;
+		stateA = (x ^ 0xBEA225FA) - 0xD192ED03 | 0;
+		stateB = (y ^ 0xA62B82F6) - BitConversion.countLeadingZeros(x) | 0;
+		stateC = (z ^ 0x9E3779BA) - BitConversion.countLeadingZeros(x & y) | 0;
+		y = (y <<  3 | y >>> 29) ^ (x = (x << 24 | x >>>  8) + y ^ z) + (x <<  7 | x >>> 25);
+		x = (x << 14 | x >>> 18) ^ (y = (y << 29 | y >>>  3) + x ^ z) + (y << 11 | y >>> 21);
+		y = (y << 19 | y >>> 13) ^ (x = (x <<  5 | x >>> 27) + y ^ z) + (x << 29 | x >>>  3);
+		x = (x << 17 | x >>> 15) ^ (y = (y << 11 | y >>> 21) + x ^ z) + (y << 23 | y >>>  9);
+		return (long)y << 32 | x;
 	}
 
 	@Override
 	public int next (int bits) {
-		int a = (stateA += 0x91E10DA5);
-		int b = (stateB += 0x6C8E9CF5 ^ Integer.numberOfLeadingZeros(a));
-		int c = (stateC += 0x7FEB352D ^ Integer.numberOfLeadingZeros(a&b));
-		a = (a << 3 | a >>> 29) ^ ((b << 24 | b >>> 8) + a ^ c);
-		a = (a ^ a >>> 16) * 0x21f0aaad;
-		a = (a ^ a >>> 15) * 0x735a2d97;
-		a ^= a >>> 15;
-		return a >>> (32 - bits);
+		int x = (stateA = stateA + 0xD192ED03 ^ 0xBEA225FA);
+		int y = (stateB = stateB + BitConversion.countLeadingZeros(x) ^ 0xA62B82F6);
+		int z = (stateC = stateC + BitConversion.countLeadingZeros(x & y) ^ 0x9E3779BA);
+		y = (y <<  3 | y >>> 29) ^ (x = (x << 24 | x >>>  8) + y ^ z) + (x <<  7 | x >>> 25);
+		x = (x << 14 | x >>> 18) ^ (y = (y << 29 | y >>>  3) + x ^ z) + (y << 11 | y >>> 21);
+		y = (y << 19 | y >>> 13) ^ (x = (x <<  5 | x >>> 27) + y ^ z) + (x << 29 | x >>>  3);
+		x = (x << 17 | x >>> 15) ^ (y = (y << 11 | y >>> 21) + x ^ z) + (y << 23 | y >>>  9);
+		return x >>> (32 - bits);
 	}
 
 	@Override
 	public int nextInt () {
-		int a = (stateA += 0x91E10DA5);
-		int b = (stateB += 0x6C8E9CF5 ^ Integer.numberOfLeadingZeros(a));
-		int c = (stateC += 0x7FEB352D ^ Integer.numberOfLeadingZeros(a&b));
-		a = (a << 3 | a >>> 29) ^ ((b << 24 | b >>> 8) + a ^ c);
-		a = (a ^ a >>> 16) * 0x21f0aaad;
-		a = (a ^ a >>> 15) * 0x735a2d97;
-		a ^= a >>> 15;
-		return a;
+		int x = (stateA = stateA + 0xD192ED03 ^ 0xBEA225FA);
+		int y = (stateB = stateB + BitConversion.countLeadingZeros(x) ^ 0xA62B82F6);
+		int z = (stateC = stateC + BitConversion.countLeadingZeros(x & y) ^ 0x9E3779BA);
+		y = (y <<  3 | y >>> 29) ^ (x = (x << 24 | x >>>  8) + y ^ z) + (x <<  7 | x >>> 25);
+		x = (x << 14 | x >>> 18) ^ (y = (y << 29 | y >>>  3) + x ^ z) + (y << 11 | y >>> 21);
+		y = (y << 19 | y >>> 13) ^ (x = (x <<  5 | x >>> 27) + y ^ z) + (x << 29 | x >>>  3);
+		x = (x << 17 | x >>> 15) ^ (y = (y << 11 | y >>> 21) + x ^ z) + (y << 23 | y >>>  9);
+		return x;
 	}
 
-	// https://github.com/skeeto/hash-prospector/issues/19
-	// [16 21f0aaad 15 735a2d97 15] = 0.10704308166917044
-
 	public int previousInt() {
-		int a = stateA;
-		int b = stateB;
-		int c = stateC;
-		a = (a << 3 | a >>> 29) ^ ((b << 24 | b >>> 8) + a ^ c);
-		a = (a ^ a >>> 16) * 0x21f0aaad;
-		a = (a ^ a >>> 15) * 0x735a2d97;
-		a ^= a >>> 15;
-		b = stateA;
-		c = stateB;
-		stateA -= 0x91E10DA5;
-		stateB -= 0x6C8E9CF5 ^ Integer.numberOfLeadingZeros(b);
-		stateC -= 0x7FEB352D ^ Integer.numberOfLeadingZeros(b&c);
-		return a;
+		int x = stateA;
+		int y = stateB;
+		int z = stateC;
+		stateA = (x ^ 0xBEA225FA) - 0xD192ED03 | 0;
+		stateB = (y ^ 0xA62B82F6) - BitConversion.countLeadingZeros(x) | 0;
+		stateC = (z ^ 0x9E3779BA) - BitConversion.countLeadingZeros(x & y) | 0;
+		y = (y <<  3 | y >>> 29) ^ (x = (x << 24 | x >>>  8) + y ^ z) + (x <<  7 | x >>> 25);
+		x = (x << 14 | x >>> 18) ^ (y = (y << 29 | y >>>  3) + x ^ z) + (y << 11 | y >>> 21);
+		y = (y << 19 | y >>> 13) ^ (x = (x <<  5 | x >>> 27) + y ^ z) + (x << 29 | x >>>  3);
+		x = (x << 17 | x >>> 15) ^ (y = (y << 11 | y >>> 21) + x ^ z) + (y << 23 | y >>>  9);
+		return x;
 	}
 
 	@Override
@@ -383,13 +344,8 @@ public class Recipe32Random extends EnhancedRandom {
 	}
 
 	@Override
-	public float nextInclusiveFloat () {
-		return (0x1000001L * (nextInt() & 0xFFFFFFFFL) >> 32) * 0x1p-24f;
-	}
-
-	@Override
-	public Recipe32Random copy () {
-		return new Recipe32Random(stateA, stateB, stateC);
+	public Chill32Random copy () {
+		return new Chill32Random(stateA, stateB, stateC);
 	}
 
 	@Override
@@ -399,17 +355,17 @@ public class Recipe32Random extends EnhancedRandom {
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		Recipe32Random that = (Recipe32Random)o;
+		Chill32Random that = (Chill32Random)o;
 
 		return stateA == that.stateA && stateB == that.stateB && stateC == that.stateC;
 	}
 
 	public String toString () {
-		return "Recipe32Random{" + "stateA=" + (stateA) + ", stateB=" + (stateB) + ", stateC=" + (stateC) + "}";
+		return "Chill32Random{stateA=" + (stateA) + ", stateB=" + (stateB) + ", stateC=" + (stateC) + "}";
 	}
 
 //	public static void main(String[] args) {
-//		Recipe32Random random = new Recipe32Random(1L);
+//		Chill32Random random = new Chill32Random(1L);
 //		long n0 = random.nextLong();
 //		long n1 = random.nextLong();
 //		long n2 = random.nextLong();
