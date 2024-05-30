@@ -28,11 +28,11 @@ subprojects {
 	version = '0.0.1'
 	ext.appName = 'speed'
 	repositories {
-//		mavenLocal()
 		mavenCentral()
 		maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
 		maven { url 'https://jitpack.io' }
 		maven { url 'https://teavm.org/maven/repository/' }
+		mavenLocal()
 	}
 }
 

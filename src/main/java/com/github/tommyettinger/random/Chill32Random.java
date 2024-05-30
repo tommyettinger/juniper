@@ -15,26 +15,43 @@
  *
  */
 
-package com.github.tommyettinger.random.experimental;
+package com.github.tommyettinger.random;
 
 import com.github.tommyettinger.digital.BitConversion;
-import com.github.tommyettinger.random.EnhancedRandom;
-import com.github.tommyettinger.random.Xoshiro128PlusPlusRandom;
 
 /**
  * A random number generator that is optimized for performance on 32-bit machines and with Google Web Toolkit,
- * Respite32Random is a 32-bit-native generator that doesn't have any shorter subcycles (because it only has one
+ * Chill32Random is a 32-bit-native generator that doesn't have any shorter subcycles (because it only has one
  * cycle, of length 2 to the 96). It effectively shares this property with {@link Xoshiro128PlusPlusRandom}, except that
- * Xoshiro128PlusPlusRandom doesn't permit the state to be all 0s, while Respite32Random isn't adversely affected by
+ * Xoshiro128PlusPlusRandom doesn't permit the state to be all 0s, while Chill32Random isn't adversely affected by
  * that condition. This generator has three {@code int} states and doesn't use any
  * multiplication. It does use the count leading zeros instruction, which is {@link Integer#numberOfLeadingZeros(int)}
  * on most platforms, or the JS function {@code Math.clz32()} on GWT. This only counts leading zeros for the purposes of
  * its state transition (for stateB and stateC), and using it the way this does is what allows the period to be so high.
+ * This is meant to be faster on GWT and TeaVM than the 64-bit-native generators here.
  * <br>
  * This algorithm passes 64TB of PractRand testing with no anomalies. It was tested as a 64-bit generator (using both
  * 64-bit and 32-bit "folding modes"), because this is designed to be much faster at calling {@link #nextLong()} on any
- * platform. Essentially, it always generates 64 bits of result, but only uses 32 of them from {@link #nextInt()} (and
+ * platform (relative to other 32-bit-native generators) while still using 32-bit math. Essentially, it always generates
+ * 64 bits of result, but only uses 32 of them from {@link #nextInt()} (and
  * doesn't need to produce a {@code long} on GWT in nextInt(), which is a slow task).
+ * <br>
+ * When the state is given exactly with {@link #Chill32Random(int, int, int)} or {@link #setState(long, long, long)},
+ * this doesn't have any generations at the start where numerically similar states show correlation. This is different
+ * from generators like {@link AceRandom}, which take some time to become adequately random, but similar to generators
+ * like {@link DistinctRandom} and {@link FlowRandom}, which hash their state(s) to get a random output from predictable
+ * state changes. Some generators never stop showing correlation from similar initial states, such as
+ * {@link WhiskerRandom} or {@link Xoshiro256StarStarRandom}; this doesn't affect how useful they are if you have only
+ * one generator or if they are seeded in an adequately-random manner.
+ * <br>
+ * A notable quality of the implementation is that {@link #nextInt()} and {@link #nextLong()} return the same values for
+ * their lowest 32 bits, and {@link #nextLong()} advances the state by the same amount as {@link #nextInt()}. This is
+ * not a cryptographically-secure generator (at all), even though it uses only operations that should be immune or
+ * resistant to timing attacks.
+ * <br>
+ * The hash-like construction used to randomize the three counter-like states is loosely based on the Speck cipher
+ * (using only 4 rounds), but adds in an extra rotation at each round, and uses very different rotation constants in
+ * every round. The input states A and B correspond to plaintext, and stateC to the key.
  * <br>
  * This implements all optional methods in EnhancedRandom except {@link #skip(long)}.
  */

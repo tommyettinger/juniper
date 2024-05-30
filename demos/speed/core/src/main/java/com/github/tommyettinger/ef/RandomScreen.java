@@ -13,7 +13,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.github.tommyettinger.RandomRandom;
 import com.github.tommyettinger.SpeedDemo;
-import com.github.tommyettinger.Stringf;
+import com.github.tommyettinger.digital.Stringf;
 
 import java.util.Arrays;
 

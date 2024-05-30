@@ -12,7 +12,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.github.tommyettinger.SpeedDemo;
-import com.github.tommyettinger.Stringf;
+import com.github.tommyettinger.digital.Stringf;
 import com.github.tommyettinger.random.Bear32RandomJS;
 
 import java.util.Arrays;
