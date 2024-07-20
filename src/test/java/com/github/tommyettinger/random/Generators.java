@@ -49,6 +49,7 @@ public final class Generators {
         randomList.add(new FrostyRandom(1, 1));
         randomList.add(new Xoroshiro128Speck1Random(1, 1));
         randomList.add(new Chill32Random(1, 1, 1));
+        randomList.add(new CupolaRandom(1, 1));
     }
     public static int randomCount = randomList.size();
 

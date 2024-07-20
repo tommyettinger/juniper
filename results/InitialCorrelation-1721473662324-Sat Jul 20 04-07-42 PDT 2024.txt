@@ -1,0 +1,1 @@
+Lowest mode: 67.00000 has mean amount 0.0582406967  FAIL 💀 for CupolaRandom
