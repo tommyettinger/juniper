@@ -1,0 +1,1 @@
+Lowest mode: 52.00000 has mean amount 0.0221338421  FAIL 💀 for TwingeRandom
