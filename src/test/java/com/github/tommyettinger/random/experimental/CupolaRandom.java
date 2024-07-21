@@ -198,7 +198,8 @@ public class CupolaRandom extends EnhancedRandom {
 		long x = ((stateA << 33 | stateA >>> 31) ^ stateB) * 0xF1357AEA2E62A9C5L;
 		stateA += 0x369DEA0F31A53F85L;
 		stateB += 0x9E3779B97F4A7C15L;
-		return x ^ x >>> 19 ^ x >>> 44;
+		x ^= x >>> (int)(x >>> 59) + 6 ^ x >>> 44;
+		return x ^ x << ((int)x & 31) + 6 ^ x << 43;
 	}
 
 	@Override
@@ -206,7 +207,8 @@ public class CupolaRandom extends EnhancedRandom {
 		stateA -= 0x369DEA0F31A53F85L;
 		stateB -= 0x9E3779B97F4A7C15L;
 		long x = ((stateA << 33 | stateA >>> 31) ^ stateB) * 0xF1357AEA2E62A9C5L;
-		return x ^ x >>> 19 ^ x >>> 44;
+		x ^= x >>> (int)(x >>> 59) + 6 ^ x >>> 44;
+		return x ^ x << ((int)x & 31) + 6 ^ x << 43;
 	}
 
 	@Override
@@ -214,7 +216,8 @@ public class CupolaRandom extends EnhancedRandom {
 		long x = ((stateA << 33 | stateA >>> 31) ^ stateB) * 0xF1357AEA2E62A9C5L;
 		stateA += 0x369DEA0F31A53F85L;
 		stateB += 0x9E3779B97F4A7C15L;
-		return (int)(x ^ x >>> 19 ^ x >>> 44) >>> (32 - bits);
+		x ^= x >>> (int)(x >>> 59) + 6 ^ x >>> 44;
+		return (int)((x ^ x << ((int)x & 31) + 6 ^ x << 43) >>> (64 - bits));
 	}
 	@Override
 	public long skip (final long advance) {
@@ -223,7 +226,8 @@ public class CupolaRandom extends EnhancedRandom {
 		long x = ((stateA << 33 | stateA >>> 31) ^ stateB) * 0xF1357AEA2E62A9C5L;
 		stateA += 0x369DEA0F31A53F85L;
 		stateB += 0x9E3779B97F4A7C15L;
-		return x ^ x >>> 19 ^ x >>> 44;
+		x ^= x >>> (int)(x >>> 59) + 6 ^ x >>> 44;
+		return x ^ x << ((int)x & 31) + 6 ^ x << 43;
 	}
 
 	/**
