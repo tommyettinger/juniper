@@ -188,7 +188,7 @@ public class TwingeRandom extends EnhancedRandom {
 		long x = ((stateA << 33 | stateA >>> 31) ^ stateB);
 		stateA = stateA * 0x369DEA0F31A53F85L + 0x2C6FE96EE78B6955L;
 		stateB = stateB * 0xD1342543DE82EF95L + 0x9E3779B97F4A7C15L;
-		return x ^ x >>> 19 ^ x >>> 44;
+		return x ^ x >>> (int)(x >>> 59) + 6 ^ x >>> 44;
 	}
 
 	@Override
@@ -196,7 +196,7 @@ public class TwingeRandom extends EnhancedRandom {
 		stateA = (stateA - 0x2C6FE96EE78B6955L) * 0xBE21F44C6018E14DL;
 		stateB = (stateB - 0x9E3779B97F4A7C15L) * 0x572B5EE77A54E3BDL;
 		long x = ((stateA << 33 | stateA >>> 31) ^ stateB);
-		return x ^ x >>> 19 ^ x >>> 44;
+		return x ^ x >>> (int)(x >>> 59) + 6 ^ x >>> 44;
 	}
 
 	@Override
@@ -204,7 +204,7 @@ public class TwingeRandom extends EnhancedRandom {
 		long x = ((stateA << 33 | stateA >>> 31) ^ stateB);
 		stateA = stateA * 0x369DEA0F31A53F85L + 0x2C6FE96EE78B6955L;
 		stateB = stateB * 0xD1342543DE82EF95L + 0x9E3779B97F4A7C15L;
-		return (int)(x ^ x >>> 19 ^ x >>> 44) >>> (32 - bits);
+		return (int)((x ^ x >>> (int)(x >>> 59) + 6) >>> (64 - bits));
 	}
 
 	@Override
