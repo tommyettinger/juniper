@@ -1,0 +1,2 @@
+Lowest mode: 115.0000 has mean amount 0.0305507481  PASS 👍 for CupolaRandom
+Lowest mode: 116.0000 has mean amount 0.0310748517  PASS 👍 for Xoshiro256MX3Random
