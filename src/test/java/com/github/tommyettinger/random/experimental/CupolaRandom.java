@@ -197,6 +197,7 @@ public class CupolaRandom extends EnhancedRandom {
 	public long nextLong () {
 //		long x = ((stateA << 31 | stateA >>> 33) ^ stateB) * 0xF1357AEA2E62A9C5L;
 		long x = ((stateA << 21 | stateA >>> 43) ^ stateB);
+//		long x = ((stateA << 33 | stateA >>> 31) ^ stateB);
 		stateA += 0x369DEA0F31A53F85L;
 		stateB += 0x9E3779B97F4A7C15L;
 		// fails ICE test
@@ -215,7 +216,7 @@ public class CupolaRandom extends EnhancedRandom {
 		// Passes ICE test, PractRand passes at least a little...
 		x ^= x >>> (int)(x >>> 60) + 14;
 		x *= 0xF1357AEA2E62A9C5L;
-		return x ^ x >>> (int)(x >>> 59) + 6;
+		return x ^ x >>> (int)(x >>> 59) + 6 ^ x >>> 44;
 		// Passes ICE test, PractRand to at least 4TB
 //		x ^= x >>> (int)(x >>> 59) + 7 ^ x >>> 47;
 //		return x ^ x << ((int)x & 31) + 6 ^ x << 41;

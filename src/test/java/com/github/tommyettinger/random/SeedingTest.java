@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class SeedingTest {
     @Test
     public void testSmallSeeds() {
-        long[] seeds = new long[]{0L, 1L, 2L, 3L, 4L};
+        long[] seeds = new long[]{0L, 1L, 2L, 3L, 4L, -1L, -2L};
         ArrayList<EnhancedRandom> randoms = Deserializer.copyRandoms();
         for(EnhancedRandom rng : randoms){
             for(long seed : seeds){
