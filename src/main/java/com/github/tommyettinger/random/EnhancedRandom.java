@@ -709,7 +709,8 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 //		return ((randLow * boundHigh >>> 32) + randHigh * boundHigh) * 0x1p-53;
 
 		final long bits = nextLong();
-		return BitConversion.longBitsToDouble(1022L - BitConversion.countLeadingZeros(bits) << 52 | (bits & 0xFFFFFFFFFFFFFL)) + 0x1p-12 - 0x1p-12;
+		return BitConversion.longBitsToDouble(1022L - BitConversion.countTrailingZeros(bits) << 52 | bits >>> 12) + 0x1p-12 - 0x1p-12;
+//		return BitConversion.longBitsToDouble(1022L - BitConversion.countLeadingZeros(bits) << 52 | (bits & 0xFFFFFFFFFFFFFL)) + 0x1p-12 - 0x1p-12;
 	}
 
 	/**
@@ -798,7 +799,7 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * The implementation may have different performance characteristics than {@link #nextDouble()}, because this
 	 * doesn't perform any floating-point multiplication or division, and instead assembles bits obtained by one call to
 	 * {@link #nextLong()}. This uses {@link BitConversion#longBitsToDouble(long)} and
-	 * {@link BitConversion#countLeadingZeros(long)}, both of which typically have optimized intrinsics on HotSpot, and
+	 * {@link BitConversion#countTrailingZeros(long)}, both of which typically have optimized intrinsics on HotSpot, and
 	 * this is branchless and loopless, unlike the original algorithm by Allen Downey. When compared with
 	 * {@link #nextExclusiveDoubleEquidistant()}, this method performs better on at least HotSpot JVMs. On GraalVM 17,
 	 * this is over twice as fast as nextExclusiveDoubleEquidistant().
@@ -807,8 +808,11 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 */
 	public double nextExclusiveDouble () {
 		final long bits = nextLong();
-		return BitConversion.longBitsToDouble(1022L - BitConversion.countLeadingZeros(bits) << 52 | (bits & 0xFFFFFFFFFFFFFL));
+		return BitConversion.longBitsToDouble(1022L - BitConversion.countTrailingZeros(bits) << 52 | bits >>> 12);
 	}
+
+// This could be used above, but it favors low results slightly.
+//		return BitConversion.longBitsToDouble(1022L - BitConversion.countLeadingZeros(bits) << 52 | (bits & 0xFFFFFFFFFFFFFL));
 
 	/**
 	 * Gets a random double between 0.0 and 1.0, exclusive at both ends. This can return double
@@ -872,7 +876,8 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 */
 	public double nextExclusiveSignedDouble(){
 		final long bits = nextLong();
-		return BitConversion.longBitsToDouble(1022L - BitConversion.countLeadingZeros(bits) << 52 | ((bits << 63 | bits >>> 1) & 0x800FFFFFFFFFFFFFL));
+		return BitConversion.longBitsToDouble(1022L - BitConversion.countTrailingZeros(bits) << 52 | ((bits << 32 | bits >>> 32) & 0x800FFFFFFFFFFFFFL))
+//		return BitConversion.longBitsToDouble(1022L - BitConversion.countLeadingZeros(bits) << 52 | ((bits << 63 | bits >>> 1) & 0x800FFFFFFFFFFFFFL));
 	}
 
 	/**

@@ -214,7 +214,7 @@ public class DistributedRandom extends EnhancedRandom {
      */
     @Override
     public double nextGaussian() {
-        return EnhancedRandom.probit(nextDouble());
+        return EnhancedRandom.probit(nextExclusiveDouble());
     }
 
     /**
@@ -224,7 +224,7 @@ public class DistributedRandom extends EnhancedRandom {
      */
     @Override
     public double nextExclusiveDouble() {
-        return (reduction.applyAsDouble(distribution) + 0x1p-53) * 0x1.fffffffffffffp-1;
+        return reduction.applyAsDouble(distribution) * 0x1.fffffffffffffp-1 + 0x1p-53;
     }
 
     /**
@@ -237,7 +237,7 @@ public class DistributedRandom extends EnhancedRandom {
      */
     @Override
     public double nextExclusiveSignedDouble() {
-        return Math.copySign((reduction.applyAsDouble(distribution) + 0x1p-53) * 0x1.fffffffffffffp-1, Long.bitCount(distribution.generator.getSelectedState(0) * 0x9E3779B97F4A7C15L) << 31);
+        return Math.copySign(reduction.applyAsDouble(distribution) * 0x1.fffffffffffffp-1 + 0x1p-53, Long.bitCount(distribution.generator.getSelectedState(0) * 0x9E3779B97F4A7C15L) << 31);
     }
 
     /**
