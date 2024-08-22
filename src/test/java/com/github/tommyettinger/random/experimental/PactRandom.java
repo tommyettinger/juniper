@@ -175,12 +175,18 @@ public class PactRandom extends EnhancedRandom {
 
 	@Override
 	public long nextLong () {
-		final long z = ((stateA * (stateB << 11 | stateB >>> 53) + stateB) ^
-				  (stateB * (stateA << 13 | stateA >>> 51) + stateA)) * 0xF1357AEA2E62A9C5L;
+		long z = ((stateA << 13 | stateA >>> 51) ^ (stateB << 41 | stateB >>> 23) + stateA) * 0xF1357AEA2E62A9C5L;
 		stateB += BitConversion.countLeadingZeros(stateA);
 		stateA += 0xDA3E39CB94B95BDBL;
+		// very close to PCG-Random
 //		z = (z ^ (z >>> ((z >>> 59) + 5))) * 0xF1357AEA2E62A9C5L;
-		return (z ^ z >>> 43);
+//		return (z ^ z >>> 43);
+		// with an earlier multiplication of the mixed states, and this below, this passes the ICE test.
+//		z = (z ^ (z >>> ((z >>> 59) + 5)) ^ z >>> 43) * 0xF1357AEA2E62A9C5L;
+//		return z ^ z >>> 43;
+		// with an earlier multiplication of the mixed states, and this below, this also passes the ICE test.
+		z = (z ^ (z << 23 | z >>> 41) ^ (z << 47 | z >>> 17)) * 0xF1357AEA2E62A9C5L;
+		return z ^ z >>> 43;
 	}
 
 	@Override
