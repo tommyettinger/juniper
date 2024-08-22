@@ -175,10 +175,11 @@ public class PactRandom extends EnhancedRandom {
 
 	@Override
 	public long nextLong () {
-		long z = stateA ^ stateB;
+		final long z = ((stateA * (stateB << 11 | stateB >>> 53) + stateB) ^
+				  (stateB * (stateA << 13 | stateA >>> 51) + stateA)) * 0xF1357AEA2E62A9C5L;
 		stateB += BitConversion.countLeadingZeros(stateA);
 		stateA += 0xDA3E39CB94B95BDBL;
-		z = (z ^ (z >>> ((z >>> 59) + 5))) * 0xAEF17502108EF2D9L;
+//		z = (z ^ (z >>> ((z >>> 59) + 5))) * 0xF1357AEA2E62A9C5L;
 		return (z ^ z >>> 43);
 	}
 
@@ -186,17 +187,20 @@ public class PactRandom extends EnhancedRandom {
 	public long previousLong () {
 		stateA -= 0xDA3E39CB94B95BDBL;
 		stateB -= BitConversion.countLeadingZeros(stateA);
-		long z = stateA ^ stateB;
-		z = (z ^ (z >>> ((z >>> 59) + 5))) * 0xAEF17502108EF2D9L;
+		final long z = ((stateA * (stateB << 11 | stateB >>> 53) + stateB) ^
+				(stateB * (stateA << 13 | stateA >>> 51) + stateA)) * 0xF1357AEA2E62A9C5L;
 		return (z ^ z >>> 43);
+//		long z = stateA ^ stateB;
+//		z = (z ^ (z >>> ((z >>> 59) + 5))) * 0xF1357AEA2E62A9C5L;
+//		return (z ^ z >>> 43);
 	}
 
 	@Override
 	public int next (int bits) {
-		long z = stateA ^ stateB;
+		final long z = ((stateA * (stateB << 11 | stateB >>> 53) + stateB) ^
+				(stateB * (stateA << 13 | stateA >>> 51) + stateA)) * 0xF1357AEA2E62A9C5L;
 		stateB += BitConversion.countLeadingZeros(stateA);
 		stateA += 0xDA3E39CB94B95BDBL;
-		z = (z ^ (z >>> ((z >>> 59) + 5))) * 0xAEF17502108EF2D9L;
 		return (int) (z ^ z >>> 43) >>> (32 - bits);
 	}
 

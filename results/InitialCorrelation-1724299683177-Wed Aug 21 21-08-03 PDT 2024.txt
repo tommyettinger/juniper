@@ -1,0 +1,2 @@
+Lowest mode: 82.00000 has mean amount 0.0190614163  FAIL 💀 for PactRandom
+Lowest mode: 115.0000 has mean amount 0.0311251431  PASS 👍 for Xoshiro256MX3Random
