@@ -877,8 +877,8 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	public double nextExclusiveSignedDouble(){
 		final long bits = nextLong();
 		return BitConversion.longBitsToDouble(1022L - BitConversion.countTrailingZeros(bits) << 52 | ((bits << 32 | bits >>> 32) & 0x800FFFFFFFFFFFFFL));
-//		return BitConversion.longBitsToDouble(1022L - BitConversion.countLeadingZeros(bits) << 52 | ((bits << 63 | bits >>> 1) & 0x800FFFFFFFFFFFFFL));
 	}
+//		return BitConversion.longBitsToDouble(1022L - BitConversion.countLeadingZeros(bits) << 52 | ((bits << 63 | bits >>> 1) & 0x800FFFFFFFFFFFFFL));
 
 	/**
 	 * Gets a random float between 0.0 and 1.0, exclusive at both ends. This method is also more uniform than
@@ -904,8 +904,8 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	public float nextExclusiveFloat () {
 		final long bits = nextLong();
 		return BitConversion.intBitsToFloat(126 - BitConversion.countLeadingZeros(bits) << 23 | ((int)bits & 0x7FFFFF));
-//		return Float.intBitsToFloat(126 - Long.numberOfTrailingZeros(bits) << 23 | (int)(bits >>> 41));
 	}
+//		return Float.intBitsToFloat(126 - Long.numberOfTrailingZeros(bits) << 23 | (int)(bits >>> 41));
 
 	/**
 	 * Gets a random float between 0.0 and 1.0, exclusive at both ends. This can return float
