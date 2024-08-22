@@ -50,7 +50,7 @@ public class CorrelationAnalyst extends ApplicationAdapter {
                         g[x][y].setState(x << 16 ^ y);
                         break;
                     case 2:
-                        g[x][y].setState(x, y);
+                        g[x][y].setState(x, y<<1);
                         break;
                     case 3:
                         g[x][y].setState(x, y, 1L);

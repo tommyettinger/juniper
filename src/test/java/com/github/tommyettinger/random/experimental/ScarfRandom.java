@@ -247,7 +247,7 @@ public class ScarfRandom extends EnhancedRandom {
 		final long c = stateC;
 		stateC = (stateD << 43 | stateD >>> 21);
 		stateD = stateB * 0x572B5EE77A54E3BDL; // modular multiplicative inverse of 0xD1342543DE82EF95L
-		stateB = c ^ (stateA -= 0x9E3779B97F4A7C15L);
+		stateB = c - (stateA -= 0x9E3779B97F4A7C15L);
 		return stateC - stateB;
 	}
 	/**
@@ -301,4 +301,36 @@ public class ScarfRandom extends EnhancedRandom {
 	public String toString () {
 		return "ScarfRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L, stateD=" + (stateD) + "L}";
 	}
+
+//	public static void main(String[] args) {
+//		ScarfRandom random = new ScarfRandom(1L);
+//		long n0 = random.nextLong();
+//		long n1 = random.nextLong();
+//		long n2 = random.nextLong();
+//		long n3 = random.nextLong();
+//		long n4 = random.nextLong();
+//		long n5 = random.nextLong();
+//		long n6 = random.nextLong();
+//		long p6 = random.previousLong();
+//		long p5 = random.previousLong();
+//		long p4 = random.previousLong();
+//		long p3 = random.previousLong();
+//		long p2 = random.previousLong();
+//		long p1 = random.previousLong();
+//		long p0 = random.previousLong();
+//		System.out.println(n0 == p0);
+//		System.out.println(n1 == p1);
+//		System.out.println(n2 == p2);
+//		System.out.println(n3 == p3);
+//		System.out.println(n4 == p4);
+//		System.out.println(n5 == p5);
+//		System.out.println(n6 == p6);
+//		System.out.println(n0 + " vs. " + p0);
+//		System.out.println(n1 + " vs. " + p1);
+//		System.out.println(n2 + " vs. " + p2);
+//		System.out.println(n3 + " vs. " + p3);
+//		System.out.println(n4 + " vs. " + p4);
+//		System.out.println(n5 + " vs. " + p5);
+//		System.out.println(n6 + " vs. " + p6);
+//	}
 }
