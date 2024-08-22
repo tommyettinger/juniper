@@ -53,6 +53,7 @@ public final class Generators {
         randomList.add(new TwingeRandom(1, 1));
         randomList.add(new PcgRXSMXSRandom(1, 1));
         randomList.add(new PactRandom(1, 1));
+        randomList.add(new PortentRandom(1, 1));
     }
     public static int randomCount = randomList.size();
 

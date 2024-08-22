@@ -20,10 +20,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.github.tommyettinger.digital.ArrayTools;
 import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.ds.ObjectList;
-import com.github.tommyettinger.random.experimental.CupolaRandom;
-import com.github.tommyettinger.random.experimental.PactRandom;
-import com.github.tommyettinger.random.experimental.PcgRXSMXSRandom;
-import com.github.tommyettinger.random.experimental.TwingeRandom;
+import com.github.tommyettinger.random.experimental.*;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -488,7 +485,7 @@ Lowest mode: 81.92187 has mean amount 0.0184360742  FAIL 💀 for Xoshiro256Star
         StringBuilder sb = new StringBuilder(1024);
         EnhancedRandom[][] g = new EnhancedRandom[256][256];
 
-        ArrayList<EnhancedRandom> rs = ObjectList.with(new Xoshiro256MX3Random(1, 1, 1, 1), new PactRandom(1, 1));
+        ArrayList<EnhancedRandom> rs = ObjectList.with(new PortentRandom(1, 1), new PactRandom(1, 1));
 //        ArrayList<EnhancedRandom> rs = ObjectList.with(new Chill32Random(1, 1, 1));
 //        ArrayList<EnhancedRandom> rs = Generators.randomList;
 
