@@ -183,7 +183,7 @@ public class FowlRandom extends EnhancedRandom {
 		long x = (stateA += BitConversion.countLeadingZeros(stateB));
 		long y = (stateB += 0xD1B54A32D192ED03L);
 		x = (x ^ (y << 37 | y >>> 27)) * 0x3C79AC492BA7B653L;
-		x = (x ^ x >>> 33) * 0x1C69B3F74AC4AE35L;
+		x = (x ^ x >>> 33) * 0xF1357AEA2E62A9C5L;
 		return x ^ x >>> 27;
 	}
 
@@ -194,7 +194,7 @@ public class FowlRandom extends EnhancedRandom {
 		stateB -= 0xD1B54A32D192ED03L;
 		stateA -= BitConversion.countLeadingZeros(stateB);
 		x = (x ^ (y << 37 | y >>> 27)) * 0x3C79AC492BA7B653L;
-		x = (x ^ x >>> 33) * 0x1C69B3F74AC4AE35L;
+		x = (x ^ x >>> 33) * 0xF1357AEA2E62A9C5L;
 		return x ^ x >>> 27;
 	}
 
@@ -203,7 +203,7 @@ public class FowlRandom extends EnhancedRandom {
 		long x = (stateA += BitConversion.countLeadingZeros(stateB));
 		long y = (stateB += 0xD1B54A32D192ED03L);
 		x = (x ^ (y << 37 | y >>> 27)) * 0x3C79AC492BA7B653L;
-		x = (x ^ x >>> 33) * 0x1C69B3F74AC4AE35L;
+		x = (x ^ x >>> 33) * 0xF1357AEA2E62A9C5L;
 		return (int)(x ^ x >>> 27) >>> (32 - bits);
 	}
 

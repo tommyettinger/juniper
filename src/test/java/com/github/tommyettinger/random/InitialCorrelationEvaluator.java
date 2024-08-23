@@ -29,8 +29,8 @@ import java.util.Date;
 /**
  */
 public class InitialCorrelationEvaluator {
-    public static final long INTERVAL_X = 1024;
-    public static final long INTERVAL_Y = 1024;
+    public static long INTERVAL_X = 0xC13FA9A902A6328FL;
+    public static long INTERVAL_Y = 0x91E10DA5C79E7B1DL;
     public double steps = 0;
     public int mode = 0;
     public double amount = 0;
@@ -487,7 +487,8 @@ Lowest mode: 81.92187 has mean amount 0.0184360742  FAIL 💀 for Xoshiro256Star
 
         ArrayList<EnhancedRandom> rs = ObjectList.with(
                 new PcgRXSMXSRandom(1, 1), new FlowRandom(1, 1), new MizuchiRandom(1, 1),
-                new Xoroshiro128StarStarRandom(1, 1), new LaserRandom(1, 1), new DistinctRandom(1));
+                new Xoroshiro128StarStarRandom(1, 1), new LaserRandom(1, 1), new FowlRandom(1, 1),
+                new DistinctRandom(1));
 //        ArrayList<EnhancedRandom> rs = ObjectList.with(new Chill32Random(1, 1, 1));
 //        ArrayList<EnhancedRandom> rs = Generators.randomList;
 

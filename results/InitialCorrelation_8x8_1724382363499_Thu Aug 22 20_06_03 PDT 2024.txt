@@ -1,0 +1,7 @@
+Lowest mode: 116.0000 has mean amount 0.0311139822  PASS 👍 for DistinctRandom
+Lowest mode: 114.0000 has mean amount 0.0310848653  FAIL 💀 for FlowRandom
+Lowest mode: 117.0000 has mean amount 0.0310991257  FAIL 💀 for FowlRandom
+Lowest mode: 81.00000 has mean amount 0.0260278880  FAIL 💀 for LaserRandom
+Lowest mode: 116.0000 has mean amount 0.0311053842  PASS 👍 for MizuchiRandom
+Lowest mode: 116.0000 has mean amount 0.0311110019  PASS 👍 for PcgRXSMXSRandom
+Lowest mode: 87.00000 has mean amount 0.0185071378  FAIL 💀 for Xoroshiro128StarStarRandom
