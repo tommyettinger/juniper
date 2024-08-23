@@ -133,13 +133,14 @@ public class CorrelationVisualizer extends ApplicationAdapter {
      * @param y an int between 0 and 65535, inclusive
      * @return an int that interleaves x and y, with x in the least significant bit position
      */
-    public static int interleaveBits(int x, int y)
+    public static long interleaveBits(long x, long y)
     {
-        x |= y << 16;
-        x =    ((x & 0x0000ff00) << 8) | ((x >>> 8) & 0x0000ff00) | (x & 0xff0000ff);
-        x =    ((x & 0x00f000f0) << 4) | ((x >>> 4) & 0x00f000f0) | (x & 0xf00ff00f);
-        x =    ((x & 0x0c0c0c0c) << 2) | ((x >>> 2) & 0x0c0c0c0c) | (x & 0xc3c3c3c3);
-        return ((x & 0x22222222) << 1) | ((x >>> 1) & 0x22222222) | (x & 0x99999999);
+        x |= y << 32;
+        x =    ((x & 0x00000000ffff0000L) <<16) | ((x >>>16) & 0x00000000ffff0000L) | (x & 0xffff00000000ffffL);
+        x =    ((x & 0x0000ff000000ff00L) << 8) | ((x >>> 8) & 0x0000ff000000ff00L) | (x & 0xff0000ffff0000ffL);
+        x =    ((x & 0x00f000f000f000f0L) << 4) | ((x >>> 4) & 0x00f000f000f000f0L) | (x & 0xf00ff00ff00ff00fL);
+        x =    ((x & 0x0c0c0c0c0c0c0c0cL) << 2) | ((x >>> 2) & 0x0c0c0c0c0c0c0c0cL) | (x & 0xc3c3c3c3c3c3c3c3L);
+        return ((x & 0x2222222222222222L) << 1) | ((x >>> 1) & 0x2222222222222222L) | (x & 0x9999999999999999L);
     }
 
     @Override

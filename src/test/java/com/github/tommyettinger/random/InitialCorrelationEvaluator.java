@@ -29,13 +29,13 @@ import java.util.Date;
 /**
  */
 public class InitialCorrelationEvaluator {
-
+    public static final long INTERVAL_X = 1024;
+    public static final long INTERVAL_Y = 1024;
     public double steps = 0;
     public int mode = 0;
     public double amount = 0;
     public double actualMode = 0;
     public double actualAmount = 0;
-    private static final double I255 = 1.0 / 255.0;
     private double[][] real;
     private double[][] imag;
     public EnhancedRandom[][] randoms;
@@ -485,7 +485,9 @@ Lowest mode: 81.92187 has mean amount 0.0184360742  FAIL 💀 for Xoshiro256Star
         StringBuilder sb = new StringBuilder(1024);
         EnhancedRandom[][] g = new EnhancedRandom[256][256];
 
-        ArrayList<EnhancedRandom> rs = ObjectList.with(new PortentRandom(1, 1), new PactRandom(1, 1));
+        ArrayList<EnhancedRandom> rs = ObjectList.with(
+                new PcgRXSMXSRandom(1, 1), new FlowRandom(1, 1), new MizuchiRandom(1, 1),
+                new Xoroshiro128StarStarRandom(1, 1), new LaserRandom(1, 1), new DistinctRandom(1));
 //        ArrayList<EnhancedRandom> rs = ObjectList.with(new Chill32Random(1, 1, 1));
 //        ArrayList<EnhancedRandom> rs = Generators.randomList;
 
@@ -501,12 +503,12 @@ Lowest mode: 81.92187 has mean amount 0.0184360742  FAIL 💀 for Xoshiro256Star
 //                            interleaveBits(x, y);
 //                    g[x][y].setSeed(b);
                     if(r.getStateCount() == 1)
-                        g[x][y].setState(CorrelationVisualizer.interleaveBits(x, y));
+                        g[x][y].setState(CorrelationVisualizer.interleaveBits(x * INTERVAL_X, y * INTERVAL_Y));
 ////                        g[x][y].setState(x << 16 ^ y);
 ////                        g[x][y].setState(y + ((x + y) * (x + y + 1L) >> 1)); // Cantor pairing function
                     else
 ////                        g[x][y].setState((long)x<<1|1L, (long)y<<1|1L, 1L, 1L, 1L);
-                        g[x][y].setState(x,y<<1|1, 1L, 1L, 1L);
+                        g[x][y].setState(x * INTERVAL_X, y * INTERVAL_Y, 1L, 1L, 1L);
                 }
             }
             InitialCorrelationEvaluator evaluator = new InitialCorrelationEvaluator();
@@ -525,7 +527,8 @@ Lowest mode: 81.92187 has mean amount 0.0184360742  FAIL 💀 for Xoshiro256Star
         Date date = new Date();
         FileHandle loc = new FileHandle(new File("results/").getAbsoluteFile());
         loc.mkdirs();
-        loc = loc.child("InitialCorrelation-" + date.getTime() + '-' + date.toString().replace(':', '-') + ".txt");
+        loc = loc.child("InitialCorrelation_" + INTERVAL_X + "x" + INTERVAL_Y + "_" + date.getTime() + '_' +
+                date.toString().replace(':', '_') + ".txt");
         loc.writeString(sb.toString(), false, "UTF-8");
     }
 

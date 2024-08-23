@@ -187,6 +187,13 @@ public class PortentRandom extends EnhancedRandom {
 		long z = ((x << 13 | x >>> 51) ^ (y << 41 | y >>> 23) + x) * 0xF1357AEA2E62A9C5L;
 		z = (z ^ (z << 23 | z >>> 41) ^ (z << 47 | z >>> 17)) * 0xF1357AEA2E62A9C5L;
 		return z ^ z >>> 43;
+//		long z = ((x << 23 | x >>> 41) + (y << 23 | y >>> 41)) * 0xF1357AEA2E62A9C5L;
+//		return (z ^ (z >>> ((z >>> 59) + 5)) ^ z >>> 43);
+//		return (z ^ (z >>> ((z >>> 59) + 5)));
+//		x = (x ^ x >>> 29) * 0xF1357AEA2E62A9C5L;
+//		y = (y ^ y >>> 29) * 0xF1357AEA2E62A9C5L;
+//		long z = ((x ^ (x >>> ((x >>> 59) + 5))) ^ (y ^ (y >>> ((y >>> 59) + 6))));
+//		return z ^ z >>> 43;
 	}
 
 	@Override
