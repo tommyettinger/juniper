@@ -19,17 +19,24 @@ sourceCompatibility = 11
 
 dependencies {
   implementation "com.github.xpenatan.gdx-teavm:backend-teavm:$gdxTeaVMVersion"
+  implementation "org.teavm:teavm-classlib:$teaVMVersion"
+  implementation "org.teavm:teavm-core:$teaVMVersion"
+  implementation "org.teavm:teavm-jso-apis:$teaVMVersion"
+  implementation "org.teavm:teavm-jso-impl:$teaVMVersion"
+  implementation "org.teavm:teavm-jso:$teaVMVersion"
+  implementation "org.teavm:teavm-tooling:$teaVMVersion"
   implementation project(':core')
-
 }
 
-task buildJavaScript(dependsOn: classes, type: JavaExec) {
+tasks.register('buildJavaScript', JavaExec) {
+  dependsOn classes
   setDescription("Transpile bytecode to JavaScript via TeaVM")
   mainClass.set(project.mainClassName)
   setClasspath(sourceSets.main.runtimeClasspath)
 }
 build.dependsOn buildJavaScript
 
-task run(dependsOn: [buildJavaScript, ":teavm:jettyRun"]) {
-  setDescription("Run the JavaScript application hosted via a local Jetty server at http://localhost:8080/")
+tasks.register("run") {
+  description = "Run the JavaScript application hosted via a local Jetty server at http://localhost:8080/"
+  dependsOn(buildJavaScript, tasks.named("jettyRun"))
 }

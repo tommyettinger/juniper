@@ -1,6 +1,6 @@
 d:assets:assets:0:application/unknown:1
-t:Cozette-license.txt:Cozette-license-8568e9b7b733077137305aa76a9192ab.txt:1086:text/plain:1
-t:Cozette.fnt:Cozette-5ffc5dac60d165740e2225cf9ac5b38c.fnt:150367:application/unknown:1
+t:Cozette-license.txt:Cozette-license-62af60dc69512820d334563d4bd7f2c2.txt:1065:text/plain:1
+t:Cozette.fnt:Cozette-4725cffcc2fc377b51bfb6e675aaef72.fnt:148721:application/unknown:1
 i:Cozette.png:Cozette-30edc3f39bef6f9e5dfc04ec2d87cb7b.png:15647:image/png:1
 t:com/badlogic/gdx/graphics/g3d/particles/particles.fragment.glsl:particles.fragment-b90524761fdf09b0a836056d590c30b8.glsl:820:application/unknown:1
 t:com/badlogic/gdx/graphics/g3d/particles/particles.vertex.glsl:particles.vertex-f25b8b2fae10b9bfa09bfdd484923148.glsl:2886:application/unknown:1

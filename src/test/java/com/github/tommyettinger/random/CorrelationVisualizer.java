@@ -32,6 +32,8 @@ import com.github.tommyettinger.digital.BitConversion;
 import static com.badlogic.gdx.Input.Keys.*;
 import static com.badlogic.gdx.graphics.GL20.GL_POINTS;
 import static com.github.tommyettinger.random.Generators.randomList;
+import static com.github.tommyettinger.random.InitialCorrelationEvaluator.INTERVAL_X;
+import static com.github.tommyettinger.random.InitialCorrelationEvaluator.INTERVAL_Y;
 
 /**
  */
@@ -61,19 +63,19 @@ public class CorrelationVisualizer extends ApplicationAdapter {
                 g[x][y] = base.copy();
                 switch (g[x][y].getStateCount()) {
                     case 1:
-                        g[x][y].setState(interleaveBits(x, y));
+                        g[x][y].setState(interleaveBits(x*INTERVAL_X, y*INTERVAL_Y));
                         break;
                     case 2:
-                        g[x][y].setState((long)x<<1|1, (long)y<<1|1);
+                        g[x][y].setState((long)x*INTERVAL_X, (long)y*INTERVAL_Y);
                         break;
                     case 3:
-                        g[x][y].setState((long)x<<1|1, (long)y<<1|1, 1L);
+                        g[x][y].setState((long)x*INTERVAL_X, (long)y*INTERVAL_Y, 1L);
                         break;
                     case 4:
-                        g[x][y].setState((long)x<<1|1, (long)y<<1|1, 1L, 1L);
+                        g[x][y].setState((long)x*INTERVAL_X, (long)y*INTERVAL_Y, 1L, 1L);
                         break;
                     case 5:
-                        g[x][y].setState((long)x<<1|1, (long)y<<1|1, 1L, 1L, 1L);
+                        g[x][y].setState((long)x*INTERVAL_X, (long)y*INTERVAL_Y, 1L, 1L, 1L);
                         break;
                 }
             }
@@ -88,19 +90,19 @@ public class CorrelationVisualizer extends ApplicationAdapter {
                 for (int y = 0; y < height; y++) {
                     switch (g[x][y].getStateCount()) {
                         case 1:
-                            g[x][y].setState(x << 16 ^ y);
+                            g[x][y].setState(interleaveBits(x*INTERVAL_X, y*INTERVAL_Y));
                             break;
                         case 2:
-                            g[x][y].setState((long)x<<1|1, (long)y<<1|1);
+                            g[x][y].setState((long)x*INTERVAL_X, (long)y*INTERVAL_Y);
                             break;
                         case 3:
-                            g[x][y].setState((long)x<<1|1, (long)y<<1|1, 1L);
+                            g[x][y].setState((long)x*INTERVAL_X, (long)y*INTERVAL_Y, 1L);
                             break;
                         case 4:
-                            g[x][y].setState((long)x<<1|1, (long)y<<1|1, 1L, 1L);
+                            g[x][y].setState((long)x*INTERVAL_X, (long)y*INTERVAL_Y, 1L, 1L);
                             break;
                         case 5:
-                            g[x][y].setState((long)x<<1|1, (long)y<<1|1, 1L, 1L, 1L);
+                            g[x][y].setState((long)x*INTERVAL_X, (long)y*INTERVAL_Y, 1L, 1L, 1L);
                             break;
                     }
                 }
@@ -124,13 +126,13 @@ public class CorrelationVisualizer extends ApplicationAdapter {
     private boolean keepGoing = true;
 
     /**
-     * Narrow-purpose; takes an x and a y value, each between 0 and 65535 inclusive, and interleaves their bits so the
-     * least significant bit and every other bit after it are filled with the bits of x, while the
+     * Narrow-purpose; takes an x and a y value, each between 0 and 4294967295 inclusive, and interleaves their bits so
+     * the least significant bit and every other bit after it are filled with the bits of x, while the
      * second-least-significant bit and every other bit after that are filled with the bits of y. Essentially, this
      * takes two numbers with bits labeled like {@code a b c} for x and {@code R S T} for y and makes a number with
      * those bits arranged like {@code R a S b T c}.
-     * @param x an int between 0 and 65535, inclusive
-     * @param y an int between 0 and 65535, inclusive
+     * @param x an int between 0 and 4294967295, inclusive
+     * @param y an int between 0 and 4294967295, inclusive
      * @return an int that interleaves x and y, with x in the least significant bit position
      */
     public static long interleaveBits(long x, long y)
@@ -197,6 +199,16 @@ public class CorrelationVisualizer extends ApplicationAdapter {
                                 + " on mode " + currentMode;
                         System.out.println(title);
                         if (!keepGoing) putMap();
+                        break;
+                    case X:
+                        INTERVAL_X += (UIUtils.shift() ? -1 : 1);
+                        refreshGrid();
+                        System.out.printf("Intervals: X=%d, Y=%d\n", INTERVAL_X, INTERVAL_Y);
+                        break;
+                    case Y:
+                        INTERVAL_Y += (UIUtils.shift() ? -1 : 1);
+                        refreshGrid();
+                        System.out.printf("Intervals: X=%d, Y=%d\n", INTERVAL_X, INTERVAL_Y);
                         break;
                     case Q: // quit
                     case ESCAPE: {
