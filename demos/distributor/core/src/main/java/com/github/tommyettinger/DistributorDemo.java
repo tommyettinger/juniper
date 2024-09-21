@@ -4,6 +4,7 @@ import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.utils.UIUtils;
 import com.badlogic.gdx.utils.Align;
 import com.github.tommyettinger.random.*;
 
@@ -39,6 +40,7 @@ public class DistributorDemo extends Game {
         corner = new CornerScreen(this);
         screens = new Screen[]{
 //                new KumaraswamySmoothScreen(this),
+                new ZigguratBorgComparisonScreen(this),
                 new KumaraswamyScreen(this), new BetaScreen(this), new LumpScreen(this),
                 new NormalScreen(this), new RaisedNormalScreen(this), new ProductNormalScreen(this),
                 new CauchyScreen(this), new LogCauchyScreen(this), new ErlangScreen(this),
@@ -79,7 +81,7 @@ public class DistributorDemo extends Game {
             setScreen(screens[screenIndex]);
         }
         else if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_0)){
-            random = randoms[randomIndex = (randomIndex + 1) % randoms.length];
+            random = randoms[randomIndex = (randomIndex + (UIUtils.shift() ? randoms.length - 1 : 1)) % randoms.length];
             setScreen(screens[screenIndex]);
         }
 //        if(Gdx.input.isKeyPressed(Input.Keys.COMMA)){
