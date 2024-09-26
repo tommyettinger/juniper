@@ -103,14 +103,27 @@ public class ZigguratBorgComparisonScreen extends ScreenAdapter {
             if ((m & 1) == 0 && m >= 0 && m < 512)
                 amounts[m]++;
         }
-        for (int i = 0; i < RUNS; i++) {
-            int m = (int) ((dist.getMu() + dist.getSigma() *
+        if((System.currentTimeMillis() >>> 12 & 1) == 0) {
+            for (int i = 0; i < RUNS; i++) {
+                int m = (int) ((dist.getMu() + dist.getSigma() *
+                    Distributor.probitHighPrecision(dist.generator.nextExclusiveDouble())
+//                        Borg.normal(dist.generator.nextLong())
+                )
+                        * 128 + 256);
+                if ((m & 1) == 1 && m >= 0 && m < 512)
+                    amounts[m]++;
+            }
+        } else {
+            for (int i = 0; i < RUNS; i++) {
+                int m = (int) ((dist.getMu() + dist.getSigma() *
 //                    Borg.probitHighPrecision(dist.generator.nextExclusiveDouble())
-                    Borg.normal(dist.generator.nextLong())
-            )
-                    * 128 + 256);
-            if ((m & 1) == 1 && m >= 0 && m < 512)
-                amounts[m]++;
+                        Distributor.normal(dist.generator.nextLong())
+                )
+                        * 128 + 256);
+                if ((m & 1) == 1 && m >= 0 && m < 512)
+                    amounts[m]++;
+            }
+
         }
         renderer.begin(camera.combined, GL20.GL_LINES);
         for (int x = 0; x < 512; x++) {
@@ -132,8 +145,9 @@ public class ZigguratBorgComparisonScreen extends ScreenAdapter {
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        font.draw(batch, Stringf.format("ZigguratBorgComparisonScreen with A=%.3f, B=%.3f; C=%.3f; median=%.3f at %d FPS",
-                a, b, c, dist.getMedian(), Gdx.graphics.getFramesPerSecond()),
+        font.draw(batch, Stringf.format("ZigguratBorgComparisonScreen with A=%.3f, B=%.3f; C=%.3f; median=%.3f at %d FPS; %s",
+                a, b, c, dist.getMedian(), Gdx.graphics.getFramesPerSecond(),
+                        ((System.currentTimeMillis() >>> 12 & 1) == 0) ? "BORG" : "LIN"),
                 64, 522, 256+128, Align.center, true);
         font.draw(batch, "Lower parameters A/B/C by holding a, b, or c;\nhold Shift and A/B/C to raise.", 64, 500-6, 256+128, Align.center, true);
         font.draw(batch,
