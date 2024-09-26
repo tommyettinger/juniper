@@ -29,8 +29,8 @@ import java.util.Date;
 /**
  */
 public class InitialCorrelationEvaluator {
-    public static long INTERVAL_X = 2;//1;//4;//8;//16;//0xC13FA9A902A6328FL;//
-    public static long INTERVAL_Y = 2;//1;//4;//8;//16;//0x91E10DA5C79E7B1DL;//
+    public static long INTERVAL_X = 1;//2;//4;//8;//16;//0xC13FA9A902A6328FL;//
+    public static long INTERVAL_Y = 1;//2;//4;//8;//16;//0x91E10DA5C79E7B1DL;//
     public double steps = 0;
     public int mode = 0;
     public double amount = 0;
@@ -489,7 +489,7 @@ Lowest mode: 81.92187 has mean amount 0.0184360742  FAIL 💀 for Xoshiro256Star
 //                new PcgRXSMXSRandom(1, 1), new FlowRandom(1, 1), new MizuchiRandom(1, 1),
 //                new Xoroshiro128StarStarRandom(1, 1), new LaserRandom(1, 1), new FowlRandom(1, 1),
 //                new DistinctRandom(1));
-        ArrayList<EnhancedRandom> rs = ObjectList.with(new PactRandom(1, 1));
+        ArrayList<EnhancedRandom> rs = ObjectList.with(new Taxon32Random(1, 1));
 //        ArrayList<EnhancedRandom> rs = Generators.randomList;
 
         rs.sort((l, r) -> l.getClass().getSimpleName().compareTo(r.getClass().getSimpleName()));
@@ -532,45 +532,4 @@ Lowest mode: 81.92187 has mean amount 0.0184360742  FAIL 💀 for Xoshiro256Star
                 date.toString().replace(':', '_') + ".txt");
         loc.writeString(sb.toString(), false, "UTF-8");
     }
-
-//    public static void mainGobbler(String[] arg) {
-//        EnhancedRandom[][] g = new EnhancedRandom[256][256];
-//
-//        Gobbler32Random r = new Gobbler32Random(1, 1, 1, 1);
-//        for (int r1 = 1; r1 < 32; r1++) {
-//            r.r1 = r1;
-//            for (int r2 = r1+1; r2 < 32; r2++) {
-//                if(r1 == r2) continue;
-//                r.r2 = r2;
-//                for (int x = 0; x < g.length; x++) {
-//                    for (int y = 0; y < g[x].length; y++) {
-//                        g[x][y] = r.copy();
-//                        g[x][y].setState(x, y, 1L, 1L, 1L);
-//                    }
-//                }
-//                InitialCorrelationEvaluator evaluator = new InitialCorrelationEvaluator();
-//                double result = evaluator.run(g, 32, 64);
-//                System.out.println("Lowest mode: "
-//                        + Base.BASE10.decimal(evaluator.actualMode, 8)
-//                        + " has mean amount " + Base.BASE10.decimal(evaluator.actualAmount, 12)
-//                        + (result > 0.0 ? "  PASS 👍 for " : "  FAIL 💀 for ") + r1 + ", " + r2);
-//            }
-////            for (int r2 = 23; r2 < 26; r2++) {
-////                if(r1 == r2) continue;
-////                r.r2 = r2;
-////                for (int x = 0; x < g.length; x++) {
-////                    for (int y = 0; y < g[x].length; y++) {
-////                        g[x][y] = r.copy();
-////                        g[x][y].setState(x, y, 1L, 1L, 1L);
-////                    }
-////                }
-////                InitialCorrelationEvaluator evaluator = new InitialCorrelationEvaluator();
-////                double result = evaluator.run(g, 32, 64);
-////                System.out.println("Lowest mode: "
-////                        + Base.BASE10.decimal(evaluator.actualMode, 8)
-////                        + " has mean amount " + Base.BASE10.decimal(evaluator.actualAmount, 12)
-////                        + (result > 0.0 ? "  PASS 👍 for " : "  FAIL 💀 for ") + r1 + ", " + r2);
-////            }
-//        }
-//    }
 }
