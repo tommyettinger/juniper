@@ -15,9 +15,7 @@
  *
  */
 
-package com.github.tommyettinger.random.experimental;
-
-import com.github.tommyettinger.random.EnhancedRandom;
+package com.github.tommyettinger.random;
 
 /**
  * An exact copy of PCG-Random's RXS-M-XS generator. It has two {@code long} states, one of which changes with every
@@ -33,7 +31,11 @@ import com.github.tommyettinger.random.EnhancedRandom;
  * <br>
  * PcgRXSMXSRandom passes at least 16TB of testing with PractRand, which uses a suite of tests to look for a variety of
  * potential problems. Its original author tested it to 32TB without issues, as well. It has not been tested with hwd or
- * remortality. All the generators here are considered stable.
+ * remortality. All the generators here are considered stable. While this is a rather high-quality generator, it is not
+ * designed for cryptography, and should not be used for such purposes. Anyone able to see the full output of
+ * {@link #nextLong()} can determine the internal stateA value, and seeing two such full outputs is enough to determine
+ * stateB's value as well. There are also some extremely minor and subtle correlations between numerically-similar
+ * states that some tests detect, but the ones found so far are essentially insignificant.
  */
 public class PcgRXSMXSRandom extends EnhancedRandom {
 

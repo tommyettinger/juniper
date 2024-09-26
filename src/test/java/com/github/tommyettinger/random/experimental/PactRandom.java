@@ -22,8 +22,8 @@ import com.github.tommyettinger.random.EnhancedRandom;
 
 /**
  * A hash-on-counters type of RNG with two 64-bit states; uses {@link Long#numberOfLeadingZeros(long)} as part of what
- * ensures its long period. The hash is the output function used by {@link PcgRXSMXSRandom}. Has an exact period of 2
- * to the 128.
+ * ensures its long period. The hash is a mix of four bitwise rotations, a xorshift, and two 64-bit multiplications,
+ * among a few other fast operations. Has an exact period of 2 to the 128.
  * <br>
  * This has passed 64TB of PractRand testing with no anomalies.
  */
@@ -193,9 +193,9 @@ public class PactRandom extends EnhancedRandom {
 	public long previousLong () {
 		stateA -= 0xDA3E39CB94B95BDBL;
 		stateB -= BitConversion.countLeadingZeros(stateA);
-		final long z = ((stateA * (stateB << 11 | stateB >>> 53) + stateB) ^
-				(stateB * (stateA << 13 | stateA >>> 51) + stateA)) * 0xF1357AEA2E62A9C5L;
-		return (z ^ z >>> 43);
+		long z = ((stateA << 13 | stateA >>> 51) ^ (stateB << 41 | stateB >>> 23) + stateA) * 0xF1357AEA2E62A9C5L;
+		z = (z ^ (z << 23 | z >>> 41) ^ (z << 47 | z >>> 17)) * 0xF1357AEA2E62A9C5L;
+		return z ^ z >>> 43;
 //		long z = stateA ^ stateB;
 //		z = (z ^ (z >>> ((z >>> 59) + 5))) * 0xF1357AEA2E62A9C5L;
 //		return (z ^ z >>> 43);
@@ -203,10 +203,10 @@ public class PactRandom extends EnhancedRandom {
 
 	@Override
 	public int next (int bits) {
-		final long z = ((stateA * (stateB << 11 | stateB >>> 53) + stateB) ^
-				(stateB * (stateA << 13 | stateA >>> 51) + stateA)) * 0xF1357AEA2E62A9C5L;
+		long z = ((stateA << 13 | stateA >>> 51) ^ (stateB << 41 | stateB >>> 23) + stateA) * 0xF1357AEA2E62A9C5L;
 		stateB += BitConversion.countLeadingZeros(stateA);
 		stateA += 0xDA3E39CB94B95BDBL;
+		z = (z ^ (z << 23 | z >>> 41) ^ (z << 47 | z >>> 17)) * 0xF1357AEA2E62A9C5L;
 		return (int) (z ^ z >>> 43) >>> (32 - bits);
 	}
 

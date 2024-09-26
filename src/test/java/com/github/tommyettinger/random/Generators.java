@@ -51,7 +51,6 @@ public final class Generators {
         randomList.add(new Chill32Random(1, 1, 1));
         randomList.add(new CupolaRandom(1, 1));
         randomList.add(new TwingeRandom(1, 1));
-        randomList.add(new PcgRXSMXSRandom(1, 1));
         randomList.add(new PactRandom(1, 1));
         randomList.add(new PortentRandom(1, 1));
         randomList.add(new FowlRandom(1, 1));
