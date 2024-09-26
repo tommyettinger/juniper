@@ -178,14 +178,14 @@ public class Taxon32Random extends EnhancedRandom {
         int t = x & 0xDB4F0B96 - x;
         int y = (stateB = stateB + (t << 1 | t >>> 31) ^ 0xAF723597);
         y += (x << y | x >>> 32 - y);
-        y = (y ^ y >>> 22) * 0xB45ED;
-        int hi = y ^ y >>> 21 ^ y << 5;
+        y = (y ^ y >>> 22 ^ y << 5) * 0xB45ED;
+        int hi = y ^ y >>> 21;
         x = (stateA = stateA + 0x9E3779BD ^ 0xD1B54A32);
         t = x & 0xDB4F0B96 - x;
         y = (stateB = stateB + (t << 1 | t >>> 31) ^ 0xAF723597);
         y += (x << y | x >>> 32 - y);
-        y = (y ^ y >>> 22) * 0xB45ED;
-        int lo = y ^ y >>> 21 ^ y << 5;
+        y = (y ^ y >>> 22 ^ y << 5) * 0xB45ED;
+        int lo = y ^ y >>> 21;
         return (long) hi << 32 ^ lo;
 
 //        int x = (stateA = stateA + 0x9E3779BD ^ 0xD1B54A32);
@@ -207,8 +207,8 @@ public class Taxon32Random extends EnhancedRandom {
         int t = x & 0xDB4F0B96 - x;
         int y = (stateB = stateB + (t << 1 | t >>> 31) ^ 0xAF723597);
         y += (x << y | x >>> 32 - y);
-        y = (y ^ y >>> 22) * 0xB45ED;
-        return (y ^ y >>> 21 ^ y << 5) >>> (32 - bits);
+        y = (y ^ y >>> 22 ^ y << 5) * 0xB45ED;
+        return (y ^ y >>> 21) >>> (32 - bits);
 
 //        int x = (stateA = stateA + 0x9E3779BD ^ 0xD1B54A32);
 //        int t = x & 0xDB4F0B96 - x;
@@ -223,8 +223,8 @@ public class Taxon32Random extends EnhancedRandom {
         int t = x & 0xDB4F0B96 - x;
         int y = (stateB = stateB + (t << 1 | t >>> 31) ^ 0xAF723597);
         y += (x << y | x >>> 32 - y);
-        y = (y ^ y >>> 22) * 0xB45ED;
-        return y ^ y >>> 21 ^ y << 5;
+        y = (y ^ y >>> 22 ^ y << 5) * 0xB45ED;
+        return y ^ y >>> 21;
     }
 
     @Override
@@ -241,8 +241,8 @@ public class Taxon32Random extends EnhancedRandom {
         stateB = (y ^ 0xAF723597) - (t << 1 | t >>> 31) | 0; // no-op OR with 0 ensures this stays in-range in JS.
         stateA = (x ^ 0xD1B54A32) - 0x9E3779BD | 0;
         y += (x << y | x >>> 32 - y);
-        y = (y ^ y >>> 22) * 0xB45ED;
-        return y ^ y >>> 21 ^ y << 5;
+        y = (y ^ y >>> 22 ^ y << 5) * 0xB45ED;
+        return y ^ y >>> 21;
     }
 
     @Override

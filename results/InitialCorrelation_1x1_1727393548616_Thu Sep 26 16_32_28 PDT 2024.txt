@@ -1,0 +1,1 @@
+Lowest mode: 115.0000 has mean amount 0.0311234742  PASS 👍 for Taxon32Random
