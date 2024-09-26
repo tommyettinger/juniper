@@ -106,8 +106,8 @@ public class ZigguratBorgComparisonScreen extends ScreenAdapter {
         if((System.currentTimeMillis() >>> 12 & 1) == 0) {
             for (int i = 0; i < RUNS; i++) {
                 int m = (int) ((dist.getMu() + dist.getSigma() *
-                    Distributor.probitHighPrecision(dist.generator.nextExclusiveDouble())
-//                        Borg.normal(dist.generator.nextLong())
+//                    Distributor.probitHighPrecision(dist.generator.nextExclusiveDouble())
+                        Borg.normal(dist.generator.nextLong())
                 )
                         * 128 + 256);
                 if ((m & 1) == 1 && m >= 0 && m < 512)

@@ -155,14 +155,36 @@ public final class Distributor {
         final long sign = n >> 63;
         n ^= sign;
         final int top10 = (int) (n >>> 53);
+        double x;
+        if(top10 == 1023){
+            long t = (n & 0x1FFFFFFFFFFFFFL);
+            x = 3.297193345691938 / (1.0 - t * 0x1.366DA506Cp-54);
+        } else {
+            final double s = TABLE[top10], e = TABLE[top10 + 1], t = (n & 0x1FFFFFFFFFFFFFL) * 0x1p-53;
+            x = t * (e - s) + s;
+        }
+        return Math.copySign(x, sign);
+
+    }
+
+    public static double cubicNormal(long n) {
+        final long sign = n >> 63;
+        n ^= sign;
+        final int top10 = (int) (n >>> 53);
         final double s = TABLE[top10], e = TABLE[top10+1], t = (n & 0x1FFFFFFFFFFFFFL) * 0x1p-53;
-        return Math.copySign(t * (e - s) + s, sign);
+        return Math.copySign((t * t * (3.0 - 2.0 * t)) * (e - s) + s, sign);
     }
 
     public static void main(String[] args) {
         double n1 = (1.0 - 0x1p-53);
         double n2 = (1.0 - 0x2p-53);
         double n3 = (1.0 - 0x3p-53);
+        long a1 = 0x3FEL << 53;
+        long b1 = 0x3FFL << 53;
+        long b0 = b1 - 100L;
+        long b2 = b1 + 100L;
+        long b3 = b1 + 1000L;
+        long b4 = b1 + 10000L;
         System.out.println("probit(" + n1 + "): " + probit(n1));
         System.out.println("probit(" + n2 + "): " + probit(n2));
         System.out.println("probit(" + n3 + "): " + probit(n3));
@@ -170,6 +192,17 @@ public final class Distributor {
         System.out.println("probitHighPrecision(" + n2 + "): " + probitHighPrecision(n2));
         System.out.println("probitHighPrecision(" + n3 + "): " + probitHighPrecision(n3));
         System.out.println("normal(" + 0x7FFFFFFFFFFFFFFFL + "): " + normal(0x7FFFFFFFFFFFFFFFL));
+        System.out.println("cubicNormal(" + 0x7FFFFFFFFFFFFFFFL + "): " + cubicNormal(0x7FFFFFFFFFFFFFFFL));
+        System.out.println("table[1024]: " + TABLE[1024]);
         System.out.println("table[1023]: " + TABLE[1023]);
+        System.out.println("table[1022]: " + TABLE[1022]);
+
+        System.out.println("normal(" + a1 + "): " + normal(a1));
+        System.out.println("normal(" + b0 + "): " + normal(b0));
+        System.out.println("normal(" + b1 + "): " + normal(b1));
+        System.out.println("normal(" + b2 + "): " + normal(b2));
+        System.out.println("normal(" + b3 + "): " + normal(b3));
+        System.out.println("normal(" + b4 + "): " + normal(b4));
+
     }
 }
