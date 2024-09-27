@@ -9,15 +9,15 @@ import java.util.Random;
  * double centered on 0.0 with standard deviation 1.0 . {@link #normal(long)} takes a long in the entire range of
  * possible long values, and also produces a double centered on 0.0 with standard deviation 1.0 . ALl of these ways will
  * preserve patterns in the input, so inputs close to the lowest possible input (0.0 for probit(),
- * {@link Long#MIN_VALUE} for normal()) will produce the lowest possible output (about -38.5 for both), and similarly
+ * {@link Long#MIN_VALUE} for normal()) will produce the lowest possible output (about -8.375 for both), and similarly
  * for the highest possible inputs producing the highest possible outputs.
  */
 public final class Distributor {
 
-    private static final double[] TABLE = new double[1025];
+    private static final double[] TABLE = new double[1024];
 
     static {
-        for (int i = 0; i < 1025; i++) {
+        for (int i = 0; i < 1024; i++) {
             TABLE[i] = probitHighPrecision(0.5 + i * 0x1p-11);
         }
     }
@@ -28,11 +28,11 @@ public final class Distributor {
      * A way of taking a double in the (0.0, 1.0) range and mapping it to a Gaussian or normal distribution, so high
      * inputs correspond to high outputs, and similarly for the low range. This is centered on 0.0 and its standard
      * deviation seems to be 1.0 (the same as {@link Random#nextGaussian()}). If this is given an input of 0.0
-     * or less, it returns -38.5, which is slightly less than the result when given {@link Double#MIN_VALUE}. If it is
-     * given an input of 1.0 or more, it returns 38.5, which is significantly larger than the result when given the
+     * or less, it returns -8.375, which is slightly less than the result when given {@link Double#MIN_VALUE}. If it is
+     * given an input of 1.0 or more, it returns 8.375, which is significantly larger than the result when given the
      * largest double less than 1.0 (this value is further from 1.0 than {@link Double#MIN_VALUE} is from 0.0). If
      * given {@link Double#NaN}, it returns whatever {@link Math#copySign(double, double)} returns for the arguments
-     * {@code 38.5, Double.NaN}, which is implementation-dependent.
+     * {@code 8.375, Double.NaN}, which is implementation-dependent.
      * <br>
      * This uses an algorithm by Peter John Acklam, as implemented by Sherali Karimov.
      * <a href="https://web.archive.org/web/20150910002142/http://home.online.no/~pjacklam/notes/invnorm/impl/karimov/StatUtil.java">Original source</a>.
@@ -46,7 +46,7 @@ public final class Distributor {
      * cases they should appear. If given a typical uniform random {@code double} that's exclusive on 1.0, it won't
      * produce a result higher than
      * {@code 8.209536145151493}, and will only produce results of at least {@code -8.209536145151493} if 0.0 is
-     * excluded from the inputs (if 0.0 is an input, the result is {@code -38.5}). This requires a fair amount of
+     * excluded from the inputs (if 0.0 is an input, the result is {@code -8.375}). This requires a fair amount of
      * floating-point multiplication and one division for all {@code d} where it is between 0 and 1 exclusive, but
      * roughly 1/20 of the time it need a {@link Math#sqrt(double)} and {@link Math#log(double)} as well.
      * <br>
@@ -61,7 +61,7 @@ public final class Distributor {
      * than Ziggurat, making it the quickest here, though at some cost to precision.
      *
      * @param d should be between 0 and 1, exclusive, but other values are tolerated
-     * @return a normal-distributed double centered on 0.0; all results will be between -38.5 and 38.5, both inclusive
+     * @return a normal-distributed double centered on 0.0; all results will be between -8.375 and 8.375, both inclusive
      * @see #probitHighPrecision(double) There is a higher-precision, slower variant on this method.
      */
     public static double probit (final double d) {
@@ -82,6 +82,12 @@ public final class Distributor {
                 ((((-5.447609879822406e+01 * r + 1.615858368580409e+02) * r - 1.556989798598866e+02) * r + 6.680131188771972e+01) * r - 1.328068155288572e+01) * r + 1.0);
     }
 
+    /**
+     * Complementary error function, partial implementation.
+     * <a href="https://en.wikipedia.org/wiki/Error_function#Complementary_error_function">See Wikipedia for more</a>.
+     * @param x any non-negative double
+     * @return a double between 0 and 1... I think?
+     */
     private static double erfcBase(double x) {
         return ((0.56418958354775629) / (x + 2.06955023132914151)) *
                 ((x * (x + 2.71078540045147805) + 5.80755613130301624) / (x * (x + 3.47954057099518960) + 12.06166887286239555)) *
@@ -98,8 +104,8 @@ public final class Distributor {
      * {@code 1.1102230246251565E-16}).
      * <a href="https://en.wikipedia.org/wiki/Error_function#Complementary_error_function">See Wikipedia for more</a>.
      *
-     * @param x any finite float
-     * @return a float between 0 and 2, inclusive
+     * @param x any finite double
+     * @return a double between 0 and 2, inclusive
      */
     private static double erfc(double x) {
         return x >= 0 ? erfcBase(x) : 2.0 - erfcBase(-x);
@@ -132,12 +138,14 @@ public final class Distributor {
      * half of the range of the normal distribution with standard deviation 1.0, and similarly maps all negative long
      * values to their equivalent-magnitude non-negative counterparts. Notably, an input of 0 will map to {@code 0.0},
      * an input of -1 will map to {@code -0.0}, and inputs of {@link Long#MIN_VALUE} and  {@link Long#MAX_VALUE} will
-     * map to larger values that are equally far from 0.0 . If you only pass this small sequential inputs, there may be
-     * no detectable difference between some outputs. This is meant to be given inputs with large differences if very
-     * different outputs are desired.
+     * map to {@code -3.879050994931691} and {@code 3.879050994931691}, respectively. If you only pass this small
+     * sequential inputs, there may be no detectable difference between some outputs. This is meant to be given inputs
+     * with large differences if very different outputs are desired.
      * <br>
      * The algorithm here can be called Linnormal; it is comparatively quite simple, and mostly relies on lookup from a
-     * precomputed table of results of {@link #probitHighPrecision(double)}, followed by linear interpolation.
+     * precomputed table of results of {@link #probitHighPrecision(double)}, followed by linear interpolation. Values in
+     * the "trail" of the normal distribution, that is, those produced by long values in the uppermost 1/2048 of all
+     * values of the lowermost 1/2048 of all values, are computed differently, and not in a linear way.
      * <br>
      * This is like the "Ziggurat algorithm" to make normal-distributed doubles, but this preserves patterns in the
      * input. Uses a large table of the results of {@link #probitHighPrecision(double)}, and interpolates between
@@ -165,14 +173,6 @@ public final class Distributor {
         return Math.copySign(x, sign);
     }
 
-    public static double cubicNormal(long n) {
-        final long sign = n >> 63;
-        n ^= sign;
-        final int top10 = (int) (n >>> 53);
-        final double s = TABLE[top10], e = TABLE[top10+1], t = (n & 0x1FFFFFFFFFFFFFL) * 0x1p-53;
-        return Math.copySign((t * t * (3.0 - 2.0 * t)) * (e - s) + s, sign);
-    }
-
     public static void main(String[] args) {
         double n1 = (1.0 - 0x1p-53);
         double n2 = (1.0 - 0x2p-53);
@@ -190,8 +190,9 @@ public final class Distributor {
         System.out.println("probitHighPrecision(" + n2 + "): " + probitHighPrecision(n2));
         System.out.println("probitHighPrecision(" + n3 + "): " + probitHighPrecision(n3));
         System.out.println("normal(" + 0x7FFFFFFFFFFFFFFFL + "): " + normal(0x7FFFFFFFFFFFFFFFL));
-        System.out.println("cubicNormal(" + 0x7FFFFFFFFFFFFFFFL + "): " + cubicNormal(0x7FFFFFFFFFFFFFFFL));
-        System.out.println("table[1024]: " + TABLE[1024]);
+        System.out.println("normal(Long.MIN_VALUE): " + normal(Long.MIN_VALUE));
+        System.out.println("normal(Long.MAX_VALUE): " + normal(Long.MAX_VALUE));
+
         System.out.println("table[1023]: " + TABLE[1023]);
         System.out.println("table[1022]: " + TABLE[1022]);
         System.out.println("table[1021]: " + TABLE[1021]);
