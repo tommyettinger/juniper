@@ -157,8 +157,8 @@ public final class Distributor {
         final int top10 = (int) (n >>> 53);
         double x;
         if(top10 == 1023){
-            long t = (n & 0x1FFFFFFFFFFFFFL);
-            x = 3.297193345691938 / (1.0 - t * 0x1.366DA506Cp-54);
+            double t = Math.sqrt((n & 0x1FFFFFFFFFFFFFL) * 0x1p-53);
+            x = 3.297193345691938 / (1.0 - t * t * t * 0.1875);
         } else {
             final double s = TABLE[top10], e = TABLE[top10 + 1], t = (n & 0x1FFFFFFFFFFFFFL) * 0x1p-53;
             x = t * (e - s) + s;
@@ -196,6 +196,7 @@ public final class Distributor {
         System.out.println("table[1024]: " + TABLE[1024]);
         System.out.println("table[1023]: " + TABLE[1023]);
         System.out.println("table[1022]: " + TABLE[1022]);
+        System.out.println("table[1021]: " + TABLE[1021]);
 
         System.out.println("normal(" + a1 + "): " + normal(a1));
         System.out.println("normal(" + b0 + "): " + normal(b0));
