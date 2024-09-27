@@ -157,14 +157,12 @@ public final class Distributor {
         final int top10 = (int) (n >>> 53);
         double x;
         if(top10 == 1023){
-            double t = Math.sqrt((n & 0x1FFFFFFFFFFFFFL) * 0x1p-53);
-            x = 3.297193345691938 / (1.0 - t * t * t * 0.1875);
+            x = 3.297193345691938 / (1.0 - ((n & 0x1FFFFFFFFFFFFFL) * 0x1.3333333333333p-56));
         } else {
             final double s = TABLE[top10], e = TABLE[top10 + 1], t = (n & 0x1FFFFFFFFFFFFFL) * 0x1p-53;
             x = t * (e - s) + s;
         }
         return Math.copySign(x, sign);
-
     }
 
     public static double cubicNormal(long n) {
