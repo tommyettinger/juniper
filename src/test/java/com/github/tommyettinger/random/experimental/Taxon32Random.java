@@ -23,6 +23,11 @@ import com.github.tommyettinger.random.EnhancedRandom;
  * A random number generator that is optimized for performance on 32-bit machines and with Google Web Toolkit, this uses
  * only the most portable operations (including compatibility with JS), and has a period of exactly 2 to the 64.
  * This passes 64TB of PractRand testing with no anomalies.
+ * <br>
+ * This is meant for the somewhat-unusual task of providing a different (short) sequence of random values for any pair
+ * of states given to it, with it especially important that numerically-close state pairs produce different sequences.
+ * It also was meant to work on GWT without needing super-sourcing; most generators either use long math and so are much
+ * slower on GWT, or use int math but need super-sourcing to avoid eventually losing precision.
  */
 public class Taxon32Random extends EnhancedRandom {
     /**
@@ -187,18 +192,6 @@ public class Taxon32Random extends EnhancedRandom {
         y = (y ^ y >>> 22 ^ y << 5) * 0xB45ED;
         int lo = y ^ y >>> 21;
         return (long) hi << 32 ^ lo;
-
-//        int x = (stateA = stateA + 0x9E3779BD ^ 0xD1B54A32);
-//        int t = x & 0xDB4F0B96 - x;
-//        int y = (stateB = stateB + (t << 1 | t >>> 31) ^ 0xAF723597);
-//        y = (x ^ y ^ (y >>> ((y >>> 28) + 4))) * 0xB45ED;
-//        int hi = y ^ y >>> 21;
-//        x = (stateA = stateA + 0x9E3779BD ^ 0xD1B54A32);
-//        t = x & 0xDB4F0B96 - x;
-//        y = (stateB = stateB + (t << 1 | t >>> 31) ^ 0xAF723597);
-//        y = (x ^ y ^ (y >>> ((y >>> 28) + 4))) * 0xB45ED;
-//        int lo = y ^ y >>> 21;
-//        return (long) hi << 32 ^ lo;
     }
 
     @Override
@@ -209,12 +202,6 @@ public class Taxon32Random extends EnhancedRandom {
         y += (x << y | x >>> 32 - y);
         y = (y ^ y >>> 22 ^ y << 5) * 0xB45ED;
         return (y ^ y >>> 21) >>> (32 - bits);
-
-//        int x = (stateA = stateA + 0x9E3779BD ^ 0xD1B54A32);
-//        int t = x & 0xDB4F0B96 - x;
-//        int y = (stateB = stateB + (t << 1 | t >>> 31) ^ 0xAF723597);
-//        y = (x ^ y ^ (y >>> ((y >>> 28) + 4))) * 0xB45ED;
-//        return (y ^ y >>> 21) >>> (32 - bits);
     }
 
     @Override
