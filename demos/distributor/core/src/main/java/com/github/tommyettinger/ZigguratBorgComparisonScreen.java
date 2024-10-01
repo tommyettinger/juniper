@@ -12,9 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.UIUtils;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.github.tommyettinger.digital.BitConversion;
-import com.github.tommyettinger.digital.MathTools;
-import com.github.tommyettinger.random.EnhancedRandom;
 import com.github.tommyettinger.random.distribution.NormalDistribution;
 
 import java.util.Arrays;
@@ -114,7 +111,7 @@ public class ZigguratBorgComparisonScreen extends ScreenAdapter {
             for (int i = 0; i < RUNS; i++) {
                 int m = (int) ((dist.getMu() + dist.getSigma() *
 //                    Distributor.probitHighPrecision(dist.generator.nextExclusiveDouble())
-                        Borg.normal(dist.generator.nextLong())//| 0x7FE0000000000000L
+                        Distributor.normalF(dist.generator.nextInt())//| 0x7FE0000000000000L
                 )
                         * 128 + 256);
                 if (m >= 0 && m < 512)
@@ -172,7 +169,7 @@ public class ZigguratBorgComparisonScreen extends ScreenAdapter {
         batch.begin();
         font.draw(batch, Stringf.format("ZigguratBorgComparisonScreen with A=%.3f, B=%.3f; C=%.3f; median=%.3f at %d FPS; %s with %d off-graph",
                 a, b, c, dist.getMedian(), Gdx.graphics.getFramesPerSecond(),
-                        ((System.currentTimeMillis() >>> 13 & 1) == 0) ? "BORG" : "LIN", offGraph),
+                        ((System.currentTimeMillis() >>> 13 & 1) == 0) ? "FLOAT" : "DOUBLE", offGraph),
                 64, 522, 256+128, Align.center, true);
         font.draw(batch, "Lower parameters A/B/C by holding a, b, or c;\nhold Shift and A/B/C to raise.", 64, 500-6, 256+128, Align.center, true);
         font.draw(batch,
