@@ -71,7 +71,7 @@ public class Taxman32Random extends EnhancedRandom {
 
     @Override
     public String getTag() {
-        return "TxnR";
+        return "TxmR";
     }
 
     /**

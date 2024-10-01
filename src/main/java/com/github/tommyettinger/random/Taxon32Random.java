@@ -15,19 +15,36 @@
  *
  */
 
-package com.github.tommyettinger.random.experimental;
-
-import com.github.tommyettinger.random.EnhancedRandom;
+package com.github.tommyettinger.random;
 
 /**
  * A random number generator that is optimized for performance on 32-bit machines and with Google Web Toolkit, this uses
  * only the most portable operations (including compatibility with JS), and has a period of exactly 2 to the 64.
- * This passes 64TB of PractRand testing with no anomalies.
+ * This passes 64TB of PractRand testing with no anomalies, and also passes juniper's InitialCorrelationEvaluator test.
+ * Relatively few generators with this small of a state size have gotten through InitialCorrelationEvaluator unscathed,
+ * so this is a good option to have if you expect to frequently use similar pairs of initial int states.
  * <br>
  * This is meant for the somewhat-unusual task of providing a different (short) sequence of random values for any pair
  * of states given to it, with it especially important that numerically-close state pairs produce different sequences.
  * It also was meant to work on GWT without needing super-sourcing; most generators either use long math and so are much
- * slower on GWT, or use int math but need super-sourcing to avoid eventually losing precision.
+ * slower on GWT, or use int math but need super-sourcing to avoid eventually losing precision. These tasks were
+ * required by the pathfinding algorithm library <a href="https://github.com/tommyettinger/gand">gand</a>, which needed
+ * a way to make an arbitrary number of random choices in the same way for any given point (or a pair of points).
+ * <br>
+ * This implements all optional methods in EnhancedRandom except {@link #skip(long)}; it does implement
+ * {@link #previousLong()} and {@link #previousInt()} without using skip().
+ * <br>
+ * This uses a mixed left/right xorshift pair, which uses
+ * <a href="https://github.com/pellevensen/bijections">this data found by Pelle Evensen</a>. Various other techniques
+ * used in here aren't widely used. Using XOR with an even constant immediately after adding an odd constant produces a
+ * full-period sequence, like a counter, but this works on GWT or JS without needing any more bitwise math. I don't
+ * think I've seen {@code int aaa = n & (0xAAAAAAAA - n);} used before, but it has the useful quality that for all
+ * possible values for n, aaa is negative an odd number of times (instead of an even number, which we don't want for
+ * period reasons). Rotating aaa left by 1, for all possible values for n, and adding it to a variable will have a
+ * longer period than n will alone; because adding (2 to the 32) rotated aaa values is the same as adding an odd number,
+ * we would need to repeat that step (2 to the 32) times to cycle, or (2 to the 64) times total.
+ * <br>
+ * The name comes from how some of the operations here are difficult to classify.
  */
 public class Taxon32Random extends EnhancedRandom {
     /**
@@ -43,7 +60,7 @@ public class Taxon32Random extends EnhancedRandom {
      * Creates a new Taxon32Random with a random state.
      */
     public Taxon32Random() {
-        this((int) EnhancedRandom.seedFromMath(), (int) EnhancedRandom.seedFromMath());
+        this((int)((Math.random() - 0.5) * 0x1p32), (int)((Math.random() - 0.5) * 0x1p32));
     }
 
     /**
@@ -126,13 +143,6 @@ public class Taxon32Random extends EnhancedRandom {
      */
     @Override
     public void setSeed(long seed) {
-        seed ^= seed >>> 32;
-        seed *= 0xBEA225F9EB34556DL;
-        seed ^= seed >>> 29;
-        seed *= 0xBEA225F9EB34556DL;
-        seed ^= seed >>> 32;
-        seed *= 0xBEA225F9EB34556DL;
-        seed ^= seed >>> 29;
         stateA = (int) seed;
         stateB = (int) (seed >>> 32);
     }
@@ -314,33 +324,4 @@ public class Taxon32Random extends EnhancedRandom {
     public String toString() {
         return "Taxon32Random{" + "stateA=" + (stateA) + ", stateB=" + (stateB) + "}";
     }
-
-    public static void main(String[] args) {
-        Taxon32Random random = new Taxon32Random(1L);
-        int n0 = random.nextInt();
-        int n1 = random.nextInt();
-        int n2 = random.nextInt();
-        int n3 = random.nextInt();
-        int n4 = random.nextInt();
-        int n5 = random.nextInt();
-        int p5 = random.previousInt();
-        int p4 = random.previousInt();
-        int p3 = random.previousInt();
-        int p2 = random.previousInt();
-        int p1 = random.previousInt();
-        int p0 = random.previousInt();
-        System.out.println(n0 == p0);
-        System.out.println(n1 == p1);
-        System.out.println(n2 == p2);
-        System.out.println(n3 == p3);
-        System.out.println(n4 == p4);
-        System.out.println(n5 == p5);
-        System.out.println(n0 + " vs. " + p0);
-        System.out.println(n1 + " vs. " + p1);
-        System.out.println(n2 + " vs. " + p2);
-        System.out.println(n3 + " vs. " + p3);
-        System.out.println(n4 + " vs. " + p4);
-        System.out.println(n5 + " vs. " + p5);
-    }
-
 }

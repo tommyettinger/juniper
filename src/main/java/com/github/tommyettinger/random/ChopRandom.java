@@ -28,7 +28,7 @@ package com.github.tommyettinger.random;
  * half the speed of FourWheelRandom when generating long values on Java 17 HotSpot). ChopRandom has a guaranteed
  * minimum period of 2 to the 32, and is very likely to have a much longer period for almost all initial states.
  * <br>
- * This generator can be stable. It passes 64TB of PractRand testing without anomalies.
+ * This generator can be considered stable. It passes 64TB of PractRand testing without anomalies.
  * <br>
  * The algorithm used here has four states purely to exploit instruction-level parallelism; one state is a counter (this
  * gives the guaranteed minimum period of 2 to the 32), and the others combine the values of the four states across three
@@ -41,7 +41,7 @@ package com.github.tommyettinger.random;
  * numbers generated, any correlation between similarly seeded generators will probably be completely gone, though.
  * <br>
  * This implements all optional methods in EnhancedRandom except {@link #skip(long)}; it does implement
- * {@link #previousLong()} without using skip().
+ * {@link #previousLong()} and {@link #previousInt()} without using skip().
  * <br>
  * This is called ChopRandom because it operates on half the bits as {@link TrimRandom} while otherwise being similar.
  */
