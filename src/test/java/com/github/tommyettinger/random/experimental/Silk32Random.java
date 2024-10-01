@@ -4,7 +4,10 @@ import com.github.tommyettinger.random.EnhancedRandom;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
- * Copied in, mostly, from SquidLib's SilkRNG class. Quality is not entirely clear yet, but may be good.
+ * Copied in, mostly, from SquidLib's SilkRNG class. Quality is decent for a single short stream of random numbers, but
+ * there are serious correlation issues when using multiple short sequences produced by similar initial states.
+ * Specifically, the least significant bit of stateB isn't used at all in the output, though it may have some effect on
+ * the next state.
  */
 public class Silk32Random extends EnhancedRandom {
 
@@ -85,10 +88,12 @@ public class Silk32Random extends EnhancedRandom {
 
     @Override
     public int previousInt() {
-        final int t = (stateB -= (stateA | -stateA) >> 31 & 0x9E3779BB);
-        final int s = (stateA += 0xC1C64E6D);
+        final int t = (stateB);
+        final int s = (stateA);
         int x = (s ^ s >>> 17) * ~((t ^ t >>> 12) & 0x1FFFFE);
         x = (x ^ x >>> 16) * 0xAC451;
+        stateB -= (stateA | -stateA) >> 31 & 0x9E3779BB;
+        stateA -= 0xC1C64E6D;
         return (x ^ x >>> 15);
     }
 
@@ -333,5 +338,33 @@ public class Silk32Random extends EnhancedRandom {
 
     public String toString() {
         return "SilkRandom{" + "stateA=" + (stateA) + ", stateB=" + (stateB) + "}";
+    }
+
+    public static void main(String[] args) {
+        Silk32Random random = new Silk32Random(1L);
+        int n0 = random.nextInt();
+        int n1 = random.nextInt();
+        int n2 = random.nextInt();
+        int n3 = random.nextInt();
+        int n4 = random.nextInt();
+        int n5 = random.nextInt();
+        int p5 = random.previousInt();
+        int p4 = random.previousInt();
+        int p3 = random.previousInt();
+        int p2 = random.previousInt();
+        int p1 = random.previousInt();
+        int p0 = random.previousInt();
+        System.out.println(n0 == p0);
+        System.out.println(n1 == p1);
+        System.out.println(n2 == p2);
+        System.out.println(n3 == p3);
+        System.out.println(n4 == p4);
+        System.out.println(n5 == p5);
+        System.out.println(n0 + " vs. " + p0);
+        System.out.println(n1 + " vs. " + p1);
+        System.out.println(n2 + " vs. " + p2);
+        System.out.println(n3 + " vs. " + p3);
+        System.out.println(n4 + " vs. " + p4);
+        System.out.println(n5 + " vs. " + p5);
     }
 }

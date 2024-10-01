@@ -489,7 +489,7 @@ Lowest mode: 81.92187 has mean amount 0.0184360742  FAIL 💀 for Xoshiro256Star
 //                new PcgRXSMXSRandom(1, 1), new FlowRandom(1, 1), new MizuchiRandom(1, 1),
 //                new Xoroshiro128StarStarRandom(1, 1), new LaserRandom(1, 1), new FowlRandom(1, 1),
 //                new DistinctRandom(1));
-        ArrayList<EnhancedRandom> rs = ObjectList.with(new Taxon32Random(1, 1));
+        ArrayList<EnhancedRandom> rs = ObjectList.with(new Taxon32Random(1, 1), new Silk32Random(1, 1));
 //        ArrayList<EnhancedRandom> rs = Generators.randomList;
 
         rs.sort((l, r) -> l.getClass().getSimpleName().compareTo(r.getClass().getSimpleName()));
