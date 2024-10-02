@@ -57,6 +57,7 @@ public final class Generators {
         randomList.add(new Taxon32Random(1, 1));
         randomList.add(new Silk32Random(1, 1));
         randomList.add(new Taxman32Random(1, 1));
+        randomList.add(new Choo32Random(1, 1, 1, 1));
     }
     public static int randomCount = randomList.size();
 
