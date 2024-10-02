@@ -1,0 +1,13 @@
+Lowest mode: 116.0000 has mean amount 0.0311149805  PASS 👍 for Bear32Random
+Lowest mode: 116.0000 has mean amount 0.0311049818  PASS 👍 for Chill32Random
+Lowest mode: 116.0000 has mean amount 0.0310839712  PASS 👍 for Choo32Random
+Lowest mode: 115.0000 has mean amount 0.0311253815  PASS 👍 for ChopRandom
+Lowest mode: 116.0000 has mean amount 0.0311274975  PASS 👍 for Jsf32Random
+Lowest mode: 115.0000 has mean amount 0.0310224890  PASS 👍 for Rawr32Random
+Lowest mode: 115.0000 has mean amount 0.0311058312  PASS 👍 for Recipe32Random
+Lowest mode: 116.0000 has mean amount 0.0310783535  PASS 👍 for Resolute32Random
+Lowest mode: 107.0000 has mean amount 0.0243715345  FAIL 💀 for Respite32Random
+Lowest mode: 0.000000 has mean amount 0.9960950016  FAIL 💀 for Silk32Random
+Lowest mode: 116.0000 has mean amount 0.0311232209  PASS 👍 for Taxman32Random
+Lowest mode: 115.0000 has mean amount 0.0311234742  PASS 👍 for Taxon32Random
+Lowest mode: 95.00000 has mean amount 0.0219035893  FAIL 💀 for Xoshiro128PlusPlusRandom

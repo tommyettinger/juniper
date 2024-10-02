@@ -24,13 +24,10 @@ import com.github.tommyettinger.random.WhiskerRandom;
 
 /**
  * A random number generator that is optimized for performance on 32-bit machines and with Google Web Toolkit, this uses
- * only add, bitwise-rotate, and XOR operations in its state transition, but uses multiplication (via
- * {@code Math.imul()} on GWT) for its output-mixing step.
+ * only add, subtract, bitwise-rotate, and XOR operations in its state transition, but also uses multiplication (via
+ * {@code Math.imul()} on GWT) and unsigned right shifts for its output-mixing step.
  * <br>
- * The actual speed of this is going to vary wildly depending on the platform being benchmarked. It's hard to find a
- * faster high-quality way to generate long values on GWT (this is, surprisingly, faster than generators like
- * {@link FourWheelRandom} or {@link WhiskerRandom} on GWT at generating either int or long values, while this is likely
- * half the speed of FourWheelRandom when generating long values on Java 17 HotSpot). Choo32Random has a guaranteed
+ * Choo32Random has a guaranteed
  * minimum period of 2 to the 32, and is very likely to have a much longer period for almost all initial states.
  * <br>
  * The algorithm used here has four states purely to exploit instruction-level parallelism; one state is a counter (this
@@ -103,7 +100,7 @@ public class Choo32Random extends EnhancedRandom {
 
 	@Override
 	public String getTag() {
-		return "ChpR";
+		return "ChoR";
 	}
 
 	/**
@@ -314,20 +311,18 @@ public class Choo32Random extends EnhancedRandom {
 		return previousInt() ^ (long)previousInt() << 32;
 	}
 
-	// TODO: Finish this, it isn't reversing right now.
 	@Override
 	public int previousInt() {
 		final int ga = stateA;
 		final int gb = stateB;
 		final int gc = stateC;
 		final int gd = stateD;
-		stateC = (gb >>> 11 | gb << 21) ^ (stateD -= 0xADB5B165);
-		stateB = (ga >>> 26 | ga << 6) ^ stateC;
-		stateA = gc ^ stateB + stateC;
+		stateA = gb ^ (stateD -= 0xADB5B165);
+		stateB = (gc >>> stateA | gc << -stateA);
+		stateC = stateB - ga;
 		int res = ga + gb ^ gc + gd;
-		res = (res ^ res >>> 16) * 0x21f0aaad;
 		res = (res ^ res >>> 15) * 0x735a2d97;
-		return res ^ res >>> 15;
+		return res ^ res >>> 16;
 	}
 
 	@Override
@@ -340,10 +335,9 @@ public class Choo32Random extends EnhancedRandom {
 		stateB = fa ^ fd;
 		stateC = (fb << fa | fb >>> -fa);
 		stateD = fd + 0xADB5B165;
-		int res = stateA + stateB ^ stateC + stateD;
-		res = (res ^ res >>> 16) * 0x21f0aaad;
+		int res = (stateA + stateB ^ stateC + stateD);
 		res = (res ^ res >>> 15) * 0x735a2d97;
-		return (res ^ res >>> 15) >>> (32 - bits);
+		return (res ^ res >>> 16) >>> (32 - bits);
 	}
 
 	@Override
@@ -353,10 +347,6 @@ public class Choo32Random extends EnhancedRandom {
 		final int fc = stateC;
 		final int fd = stateD;
 //		int res = (fa + (fb << fc | fb >>> -fc)) ^ (fc - (fd << fa | fd >>> -fa));
-		stateA = fb - fc;
-		stateB = fa ^ fd;
-		stateC = (fb << fa | fb >>> -fa);
-		stateD = fd + 0xADB5B165;
 //		final int sa = fb + fc;
 //		stateA = (sa << 26 | sa >>> 6);
 //		final int sb = fc + fd;
@@ -364,10 +354,19 @@ public class Choo32Random extends EnhancedRandom {
 //		final int sc = fa + fb;
 //		stateC = (sc << 5 | sc >>> 27);
 //		stateD = fd + 0xADB5B165;
-		int res = stateA + stateB ^ stateC + stateD;
-		res = (res ^ res >>> 16) * 0x21f0aaad;
+		stateA = fb - fc;
+		stateB = fa ^ fd;
+		stateC = (fb << fa | fb >>> -fa);
+		stateD = fd + 0xADB5B165;
+		int res = (stateA + stateB ^ stateC + stateD);
 		res = (res ^ res >>> 15) * 0x735a2d97;
-		return res ^ res >>> 15;
+		return res ^ res >>> 16;
+//		res = (res ^ res >>> 16) * 0x21f0aaad;
+
+//		res = (res ^ res >>> 16) * 0x93d765dd;
+//		res = (res << 20 | res >>> 12) * 0x39E2D;
+//		res = (res << 19 | res >>> 13) * 0x39E2D;
+//		return res ^ (res << 17 | res >>> 15) ^ (res << 5 | res >>> 27);
 	}
 
 	@Override

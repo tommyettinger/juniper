@@ -2,6 +2,7 @@ package com.github.tommyettinger.random;
 
 import com.github.tommyettinger.digital.ArrayTools;
 import com.github.tommyettinger.digital.Base;
+import com.github.tommyettinger.random.experimental.Choo32Random;
 import com.github.tommyettinger.random.experimental.Rawr32Random;
 import com.github.tommyettinger.random.experimental.RespectRandom;
 import org.junit.Assert;
