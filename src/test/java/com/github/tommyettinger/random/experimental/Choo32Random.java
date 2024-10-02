@@ -24,31 +24,27 @@ import com.github.tommyettinger.random.WhiskerRandom;
 
 /**
  * A random number generator that is optimized for performance on 32-bit machines and with Google Web Toolkit, this uses
- * only add, bitwise-rotate, and XOR operations (no multiplication). This generator is nearly identical to
- * {@link TrimRandom} in its structure, but uses smaller words (int instead of long), and has better avalanche properties.
+ * only add, bitwise-rotate, and XOR operations in its state transition, but uses multiplication (via
+ * {@code Math.imul()} on GWT) for its output-mixing step.
  * <br>
  * The actual speed of this is going to vary wildly depending on the platform being benchmarked. It's hard to find a
  * faster high-quality way to generate long values on GWT (this is, surprisingly, faster than generators like
  * {@link FourWheelRandom} or {@link WhiskerRandom} on GWT at generating either int or long values, while this is likely
- * half the speed of FourWheelRandom when generating long values on Java 17 HotSpot). ChopRandom has a guaranteed
+ * half the speed of FourWheelRandom when generating long values on Java 17 HotSpot). Choo32Random has a guaranteed
  * minimum period of 2 to the 32, and is very likely to have a much longer period for almost all initial states.
- * <br>
- * This generator can be considered stable. It passes 64TB of PractRand testing without anomalies.
  * <br>
  * The algorithm used here has four states purely to exploit instruction-level parallelism; one state is a counter (this
  * gives the guaranteed minimum period of 2 to the 32), and the others combine the values of the four states across three
  * variables. There's a complex tangle of dependencies across the states, but it is possible to invert the generator
  * given a full 128-bit state; this is vital for its period and quality.
  * <br>
- * It is strongly recommended that you seed this with {@link #setSeed(long)} instead of
- * {@link #setState(long, long, long, long)}, because if you give sequential seeds to both setSeed() and setState(), the
- * former will start off random, while the latter will start off repeating the seed sequence. After about 20-40 random
- * numbers generated, any correlation between similarly seeded generators will probably be completely gone, though.
- * <br>
  * This implements all optional methods in EnhancedRandom except {@link #skip(long)}; it does implement
  * {@link #previousLong()} and {@link #previousInt()} without using skip().
  * <br>
- * This is called ChopRandom because it operates on half the bits as {@link TrimRandom} while otherwise being similar.
+ * This uses an output mixer found using <a href="https://github.com/skeeto/hash-prospector">hash-prospector</a> by
+ * TheIronBorn, and runs it on a combination of all four states.
+ * <br>
+ * This is called Choo32Random because it is choo-choo-chugging along at improving on the similar ChopRandom.
  */
 public class Choo32Random extends EnhancedRandom {
 
@@ -71,14 +67,14 @@ public class Choo32Random extends EnhancedRandom {
 	protected int stateD;
 
 	/**
-	 * Creates a new ChopRandom with a random state.
+	 * Creates a new Choo32Random with a random state.
 	 */
 	public Choo32Random() {
 		this((int)EnhancedRandom.seedFromMath(), (int)EnhancedRandom.seedFromMath(), (int)EnhancedRandom.seedFromMath(), (int)EnhancedRandom.seedFromMath());
 	}
 
 	/**
-	 * Creates a new ChopRandom with the given seed; all {@code long} values are permitted.
+	 * Creates a new Choo32Random with the given seed; all {@code long} values are permitted.
 	 * The seed will be passed to {@link #setSeed(long)} to attempt to adequately distribute the seed randomly.
 	 *
 	 * @param seed any {@code long} value
@@ -89,7 +85,7 @@ public class Choo32Random extends EnhancedRandom {
 	}
 
 	/**
-	 * Creates a new ChopRandom with the given four states; all {@code int} values are permitted.
+	 * Creates a new Choo32Random with the given four states; all {@code int} values are permitted.
 	 * These states will be used verbatim.
 	 *
 	 * @param stateA any {@code int} value
@@ -169,9 +165,7 @@ public class Choo32Random extends EnhancedRandom {
 
 	/**
 	 * This initializes all 4 states of the generator to random values based on the given seed.
-	 * (2 to the 64) possible initial generator states can be produced here, all with a different
-	 * first value returned by {@link #nextLong()} (because {@code stateC} is guaranteed to be
-	 * different for every different {@code seed}).
+	 * (2 to the 64) possible initial generator states can be produced here.
 	 *
 	 * @param seed the initial seed; may be any long
 	 */
@@ -282,44 +276,42 @@ public class Choo32Random extends EnhancedRandom {
 
 	@Override
 	public long nextLong () {
-		final int fa = stateA;
-		final int fb = stateB;
-		final int fc = stateC;
-		final int fd = stateD;
-		final int hi = (fa + (fb << fc | fb >>> -fc)) * 0x9E37 ^ (fc + (fd << fa | fd >>> -fa)) * 0x79B9;
-		int ga = fb ^ fc;
-		ga = (ga << 26 | ga >>> 6);
-		int gb = fc ^ fd;
-		gb = (gb << 11 | gb >>> 21);
-		final int gc = fa ^ fb + fc;
-		final int gd = fd + 0xADB5B165;
-		final int lo = (ga + (gb << gc | gb >>> -gc)) * 0x9E37 ^ (gc + (gd << ga | gd >>> -ga)) * 0x79B9;
-		int sa = gb ^ gc;
-		stateA = (sa << 26 | sa >>> 6);
-		int sb = gc ^ gd;
-		stateB = (sb << 11 | sb >>> 21);
-		stateC = ga ^ gb + gc;
-		stateD = gd + 0xADB5B165;
-		return (long)(hi ^ hi >>> 15) << 32 ^ (lo ^ lo >>> 15);
+//		final int fa = stateA;
+//		final int fb = stateB;
+//		final int fc = stateC;
+//		final int fd = stateD;
+//		final int hi = (fa + (fb << fc | fb >>> -fc)) * 0x9E37 ^ (fc + (fd << fa | fd >>> -fa)) * 0x79B9;
+//		int ga = fb ^ fc;
+//		ga = (ga << 26 | ga >>> 6);
+//		int gb = fc ^ fd;
+//		gb = (gb << 11 | gb >>> 21);
+//		final int gc = fa ^ fb + fc;
+//		final int gd = fd + 0xADB5B165;
+//		final int lo = (ga + (gb << gc | gb >>> -gc)) * 0x9E37 ^ (gc + (gd << ga | gd >>> -ga)) * 0x79B9;
+//		int sa = gb ^ gc;
+//		stateA = (sa << 26 | sa >>> 6);
+//		int sb = gc ^ gd;
+//		stateB = (sb << 11 | sb >>> 21);
+//		stateC = ga ^ gb + gc;
+//		stateD = gd + 0xADB5B165;
+//		return (long)(hi ^ hi >>> 15) << 32 ^ (lo ^ lo >>> 15);
+		return (long)nextInt() << 32 ^ nextInt();
 	}
 
 	@Override
 	public long previousLong () {
-		final int fa = stateA;
-		final int fb = stateB;
-		final int fc = stateC;
-		final int gc = (fb >>> 11 | fb << 21) ^ (stateD -= 0xADB5B165);
-		final int gb = (fa >>> 26 | fa << 6) ^ gc;
-		final int ga = fc ^ gb + gc;
-		final int lo = (gc + (gb << ga | gb >>> -ga)) * 0xB45ED ^ stateD;
-		stateC = (gb >>> 11 | gb << 21) ^ (stateD -= 0xADB5B165);
-		stateB = (ga >>> 26 | ga << 6) ^ stateC;
-		stateA = gc ^ stateB + stateC;
-		final int hi = (stateC + (stateB << stateA | stateB >>> -stateA)) * 0xB45ED ^ stateD;
-		return (long)hi << 32 ^ lo;
-//		fc = ((stateB >>> 11 | stateB << 21) ^ stateD - 0xADB5B165);
-//		fb = (stateA >>> 26 | stateA << 6) ^ fc;
-//		return (long)((fb >>> 11 | fb << 21) ^ stateD - 0x5B6B62CA) << 32 ^ fc;
+//		final int fa = stateA;
+//		final int fb = stateB;
+//		final int fc = stateC;
+//		final int gc = (fb >>> 11 | fb << 21) ^ (stateD -= 0xADB5B165);
+//		final int gb = (fa >>> 26 | fa << 6) ^ gc;
+//		final int ga = fc ^ gb + gc;
+//		final int lo = (gc + (gb << ga | gb >>> -ga)) * 0xB45ED ^ stateD;
+//		stateC = (gb >>> 11 | gb << 21) ^ (stateD -= 0xADB5B165);
+//		stateB = (ga >>> 26 | ga << 6) ^ stateC;
+//		stateA = gc ^ stateB + stateC;
+//		final int hi = (stateC + (stateB << stateA | stateB >>> -stateA)) * 0xB45ED ^ stateD;
+		return previousInt() ^ (long)previousInt() << 32;
 	}
 
 	@Override
@@ -330,8 +322,10 @@ public class Choo32Random extends EnhancedRandom {
 		stateC = (gb >>> 11 | gb << 21) ^ (stateD -= 0xADB5B165);
 		stateB = (ga >>> 26 | ga << 6) ^ stateC;
 		stateA = gc ^ stateB + stateC;
-
-		return (stateC + (stateB << stateA | stateB >>> -stateA)) * 0xB45ED ^ stateD;
+		int res = stateA + stateB ^ stateC + stateD;
+		res = (res ^ res >>> 16) * 0x21f0aaad;
+		res = (res ^ res >>> 15) * 0x735a2d97;
+		return res ^ res >>> 15;
 	}
 
 	@Override
@@ -340,7 +334,10 @@ public class Choo32Random extends EnhancedRandom {
 		final int fb = stateB;
 		final int fc = stateC;
 		final int fd = stateD;
-		final int res = (fc + (fb << fa | fb >>> -fa)) * 0xB45ED ^ fd;
+		int res = fa + fb ^ fc + fd;
+		res = (res ^ res >>> 16) * 0x21f0aaad;
+		res = (res ^ res >>> 15) * 0x735a2d97;
+		res ^= res >>> 15;
 		final int sa = fb ^ fc;
 		stateA = (sa << 26 | sa >>> 6);
 		final int sb = fc ^ fd;
@@ -356,7 +353,11 @@ public class Choo32Random extends EnhancedRandom {
 		final int fb = stateB;
 		final int fc = stateC;
 		final int fd = stateD;
-		final int res = (fc + (fb << fa | fb >>> -fa)) * 0xB45ED ^ fd;
+//		int res = (fa + (fb << fc | fb >>> -fc)) ^ (fc - (fd << fa | fd >>> -fa));
+		int res = fa + fb ^ fc + fd;
+		res = (res ^ res >>> 16) * 0x21f0aaad;
+		res = (res ^ res >>> 15) * 0x735a2d97;
+		res ^= res >>> 15;
 		final int sa = fb ^ fc;
 		stateA = (sa << 26 | sa >>> 6);
 		final int sb = fc ^ fd;
@@ -442,6 +443,6 @@ public class Choo32Random extends EnhancedRandom {
 	}
 
 	public String toString () {
-		return "ChopRandom{" + "stateA=" + (stateA) + ", stateB=" + (stateB) + ", stateC=" + (stateC) + ", stateD=" + (stateD) + "}";
+		return "Choo32Random{" + "stateA=" + (stateA) + ", stateB=" + (stateB) + ", stateC=" + (stateC) + ", stateD=" + (stateD) + "}";
 	}
 }
