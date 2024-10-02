@@ -314,15 +314,17 @@ public class Choo32Random extends EnhancedRandom {
 		return previousInt() ^ (long)previousInt() << 32;
 	}
 
+	// TODO: Finish this, it isn't reversing right now.
 	@Override
 	public int previousInt() {
 		final int ga = stateA;
 		final int gb = stateB;
 		final int gc = stateC;
+		final int gd = stateD;
 		stateC = (gb >>> 11 | gb << 21) ^ (stateD -= 0xADB5B165);
 		stateB = (ga >>> 26 | ga << 6) ^ stateC;
 		stateA = gc ^ stateB + stateC;
-		int res = stateA + stateB ^ stateC + stateD;
+		int res = ga + gb ^ gc + gd;
 		res = (res ^ res >>> 16) * 0x21f0aaad;
 		res = (res ^ res >>> 15) * 0x735a2d97;
 		return res ^ res >>> 15;
@@ -334,17 +336,14 @@ public class Choo32Random extends EnhancedRandom {
 		final int fb = stateB;
 		final int fc = stateC;
 		final int fd = stateD;
-		int res = fa + fb ^ fc + fd;
+		stateA = fb - fc;
+		stateB = fa ^ fd;
+		stateC = (fb << fa | fb >>> -fa);
+		stateD = fd + 0xADB5B165;
+		int res = stateA + stateB ^ stateC + stateD;
 		res = (res ^ res >>> 16) * 0x21f0aaad;
 		res = (res ^ res >>> 15) * 0x735a2d97;
-		res ^= res >>> 15;
-		final int sa = fb ^ fc;
-		stateA = (sa << 26 | sa >>> 6);
-		final int sb = fc ^ fd;
-		stateB = (sb << 11 | sb >>> 21);
-		stateC = fa ^ fb + fc;
-		stateD = fd + 0xADB5B165;
-		return res >>> (32 - bits);
+		return (res ^ res >>> 15) >>> (32 - bits);
 	}
 
 	@Override
@@ -354,17 +353,21 @@ public class Choo32Random extends EnhancedRandom {
 		final int fc = stateC;
 		final int fd = stateD;
 //		int res = (fa + (fb << fc | fb >>> -fc)) ^ (fc - (fd << fa | fd >>> -fa));
-		int res = fa + fb ^ fc + fd;
+		stateA = fb - fc;
+		stateB = fa ^ fd;
+		stateC = (fb << fa | fb >>> -fa);
+		stateD = fd + 0xADB5B165;
+//		final int sa = fb + fc;
+//		stateA = (sa << 26 | sa >>> 6);
+//		final int sb = fc + fd;
+//		stateB = (sb << 11 | sb >>> 21);
+//		final int sc = fa + fb;
+//		stateC = (sc << 5 | sc >>> 27);
+//		stateD = fd + 0xADB5B165;
+		int res = stateA + stateB ^ stateC + stateD;
 		res = (res ^ res >>> 16) * 0x21f0aaad;
 		res = (res ^ res >>> 15) * 0x735a2d97;
-		res ^= res >>> 15;
-		final int sa = fb ^ fc;
-		stateA = (sa << 26 | sa >>> 6);
-		final int sb = fc ^ fd;
-		stateB = (sb << 11 | sb >>> 21);
-		stateC = fa ^ fb + fc;
-		stateD = fd + 0xADB5B165;
-		return res;
+		return res ^ res >>> 15;
 	}
 
 	@Override
