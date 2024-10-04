@@ -114,7 +114,7 @@ public class Gobbler32Random extends EnhancedRandom {
 
 	/**
 	 * Sets one of the states, determined by {@code selection}, to the lower 32 bits of {@code value}, as-is.
-	 * Selections 0, 1, 2, and 3 refer to states A, B, C, and D,  and if the selection is anything
+	 * Selections 0, 1, 2, and 3 refer to states A, B, C, and D, and if the selection is anything
 	 * else, this treats it as 3 and sets stateD. This always casts {@code value} to an int before using it.
 	 *
 	 * @param selection used to select which state variable to set; generally 0, 1, 2, or 3
