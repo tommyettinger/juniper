@@ -241,15 +241,15 @@ public class Cover32Random extends EnhancedRandom {
 
 	@Override
 	public long nextLong () {
-		int x = (stateA = stateA + 0xD192ED03 ^ 0xBEA225FA);
-		int y = (stateB = stateB + BitConversion.countLeadingZeros(x) ^ 0xA62B82F6);
-		int z = (stateC = stateC + BitConversion.countLeadingZeros(x & y) ^ 0x9E3779BA);
-		int w = (stateD = imul((stateD << 12 | stateD >>> 20), 0xD747A13B) ^ z);
-		y ^= imul(w ^ (x << 16 | x >>> 16), 0x21f0aaad);
-		x ^= imul(z ^ (y << 17 | y >>> 15), 0x735a2d97);
-		y ^= (x << 17 | x >>> 15);
-//		x = (x << 17 | x >>> 15) + z ^ (y = (y << 11 | y >>> 21) + x ^ w) + (y << 23 | y >>>  9);
-		return (long)y << 32 ^ x;
+//		int x = (stateA = stateA + 0xD192ED03 ^ 0xBEA225FA);
+//		int y = (stateB = stateB + BitConversion.countLeadingZeros(x) ^ 0xA62B82F6);
+//		int z = (stateC = stateC + BitConversion.countLeadingZeros(x & y) ^ 0x9E3779BA);
+//		int w = (stateD = imul((stateD << 12 | stateD >>> 20), 0xD747A13B) ^ z);
+//		y ^= imul(w ^ (x << 16 | x >>> 16), 0x21f0aaad);
+//		x ^= imul(z ^ (y << 17 | y >>> 15), 0x735a2d97);
+//		y ^= (x << 17 | x >>> 15);
+////		x = (x << 17 | x >>> 15) + z ^ (y = (y << 11 | y >>> 21) + x ^ w) + (y << 23 | y >>>  9);
+		return (long)nextInt() << 32 ^ nextInt();
 	}
 
 	@Override
@@ -273,10 +273,11 @@ public class Cover32Random extends EnhancedRandom {
 		int y = (stateB = stateB + BitConversion.countLeadingZeros(x) ^ 0xA62B82F6);
 		int z = (stateC = stateC + BitConversion.countLeadingZeros(x & y) ^ 0x9E3779BA);
 		int w = (stateD = imul((stateD << 12 | stateD >>> 20), 0xD747A13B) ^ z);
-		y ^= imul(w ^ (x << 16 | x >>> 16), 0x21f0aaad);
-		x ^= imul(z ^ (y << 17 | y >>> 15), 0x735a2d97);
-		y ^= (x << 17 | x >>> 15);
-		return y >>> (32 - bits);
+		x += y + z + w;
+		x = imul(x ^ (x << 16 | x >>> 16), 0x21f0aaad);
+		x = imul(x ^ (x << 17 | x >>> 15), 0x735a2d97);
+		x ^= (x << 17 | x >>> 15);
+		return x >>> (32 - bits);
 	}
 
 	@Override
@@ -284,11 +285,17 @@ public class Cover32Random extends EnhancedRandom {
 		int x = (stateA = stateA + 0xD192ED03 ^ 0xBEA225FA);
 		int y = (stateB = stateB + BitConversion.countLeadingZeros(x) ^ 0xA62B82F6);
 		int z = (stateC = stateC + BitConversion.countLeadingZeros(x & y) ^ 0x9E3779BA);
-		int w = (stateD = imul((stateD << 12 | stateD >>> 20), 0xD747A13B) ^ z);
-		y ^= imul(w ^ (x << 16 | x >>> 16), 0x21f0aaad);
-		x ^= imul(z ^ (y << 17 | y >>> 15), 0x735a2d97);
-		y ^= (x << 17 | x >>> 15);
-		return y;
+		int w = (stateD = imul((stateD << 12 | stateD >>> 20) ^ z, 0xD747A13B));
+//		int res = x + y + z + w;
+//		x = imul(x ^ x >>> 16, 0x21f0aaad);
+//		x = imul(x ^ x >>> 15, 0x735a2d97);
+//		x ^= x >>> 15;
+//		return x;
+		int res = (x << 17 | x >>> 15) + z ^ (w << 5 | w >>> 27) ^ (y = (y << 11 | y >>> 21) + x ^ w + (z << 25 | z >>> 7)) + (y << 23 | y >>> 9);
+//		res = imul(res ^ res >>> 16, 0x21f0aaad);
+		res = imul(res ^ res >>> 15, 0x735a2d97);
+		return res ^ res >>> 16;
+
 	}
 
 	public int previousInt() {
