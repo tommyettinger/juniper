@@ -17,32 +17,44 @@
 
 package com.github.tommyettinger.random.experimental;
 
+import com.github.tommyettinger.digital.Base;
+import com.github.tommyettinger.digital.BitConversion;
 import com.github.tommyettinger.random.EnhancedRandom;
 import com.github.tommyettinger.random.FourWheelRandom;
 import com.github.tommyettinger.random.TrimRandom;
 import com.github.tommyettinger.random.WhiskerRandom;
 
+import static com.github.tommyettinger.digital.BitConversion.imul;
+
 /**
- * A random number generator that is optimized for performance on 32-bit machines and with Google Web Toolkit, this uses
- * only add, subtract, bitwise-rotate, and XOR operations in its state transition, but also uses multiplication (via
- * {@code Math.imul()} on GWT) and unsigned right shifts for its output-mixing step.
+ * A random number generator that is optimized for performance on 32-bit machines and with Google Web Toolkit.
+ * This uses only add, subtract, (variable) bitwise-rotate, and XOR operations in its state transition, but also
+ * uses multiplication (via {@code Math.imul()} on GWT) and unsigned right shifts for its output-mixing step.
+ * It will usually be compiled out, but this does also use {@code variable = variable + constant | 0;} in order
+ * to force additions to counters on GWT to actually overflow as they do (and should) on desktop JVMs.
  * <br>
- * Choo32Random has a guaranteed
- * minimum period of 2 to the 32, and is very likely to have a much longer period for almost all initial states.
+ * Choo32Random has a guaranteed minimum period of 2 to the 32, and is very likely to have a much longer period for
+ * almost all initial states. There are expected to be several (double-digit) relatively long sub-cycles that most
+ * states will be within, and relatively few sub-cycles nearing the smallest possible size (2 to the 32, or over 4
+ * billion).
  * <br>
- * The algorithm used here has four states purely to exploit instruction-level parallelism; one state is a counter (this
- * gives the guaranteed minimum period of 2 to the 32), and the others combine the values of the four states across three
- * variables. There's a complex tangle of dependencies across the states, but it is possible to invert the generator
- * given a full 128-bit state; this is vital for its period and quality.
+ * The algorithm used here has four states purely to exploit instruction-level parallelism; one state is a counter
+ * (this gives the guaranteed minimum period of 2 to the 32), and the others combine the values of the four states
+ * across three variables. It is possible to invert the generator given a full 128-bit state; this is vital for its
+ * period and quality. It is not possible to invert the generator given a known small number of outputs; the furthest
+ * you can get when inverting the output is to get the current sum of all four states.
  * <br>
  * This implements all optional methods in EnhancedRandom except {@link #skip(long)}; it does implement
  * {@link #previousLong()} and {@link #previousInt()} without using skip().
  * <br>
- * This uses an output mixer found using <a href="https://github.com/skeeto/hash-prospector">hash-prospector</a> by
- * TheIronBorn, and runs it on a combination of all four states.
+ * This uses part of an output mixer found using <a href="https://github.com/skeeto/hash-prospector">hash-prospector</a>
+ * by TheIronBorn, and runs it on a combination of all four states.
  * <br>
- * This is called Choo32Random because it is choo-choo-chugging along at improving on the similar ChopRandom.
+ * This is called Choo32Random because it is choo-choo-chugging along at improving on the similar ChopRandom. It uses
+ * a simpler state transition than ChopRandom, but a more complex output mixer so that it can be used as a sequence of
+ * hashes of four values.
  */
+@SuppressWarnings({"PointlessBitwiseExpression"}) // GWT actually needs these.
 public class Choo32Random extends EnhancedRandom {
 
 	/**
@@ -273,42 +285,56 @@ public class Choo32Random extends EnhancedRandom {
 
 	@Override
 	public long nextLong () {
-//		final int fa = stateA;
-//		final int fb = stateB;
-//		final int fc = stateC;
-//		final int fd = stateD;
-//		final int hi = (fa + (fb << fc | fb >>> -fc)) * 0x9E37 ^ (fc + (fd << fa | fd >>> -fa)) * 0x79B9;
-//		int ga = fb ^ fc;
-//		ga = (ga << 26 | ga >>> 6);
-//		int gb = fc ^ fd;
-//		gb = (gb << 11 | gb >>> 21);
-//		final int gc = fa ^ fb + fc;
-//		final int gd = fd + 0xADB5B165;
-//		final int lo = (ga + (gb << gc | gb >>> -gc)) * 0x9E37 ^ (gc + (gd << ga | gd >>> -ga)) * 0x79B9;
-//		int sa = gb ^ gc;
-//		stateA = (sa << 26 | sa >>> 6);
-//		int sb = gc ^ gd;
-//		stateB = (sb << 11 | sb >>> 21);
-//		stateC = ga ^ gb + gc;
-//		stateD = gd + 0xADB5B165;
-//		return (long)(hi ^ hi >>> 15) << 32 ^ (lo ^ lo >>> 15);
-		return (long)nextInt() << 32 ^ nextInt();
+		// This is the same as the following, but inlined manually:
+		//		return (long)nextInt() << 32 ^ nextInt();
+
+		final int fa = stateA;
+		final int fb = stateB;
+		final int fc = stateC;
+		final int fd = stateD;
+
+		final int ga = fb - fc;
+		final int gb = fa ^ fd;
+		final int gc = (fb << fa | fb >>> -fa);
+		final int gd = fd + 0xADB5B165;
+		int hi = (ga + gb + gc + gd);
+		hi = imul(hi ^ hi >>> 15, 0x735a2d97);
+
+		stateA = gb - gc;
+		stateB = ga ^ gd;
+		stateC = (gb << ga | gb >>> -ga);
+		stateD = gd + 0xADB5B165 | 0;
+		int lo = (stateA + stateB + stateC + stateD);
+		lo = imul(lo ^ lo >>> 15, 0x735a2d97);
+
+		return (long)(hi ^ hi >>> 16) << 32 ^ (lo ^ lo >>> 16);
 	}
 
 	@Override
 	public long previousLong () {
-//		final int fa = stateA;
-//		final int fb = stateB;
-//		final int fc = stateC;
-//		final int gc = (fb >>> 11 | fb << 21) ^ (stateD -= 0xADB5B165);
-//		final int gb = (fa >>> 26 | fa << 6) ^ gc;
-//		final int ga = fc ^ gb + gc;
-//		final int lo = (gc + (gb << ga | gb >>> -ga)) * 0xB45ED ^ stateD;
-//		stateC = (gb >>> 11 | gb << 21) ^ (stateD -= 0xADB5B165);
-//		stateB = (ga >>> 26 | ga << 6) ^ stateC;
-//		stateA = gc ^ stateB + stateC;
-//		final int hi = (stateC + (stateB << stateA | stateB >>> -stateA)) * 0xB45ED ^ stateD;
-		return previousInt() ^ (long)previousInt() << 32;
+		// This is the same as the following, but inlined manually:
+		//		return previousInt() ^ (long)previousInt() << 32;
+
+		final int ga = stateA;
+		final int gb = stateB;
+		final int gc = stateC;
+		final int gd = stateD;
+
+		int lo = ga + gb + gc + gd;
+		lo = imul(lo ^ lo >>> 15, 0x735a2d97);
+		final int fd = gd - 0xADB5B165;
+		final int fa = gb ^ fd;
+		final int fb = (gc >>> fa | gc << -fa);
+		final int fc = fb - ga;
+
+		int hi = fa + fb + fc + fd;
+		hi = imul(hi ^ hi >>> 15, 0x735a2d97);
+		stateD = fd - 0xADB5B165 | 0;
+		stateA = fb ^ stateD;
+		stateB = (fc >>> stateA | fc << -stateA);
+		stateC = stateB - fa;
+
+		return (lo ^ lo >>> 16) ^ (long)(hi ^ hi >>> 16) << 32;
 	}
 
 	@Override
@@ -317,11 +343,11 @@ public class Choo32Random extends EnhancedRandom {
 		final int gb = stateB;
 		final int gc = stateC;
 		final int gd = stateD;
-		stateA = gb ^ (stateD -= 0xADB5B165);
+		int res = ga + gb + gc + gd;
+		res = imul(res ^ res >>> 15, 0x735a2d97);
+		stateA = gb ^ (stateD = gd - 0xADB5B165 | 0);
 		stateB = (gc >>> stateA | gc << -stateA);
 		stateC = stateB - ga;
-		int res = ga + gb + gc + gd;
-		res = (res ^ res >>> 15) * 0x735a2d97;
 		return res ^ res >>> 16;
 	}
 
@@ -334,9 +360,9 @@ public class Choo32Random extends EnhancedRandom {
 		stateA = fb - fc;
 		stateB = fa ^ fd;
 		stateC = (fb << fa | fb >>> -fa);
-		stateD = fd + 0xADB5B165;
+		stateD = fd + 0xADB5B165 | 0;
 		int res = (stateA + stateB + stateC + stateD);
-		res = (res ^ res >>> 15) * 0x735a2d97;
+		res = imul(res ^ res >>> 15, 0x735a2d97);
 		return (res ^ res >>> 16) >>> (32 - bits);
 	}
 
@@ -346,27 +372,13 @@ public class Choo32Random extends EnhancedRandom {
 		final int fb = stateB;
 		final int fc = stateC;
 		final int fd = stateD;
-//		int res = (fa + (fb << fc | fb >>> -fc)) ^ (fc - (fd << fa | fd >>> -fa));
-//		final int sa = fb + fc;
-//		stateA = (sa << 26 | sa >>> 6);
-//		final int sb = fc + fd;
-//		stateB = (sb << 11 | sb >>> 21);
-//		final int sc = fa + fb;
-//		stateC = (sc << 5 | sc >>> 27);
-//		stateD = fd + 0xADB5B165;
 		stateA = fb - fc;
 		stateB = fa ^ fd;
 		stateC = (fb << fa | fb >>> -fa);
-		stateD = fd + 0xADB5B165;
+		stateD = fd + 0xADB5B165 | 0;
 		int res = (stateA + stateB + stateC + stateD);
-		res = (res ^ res >>> 15) * 0x735a2d97;
+		res = imul(res ^ res >>> 15, 0x735a2d97);
 		return res ^ res >>> 16;
-//		res = (res ^ res >>> 16) * 0x21f0aaad;
-
-//		res = (res ^ res >>> 16) * 0x93d765dd;
-//		res = (res << 20 | res >>> 12) * 0x39E2D;
-//		res = (res << 19 | res >>> 13) * 0x39E2D;
-//		return res ^ (res << 17 | res >>> 15) ^ (res << 5 | res >>> 27);
 	}
 
 	@Override
@@ -446,5 +458,62 @@ public class Choo32Random extends EnhancedRandom {
 
 	public String toString () {
 		return "Choo32Random{" + "stateA=" + (stateA) + ", stateB=" + (stateB) + ", stateC=" + (stateC) + ", stateD=" + (stateD) + "}";
+	}
+
+
+	public static void main(String[] args) {
+		Choo32Random random = new Choo32Random(1L);
+		{
+			int n0 = random.nextInt();
+			int n1 = random.nextInt();
+			int n2 = random.nextInt();
+			int n3 = random.nextInt();
+			int n4 = random.nextInt();
+			int n5 = random.nextInt();
+			int p5 = random.previousInt();
+			int p4 = random.previousInt();
+			int p3 = random.previousInt();
+			int p2 = random.previousInt();
+			int p1 = random.previousInt();
+			int p0 = random.previousInt();
+			System.out.println(n0 == p0);
+			System.out.println(n1 == p1);
+			System.out.println(n2 == p2);
+			System.out.println(n3 == p3);
+			System.out.println(n4 == p4);
+			System.out.println(n5 == p5);
+			System.out.println(Base.BASE16.unsigned(n0) + " vs. " + Base.BASE16.unsigned(p0));
+			System.out.println(Base.BASE16.unsigned(n1) + " vs. " + Base.BASE16.unsigned(p1));
+			System.out.println(Base.BASE16.unsigned(n2) + " vs. " + Base.BASE16.unsigned(p2));
+			System.out.println(Base.BASE16.unsigned(n3) + " vs. " + Base.BASE16.unsigned(p3));
+			System.out.println(Base.BASE16.unsigned(n4) + " vs. " + Base.BASE16.unsigned(p4));
+			System.out.println(Base.BASE16.unsigned(n5) + " vs. " + Base.BASE16.unsigned(p5));
+		}
+		{
+			long n0 = random.nextLong();
+			long n1 = random.nextLong();
+			long n2 = random.nextLong();
+			long n3 = random.nextLong();
+			long n4 = random.nextLong();
+			long n5 = random.nextLong();
+			long p5 = random.previousLong();
+			long p4 = random.previousLong();
+			long p3 = random.previousLong();
+			long p2 = random.previousLong();
+			long p1 = random.previousLong();
+			long p0 = random.previousLong();
+			System.out.println(n0 == p0);
+			System.out.println(n1 == p1);
+			System.out.println(n2 == p2);
+			System.out.println(n3 == p3);
+			System.out.println(n4 == p4);
+			System.out.println(n5 == p5);
+			System.out.println(Base.BASE16.unsigned(n0) + " vs. " + Base.BASE16.unsigned(p0));
+			System.out.println(Base.BASE16.unsigned(n1) + " vs. " + Base.BASE16.unsigned(p1));
+			System.out.println(Base.BASE16.unsigned(n2) + " vs. " + Base.BASE16.unsigned(p2));
+			System.out.println(Base.BASE16.unsigned(n3) + " vs. " + Base.BASE16.unsigned(p3));
+			System.out.println(Base.BASE16.unsigned(n4) + " vs. " + Base.BASE16.unsigned(p4));
+			System.out.println(Base.BASE16.unsigned(n5) + " vs. " + Base.BASE16.unsigned(p5));
+		}
 	}
 }
