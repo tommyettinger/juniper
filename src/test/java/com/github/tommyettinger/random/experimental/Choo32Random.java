@@ -300,7 +300,7 @@ public class Choo32Random extends EnhancedRandom {
 		int hi = (ga + gb + gc + gd);
 		hi = imul(hi ^ hi >>> 15, 0x735a2d97);
 
-		stateA = gb - gc;
+		stateA = gb - gc | 0;
 		stateB = ga ^ gd;
 		stateC = (gb << ga | gb >>> -ga);
 		stateD = gd + 0xADB5B165 | 0;
@@ -332,7 +332,7 @@ public class Choo32Random extends EnhancedRandom {
 		stateD = fd - 0xADB5B165 | 0;
 		stateA = fb ^ stateD;
 		stateB = (fc >>> stateA | fc << -stateA);
-		stateC = stateB - fa;
+		stateC = stateB - fa | 0;
 
 		return (lo ^ lo >>> 16) ^ (long)(hi ^ hi >>> 16) << 32;
 	}
@@ -347,7 +347,7 @@ public class Choo32Random extends EnhancedRandom {
 		res = imul(res ^ res >>> 15, 0x735a2d97);
 		stateA = gb ^ (stateD = gd - 0xADB5B165 | 0);
 		stateB = (gc >>> stateA | gc << -stateA);
-		stateC = stateB - ga;
+		stateC = stateB - ga | 0;
 		return res ^ res >>> 16;
 	}
 
@@ -357,7 +357,7 @@ public class Choo32Random extends EnhancedRandom {
 		final int fb = stateB;
 		final int fc = stateC;
 		final int fd = stateD;
-		stateA = fb - fc;
+		stateA = fb - fc | 0;
 		stateB = fa ^ fd;
 		stateC = (fb << fa | fb >>> -fa);
 		stateD = fd + 0xADB5B165 | 0;
@@ -372,7 +372,7 @@ public class Choo32Random extends EnhancedRandom {
 		final int fb = stateB;
 		final int fc = stateC;
 		final int fd = stateD;
-		stateA = fb - fc;
+		stateA = fb - fc | 0;
 		stateB = fa ^ fd;
 		stateC = (fb << fa | fb >>> -fa);
 		stateD = fd + 0xADB5B165 | 0;
