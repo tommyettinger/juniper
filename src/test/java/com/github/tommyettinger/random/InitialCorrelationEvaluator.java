@@ -115,7 +115,9 @@ public class InitialCorrelationEvaluator {
 //                new Jsf32Random(1, 1, 1, 1), new Respite32Random(1, 1, 1), new Resolute32Random(1, 1, 1),
 //                new Rawr32Random(1, 1, 1, 1), new Recipe32Random(1, 1, 1), new Xoshiro128PlusPlusRandom(1, 1, 1, 1),
 //                new Taxman32Random(1, 1), new Taxon32Random(1, 1), new Silk32Random(1, 1),
-                new Choo32Random(1, 1, 1, 1));
+                new Choo32Random(1, 1, 1, 1)
+                , new Taupe32Random(1, 1)
+        );
 //        ArrayList<EnhancedRandom> rs = Generators.randomList;
 
         rs.sort((l, r) -> l.getClass().getSimpleName().compareTo(r.getClass().getSimpleName()));
