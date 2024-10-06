@@ -272,60 +272,62 @@ public class Brew32Random extends EnhancedRandom {
 		this.stateC = (int)stateC;
 		this.stateD = (int)stateD;
 	}
-
+//fa * 0xC5F768E7 ^ fb * 0xC21736F9 ^ fc * 0xC514D823 ^ fd * 0xCCE4C43F
+//ga * 0xC5F768E7 ^ gb * 0xC21736F9 ^ gc * 0xC514D823 ^ gd * 0xCCE4C43F
+//stateA * 0xC5F768E7 ^ stateB * 0xC21736F9 ^ stateC * 0xC514D823 ^ stateD * 0xCCE4C43F
 	@Override
 	public long nextLong () {
 		// This is the same as the following, but inlined manually:
-		//		return (long)nextInt() << 32 ^ nextInt();
+		return (long)nextInt() << 32 ^ nextInt();
 
-		final int fa = stateA;
-		final int fb = stateB;
-		final int fc = stateC;
-		final int fd = stateD;
-
-		final int hi = fa * 0x001DEF1D + fb * 0x0018BD49 + fc * 0x001DE7A9 + fd * 0x001BDC1D;
-
-		final int ga = fb - fc;
-		final int gb = fa ^ fd;
-		final int gc = (fb << fa | fb >>> -fa);
-		final int gd = fd + 0xADB5B165;
-
-		final int lo = ga * 0x001DEF1D + gb * 0x0018BD49 + gc * 0x001DE7A9 + gd * 0x001BDC1D;
-		stateA = gb - gc;
-		stateB = ga ^ gd;
-		stateC = (gb << ga | gb >>> -ga);
-		stateD = gd + 0xADB5B165 | 0;
-
-		return (long)(hi ^ (hi << 5 | hi >>> 27) ^ (hi << 19 | hi >>> 13)) << 32
-				^ (lo ^ (lo << 5 | lo >>> 27) ^ (lo << 19 | lo >>> 13));
+//		final int fa = stateA;
+//		final int fb = stateB;
+//		final int fc = stateC;
+//		final int fd = stateD;
+//
+//		final int hi = fa * 0xC5F768E7 ^ fb * 0xC21736F9 ^ fc * 0xC514D823 ^ fd * 0xCCE4C43F;
+//
+//		final int ga = fb - fc;
+//		final int gb = fa ^ fd;
+//		final int gc = (fb << fa | fb >>> -fa);
+//		final int gd = fd + 0xADB5B165;
+//
+//		final int lo = ga * 0xC5F768E7 ^ gb * 0xC21736F9 ^ gc * 0xC514D823 ^ gd * 0xCCE4C43F;
+//		stateA = gb - gc;
+//		stateB = ga ^ gd;
+//		stateC = (gb << ga | gb >>> -ga);
+//		stateD = gd + 0xADB5B165 | 0;
+//
+//		return (long)(hi ^ (hi << 5 | hi >>> 27) ^ (hi << 19 | hi >>> 13)) << 32
+//				^ (lo ^ (lo << 5 | lo >>> 27) ^ (lo << 19 | lo >>> 13));
 	}
 
 	@Override
 	public long previousLong () {
 		// This is the same as the following, but inlined manually:
-		//		return previousInt() ^ (long)previousInt() << 32;
+		return previousInt() ^ (long)previousInt() << 32;
 
-		final int ga = stateA;
-		final int gb = stateB;
-		final int gc = stateC;
-		final int gd = stateD;
-
-		final int fd = gd - 0xADB5B165;
-		final int fa = gb ^ fd;
-		final int fb = (gc >>> fa | gc << -fa);
-		final int fc = fb - ga;
-
-		final int lo = fa * 0x001DEF1D + fb * 0x0018BD49 + fc * 0x001DE7A9 + fd * 0x001BDC1D;
-
-		stateD = fd - 0xADB5B165 | 0;
-		stateA = fb ^ stateD;
-		stateB = (fc >>> stateA | fc << -stateA);
-		stateC = stateB - fa | 0;
-
-		final int hi = stateA * 0x001DEF1D + stateB * 0x0018BD49 + stateC * 0x001DE7A9 + stateD * 0x001BDC1D;
-
-		return (lo ^ (lo << 5 | lo >>> 27) ^ (lo << 19 | lo >>> 13))
-				^ (long)(hi ^ (hi << 5 | hi >>> 27) ^ (hi << 19 | hi >>> 13)) << 32;
+//		final int ga = stateA;
+//		final int gb = stateB;
+//		final int gc = stateC;
+//		final int gd = stateD;
+//
+//		final int fd = gd - 0xADB5B165;
+//		final int fa = gb ^ fd;
+//		final int fb = (gc >>> fa | gc << -fa);
+//		final int fc = fb - ga;
+//
+//		final int lo = fa * 0xC5F768E7 ^ fb * 0xC21736F9 ^ fc * 0xC514D823 ^ fd * 0xCCE4C43F;
+//
+//		stateD = fd - 0xADB5B165 | 0;
+//		stateA = fb ^ stateD;
+//		stateB = (fc >>> stateA | fc << -stateA);
+//		stateC = stateB - fa | 0;
+//
+//		final int hi = stateA * 0xC5F768E7 ^ stateB * 0xC21736F9 ^ stateC * 0xC514D823 ^ stateD * 0xCCE4C43F;
+//
+//		return (lo ^ (lo << 5 | lo >>> 27) ^ (lo << 19 | lo >>> 13))
+//				^ (long)(hi ^ (hi << 5 | hi >>> 27) ^ (hi << 19 | hi >>> 13)) << 32;
 	}
 
 	@Override
@@ -339,7 +341,7 @@ public class Brew32Random extends EnhancedRandom {
 		stateB = (gc >>> stateA | gc << -stateA);
 		stateC = stateB - ga | 0;
 
-		final int res = stateA * 0x001DEF1D + stateB * 0x0018BD49 + stateC * 0x001DE7A9 + stateD * 0x001BDC1D;
+		final int res = stateA * 0xC5F768E7 ^ stateB * 0xC21736F9 ^ stateC * 0xC514D823 ^ stateD * 0xCCE4C43F;
 
 		return (res ^ (res << 5 | res >>> 27) ^ (res << 19 | res >>> 13));
 	}
@@ -351,7 +353,7 @@ public class Brew32Random extends EnhancedRandom {
 		final int fc = stateC;
 		final int fd = stateD;
 
-		final int res = fa * 0x001DEF1D + fb * 0x0018BD49 + fc * 0x001DE7A9 + fd * 0x001BDC1D;
+		final int res = fa * 0xC5F768E7 ^ fb * 0xC21736F9 ^ fc * 0xC514D823 ^ fd * 0xCCE4C43F;
 
 		stateA = fb - fc | 0;
 		stateB = fa ^ fd;
@@ -367,7 +369,7 @@ public class Brew32Random extends EnhancedRandom {
 		final int fc = stateC;
 		final int fd = stateD;
 
-		final int res = fa * 0x001DEF1D + fb * 0x0018BD49 + fc * 0x001DE7A9 + fd * 0x001BDC1D;
+		final int res = fa * 0xC5F768E7 ^ fb * 0xC21736F9 ^ fc * 0xC514D823 ^ fd * 0xCCE4C43F;
 
 		stateA = fb - fc | 0;
 		stateB = fa ^ fd;
