@@ -15,14 +15,7 @@
  *
  */
 
-package com.github.tommyettinger.random.experimental;
-
-import com.github.tommyettinger.digital.Base;
-import com.github.tommyettinger.digital.BitConversion;
-import com.github.tommyettinger.random.EnhancedRandom;
-import com.github.tommyettinger.random.FourWheelRandom;
-import com.github.tommyettinger.random.TrimRandom;
-import com.github.tommyettinger.random.WhiskerRandom;
+package com.github.tommyettinger.random;
 
 import static com.github.tommyettinger.digital.BitConversion.imul;
 
@@ -52,7 +45,13 @@ import static com.github.tommyettinger.digital.BitConversion.imul;
  * <br>
  * This is called Choo32Random because it is choo-choo-chugging along at improving on the similar ChopRandom. It uses
  * a simpler state transition than ChopRandom, but a more complex output mixer so that it can be used as a sequence of
- * hashes of four values.
+ * hashes of four values. ChopRandom doesn't actually perform any mixing, which means if you only produce one generation
+ * from many generators, that entire group of results will be based entirely on one initial state in each generator.
+ * Choo32Random does do some mixing, does it on a combination of all states, and does it on the state after it
+ * transitions to the next in the sequence, rather than before. This lets it be used as a hash of 1 to 4 int inputs to
+ * get a sequence of random numbers as output. It also means this is slower to generate sequences of results than
+ * ChopRandom, though the first result will be actually random with this and probably will be very correlated with the
+ * initial state with ChopRandom.
  */
 @SuppressWarnings({"PointlessBitwiseExpression"}) // GWT actually needs these.
 public class Choo32Random extends EnhancedRandom {
@@ -89,6 +88,17 @@ public class Choo32Random extends EnhancedRandom {
 	 * @param seed any {@code long} value
 	 */
 	public Choo32Random(long seed) {
+		super(seed);
+		setSeed(seed);
+	}
+
+	/**
+	 * Creates a new Choo32Random with the given seed; all {@code long} values are permitted.
+	 * The seed will be passed to {@link #setSeed(int)} to attempt to adequately distribute the seed randomly.
+	 *
+	 * @param seed any {@code long} value
+	 */
+	public Choo32Random(int seed) {
 		super(seed);
 		setSeed(seed);
 	}
@@ -180,30 +190,42 @@ public class Choo32Random extends EnhancedRandom {
 	 */
 	@Override
 	public void setSeed (long seed) {
-		long x = (seed += 0x9E3779B97F4A7C15L);
-		x ^= x >>> 27;
-		x *= 0x3C79AC492BA7B653L;
-		x ^= x >>> 33;
-		x *= 0x1C69B3F74AC4AE35L;
-		stateA = (int)(x ^ x >>> 27);
-		x = (seed += 0x9E3779B97F4A7C15L);
-		x ^= x >>> 27;
-		x *= 0x3C79AC492BA7B653L;
-		x ^= x >>> 33;
-		x *= 0x1C69B3F74AC4AE35L;
-		stateB = (int)(x ^ x >>> 27);
-		x = (seed += 0x9E3779B97F4A7C15L);
-		x ^= x >>> 27;
-		x *= 0x3C79AC492BA7B653L;
-		x ^= x >>> 33;
-		x *= 0x1C69B3F74AC4AE35L;
-		stateC = (int)(x ^ x >>> 27);
-		x = (seed + 0x9E3779B97F4A7C15L);
-		x ^= x >>> 27;
-		x *= 0x3C79AC492BA7B653L;
-		x ^= x >>> 33;
-		x *= 0x1C69B3F74AC4AE35L;
-		stateD = (int)(x ^ x >>> 27);
+		int a = (int)seed ^ 0xDB4F0B91, b = (int)(seed >>> 16) ^ 0xBBE05633, c = (int)(seed >>> 32) ^ 0xA0F2EC75, d = (int)(seed >>> 48) ^ 0x89E18285;
+		a = imul(a ^ a >>> 16, 0x21f0aaad);
+		a = imul(a ^ a >>> 15, 0x735a2d97);
+		stateA = a ^ a >>> 15;
+		b = imul(b ^ b >>> 16, 0x21f0aaad);
+		b = imul(b ^ b >>> 15, 0x735a2d97);
+		stateB = b ^ b >>> 15;
+		c = imul(c ^ c >>> 16, 0x21f0aaad);
+		c = imul(c ^ c >>> 15, 0x735a2d97);
+		stateC = c ^ c >>> 15;
+		d = imul(d ^ d >>> 16, 0x21f0aaad);
+		d = imul(d ^ d >>> 15, 0x735a2d97);
+		stateD = d ^ d >>> 15;
+	}
+
+	/**
+	 * This initializes all 4 states of the generator to random values based on the given seed.
+	 * (2 to the 32) possible initial generator states can be produced here.
+	 *
+	 * @param seed the initial seed; may be any long
+	 */
+	public void setSeed (int seed) {
+		int a = seed ^ 0xDB4F0B91, b = (seed << 8 | seed >>> 24) ^ 0xBBE05633,
+				c = (seed << 16 | seed >>> 16) ^ 0xA0F2EC75, d = (seed << 24 | seed >>> 8) ^ 0x89E18285;
+		a = imul(a ^ a >>> 16, 0x21f0aaad);
+		a = imul(a ^ a >>> 15, 0x735a2d97);
+		stateA = a ^ a >>> 15;
+		b = imul(b ^ b >>> 16, 0x21f0aaad);
+		b = imul(b ^ b >>> 15, 0x735a2d97);
+		stateB = b ^ b >>> 15;
+		c = imul(c ^ c >>> 16, 0x21f0aaad);
+		c = imul(c ^ c >>> 15, 0x735a2d97);
+		stateC = c ^ c >>> 15;
+		d = imul(d ^ d >>> 16, 0x21f0aaad);
+		d = imul(d ^ d >>> 15, 0x735a2d97);
+		stateD = d ^ d >>> 15;
 	}
 
 	public long getStateA () {
@@ -458,62 +480,5 @@ public class Choo32Random extends EnhancedRandom {
 
 	public String toString () {
 		return "Choo32Random{" + "stateA=" + (stateA) + ", stateB=" + (stateB) + ", stateC=" + (stateC) + ", stateD=" + (stateD) + "}";
-	}
-
-
-	public static void main(String[] args) {
-		Choo32Random random = new Choo32Random(1L);
-		{
-			int n0 = random.nextInt();
-			int n1 = random.nextInt();
-			int n2 = random.nextInt();
-			int n3 = random.nextInt();
-			int n4 = random.nextInt();
-			int n5 = random.nextInt();
-			int p5 = random.previousInt();
-			int p4 = random.previousInt();
-			int p3 = random.previousInt();
-			int p2 = random.previousInt();
-			int p1 = random.previousInt();
-			int p0 = random.previousInt();
-			System.out.println(n0 == p0);
-			System.out.println(n1 == p1);
-			System.out.println(n2 == p2);
-			System.out.println(n3 == p3);
-			System.out.println(n4 == p4);
-			System.out.println(n5 == p5);
-			System.out.println(Base.BASE16.unsigned(n0) + " vs. " + Base.BASE16.unsigned(p0));
-			System.out.println(Base.BASE16.unsigned(n1) + " vs. " + Base.BASE16.unsigned(p1));
-			System.out.println(Base.BASE16.unsigned(n2) + " vs. " + Base.BASE16.unsigned(p2));
-			System.out.println(Base.BASE16.unsigned(n3) + " vs. " + Base.BASE16.unsigned(p3));
-			System.out.println(Base.BASE16.unsigned(n4) + " vs. " + Base.BASE16.unsigned(p4));
-			System.out.println(Base.BASE16.unsigned(n5) + " vs. " + Base.BASE16.unsigned(p5));
-		}
-		{
-			long n0 = random.nextLong();
-			long n1 = random.nextLong();
-			long n2 = random.nextLong();
-			long n3 = random.nextLong();
-			long n4 = random.nextLong();
-			long n5 = random.nextLong();
-			long p5 = random.previousLong();
-			long p4 = random.previousLong();
-			long p3 = random.previousLong();
-			long p2 = random.previousLong();
-			long p1 = random.previousLong();
-			long p0 = random.previousLong();
-			System.out.println(n0 == p0);
-			System.out.println(n1 == p1);
-			System.out.println(n2 == p2);
-			System.out.println(n3 == p3);
-			System.out.println(n4 == p4);
-			System.out.println(n5 == p5);
-			System.out.println(Base.BASE16.unsigned(n0) + " vs. " + Base.BASE16.unsigned(p0));
-			System.out.println(Base.BASE16.unsigned(n1) + " vs. " + Base.BASE16.unsigned(p1));
-			System.out.println(Base.BASE16.unsigned(n2) + " vs. " + Base.BASE16.unsigned(p2));
-			System.out.println(Base.BASE16.unsigned(n3) + " vs. " + Base.BASE16.unsigned(p3));
-			System.out.println(Base.BASE16.unsigned(n4) + " vs. " + Base.BASE16.unsigned(p4));
-			System.out.println(Base.BASE16.unsigned(n5) + " vs. " + Base.BASE16.unsigned(p5));
-		}
 	}
 }

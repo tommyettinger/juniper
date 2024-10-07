@@ -48,7 +48,6 @@ public final class Generators {
         randomList.add(new Rawr32Random(1, 1, 1, 1));
         randomList.add(new FrostyRandom(1, 1));
         randomList.add(new Xoroshiro128Speck1Random(1, 1));
-        randomList.add(new Chill32Random(1, 1, 1));
         randomList.add(new CupolaRandom(1, 1));
         randomList.add(new TwingeRandom(1, 1));
         randomList.add(new PactRandom(1, 1));
@@ -57,7 +56,6 @@ public final class Generators {
         randomList.add(new Taxon32Random(1, 1));
         randomList.add(new Silk32Random(1, 1));
         randomList.add(new Taxman32Random(1, 1));
-        randomList.add(new Choo32Random(1, 1, 1, 1));
         randomList.add(new Cover32Random(1, 1, 1, 1));
         randomList.add(new Brew32Random(1, 1, 1, 1));
         randomList.add(new Taupe32Random(1, 1));
