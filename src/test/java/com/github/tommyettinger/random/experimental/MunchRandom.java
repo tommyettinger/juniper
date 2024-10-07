@@ -17,6 +17,7 @@
 
 package com.github.tommyettinger.random.experimental;
 
+import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.digital.BitConversion;
 import com.github.tommyettinger.random.EnhancedRandom;
 
@@ -243,12 +244,10 @@ public class MunchRandom extends EnhancedRandom {
 	public long previousLong () {
 		long a = stateA;
 		long b = stateB;
+		long c = stateC;
 		stateA -= 0x9E3779B97F4A7C15L;
 		stateB -= BitConversion.countLeadingZeros(a);
 		stateC -= BitConversion.countLeadingZeros(a|b);
-		a = stateA;
-		b = stateB;
-		long c = stateC;
 		a = (a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ c);
 		a = (a ^ a >>> 27) * 0x3C79AC492BA7B653L;
 		a = (a ^ a >>> 33) * 0x1C69B3F74AC4AE35L;
@@ -293,34 +292,58 @@ public class MunchRandom extends EnhancedRandom {
 	}
 
 	public static void main(String[] args) {
-		MunchRandom random = new MunchRandom(1L);
-		long n0 = random.nextLong();
-		long n1 = random.nextLong();
-		long n2 = random.nextLong();
-		long n3 = random.nextLong();
-		long n4 = random.nextLong();
-		long n5 = random.nextLong();
-		long n6 = random.nextLong();
-		long p6 = random.previousLong();
-		long p5 = random.previousLong();
-		long p4 = random.previousLong();
-		long p3 = random.previousLong();
-		long p2 = random.previousLong();
-		long p1 = random.previousLong();
-		long p0 = random.previousLong();
-		System.out.println(n0 == p0);
-		System.out.println(n1 == p1);
-		System.out.println(n2 == p2);
-		System.out.println(n3 == p3);
-		System.out.println(n4 == p4);
-		System.out.println(n5 == p5);
-		System.out.println(n6 == p6);
-		System.out.println(n0 + " vs. " + p0);
-		System.out.println(n1 + " vs. " + p1);
-		System.out.println(n2 + " vs. " + p2);
-		System.out.println(n3 + " vs. " + p3);
-		System.out.println(n4 + " vs. " + p4);
-		System.out.println(n5 + " vs. " + p5);
-		System.out.println(n6 + " vs. " + p6);
+		EnhancedRandom random = new MunchRandom(1L);
+		{
+			int n0 = random.nextInt();
+			int n1 = random.nextInt();
+			int n2 = random.nextInt();
+			int n3 = random.nextInt();
+			int n4 = random.nextInt();
+			int n5 = random.nextInt();
+			int p5 = random.previousInt();
+			int p4 = random.previousInt();
+			int p3 = random.previousInt();
+			int p2 = random.previousInt();
+			int p1 = random.previousInt();
+			int p0 = random.previousInt();
+			System.out.println(n0 == p0);
+			System.out.println(n1 == p1);
+			System.out.println(n2 == p2);
+			System.out.println(n3 == p3);
+			System.out.println(n4 == p4);
+			System.out.println(n5 == p5);
+			System.out.println(Base.BASE16.unsigned(n0) + " vs. " + Base.BASE16.unsigned(p0));
+			System.out.println(Base.BASE16.unsigned(n1) + " vs. " + Base.BASE16.unsigned(p1));
+			System.out.println(Base.BASE16.unsigned(n2) + " vs. " + Base.BASE16.unsigned(p2));
+			System.out.println(Base.BASE16.unsigned(n3) + " vs. " + Base.BASE16.unsigned(p3));
+			System.out.println(Base.BASE16.unsigned(n4) + " vs. " + Base.BASE16.unsigned(p4));
+			System.out.println(Base.BASE16.unsigned(n5) + " vs. " + Base.BASE16.unsigned(p5));
+		}
+		{
+			long n0 = random.nextLong();
+			long n1 = random.nextLong();
+			long n2 = random.nextLong();
+			long n3 = random.nextLong();
+			long n4 = random.nextLong();
+			long n5 = random.nextLong();
+			long p5 = random.previousLong();
+			long p4 = random.previousLong();
+			long p3 = random.previousLong();
+			long p2 = random.previousLong();
+			long p1 = random.previousLong();
+			long p0 = random.previousLong();
+			System.out.println(n0 == p0);
+			System.out.println(n1 == p1);
+			System.out.println(n2 == p2);
+			System.out.println(n3 == p3);
+			System.out.println(n4 == p4);
+			System.out.println(n5 == p5);
+			System.out.println(Base.BASE16.unsigned(n0) + " vs. " + Base.BASE16.unsigned(p0));
+			System.out.println(Base.BASE16.unsigned(n1) + " vs. " + Base.BASE16.unsigned(p1));
+			System.out.println(Base.BASE16.unsigned(n2) + " vs. " + Base.BASE16.unsigned(p2));
+			System.out.println(Base.BASE16.unsigned(n3) + " vs. " + Base.BASE16.unsigned(p3));
+			System.out.println(Base.BASE16.unsigned(n4) + " vs. " + Base.BASE16.unsigned(p4));
+			System.out.println(Base.BASE16.unsigned(n5) + " vs. " + Base.BASE16.unsigned(p5));
+		}
 	}
 }
