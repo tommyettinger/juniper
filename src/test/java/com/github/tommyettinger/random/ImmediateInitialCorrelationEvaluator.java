@@ -19,6 +19,8 @@ package com.github.tommyettinger.random;
 import com.badlogic.gdx.files.FileHandle;
 import com.github.tommyettinger.digital.ArrayTools;
 import com.github.tommyettinger.digital.Base;
+import com.github.tommyettinger.ds.ObjectList;
+import com.github.tommyettinger.random.experimental.Taupe32Random;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -118,6 +120,8 @@ public class ImmediateInitialCorrelationEvaluator {
 //                new Xoroshiro128StarStarRandom(1, 1), new LaserRandom(1, 1), new FowlRandom(1, 1),
 //                new DistinctRandom(1));
 
+        ArrayList<EnhancedRandom> rs = ObjectList.with(new Taupe32Random(1, 1));
+
 //        ArrayList<EnhancedRandom> rs = ObjectList.with(
 //                new Bear32Random(1, 1, 1, 1), new Chill32Random(1, 1, 1), new ChopRandom(1, 1, 1, 1),
 //                new Jsf32Random(1, 1, 1, 1), new Respite32Random(1, 1, 1), new Resolute32Random(1, 1, 1),
@@ -125,7 +129,7 @@ public class ImmediateInitialCorrelationEvaluator {
 //                new Taxman32Random(1, 1), new Taxon32Random(1, 1), new Silk32Random(1, 1),
 //                new Choo32Random(1, 1, 1, 1));
 
-        ArrayList<EnhancedRandom> rs = Generators.randomList;
+//        ArrayList<EnhancedRandom> rs = Generators.randomList;
 
         rs.sort((l, r) -> l.getClass().getSimpleName().compareTo(r.getClass().getSimpleName()));
 //        rs.sort(Comparator.comparing(EnhancedRandom::getClass, Comparator.comparing(Class::getSimpleName)));
