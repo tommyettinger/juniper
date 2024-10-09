@@ -20,6 +20,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.github.tommyettinger.digital.ArrayTools;
 import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.ds.ObjectList;
+import com.github.tommyettinger.random.experimental.CupolaRandom;
 import com.github.tommyettinger.random.experimental.Taupe32Random;
 
 import java.io.File;
@@ -120,7 +121,10 @@ public class ImmediateInitialCorrelationEvaluator {
 //                new Xoroshiro128StarStarRandom(1, 1), new LaserRandom(1, 1), new FowlRandom(1, 1),
 //                new DistinctRandom(1));
 
-        ArrayList<EnhancedRandom> rs = ObjectList.with(new Taupe32Random(1, 1));
+        ArrayList<EnhancedRandom> rs = ObjectList.with(
+                new CupolaRandom(1, 1)
+//                new Taupe32Random(1, 1)
+        );
 
 //        ArrayList<EnhancedRandom> rs = ObjectList.with(
 //                new Bear32Random(1, 1, 1, 1), new Chill32Random(1, 1, 1), new ChopRandom(1, 1, 1, 1),
