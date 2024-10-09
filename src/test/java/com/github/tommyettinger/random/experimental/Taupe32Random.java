@@ -210,10 +210,10 @@ public class Taupe32Random extends EnhancedRandom {
     @Override
     public int nextInt() {
         int x = (stateA = stateA + 0x9E3779BD ^ 0xD1B54A32);
-        int y = stateB = stateB + BitConversion.countLeadingZeros(x) ^ imul(x, 0x91E10DA5);
+        int y = (stateB = stateB + imul(BitConversion.countLeadingZeros(x), 0x91E10DA5) ^ x);
         y += (x << y | x >>> -y);
-        y = imul(y ^ (y << 11 | y >>> 21) ^ (y << 20 | y >>> 22), 0xC5F768E7);
-        return y ^ y >>> 16;
+        y = imul(y ^ (y << 11 | y >>> 21) ^ (y << 23 | y >>> 20), 0xC5F768E7);
+        return y ^ y >>> 15;
     }
 
     @Override
@@ -226,11 +226,11 @@ public class Taupe32Random extends EnhancedRandom {
     public int previousInt() {
         int y = stateB;
         final int x = stateA;
-        stateB = (y ^ imul(x, 0x91E10DA5)) - BitConversion.countLeadingZeros(x) | 0; // no-op OR with 0 ensures this stays in-range in JS.
+        stateB = (y ^ x) - imul(BitConversion.countLeadingZeros(x), 0x91E10DA5) | 0; // no-op OR with 0 ensures this stays in-range in JS.
         stateA = (x ^ 0xD1B54A32) - 0x9E3779BD | 0;
         y += (x << y | x >>> -y);
-        y = imul(y ^ (y << 11 | y >>> 21) ^ (y << 20 | y >>> 22), 0xC5F768E7);
-        return y ^ y >>> 16;
+        y = imul(y ^ (y << 11 | y >>> 21) ^ (y << 23 | y >>> 20), 0xC5F768E7);
+        return y ^ y >>> 15;
     }
 
     @Override

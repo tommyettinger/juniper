@@ -122,8 +122,8 @@ public class ImmediateInitialCorrelationEvaluator {
 //                new DistinctRandom(1));
 
         ArrayList<EnhancedRandom> rs = ObjectList.with(
-                new CupolaRandom(1, 1)
-//                new Taupe32Random(1, 1)
+//                new CupolaRandom(1, 1)
+                new Taupe32Random(1, 1)
         );
 
 //        ArrayList<EnhancedRandom> rs = ObjectList.with(
