@@ -19,6 +19,7 @@ package com.github.tommyettinger.random;
 
 import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.digital.BitConversion;
+import com.github.tommyettinger.digital.Distributor;
 import com.github.tommyettinger.digital.MathTools;
 
 import java.io.Externalizable;
@@ -981,24 +982,24 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * normal distribution with mean {@code 0.0} and standard deviation
 	 * {@code 1.0}, is pseudorandomly generated and returned.
 	 * <p>
-	 * This does not use a rough approximation, which is a departure from earlier
-	 * versions; instead, it uses the Ziggurat method, which produces high-quality
-	 * variables very quickly. Like earlier versions that used probit() or a
+	 * Like earlier versions that used probit() or a
 	 * bit-counting approximation, this requests exactly one long from the
 	 * generator's sequence (using {@link #nextLong()}). This makes it different
 	 * from code like java.util.Random's nextGaussian() method, which can (rarely)
 	 * fetch a higher number of random doubles.
 	 * <p>
-	 * The implementation here was ported from code by Olaf Berstein, based on a
-	 * paper by Jorgen A. Doornik and some steps from a paper by George Marsaglia.
-	 * {@link Ziggurat} has more information, for the curious.
+	 * The implementation here is "Linnormal", a crude but typically effective and fast
+	 * way of mapping any {@code long} input to a Gaussian-distributed {@code double}
+	 * value with related distance between the input and the center of the domain, and
+	 * the output and the center of the range. {@link Distributor} in digital has more
+	 * information, for the curious.
 	 *
 	 * @return the next pseudorandom, Gaussian ("normally") distributed
 	 * {@code double} value with mean {@code 0.0} and standard deviation
 	 * {@code 1.0} from this random number generator's sequence
 	 */
 	public double nextGaussian () {
-		return Ziggurat.normal(nextLong());
+		return Distributor.normal(nextLong());
 	}
 
 	/**

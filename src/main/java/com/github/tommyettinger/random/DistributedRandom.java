@@ -18,6 +18,7 @@
 package com.github.tommyettinger.random;
 
 import com.github.tommyettinger.digital.Base;
+import com.github.tommyettinger.digital.Distributor;
 import com.github.tommyettinger.random.distribution.ContinuousUniformDistribution;
 import com.github.tommyettinger.random.distribution.Distribution;
 
@@ -209,12 +210,12 @@ public class DistributedRandom extends EnhancedRandom {
     }
 
     /**
-     * This runs {@link EnhancedRandom#probit(double)} on a distributed double this produces.
+     * This runs {@link Distributor#probit(double)} on a distributed double this produces.
      * @return a "Gaussian-ized" result of {@link #nextDouble()}
      */
     @Override
     public double nextGaussian() {
-        return EnhancedRandom.probit(nextExclusiveDouble());
+        return Distributor.probit(nextExclusiveDouble());
     }
 
     /**
