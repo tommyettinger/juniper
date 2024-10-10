@@ -1,5 +1,7 @@
 package com.github.tommyettinger;
 
+import com.github.tommyettinger.digital.BitConversion;
+
 import java.util.Random;
 
 /**
@@ -19,11 +21,15 @@ public final class Distributor {
     private Distributor() {}
 
     private static final double[] TABLE = new double[1024];
+    private static final double[] N_TABLE = new double[2049];
     private static final float[] TABLE_F = new float[1024];
 
     static {
-        for (int i = 0; i < 1024; i++) {
+        for (int i = 0; i < TABLE.length; i++) {
             TABLE_F[i] = (float) (TABLE[i] = probitHighPrecision(0.5 + i * 0x1p-11));
+        }
+        for (int i = 0; i < N_TABLE.length; i++) {
+            N_TABLE[i] = probitHighPrecision(0.5 + i * 0x1p-12);
         }
     }
 
@@ -176,6 +182,14 @@ public final class Distributor {
             v = t * (TABLE[top10 + 1] - s) + s;
         }
         return Math.copySign(v, sign);
+    }
+    public static double nermal(long n) {
+        final long sign = n >> 63;
+        n ^= sign;
+        final int top11 = (int) (n >>> 52);
+        final double s = N_TABLE[top11], e = N_TABLE[top11+1];
+        return Math.copySign(Math.sqrt(2.0 - BitConversion.longBitsToDouble(0x3FF0000000000000L | (n & 0xFFFFFFFFFFFFFL)))
+                * (s - e) + e, sign);
     }
     /**
      * Given any {@code int} as input, this maps the full range of non-negative int values to much of the non-negative

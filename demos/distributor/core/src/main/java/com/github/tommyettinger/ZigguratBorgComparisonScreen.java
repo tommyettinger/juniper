@@ -110,8 +110,8 @@ public class ZigguratBorgComparisonScreen extends ScreenAdapter {
         if((System.currentTimeMillis() >>> 13 & 1) == 0) {
             for (int i = 0; i < RUNS; i++) {
                 int m = (int) ((dist.getMu() + dist.getSigma() *
-//                    Distributor.probitHighPrecision(dist.generator.nextExclusiveDouble())
-                        Distributor.normalF(dist.generator.nextInt())//| 0x7FE0000000000000L
+//                    Borg.probitHighPrecision(dist.generator.nextExclusiveDouble())
+                        Distributor.nermal(dist.generator.nextLong())// | 0x7FC0000000000000L)
                 )
                         * 128 + 256);
                 if (m >= 0 && m < 512)
@@ -120,6 +120,18 @@ public class ZigguratBorgComparisonScreen extends ScreenAdapter {
                         amounts[m]++;
                 } else offGraph++;
             }
+//            for (int i = 0; i < RUNS; i++) {
+//                int m = (int) ((dist.getMu() + dist.getSigma() *
+////                    Distributor.probitHighPrecision(dist.generator.nextExclusiveDouble())
+//                        Distributor.normalF(dist.generator.nextInt())//| 0x7FE0000000000000L
+//                )
+//                        * 128 + 256);
+//                if (m >= 0 && m < 512)
+//                {
+//                    if((m & 1) == 1)
+//                        amounts[m]++;
+//                } else offGraph++;
+//            }
         } else {
             for (int i = 0; i < RUNS; i++) {
                 int m = (int) ((dist.getMu() + dist.getSigma() *
@@ -131,7 +143,8 @@ public class ZigguratBorgComparisonScreen extends ScreenAdapter {
                 {
                     if((m & 1) == 1)
                         amounts[m]++;
-                } else offGraph++;            }
+                } else offGraph++;
+            }
 
         }
         renderer.begin(camera.combined, GL20.GL_LINES);
