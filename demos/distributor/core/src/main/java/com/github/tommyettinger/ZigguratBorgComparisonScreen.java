@@ -111,7 +111,7 @@ public class ZigguratBorgComparisonScreen extends ScreenAdapter {
             for (int i = 0; i < RUNS; i++) {
                 int m = (int) ((dist.getMu() + dist.getSigma() *
 //                    Borg.probitHighPrecision(dist.generator.nextExclusiveDouble())
-                        Distributor.nermal(dist.generator.nextLong())// | 0x7FC0000000000000L)
+                        com.github.tommyettinger.random.Ziggurat.normal(dist.generator.nextLong())// | 0x7FC0000000000000L)
                 )
                         * 128 + 256);
                 if (m >= 0 && m < 512)
@@ -182,7 +182,7 @@ public class ZigguratBorgComparisonScreen extends ScreenAdapter {
         batch.begin();
         font.draw(batch, Stringf.format("ZigguratBorgComparisonScreen with A=%.3f, B=%.3f; C=%.3f; median=%.3f at %d FPS; %s with %d off-graph",
                 a, b, c, dist.getMedian(), Gdx.graphics.getFramesPerSecond(),
-                        ((System.currentTimeMillis() >>> 13 & 1) == 0) ? "FLOAT" : "DOUBLE", offGraph),
+                        ((System.currentTimeMillis() >>> 13 & 1) == 0) ? "ZIG" : "LIN", offGraph),
                 64, 522, 256+128, Align.center, true);
         font.draw(batch, "Lower parameters A/B/C by holding a, b, or c;\nhold Shift and A/B/C to raise.", 64, 500-6, 256+128, Align.center, true);
         font.draw(batch,

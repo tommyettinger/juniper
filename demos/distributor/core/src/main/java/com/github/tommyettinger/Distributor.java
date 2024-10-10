@@ -186,11 +186,25 @@ public final class Distributor {
     public static double nermal(long n) {
         final long sign = n >> 63;
         n ^= sign;
-        final int top11 = (int) (n >>> 52);
-        final double s = N_TABLE[top11], e = N_TABLE[top11+1];
-        return Math.copySign(Math.sqrt(2.0 - BitConversion.longBitsToDouble(0x3FF0000000000000L | (n & 0xFFFFFFFFFFFFFL)))
-                * (s - e) + e, sign);
+        final int top10 = (int) (n >>> 53);
+        // slightly faster on desktop, but probably much slower on GWT.
+        final double t = BitConversion.longBitsToDouble(0x3FF0000000000000L | (n & 0x1FFFFFFFFFFFFFL)) - 1.0, v;
+        if (top10 == 1023) {
+            v = t * t * (8.375 - 3.297193345691938) + 3.297193345691938;
+        } else {
+            final double s = TABLE[top10];
+            v = t * (TABLE[top10 + 1] - s) + s;
+        }
+        return Math.copySign(v, sign);
     }
+//    public static double nermal(long n) {
+//        final long sign = n >> 63;
+//        n ^= sign;
+//        final int top11 = (int) (n >>> 52);
+//        final double s = N_TABLE[top11], e = N_TABLE[top11+1];
+//        return Math.copySign(Math.sqrt(2.0 - BitConversion.longBitsToDouble(0x3FF0000000000000L | (n & 0xFFFFFFFFFFFFFL)))
+//                * (s - e) + e, sign);
+//    }
     /**
      * Given any {@code int} as input, this maps the full range of non-negative int values to much of the non-negative
      * half of the range of the normal distribution with standard deviation 1f, and similarly maps all negative int

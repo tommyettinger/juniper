@@ -17,6 +17,7 @@
 
 package com.github.tommyettinger.random;
 
+import com.github.tommyettinger.digital.Distributor;
 import com.github.tommyettinger.digital.Hasher;
 
 import java.util.Random;
@@ -220,7 +221,7 @@ public class VanDerCorputQuasiRandom extends EnhancedRandom {
 //		return super.nextGaussian();
 //		return probit(nextDouble());
 //		return probit(((state & 0x1FFF_FFFFF_FFFFFL) ^ nextLong() >>> 11) * 0x1p-53);
-		return Ziggurat.normal(Hasher.randomize3(++state));
+		return Distributor.normal(Long.reverse(++state));
 //		return Ziggurat.normal(nextLong());
 	}
 
