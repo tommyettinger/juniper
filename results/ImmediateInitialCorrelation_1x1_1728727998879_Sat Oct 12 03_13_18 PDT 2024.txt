@@ -1,0 +1,1 @@
+[Immediate] Lowest mode: 116.0000 has mean amount 0.0303627252  PASS 👍 for Taupe32Random

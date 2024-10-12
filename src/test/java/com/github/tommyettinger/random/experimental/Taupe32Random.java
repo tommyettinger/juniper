@@ -18,19 +18,20 @@
 package com.github.tommyettinger.random.experimental;
 
 import com.github.tommyettinger.digital.Base;
-import com.github.tommyettinger.digital.BitConversion;
 import com.github.tommyettinger.random.EnhancedRandom;
 
+import static com.github.tommyettinger.digital.BitConversion.countLeadingZeros;
 import static com.github.tommyettinger.digital.BitConversion.imul;
 
 /**
  * A random number generator that is optimized for performance on 32-bit machines and with Google Web Toolkit, this
- * has a period of exactly 2 to the 64.
+ * has a period of exactly 2 to the 64. It passes 64TB of PractRand testing with no anomalies.
  * <br>
  * This is meant for the somewhat-unusual task of providing a different (short) sequence of random values for any pair
  * of states given to it, with it especially important that numerically-close state pairs produce different sequences.
- * It also was meant to work on GWT without needing super-sourcing; most generators either use long math and so are much
- * slower on GWT, or use int math but need super-sourcing to avoid eventually losing precision.
+ * Unlike {@link com.github.tommyettinger.random.Taxon32Random}, this generator does use super-sourced functions on GWT:
+ * {@link com.github.tommyettinger.digital.BitConversion#imul(int, int)} and
+ * {@link com.github.tommyettinger.digital.BitConversion#countLeadingZeros(int)} are important to how this works.
  */
 public class Taupe32Random extends EnhancedRandom {
     /**
@@ -43,14 +44,14 @@ public class Taupe32Random extends EnhancedRandom {
     protected int stateB;
 
     /**
-     * Creates a new Taxman32Random with a random state.
+     * Creates a new Taupe32Random with a random state.
      */
     public Taupe32Random() {
         this((int) EnhancedRandom.seedFromMath(), (int) EnhancedRandom.seedFromMath());
     }
 
     /**
-     * Creates a new Taxman32Random with the given seed; all {@code long} values are permitted.
+     * Creates a new Taupe32Random with the given seed; all {@code long} values are permitted.
      * The seed will be passed to {@link #setSeed(long)} to attempt to adequately distribute the seed randomly.
      *
      * @param seed any {@code long} value
@@ -61,7 +62,7 @@ public class Taupe32Random extends EnhancedRandom {
     }
 
     /**
-     * Creates a new Taxman32Random with the given two states; all {@code int} values are permitted.
+     * Creates a new Taupe32Random with the given two states; all {@code int} values are permitted.
      * These states will be used verbatim.
      *
      * @param stateA any {@code int} value
@@ -210,10 +211,10 @@ public class Taupe32Random extends EnhancedRandom {
     @Override
     public int nextInt() {
         int x = (stateA = stateA + 0x9E3779BD ^ 0xD1B54A32);
-        int y = (stateB = stateB + imul(BitConversion.countLeadingZeros(x), 0x91E10DA5) ^ x);
+        int y = (stateB = stateB + imul(countLeadingZeros(x), 0x91E10DA5) ^ x);
         y += (x << y | x >>> -y);
-        y = imul(y ^ (y << 11 | y >>> 21) ^ (y << 23 | y >>> 20), 0xC5F768E7);
-        return y ^ y >>> 15;
+        y = imul(y ^ y >>> 15, 0xD168AAAD);
+        return y ^ (y << 11 | y >>> 21) ^ (y << 23 | y >>> 9);
     }
 
     @Override
@@ -226,11 +227,11 @@ public class Taupe32Random extends EnhancedRandom {
     public int previousInt() {
         int y = stateB;
         final int x = stateA;
-        stateB = (y ^ x) - imul(BitConversion.countLeadingZeros(x), 0x91E10DA5) | 0; // no-op OR with 0 ensures this stays in-range in JS.
+        stateB = (y ^ x) - imul(countLeadingZeros(x), 0x91E10DA5) | 0; // no-op OR with 0 ensures this stays in-range in JS.
         stateA = (x ^ 0xD1B54A32) - 0x9E3779BD | 0;
         y += (x << y | x >>> -y);
-        y = imul(y ^ (y << 11 | y >>> 21) ^ (y << 23 | y >>> 20), 0xC5F768E7);
-        return y ^ y >>> 15;
+        y = imul(y ^ y >>> 15, 0xD168AAAD);
+        return y ^ (y << 11 | y >>> 21) ^ (y << 23 | y >>> 9);
     }
 
     @Override
@@ -313,7 +314,7 @@ public class Taupe32Random extends EnhancedRandom {
     }
 
     public String toString() {
-        return "Taxman32Random{" + "stateA=" + (stateA) + ", stateB=" + (stateB) + "}";
+        return "Taupe32Random{" + "stateA=" + (stateA) + ", stateB=" + (stateB) + "}";
     }
 
     public static void main(String[] args) {
