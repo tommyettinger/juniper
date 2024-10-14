@@ -28,9 +28,9 @@ import com.github.tommyettinger.random.EnhancedRandom;
  * This implements all optional methods in EnhancedRandom except {@link #skip(long)}; it does implement
  * {@link #previousLong()} and {@link #previousInt()} without using skip().
  * <br>
- * The name comes from how this has no multiplication, and is small.
+ * The name comes from how this has no multiplication.
  */
-public class Gnome32Random extends EnhancedRandom {
+public class Nuu32Random extends EnhancedRandom {
     /**
      * The first state; can be any int.
      */
@@ -43,7 +43,7 @@ public class Gnome32Random extends EnhancedRandom {
     /**
      * Creates a new Gnome32Random with a random state.
      */
-    public Gnome32Random() {
+    public Nuu32Random() {
         this((int)((Math.random() - 0.5) * 0x1p32), (int)((Math.random() - 0.5) * 0x1p32));
     }
 
@@ -53,7 +53,7 @@ public class Gnome32Random extends EnhancedRandom {
      *
      * @param seed any {@code long} value
      */
-    public Gnome32Random(long seed) {
+    public Nuu32Random(long seed) {
         super(seed);
         setSeed(seed);
     }
@@ -65,7 +65,7 @@ public class Gnome32Random extends EnhancedRandom {
      * @param stateA any {@code int} value
      * @param stateB any {@code int} value
      */
-    public Gnome32Random(int stateA, int stateB) {
+    public Nuu32Random(int stateA, int stateB) {
         super(stateA);
         this.stateA = stateA;
         this.stateB = stateB;
@@ -73,7 +73,7 @@ public class Gnome32Random extends EnhancedRandom {
 
     @Override
     public String getTag() {
-        return "GnmR";
+        return "NuuR";
     }
 
     /**
@@ -205,10 +205,10 @@ public class Gnome32Random extends EnhancedRandom {
         int x = (stateA = stateA + 0x9E3779BD ^ 0xD1B54A32);
         int t = x & 0xDB4F0B96 - x;
         int y = (stateB = stateB + (t << 1 | t >>> 31) ^ 0xAF723596);
-//        x += y = (y << x | y >>> -x);
-//        y += x = (x << y | x >>> -y);
-        x += y ^= (y << x | y >>> -x) ^ (y << 31 - x | y >>> 1 + x);
-        y += x ^= (x << y | x >>> -y) ^ (x << 31 - y | x >>> 1 + y);
+        x -= y = (y << x | y >>> -x);
+        y -= x = (x << y | x >>> -y);
+        x -= y = (y << x | y >>> -x);
+        y -= x = (x << y | x >>> -y);
         return x ^ (y << 13 | y >>> 19);
 //        return (y ^ (y << 3 | y >>> 29) ^ (y << 24 | y >>> 8));
     }
@@ -226,8 +226,10 @@ public class Gnome32Random extends EnhancedRandom {
         int t = x & 0xDB4F0B96 - x;
         stateB = (y ^ 0xAF723596) - (t << 1 | t >>> 31) | 0; // no-op OR with 0 ensures this stays in-range in JS.
         stateA = (x ^ 0xD1B54A32) - 0x9E3779BD | 0;
-        x += y ^= (y << x | y >>> -x) ^ (y << 31 - x | y >>> 1 + x);
-        y += x ^= (x << y | x >>> -y) ^ (x << 31 - y | x >>> 1 + y);
+        x -= y = (y << x | y >>> -x);
+        y -= x = (x << y | x >>> -y);
+        x -= y = (y << x | y >>> -x);
+        y -= x = (x << y | x >>> -y);
         return x ^ (y << 13 | y >>> 19);
     }
 
@@ -294,8 +296,8 @@ public class Gnome32Random extends EnhancedRandom {
     }
 
     @Override
-    public Gnome32Random copy() {
-        return new Gnome32Random(stateA, stateB);
+    public Nuu32Random copy() {
+        return new Nuu32Random(stateA, stateB);
     }
 
     @Override
@@ -305,7 +307,7 @@ public class Gnome32Random extends EnhancedRandom {
         if (o == null || getClass() != o.getClass())
             return false;
 
-        Gnome32Random that = (Gnome32Random) o;
+        Nuu32Random that = (Nuu32Random) o;
 
         return stateA == that.stateA && stateB == that.stateB;
     }
@@ -315,7 +317,7 @@ public class Gnome32Random extends EnhancedRandom {
     }
 
     public static void main(String[] args) {
-        EnhancedRandom random = new Gnome32Random(1L);
+        EnhancedRandom random = new Nuu32Random(1L);
         {
             int n0 = random.nextInt();
             int n1 = random.nextInt();
