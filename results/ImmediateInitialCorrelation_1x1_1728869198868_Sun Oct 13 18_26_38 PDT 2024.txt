@@ -1,0 +1,1 @@
+[Immediate] Lowest mode: 116.0000 has mean amount 0.0302610397  PASS 👍 for Gnome32Random

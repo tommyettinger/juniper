@@ -73,7 +73,7 @@ public class Gnome32Random extends EnhancedRandom {
 
     @Override
     public String getTag() {
-        return "TxnR";
+        return "GnmR";
     }
 
     /**
@@ -173,29 +173,31 @@ public class Gnome32Random extends EnhancedRandom {
 
     @Override
     public long nextLong() {
-        int x = (stateA = stateA + 0x9E3779BD ^ 0xD1B54A32);
-        int t = x & 0xDB4F0B96 - x;
-        int y = (stateB = stateB + (t << 1 | t >>> 31) ^ 0xAF723596);
-        x += y = (y << x | y >>> -x);
-        y +=     (x << y | x >>> -y);
-        int hi = (y ^ (y << 3 | y >>> 29) ^ (y << 24 | y >>> 8));
-        x = (stateA = stateA + 0x9E3779BD ^ 0xD1B54A32);
-        t = x & 0xDB4F0B96 - x;
-        y = (stateB = stateB + (t << 1 | t >>> 31) ^ 0xAF723596);
-        x += y = (y << x | y >>> -x);
-        y +=     (x << y | x >>> -y);
-        int lo = (y ^ (y << 3 | y >>> 29) ^ (y << 24 | y >>> 8));
-        return (long) hi << 32 ^ lo;
+//        int x = (stateA = stateA + 0x9E3779BD ^ 0xD1B54A32);
+//        int t = x & 0xDB4F0B96 - x;
+//        int y = (stateB = stateB + (t << 1 | t >>> 31) ^ 0xAF723596);
+//        x += y = (y << x | y >>> -x);
+//        y +=     (x << y | x >>> -y);
+//        int hi = (y ^ (y << 3 | y >>> 29) ^ (y << 24 | y >>> 8));
+//        x = (stateA = stateA + 0x9E3779BD ^ 0xD1B54A32);
+//        t = x & 0xDB4F0B96 - x;
+//        y = (stateB = stateB + (t << 1 | t >>> 31) ^ 0xAF723596);
+//        x += y = (y << x | y >>> -x);
+//        y +=     (x << y | x >>> -y);
+//        int lo = (y ^ (y << 3 | y >>> 29) ^ (y << 24 | y >>> 8));
+//        return (long) hi << 32 ^ lo;
+        return (long) nextInt() << 32 ^ nextInt();
     }
 
     @Override
     public int next(int bits) {
-        int x = (stateA = stateA + 0x9E3779BD ^ 0xD1B54A32);
-        int t = x & 0xDB4F0B96 - x;
-        int y = (stateB = stateB + (t << 1 | t >>> 31) ^ 0xAF723596);
-        x += y = (y << x | y >>> -x);
-        y +=     (x << y | x >>> -y);
-        return (y ^ (y << 3 | y >>> 29) ^ (y << 24 | y >>> 8)) >>> (32 - bits);
+        return nextInt() >>> (32 - bits);
+//        int x = (stateA = stateA + 0x9E3779BD ^ 0xD1B54A32);
+//        int t = x & 0xDB4F0B96 - x;
+//        int y = (stateB = stateB + (t << 1 | t >>> 31) ^ 0xAF723596);
+//        x += y = (y << x | y >>> -x);
+//        y +=     (x << y | x >>> -y);
+//        return (y ^ (y << 3 | y >>> 29) ^ (y << 24 | y >>> 8)) >>> (32 - bits);
     }
 
     @Override
@@ -203,9 +205,10 @@ public class Gnome32Random extends EnhancedRandom {
         int x = (stateA = stateA + 0x9E3779BD ^ 0xD1B54A32);
         int t = x & 0xDB4F0B96 - x;
         int y = (stateB = stateB + (t << 1 | t >>> 31) ^ 0xAF723596);
-        x += y = (y << x | y >>> -x);
-        y +=     (x << y | x >>> -y);
-        return (y ^ (y << 3 | y >>> 29) ^ (y << 24 | y >>> 8));
+        x += y ^= (y << x | y >>> -x) ^ (y << ~x | y >>> -~x);
+        y += x ^  (x << y | x >>> -y) ^ (x << ~y | x >>> -~y);
+        return y ^ y >>> 14;
+//        return (y ^ (y << 3 | y >>> 29) ^ (y << 24 | y >>> 8));
     }
 
     @Override
@@ -221,9 +224,9 @@ public class Gnome32Random extends EnhancedRandom {
         int t = x & 0xDB4F0B96 - x;
         stateB = (y ^ 0xAF723596) - (t << 1 | t >>> 31) | 0; // no-op OR with 0 ensures this stays in-range in JS.
         stateA = (x ^ 0xD1B54A32) - 0x9E3779BD | 0;
-        x += y = (y << x | y >>> -x);
-        y +=     (x << y | x >>> -y);
-        return (y ^ (y << 3 | y >>> 29) ^ (y << 24 | y >>> 8));
+        x += y ^= (y << x | y >>> -x) ^ (y << ~x | y >>> -~x);
+        y += x ^  (x << y | x >>> -y) ^ (x << ~y | x >>> -~y);
+        return y ^ y >>> 14;
     }
 
     @Override

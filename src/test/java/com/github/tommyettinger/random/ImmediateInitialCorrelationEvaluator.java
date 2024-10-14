@@ -21,6 +21,7 @@ import com.github.tommyettinger.digital.ArrayTools;
 import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.ds.ObjectList;
 import com.github.tommyettinger.random.experimental.CupolaRandom;
+import com.github.tommyettinger.random.experimental.Gnome32Random;
 import com.github.tommyettinger.random.experimental.Taupe32Random;
 
 import java.io.File;
@@ -123,7 +124,7 @@ public class ImmediateInitialCorrelationEvaluator {
 
         ArrayList<EnhancedRandom> rs = ObjectList.with(
 //                new CupolaRandom(1, 1)
-                new Taupe32Random(1, 1)
+                new Gnome32Random(1, 1)
         );
 
 //        ArrayList<EnhancedRandom> rs = ObjectList.with(
