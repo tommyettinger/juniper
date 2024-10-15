@@ -60,7 +60,7 @@ public final class Generators {
         randomList.add(new Brew32Random(1, 1, 1, 1));
         randomList.add(new Taupe32Random(1, 1));
         randomList.add(new Gnome32Random(1, 1));
-        randomList.add(new Nuu32Random(1, 1));
+//        randomList.add(new Nuu32Random(1, 1));
     }
     public static int randomCount = randomList.size();
 

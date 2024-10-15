@@ -208,9 +208,8 @@ public class Gnome32Random extends EnhancedRandom {
 //        x += y = (y << x | y >>> -x);
 //        y += x = (x << y | x >>> -y);
         x += y ^= (y << x | y >>> -x) ^ (y << 31 - x | y >>> 1 + x);
-        y += x ^= (x << y | x >>> -y) ^ (x << 31 - y | x >>> 1 + y);
-        return x ^ (y << 13 | y >>> 19);
-//        return (y ^ (y << 3 | y >>> 29) ^ (y << 24 | y >>> 8));
+        y += x ^  (x << y | x >>> -y) ^ (x << 31 - y | x >>> 1 + y);
+        return (y ^ (y << 3 | y >>> 29) ^ (y << 24 | y >>> 8));
     }
 
     @Override
@@ -227,8 +226,8 @@ public class Gnome32Random extends EnhancedRandom {
         stateB = (y ^ 0xAF723596) - (t << 1 | t >>> 31) | 0; // no-op OR with 0 ensures this stays in-range in JS.
         stateA = (x ^ 0xD1B54A32) - 0x9E3779BD | 0;
         x += y ^= (y << x | y >>> -x) ^ (y << 31 - x | y >>> 1 + x);
-        y += x ^= (x << y | x >>> -y) ^ (x << 31 - y | x >>> 1 + y);
-        return x ^ (y << 13 | y >>> 19);
+        y += x ^  (x << y | x >>> -y) ^ (x << 31 - y | x >>> 1 + y);
+        return (y ^ (y << 3 | y >>> 29) ^ (y << 24 | y >>> 8));
     }
 
     @Override
