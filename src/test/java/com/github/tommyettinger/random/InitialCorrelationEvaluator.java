@@ -116,7 +116,7 @@ public class InitialCorrelationEvaluator {
 //                new Rawr32Random(1, 1, 1, 1), new Recipe32Random(1, 1, 1), new Xoshiro128PlusPlusRandom(1, 1, 1, 1),
 //                new Taxman32Random(1, 1), new Taxon32Random(1, 1), new Silk32Random(1, 1),
 //                new CupolaRandom(1, 1)
-                new Gnome32Random(1, 1)
+                new Fluff32Random(1, 1)
         );
 //        ArrayList<EnhancedRandom> rs = Generators.randomList;
 

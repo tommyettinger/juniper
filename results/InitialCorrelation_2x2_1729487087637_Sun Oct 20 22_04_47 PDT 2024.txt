@@ -1,0 +1,1 @@
+Lowest mode: 116.0000 has mean amount 0.0311132818  PASS 👍 for Fluff32Random
