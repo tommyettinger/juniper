@@ -70,7 +70,7 @@ public class Fluff32Random extends EnhancedRandom {
 
     @Override
     public String getTag() {
-        return "TxmR";
+        return "FlfR";
     }
 
     /**
@@ -188,8 +188,8 @@ public class Fluff32Random extends EnhancedRandom {
     @Override
     public int nextInt() {
         int x = (stateA = stateA + 0x9E3779BD ^ 0xD1B54A32);
-        int y = (stateB = stateB + countLeadingZeros(x) + 0x91E10DA5 ^ x);
-        x ^= (y << 14 | y >>> 18);
+        int y = (stateB = stateB + countLeadingZeros(x) + 0xC5F768E7 ^ x);
+        x ^= (y << 17 | y >>> 15);
         x = imul(x, 0x2C1B3C6D);
         x ^= x >>> 12;
         x = imul(x, 0x297A2D39);
@@ -197,11 +197,11 @@ public class Fluff32Random extends EnhancedRandom {
         return x;
 
 //uint32_t x = (stateA = stateA + 0x9E3779BD ^ 0xD1B54A32);
-//uint32_t y = (stateB = stateB + __lzcnt(x) + 0x91E10DA5 ^ x);
-//x ^= rotate32(y, 14);
-//x *= 0x2c1b3c6d;
+//uint32_t y = (stateB = stateB + __lzcnt(x) + 0xC5F768E7 ^ x);
+//x ^= rotate32(y, 17);
+//x *= 0x2C1B3C6D;
 //x ^= x >> 12;
-//x *= 0x297a2d39;
+//x *= 0x297A2D39;
 //x ^= x >> 15;
 //return x;
 
@@ -217,9 +217,9 @@ public class Fluff32Random extends EnhancedRandom {
     public int previousInt() {
         int y = stateB;
         int x = stateA;
-        stateB = (y ^ x) - countLeadingZeros(x) - 0x91E10DA5 | 0; // no-op OR with 0 ensures this stays in-range in JS.
+        stateB = (y ^ x) - countLeadingZeros(x) - 0xC5F768E7 | 0; // no-op OR with 0 ensures this stays in-range in JS.
         stateA = (x ^ 0xD1B54A32) - 0x9E3779BD | 0;
-        x ^= (y << 14 | y >>> 18);
+        x ^= (y << 17 | y >>> 15);
         x = imul(x, 0x2C1B3C6D);
         x ^= x >>> 12;
         x = imul(x, 0x297A2D39);
