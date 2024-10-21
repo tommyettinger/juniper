@@ -20,20 +20,14 @@ package com.github.tommyettinger.random.experimental;
 import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.random.EnhancedRandom;
 
+import static com.github.tommyettinger.digital.BitConversion.countLeadingZeros;
+import static com.github.tommyettinger.digital.BitConversion.imul;
+
 /**
- * A random number generator that is optimized for performance on 32-bit machines and with Google Web Toolkit, this uses
- * only the most portable operations (including compatibility with JS), uses no multiplication, and has a period of
- * exactly 2 to the 64.
- * <br>
- * This passes 64TB of PractRand testing with no anomalies, and passes initial correlation evaluation (ICE) testing
- * in juniper.
- * <br>
- * This implements all optional methods in EnhancedRandom except {@link #skip(long)}; it does implement
- * {@link #previousLong()} and {@link #previousInt()} without using skip().
- * <br>
- * The name comes from how this has no multiplication, and is small.
+ * A random number generator that is optimized for performance on 32-bit machines and with Google Web Toolkit, this
+ * has a period of exactly 2 to the 64. It passes 64TB of PractRand testing with no anomalies.
  */
-public class Gnome32Random extends EnhancedRandom {
+public class Fluff32Random extends EnhancedRandom {
     /**
      * The first state; can be any int.
      */
@@ -44,31 +38,31 @@ public class Gnome32Random extends EnhancedRandom {
     protected int stateB;
 
     /**
-     * Creates a new Gnome32Random with a random state.
+     * Creates a new Fluff32Random with a random state.
      */
-    public Gnome32Random() {
-        this((int)((Math.random() - 0.5) * 0x1p32), (int)((Math.random() - 0.5) * 0x1p32));
+    public Fluff32Random() {
+        this((int) EnhancedRandom.seedFromMath(), (int) EnhancedRandom.seedFromMath());
     }
 
     /**
-     * Creates a new Gnome32Random with the given seed; all {@code long} values are permitted.
+     * Creates a new Fluff32Random with the given seed; all {@code long} values are permitted.
      * The seed will be passed to {@link #setSeed(long)} to attempt to adequately distribute the seed randomly.
      *
      * @param seed any {@code long} value
      */
-    public Gnome32Random(long seed) {
+    public Fluff32Random(long seed) {
         super(seed);
         setSeed(seed);
     }
 
     /**
-     * Creates a new Gnome32Random with the given two states; all {@code int} values are permitted.
+     * Creates a new Fluff32Random with the given two states; all {@code int} values are permitted.
      * These states will be used verbatim.
      *
      * @param stateA any {@code int} value
      * @param stateB any {@code int} value
      */
-    public Gnome32Random(int stateA, int stateB) {
+    public Fluff32Random(int stateA, int stateB) {
         super(stateA);
         this.stateA = stateA;
         this.stateB = stateB;
@@ -76,7 +70,7 @@ public class Gnome32Random extends EnhancedRandom {
 
     @Override
     public String getTag() {
-        return "GnmR";
+        return "TxmR";
     }
 
     /**
@@ -130,6 +124,13 @@ public class Gnome32Random extends EnhancedRandom {
      */
     @Override
     public void setSeed(long seed) {
+        seed ^= seed >>> 32;
+        seed *= 0xBEA225F9EB34556DL;
+        seed ^= seed >>> 29;
+        seed *= 0xBEA225F9EB34556DL;
+        seed ^= seed >>> 32;
+        seed *= 0xBEA225F9EB34556DL;
+        seed ^= seed >>> 29;
         stateA = (int) seed;
         stateB = (int) (seed >>> 32);
     }
@@ -176,61 +177,39 @@ public class Gnome32Random extends EnhancedRandom {
 
     @Override
     public long nextLong() {
-        int x = (stateA = stateA + 0x9E3779BD ^ 0xD1B54A32);
-        int t = x & 0xDB4F0B96 - x;
-        int y = (stateB = stateB + (t << 1 | t >>> 31) ^ 0xAF723596);
-        x += y ^= (y << x | y >>> -x) ^ (y << 31 - x | y >>> 1 + x);
-        y += x ^  (x << y | x >>> -y) ^ (x << 31 - y | x >>> 1 + y);
-        int hi = (y ^ (y << 3 | y >>> 29) ^ (y << 24 | y >>> 8));
-        x = (stateA = stateA + 0x9E3779BD ^ 0xD1B54A32);
-        t = x & 0xDB4F0B96 - x;
-        y = (stateB = stateB + (t << 1 | t >>> 31) ^ 0xAF723596);
-        x += y ^= (y << x | y >>> -x) ^ (y << 31 - x | y >>> 1 + x);
-        y += x ^  (x << y | x >>> -y) ^ (x << 31 - y | x >>> 1 + y);
-        int lo = (y ^ (y << 3 | y >>> 29) ^ (y << 24 | y >>> 8));
-        return (long) hi << 32 ^ lo;
+        return (long) nextInt() << 32 ^ nextInt();
     }
 
     @Override
     public int next(int bits) {
-        int x = (stateA = stateA + 0x9E3779BD ^ 0xD1B54A32);
-        int t = x & 0xDB4F0B96 - x;
-        int y = (stateB = stateB + (t << 1 | t >>> 31) ^ 0xAF723596);
-        x += y ^= (y << x | y >>> -x) ^ (y << 31 - x | y >>> 1 + x);
-        y += x ^  (x << y | x >>> -y) ^ (x << 31 - y | x >>> 1 + y);
-        return (y ^ (y << 3 | y >>> 29) ^ (y << 24 | y >>> 8)) >>> (32 - bits);
+        return nextInt() >>> (32 - bits);
     }
 
     @Override
     public int nextInt() {
         int x = (stateA = stateA + 0x9E3779BD ^ 0xD1B54A32);
-        int t = x & 0xDB4F0B96 - x;
-        int y = (stateB = stateB + (t << 1 | t >>> 31) ^ 0xAF723596);
-        x += y ^= (y << x | y >>> -x) ^ (y << 31 - x | y >>> 1 + x);
-        y += x ^  (x << y | x >>> -y) ^ (x << 31 - y | x >>> 1 + y);
-        return (y ^ (y << 3 | y >>> 29) ^ (y << 24 | y >>> 8));
+        int y = (stateB = stateB + countLeadingZeros(x) + 0x91E10DA5 ^ x);
+        x ^= (y << 14 | y >>> 18);
+        x = imul(x, 0x2C1B3C6D);
+        x ^= x >>> 12;
+        x = imul(x, 0x297A2D39);
+        x ^= x >>> 15;
+        return x;
+
+//uint32_t x = (stateA = stateA + 0x9E3779BD ^ 0xD1B54A32);
+//uint32_t y = (stateB = stateB + __lzcnt(x) + 0x91E10DA5 ^ x);
+//x ^= rotate32(y, 14);
+//x *= 0x2c1b3c6d;
+//x ^= x >> 12;
+//x *= 0x297a2d39;
+//x ^= x >> 15;
+//return x;
+
     }
 
-    @SuppressWarnings("PointlessBitwiseExpression")
     @Override
     public long previousLong() {
-        int y = stateB;
-        int x = stateA;
-        int t = x & 0xDB4F0B96 - x;
-        stateB = (y ^ 0xAF723596) - (t << 1 | t >>> 31) | 0; // no-op OR with 0 ensures this stays in-range in JS.
-        stateA = (x ^ 0xD1B54A32) - 0x9E3779BD | 0;
-        x += y ^= (y << x | y >>> -x) ^ (y << 31 - x | y >>> 1 + x);
-        y += x ^  (x << y | x >>> -y) ^ (x << 31 - y | x >>> 1 + y);
-        int lo = (y ^ (y << 3 | y >>> 29) ^ (y << 24 | y >>> 8));
-        y = stateB;
-        x = stateA;
-        t = x & 0xDB4F0B96 - x;
-        stateB = (y ^ 0xAF723596) - (t << 1 | t >>> 31) | 0; // no-op OR with 0 ensures this stays in-range in JS.
-        stateA = (x ^ 0xD1B54A32) - 0x9E3779BD | 0;
-        x += y ^= (y << x | y >>> -x) ^ (y << 31 - x | y >>> 1 + x);
-        y += x ^  (x << y | x >>> -y) ^ (x << 31 - y | x >>> 1 + y);
-        int hi = (y ^ (y << 3 | y >>> 29) ^ (y << 24 | y >>> 8));
-        return lo ^ (long) hi << 32;
+        return previousInt() ^ (long) previousInt() << 32;
     }
 
     @SuppressWarnings("PointlessBitwiseExpression")
@@ -238,12 +217,14 @@ public class Gnome32Random extends EnhancedRandom {
     public int previousInt() {
         int y = stateB;
         int x = stateA;
-        int t = x & 0xDB4F0B96 - x;
-        stateB = (y ^ 0xAF723596) - (t << 1 | t >>> 31) | 0; // no-op OR with 0 ensures this stays in-range in JS.
+        stateB = (y ^ x) - countLeadingZeros(x) - 0x91E10DA5 | 0; // no-op OR with 0 ensures this stays in-range in JS.
         stateA = (x ^ 0xD1B54A32) - 0x9E3779BD | 0;
-        x += y ^= (y << x | y >>> -x) ^ (y << 31 - x | y >>> 1 + x);
-        y += x ^  (x << y | x >>> -y) ^ (x << 31 - y | x >>> 1 + y);
-        return (y ^ (y << 3 | y >>> 29) ^ (y << 24 | y >>> 8));
+        x ^= (y << 14 | y >>> 18);
+        x = imul(x, 0x2C1B3C6D);
+        x ^= x >>> 12;
+        x = imul(x, 0x297A2D39);
+        x ^= x >>> 15;
+        return x;
     }
 
     @Override
@@ -309,8 +290,8 @@ public class Gnome32Random extends EnhancedRandom {
     }
 
     @Override
-    public Gnome32Random copy() {
-        return new Gnome32Random(stateA, stateB);
+    public Fluff32Random copy() {
+        return new Fluff32Random(stateA, stateB);
     }
 
     @Override
@@ -320,17 +301,17 @@ public class Gnome32Random extends EnhancedRandom {
         if (o == null || getClass() != o.getClass())
             return false;
 
-        Gnome32Random that = (Gnome32Random) o;
+        Fluff32Random that = (Fluff32Random) o;
 
         return stateA == that.stateA && stateB == that.stateB;
     }
 
     public String toString() {
-        return "Gnome32Random{" + "stateA=" + (stateA) + ", stateB=" + (stateB) + "}";
+        return "Fluff32Random{" + "stateA=" + (stateA) + ", stateB=" + (stateB) + "}";
     }
 
     public static void main(String[] args) {
-        EnhancedRandom random = new Gnome32Random(1L);
+        EnhancedRandom random = new Fluff32Random(1L);
         {
             int n0 = random.nextInt();
             int n1 = random.nextInt();

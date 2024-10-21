@@ -183,43 +183,55 @@ public class Taupe32Random extends EnhancedRandom {
 
     @Override
     public long nextLong() {
-//        int x = (stateA = stateA + 0x9E3779BD ^ 0xD1B54A32);
-//        int t = x & 0xDB4F0B96 - x;
-//        int y = (stateB = stateB + (t << 1 | t >>> 31) ^ 0xAF723597);
-//        y += (x << y | x >>> 32 - y);
-//        y = (y ^ (y << 10 | y >>> 22) ^ (y << 5 | y >>> 27)) * 0xB45ED;
-//        int hi = y ^ y >>> 21;
-//        x = (stateA = stateA + 0x9E3779BD ^ 0xD1B54A32);
-//        t = x & 0xDB4F0B96 - x;
-//        y = (stateB = stateB + (t << 1 | t >>> 31) ^ 0xAF723597);
-//        y += (x << y | x >>> 32 - y);
-//        y = (y ^ (y << 10 | y >>> 22) ^ (y << 5 | y >>> 27)) * 0xB45ED;
-//        int lo = y ^ y >>> 21;
-        return (long) nextInt() << 32 ^ nextInt();
-    }
-
-    @Override
-    public int next(int bits) {
-//        int x = (stateA = stateA + 0x9E3779BD ^ 0xD1B54A32);
-//        int t = x & 0xDB4F0B96 - x;
-//        int y = (stateB = stateB + (t << 1 | t >>> 31) ^ 0xAF723597);
-//        y += (x << y | x >>> 32 - y);
-//        y = (y ^ (y << 10 | y >>> 22) ^ (y << 5 | y >>> 27)) * 0xB45ED;
-        return nextInt() >>> (32 - bits);
-    }
-
-    @Override
-    public int nextInt() {
         int x = (stateA = stateA + 0x9E3779BD ^ 0xD1B54A32);
         int y = (stateB = stateB + imul(countLeadingZeros(x), 0x91E10DA5) ^ x);
         y += (x << y | x >>> -y);
         y = imul(y ^ y >>> 15, 0xD168AAAD);
-        return y ^ (y << 11 | y >>> 21) ^ (y << 23 | y >>> 9);
+        int hi = (y ^ (y << 11 | y >>> 21) ^ (y << 23 | y >>> 9));
+        x = (stateA = stateA + 0x9E3779BD ^ 0xD1B54A32);
+        y = (stateB = stateB + imul(countLeadingZeros(x), 0x91E10DA5) ^ x);
+        y += (x << y | x >>> -y);
+        y = imul(y ^ y >>> 15, 0xD168AAAD);
+        int lo = (y ^ (y << 11 | y >>> 21) ^ (y << 23 | y >>> 9));
+        return (long) hi << 32 ^ lo;
     }
 
     @Override
+    public int next(int bits) {
+        final int x = (stateA = stateA + 0x9E3779BD ^ 0xD1B54A32);
+        int y = (stateB = stateB + imul(countLeadingZeros(x), 0x91E10DA5) ^ x);
+        y += (x << y | x >>> -y);
+        y = imul(y ^ y >>> 15, 0xD168AAAD);
+        return (y ^ (y << 11 | y >>> 21) ^ (y << 23 | y >>> 9)) >>> (32 - bits);
+    }
+
+    @Override
+    public int nextInt() {
+        final int x = (stateA = stateA + 0x9E3779BD ^ 0xD1B54A32);
+        int y = (stateB = stateB + imul(countLeadingZeros(x), 0x91E10DA5) ^ x);
+        y += (x << y | x >>> -y);
+        y = imul(y ^ y >>> 15, 0xD168AAAD);
+        return (y ^ (y << 11 | y >>> 21) ^ (y << 23 | y >>> 9));
+    }
+
+    @SuppressWarnings("PointlessBitwiseExpression")
+    @Override
     public long previousLong() {
-        return previousInt() ^ (long) previousInt() << 32;
+        int y = stateB;
+        int x = stateA;
+        stateB = (y ^ x) - imul(countLeadingZeros(x), 0x91E10DA5) | 0; // no-op OR with 0 ensures this stays in-range in JS.
+        stateA = (x ^ 0xD1B54A32) - 0x9E3779BD | 0;
+        y += (x << y | x >>> -y);
+        y = imul(y ^ y >>> 15, 0xD168AAAD);
+        int lo = y ^ (y << 11 | y >>> 21) ^ (y << 23 | y >>> 9);
+        y = stateB;
+        x = stateA;
+        stateB = (y ^ x) - imul(countLeadingZeros(x), 0x91E10DA5) | 0; // no-op OR with 0 ensures this stays in-range in JS.
+        stateA = (x ^ 0xD1B54A32) - 0x9E3779BD | 0;
+        y += (x << y | x >>> -y);
+        y = imul(y ^ y >>> 15, 0xD168AAAD);
+        int hi = y ^ (y << 11 | y >>> 21) ^ (y << 23 | y >>> 9);
+        return lo ^ (long) hi << 32;
     }
 
     @SuppressWarnings("PointlessBitwiseExpression")
