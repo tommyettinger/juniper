@@ -21,8 +21,12 @@ package com.github.tommyettinger.random;
  * A random number generator that is optimized for performance on 32-bit machines and with Google Web Toolkit, this uses
  * only the most portable operations (including compatibility with JS), and has a period of exactly 2 to the 64.
  * This passes 64TB of PractRand testing with no anomalies, and also passes juniper's InitialCorrelationEvaluator test.
- * Relatively few generators with this small of a state size have gotten through InitialCorrelationEvaluator unscathed,
- * so this is a good option to have if you expect to frequently use similar pairs of initial int states.
+ * Relatively few generators with this small of a state size have gotten through InitialCorrelationEvaluator and the
+ * check ImmediateInitialCorrelationEvaluator (which is not a test for an RNG, but for how hash-like an RNG is),
+ * unscathed, so this is a good option to have if you expect to frequently use similar pairs of initial int states.
+ * Taxon32Random is somewhat slower than {@link ChopRandom} or {@link Choo32Random}, but has a longer guaranteed minimum
+ * period and a smaller state size. Chop and Choo32 have a rather short minimum period guarantee (2 to the 32 ints), so
+ * in the unlikely event that you might encounter a sequence that short, you might prefer Taxon32Random.
  * <br>
  * This is meant for the somewhat-unusual task of providing a different (short) sequence of random values for any pair
  * of states given to it, with it especially important that numerically-close state pairs produce different sequences.
