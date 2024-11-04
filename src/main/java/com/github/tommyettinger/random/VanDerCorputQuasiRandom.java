@@ -221,7 +221,7 @@ public class VanDerCorputQuasiRandom extends EnhancedRandom {
 //		return super.nextGaussian();
 //		return probit(nextDouble());
 //		return probit(((state & 0x1FFF_FFFFF_FFFFFL) ^ nextLong() >>> 11) * 0x1p-53);
-		return Distributor.normal(Long.reverse(++state));
+		return Distributor.linearNormal(Long.reverse(++state));
 //		return Ziggurat.normal(nextLong());
 	}
 

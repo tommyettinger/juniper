@@ -21,6 +21,8 @@
 
 package com.github.tommyettinger.random;
 
+import com.github.tommyettinger.digital.Distributor;
+
 /**
  * An implementation of the Ziggurat method for generating normal-distributed random values. The Ziggurat method is not
  * an approximation, but is faster than some simple approximations while having higher statistical quality. This is not
@@ -53,103 +55,22 @@ public final class Ziggurat {
     private Ziggurat() {
     }
 
-    private static final int    TABLE_ITEMS = 256;
-    private static final double R           = 3.65415288536100716461;
-    private static final double INV_R       = 1.0 / R;
-    private static final double AREA        = 0.00492867323397465524494;
-
-    /**
-     * This is private because it shouldn't ever be changed after assignment, and has nearly no use outside this code.
-     */
-    private static final double[] TABLE = new double[257];
-    static {
-        double f = Math.exp(-0.5 * R * R);
-        TABLE[0] = AREA / f;
-        TABLE[1] = R;
-
-        for (int i = 2; i < TABLE_ITEMS; i++) {
-            double xx = Math.log(AREA /
-                    TABLE[i - 1] + f);
-            TABLE[i] = Math.sqrt(-2 * xx);
-            f = Math.exp(xx);
-        }
-
-        TABLE[TABLE_ITEMS] = 0.0;
-    }
-
     /**
      * Given a long where all bits are sufficiently (independently) random, this produces a normal-distributed
      * (Gaussian) variable as if by a normal distribution with mean (mu) 0.0 and standard deviation (sigma) 1.0.
+     * Note that no additive counters are considered sufficiently random for this, and linear congruential generators
+     * might not be random enough either if they return the low-order bits without changes.
+     * Patterns between different {@code state} values provided to this will generally not be preserved in the
+     * output, but this may not be true all the time for patterns on all bits.
+     * <br>
+     * This is an alias for {@link Distributor#normal(long)}. If you want to preserve input patterns in the
+     * normal-distributed output, you can use {@link Distributor#probit(double)} or
+     * {@link Distributor#linearNormal(long)}, or variants on those.
+     *
      * @param state a long that should be sufficiently random; quasi-random longs may not be enough
      * @return a normal-distributed double with mean (mu) 0.0 and standard deviation (sigma) 1.0
      */
     public static double normal(long state) {
-        double x, y, f0, f1, u;
-        int idx;
-
-        while (true) {
-            /* To minimize calls to the RNG, we use every bit for its own
-             * purposes:
-             *    - The 53 most significant bits are used to generate
-             *      a random floating-point number in the range [0.0,1.0).
-             *    - The first to the eighth least significant bits are used
-             *      to generate an index in the range [0,256).
-             *    - The ninth least significant bit is treated as the sign
-             *      bit of the result, unless the result is in the trail.
-             *    - If the random variable is in the trail, the state will
-             *      be modified instead of generating a new random number.
-             *      This could yield lower quality, but variables in the
-             *      trail are already rare (1/256 values or fewer).
-             *    - If the result is in the trail, the parity of the
-             *      complete state is used to randomly set the sign of the
-             *      return value.
-             */
-            idx = (int)(state & (TABLE_ITEMS - 1));
-            u = (state >>> 11) * 0x1p-53 * TABLE[idx];
-
-            /* Take a random box from TABLE
-             * and get the value of a random x-coordinate inside it.
-             * If it's also inside TABLE[idx + 1] we already know to accept
-             * this value. */
-            if (u < TABLE[idx + 1])
-                break;
-
-            /* If our random box is at the bottom, we can't use the lookup
-             * table and need to generate a variable for the trail of the
-             * normal distribution, as described by Marsaglia in 1964: */
-            if (idx == 0) {
-                /* If idx is 0, then the bottom 8 bits of state must all be 0,
-                 * and u must be on the larger side.
-                 * Doing a "proper" mix of state to get a new random state is
-                 * not especially fast, but we could do it here with MX3. */
-//                state ^= 0xABC98388FB8FAC03L;
-//                state ^= state >>> 32;
-//                state *= 0xBEA225F9EB34556DL;
-//                state ^= state >>> 29;
-//                state *= 0xBEA225F9EB34556DL;
-//                state ^= state >>> 32;
-//                state *= 0xBEA225F9EB34556DL;
-//                state ^= state >>> 29;
-                do {
-                    x = Math.log((((state = (state ^ 0xF1357AEA2E62A9C5L) * 0xABC98388FB8FAC03L) >>> 11) + 1L) * 0x1p-53) * INV_R;
-                    y = Math.log((((state = (state ^ 0xF1357AEA2E62A9C5L) * 0xABC98388FB8FAC03L) >>> 11) + 1L) * 0x1p-53);
-                } while (-(y + y) < x * x);
-                return (Long.bitCount(state) & 1L) == 0L ?
-                        x - R :
-                        R - x;
-            }
-
-            /* Take a random x-coordinate u in between TABLE[idx] and TABLE[idx+1]
-             * and return x if u is inside the normal distribution,
-             * otherwise, repeat the entire ziggurat method. */
-            y = u * u;
-            f0 = Math.exp(-0.5 * (TABLE[idx]     * TABLE[idx]     - y));
-            f1 = Math.exp(-0.5 * (TABLE[idx + 1] * TABLE[idx + 1] - y));
-            if (f1 + (((state = (state ^ 0xF1357AEA2E62A9C5L) * 0xABC98388FB8FAC03L) >>> 11) * 0x1p-53) * (f0 - f1) < 1.0)
-                break;
-        }
-        /* (Zero-indexed ) bits 8, 9, and 10 aren't used in the calculations for idx
-         * or u, so we use bit 9 as a sign bit here. */
-        return Math.copySign(u, 256L - (state & 512L));
+        return Distributor.normal(state);
     }
 }

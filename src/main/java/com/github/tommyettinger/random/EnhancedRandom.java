@@ -19,6 +19,7 @@ package com.github.tommyettinger.random;
 
 import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.digital.BitConversion;
+import com.github.tommyettinger.digital.Distributor;
 import com.github.tommyettinger.digital.MathTools;
 
 import java.io.Externalizable;
@@ -998,7 +999,7 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * {@code 1.0} from this random number generator's sequence
 	 */
 	public double nextGaussian () {
-		return Ziggurat.normal(nextLong());
+		return Distributor.normal(nextLong());
 	}
 
 	/**

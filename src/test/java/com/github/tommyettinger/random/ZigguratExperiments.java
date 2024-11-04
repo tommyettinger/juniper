@@ -1,6 +1,7 @@
 package com.github.tommyettinger.random;
 
 import com.github.tommyettinger.digital.BitConversion;
+import com.github.tommyettinger.digital.Distributor;
 import com.github.tommyettinger.digital.Hasher;
 import com.github.tommyettinger.digital.MathTools;
 
@@ -550,7 +551,7 @@ public class ZigguratExperiments {
             long c = 0L;
 //            for (int i = -0x78000000; i < 0x78000000; i++, c += 0xF1357AEA2E62A000L) {
             for (int i = -0x78000000; i < 0x78000000; i++, c += 0xC6BC279692B5C323L) {
-                double z = Ziggurat.normal(c);
+                double z = Distributor.normal(c);
 //                double z = MathTools.probit(MathTools.exclusiveDouble(c));
                 mx = Math.max(mx, z);
                 mn = Math.min(mn, z);

@@ -222,7 +222,7 @@ public class GoldenQuasiRandom extends EnhancedRandom {
 //		return super.nextGaussian();
 //		return probit(nextDouble());
 //		return probit(((state & 0x1FFF_FFFFF_FFFFFL) ^ nextLong() >>> 11) * 0x1p-53);
-		return Distributor.normal(state += 0x9E3779B97F4A7C15L);
+		return Distributor.linearNormal(state += 0x9E3779B97F4A7C15L);
 //		return Ziggurat.normal(state += 0x9E3779B97F4A7C15L); // has severe problems when getting tuples of Gaussians
 	}
 
