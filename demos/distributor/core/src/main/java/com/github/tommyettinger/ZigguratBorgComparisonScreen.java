@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.UIUtils;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.github.tommyettinger.digital.Distributor;
 import com.github.tommyettinger.random.distribution.NormalDistribution;
 
 import java.util.Arrays;
@@ -99,7 +100,7 @@ public class ZigguratBorgComparisonScreen extends ScreenAdapter {
         iterations += SMOOTHNESS;
         dist.setParameters(a, b, c);
         for (int i = 0; i < RUNS; i++) {
-            int m = (int) ((dist.getMu() + dist.getSigma() * Ziggurat.normal(dist.generator.nextLong()))
+            int m = (int) ((dist.getMu() + dist.getSigma() * Distributor.normal(dist.generator.nextLong()))
                     * 128 + 256);
             if (m >= 0 && m < 512)
             {
@@ -136,7 +137,7 @@ public class ZigguratBorgComparisonScreen extends ScreenAdapter {
             for (int i = 0; i < RUNS; i++) {
                 int m = (int) ((dist.getMu() + dist.getSigma() *
 //                    Borg.probitHighPrecision(dist.generator.nextExclusiveDouble())
-                        Distributor.normal(dist.generator.nextLong())// | 0x7FC0000000000000L)
+                        Distributor.linearNormal(dist.generator.nextLong())// | 0x7FC0000000000000L)
                 )
                         * 128 + 256);
                 if (m >= 0 && m < 512)

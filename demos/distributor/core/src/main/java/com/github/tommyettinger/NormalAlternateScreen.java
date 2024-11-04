@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.github.tommyettinger.digital.BitConversion;
+import com.github.tommyettinger.digital.Distributor;
 import com.github.tommyettinger.digital.MathTools;
 import com.github.tommyettinger.random.EnhancedRandom;
 import com.github.tommyettinger.random.distribution.NormalDistribution;
@@ -178,7 +179,7 @@ public class NormalAlternateScreen extends ScreenAdapter {
                 break;
             case 6:
                 for (int i = 0; i < RUNS; i++) {
-                    int m = (int) ((dist.getMu() + dist.getSigma() * Ziggurat.normal(dist.generator.nextLong()))
+                    int m = (int) ((dist.getMu() + dist.getSigma() * Distributor.normal(dist.generator.nextLong()))
                             * 128 + 256);
                     if (m >= 0 && m < 512)
                         amounts[m]++;
@@ -219,7 +220,7 @@ public class NormalAlternateScreen extends ScreenAdapter {
                 for (int i = 0; i < RUNS; i++) {
                     int m = (int) ((dist.getMu() + dist.getSigma() *
                             (dist.generator.nextExclusiveSignedDouble() * (1.0 - c)
-                                    + c * Ziggurat.normal(dist.generator.nextLong())
+                                    + c * Distributor.normal(dist.generator.nextLong())
                             ))
                             * 128 + 256);
                     if (m >= 0 && m < 512)
