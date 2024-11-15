@@ -137,7 +137,8 @@ public class ZigguratLinnormalComparisonScreen extends ScreenAdapter {
             for (int i = 0; i < RUNS; i++) {
                 int m = (int) ((dist.getMu() + dist.getSigma() *
 //                    Borg.probitHighPrecision(dist.generator.nextExclusiveDouble())
-                        Linnormal.linearNormal(dist.generator.nextLong())// | 0x7FC0000000000000L)
+                        com.github.tommyettinger.Distributor.normal(dist.generator.nextLong())// | 0x7FC0000000000000L)
+//                        Linnormal.linearNormal(dist.generator.nextLong())// | 0x7FC0000000000000L)
                 )
                         * 128 + 256);
                 if (m >= 0 && m < 512)
