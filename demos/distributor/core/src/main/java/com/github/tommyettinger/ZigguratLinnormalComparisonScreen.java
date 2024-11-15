@@ -19,7 +19,7 @@ import java.util.Arrays;
 
 import static com.github.tommyettinger.DistributorDemo.*;
 
-public class ZigguratBorgComparisonScreen extends ScreenAdapter {
+public class ZigguratLinnormalComparisonScreen extends ScreenAdapter {
     private NormalDistribution dist;
     private SpriteBatch batch;
     private ImmediateModeRenderer20 renderer;
@@ -52,7 +52,7 @@ public class ZigguratBorgComparisonScreen extends ScreenAdapter {
     }
     private final DistributorDemo mainGame;
 
-    public ZigguratBorgComparisonScreen(DistributorDemo main){
+    public ZigguratLinnormalComparisonScreen(DistributorDemo main){
         mainGame = main;
     }
 
@@ -112,7 +112,7 @@ public class ZigguratBorgComparisonScreen extends ScreenAdapter {
             for (int i = 0; i < RUNS; i++) {
                 int m = (int) ((dist.getMu() + dist.getSigma() *
 //                    Borg.probitHighPrecision(dist.generator.nextExclusiveDouble())
-                        com.github.tommyettinger.random.Ziggurat.normal(dist.generator.nextLong())// | 0x7FC0000000000000L)
+                        Distributor.normal(dist.generator.nextLong())// | 0x7FC0000000000000L)
                 )
                         * 128 + 256);
                 if (m >= 0 && m < 512)
@@ -137,7 +137,7 @@ public class ZigguratBorgComparisonScreen extends ScreenAdapter {
             for (int i = 0; i < RUNS; i++) {
                 int m = (int) ((dist.getMu() + dist.getSigma() *
 //                    Borg.probitHighPrecision(dist.generator.nextExclusiveDouble())
-                        Distributor.linearNormal(dist.generator.nextLong())// | 0x7FC0000000000000L)
+                        Linnormal.linearNormal(dist.generator.nextLong())// | 0x7FC0000000000000L)
                 )
                         * 128 + 256);
                 if (m >= 0 && m < 512)

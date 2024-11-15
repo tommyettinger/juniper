@@ -40,7 +40,7 @@ public class DistributorDemo extends Game {
         corner = new CornerScreen(this);
         screens = new Screen[]{
 //                new KumaraswamySmoothScreen(this),
-                new ZigguratBorgComparisonScreen(this),
+                new ZigguratLinnormalComparisonScreen(this),
                 new KumaraswamyScreen(this), new BetaScreen(this), new LumpScreen(this),
                 new NormalScreen(this), new RaisedNormalScreen(this), new ProductNormalScreen(this),
                 new CauchyScreen(this), new LogCauchyScreen(this), new ErlangScreen(this),
