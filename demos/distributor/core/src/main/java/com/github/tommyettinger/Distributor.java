@@ -32,12 +32,13 @@ public final class Distributor {
      * This is private because it shouldn't ever be changed after assignment, and has nearly no use outside this code.
      */
     private static final double[] ZIG_TABLE  = new double[ZIG_TABLE_ITEMS+1];
-    private static final double[] LIN_TABLE  = new double[1024];
-    private static final float[] LIN_TABLE_F = new float[1024];
+    private static final int LIN_TABLE_ITEMS = 1024;
+    private static final double[] LIN_TABLE  = new double[LIN_TABLE_ITEMS];
+    private static final float[] LIN_TABLE_F = new float[LIN_TABLE_ITEMS];
 
     static {
-        for (int i = 0; i < 1024; i++) {
-            LIN_TABLE_F[i] = (float) (LIN_TABLE[i] = probitHighPrecision(0.5 + i * 0x1p-11));
+        for (int i = 0; i < LIN_TABLE_ITEMS; i++) {
+            LIN_TABLE_F[i] = (float) (LIN_TABLE[i] = probitHighPrecision(0.5 + i * 0.5 / LIN_TABLE_ITEMS));
         }
         double f = Math.exp(-0.5 * R * R);
         ZIG_TABLE[0] = AREA / f;
@@ -170,9 +171,16 @@ public final class Distributor {
         if( d > 0.0 && d < 1.0 && d != 0.5) {
             double e = 0.5 * erfc(x * -0.7071067811865475) - d; //-0.7071067811865475 == -1.0 / Math.sqrt(2.0)
             double u = e * 2.5066282746310002 * Math.exp((x * x) * 0.5); //2.5066282746310002 == Math.sqrt(2 * Math.PI)
-            x = x - u / (1.0 + x * u * 0.5);
+            x -= u / (1.0 + x * u * 0.5);
         }
         return x;
+    }
+
+    public static double linearNormalHighPrecision(long d) {
+        double x = linearNormal(d);
+        double e = 0.5 * erfc(x * -0.7071067811865475) - (d + 0x1p63) * 0x1p-64; //-0.7071067811865475 == -1.0 / Math.sqrt(2.0)
+        double u = e * 2.5066282746310002 * Math.exp((x * x) * 0.5); //2.5066282746310002 == Math.sqrt(2 * Math.PI)
+        return x - u / (1.0 + x * u * 0.5);
     }
 
     /**
@@ -209,7 +217,8 @@ public final class Distributor {
         final int top10 = (int) (n >>> 53);
         final double t = (n & 0x1FFFFFFFFFFFFFL) * 0x1p-53, v;
         if (top10 == 1023) {
-            v = t * t * (8.375 - 3.297193345691938) + 3.297193345691938;
+            v = t * t * t * (4.0 - 3.297193345691938) + 3.297193345691938;
+//            v = t * t * (8.375 - 3.297193345691938) + 3.297193345691938;
         } else {
             final double s = LIN_TABLE[top10];
             v = t * (LIN_TABLE[top10 + 1] - s) + s;
@@ -289,9 +298,9 @@ public final class Distributor {
              * purposes:
              *    - The 53 most significant bits are used to generate
              *      a random floating-point number in the range [0.0,1.0).
-             *    - The first to the eighth least significant bits are used
+             *    - The first to the tenth least significant bits are used
              *      to generate an index in the range [0,256).
-             *    - The ninth least significant bit is treated as the sign
+             *    - The eleventh least significant bit is treated as the sign
              *      bit of the result, unless the result is in the trail.
              *    - If the random variable is in the trail, the state will
              *      be modified instead of generating a new random number.
