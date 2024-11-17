@@ -1,6 +1,7 @@
 package com.github.tommyettinger;
 
 import com.github.tommyettinger.digital.Base;
+import com.github.tommyettinger.digital.BitConversion;
 import com.github.tommyettinger.digital.RoughMath;
 
 import java.util.Random;
@@ -144,10 +145,36 @@ public final class Distributor {
     /**
      * A single-precision probit() approximation that takes a float between 0 and 1 inclusive and returns an
      * approximately-Gaussian-distributed float between -9.080134 and 9.080134 .
+     * The function maps the lowest inputs to the most negative outputs, the highest inputs to the most
+     * positive outputs, and inputs near 0.5 to outputs near 0.
+     * <a href="https://www.researchgate.net/publication/46462650_A_New_Approximation_to_the_Normal_Distribution_Quantile_Function">Uses this algorithm by Paul Voutier</a>.
      * @param p should be between 0 and 1, inclusive.
      * @return an approximately-Gaussian-distributed float between -9.080134 and 9.080134
      */
-    public static float probitf(float p) {
+    public static float probitF(float p) {
+        if(0.0465f > p){
+            float r = (float)Math.sqrt(RoughMath.logRough(1f/(p*p)));
+            return c3f * r + c2f + (c1f * r + c0f) / (r * (r + d1f) + d0f);
+        } else if(0.9535f < p) {
+            float q = 1f - p, r = (float)Math.sqrt(RoughMath.logRough(1f/(q*q)));
+            return -c3f * r - c2f - (c1f * r + c0f) / (r * (r + d1f) + d0f);
+        } else {
+            float q = p - 0.5f, r = q * q;
+            return q * (a2f + (a1f * r + a0f) / (r * (r + b1f) + b0f));
+        }
+    }
+
+    /**
+     * A single-precision probit() approximation that takes a float between 0 and 1 inclusive and returns an
+     * approximately-Gaussian-distributed float between -9.080134 and 9.080134 .
+     * The function maps the most negative inputs to the most negative outputs, the most positive inputs to the most
+     * positive outputs, and inputs near 0 to outputs near 0.
+     * <a href="https://www.researchgate.net/publication/46462650_A_New_Approximation_to_the_Normal_Distribution_Quantile_Function">Uses this algorithm by Paul Voutier</a>.
+     * @param i may be any int, though very close ints will not produce different results
+     * @return an approximately-Gaussian-distributed float between -9.080134 and 9.080134
+     */
+    public static float probitI(int i) {
+        float p = 0x1p-32f * i + 0.5f;
         if(0.0465f > p){
             float r = (float)Math.sqrt(RoughMath.logRough(1f/(p*p)));
             return c3f * r + c2f + (c1f * r + c0f) / (r * (r + d1f) + d0f);
@@ -163,10 +190,13 @@ public final class Distributor {
     /**
      * A double-precision probit() approximation that takes a double between 0 and 1 inclusive and returns an
      * approximately-Gaussian-distributed double between -26.48372928592822 and 26.48372928592822 .
+     * The function maps the lowest inputs to the most negative outputs, the highest inputs to the most
+     * positive outputs, and inputs near 0.5 to outputs near 0.
+     * <a href="https://www.researchgate.net/publication/46462650_A_New_Approximation_to_the_Normal_Distribution_Quantile_Function">Uses this algorithm by Paul Voutier</a>.
      * @param p should be between 0 and 1, inclusive.
      * @return an approximately-Gaussian-distributed double between -26.48372928592822 and 26.48372928592822
      */
-    public static double probitVoutier(double p) {
+    public static double probitD(double p) {
         if(0.0465 > p){
             double q = p + 7.458340731200208E-155, r = Math.sqrt(Math.log(1.0/(q*q)));
             return c3 * r + c2 + (c1 * r + c0) / (r * (r + d1) + d0);
@@ -175,6 +205,30 @@ public final class Distributor {
             return -c3 * r - c2 - (c1 * r + c0) / (r * (r + d1) + d0);
         } else {
             double q = p - 0.5, r = q * q;
+            return q * (a2 + (a1 * r + a0) / (r * (r + b1) + b0));
+        }
+    }
+
+    /**
+     * A double-precision probit() approximation that takes any long and returns an
+     * approximately-Gaussian-distributed double between -26.48372928592822 and 26.48372928592822 .
+     * The function maps the most negative inputs to the most negative outputs, the most positive inputs to the most
+     * positive outputs, and inputs near 0 to outputs near 0.
+     * <a href="https://www.researchgate.net/publication/46462650_A_New_Approximation_to_the_Normal_Distribution_Quantile_Function">Uses this algorithm by Paul Voutier</a>.
+     * @param l may be any long, though very close longs will not produce different results
+     * @return an approximately-Gaussian-distributed double between -26.48372928592822 and 26.48372928592822
+     */
+    public static double probitL(long l) {
+//        double p = l * 0x1p-64 + 0.5;
+        double p = BitConversion.longBitsToDouble((0x3FF8000000000000L ^ l >>> 12) + (~l >>> 63));
+        if(1.0465 > p){
+            double q = p - 1.0 + 7.458340731200208E-155, r = Math.sqrt(Math.log(1.0/(q*q)));
+            return c3 * r + c2 + (c1 * r + c0) / (r * (r + d1) + d0);
+        } else if(1.9535 < p) {
+            double q = 2.0 - p + 7.458340731200208E-155, r = Math.sqrt(Math.log(1.0/(q*q)));
+            return -c3 * r - c2 - (c1 * r + c0) / (r * (r + d1) + d0);
+        } else {
+            double q = p - 1.5, r = q * q;
             return q * (a2 + (a1 * r + a0) / (r * (r + b1) + b0));
         }
     }
@@ -190,8 +244,19 @@ public final class Distributor {
 ////        }
 ////        System.out.println("Last working double was " + Base.BASE10.friendly(d = Math.nextUp(d)));
 ////        System.out.println("Last working result was was " + Base.BASE10.friendly(probitVoutier(d)));
-//        System.out.println(Base.BASE10.friendly(probitVoutier(0.0)));
-//        System.out.println(Base.BASE10.friendly(probitVoutier(1.0)));
+//        System.out.println(Base.BASE10.friendly(probitI(Integer.MIN_VALUE)));
+//        System.out.println(Base.BASE10.friendly(probitI(Integer.MAX_VALUE)));
+//        System.out.println(Base.BASE10.friendly(probitL(Long.MIN_VALUE)));
+//        System.out.println(Base.BASE10.friendly(probitL(-1L)));
+//        System.out.println(Base.BASE10.friendly(probitL(0L)));
+//        System.out.println(Base.BASE10.friendly(probitL(Long.MAX_VALUE)));
+//        System.out.println(Base.BASE10.friendly(probitD(Math.nextDown(1.0))));
+//        System.out.println(Base.BASE10.friendly(probitD(Math.nextDown(Math.nextDown(1.0)))));
+////        System.out.println(Base.BASE10.friendly(BitConversion.longBitsToDouble(0x3FF0000000000000L | -1L >>> 12)));
+////        System.out.println(Base.BASE10.friendly(2.0 - BitConversion.longBitsToDouble(0x3FF0000000000000L | -1L >>> 12)));
+////        System.out.println(Base.BASE10.friendly(2.0 - BitConversion.longBitsToDouble((0x3FF0000000000000L | -1L >>> 12)+1L)));
+////        System.out.println(Base.BASE10.friendly((2.0 - BitConversion.longBitsToDouble(0x3FF0000000000000L | -1L >>> 12)) * 0.5));
+////        System.out.println(Base.BASE10.friendly(1.0 - (Long.MAX_VALUE * 0x1p-64 + 0.5)));
 //    }
 
     /**
