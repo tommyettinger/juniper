@@ -1,5 +1,6 @@
 package com.github.tommyettinger;
 
+import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.digital.RoughMath;
 
 import java.util.Random;
@@ -114,17 +115,31 @@ public final class Distributor {
                 ((((-5.447609879822406e+01 * r + 1.615858368580409e+02) * r - 1.556989798598866e+02) * r + 6.680131188771972e+01) * r - 1.328068155288572e+01) * r + 1.0);
     }
 
-    private static final float a0 = 0.195740115269792f,
-            a1 = -0.652871358365296f,
-            a2 = 1.246899760652504f,
-            b0 = 0.155331081623168f,
-            b1 = -0.839293158122257f,
-            c3 = -1.000182518730158122f,
-            c0 = 16.682320830719986527f,
-            c1 = 4.120411523939115059f,
-            c2 = 0.029814187308200211f,
-            d0 = 7.173787663925508066f,
-            d1 = 8.759693508958633869f;
+    private static final float
+            a0f = 0.195740115269792f,
+            a1f = -0.652871358365296f,
+            a2f = 1.246899760652504f,
+            b0f = 0.155331081623168f,
+            b1f = -0.839293158122257f,
+            c3f = -1.000182518730158122f,
+            c0f = 16.682320830719986527f,
+            c1f = 4.120411523939115059f,
+            c2f = 0.029814187308200211f,
+            d0f = 7.173787663925508066f,
+            d1f = 8.759693508958633869f;
+
+    private static final double
+            a0 = 0.195740115269792,
+            a1 = -0.652871358365296,
+            a2 = 1.246899760652504,
+            b0 = 0.155331081623168,
+            b1 = -0.839293158122257,
+            c3 = -1.000182518730158122,
+            c0 = 16.682320830719986527,
+            c1 = 4.120411523939115059,
+            c2 = 0.029814187308200211,
+            d0 = 7.173787663925508066,
+            d1 = 8.759693508958633869;
 
     /**
      * A single-precision probit() approximation that takes a float between 0 and 1 inclusive and returns an
@@ -135,15 +150,49 @@ public final class Distributor {
     public static float probitf(float p) {
         if(0.0465f > p){
             float r = (float)Math.sqrt(RoughMath.logRough(1f/(p*p)));
-            return c3 * r + c2 + (c1 * r + c0) / (r * (r + d1) + d0);
+            return c3f * r + c2f + (c1f * r + c0f) / (r * (r + d1f) + d0f);
         } else if(0.9535f < p) {
             float q = 1f - p, r = (float)Math.sqrt(RoughMath.logRough(1f/(q*q)));
-            return -c3 * r - c2 - (c1 * r + c0) / (r * (r + d1) + d0);
+            return -c3f * r - c2f - (c1f * r + c0f) / (r * (r + d1f) + d0f);
         } else {
             float q = p - 0.5f, r = q * q;
+            return q * (a2f + (a1f * r + a0f) / (r * (r + b1f) + b0f));
+        }
+    }
+
+    /**
+     * A double-precision probit() approximation that takes a double between 0 and 1 inclusive and returns an
+     * approximately-Gaussian-distributed double between -26.48372928592822 and 26.48372928592822 .
+     * @param p should be between 0 and 1, inclusive.
+     * @return an approximately-Gaussian-distributed double between -26.48372928592822 and 26.48372928592822
+     */
+    public static double probitVoutier(double p) {
+        if(0.0465 > p){
+            double q = p + 7.458340731200208E-155, r = Math.sqrt(Math.log(1.0/(q*q)));
+            return c3 * r + c2 + (c1 * r + c0) / (r * (r + d1) + d0);
+        } else if(0.9535 < p) {
+            double q = 1.0 - p + 7.458340731200208E-155, r = Math.sqrt(Math.log(1.0/(q*q)));
+            return -c3 * r - c2 - (c1 * r + c0) / (r * (r + d1) + d0);
+        } else {
+            double q = p - 0.5, r = q * q;
             return q * (a2 + (a1 * r + a0) / (r * (r + b1) + b0));
         }
     }
+
+//    public static void main(String[] args) {
+//        double d = 7.458340731200208E-155;
+////        for (int i = 0; i < 1000000000; i++) {
+////            if(Double.isNaN(probitVoutier(d = Math.nextDown(d))))
+////            {
+////                System.out.println("NaNaNaNaNa...");
+////                break;
+////            }
+////        }
+////        System.out.println("Last working double was " + Base.BASE10.friendly(d = Math.nextUp(d)));
+////        System.out.println("Last working result was was " + Base.BASE10.friendly(probitVoutier(d)));
+//        System.out.println(Base.BASE10.friendly(probitVoutier(0.0)));
+//        System.out.println(Base.BASE10.friendly(probitVoutier(1.0)));
+//    }
 
     /**
      * Complementary error function, partial implementation.
