@@ -1,5 +1,7 @@
 package com.github.tommyettinger;
 
+import com.github.tommyettinger.digital.RoughMath;
+
 import java.util.Random;
 
 /**
@@ -110,6 +112,37 @@ public final class Distributor {
         final double r = q * q;
         return (((((-3.969683028665376e+01 * r + 2.209460984245205e+02) * r - 2.759285104469687e+02) * r + 1.383577518672690e+02) * r - 3.066479806614716e+01) * r + 2.506628277459239e+00) * q / (
                 ((((-5.447609879822406e+01 * r + 1.615858368580409e+02) * r - 1.556989798598866e+02) * r + 6.680131188771972e+01) * r - 1.328068155288572e+01) * r + 1.0);
+    }
+
+    private static final float a0 = 0.195740115269792f,
+            a1 = -0.652871358365296f,
+            a2 = 1.246899760652504f,
+            b0 = 0.155331081623168f,
+            b1 = -0.839293158122257f,
+            c3 = -1.000182518730158122f,
+            c0 = 16.682320830719986527f,
+            c1 = 4.120411523939115059f,
+            c2 = 0.029814187308200211f,
+            d0 = 7.173787663925508066f,
+            d1 = 8.759693508958633869f;
+
+    /**
+     * A single-precision probit() approximation that takes a float between 0 and 1 inclusive and returns an
+     * approximately-Gaussian-distributed float between -9.080134 and 9.080134 .
+     * @param p should be between 0 and 1, inclusive.
+     * @return an approximately-Gaussian-distributed float between -9.080134 and 9.080134
+     */
+    public static float probitf(float p) {
+        if(0.0465f > p){
+            float r = (float)Math.sqrt(RoughMath.logRough(1f/(p*p)));
+            return c3 * r + c2 + (c1 * r + c0) / (r * (r + d1) + d0);
+        } else if(0.9535f < p) {
+            float q = 1f - p, r = (float)Math.sqrt(RoughMath.logRough(1f/(q*q)));
+            return -c3 * r - c2 - (c1 * r + c0) / (r * (r + d1) + d0);
+        } else {
+            float q = p - 0.5f, r = q * q;
+            return q * (a2 + (a1 * r + a0) / (r * (r + b1) + b0));
+        }
     }
 
     /**
