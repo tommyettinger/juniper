@@ -174,15 +174,16 @@ public final class Distributor {
      * @return an approximately-Gaussian-distributed float between -9.080134 and 9.080134
      */
     public static float probitI(int i) {
-        float p = 0x1p-32f * i + 0.5f;
-        if(0.0465f > p){
-            float r = (float)Math.sqrt(RoughMath.logRough(1f/(p*p)));
+//        float p = 0x1p-32f * i + 0.5f;
+        float p = BitConversion.intBitsToFloat((0x3FC00000 ^ i >>> 9) + (~i >>> 31));
+        if(1.0465f > p){
+            float q = p - 1f, r = (float)Math.sqrt(RoughMath.logRough(1f/(q*q)));
             return c3f * r + c2f + (c1f * r + c0f) / (r * (r + d1f) + d0f);
-        } else if(0.9535f < p) {
-            float q = 1f - p, r = (float)Math.sqrt(RoughMath.logRough(1f/(q*q)));
+        } else if(1.9535f < p) {
+            float q = 2f - p, r = (float)Math.sqrt(RoughMath.logRough(1f/(q*q)));
             return -c3f * r - c2f - (c1f * r + c0f) / (r * (r + d1f) + d0f);
         } else {
-            float q = p - 0.5f, r = q * q;
+            float q = p - 1.5f, r = q * q;
             return q * (a2f + (a1f * r + a0f) / (r * (r + b1f) + b0f));
         }
     }
@@ -245,13 +246,16 @@ public final class Distributor {
 ////        System.out.println("Last working double was " + Base.BASE10.friendly(d = Math.nextUp(d)));
 ////        System.out.println("Last working result was was " + Base.BASE10.friendly(probitVoutier(d)));
 //        System.out.println(Base.BASE10.friendly(probitI(Integer.MIN_VALUE)));
+//        System.out.println(Base.BASE10.friendly(probitI(-1)));
+//        System.out.println(Base.BASE10.friendly(probitI(0)));
 //        System.out.println(Base.BASE10.friendly(probitI(Integer.MAX_VALUE)));
-//        System.out.println(Base.BASE10.friendly(probitL(Long.MIN_VALUE)));
-//        System.out.println(Base.BASE10.friendly(probitL(-1L)));
-//        System.out.println(Base.BASE10.friendly(probitL(0L)));
-//        System.out.println(Base.BASE10.friendly(probitL(Long.MAX_VALUE)));
-//        System.out.println(Base.BASE10.friendly(probitD(Math.nextDown(1.0))));
-//        System.out.println(Base.BASE10.friendly(probitD(Math.nextDown(Math.nextDown(1.0)))));
+//
+////        System.out.println(Base.BASE10.friendly(probitL(Long.MIN_VALUE)));
+////        System.out.println(Base.BASE10.friendly(probitL(-1L)));
+////        System.out.println(Base.BASE10.friendly(probitL(0L)));
+////        System.out.println(Base.BASE10.friendly(probitL(Long.MAX_VALUE)));
+////        System.out.println(Base.BASE10.friendly(probitD(Math.nextDown(1.0))));
+////        System.out.println(Base.BASE10.friendly(probitD(Math.nextDown(Math.nextDown(1.0)))));
 ////        System.out.println(Base.BASE10.friendly(BitConversion.longBitsToDouble(0x3FF0000000000000L | -1L >>> 12)));
 ////        System.out.println(Base.BASE10.friendly(2.0 - BitConversion.longBitsToDouble(0x3FF0000000000000L | -1L >>> 12)));
 ////        System.out.println(Base.BASE10.friendly(2.0 - BitConversion.longBitsToDouble((0x3FF0000000000000L | -1L >>> 12)+1L)));
