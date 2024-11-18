@@ -1,6 +1,5 @@
 package com.github.tommyettinger;
 
-import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.digital.BitConversion;
 import com.github.tommyettinger.digital.RoughMath;
 
@@ -10,27 +9,36 @@ import java.util.Random;
  * Different methods for distributing input {@code long} or {@code double} values from a given domain into specific
  * distributions, such as the normal distribution. {@link #probit(double)} and {@link #probitHighPrecision(double)} take
  * a double in the 0.0 to 1.0 range (typically exclusive, but not required to be), and produce a normal-distributed
- * double centered on 0.0 with standard deviation 1.0 . {@link #linearNormal(long)} takes a long in the entire range of
- * possible long values, and also produces a double centered on 0.0 with standard deviation 1.0 . Similarly,
- * {@link #linearNormalF(int)} takes an int in the entire range of possible int values, and produces a float centered on
- * 0f with standard deviation 1f. All of these ways will preserve patterns in the input, so inputs close to the lowest
+ * double centered on 0.0 with standard deviation 1.0, using an algorithm by Acklam. The suffixed
+ * {@link #probitD(double)}, {@link #probitF(float)}, {@link #probitL(long)}, and {@link #probitI(int)} use a faster but
+ * still fairly-high-quality approximation by Voutier, and are usually indistinguishable from the earlier
+ * {@link #probit(double)}. The float and double versions also take inputs in the 0.0 to 1.0 range, but the int and long
+ * versions can take any int or any long, with the lowest values mapping to the lowest results, highest to highest, near
+ * 0 to near 0, etc. {@link #linearNormal(long)} is like {@link #probitL(long)}, though not quite as accurate.
+ * It takes a long in the entire range of possible long values, and also produces a double centered on 0.0 with
+ * standard deviation 1.0 . Similarly, {@link #linearNormalF(int)} takes an int in the entire range of possible int
+ * values, and produces a float centered on 0f with standard deviation 1f. Using the suffixed probit() methods, such as
+ * {@link #probitF(float)}, is recommended when generating normal-distributed floats or doubles.
+ * <br>
+ * All of these ways will preserve patterns in the input, so inputs close to the lowest
  * possible input (0.0 for probit(), {@link Long#MIN_VALUE} for normal(), {@link Integer#MIN_VALUE} for normalF()) will
  * produce the lowest possible output (-8.375 for probit(), linearNormal(), and linearNormalF()),
- * and similarly for the highest possible inputs producing the highest possible outputs. There's also
- * {@link #normal(long)}, which uses the <a href="https://en.wikipedia.org/wiki/Ziggurat_algorithm">Ziggurat method</a>
- * and does not preserve input patterns. The Ziggurat method does get drastically closer to the correct normal
- * distribution in the trail (where very positive or very negative values are), and it is about the same speed as
- * linearNormal() and linearNormalF().
+ * and similarly for the highest possible inputs producing the highest possible outputs.
  * <br>
- * This class is meant to be copyable without dependencies.
+ * There's also {@link #normal(long)} and {@link #normalF(int)}, which use the
+ * <a href="https://en.wikipedia.org/wiki/Ziggurat_algorithm">Ziggurat method</a> and do not preserve input patterns.
+ * The Ziggurat method does get drastically closer to the correct normal distribution in the trail (where very positive
+ * or very negative values are) relative to linearNormal methods, and it is about the same speed as linearNormal() and
+ * linearNormalF(). Surprisingly, {@link #probitF(float)} is a little faster than {@link #normalF(int)}, even
+ * considering that generating random floats for input is slower than generating random ints.
  */
 public final class Distributor {
 
     private Distributor() {}
-    private static final int    ZIG_TABLE_ITEMS = 1024;
-    private static final double R               = 4.03884984610951;
+    private static final int    ZIG_TABLE_ITEMS = 256;
+    private static final double R               = 3.65415288536100716461;
     private static final double INV_R           = 1.0 / R;
-    private static final double AREA            = 0.001226324646353085;
+    private static final double AREA            = 0.00492867323397465524494;
     private static final double[] ZIG_TABLE  = new double[ZIG_TABLE_ITEMS+1];
 
     private static final int   ZIG_TABLE_ITEMS_F = 128;
@@ -73,7 +81,6 @@ public final class Distributor {
         }
 
         ZIG_TABLE_F[ZIG_TABLE_ITEMS_F] = 0f;
-
     }
 
     /**
@@ -186,7 +193,7 @@ public final class Distributor {
      * A single-precision probit() approximation that takes a float between 0 and 1 inclusive and returns an
      * approximately-Gaussian-distributed float between -9.080134 and 9.080134 .
      * The function maps the most negative inputs to the most negative outputs, the most positive inputs to the most
-     * positive outputs, and inputs near 0 to outputs near 0.
+     * positive outputs, and inputs near 0 to outputs near 0. This does not consider the bottom 9 bits of {@code i}.
      * <a href="https://www.researchgate.net/publication/46462650_A_New_Approximation_to_the_Normal_Distribution_Quantile_Function">Uses this algorithm by Paul Voutier</a>.
      * @param i may be any int, though very close ints will not produce different results
      * @return an approximately-Gaussian-distributed float between -9.080134 and 9.080134
@@ -232,7 +239,7 @@ public final class Distributor {
      * A double-precision probit() approximation that takes any long and returns an
      * approximately-Gaussian-distributed double between -26.48372928592822 and 26.48372928592822 .
      * The function maps the most negative inputs to the most negative outputs, the most positive inputs to the most
-     * positive outputs, and inputs near 0 to outputs near 0.
+     * positive outputs, and inputs near 0 to outputs near 0. This does not consider the bottom 12 bits of {@code l}.
      * <a href="https://www.researchgate.net/publication/46462650_A_New_Approximation_to_the_Normal_Distribution_Quantile_Function">Uses this algorithm by Paul Voutier</a>.
      * @param l may be any long, though very close longs will not produce different results
      * @return an approximately-Gaussian-distributed double between -26.48372928592822 and 26.48372928592822
@@ -387,7 +394,6 @@ public final class Distributor {
         final double t = (n & 0x1FFFFFFFFFFFFFL) * 0x1p-53, v;
         if (top10 == 1023) {
             v = t * t * t * (4.0 - 3.297193345691938) + 3.297193345691938;
-//            v = t * t * (8.375 - 3.297193345691938) + 3.297193345691938;
         } else {
             final double s = LIN_TABLE[top10];
             v = t * (LIN_TABLE[top10 + 1] - s) + s;
@@ -513,9 +519,9 @@ public final class Distributor {
             if (f1 + (((state = (state ^ 0xF1357AEA2E62A9C5L) * 0xABC98388FB8FAC03L) >>> 11) * 0x1p-53) * (f0 - f1) < 1.0)
                 break;
         }
-        /* (Zero-indexed) bit 10 isn't used in the calculations for idx
-         * or u, so we use bit 10 as a sign bit here. */
-        return Math.copySign(u, 512L - (state & 1024L));
+        /* (Zero-indexed ) bits 8, 9, and 10 aren't used in the calculations for idx
+         * or u, so we use bit 9 as a sign bit here. */
+        return Math.copySign(u, 256L - (state & 512L));
     }
 
     /**
@@ -591,7 +597,7 @@ public final class Distributor {
             y = u * u;
             f0 = (float) Math.exp(-0.5f * (ZIG_TABLE_F[idx]     * ZIG_TABLE_F[idx]     - y));
             f1 = (float) Math.exp(-0.5f * (ZIG_TABLE_F[idx + 1] * ZIG_TABLE_F[idx + 1] - y));
-            if (f1 + (((state = BitConversion.imul(state ^ state >>> 8 ^ 0xFE62A9C5, 0xABC98383)) >>> 8) * 0x1p-24f) * (f0 - f1) < 1.0)
+            if (f1 + (((state = BitConversion.imul(state ^ state >>> 8 ^ 0xFE62A9C5, 0xABC98383)) >>> 8) * 0x1p-24f) * (f0 - f1) < 1f)
                 break;
         }
         /* (Zero-indexed) bit 8 isn't used in the calculations for idx
