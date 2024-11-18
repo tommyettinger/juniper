@@ -68,7 +68,6 @@ public final class Distributor {
 
         ZIG_TABLE[ZIG_TABLE_ITEMS] = 0.0;
 
-
         float ff = (float) Math.exp(-0.5 * R_F * R_F);
         ZIG_TABLE_F[0] = AREA_F / ff;
         ZIG_TABLE_F[1] = R_F;
@@ -190,30 +189,6 @@ public final class Distributor {
     }
 
     /**
-     * A single-precision probit() approximation that takes a float between 0 and 1 inclusive and returns an
-     * approximately-Gaussian-distributed float between -9.080134 and 9.080134 .
-     * The function maps the most negative inputs to the most negative outputs, the most positive inputs to the most
-     * positive outputs, and inputs near 0 to outputs near 0. This does not consider the bottom 9 bits of {@code i}.
-     * <a href="https://www.researchgate.net/publication/46462650_A_New_Approximation_to_the_Normal_Distribution_Quantile_Function">Uses this algorithm by Paul Voutier</a>.
-     * @param i may be any int, though very close ints will not produce different results
-     * @return an approximately-Gaussian-distributed float between -9.080134 and 9.080134
-     */
-    public static float probitI(int i) {
-//        float p = 0x1p-32f * i + 0.5f;
-        float p = BitConversion.intBitsToFloat((0x3FC00000 ^ i >>> 9) + (~i >>> 31));
-        if(1.0465f > p){
-            float q = p - 1f, r = (float)Math.sqrt(RoughMath.logRough(1f/(q*q)));
-            return c3f * r + c2f + (c1f * r + c0f) / (r * (r + d1f) + d0f);
-        } else if(1.9535f < p) {
-            float q = 2f - p, r = (float)Math.sqrt(RoughMath.logRough(1f/(q*q)));
-            return -c3f * r - c2f - (c1f * r + c0f) / (r * (r + d1f) + d0f);
-        } else {
-            float q = p - 1.5f, r = q * q;
-            return q * (a2f + (a1f * r + a0f) / (r * (r + b1f) + b0f));
-        }
-    }
-
-    /**
      * A double-precision probit() approximation that takes a double between 0 and 1 inclusive and returns an
      * approximately-Gaussian-distributed double between -26.48372928592822 and 26.48372928592822 .
      * The function maps the lowest inputs to the most negative outputs, the highest inputs to the most
@@ -236,6 +211,32 @@ public final class Distributor {
     }
 
     /**
+     * A single-precision probit() approximation that takes a float between 0 and 1 inclusive and returns an
+     * approximately-Gaussian-distributed float between -9.080134 and 9.080134 .
+     * The function maps the most negative inputs to the most negative outputs, the most positive inputs to the most
+     * positive outputs, and inputs near 0 to outputs near 0. This does not consider the bottom 9 bits of {@code i}.
+     * <a href="https://www.researchgate.net/publication/46462650_A_New_Approximation_to_the_Normal_Distribution_Quantile_Function">Uses this algorithm by Paul Voutier</a>.
+     * @param i may be any int, though very close ints will not produce different results
+     * @return an approximately-Gaussian-distributed float between -9.080134 and 9.080134
+     */
+    public static float probitI(int i) {
+        float p = BitConversion.intBitsToFloat((0x3FC00000 ^ i >>> 9) + (~i >>> 31));
+        // The above is essentially an optimized version of the below line.
+        //float p = 0x1p-32f * i + 0.5f;
+        // Really, the bitwise arcana is faster than a multiply-add op, somehow.
+        if(1.0465f > p){
+            float q = p - 1f, r = (float)Math.sqrt(RoughMath.logRough(1f/(q*q)));
+            return c3f * r + c2f + (c1f * r + c0f) / (r * (r + d1f) + d0f);
+        } else if(1.9535f < p) {
+            float q = 2f - p, r = (float)Math.sqrt(RoughMath.logRough(1f/(q*q)));
+            return -c3f * r - c2f - (c1f * r + c0f) / (r * (r + d1f) + d0f);
+        } else {
+            float q = p - 1.5f, r = q * q;
+            return q * (a2f + (a1f * r + a0f) / (r * (r + b1f) + b0f));
+        }
+    }
+
+    /**
      * A double-precision probit() approximation that takes any long and returns an
      * approximately-Gaussian-distributed double between -26.48372928592822 and 26.48372928592822 .
      * The function maps the most negative inputs to the most negative outputs, the most positive inputs to the most
@@ -245,8 +246,10 @@ public final class Distributor {
      * @return an approximately-Gaussian-distributed double between -26.48372928592822 and 26.48372928592822
      */
     public static double probitL(long l) {
-//        double p = l * 0x1p-64 + 0.5;
         double p = BitConversion.longBitsToDouble((0x3FF8000000000000L ^ l >>> 12) + (~l >>> 63));
+        // The above is essentially an optimized version of the below line.
+        //double p = l * 0x1p-64 + 0.5;
+        // Really, the bitwise arcana is faster than a multiply-add op, somehow.
         if(1.0465 > p){
             double q = p - 1.0 + 7.458340731200208E-155, r = Math.sqrt(Math.log(1.0/(q*q)));
             return c3 * r + c2 + (c1 * r + c0) / (r * (r + d1) + d0);
@@ -620,4 +623,30 @@ public final class Distributor {
 //        }
 //        System.out.println("from " + Base.BASE10.friendly(min) + " to " + Base.BASE10.friendly(max));
 //    }
+
+    /**
+     * A single-precision probit() approximation that takes a float between 0 and 1 inclusive and returns an
+     * approximately-Gaussian-distributed float between -9.080134 and 9.080134 .
+     * The function maps the most negative inputs to the most negative outputs, the most positive inputs to the most
+     * positive outputs, and inputs near 0 to outputs near 0.
+     * This does not consider some less-significant bits of {@code i}.
+     * <a href="https://www.researchgate.net/publication/46462650_A_New_Approximation_to_the_Normal_Distribution_Quantile_Function">Uses this algorithm by Paul Voutier</a>.
+     * @param i may be any int, though very close ints will not produce different results
+     * @return an approximately-Gaussian-distributed float between -9.080134 and 9.080134
+     */
+    public static float probitISimple(int i) {
+        float p = 0x1p-32f * i + 0.5f;
+//        float p = BitConversion.intBitsToFloat((0x3FC00000 ^ i >>> 9) + (~i >>> 31));
+        if(0.0465f > p){
+            float r = (float)Math.sqrt(RoughMath.logRough(1f/(p*p)));
+            return c3f * r + c2f + (c1f * r + c0f) / (r * (r + d1f) + d0f);
+        } else if(0.9535f < p) {
+            float q = 1f - p, r = (float)Math.sqrt(RoughMath.logRough(1f/(q*q)));
+            return -c3f * r - c2f - (c1f * r + c0f) / (r * (r + d1f) + d0f);
+        } else {
+            float q = p - 0.5f, r = q * q;
+            return q * (a2f + (a1f * r + a0f) / (r * (r + b1f) + b0f));
+        }
+    }
+
 }
