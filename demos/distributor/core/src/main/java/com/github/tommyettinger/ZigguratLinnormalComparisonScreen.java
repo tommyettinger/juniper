@@ -112,7 +112,8 @@ public class ZigguratLinnormalComparisonScreen extends ScreenAdapter {
             for (int i = 0; i < RUNS; i++) {
                 int m = (int) ((dist.getMu() + dist.getSigma() *
 //                    Borg.probitHighPrecision(dist.generator.nextExclusiveDouble())
-                        com.github.tommyettinger.Distributor.probitF(dist.generator.nextExclusiveFloat())
+                        com.github.tommyettinger.Distributor.probitI(dist.generator.nextInt())
+//                        com.github.tommyettinger.Distributor.probitF(dist.generator.nextExclusiveFloat())
 //                        Distributor.linearNormalF(dist.generator.nextInt())
                 )
                         * 128 + 256);
@@ -138,7 +139,7 @@ public class ZigguratLinnormalComparisonScreen extends ScreenAdapter {
             for (int i = 0; i < RUNS; i++) {
                 int m = (int) ((dist.getMu() + dist.getSigma() *
 //                    Borg.probitHighPrecision(dist.generator.nextExclusiveDouble())
-                        com.github.tommyettinger.Distributor.probitI(dist.generator.nextInt())
+                        com.github.tommyettinger.Distributor.normalF(dist.generator.nextInt())
 //                        Linnormal.linearNormal(dist.generator.nextLong())// | 0x7FC0000000000000L)
                 )
                         * 128 + 256);

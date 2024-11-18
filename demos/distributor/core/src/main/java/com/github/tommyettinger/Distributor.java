@@ -527,7 +527,7 @@ public final class Distributor {
      * Patterns between different {@code state} values provided to this will generally not be preserved in the
      * output, but this may not be true all the time for patterns on all bits.
      * <br>
-     * The range this can produce is from -??? to ???, both inclusive.
+     * The range this can produce is from -6.127281f to 6.158781f, both inclusive. This was tested exhaustively.
      * <br>
      * From <a href="https://github.com/camel-cdr/cauldron/blob/7d5328441b1a1bc8143f627aebafe58b29531cb9/cauldron/random.h#L2013-L2265">Cauldron</a>,
      * MIT-licensed. This in turn is based on Doornik's form of the Ziggurat method:
@@ -577,8 +577,8 @@ public final class Distributor {
                 /* If idx is 0, then the bottom 7 bits of state must all be 0,
                  * and u must be on the larger side. */
                 do {
-                    x = (float) Math.log((((state = BitConversion.imul(state ^ 0xFE62A9C5, 0xABC98383)) >>> 8) + 1) * 0x1p-24f) * INV_R_F;
-                    y = (float) Math.log((((state = BitConversion.imul(state ^ 0xFE62A9C5, 0xABC98383)) >>> 8) + 1) * 0x1p-24f);
+                    x = (float) Math.log((((state = BitConversion.imul(state ^ state >>> 8 ^ 0xFE62A9C5, 0xABC98383)) >>> 8) + 1) * 0x1p-24f) * INV_R_F;
+                    y = (float) Math.log((((state = BitConversion.imul(state ^ state >>> 8 ^ 0xFE62A9C5, 0xABC98383)) >>> 8) + 1) * 0x1p-24f);
                 } while (-(y + y) < x * x);
                 return (Integer.bitCount(state) & 1) == 0 ?
                         x - R_F :
@@ -591,11 +591,27 @@ public final class Distributor {
             y = u * u;
             f0 = (float) Math.exp(-0.5f * (ZIG_TABLE_F[idx]     * ZIG_TABLE_F[idx]     - y));
             f1 = (float) Math.exp(-0.5f * (ZIG_TABLE_F[idx + 1] * ZIG_TABLE_F[idx + 1] - y));
-            if (f1 + (((state = BitConversion.imul(state ^ 0xFE62A9C5, 0xABC98383)) >>> 8) * 0x1p-24f) * (f0 - f1) < 1.0)
+            if (f1 + (((state = BitConversion.imul(state ^ state >>> 8 ^ 0xFE62A9C5, 0xABC98383)) >>> 8) * 0x1p-24f) * (f0 - f1) < 1.0)
                 break;
         }
         /* (Zero-indexed) bit 8 isn't used in the calculations for idx
          * or u, so we use bit 8 as a sign bit here. */
         return Math.copySign(u, 128 - (state & 256));
     }
+
+//    /**
+//     * Exhaustive test of all ints to find the min and max results for normalF().
+//     * @param args
+//     */
+//    public static void main(String[] args) {
+//        float min = 1f, max = -1f;
+//        for (int x = 0; x < 0x10000; x++) {
+//            for (int y = 0; y < 0x10000; y++) {
+//                float zig = normalF(x << 16 | y);
+//                min = Math.min(min, zig);
+//                max = Math.max(max, zig);
+//            }
+//        }
+//        System.out.println("from " + Base.BASE10.friendly(min) + " to " + Base.BASE10.friendly(max));
+//    }
 }
