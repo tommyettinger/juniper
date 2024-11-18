@@ -31,11 +31,14 @@ public final class Distributor {
     private static final double R               = 4.03884984610951;
     private static final double INV_R           = 1.0 / R;
     private static final double AREA            = 0.001226324646353085;
-
-    /**
-     * This is private because it shouldn't ever be changed after assignment, and has nearly no use outside this code.
-     */
     private static final double[] ZIG_TABLE  = new double[ZIG_TABLE_ITEMS+1];
+
+    private static final int   ZIG_TABLE_ITEMS_F = 128;
+    private static final float R_F               = 3.4426198558966522559f;
+    private static final float INV_R_F           = 1f / R_F;
+    private static final float AREA_F            = 0.00991256303533646112916f;
+    private static final float[] ZIG_TABLE_F  = new float[ZIG_TABLE_ITEMS_F+1];
+
     private static final int LIN_TABLE_ITEMS = 1024;
     private static final double[] LIN_TABLE  = new double[LIN_TABLE_ITEMS];
     private static final float[] LIN_TABLE_F = new float[LIN_TABLE_ITEMS];
@@ -56,6 +59,21 @@ public final class Distributor {
         }
 
         ZIG_TABLE[ZIG_TABLE_ITEMS] = 0.0;
+
+
+        float ff = (float) Math.exp(-0.5 * R_F * R_F);
+        ZIG_TABLE_F[0] = AREA_F / ff;
+        ZIG_TABLE_F[1] = R_F;
+
+        for (int i = 2; i < ZIG_TABLE_ITEMS_F; i++) {
+            float xx = (float)Math.log(AREA_F /
+                    ZIG_TABLE_F[i - 1] + ff);
+            ZIG_TABLE_F[i] = (float) Math.sqrt(-2f * xx);
+            ff = (float) Math.exp(xx);
+        }
+
+        ZIG_TABLE_F[ZIG_TABLE_ITEMS_F] = 0f;
+
     }
 
     /**
@@ -449,7 +467,7 @@ public final class Distributor {
              * purposes:
              *    - The 53 most significant bits are used to generate
              *      a random floating-point number in the range [0.0,1.0).
-             *    - The first to the tenth least significant bits are used
+             *    - The first to the eighth least significant bits are used
              *      to generate an index in the range [0,256).
              *    - The eleventh least significant bit is treated as the sign
              *      bit of the result, unless the result is in the trail.
@@ -498,5 +516,86 @@ public final class Distributor {
         /* (Zero-indexed) bit 10 isn't used in the calculations for idx
          * or u, so we use bit 10 as a sign bit here. */
         return Math.copySign(u, 512L - (state & 1024L));
+    }
+
+    /**
+     * Given an int where all bits are sufficiently (independently) random, this produces a normal-distributed float
+     * (Gaussian) variable as if by a normal distribution with mean (mu) 0.0 and standard deviation (sigma) 1.0.
+     * This uses the Ziggurat algorithm, and takes one {@code int} input to produce one {@code float} value.
+     * Note that no additive counters are considered sufficiently random for this, and linear congruential generators
+     * might not be random enough either if they return the low-order bits without changes.
+     * Patterns between different {@code state} values provided to this will generally not be preserved in the
+     * output, but this may not be true all the time for patterns on all bits.
+     * <br>
+     * The range this can produce is from -??? to ???, both inclusive.
+     * <br>
+     * From <a href="https://github.com/camel-cdr/cauldron/blob/7d5328441b1a1bc8143f627aebafe58b29531cb9/cauldron/random.h#L2013-L2265">Cauldron</a>,
+     * MIT-licensed. This in turn is based on Doornik's form of the Ziggurat method:
+     * <br>
+     *      Doornik, Jurgen A (2005):
+     *      "An improved ziggurat method to generate normal random samples."
+     *      University of Oxford: 77.
+     *
+     * @param state an int that should be sufficiently random; quasi-random longs may not be enough
+     * @return a normal-distributed float with mean (mu) 0.0 and standard deviation (sigma) 1.0
+     */
+    public static float normalF(int state) {
+        float x, y, f0, f1, u;
+        int idx;
+
+        while (true) {
+            /* To minimize calls to the RNG, we use every bit for its own
+             * purposes:
+             *    - The 24 most significant bits are used to generate
+             *      a random floating-point number in the range [0.0,1.0).
+             *    - The first to the seventh least significant bits are used
+             *      to generate an index in the range [0,128).
+             *    - The eighth least significant bit is treated as the sign
+             *      bit of the result, unless the result is in the trail.
+             *    - If the random variable is in the trail, the state will
+             *      be modified instead of generating a new random number.
+             *      This could yield lower quality, but variables in the
+             *      trail are already rare (1/128 values or fewer).
+             *    - If the result is in the trail, the parity of the
+             *      complete state is used to randomly set the sign of the
+             *      return value.
+             */
+            idx = (state & (ZIG_TABLE_ITEMS_F - 1));
+            u = (state >>> 8) * 0x1p-24f * ZIG_TABLE_F[idx];
+
+            /* Take a random box from TABLE
+             * and get the value of a random x-coordinate inside it.
+             * If it's also inside TABLE[idx + 1] we already know to accept
+             * this value. */
+            if (u < ZIG_TABLE_F[idx + 1])
+                break;
+
+            /* If our random box is at the bottom, we can't use the lookup
+             * table and need to generate a variable for the trail of the
+             * normal distribution, as described by Marsaglia in 1964: */
+            if (idx == 0) {
+                /* If idx is 0, then the bottom 7 bits of state must all be 0,
+                 * and u must be on the larger side. */
+                do {
+                    x = (float) Math.log((((state = BitConversion.imul(state ^ 0xFE62A9C5, 0xABC98383)) >>> 8) + 1) * 0x1p-24f) * INV_R_F;
+                    y = (float) Math.log((((state = BitConversion.imul(state ^ 0xFE62A9C5, 0xABC98383)) >>> 8) + 1) * 0x1p-24f);
+                } while (-(y + y) < x * x);
+                return (Integer.bitCount(state) & 1) == 0 ?
+                        x - R_F :
+                        R_F - x;
+            }
+
+            /* Take a random x-coordinate u in between TABLE[idx] and TABLE[idx+1]
+             * and return x if u is inside the normal distribution,
+             * otherwise, repeat the entire ziggurat method. */
+            y = u * u;
+            f0 = (float) Math.exp(-0.5f * (ZIG_TABLE_F[idx]     * ZIG_TABLE_F[idx]     - y));
+            f1 = (float) Math.exp(-0.5f * (ZIG_TABLE_F[idx + 1] * ZIG_TABLE_F[idx + 1] - y));
+            if (f1 + (((state = BitConversion.imul(state ^ 0xFE62A9C5, 0xABC98383)) >>> 8) * 0x1p-24f) * (f0 - f1) < 1.0)
+                break;
+        }
+        /* (Zero-indexed) bit 8 isn't used in the calculations for idx
+         * or u, so we use bit 8 as a sign bit here. */
+        return Math.copySign(u, 128 - (state & 256));
     }
 }
