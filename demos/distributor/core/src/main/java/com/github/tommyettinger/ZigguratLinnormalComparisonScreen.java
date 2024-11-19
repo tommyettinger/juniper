@@ -16,6 +16,7 @@ import com.github.tommyettinger.digital.Distributor;
 import com.github.tommyettinger.random.distribution.NormalDistribution;
 
 import java.util.Arrays;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static com.github.tommyettinger.DistributorDemo.*;
 
@@ -27,6 +28,7 @@ public class ZigguratLinnormalComparisonScreen extends ScreenAdapter {
     private long iterations = 0L;
     private BitmapFont font;
     private ScreenViewport viewport;
+    private ThreadLocalRandom tlr;
 
     private int mode = 0;
 
@@ -49,6 +51,7 @@ public class ZigguratLinnormalComparisonScreen extends ScreenAdapter {
         renderer = new ImmediateModeRenderer20(512 * 5, false, true, 0);
         Arrays.fill(amounts, 0);
         iterations = 0;
+        tlr = ThreadLocalRandom.current();
     }
     private final DistributorDemo mainGame;
 
@@ -100,7 +103,7 @@ public class ZigguratLinnormalComparisonScreen extends ScreenAdapter {
         iterations += SMOOTHNESS;
         dist.setParameters(a, b, c);
         for (int i = 0; i < RUNS; i++) {
-            int m = (int) ((dist.getMu() + dist.getSigma() * Distributor.normal(dist.generator.nextLong()))
+            int m = (int) ((dist.getMu() + dist.getSigma() * tlr.nextGaussian())
                     * 128 + 256);
             if (m >= 0 && m < 512)
             {
@@ -112,7 +115,7 @@ public class ZigguratLinnormalComparisonScreen extends ScreenAdapter {
             for (int i = 0; i < RUNS; i++) {
                 int m = (int) ((dist.getMu() + dist.getSigma() *
 //                    Borg.probitHighPrecision(dist.generator.nextExclusiveDouble())
-                        com.github.tommyettinger.Distributor.probitI(dist.generator.nextInt())
+                        com.github.tommyettinger.Distributor.normal(dist.generator.nextLong())
 //                        com.github.tommyettinger.Distributor.probitF(dist.generator.nextExclusiveFloat())
 //                        Distributor.linearNormalF(dist.generator.nextInt())
                 )
@@ -139,7 +142,7 @@ public class ZigguratLinnormalComparisonScreen extends ScreenAdapter {
             for (int i = 0; i < RUNS; i++) {
                 int m = (int) ((dist.getMu() + dist.getSigma() *
 //                    Borg.probitHighPrecision(dist.generator.nextExclusiveDouble())
-                        com.github.tommyettinger.Distributor.probitISimple(dist.generator.nextInt())
+                        com.github.tommyettinger.Distributor.probitF(dist.generator.nextExclusiveFloat())
 //                        com.github.tommyettinger.Distributor.normalF(dist.generator.nextInt())
 //                        Linnormal.linearNormal(dist.generator.nextLong())// | 0x7FC0000000000000L)
                 )

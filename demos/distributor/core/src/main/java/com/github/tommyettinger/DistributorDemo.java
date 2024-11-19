@@ -23,7 +23,7 @@ public class DistributorDemo extends Game {
             new DistinctRandom(),
             new GoldenQuasiRandom(), new VanDerCorputQuasiRandom(), new LowChangeQuasiRandom(), new TupleQuasiRandom(0),
     };
-    public int randomIndex = 6;
+    public int randomIndex = 14;
     public EnhancedRandom random = randoms[randomIndex];
     public BitmapFont font;
     public SpriteBatch batch;

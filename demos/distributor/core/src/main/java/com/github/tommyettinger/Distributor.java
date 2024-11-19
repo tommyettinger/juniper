@@ -1,5 +1,6 @@
 package com.github.tommyettinger;
 
+import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.digital.BitConversion;
 import com.github.tommyettinger.digital.RoughMath;
 
@@ -262,34 +263,36 @@ public final class Distributor {
         }
     }
 
-//    public static void main(String[] args) {
-//        double d = 7.458340731200208E-155;
-////        for (int i = 0; i < 1000000000; i++) {
-////            if(Double.isNaN(probitVoutier(d = Math.nextDown(d))))
-////            {
-////                System.out.println("NaNaNaNaNa...");
-////                break;
-////            }
-////        }
-////        System.out.println("Last working double was " + Base.BASE10.friendly(d = Math.nextUp(d)));
-////        System.out.println("Last working result was was " + Base.BASE10.friendly(probitVoutier(d)));
-//        System.out.println(Base.BASE10.friendly(probitI(Integer.MIN_VALUE)));
-//        System.out.println(Base.BASE10.friendly(probitI(-1)));
-//        System.out.println(Base.BASE10.friendly(probitI(0)));
-//        System.out.println(Base.BASE10.friendly(probitI(Integer.MAX_VALUE)));
-//
-////        System.out.println(Base.BASE10.friendly(probitL(Long.MIN_VALUE)));
-////        System.out.println(Base.BASE10.friendly(probitL(-1L)));
-////        System.out.println(Base.BASE10.friendly(probitL(0L)));
-////        System.out.println(Base.BASE10.friendly(probitL(Long.MAX_VALUE)));
-////        System.out.println(Base.BASE10.friendly(probitD(Math.nextDown(1.0))));
-////        System.out.println(Base.BASE10.friendly(probitD(Math.nextDown(Math.nextDown(1.0)))));
-////        System.out.println(Base.BASE10.friendly(BitConversion.longBitsToDouble(0x3FF0000000000000L | -1L >>> 12)));
-////        System.out.println(Base.BASE10.friendly(2.0 - BitConversion.longBitsToDouble(0x3FF0000000000000L | -1L >>> 12)));
-////        System.out.println(Base.BASE10.friendly(2.0 - BitConversion.longBitsToDouble((0x3FF0000000000000L | -1L >>> 12)+1L)));
-////        System.out.println(Base.BASE10.friendly((2.0 - BitConversion.longBitsToDouble(0x3FF0000000000000L | -1L >>> 12)) * 0.5));
-////        System.out.println(Base.BASE10.friendly(1.0 - (Long.MAX_VALUE * 0x1p-64 + 0.5)));
-//    }
+    public static void main(String[] args) {
+        double d = 7.458340731200208E-155;
+//        for (int i = 0; i < 1000000000; i++) {
+//            if(Double.isNaN(probitVoutier(d = Math.nextDown(d))))
+//            {
+//                System.out.println("NaNaNaNaNa...");
+//                break;
+//            }
+//        }
+//        System.out.println("Last working double was " + Base.BASE10.friendly(d = Math.nextUp(d)));
+//        System.out.println("Last working result was was " + Base.BASE10.friendly(probitVoutier(d)));
+        System.out.println(Base.BASE10.friendly(probitD(Double.NaN)));
+        System.out.println(Base.BASE10.friendly(probitD(-1)));
+        System.out.println(Base.BASE10.friendly(probitD(-0.0)));
+        System.out.println(Base.BASE10.friendly(probitD(0.0)));
+        System.out.println(Base.BASE10.friendly(probitD(1)));
+        System.out.println(Base.BASE10.friendly(probitD(2)));
+
+//        System.out.println(Base.BASE10.friendly(probitL(Long.MIN_VALUE)));
+//        System.out.println(Base.BASE10.friendly(probitL(-1L)));
+//        System.out.println(Base.BASE10.friendly(probitL(0L)));
+//        System.out.println(Base.BASE10.friendly(probitL(Long.MAX_VALUE)));
+//        System.out.println(Base.BASE10.friendly(probitD(Math.nextDown(1.0))));
+//        System.out.println(Base.BASE10.friendly(probitD(Math.nextDown(Math.nextDown(1.0)))));
+//        System.out.println(Base.BASE10.friendly(BitConversion.longBitsToDouble(0x3FF0000000000000L | -1L >>> 12)));
+//        System.out.println(Base.BASE10.friendly(2.0 - BitConversion.longBitsToDouble(0x3FF0000000000000L | -1L >>> 12)));
+//        System.out.println(Base.BASE10.friendly(2.0 - BitConversion.longBitsToDouble((0x3FF0000000000000L | -1L >>> 12)+1L)));
+//        System.out.println(Base.BASE10.friendly((2.0 - BitConversion.longBitsToDouble(0x3FF0000000000000L | -1L >>> 12)) * 0.5));
+//        System.out.println(Base.BASE10.friendly(1.0 - (Long.MAX_VALUE * 0x1p-64 + 0.5)));
+    }
 
     /**
      * Complementary error function, partial implementation.
