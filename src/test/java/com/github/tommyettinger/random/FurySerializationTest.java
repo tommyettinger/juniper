@@ -4,6 +4,7 @@ import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.random.distribution.Distribution;
 import org.apache.fury.Fury;
 import org.apache.fury.config.Language;
+import org.apache.fury.logging.LoggerFactory;
 import org.apache.fury.memory.MemoryBuffer;
 import org.junit.Assert;
 import org.junit.Ignore;
@@ -16,6 +17,7 @@ public class FurySerializationTest {
     @Test
 //    @Ignore
     public void testRoundTrip() {
+        LoggerFactory.disableLogging();
         Fury fury = Fury.builder().withLanguage(Language.JAVA).build();
 //        fury.register(EnhancedRandom.class);
 
@@ -41,6 +43,7 @@ public class FurySerializationTest {
 
     @Test
     public void testRoundTripDist() {
+        LoggerFactory.disableLogging();
         Fury fury = Fury.builder().withLanguage(Language.JAVA).build();
 //        fury.register(EnhancedRandom.class);
         List<Distribution> all = Deserializer.copyDistributions();
@@ -74,6 +77,7 @@ public class FurySerializationTest {
 
     @Test
     public void testRoundTripDistributedRandom() {
+        LoggerFactory.disableLogging();
         Fury fury = Fury.builder().withLanguage(Language.JAVA).build();
         fury.register(DistributedRandom.class);
         List<Distribution> all = Deserializer.copyDistributions();
@@ -108,6 +112,7 @@ public class FurySerializationTest {
 
     @Test
     public void testReverseWrapper() {
+        LoggerFactory.disableLogging();
         Fury fury = Fury.builder().withLanguage(Language.JAVA).build();
         fury.register(EnhancedRandom.class);
         fury.register(ReverseWrapper.class);
@@ -143,6 +148,7 @@ public class FurySerializationTest {
 
     @Test
     public void testArchivalWrapper() {
+        LoggerFactory.disableLogging();
         Fury fury = Fury.builder().withLanguage(Language.JAVA).build();
         fury.register(EnhancedRandom.class);
         fury.register(AceRandom.class);
@@ -166,6 +172,7 @@ public class FurySerializationTest {
     }
     @Test
     public void testArchivalWrapper2() {
+        LoggerFactory.disableLogging();
         Fury fury = Fury.builder().withLanguage(Language.JAVA).build();
         fury.register(EnhancedRandom.class);
         fury.register(DistinctRandom.class);

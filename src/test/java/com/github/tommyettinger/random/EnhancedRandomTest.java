@@ -1055,7 +1055,7 @@ public class EnhancedRandomTest {
 			}catch (UnsupportedOperationException ex) {
 				System.out.println(random.getTag() + " does not support a required operation.");
 			} catch (AssertionError ex) {
-				System.out.println(random.getTag() + " failed.");
+				System.out.println(random.getTag() + " failed: " + ex.getLocalizedMessage());
 			}
 		}
 	}
@@ -1182,6 +1182,46 @@ public class EnhancedRandomTest {
 		for (int i = 1; i < toProduce.size; i++) {
 			Assert.assertEquals(toProduce.get(i), ksr.nextLong());
 		}
+	}
+	@Test
+	public void testKnownSequenceRandomPrevious() {
+		LongSequence toProduce = LongSequence.with(123L, 456L, -1L, 1L, 0L, 0L, 1000000000000L);
+		KnownSequenceRandom random = new KnownSequenceRandom(toProduce);
+		long n0 = random.nextLong();
+		long n1 = random.nextLong();
+		long n2 = random.nextLong();
+		long n3 = random.nextLong();
+		long n4 = random.nextLong();
+		long n5 = random.nextLong();
+		long n6 = random.nextLong();
+		long p6 = random.previousLong();
+		long p5 = random.previousLong();
+		long p4 = random.previousLong();
+		long p3 = random.previousLong();
+		long p2 = random.previousLong();
+		long p1 = random.previousLong();
+		long p0 = random.previousLong();
+		System.out.println(n0 + " vs. " + p0);
+		System.out.println(n1 + " vs. " + p1);
+		System.out.println(n2 + " vs. " + p2);
+		System.out.println(n3 + " vs. " + p3);
+		System.out.println(n4 + " vs. " + p4);
+		System.out.println(n5 + " vs. " + p5);
+		System.out.println(n6 + " vs. " + p6);
+		Assert.assertEquals(n0, p0);
+		Assert.assertEquals(n1, p1);
+		Assert.assertEquals(n2, p2);
+		Assert.assertEquals(n3, p3);
+		Assert.assertEquals(n4, p4);
+		Assert.assertEquals(n5, p5);
+		Assert.assertEquals(n6, p6);
+		long n = random.nextLong();
+		long np = random.previousLong();
+		long npn = random.nextLong();
+		long npnp = random.previousLong();
+		Assert.assertEquals(n, np);
+		Assert.assertEquals(np, npn);
+		Assert.assertEquals(npn, npnp);
 	}
 
 	@Test

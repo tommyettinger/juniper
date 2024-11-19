@@ -18,6 +18,7 @@
 package com.github.tommyettinger.random.experimental;
 
 import com.github.tommyettinger.digital.BitConversion;
+import com.github.tommyettinger.digital.MathTools;
 import com.github.tommyettinger.random.*;
 
 import static com.github.tommyettinger.digital.BitConversion.imul;
@@ -83,7 +84,7 @@ public class Cover32Random extends EnhancedRandom {
 
 	@Override
 	public String getTag() {
-		return "GobR";
+		return "CvrR";
 	}
 
 	/**
@@ -254,17 +255,7 @@ public class Cover32Random extends EnhancedRandom {
 
 	@Override
 	public long previousLong () {
-		int x = stateA;
-		int y = stateB;
-		int z = stateC;
-		stateA = (x ^ 0xBEA225FA) - 0xD192ED03 | 0;
-		stateB = (y ^ 0xA62B82F6) - BitConversion.countLeadingZeros(x) | 0;
-		stateC = (z ^ 0x9E3779BA) - BitConversion.countLeadingZeros(x & y) | 0;
-		y = (y <<  3 | y >>> 29) ^ (x = (x << 24 | x >>>  8) + y ^ z) + (x <<  7 | x >>> 25);
-		x = (x << 14 | x >>> 18) ^ (y = (y << 29 | y >>>  3) + x ^ z) + (y << 11 | y >>> 21);
-		y = (y << 19 | y >>> 13) ^ (x = (x <<  5 | x >>> 27) + y ^ z) + (x << 29 | x >>>  3);
-		x = (x << 17 | x >>> 15) ^ (y = (y << 11 | y >>> 21) + x ^ z) + (y << 23 | y >>>  9);
-		return (long)y << 32 ^ x;
+		return previousInt() ^ (long)previousInt() << 32;
 	}
 
 	@Override
@@ -273,11 +264,9 @@ public class Cover32Random extends EnhancedRandom {
 		int y = (stateB = stateB + BitConversion.countLeadingZeros(x) ^ 0xA62B82F6);
 		int z = (stateC = stateC + BitConversion.countLeadingZeros(x & y) ^ 0x9E3779BA);
 		int w = (stateD = imul((stateD << 12 | stateD >>> 20), 0xD747A13B) ^ z);
-		x += y + z + w;
-		x = imul(x ^ (x << 16 | x >>> 16), 0x21f0aaad);
-		x = imul(x ^ (x << 17 | x >>> 15), 0x735a2d97);
-		x ^= (x << 17 | x >>> 15);
-		return x >>> (32 - bits);
+		int res = (x << 17 | x >>> 15) + z ^ (w << 5 | w >>> 27) ^ (y = (y << 11 | y >>> 21) + x ^ w + (z << 25 | z >>> 7)) + (y << 23 | y >>> 9);
+		res = imul(res ^ res >>> 15, 0x735a2d97);
+		return (res ^ res >>> 16) >>> (32 - bits);
 	}
 
 	@Override
@@ -286,13 +275,7 @@ public class Cover32Random extends EnhancedRandom {
 		int y = (stateB = stateB + BitConversion.countLeadingZeros(x) ^ 0xA62B82F6);
 		int z = (stateC = stateC + BitConversion.countLeadingZeros(x & y) ^ 0x9E3779BA);
 		int w = (stateD = imul((stateD << 12 | stateD >>> 20) ^ z, 0xD747A13B));
-//		int res = x + y + z + w;
-//		x = imul(x ^ x >>> 16, 0x21f0aaad);
-//		x = imul(x ^ x >>> 15, 0x735a2d97);
-//		x ^= x >>> 15;
-//		return x;
 		int res = (x << 17 | x >>> 15) + z ^ (w << 5 | w >>> 27) ^ (y = (y << 11 | y >>> 21) + x ^ w + (z << 25 | z >>> 7)) + (y << 23 | y >>> 9);
-//		res = imul(res ^ res >>> 16, 0x21f0aaad);
 		res = imul(res ^ res >>> 15, 0x735a2d97);
 		return res ^ res >>> 16;
 
@@ -302,15 +285,22 @@ public class Cover32Random extends EnhancedRandom {
 		int x = stateA;
 		int y = stateB;
 		int z = stateC;
+		int w = stateD;
 		stateA = (x ^ 0xBEA225FA) - 0xD192ED03 | 0;
 		stateB = (y ^ 0xA62B82F6) - BitConversion.countLeadingZeros(x) | 0;
 		stateC = (z ^ 0x9E3779BA) - BitConversion.countLeadingZeros(x & y) | 0;
-		y = (y <<  3 | y >>> 29) ^ (x = (x << 24 | x >>>  8) + y ^ z) + (x <<  7 | x >>> 25);
-		x = (x << 14 | x >>> 18) ^ (y = (y << 29 | y >>>  3) + x ^ z) + (y << 11 | y >>> 21);
-		y = (y << 19 | y >>> 13) ^ (x = (x <<  5 | x >>> 27) + y ^ z) + (x << 29 | x >>>  3);
-		x = (x << 17 | x >>> 15) ^ (y = (y << 11 | y >>> 21) + x ^ z) + (y << 23 | y >>>  9);
-		return x;
+		stateD = imul(w, MathTools.modularMultiplicativeInverse(0xD747A13B)) ^ z;
+		stateD = (stateD << 20 | stateD >>> 12);
+		int res = (x << 17 | x >>> 15) + z ^ (w << 5 | w >>> 27) ^
+				(y = (y << 11 | y >>> 21) + x ^ w + (z << 25 | z >>> 7)) + (y << 23 | y >>> 9);
+		res = imul(res ^ res >>> 15, 0x735a2d97);
+		return res ^ res >>> 16;
 	}
+//		int res = x + y + z + w;
+//		x = imul(x ^ x >>> 16, 0x21f0aaad);
+//		x = imul(x ^ x >>> 15, 0x735a2d97);
+//		x ^= x >>> 15;
+//		return x;
 
 	@Override
 	public int nextInt (int bound) {

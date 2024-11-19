@@ -163,9 +163,8 @@ public class KnownSequenceRandom extends EnhancedRandom {
      */
     @Override
     public long previousLong() {
-        final long r = known.get(index--);
-        if(index < 0) index = known.size - 1;
-        return r;
+        if(--index < 0) index = known.size - 1;
+        return known.get(index);
     }
 
     /**
