@@ -116,7 +116,8 @@ public class InitialCorrelationEvaluator {
 //                new Rawr32Random(1, 1, 1, 1), new Recipe32Random(1, 1, 1), new Xoshiro128PlusPlusRandom(1, 1, 1, 1),
 //                new Taxman32Random(1, 1), new Taxon32Random(1, 1), new Silk32Random(1, 1),
 //                new CupolaRandom(1, 1)
-                new Fluff32Random(1, 1)
+//                new Fluff32Random(1, 1)
+                new SoloRandom(1, 1, 1)
         );
 //        ArrayList<EnhancedRandom> rs = Generators.randomList;
 
@@ -141,7 +142,7 @@ public class InitialCorrelationEvaluator {
                 }
             }
             InitialCorrelationEvaluator evaluator = new InitialCorrelationEvaluator();
-            double result = evaluator.run(g, 32, 64);
+            double result = evaluator.run(g, 100, 100 + 32);
             System.out.println("Lowest mode: "
                     + Base.BASE10.decimal(evaluator.actualMode, 8)
                     + " has mean amount " + Base.BASE10.decimal(evaluator.actualAmount, 12)

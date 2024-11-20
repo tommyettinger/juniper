@@ -62,6 +62,7 @@ public final class Generators {
         randomList.add(new Gnome32Random(1, 1));
 //        randomList.add(new Nuu32Random(1, 1));
         randomList.add(new Fluff32Random(1, 1));
+        randomList.add(new SoloRandom(1, 1, 1));
     }
     public static int randomCount = randomList.size();
 
