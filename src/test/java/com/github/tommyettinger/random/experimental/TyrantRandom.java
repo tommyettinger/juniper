@@ -78,7 +78,7 @@ public class TyrantRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Creates a new TyrantRandom with the given four states; all {@code long} values are permitted.
+	 * Creates a new TyrantRandom with the given three states; all {@code long} values are permitted.
 	 * These states will be used verbatim.
 	 *
 	 * @param stateA any {@code long} value
@@ -144,9 +144,9 @@ public class TyrantRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * This initializes all 4 states of the generator to random values based on the given seed.
+	 * This initializes all 3 states of the generator to random values based on the given seed.
 	 * (2 to the 64) possible initial generator states can be produced here, though there are
-	 * (2 to the 190) possible states in total.
+	 * (2 to the 192) possible states in total.
 	 *
 	 * @param seed the initial seed; may be any long
 	 */
@@ -215,7 +215,7 @@ public class TyrantRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Sets the state completely to the given four state variables.
+	 * Sets the state completely to the given three state variables.
 	 * This is the same as calling {@link #setStateA(long)}, {@link #setStateB(long)},
 	 * and {@link #setStateC(long)} as a group.
 	 *
