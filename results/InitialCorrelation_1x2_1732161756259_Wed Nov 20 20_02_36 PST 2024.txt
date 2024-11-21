@@ -1,0 +1,7 @@
+Lowest mode: 116.0000 has mean amount 0.0310885310  PASS 👍 for DistinctRandom
+Lowest mode: 115.0000 has mean amount 0.0310773998  PASS 👍 for FlowRandom
+Lowest mode: 0.000000 has mean amount 0.1626894325  FAIL 💀 for OrbitRXSMXSRandom
+Lowest mode: 116.0000 has mean amount 0.0311037898  PASS 👍 for OrbitRandom
+Lowest mode: 116.0000 has mean amount 0.0310876667  PASS 👍 for PcgBoostedRandom
+Lowest mode: 115.0000 has mean amount 0.0311215817  PASS 👍 for PcgRXSMXSRandom
+Lowest mode: 114.0000 has mean amount 0.0307359248  PASS 👍 for SoloRandom
