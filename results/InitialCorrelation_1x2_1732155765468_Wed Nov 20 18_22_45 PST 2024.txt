@@ -1,0 +1,16 @@
+Lowest mode: 116.0000 has mean amount 0.0311261266  PASS 👍 for AceRandom
+Lowest mode: 116.0000 has mean amount 0.0311031788  PASS 👍 for Crand64Random
+Lowest mode: 116.0000 has mean amount 0.0310885310  PASS 👍 for DistinctRandom
+Lowest mode: 115.0000 has mean amount 0.0310773998  PASS 👍 for FlowRandom
+Lowest mode: 59.00000 has mean amount 0.0488040745  FAIL 💀 for LCG48Random
+Lowest mode: 83.00000 has mean amount 0.0257725715  FAIL 💀 for LaserRandom
+Lowest mode: 116.0000 has mean amount 0.0310774743  PASS 👍 for MizuchiRandom
+Lowest mode: 116.0000 has mean amount 0.0310876667  PASS 👍 for PcgBoostedRandom
+Lowest mode: 115.0000 has mean amount 0.0311215817  PASS 👍 for PcgRXSMXSRandom
+Lowest mode: 116.0000 has mean amount 0.0310954749  PASS 👍 for RomuTrioRandom
+Lowest mode: 116.0000 has mean amount 0.0310793668  PASS 👍 for Sfc64Random
+Lowest mode: 114.0000 has mean amount 0.0307359248  PASS 👍 for SoloRandom
+Lowest mode: 85.00000 has mean amount 0.0183753967  FAIL 💀 for Xoroshiro128StarStarRandom
+Lowest mode: 95.00000 has mean amount 0.0220101624  FAIL 💀 for Xoshiro128PlusPlusRandom
+Lowest mode: 116.0000 has mean amount 0.0311121046  PASS 👍 for Xoshiro256MX3Random
+Lowest mode: 88.00000 has mean amount 0.0185345113  FAIL 💀 for Xoshiro256StarStarRandom

@@ -29,8 +29,13 @@ import java.util.Date;
 /**
  */
 public class InitialCorrelationEvaluator {
+    /**
+     * How many steps to run before measurement starts.
+     */
+    public static int STEPS_BEFORE = 80;
     public static long INTERVAL_X = 1;//2;//4;//8;//16;//0xC13FA9A902A6328FL;//
-    public static long INTERVAL_Y = 1;//2;//4;//8;//16;//0x91E10DA5C79E7B1DL;//
+    // We use 2 here because several generators use only odd numbers for stateB.
+    public static long INTERVAL_Y = 2;//2;//4;//8;//16;//0x91E10DA5C79E7B1DL;//
     public double steps = 0;
     public int mode = 0;
     public double amount = 0;
@@ -85,7 +90,7 @@ public class InitialCorrelationEvaluator {
             actualMode = minMode;
         }
 //        actualMode *= 0.5; // not sure why this is needed to get similar behavior to before...
-        return 1.0 - Math.abs(actualMode - 115.5) - (actualAmount - 0.031) * 10;
+        return 1.0 - Math.abs(actualMode - 115.5) * 0.5f - (actualAmount - 0.031) * 50;
     }
     public void step(int bit) {
         ++steps;
@@ -110,15 +115,22 @@ public class InitialCorrelationEvaluator {
 //                new PcgRXSMXSRandom(1, 1), new FlowRandom(1, 1), new MizuchiRandom(1, 1),
 //                new Xoroshiro128StarStarRandom(1, 1), new LaserRandom(1, 1), new FowlRandom(1, 1),
 //                new DistinctRandom(1));
-        ArrayList<EnhancedRandom> rs = ObjectList.with(
+        ArrayList<EnhancedRandom> rs = ObjectList.with(new EnhancedRandom[]{
 //                new Bear32Random(1, 1, 1, 1), new Chill32Random(1, 1, 1), new ChopRandom(1, 1, 1, 1),
 //                new Jsf32Random(1, 1, 1, 1), new Respite32Random(1, 1, 1), new Resolute32Random(1, 1, 1),
 //                new Rawr32Random(1, 1, 1, 1), new Recipe32Random(1, 1, 1), new Xoshiro128PlusPlusRandom(1, 1, 1, 1),
 //                new Taxman32Random(1, 1), new Taxon32Random(1, 1), new Silk32Random(1, 1),
 //                new CupolaRandom(1, 1)
 //                new Fluff32Random(1, 1)
-                new SoloRandom(1, 1, 1)
-        );
+//                new SoloRandom(1, 1, 1)
+                new LCG48Random(1),
+                new PcgRXSMXSRandom(1, 1), new PcgBoostedRandom(1, 1),
+                new Xoshiro256StarStarRandom(1, 1, 1, 1), new Xoshiro128PlusPlusRandom(1, 1, 1, 1),
+                new Xoshiro256MX3Random(1, 1, 1, 1), new Xoroshiro128StarStarRandom(1, 1),
+                new DistinctRandom(1), new AceRandom(1, 1, 1, 1, 1), new SoloRandom(1, 1, 1), new FlowRandom(1, 1),
+                new LaserRandom(1, 1), new MizuchiRandom(1, 1),
+                new Crand64Random(1, 1, 1, 1, 1), new RomuTrioRandom(1, 1, 1), new Sfc64Random(1, 1, 1, 1)
+        });
 //        ArrayList<EnhancedRandom> rs = Generators.randomList;
 
         rs.sort((l, r) -> l.getClass().getSimpleName().compareTo(r.getClass().getSimpleName()));
@@ -142,7 +154,7 @@ public class InitialCorrelationEvaluator {
                 }
             }
             InitialCorrelationEvaluator evaluator = new InitialCorrelationEvaluator();
-            double result = evaluator.run(g, 100, 100 + 32);
+            double result = evaluator.run(g, STEPS_BEFORE, STEPS_BEFORE + 32);
             System.out.println("Lowest mode: "
                     + Base.BASE10.decimal(evaluator.actualMode, 8)
                     + " has mean amount " + Base.BASE10.decimal(evaluator.actualAmount, 12)
