@@ -123,13 +123,15 @@ public class InitialCorrelationEvaluator {
 //                new CupolaRandom(1, 1)
 //                new Fluff32Random(1, 1)
 //                new SoloRandom(1, 1, 1)
-                new LCG48Random(1),
-                new PcgRXSMXSRandom(1, 1), new PcgBoostedRandom(1, 1),
-                new Xoshiro256StarStarRandom(1, 1, 1, 1), new Xoshiro128PlusPlusRandom(1, 1, 1, 1),
-                new Xoshiro256MX3Random(1, 1, 1, 1), new Xoroshiro128StarStarRandom(1, 1),
-                new DistinctRandom(1), new AceRandom(1, 1, 1, 1, 1), new SoloRandom(1, 1, 1), new FlowRandom(1, 1),
-                new LaserRandom(1, 1), new MizuchiRandom(1, 1),
-                new Crand64Random(1, 1, 1, 1, 1), new RomuTrioRandom(1, 1, 1), new Sfc64Random(1, 1, 1, 1)
+
+                new PcgRXSMXSRandom(1, 1), new PcgBoostedRandom(1, 1), new OrbitRXSMXSRandom(1, 1),
+//                new Xoshiro256StarStarRandom(1, 1, 1, 1), new Xoshiro128PlusPlusRandom(1, 1, 1, 1),
+//                new Xoshiro256MX3Random(1, 1, 1, 1), new Xoroshiro128StarStarRandom(1, 1),
+                new DistinctRandom(1), new SoloRandom(1, 1, 1), new FlowRandom(1, 1),
+//                new AceRandom(1, 1, 1, 1, 1),
+//                new LaserRandom(1, 1), new MizuchiRandom(1, 1),
+//                new Crand64Random(1, 1, 1, 1, 1), new RomuTrioRandom(1, 1, 1), new Sfc64Random(1, 1, 1, 1),
+//                new LCG48Random(1),
         });
 //        ArrayList<EnhancedRandom> rs = Generators.randomList;
 

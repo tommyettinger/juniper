@@ -17,74 +17,58 @@
 
 package com.github.tommyettinger.random.experimental;
 
+import com.github.tommyettinger.digital.BitConversion;
 import com.github.tommyettinger.random.EnhancedRandom;
 
 /**
- * A modified version of PCG-Random's RXS-M-XS generator. It has two {@code long} states, one of which changes with
- * every generated value and one always-odd state which never changes (the "stream" or "increment"). This uses a linear
- * congruential generator for its changing state (the state changes by multiplying with a large constant and adding the
- * stream), and feeds the resulting value to a specific 64-bit unary hash.
- * <br>
- * This always has a period of 2 to the 64, and there are 2 to the 63 possible sequences that result from changing the
- * stream value. PcgBoostedRandom implements all optional methods in EnhancedRandom except
- * {@link #skip(long)}; it does implement {@link #previousLong()} without using skip().
- * <br>
- * PcgBoostedRandom passes at least 16TB of testing with PractRand, which uses a suite of tests to look for a variety of
- * potential problems. Its original author tested it to 32TB without issues, as well. It has not been tested with hwd or
- * remortality. All the generators here are considered stable. While this is a rather high-quality generator, it is not
- * designed for cryptography, and should not be used for such purposes. Anyone able to see the full output of
- * {@link #nextLong()} can determine the internal stateA value, and seeing two such full outputs is enough to determine
- * stateB's value as well. There are also some extremely minor and subtle correlations between numerically-similar
- * states that some tests detect, but the ones found so far are essentially insignificant.
  */
-public class PcgBoostedRandom extends EnhancedRandom {
+public class OrbitRXSMXSRandom extends EnhancedRandom {
 
 	/**
-	 * The first state, also called the changing state; can be any long.
+	 * The first state; can be any long.
 	 */
 	protected long stateA;
 	/**
-	 * The second state, also called the stream; can be any odd-number long.
+	 * The second state; can be any long.
 	 */
 	protected long stateB;
 
 	/**
-	 * Creates a new PcgBoostedRandom with a random state.
+	 * Creates a new OrbitRXSMXSRandom with a random state.
 	 */
-	public PcgBoostedRandom() {
+	public OrbitRXSMXSRandom() {
 		super();
 		stateA = EnhancedRandom.seedFromMath();
-		stateB = EnhancedRandom.seedFromMath() | 1L;
+		stateB = EnhancedRandom.seedFromMath();
 	}
 
 	/**
-	 * Creates a new PcgBoostedRandom with the given seed; all {@code long} values are permitted.
+	 * Creates a new OrbitRXSMXSRandom with the given seed; all {@code long} values are permitted.
 	 * The seed will be passed to {@link #setSeed(long)} to attempt to adequately distribute the seed randomly.
 	 *
 	 * @param seed any {@code long} value
 	 */
-	public PcgBoostedRandom(long seed) {
+	public OrbitRXSMXSRandom(long seed) {
 		super(seed);
 		setSeed(seed);
 	}
 
 	/**
-	 * Creates a new PcgBoostedRandom with the given two states; all {@code long} values are permitted for
-	 * stateA, and all odd-number {@code long} values are permitted for stateB. These states are not
-	 * changed as long as they are permitted values.
+	 * Creates a new OrbitRXSMXSRandom with the given two states; all {@code long} values are permitted for
+	 * stateA, and all {@code long} values are permitted for stateB. These states are not changed.
 	 *
 	 * @param stateA any {@code long} value
-	 * @param stateB any {@code long} value; should be odd, otherwise this will add 1 to make it odd
+	 * @param stateB any {@code long} value
 	 */
-	public PcgBoostedRandom(long stateA, long stateB) {
+	public OrbitRXSMXSRandom(long stateA, long stateB) {
 		super(stateA);
 		this.stateA = stateA;
-		this.stateB = stateB | 1L;
+		this.stateB = stateB;
 	}
 
 	@Override
 	public String getTag() {
-		return "PBdR";
+		return "ORXR";
 	}
 
 	/**
@@ -122,7 +106,7 @@ public class PcgBoostedRandom extends EnhancedRandom {
 	@Override
 	public void setSelectedState (int selection, long value) {
 		if ((selection & 1) == 1) {
-			stateB = value | 1L;
+			stateB = value;
 		} else {
 			stateA = value;
 		}
@@ -147,7 +131,7 @@ public class PcgBoostedRandom extends EnhancedRandom {
 		x *= 0x3C79AC492BA7B653L;
 		x ^= x >>> 33;
 		x *= 0x1C69B3F74AC4AE35L;
-		stateB = (x ^ x >>> 27) | 1L;
+		stateB = (x ^ x >>> 27);
 	}
 
 	/**
@@ -159,7 +143,7 @@ public class PcgBoostedRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Sets the first part of the state (the changing state).
+	 * Sets the first part of the state.
 	 *
 	 * @param stateA can be any long
 	 */
@@ -168,7 +152,7 @@ public class PcgBoostedRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Gets the second part of the state (the stream or increment).
+	 * Gets the second part of the state.
 	 * @return the second part of the state
 	 */
 	public long getStateB () {
@@ -176,13 +160,12 @@ public class PcgBoostedRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Sets the second part of the state (the stream or increment).
-	 * This must be odd, otherwise this will add 1 to make it odd.
+	 * Sets the second part of the state.
 	 *
-	 * @param stateB can be any odd-number long; otherwise this adds 1 to make it odd
+	 * @param stateB can be any long
 	 */
 	public void setStateB (long stateB) {
-		this.stateB = stateB | 1L;
+		this.stateB = stateB;
 	}
 
 	/**
@@ -191,39 +174,46 @@ public class PcgBoostedRandom extends EnhancedRandom {
 	 * as a group.
 	 *
 	 * @param stateA the first state; can be any long
-	 * @param stateB the second state; can be any odd-number long
+	 * @param stateB the second state; can be any long
 	 */
 	@Override
 	public void setState (long stateA, long stateB) {
 		this.stateA = stateA;
-		this.stateB = stateB | 1L;
+		this.stateB = stateB;
 	}
 
 	@Override
 	public long nextLong () {
-		long z = (stateA = stateA * 0x5851F42D4C957F2DL + stateB);
-		z = (z ^ z >>> ((z >>> 59) + 5) ^ z >>> 40) * 0xAEF17502108EF2D9L;
-		return z ^ z >>> 43;
+		long x = (stateA += 0xD1B54A32D192ED03L);
+		long y = (stateB += 0x8CB92BA72F3D8DD7L + BitConversion.countLeadingZeros(x));
+		long z = (x ^ (y << 37 | y >>> 27));
+		z = (z ^ (z >>> ((z >>> 59) + 5))) * 0xAEF17502108EF2D9L;
+		return (z ^ z >>> 43);
 	}
 
 	@Override
 	public long previousLong () {
-		long z = stateA;
-		stateA = (stateA - stateB) * 0xC097EF87329E28A5L;
-		z = (z ^ z >>> ((z >>> 59) + 5) ^ z >>> 40) * 0xAEF17502108EF2D9L;
-		return z ^ z >>> 43;
+		long x = stateA;
+		long y = stateB;
+		stateA -= 0xD1B54A32D192ED03L;
+		stateB -= 0x8CB92BA72F3D8DD7L + BitConversion.countLeadingZeros(x);
+		long z = (x ^ (y << 37 | y >>> 27));
+		z = (z ^ (z >>> ((z >>> 59) + 5))) * 0xAEF17502108EF2D9L;
+		return (z ^ z >>> 43);
 	}
 
 	@Override
 	public int next (int bits) {
-		long z = (stateA = stateA * 0x5851F42D4C957F2DL + stateB);
-		z = (z ^ z >>> ((z >>> 59) + 5) ^ z >>> 40) * 0xAEF17502108EF2D9L;
+		long x = (stateA += 0xD1B54A32D192ED03L);
+		long y = (stateB += 0x8CB92BA72F3D8DD7L + BitConversion.countLeadingZeros(x));
+		long z = (x ^ (y << 37 | y >>> 27));
+		z = (z ^ (z >>> ((z >>> 59) + 5))) * 0xAEF17502108EF2D9L;
 		return (int)(z ^ z >>> 43) >>> (32 - bits);
 	}
 
 	@Override
-	public PcgBoostedRandom copy () {
-		return new PcgBoostedRandom(stateA, stateB);
+	public OrbitRXSMXSRandom copy () {
+		return new OrbitRXSMXSRandom(stateA, stateB);
 	}
 
 	@Override
@@ -233,7 +223,7 @@ public class PcgBoostedRandom extends EnhancedRandom {
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		PcgBoostedRandom that = (PcgBoostedRandom)o;
+		OrbitRXSMXSRandom that = (OrbitRXSMXSRandom)o;
 
 		if (stateA != that.stateA)
 			return false;
@@ -241,6 +231,6 @@ public class PcgBoostedRandom extends EnhancedRandom {
 	}
 
 	public String toString () {
-		return "PcgBoostedRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L}";
+		return "OrbitRXSMXSRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L}";
 	}
 }
