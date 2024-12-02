@@ -20,13 +20,10 @@ package com.github.tommyettinger.random.gdx;
 import com.badlogic.gdx.utils.Collections;
 import com.badlogic.gdx.utils.IntIntMap;
 import com.badlogic.gdx.utils.IntMap;
-import com.badlogic.gdx.utils.ObjectMap;
 import com.github.tommyettinger.ds.IntObjectMap;
-import com.github.tommyettinger.ds.ObjectObjectMap;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;

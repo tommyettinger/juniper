@@ -907,6 +907,7 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 		return BitConversion.intBitsToFloat(126 - BitConversion.countLeadingZeros(bits) << 23 | ((int)bits & 0x7FFFFF));
 	}
 //		return Float.intBitsToFloat(126 - Long.numberOfTrailingZeros(bits) << 23 | (int)(bits >>> 41));
+//		return Float.intBitsToFloat(126 - Long.numberOfLeadingZeros(bits) << 23 | ((int)bits & 0x7FFFFF));
 
 	/**
 	 * Gets a random float between 0.0 and 1.0, exclusive at both ends. This can return float

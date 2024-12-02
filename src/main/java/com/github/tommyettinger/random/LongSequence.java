@@ -4,10 +4,6 @@ import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.digital.Hasher;
 import com.github.tommyettinger.digital.MathTools;
 
-import java.io.Externalizable;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.util.Arrays;
 
 /**
@@ -15,7 +11,7 @@ import java.util.Arrays;
  * This is used to store the sequence of results used by a {@link KnownSequenceRandom}, and
  * can be produced by an {@link ArchivalWrapper}.
  */
-public class LongSequence implements Externalizable {
+public class LongSequence {
     public long[] items;
     public int size;
     public LongSequence() {
@@ -160,44 +156,6 @@ public class LongSequence implements Externalizable {
         return new LongSequence(items);
     }
 
-
-    /**
-     * The object implements the writeExternal method to save its contents
-     * by calling the methods of DataOutput for its primitive values or
-     * calling the writeObject method of ObjectOutput for objects, strings,
-     * and arrays.
-     *
-     * @param out the stream to write the object to
-     * @throws IOException Includes any I/O exceptions that may occur
-     * @serialData int number of items, then that many long items
-     */
-    @GwtIncompatible
-    public void writeExternal(ObjectOutput out) throws IOException {
-        out.writeInt(size);
-        for (int i = 0; i < size; i++) {
-            out.writeLong(items[i]);
-        }
-    }
-
-    /**
-     * The object implements the readExternal method to restore its
-     * contents by calling the methods of DataInput for primitive
-     * types and readObject for objects, strings and arrays.  The
-     * readExternal method must read the values in the same sequence
-     * and with the same types as were written by writeExternal.
-     *
-     * @param in the stream to read data from in order to restore the object
-     * @throws IOException            if I/O errors occur
-     */
-    @GwtIncompatible
-    public void readExternal(ObjectInput in) throws IOException {
-        size = in.readInt();
-        resize(size);
-        for (int i = 0; i < size; i++) {
-            items[i] = in.readLong();
-        }
-    }
-
     /**
      * This is a special single instance of a subclass of LongSequence; it doesn't store anything, and can't have its
      * {@link #get(int)} method called. The {@link #add(long)} method does nothing here, and won't cause any memory to
@@ -227,38 +185,5 @@ public class LongSequence implements Externalizable {
         public LongSequence copy() {
             return this;
         }
-
-
-        /**
-         * The object implements the writeExternal method to save its contents
-         * by calling the methods of DataOutput for its primitive values or
-         * calling the writeObject method of ObjectOutput for objects, strings,
-         * and arrays.
-         *
-         * @param out the stream to write the object to
-         * @throws IOException Includes any I/O exceptions that may occur
-         * @serialData the int 0 (no items)
-         */
-        @GwtIncompatible
-        public void writeExternal(ObjectOutput out) throws IOException {
-            out.writeInt(0);
-
-        }
-
-        /**
-         * The object implements the readExternal method to restore its
-         * contents by calling the methods of DataInput for primitive
-         * types and readObject for objects, strings and arrays.  The
-         * readExternal method must read the values in the same sequence
-         * and with the same types as were written by writeExternal.
-         *
-         * @param in the stream to read data from in order to restore the object
-         * @throws IOException            if I/O errors occur
-         */
-        @GwtIncompatible
-        public void readExternal(ObjectInput in) throws IOException {
-            size = in.readInt();
-        }
-
     }
 }
