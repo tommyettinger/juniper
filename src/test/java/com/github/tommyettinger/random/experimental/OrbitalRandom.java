@@ -35,7 +35,7 @@ import com.github.tommyettinger.random.EnhancedRandom;
  * the second counter is very slightly offset from being in-sync with the first, and since it depends
  * upon the first counter, its period is 2 to the 128.
  */
-public class OrbitRandom extends EnhancedRandom {
+public class OrbitalRandom extends EnhancedRandom {
 
 	/**
 	 * The first state; can be any long.
@@ -49,7 +49,7 @@ public class OrbitRandom extends EnhancedRandom {
 	/**
 	 * Creates a new OrbitRandom with a random state.
 	 */
-	public OrbitRandom() {
+	public OrbitalRandom() {
 		super();
 		stateA = EnhancedRandom.seedFromMath();
 		stateB = EnhancedRandom.seedFromMath();
@@ -61,7 +61,7 @@ public class OrbitRandom extends EnhancedRandom {
 	 *
 	 * @param seed any {@code long} value
 	 */
-	public OrbitRandom(long seed) {
+	public OrbitalRandom(long seed) {
 		super(seed);
 		setSeed(seed);
 	}
@@ -73,7 +73,7 @@ public class OrbitRandom extends EnhancedRandom {
 	 * @param stateA any {@code long} value
 	 * @param stateB any {@code long} value
 	 */
-	public OrbitRandom(long stateA, long stateB) {
+	public OrbitalRandom(long stateA, long stateB) {
 		super(stateA);
 		this.stateA = stateA;
 		this.stateB = stateB;
@@ -220,8 +220,8 @@ public class OrbitRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public OrbitRandom copy () {
-		return new OrbitRandom(stateA, stateB);
+	public OrbitalRandom copy () {
+		return new OrbitalRandom(stateA, stateB);
 	}
 
 	@Override
@@ -231,7 +231,7 @@ public class OrbitRandom extends EnhancedRandom {
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		OrbitRandom that = (OrbitRandom)o;
+		OrbitalRandom that = (OrbitalRandom)o;
 
 		return stateA == that.stateA && stateB == that.stateB;
 	}
@@ -241,7 +241,7 @@ public class OrbitRandom extends EnhancedRandom {
 	}
 
 	public static void main(String[] args) {
-		OrbitRandom random = new OrbitRandom(1L);
+		OrbitalRandom random = new OrbitalRandom(1L);
 		{
 			int n0 = random.nextInt();
 			int n1 = random.nextInt();

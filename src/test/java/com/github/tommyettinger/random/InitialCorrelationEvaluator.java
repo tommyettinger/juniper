@@ -32,7 +32,7 @@ public class InitialCorrelationEvaluator {
     /**
      * How many steps to run before measurement starts.
      */
-    public static int STEPS_BEFORE = 80;
+    public static int STEPS_BEFORE = 100;
     public static long INTERVAL_X = 1;//2;//4;//8;//16;//0xC13FA9A902A6328FL;//
     // We use 2 here because several generators use only odd numbers for stateB.
     public static long INTERVAL_Y = 2;//2;//4;//8;//16;//0x91E10DA5C79E7B1DL;//
@@ -122,13 +122,13 @@ public class InitialCorrelationEvaluator {
 //                new Taxman32Random(1, 1), new Taxon32Random(1, 1), new Silk32Random(1, 1),
 //                new CupolaRandom(1, 1)
 //                new Fluff32Random(1, 1)
-//                new SoloRandom(1, 1, 1)
+                new SoloRandom(1, 1, 1)
 
-                new PcgRXSMXSRandom(1, 1), new PcgBoostedRandom(1, 1),
-                new OrbitRandom(1, 1), new OrbitRXSMXSRandom(1, 1),
+//                new PcgRXSMXSRandom(1, 1), new PcgBoostedRandom(1, 1),
+//                new OrbitalRandom(1, 1), new OrbitRXSMXSRandom(1, 1),
 //                new Xoshiro256StarStarRandom(1, 1, 1, 1), new Xoshiro128PlusPlusRandom(1, 1, 1, 1),
 //                new Xoshiro256MX3Random(1, 1, 1, 1), new Xoroshiro128StarStarRandom(1, 1),
-                new DistinctRandom(1), new SoloRandom(1, 1, 1), new FlowRandom(1, 1),
+//                new DistinctRandom(1), new SoloRandom(1, 1, 1), new FlowRandom(1, 1),
 //                new AceRandom(1, 1, 1, 1, 1),
 //                new LaserRandom(1, 1), new MizuchiRandom(1, 1),
 //                new Crand64Random(1, 1, 1, 1, 1), new RomuTrioRandom(1, 1, 1), new Sfc64Random(1, 1, 1, 1),

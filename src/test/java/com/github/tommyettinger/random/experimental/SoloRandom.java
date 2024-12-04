@@ -235,10 +235,12 @@ public class SoloRandom extends EnhancedRandom {
 	@Override
 	public long nextLong () {
 		return stateA = (stateB = (stateB << 47 | stateB >>> 17) + (stateC += 0xD1B54A32D192ED03L))
-				^ (stateA << 26 | stateA >>> 38) + stateC ^ (stateC << 23 | stateC >>> 41);
+				^ stateC + (stateA << 23 | stateA >>> 41);
 	}
-	// one-line version
+	// above, one-line version
 //		return a=(b=(b<<47|b>>>17)+(c+=0xD1B54A32D192ED03L))^(a<<26|a>>>38)+c^(c<<23|c>>>41);
+	// variant, one-line version
+//      return a=(b=(b<<47|b>>>17)+(c+=0xD1B54A32D192ED03L))^c+(a<<23|a>>>41);
 
 	@Override
 	public long previousLong () {
@@ -248,17 +250,31 @@ public class SoloRandom extends EnhancedRandom {
 		stateC -= 0xD1B54A32D192ED03L;
 		stateB = b - c;
 		stateB = (stateB << 17 | stateB >>> 47);
-		stateA = (a ^ b ^ (c << 23 | c >>> 41)) - c;
-		stateA = (stateA << 38 | stateA >>> 26);
+		stateA = (a ^ b) - c;
+		stateA = (stateA << 41 | stateA >>> 23);
 		return a;
 	}
-
 	@Override
 	public int next (int bits) {
 		return (int)(stateA = (stateB = (stateB << 47 | stateB >>> 17) + (stateC += 0xD1B54A32D192ED03L))
-				^ (stateA << 26 | stateA >>> 38) + stateC ^ (stateC << 23 | stateC >>> 41)) >>> (32 - bits);
+				^ stateC + (stateA << 23 | stateA >>> 41)) >>> (32 - bits);
 	}
 
+	/**
+	 * Returns the next pseudorandom, uniformly distributed {@code int}
+	 * value from this random number generator's sequence. The general
+	 * contract of {@code nextInt} is that one {@code int} value is
+	 * pseudorandomly generated and returned. All 2<sup>32</sup> possible
+	 * {@code int} values are produced with (approximately) equal probability.
+	 *
+	 * @return the next pseudorandom, uniformly distributed {@code int}
+	 * value from this random number generator's sequence
+	 */
+	@Override
+	public int nextInt() {
+		return (int)(stateA = (stateB = (stateB << 47 | stateB >>> 17) + (stateC += 0xD1B54A32D192ED03L))
+				^ stateC + (stateA << 23 | stateA >>> 41));
+	}
 
 	@Override
 	public SoloRandom copy () {
