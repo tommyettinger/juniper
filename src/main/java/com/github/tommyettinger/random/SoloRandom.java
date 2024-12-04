@@ -15,17 +15,24 @@
  *
  */
 
-package com.github.tommyettinger.random.experimental;
-
-import com.github.tommyettinger.random.EnhancedRandom;
+package com.github.tommyettinger.random;
 
 /**
- * 192 bits of state. Period is at minimum 2 to the 64, and is always a multiple of 2 to the 64.
- * A subcycle generator that uses only ARX operations. The whole nextLong() method can fit on one line.
- * This passes 64TB of PractRand with no anomalies. It also finished in less than 46 hours; I
- * don't know how much that actually says about the generator's speed (most of that time is spent
- * running tests on the generated data), but it's certainly better than anything else I remember.
- * That is in C++, though, so it may not apply to performance here.
+ * A subcycle generator with a counter, using only Add-Rotate-XOR operations.
+ * The whole nextLong() method can fit on one (lengthy) line, where a, b, and c can each be any long:
+ * <br>
+ * <code>public long nextLong(){return a=(b=(b<<47|b>>>17)+(c+=0xD1B54A32D192ED03L))^c+(a<<23|a>>>41);}</code>
+ * <br>
+ * This has 192 bits of state. Period is at minimum 2 to the 64, and is always a multiple of 2 to the 64, but the
+ * expected period is much, much longer. This passes 64TB of PractRand with no anomalies. This takes more generations
+ * to decorrelate given initially similar starting states, but does completely decorrelate by 100 {@link #nextLong()}
+ * calls or earlier. Generators like {@link AceRandom} decorrelate by maybe 40-50 calls, and generators like
+ * {@link WhiskerRandom} effectively never decorrelate.
+ * <br>
+ * On current HotSpot JVMs, this isn't as fast as AceRandom (SoloRandom gets roughly half the throughput as AceRandom),
+ * and the guaranteed minimum period is the same for each. AceRandom has a longer maximum period, and its only downside
+ * is it has 320 bits of state instead of 192. Both use only ARX operations. Still, SoloRandom may be useful just
+ * because it can fit in one line, when the states are declared already.
  * <br>
  * Never tell me the odds!
  */
