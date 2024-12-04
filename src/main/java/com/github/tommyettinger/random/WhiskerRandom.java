@@ -24,7 +24,7 @@ package com.github.tommyettinger.random;
  * the other operations, improves both quality and speed here. This can be considered stable, like the other
  * EnhancedRandom implementations here. This generator is between 10% and 20% faster than FourWheelRandom on Java 16 and
  * up, including on Graal but not counting Semeru JDKs (which seem to be generally slower for all microbenchmarks). This
- * generator is slightly slower than {@link PouchRandom} most of the time.
+ * generator is slightly slower than {@link PouchRandom} most of the time, and slower still than {@link AceRandom}.
  * <br>
  * WhiskerRandom has been, in the past, used as the default generator here, and it could still be used as such. It
  * passes significant statistical testing, but only on one sequence of random numbers at a time (it only gets seeded
@@ -32,10 +32,10 @@ package com.github.tommyettinger.random;
  * inputs and getting a limited amount of random values), WhiskerRandom will do quite poorly, however. If multiple
  * states are the same between different compared generators, the output between those two can be very correlated. Other
  * generators, like the also-four-state {@link PouchRandom} and the five-state {@link AceRandom}, do not have this issue
- * once enough values have been produced (usually about 30 longs). PouchRandom is faster on desktop hardware than
- * WhiskerRandom is, and it has a minimum guaranteed period of 2 to the 63, but it has some valid state restrictions
- * that make general-purpose usage more challenging. AceRandom is about as fast as Whisker, doesn't have restrictions on
- * valid states, and has a minimum guaranteed period of 2 to the 64.
+ * once enough values have been produced (usually about 30 longs). PouchRandom is a little faster on desktop hardware
+ * than WhiskerRandom is, and it has a minimum guaranteed period of 2 to the 63, but it has some valid state
+ * restrictions that make general-purpose usage more challenging. AceRandom even faster than Whisker, doesn't have
+ * restrictions on valid states, and has a minimum guaranteed period of 2 to the 64. Using Ace is recommended.
  * <br>
  * Testing performed should be sufficient, but more can always be done; this passes at least 64TB of PractRand without
  * issues. This has been tested with Remortality, and it passes over 179 PB of that test without any suspect results.

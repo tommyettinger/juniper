@@ -21,8 +21,8 @@ package com.github.tommyettinger.random;
  * Like TrimRandom with five 64-bit states; does not use multiplication, only add, subtract, XOR, and left-rotate
  * operations. Has a state that runs like a counter, guaranteeing a minimum period of 2 to the 64. This passes roughly
  * 180 petabytes of intensive testing on the GPU with ReMort, as well as 64TB of PractRand's broad spectrum of tests.
- * It can sometimes be the fastest generator here, outpacing {@link WhiskerRandom} on Java 19 on occasion, but it isn't
- * quite as fast as Whisker on older JDKs, or as fast as {@link PouchRandom} in most cases. Whisker doesn't have a
+ * It is usually the fastest generator here, outpacing {@link WhiskerRandom} and {@link PouchRandom} on any Java
+ * versions 17 and up, but it is slightly slower on Java 8 (still very fast). Whisker doesn't have a
  * guaranteed minimum period, Pouch has a lower guaranteed minimum period, and this is
  * usually faster than {@link PasarRandom}, another 5-state generator with a minimum period of 2 to the 64. The maximum
  * and/or expected periods for both PasarRandom and AceRandom are far larger than they would need to be, even if run for

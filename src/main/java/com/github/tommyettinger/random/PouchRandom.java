@@ -35,12 +35,12 @@ import com.github.tommyettinger.digital.MathTools;
  * Because there are some constraints on valid state combinations, setting the state is a tiny bit slower here. Getting
  * the {@link #previousLong()} is significantly slower than normal because it requires getting the
  * {@link MathTools#modularMultiplicativeInverse(long)} of a long, though the slowdown is likely not noticeable. Other
- * than that, this generator is extremely fast when calling {@link #nextLong()} and anything that uses it. It's faster
- * than {@link WhiskerRandom} and {@link AceRandom}, which are the runners-up for fastest generators here, and if it is
- * set in a too-predictable way using {@link #setState(long, long, long, long)}, it still will diffuse to produce random
- * results (AceRandom does this a little more quickly, but WhiskerRandom won't at all). If two states are only different
- * by a very small amount (either numerically or by their bits), then calling nextLong() about 25 times should fully
- * diffuse PouchRandom, or about 18 for AceRandom.
+ * than that, this generator is extremely fast when calling {@link #nextLong()} and anything that uses it. It's almost
+ * as fast as {@link AceRandom}, which seems to be the fastest generator here, and if it is set in a too-predictable way
+ * using {@link #setState(long, long, long, long)}, it still will diffuse to produce random results (AceRandom does this
+ * a little more quickly, but WhiskerRandom won't at all). If two states are only different by a very small amount
+ * (either numerically or by their bits), then calling nextLong() about 25 times should fully diffuse PouchRandom, or
+ * about 18 for AceRandom.
  * <br>
  * This passes at least 64TB of PractRand testing without anomalies. It also passes 179 PB of ReMort testing without
  * anomalies.
