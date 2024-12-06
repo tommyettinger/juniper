@@ -21,7 +21,7 @@ package com.github.tommyettinger.random;
  * A subcycle generator with a counter, using only Add-Rotate-XOR operations.
  * The whole nextLong() method can fit on one (lengthy) line, where a, b, and c can each be any long:
  * <br>
- * <code>public long nextLong(){return a=(b=(b<<47|b>>>17)+(c+=0xD1B54A32D192ED03L))^c+(a<<23|a>>>41);}</code>
+ * {@code return a=(b=(b<<47|b>>>17)+(c+=0xD1B54A32D192ED03L))^c+(a<<23|a>>>41);}
  * <br>
  * This has 192 bits of state. Period is at minimum 2 to the 64, and is always a multiple of 2 to the 64, but the
  * expected period is much, much longer. This passes 64TB of PractRand with no anomalies. This takes more generations

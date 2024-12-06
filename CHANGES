@@ -1,3 +1,8 @@
+[0.6.3]
+- SoloRandom, Taxon32Random, PcgRXSMXSRandom are new.
+- The digital dependency is now 0.5.4 .
+- Probably a bunch more that I forgot...
+
 [0.6.0]
 - [LARGE, SEED BREAKING] Calling nextInt or nextSignedInt on any EnhancedRandom with two parameters now uses a different, more efficient algorithm. This also changes other bounded int generation, including in shuffling methods.
 - [SEED BREAKING] FlowRandom is seeded differently now, in a way that's more consistent with other generators.

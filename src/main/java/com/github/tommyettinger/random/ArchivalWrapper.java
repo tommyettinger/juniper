@@ -370,7 +370,7 @@ public class ArchivalWrapper extends EnhancedRandom {
      *         <li>long state_n; the nth state used here.</li>
      *     </ul>
      * </li>
-     * <li>Either null, or LongSequence archive; written with {@link LongSequence#writeExternal(ObjectOutput)}.</li>
+     * <li>Either null, or LongSequence archive; LongSequence should be registered
      * </ul>
      */
     @GwtIncompatible
