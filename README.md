@@ -26,11 +26,11 @@ library desugaring; Google is dropping support for older Android versions and
 developers should follow suit. RoboVM has always had support for language level
 8, but in the main branch has never supported Java 8 APIs (not a problem here).
 GWT has had support for Java 8 in some form since the 2.8.x line of releases;
-using 2.10.0 is recommended because it improves on this support. Most of these
-are made at least a little easier by using
+using 2.11.0 or higher is recommended because it improves on this support. Most
+of these are made at least a little easier by using
 [gdx-liftoff](https://github.com/tommyettinger/gdx-liftoff) to generate projects
 (assuming you are making a libGDX app or game), since gdx-liftoff handles core
-library desugaring on Android and uses GWT 2.10.0 by default.
+library desugaring on Android and uses GWT 2.11.0 by default.
 
 You can preview what some distributions look like
 [on this page](https://tommyettinger.github.io/juniper/distributor/). It uses
@@ -42,6 +42,15 @@ The name comes from my dog Juniper, who appears to have a deterministic, but
 seemingly-random, response to any new person she meets.
 
 ### What are these generators?
+
+tl;dr: You should use `com.github.tommyettinger.random.AceRandom` if you want the highest speed and the highest quality
+over a long sequence of outputs from one generator. You can instead use `com.github.tommyettinger.random.DistinctRandom`
+if you want one state that gets fully randomized from the first output, or `com.github.tommyettinger.random.FlowRandom`
+if you want the same idea as DistinctRandom but have two states that you want to use like inputs to a hash, or you want
+multiple approximately-independent streams. All of these have a period of at least 2 to the 64, which is probably enough
+for any game and many non-game tasks. If you target GWT, you should generally use
+`com.github.tommyettinger.random.ChopRandom`, since it is much faster on GWT than other generators here, and only
+slightly slower on desktop platforms.
 
 Several high-quality and very-fast random number generators are here, such as
 `com.github.tommyettinger.random.PouchRandom`, `com.github.tommyettinger.random.WhiskerRandom`,
@@ -66,7 +75,17 @@ that it has two `long` states that each cycle with the same period. The relation
 determines the current stream, and you can access a FlowRandom's stream with `getStream()` or change it with
 `setStream()` or `shiftStream()`. Streams here are not correlated at all, as far as I have been able to determine.
 FlowRandom isn't as fast as some other generators here that have streams (such as LaserRandom), but it seems to be much
-more robust statistically when its stream changes.
+more robust statistically when its stream changes. Unlike DistinctRandom, a given stream can produce the same result
+more than once, and will generally be unable to produce roughly 1/3 of possible `long` outputs. All possible streams, if
+concatenated, would include every `long` result exactly 2 to the 64 times each.
+
+AceRandom is the main recommended generator, this time with 5 states. It is the fastest generator here when benchmarked
+on Java 17 and newer. One state is a counter, which makes AceRandom have a minimum period of 2 to the 64, though its
+maximum period is much, much higher and its expected period is much higher than I could reach by brute-force generation
+with current hardware given a century. Ace uses only add, rotate, XOR, and subtract operations. These operations each
+take the same amount of time on current CPUs, a property that some cryptographic RNGs use to avoid timing attacks.
+AceRandom is a good all-around default because it resists various ways generators can be constructed so they are
+correlated with each other; it is also almost always faster than PouchRandom, and much faster than FlowRandom.
 
 WhiskerRandom is often considerably faster than DistinctRandom (which is no slouch either), and generally has very high
 quality, but does not have a guaranteed cycle length -- a given seed could be found that has an unusually short cycle,
@@ -78,20 +97,12 @@ states, such as with a generator initially set to the state `1, 1, 1, 1` and ano
 are very often highly correlated. This isn't a problem if you use `setSeed()`, since it won't produce numerically
 similar states often (or possibly won't at all), but can be a problem if you try to use a WhiskerRandom as a hash.
 
-PouchRandom is often the fastest generator here in benchmarks; it acts like WhiskerRandom but has a guaranteed minimum
-cycle length of 2 to the 63 (as long as it isn't somehow forced into an invalid state, which its own methods cannot do).
-While it disallows certain states (state D has to be an odd number, and the other states can't all be 0 at once), if
-that isn't a problem for your application, it is probably a solid choice. After producing about 25 outputs, numerically
-similar initial states won't appear correlated, and shouldn't become correlated again for a very long time. It has 4
-states and uses multiplication (in this case, it multiplies one state by another, always odd, state).
-
-AceRandom is another recommended generator, this time with 5 states. One is a counter, which makes AceRandom have a
-minimum period of 2 to the 64, though its maximum period is much, much higher and its expected period is much higher
-than I could reach by brute-force generation with current hardware given a century. Ace uses only add, rotate, XOR, and
-subtract operations. These operations each take the same amount of time on current CPUs, a property that some
-cryptographic RNGs use to avoid timing attacks. AceRandom is a good all-around default because it resists various ways
-generators can be constructed so they are correlated with each other; it is also almost as fast as PouchRandom, and much
-faster than FlowRandom.
+PouchRandom is the fastest generator here when benchmarked on Java 8; it acts like WhiskerRandom but has a guaranteed
+minimum cycle length of 2 to the 63 (as long as it isn't somehow forced into an invalid state, which its own methods
+cannot do). While it disallows certain states (state D has to be an odd number, and the other states can't all be 0 at
+once), if that isn't a problem for your application, it is probably a solid choice. After producing about 25 outputs,
+numerically similar initial states won't appear correlated, and shouldn't become correlated again for a very long time.
+It has 4 states and uses multiplication (in this case, it multiplies one state by another, always odd, state).
 
 There's lots of others here. TrimRandom, PasarRandom, ScruffRandom are all good but have the same or similar known flaw
 that WhiskerRandom has regarding numerically-similar initial states. TricycleRandom and FourWheelRandom don't have that
@@ -121,8 +132,10 @@ more robust (slow) way of mixing the output bits (the MX3 unary hash instead of 
 `com.github.tommyettinger.random.StrangerRandom` is mostly useful if you anticipate running on unusual
 hardware, particularly some that doesn't support fast multiplication between `long`s (StrangerRandom doesn't use multiplication);
 it also has a good guaranteed minimum period length of 2 to the 65 minus 2, but is between DistinctRandom and FourWheelRandom in
-raw speed. `com.github.tommyettinger.random.MizuchiRandom` is a simple PCG-style generator, using a linear congruential generator
-as a base and hashing the LCG's output before it returns it; Mizuchi has streams, like LaserRandom, but they are less correlated
+raw speed. `com.github.tommyettinger.random.PcgRXSMXSRandom` is one of the simpler generators in the PCG-Random family;
+it uses a 64-bit linear congruential generator (LCG) and scrambled its output using a random xor-shift, a multiply, and
+a non-random xor-shift.`com.github.tommyettinger.random.MizuchiRandom` is a simple PCG-style generator, using an LCG as
+a base and hashing its output before it returns it; Mizuchi has streams, like LaserRandom, but they are less correlated
 with each other than in LaserRandom. `com.github.tommyettinger.random.ChopRandom` is much like TrimRandom, but natively
 works on `int` states instead of `long`, so it has a shorter guaranteed period of 2 to the 32, but should be much faster
 when run on GWT (even when generating `long` values!). `com.github.tommyettinger.random.Xoshiro128PlusPlusRandom` is a slightly-modified
@@ -155,7 +168,8 @@ format, and deserialized to the appropriate class given a serialized String from
 numbers, or normal base 10 numbers) to write a serialized String. You can use the `Deserializer.deserialize()` method
 (which also optionally takes a `Base`, and it must be the same used to write the String) to read an `EnhancedRandom`
 back. It will have the `EnhancedRandom` type as far as the compiler can tell, but it will use the correct implementation
-to match the generator that was serialized.
+to match the generator that was serialized. All `EnhancedRandom` generators are also `Externalizable`, which allows them
+to be serialized without serializing the `Random` fields they inherit (and almost never use).
 
 Some generators have the ability to `leap()` ahead many steps in their sequence, guaranteeing some span of values will
 not overlap with the next call to `leap()`. The Xoshiro generators have an exact-length leap that guarantees a
@@ -215,7 +229,9 @@ or Box-Muller methods that are more commonly-used (such as by the JDK), but Zigg
 sometimes significantly so, and doesn't require caching a result for later like the other two mentioned methods need.
 The Ziggurat method code here is derived from [Olaf Berstein's cauldron library](https://github.com/camel-cdr/cauldron/blob/7d5328441b1a1bc8143f627aebafe58b29531cb9/cauldron/random.h#L2013-L2265),
 which is MIT-licensed C++. Using Ziggurat should improve accuracy compared to versions before 0.1.6, which uses a fairly
-fast approximation based on bit counting (by [Marc B. Reynolds](https://marc-b-reynolds.github.io/distribution/2021/03/18/CheapGaussianApprox.html)).
+fast approximation based on bit counting (by [Marc B. Reynolds](https://marc-b-reynolds.github.io/distribution/2021/03/18/CheapGaussianApprox.html)). The current code to generate normal-distributed
+values just uses `Distributor` in the `digital` library; that class has some other ways to generate Gaussian variates,
+including some that preserve how high or low the input is when they produce a high or low Gaussian variate.
 
 ## Wrappers, now, too?
 
@@ -264,7 +280,10 @@ mark Externalizable method implementations as`GwtIncompatible` with an annotatio
 with GWT. When used with Fury, you typically register any `EnhancedRandom` class or `Distribution` class you use, though
 generally you don't need to register `EnhancedRandom` or `Distribution` itself. In some cases you may need to register
 other classes, such as how `ArchivalWrapper` needs `LongSequence` registered. If a class has special requirements for
-Fury to serialize it, the `writeExternal()` JavaDocs will mention them.
+Fury to serialize it, the `writeExternal()` JavaDocs will mention them. If you're writing a custom serializer, it may
+make the most sense to just get the result of `stringSerialize()` and store that, since that won't need other classes
+to be registered. No `Distribution` types are `Externalizable`, since they wouldn't really gain anything from it; they
+do need the `EnhancedRandom` they use registered with Fury, but otherwise can just be registered themselves normally.
 
 ## How to get it?
 
