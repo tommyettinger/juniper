@@ -992,19 +992,31 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 * Gets a random float that may be positive or negative, but cannot be 0, and always has a magnitude less than 1.
 	 * <br>
 	 * This is a modified version of <a href="https://allendowney.com/research/rand/">this
-	 * algorithm by Allen Downey</a>. This version can return double values between -0.99999994 and -1.1641532E-10, as
-	 * well as between 2.7105054E-20 and 0.99999994, or -0x1.fffffep-1 to -0x1.0p-33 as well as between 0x1.0p-65 and
+	 * algorithm by Allen Downey</a>. This version can return float values between -0.99999994 and -5.421011E-20, as
+	 * well as between 5.421011E-20 and 0.99999994, or -0x1.fffffep-1 to -0x1.0p-64 as well as between 0x1.0p-64 and
 	 * 0x1.fffffep-1 in hex notation. It cannot return -1, 0 or 1. It has much more uniform bit distribution across its
-	 * mantissa/significand bits than {@link Random#nextDouble()}, especially when the result of nextDouble() is
-	 * expanded to the -1.0 to 1.0 range (such as with {@code 2.0 * (nextDouble() - 0.5)}). Where the given example code
+	 * mantissa/significand bits than {@link Random#nextFloat()}, especially when the result of nextFloat() is
+	 * expanded to the -1.0 to 1.0 range (such as with {@code 2.0 * (nextFloat() - 0.5)}). Where the given example code
 	 * is unable to produce a "1" bit for its lowest bit of mantissa (the least significant bits numerically, but
 	 * potentially important for some uses), this has approximately the same likelihood of producing a "1" bit for any
 	 * positions in the mantissa, and also equal odds for the sign bit.
-	 * @return a random uniform double between -1 and 1 with a tiny hole around 0 (all exclusive)
+	 * <br>
+	 * Some useful properties here are that this produces a negative result exactly as often as the underlying generator
+	 * produces a negative result with {@link #nextLong()}, and the least-significant bits that the underlying generator
+	 * produces with {@link #nextLong()} are also the least-significant in magnitude here. This could be used with
+	 * lower-quality randomness, like a linear congruential generator, and the flaws those have with their low-order
+	 * bits would barely affect floating-point results here. This generator also produces results that are symmetrical
+	 * around 0.0, with every possible positive number having a possible negative number of equal magnitude, if the
+	 * underlying generator is at least 1-dimensionally equidistributed. Note that generators such as
+	 * {@link Xoroshiro128StarStarRandom} and {@link Xoshiro256StarStarRandom} cannot return 0L from {@link #nextLong()}
+	 * as frequently as other results, so this is not (technically) true of those. Those generators (and other LFSR-type
+	 * generators) will produce 5.421011E-20 less frequently than -5.421011E-20 .
+	 * @return a random uniform float between -1 and 1 with a tiny hole around 0 (all exclusive)
 	 */
 	public float nextExclusiveSignedFloat(){
 		final long bits = nextLong();
-		return BitConversion.intBitsToFloat(126 - BitConversion.countLeadingZeros(bits) << 23 | ((int)bits & 0x807FFFFF));
+		return BitConversion.intBitsToFloat(127 - BitConversion.countLeadingZeros(bits & 0x7FFFFFFFFFFFFFFFL) << 23 | ((int)(bits>>>32) & 0x807FFFFF));
+//		Float.intBitsToFloat(127 - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFFFFFL) << 23 | ((int)(bits>>>32) & 0x807FFFFF));
 	}
 
 	/**
