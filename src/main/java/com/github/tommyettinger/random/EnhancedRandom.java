@@ -692,16 +692,31 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 
 	/**
 	 * This is just like {@link #nextDouble()}, returning a double between 0 and 1, except that it is inclusive on both
-	 * 0.0 and 1.0. It returns 1.0 extremely rarely, 0.000000000000011102230246251565404236316680908203125% of the time
-	 * if there is no bias in the generator, but it can happen. This uses similar code to {@link #nextExclusiveDouble()}
-	 * internally, and retains its quality of having approximately uniform distributions for every mantissa bit, unlike
-	 * most ways of generating random floating-point numbers.
+	 * 0.0 and 1.0. It returns 1.0 rarely, 0.000000000000000005421010862427522% of the time if there is no bias in the
+	 * generator, but it can happen.
+	 * <br>
+	 * This method does not return purely-equidistant doubles, because there the resolution of possible doubles it can
+	 * generate is higher as it approaches 0.0 . The smallest non-zero double this can return is 2.710505431213763e-20
+	 * (0x1.0000000000003p-65 in hex), and the largest non-one double this can return is 0.9999999999999999
+	 * (0x1.fffffffffffffp-1 in hex). This uses nearly identical code to {@link #nextExclusiveDouble()}, but does some
+	 * really unusual operations on both the bits and the double value to be able to produce 0.0 and 1.0 . This retains
+	 * the exclusive version's quality of having approximately uniform distributions for every mantissa bit, unlike most
+	 * ways of generating random floating-point numbers.
 	 *
 	 * @return a double between 0.0, inclusive, and 1.0, inclusive
 	 */
 	public double nextInclusiveDouble () {
-//		return nextLong(0x20000000000001L) * 0x1p-53;
+		final long bits = nextLong();
+		return BitConversion.longBitsToDouble(1022L - BitConversion.countLeadingZeros(bits) << 52 | (bits & 0xFFFFFFFFFFFFFL) + 1L) - 0x1.0000000000001p-65;
+		// equivalent to
+//		Double.longBitsToDouble(1022L - Long.numberOfLeadingZeros(bits) << 52 | (bits & 0xFFFFFFFFFFFFFL) + 1L) - 0x1.0000000000001p-65;
 
+		// older
+//		BitConversion.longBitsToDouble(1022L - BitConversion.countTrailingZeros(bits) << 52 | bits >>> 12) + 2.44140625E-4 - 0x1p-12;
+//		Double.longBitsToDouble(1022L - Long.numberOfTrailingZeros(bits) << 52 | bits >>> 12);
+		// oldest
+//		return nextLong(0x20000000000001L) * 0x1p-53;
+		// inline oldest
 //		final long rand = nextLong();
 //		final long bound = 0x20000000000001L;
 //		final long randLow = rand & 0xFFFFFFFFL;
@@ -709,9 +724,6 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 //		final long boundHigh = (bound >>> 32);
 //		return ((randLow * boundHigh >>> 32) + randHigh * boundHigh) * 0x1p-53;
 
-		final long bits = nextLong();
-		return BitConversion.longBitsToDouble(1022L - BitConversion.countTrailingZeros(bits) << 52 | bits >>> 12) + 0x1p-12 - 0x1p-12;
-//		return BitConversion.longBitsToDouble(1022L - BitConversion.countLeadingZeros(bits) << 52 | (bits & 0xFFFFFFFFFFFFFL)) + 0x1p-12 - 0x1p-12;
 	}
 
 	/**
