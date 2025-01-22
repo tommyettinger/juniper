@@ -44,7 +44,8 @@ public final class Deserializer {
     /**
      * Given a (typically freshly-constructed and never-reused) EnhancedRandom, this registers that instance by its
      * {@link EnhancedRandom#getTag()} in a Map, so that this type of EnhancedRandom can be deserialized correctly by
-     * {@link #deserialize(String, Base)}.
+     * {@link #deserialize(String, Base)}. If the tag for {@code random} is already registered, this will replace it
+     * in the registry.
      * @param random a (typically freshly-constructed) EnhancedRandom that should never be reused elsewhere
      */
     public static void register(EnhancedRandom random){
@@ -54,7 +55,8 @@ public final class Deserializer {
     /**
      * Given a (typically freshly-constructed and never-reused) Distribution, this registers that instance by its
      * {@link Distribution#getTag()} in a Map, so that this type of Distribution can be deserialized correctly by
-     * {@link #deserializeDistribution(String, Base)}.
+     * {@link #deserializeDistribution(String, Base)}. If the tag for {@code distribution} is already registered, this
+     * will replace it in the registry.
      * @param distribution a (typically freshly-constructed) Distribution that should never be reused elsewhere
      */
     public static void register(Distribution distribution){

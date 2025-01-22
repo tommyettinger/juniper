@@ -41,7 +41,7 @@ public class SerializationTest {
         int idx = 0;
         for(String s : serialized){
             EnhancedRandom x = all[idx++], r = Deserializer.deserialize(s);
-            System.out.println(x + "  ,  " + r);
+            System.out.println(s + " makes " + x + "  ,  " + r);
             Assert.assertTrue(EnhancedRandom.areEqual(r, x));
         }
     }

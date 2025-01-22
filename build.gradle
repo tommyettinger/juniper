@@ -61,6 +61,7 @@ compileTestJava {
 
 idea.module.excludeDirs += [file("src/main/java/com/github/tommyettinger/emu/")]
 [compileJava, compileTestJava, javadoc]*.exclude("com/github/tommyettinger/emu")
+idea.module.excludeDirs += [file("docs/")]
 
 // JavaDocs will be published inside the docs/ folder, which you can easily put on GitHub Pages in your repo settings.
 javadoc.destinationDir = file('docs/apidocs')
