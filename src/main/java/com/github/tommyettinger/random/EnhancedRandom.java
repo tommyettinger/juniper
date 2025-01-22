@@ -707,7 +707,7 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 */
 	public double nextInclusiveDouble () {
 		final long bits = nextLong();
-		return BitConversion.longBitsToDouble(1022L - BitConversion.countLeadingZeros(bits) << 52 | (bits & 0xFFFFFFFFFFFFFL) + 1L) - 0x1.0000000000001p-65;
+		return BitConversion.longBitsToDouble(1022L - BitConversion.countLeadingZeros(bits) << 52 | (bits & 0xFFFFFFFFFFFFFL) + 1L) - 2.7105054312137617E-20; // 2.7105054312137617E-20 is 0x1.0000000000001p-65
 		// equivalent to
 //		Double.longBitsToDouble(1022L - Long.numberOfLeadingZeros(bits) << 52 | (bits & 0xFFFFFFFFFFFFFL) + 1L) - 0x1.0000000000001p-65;
 
@@ -767,7 +767,7 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 */
 	public float nextInclusiveFloat () {
 		final long bits = nextLong();
-		return BitConversion.intBitsToFloat(126 - BitConversion.countLeadingZeros(bits) << 23 | ((int)bits & 0x7FFFFF) + 1) - 0x1.000002p-65f;
+		return BitConversion.intBitsToFloat(126 - BitConversion.countLeadingZeros(bits) << 23 | ((int)bits & 0x7FFFFF) + 1) - 2.7105058E-20f; // 2.7105058E-20f is 0x1.000002p-65f
 		// equivalent to
 		//Float.intBitsToFloat(126 - Long.numberOfLeadingZeros(bits) << 23 | ((int)bits & 0x7FFFFF) + 1) - 0x1.000002p-65f;
 		// older
@@ -820,7 +820,7 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * The implementation may have different performance characteristics than {@link #nextDouble()}, because this
 	 * doesn't perform any floating-point multiplication or division, and instead assembles bits obtained by one call to
 	 * {@link #nextLong()}. This uses {@link BitConversion#longBitsToDouble(long)} and
-	 * {@link BitConversion#countTrailingZeros(long)}, both of which typically have optimized intrinsics on HotSpot, and
+	 * {@link BitConversion#countLeadingZeros(long)}, both of which typically have optimized intrinsics on HotSpot, and
 	 * this is branchless and loopless, unlike the original algorithm by Allen Downey. When compared with
 	 * {@link #nextExclusiveDoubleEquidistant()}, this method performs better on at least HotSpot JVMs. On GraalVM 17,
 	 * this is over twice as fast as nextExclusiveDoubleEquidistant().
@@ -829,11 +829,8 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 */
 	public double nextExclusiveDouble () {
 		final long bits = nextLong();
-		return BitConversion.longBitsToDouble(1022L - BitConversion.countTrailingZeros(bits) << 52 | bits >>> 12);
+		return BitConversion.longBitsToDouble(1022L - BitConversion.countLeadingZeros(bits) << 52 | (bits & 0xFFFFFFFFFFFFFL));
 	}
-
-// This could be used above, but it favors low results slightly.
-//		return BitConversion.longBitsToDouble(1022L - BitConversion.countLeadingZeros(bits) << 52 | (bits & 0xFFFFFFFFFFFFFL));
 
 	/**
 	 * Gets a random double between 0.0 and 1.0, exclusive at both ends. This can return double
@@ -885,21 +882,38 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * <br>
 	 * This is a modified version of <a href="https://allendowney.com/research/rand/">this
 	 * algorithm by Allen Downey</a>. This version can return double values between -0.9999999999999999 and
-	 * -5.421010862427522E-20, as well as between 2.710505431213761E-20 and 0.9999999999999999, or -0x1.fffffffffffffp-1
-	 * to -0x1.0p-64 as well as between 0x1.0p-65 and 0x1.fffffffffffffp-1 in hex notation. It cannot return -1, 0 or 1.
+	 * -5.421010862427522E-20, as well as between 5.421010862427522E-20 and 0.9999999999999999, or -0x1.fffffffffffffp-1
+	 * to -0x1.0p-64 as well as between 0x1.0p-64 and 0x1.fffffffffffffp-1 in hex notation. It cannot return -1, 0 or 1.
 	 * It has much more uniform bit distribution across its mantissa/significand bits than {@link Random#nextDouble()},
 	 * especially when the result of nextDouble() is expanded to the -1.0 to 1.0 range (such as with
-	 * {@code 2.0 * (nextDouble() - 0.5)}). Where the given example code is unable to produce a "1" bit for its lowest
-	 * bit of mantissa (the least significant bits numerically, but potentially important for some uses), this has
-	 * approximately the same likelihood of producing a "1" bit for any positions in the mantissa, and also equal odds
-	 * for the sign bit.
+	 * {@code 2.0 * (nextDouble() - 0.5)}). Where that code using {@link #nextDouble()} is unable to produce a "1" bit
+	 * for its lowest bit of mantissa (the least significant bits numerically, but potentially important for some uses),
+	 * this has approximately the same likelihood of producing a "1" bit for any positions in the mantissa, and also
+	 * equal odds for the sign bit.
+	 * <br>
+	 * Some useful properties here are that this produces a negative result exactly as often as the underlying generator
+	 * produces a negative result with {@link #nextLong()}, and the least-significant bits that the underlying generator
+	 * produces with {@link #nextLong()} are also the least-significant in magnitude here. This could be used with
+	 * lower-quality randomness, like a linear congruential generator, and the flaws those have with their low-order
+	 * bits would barely affect floating-point results here. This generator also produces results that are symmetrical
+	 * around 0.0, with every possible positive number having a possible negative number of equal magnitude, if the
+	 * underlying generator is at least 1-dimensionally equidistributed. Note that generators such as
+	 * {@link Xoroshiro128StarStarRandom} and {@link Xoshiro256StarStarRandom} cannot return 0L from {@link #nextLong()}
+	 * as frequently as other results, so this is not (technically) true of those. Those generators (and other LFSR-type
+	 * generators) will produce 5.421010862427522E-20 less frequently than -5.421010862427522E-20 .
 	 * @return a random uniform double between -1 and 1 with a tiny hole around 0 (all exclusive)
 	 */
 	public double nextExclusiveSignedDouble(){
 		final long bits = nextLong();
-		return BitConversion.longBitsToDouble(1022L - BitConversion.countTrailingZeros(bits) << 52 | ((bits << 32 | bits >>> 32) & 0x800FFFFFFFFFFFFFL));
+		return BitConversion.longBitsToDouble(1023L - BitConversion.countLeadingZeros(bits & 0x7FFFFFFFFFFFFFFFL) << 52 | (bits & 0x800FFFFFFFFFFFFFL));
+/*
+Double.longBitsToDouble(1022L - Long.numberOfTrailingZeros(bits) << 52 | ((bits << 32 | bits >>> 32) & 0x800FFFFFFFFFFFFFL));
+Double.longBitsToDouble(1022L - Long.numberOfLeadingZeros(bits) << 52 | ((bits << 52 | bits >>> 12) & 0x800FFFFFFFFFFFFFL));
+Double.longBitsToDouble(1022L - Long.numberOfLeadingZeros(bits) << 52 | ((bits << 63 | bits >>> 1) & 0x800FFFFFFFFFFFFFL));
+Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFFFFFL) << 52 | (bits & 0x800FFFFFFFFFFFFFL));
+ */
 	}
-//		return BitConversion.longBitsToDouble(1022L - BitConversion.countLeadingZeros(bits) << 52 | ((bits << 63 | bits >>> 1) & 0x800FFFFFFFFFFFFFL));
+//		return BitConversion.longBitsToDouble(1022L - BitConversion.countLeadingZeros(bits) << 52 | ((bits << 52 | bits >>> 12) & 0x800FFFFFFFFFFFFFL));
 
 	/**
 	 * Gets a random float between 0.0 and 1.0, exclusive at both ends. This method is also more uniform than
