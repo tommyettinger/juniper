@@ -829,7 +829,7 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 */
 	public double nextExclusiveDouble () {
 		final long bits = nextLong();
-		return BitConversion.longBitsToDouble(1022L - BitConversion.countLeadingZeros(bits) << 52 | (bits & 0xFFFFFFFFFFFFFL));
+		return BitConversion.longBitsToDouble(1022L - BitConversion.countLeadingZeros(bits) << 52 | (bits & 0x000FFFFFFFFFFFFFL));
 	}
 
 	/**
@@ -1039,7 +1039,7 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 * <p>
 	 * The implementation here was ported from code by Olaf Berstein, based on a
 	 * paper by Jorgen A. Doornik and some steps from a paper by George Marsaglia.
-	 * {@link Ziggurat} has more information, for the curious.
+	 * {@link Distributor} has more information, for the curious.
 	 *
 	 * @return the next pseudorandom, Gaussian ("normally") distributed
 	 * {@code double} value with mean {@code 0.0} and standard deviation

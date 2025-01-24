@@ -64,8 +64,8 @@ public final class Ziggurat {
      * output, but this may not be true all the time for patterns on all bits.
      * <br>
      * This is an alias for {@link Distributor#normal(long)}. If you want to preserve input patterns in the
-     * normal-distributed output, you can use {@link Distributor#probit(double)} or
-     * {@link Distributor#linearNormal(long)}, or variants on those.
+     * normal-distributed output, you can use {@link Distributor#probitD(double)} or
+     * {@link Distributor#probitL(long)}, or variants on those.
      *
      * @param state a long that should be sufficiently random; quasi-random longs may not be enough
      * @return a normal-distributed double with mean (mu) 0.0 and standard deviation (sigma) 1.0
