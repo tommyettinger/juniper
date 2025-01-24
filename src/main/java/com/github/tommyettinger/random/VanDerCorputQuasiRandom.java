@@ -192,37 +192,36 @@ public class VanDerCorputQuasiRandom extends EnhancedRandom {
 
 	@Override
 	public double nextExclusiveDouble () {
-		final double n = (Long.reverse(++state) >>> 11) * 0x1p-53;
-		return n == 0.0 ? 0x1.0p-54 : n;
+		/* 1.1102230246251565E-16 is 0x1p-53, 5.551115123125782E-17 is 0x1.fffffffffffffp-55 */
+		return (Long.reverse(++state) >>> 11) * 1.1102230246251565E-16 + 5.551115123125782E-17;
 	}
 
 	@Override
 	public double nextExclusiveSignedDouble() {
 		final long bits = Long.reverse(++state);
-		final double n = (bits >>> 11) * 0x1p-53;
-		return Math.copySign(n == 0.0 ? 0x1.0p-54 : n, bits << 54);
+		/* 1.1102230246251565E-16 is 0x1p-53, 5.551115123125782E-17 is 0x1.fffffffffffffp-55 */
+		final double n = (bits >>> 11) * 1.1102230246251565E-16 + 5.551115123125782E-17;
+		return Math.copySign(n, bits << 53);
 	}
 
 	@Override
 	public float nextExclusiveFloat() {
-		final float n = (Long.reverse(++state) >>> 40) * 0x1p-24f;
-		return n == 0.0 ? 0x1p-25f : n;
+		/* 5.9604645E-8f is 0x1p-24f, 2.980232E-8f is 0x1.FFFFFEp-26f */
+		return  (Long.reverse(++state) >>> 40) * 5.9604645E-8f + 2.980232E-8f;
 	}
 
 	@Override
 	public float nextExclusiveSignedFloat() {
 		final long bits = Long.reverse(++state);
-		final float n = (bits >>> 40) * 0x1p-24f;
-		return Math.copySign(n == 0f ? 0x1p-25f : n, bits << 25);
+		/* 5.9604645E-8f is 0x1p-24f, 2.980232E-8f is 0x1.FFFFFEp-26f */
+		final float n = (bits >>> 40) * 5.9604645E-8f + 2.980232E-8f;
+		return Math.copySign(n, bits << 24);
 	}
 
 	@Override
 	public double nextGaussian() {
-//		return super.nextGaussian();
-//		return probit(nextDouble());
-//		return probit(((state & 0x1FFF_FFFFF_FFFFFL) ^ nextLong() >>> 11) * 0x1p-53);
-		return Distributor.linearNormal(Long.reverse(++state));
-//		return Ziggurat.normal(nextLong());
+		/* 5.421010862427522E-20 is 0x1p-64 */
+		return Distributor.probitD(Long.reverse(++state) * 5.421010862427522E-20 + 0.5);
 	}
 
 	@Override
