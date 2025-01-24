@@ -210,12 +210,12 @@ public class DistributedRandom extends EnhancedRandom {
     }
 
     /**
-     * This runs {@link Distributor#probit(double)} on a distributed double this produces.
+     * This runs {@link Distributor#probitD(double)} on a distributed double this produces.
      * @return a "Gaussian-ized" result of {@link #nextDouble()}
      */
     @Override
     public double nextGaussian() {
-        return Distributor.probit(nextExclusiveDouble());
+        return Distributor.probitD(nextExclusiveDouble());
     }
 
     /**
