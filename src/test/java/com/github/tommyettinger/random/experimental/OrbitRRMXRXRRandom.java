@@ -184,11 +184,14 @@ public class OrbitRRMXRXRRandom extends EnhancedRandom {
 
 	@Override
 	public long nextLong () {
-		final long x = (stateA += 0xD1B54A32D192ED03L);
-		final long y = (stateB += 0x9E3779B97F4A7C15L + BitConversion.countLeadingZeros(x));
-		final int r = (int)y;
-		final long z = (y ^ (x << r | x >>> 64 - r)) * 0xF1357AEA2E62A9C5L;
-		return (z ^ (z << 43 | z >>> 21) ^ (z << 29 | z >>> 35));
+		long x = (stateA += 0xD1B54A32D192ED03L);
+		long y = (stateB += 0x9E3779B97F4A7C15L + BitConversion.countLeadingZeros(x));
+		x = (x ^ x >>> 32) * 0xBEA225F9EB34556DL;
+		y = (y ^ y >>> 29) * 0xF1357AEA2E62A9C5L;
+		x ^= x >>> 29;
+		y ^= y >>> 32;
+		final int r = (int)(y);
+		return (y ^ (x << r | x >>> 64 - r));
 	}
 
 	@Override
@@ -197,18 +200,24 @@ public class OrbitRRMXRXRRandom extends EnhancedRandom {
 		long y = stateB;
 		stateA -= 0xD1B54A32D192ED03L;
 		stateB -= 0x9E3779B97F4A7C15L + BitConversion.countLeadingZeros(x);
-		final int r = (int)y;
-		final long z = (y ^ (x << r | x >>> 64 - r)) * 0xF1357AEA2E62A9C5L;
-		return (z ^ (z << 43 | z >>> 21) ^ (z << 29 | z >>> 35));
+		x = (x ^ x >>> 32) * 0xBEA225F9EB34556DL;
+		y = (y ^ y >>> 29) * 0xF1357AEA2E62A9C5L;
+		x ^= x >>> 29;
+		y ^= y >>> 32;
+		final int r = (int)(y);
+		return (y ^ (x << r | x >>> 64 - r));
 	}
 
 	@Override
 	public int next (int bits) {
 		long x = (stateA += 0xD1B54A32D192ED03L);
 		long y = (stateB += 0x9E3779B97F4A7C15L + BitConversion.countLeadingZeros(x));
-		final int r = (int)y;
-		final long z = (y ^ (x << r | x >>> 64 - r)) * 0xF1357AEA2E62A9C5L;
-		return (int)(z ^ (z << 43 | z >>> 21) ^ (z << 29 | z >>> 35)) >>> (32 - bits);
+		x = (x ^ x >>> 32) * 0xBEA225F9EB34556DL;
+		y = (y ^ y >>> 29) * 0xF1357AEA2E62A9C5L;
+		x ^= x >>> 29;
+		y ^= y >>> 32;
+		final int r = (int)(y);
+		return (int)(y ^ (x << r | x >>> 64 - r)) >>> (32 - bits);
 	}
 
 	@Override

@@ -115,10 +115,11 @@ public class ImmediateInitialCorrelationEvaluator {
         StringBuilder sb = new StringBuilder(1024);
         EnhancedRandom[][] g = new EnhancedRandom[256][256];
 
-//        ArrayList<EnhancedRandom> rs = ObjectList.with(
-//                new PcgRXSMXSRandom(1, 1), new FlowRandom(1, 1), new MizuchiRandom(1, 1),
-//                new Xoroshiro128StarStarRandom(1, 1), new LaserRandom(1, 1), new FowlRandom(1, 1),
-//                new DistinctRandom(1));
+        ArrayList<EnhancedRandom> rs = ObjectList.with(
+                new PcgRXSMXSRandom(1, 1), new FlowRandom(1, 1), new MizuchiRandom(1, 1),
+                new Xoroshiro128StarStarRandom(1, 1), new LaserRandom(1, 1),
+                new OrbitRRMXRXRRandom(1, 1), new OrbitRXSMXSRandom(1, 1), new OrbitalRandom(1, 1),
+                new DistinctRandom(1));
 
 //        ArrayList<EnhancedRandom> rs = ObjectList.with(new EnhancedRandom[]{
 //                new PcgRXSMXSRandom(1, 1), new PcgBoostedRandom(1, 1),
@@ -139,7 +140,7 @@ public class ImmediateInitialCorrelationEvaluator {
 //                new Taxman32Random(1, 1), new Taxon32Random(1, 1), new Silk32Random(1, 1),
 //                new Choo32Random(1, 1, 1, 1));
 
-        ArrayList<EnhancedRandom> rs = Generators.randomList;
+//        ArrayList<EnhancedRandom> rs = Generators.randomList;
 
         rs.sort((l, r) -> l.getClass().getSimpleName().compareTo(r.getClass().getSimpleName()));
 //        rs.sort(Comparator.comparing(EnhancedRandom::getClass, Comparator.comparing(Class::getSimpleName)));

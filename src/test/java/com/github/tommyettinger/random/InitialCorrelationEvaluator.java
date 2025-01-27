@@ -20,6 +20,9 @@ import com.badlogic.gdx.files.FileHandle;
 import com.github.tommyettinger.digital.ArrayTools;
 import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.ds.ObjectList;
+import com.github.tommyettinger.random.experimental.OrbitRRMXRXRRandom;
+import com.github.tommyettinger.random.experimental.OrbitRXSMXSRandom;
+import com.github.tommyettinger.random.experimental.OrbitalRandom;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -110,18 +113,23 @@ public class InitialCorrelationEvaluator {
         StringBuilder sb = new StringBuilder(1024);
         EnhancedRandom[][] g = new EnhancedRandom[256][256];
 
-//        ArrayList<EnhancedRandom> rs = ObjectList.with(
-//                new PcgRXSMXSRandom(1, 1), new FlowRandom(1, 1), new MizuchiRandom(1, 1),
-//                new Xoroshiro128StarStarRandom(1, 1), new LaserRandom(1, 1), new FowlRandom(1, 1),
-//                new DistinctRandom(1));
-        ArrayList<EnhancedRandom> rs = ObjectList.with(new EnhancedRandom[]{
+        ArrayList<EnhancedRandom> rs = ObjectList.with(
+                new PcgRXSMXSRandom(1, 1), new FlowRandom(1, 1), new MizuchiRandom(1, 1),
+                new Xoroshiro128StarStarRandom(1, 1), new LaserRandom(1, 1),
+                new OrbitRRMXRXRRandom(1, 1), new OrbitRXSMXSRandom(1, 1), new OrbitalRandom(1, 1),
+                new DistinctRandom(1));
+
+//        ArrayList<EnhancedRandom> rs = ObjectList.with(new EnhancedRandom[]{
+//                new SoloRandom(1, 1, 1)
+//        });
+
+//        ArrayList<EnhancedRandom> rs = ObjectList.with(new EnhancedRandom[]{
 //                new Bear32Random(1, 1, 1, 1), new Chill32Random(1, 1, 1), new ChopRandom(1, 1, 1, 1),
 //                new Jsf32Random(1, 1, 1, 1), new Respite32Random(1, 1, 1), new Resolute32Random(1, 1, 1),
 //                new Rawr32Random(1, 1, 1, 1), new Recipe32Random(1, 1, 1), new Xoshiro128PlusPlusRandom(1, 1, 1, 1),
 //                new Taxman32Random(1, 1), new Taxon32Random(1, 1), new Silk32Random(1, 1),
 //                new CupolaRandom(1, 1)
 //                new Fluff32Random(1, 1)
-                new SoloRandom(1, 1, 1)
 
 //                new PcgRXSMXSRandom(1, 1), new PcgBoostedRandom(1, 1),
 //                new OrbitalRandom(1, 1), new OrbitRXSMXSRandom(1, 1),
@@ -132,7 +140,7 @@ public class InitialCorrelationEvaluator {
 //                new LaserRandom(1, 1), new MizuchiRandom(1, 1),
 //                new Crand64Random(1, 1, 1, 1, 1), new RomuTrioRandom(1, 1, 1), new Sfc64Random(1, 1, 1, 1),
 //                new LCG48Random(1),
-        });
+//        });
 //        ArrayList<EnhancedRandom> rs = Generators.randomList;
 
         rs.sort((l, r) -> l.getClass().getSimpleName().compareTo(r.getClass().getSimpleName()));
