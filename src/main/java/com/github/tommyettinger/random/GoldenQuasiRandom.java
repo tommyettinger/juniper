@@ -208,7 +208,7 @@ public class GoldenQuasiRandom extends EnhancedRandom {
 	@Override
 	public float nextExclusiveFloat() {
 		/* 5.9604645E-8f is 0x1p-24f, 2.980232E-8f is 0x1.FFFFFEp-26f */
-		return  ((state += 0x9E3779B97F4A7C15L) >>> 40) * 5.9604645E-8f + 2.980232E-8f;
+		return ((state += 0x9E3779B97F4A7C15L) >>> 40) * 5.9604645E-8f + 2.980232E-8f;
 	}
 
 	@Override

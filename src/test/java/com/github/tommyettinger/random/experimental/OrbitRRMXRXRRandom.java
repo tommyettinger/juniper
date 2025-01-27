@@ -22,7 +22,7 @@ import com.github.tommyettinger.random.EnhancedRandom;
 
 /**
  */
-public class OrbitRXSMXSRandom extends EnhancedRandom {
+public class OrbitRRMXRXRRandom extends EnhancedRandom {
 
 	/**
 	 * The first state; can be any long.
@@ -34,33 +34,33 @@ public class OrbitRXSMXSRandom extends EnhancedRandom {
 	protected long stateB;
 
 	/**
-	 * Creates a new OrbitRXSMXSRandom with a random state.
+	 * Creates a new OrbitRRMXRXRRandom with a random state.
 	 */
-	public OrbitRXSMXSRandom() {
+	public OrbitRRMXRXRRandom() {
 		super();
 		stateA = EnhancedRandom.seedFromMath();
 		stateB = EnhancedRandom.seedFromMath();
 	}
 
 	/**
-	 * Creates a new OrbitRXSMXSRandom with the given seed; all {@code long} values are permitted.
+	 * Creates a new OrbitRRMXRXRRandom with the given seed; all {@code long} values are permitted.
 	 * The seed will be passed to {@link #setSeed(long)} to attempt to adequately distribute the seed randomly.
 	 *
 	 * @param seed any {@code long} value
 	 */
-	public OrbitRXSMXSRandom(long seed) {
+	public OrbitRRMXRXRRandom(long seed) {
 		super(seed);
 		setSeed(seed);
 	}
 
 	/**
-	 * Creates a new OrbitRXSMXSRandom with the given two states; all {@code long} values are permitted for
+	 * Creates a new OrbitRRMXRXRRandom with the given two states; all {@code long} values are permitted for
 	 * stateA, and all {@code long} values are permitted for stateB. These states are not changed.
 	 *
 	 * @param stateA any {@code long} value
 	 * @param stateB any {@code long} value
 	 */
-	public OrbitRXSMXSRandom(long stateA, long stateB) {
+	public OrbitRRMXRXRRandom(long stateA, long stateB) {
 		super(stateA);
 		this.stateA = stateA;
 		this.stateB = stateB;
@@ -68,7 +68,7 @@ public class OrbitRXSMXSRandom extends EnhancedRandom {
 
 	@Override
 	public String getTag() {
-		return "ORXR";
+		return "ORRR";
 	}
 
 	/**
@@ -184,11 +184,11 @@ public class OrbitRXSMXSRandom extends EnhancedRandom {
 
 	@Override
 	public long nextLong () {
-		long x = (stateA += 0xD1B54A32D192ED03L);
-		long y = (stateB += 0x8CB92BA72F3D8DD7L + BitConversion.countLeadingZeros(x));
-		long z = (x ^ (y << 37 | y >>> 27));
-		z = (z ^ (z >>> ((z >>> 59) + 5))) * 0xAEF17502108EF2D9L;
-		return (z ^ z >>> 43);
+		final long x = (stateA += 0xD1B54A32D192ED03L);
+		final long y = (stateB += 0x9E3779B97F4A7C15L + BitConversion.countLeadingZeros(x));
+		final int r = (int)y;
+		final long z = (y ^ (x << r | x >>> 64 - r)) * 0xF1357AEA2E62A9C5L;
+		return (z ^ (z << 43 | z >>> 21) ^ (z << 29 | z >>> 35));
 	}
 
 	@Override
@@ -196,24 +196,24 @@ public class OrbitRXSMXSRandom extends EnhancedRandom {
 		long x = stateA;
 		long y = stateB;
 		stateA -= 0xD1B54A32D192ED03L;
-		stateB -= 0x8CB92BA72F3D8DD7L + BitConversion.countLeadingZeros(x);
-		long z = (x ^ (y << 37 | y >>> 27));
-		z = (z ^ (z >>> ((z >>> 59) + 5))) * 0xAEF17502108EF2D9L;
-		return (z ^ z >>> 43);
+		stateB -= 0x9E3779B97F4A7C15L + BitConversion.countLeadingZeros(x);
+		final int r = (int)y;
+		final long z = (y ^ (x << r | x >>> 64 - r)) * 0xF1357AEA2E62A9C5L;
+		return (z ^ (z << 43 | z >>> 21) ^ (z << 29 | z >>> 35));
 	}
 
 	@Override
 	public int next (int bits) {
 		long x = (stateA += 0xD1B54A32D192ED03L);
-		long y = (stateB += 0x8CB92BA72F3D8DD7L + BitConversion.countLeadingZeros(x));
-		long z = (x ^ (y << 37 | y >>> 27));
-		z = (z ^ (z >>> ((z >>> 59) + 5))) * 0xAEF17502108EF2D9L;
-		return (int)(z ^ z >>> 43) >>> (32 - bits);
+		long y = (stateB += 0x9E3779B97F4A7C15L + BitConversion.countLeadingZeros(x));
+		final int r = (int)y;
+		final long z = (y ^ (x << r | x >>> 64 - r)) * 0xF1357AEA2E62A9C5L;
+		return (int)(z ^ (z << 43 | z >>> 21) ^ (z << 29 | z >>> 35)) >>> (32 - bits);
 	}
 
 	@Override
-	public OrbitRXSMXSRandom copy () {
-		return new OrbitRXSMXSRandom(stateA, stateB);
+	public OrbitRRMXRXRRandom copy () {
+		return new OrbitRRMXRXRRandom(stateA, stateB);
 	}
 
 	@Override
@@ -223,7 +223,7 @@ public class OrbitRXSMXSRandom extends EnhancedRandom {
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		OrbitRXSMXSRandom that = (OrbitRXSMXSRandom)o;
+		OrbitRRMXRXRRandom that = (OrbitRRMXRXRRandom)o;
 
 		if (stateA != that.stateA)
 			return false;
@@ -231,6 +231,6 @@ public class OrbitRXSMXSRandom extends EnhancedRandom {
 	}
 
 	public String toString () {
-		return "OrbitRXSMXSRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L}";
+		return "OrbitRRMXRXRRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L}";
 	}
 }

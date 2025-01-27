@@ -18,7 +18,8 @@
 package com.github.tommyettinger.random;
 
 /**
- * An exact copy of PCG-Random's RXS-M-XS generator. It has two {@code long} states, one of which changes with every
+ * An exact copy of <a href="https://www.pcg-random.org">PCG-Random</a>'s RXS-M-XS generator.
+ * It has two {@code long} states, one of which changes with every
  * generated value and one always-odd state which never changes (the "stream" or "increment"). This uses a linear
  * congruential generator for its changing state (the state changes by multiplying with a large constant and adding the
  * stream), and feeds the resulting value to a specific 64-bit unary hash. The hash is what gives this generator its
@@ -186,7 +187,7 @@ public class PcgRXSMXSRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Sets the state completely to the given three state variables.
+	 * Sets the state completely to the given two state variables.
 	 * This is the same as calling {@link #setStateA(long)} and {@link #setStateB(long)}
 	 * as a group.
 	 *
