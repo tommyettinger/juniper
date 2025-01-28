@@ -189,10 +189,8 @@ public class TwinSunRandom extends EnhancedRandom {
 		long y = (stateB += 0x9E3779B97F4A7C15L + BitConversion.countLeadingZeros(x));
 		x = (x ^ x >>> 32) * 0xBEA225F9EB34556DL;
 		y = (y ^ y >>> 29) * 0xF1357AEA2E62A9C5L;
-		x ^= x >>> 29;
-		y ^= y >>> 32;
-		final int r = (int)(y);
-		return (y ^ (x << r | x >>> 64 - r));
+		final int q = (int)(x^x>>>58), r = (int)(y^y>>>58);
+		return ((y << q | y >>> 64 - q) ^ (x << r | x >>> 64 - r));
 	}
 
 	@Override
@@ -203,10 +201,8 @@ public class TwinSunRandom extends EnhancedRandom {
 		stateB -= 0x9E3779B97F4A7C15L + BitConversion.countLeadingZeros(x);
 		x = (x ^ x >>> 32) * 0xBEA225F9EB34556DL;
 		y = (y ^ y >>> 29) * 0xF1357AEA2E62A9C5L;
-		x ^= x >>> 29;
-		y ^= y >>> 32;
-		final int r = (int)(y);
-		return (y ^ (x << r | x >>> 64 - r));
+		final int q = (int)(x^x>>>58), r = (int)(y^y>>>58);
+		return ((y << q | y >>> 64 - q) ^ (x << r | x >>> 64 - r));
 	}
 
 	@Override
@@ -215,10 +211,8 @@ public class TwinSunRandom extends EnhancedRandom {
 		long y = (stateB += 0x9E3779B97F4A7C15L + BitConversion.countLeadingZeros(x));
 		x = (x ^ x >>> 32) * 0xBEA225F9EB34556DL;
 		y = (y ^ y >>> 29) * 0xF1357AEA2E62A9C5L;
-		x ^= x >>> 29;
-		y ^= y >>> 32;
-		final int r = (int)(y);
-		return (int)(y ^ (x << r | x >>> 64 - r)) >>> (32 - bits);
+		final int q = (int)(x^x>>>58), r = (int)(y^y>>>58);
+		return (int)((y << q | y >>> 64 - q) ^ (x << r | x >>> 64 - r)) >>> (32 - bits);
 	}
 
 	@Override
