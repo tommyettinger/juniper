@@ -15,19 +15,17 @@
  *
  */
 
-package com.github.tommyettinger.random.experimental;
+package com.github.tommyettinger.random;
 
 import com.github.tommyettinger.digital.BitConversion;
-import com.github.tommyettinger.random.EnhancedRandom;
 
 /**
  * A hash-on-counters RNG with a period of 2 to the 128.
- * This is closely related to {@link com.github.tommyettinger.random.FlowRandom}, but gives up the
+ * This is closely related to {@link FlowRandom}, but gives up the
  * arbitrary {@link #skip(long)} feature and the various stream manipulation methods to have a
  * much longer period and become 1-dimensionally equidistributed.
  * <br>
- * Uses the Moremur unary hash (the same one as {@link com.github.tommyettinger.random.DistinctRandom}
- * and FlowRandom), passing it a
+ * Uses the Moremur unary hash (the same one as {@link DistinctRandom} and FlowRandom), passing it a
  * combination of the two different additive counters this has for its state. One counter is rotated
  * before XORing with the other, which replaces a xorshift in the original. The first counter only
  * adds the same large odd number at each step, but the second counter adds both a different large
@@ -44,12 +42,12 @@ import com.github.tommyettinger.random.EnhancedRandom;
  * <br>
  * You would probably want to use this generator when you want a known, large period and to be
  * reliably random from the first output regardless of the initial state. Using a
- * {@link com.github.tommyettinger.random.Xoshiro256StarStarRandom} gets the first (with a period
+ * {@link Xoshiro256StarStarRandom} gets the first (with a period
  * of 2 to the 256, minus 1), but not the second. Using a
- * {@link com.github.tommyettinger.random.Xoshiro256MX3Random} gets you most of both, but it can't
- * be seeded with all 0 states, which could be a burden, and it's slower than this. Both of those
- * generators offer 4-dimensional equidistribution, whereas this only offers 1-dimensional, and
- * that might be a deciding factor.
+ * {@link Xoshiro256MX3Random} gets you most of both (and a period of 2 to the 256, minus 1), but
+ * it can't be seeded with all 0 states, which could be a burden, and it's slower than this. Both
+ * of those generators offer 4-dimensional equidistribution, whereas this only offers
+ * 1-dimensional, and that might be a deciding factor.
  */
 public class OrbitalRandom extends EnhancedRandom {
 

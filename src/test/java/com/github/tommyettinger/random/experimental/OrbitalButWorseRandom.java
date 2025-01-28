@@ -19,6 +19,7 @@ package com.github.tommyettinger.random.experimental;
 
 import com.github.tommyettinger.digital.BitConversion;
 import com.github.tommyettinger.random.EnhancedRandom;
+import com.github.tommyettinger.random.OrbitalRandom;
 
 /**
  * Exactly like {@link OrbitalRandom}, but slower and probably no more random.
