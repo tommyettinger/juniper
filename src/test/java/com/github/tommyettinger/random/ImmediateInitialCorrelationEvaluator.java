@@ -118,7 +118,7 @@ public class ImmediateInitialCorrelationEvaluator {
         ArrayList<EnhancedRandom> rs = ObjectList.with(
                 new PcgRXSMXSRandom(1, 1), new FlowRandom(1, 1), new MizuchiRandom(1, 1),
                 new Xoroshiro128StarStarRandom(1, 1), new LaserRandom(1, 1),
-                new TwinSunRandom(1, 1), new OrbitRXSMXSRandom(1, 1), new OrbitalRandom(1, 1),
+                new OrbitalButWorseRandom(1, 1), new OrbitRXSMXSRandom(1, 1), new OrbitalRandom(1, 1),
                 new DistinctRandom(1));
 
 //        ArrayList<EnhancedRandom> rs = ObjectList.with(new EnhancedRandom[]{
