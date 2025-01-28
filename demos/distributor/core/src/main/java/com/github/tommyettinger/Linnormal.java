@@ -18,7 +18,7 @@ public final class Linnormal {
         for (int i = 0; i < TABLE_SIZE; i++) {
             LIN_TABLE_F[i] = (float) (LIN_TABLE[i] = Distributor.probitHighPrecision(0.5 + i * 0.5 / TABLE_SIZE));
         }
-        System.out.printf("SHIFT: %d, MASK: 0x%016XL, SCALE: %a\n", SHIFT, MASK, SCALE);
+//        System.out.printf("SHIFT: %d, MASK: 0x%016XL, SCALE: %a\n", SHIFT, MASK, SCALE);
     }
     /**
      * Given any {@code long} as input, this maps the full range of non-negative long values to much of the non-negative

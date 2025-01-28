@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.github.tommyettinger.digital.Distributor;
+import com.github.tommyettinger.random.GoldenQuasiRandom;
 import com.github.tommyettinger.random.distribution.NormalDistribution;
 
 import java.util.Arrays;
@@ -28,7 +29,7 @@ public class ZigguratLinnormalComparisonScreen extends ScreenAdapter {
     private long iterations = 0L;
     private BitmapFont font;
     private ScreenViewport viewport;
-    private ThreadLocalRandom tlr;
+    private GoldenQuasiRandom tlr;
 
     private int mode = 0;
 
@@ -51,7 +52,7 @@ public class ZigguratLinnormalComparisonScreen extends ScreenAdapter {
         renderer = new ImmediateModeRenderer20(512 * 5, false, true, 0);
         Arrays.fill(amounts, 0);
         iterations = 0;
-        tlr = ThreadLocalRandom.current();
+        tlr = new GoldenQuasiRandom();
     }
     private final DistributorDemo mainGame;
 
