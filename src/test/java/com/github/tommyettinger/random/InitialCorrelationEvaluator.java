@@ -20,7 +20,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.github.tommyettinger.digital.ArrayTools;
 import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.ds.ObjectList;
-import com.github.tommyettinger.random.experimental.OrbitRRMXRXRRandom;
+import com.github.tommyettinger.random.experimental.TwinSunRandom;
 import com.github.tommyettinger.random.experimental.OrbitRXSMXSRandom;
 import com.github.tommyettinger.random.experimental.OrbitalRandom;
 
@@ -116,7 +116,7 @@ public class InitialCorrelationEvaluator {
         ArrayList<EnhancedRandom> rs = ObjectList.with(
                 new PcgRXSMXSRandom(1, 1), new FlowRandom(1, 1), new MizuchiRandom(1, 1),
                 new Xoroshiro128StarStarRandom(1, 1), new LaserRandom(1, 1),
-                new OrbitRRMXRXRRandom(1, 1), new OrbitRXSMXSRandom(1, 1), new OrbitalRandom(1, 1),
+                new TwinSunRandom(1, 1), new OrbitRXSMXSRandom(1, 1), new OrbitalRandom(1, 1),
                 new DistinctRandom(1));
 
 //        ArrayList<EnhancedRandom> rs = ObjectList.with(new EnhancedRandom[]{

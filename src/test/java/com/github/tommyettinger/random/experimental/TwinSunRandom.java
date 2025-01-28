@@ -21,8 +21,19 @@ import com.github.tommyettinger.digital.BitConversion;
 import com.github.tommyettinger.random.EnhancedRandom;
 
 /**
+ * An RNG with two 64-bit states and a period of 2 to the 128. The second state is dependent on the first, but the rest
+ * of the operations can be performed as instruction-level parallel until the last step, which XORs the second state
+ * with a random rotation of the first state (with the random amount determined by the second state). This construction
+ * is one-dimensionally equidistributed. It passes at least 32 TB of PractRand with no anomalies, and also passes both
+ * the ICE tests (testing correlation between numerically similar initial states, either on the first call or after
+ * warming up). This generator can probably be considered hard-to-predict, because there are exactly 2 to the 64
+ * possible states that can produce any given 64-bit result, and inverting the output (64 bits) can't give you a full
+ * input (128 bits). There is a good chance that given enough observed outputs, the state can be figured out, but how
+ * many are required could be very large.
+ * <br>
+ * Some day... I'm gonna get off this rock. *Orchestra comes to life...*
  */
-public class OrbitRRMXRXRRandom extends EnhancedRandom {
+public class TwinSunRandom extends EnhancedRandom {
 
 	/**
 	 * The first state; can be any long.
@@ -34,33 +45,33 @@ public class OrbitRRMXRXRRandom extends EnhancedRandom {
 	protected long stateB;
 
 	/**
-	 * Creates a new OrbitRRMXRXRRandom with a random state.
+	 * Creates a new TwinSunRandom with a random state.
 	 */
-	public OrbitRRMXRXRRandom() {
+	public TwinSunRandom() {
 		super();
 		stateA = EnhancedRandom.seedFromMath();
 		stateB = EnhancedRandom.seedFromMath();
 	}
 
 	/**
-	 * Creates a new OrbitRRMXRXRRandom with the given seed; all {@code long} values are permitted.
+	 * Creates a new TwinSunRandom with the given seed; all {@code long} values are permitted.
 	 * The seed will be passed to {@link #setSeed(long)} to attempt to adequately distribute the seed randomly.
 	 *
 	 * @param seed any {@code long} value
 	 */
-	public OrbitRRMXRXRRandom(long seed) {
+	public TwinSunRandom(long seed) {
 		super(seed);
 		setSeed(seed);
 	}
 
 	/**
-	 * Creates a new OrbitRRMXRXRRandom with the given two states; all {@code long} values are permitted for
+	 * Creates a new TwinSunRandom with the given two states; all {@code long} values are permitted for
 	 * stateA, and all {@code long} values are permitted for stateB. These states are not changed.
 	 *
 	 * @param stateA any {@code long} value
 	 * @param stateB any {@code long} value
 	 */
-	public OrbitRRMXRXRRandom(long stateA, long stateB) {
+	public TwinSunRandom(long stateA, long stateB) {
 		super(stateA);
 		this.stateA = stateA;
 		this.stateB = stateB;
@@ -68,7 +79,7 @@ public class OrbitRRMXRXRRandom extends EnhancedRandom {
 
 	@Override
 	public String getTag() {
-		return "ORRR";
+		return "TwSR";
 	}
 
 	/**
@@ -120,18 +131,8 @@ public class OrbitRRMXRXRRandom extends EnhancedRandom {
 	 */
 	@Override
 	public void setSeed (long seed) {
-		long x = (seed += 0x9E3779B97F4A7C15L);
-		x ^= x >>> 27;
-		x *= 0x3C79AC492BA7B653L;
-		x ^= x >>> 33;
-		x *= 0x1C69B3F74AC4AE35L;
-		stateA = x ^ x >>> 27;
-		x = (seed + 0x9E3779B97F4A7C15L);
-		x ^= x >>> 27;
-		x *= 0x3C79AC492BA7B653L;
-		x ^= x >>> 33;
-		x *= 0x1C69B3F74AC4AE35L;
-		stateB = (x ^ x >>> 27);
+		stateA = seed;
+		stateB = ~seed;
 	}
 
 	/**
@@ -221,8 +222,8 @@ public class OrbitRRMXRXRRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public OrbitRRMXRXRRandom copy () {
-		return new OrbitRRMXRXRRandom(stateA, stateB);
+	public TwinSunRandom copy () {
+		return new TwinSunRandom(stateA, stateB);
 	}
 
 	@Override
@@ -232,14 +233,12 @@ public class OrbitRRMXRXRRandom extends EnhancedRandom {
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		OrbitRRMXRXRRandom that = (OrbitRRMXRXRRandom)o;
+		TwinSunRandom that = (TwinSunRandom)o;
 
-		if (stateA != that.stateA)
-			return false;
-		return stateB == that.stateB;
+		return stateA == that.stateA && stateB == that.stateB;
 	}
 
 	public String toString () {
-		return "OrbitRRMXRXRRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L}";
+		return "TwinSunRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L}";
 	}
 }
