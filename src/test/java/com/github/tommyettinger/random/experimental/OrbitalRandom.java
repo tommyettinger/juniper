@@ -17,7 +17,6 @@
 
 package com.github.tommyettinger.random.experimental;
 
-import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.digital.BitConversion;
 import com.github.tommyettinger.random.EnhancedRandom;
 
@@ -27,13 +26,30 @@ import com.github.tommyettinger.random.EnhancedRandom;
  * arbitrary {@link #skip(long)} feature and the various stream manipulation methods to have a
  * much longer period and become 1-dimensionally equidistributed.
  * <br>
- * Uses the Moremur unary hash (the same one as DistinctRandom), passing it a
- * combination of the two different additive counters this has for its state. The first counter only
+ * Uses the Moremur unary hash (the same one as {@link com.github.tommyettinger.random.DistinctRandom}
+ * and FlowRandom), passing it a
+ * combination of the two different additive counters this has for its state. One counter is rotated
+ * before XORing with the other, which replaces a xorshift in the original. The first counter only
  * adds the same large odd number at each step, but the second counter adds both a different large
  * odd number and the result of {@link BitConversion#countLeadingZeros(long)} on the first state.
  * This way of mixing the states means while the first counter on its own has a period of 2 to the 64,
  * the second counter is very slightly offset from being in-sync with the first, and since it depends
  * upon the first counter, its period is 2 to the 128.
+ * <br>
+ * This passes 64TB of PractRand without anomalies. In most regards, it should have similar
+ * statistical qualities to FlowRandom, except that it is guaranteed to produce each possible long
+ * value exactly (2 to the 64) times. Unlike DistinctRandom, it is not possible to figure out the
+ * current state given one output, and it would take an unknown amount of additional outputs to
+ * retrieve the current state exactly. It shares this quality with FlowRandom.
+ * <br>
+ * You would probably want to use this generator when you want a known, large period and to be
+ * reliably random from the first output regardless of the initial state. Using a
+ * {@link com.github.tommyettinger.random.Xoshiro256StarStarRandom} gets the first (with a period
+ * of 2 to the 256, minus 1), but not the second. Using a
+ * {@link com.github.tommyettinger.random.Xoshiro256MX3Random} gets you most of both, but it can't
+ * be seeded with all 0 states, which could be a burden, and it's slower than this. Both of those
+ * generators offer 4-dimensional equidistribution, whereas this only offers 1-dimensional, and
+ * that might be a deciding factor.
  */
 public class OrbitalRandom extends EnhancedRandom {
 
@@ -47,7 +63,7 @@ public class OrbitalRandom extends EnhancedRandom {
 	protected long stateB;
 
 	/**
-	 * Creates a new OrbitRandom with a random state.
+	 * Creates a new OrbitalRandom with a random state.
 	 */
 	public OrbitalRandom() {
 		super();
@@ -56,7 +72,7 @@ public class OrbitalRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Creates a new OrbitRandom with the given seed; all {@code long} values are permitted.
+	 * Creates a new OrbitalRandom with the given seed; all {@code long} values are permitted.
 	 * The seed will be passed to {@link #setSeed(long)} to attempt to adequately distribute the seed randomly.
 	 *
 	 * @param seed any {@code long} value
@@ -67,7 +83,7 @@ public class OrbitalRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Creates a new OrbitRandom with the given two states; all {@code long} values are permitted for
+	 * Creates a new OrbitalRandom with the given two states; all {@code long} values are permitted for
 	 * stateA and for stateB. These states are not changed during assignment.
 	 *
 	 * @param stateA any {@code long} value
@@ -237,64 +253,6 @@ public class OrbitalRandom extends EnhancedRandom {
 	}
 
 	public String toString () {
-		return "OrbitRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L}";
+		return "OrbitalRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L}";
 	}
-
-	public static void main(String[] args) {
-		OrbitalRandom random = new OrbitalRandom(1L);
-		{
-			int n0 = random.nextInt();
-			int n1 = random.nextInt();
-			int n2 = random.nextInt();
-			int n3 = random.nextInt();
-			int n4 = random.nextInt();
-			int n5 = random.nextInt();
-			int p5 = random.previousInt();
-			int p4 = random.previousInt();
-			int p3 = random.previousInt();
-			int p2 = random.previousInt();
-			int p1 = random.previousInt();
-			int p0 = random.previousInt();
-			System.out.println(n0 == p0);
-			System.out.println(n1 == p1);
-			System.out.println(n2 == p2);
-			System.out.println(n3 == p3);
-			System.out.println(n4 == p4);
-			System.out.println(n5 == p5);
-			System.out.println(Base.BASE16.unsigned(n0) + " vs. " + Base.BASE16.unsigned(p0));
-			System.out.println(Base.BASE16.unsigned(n1) + " vs. " + Base.BASE16.unsigned(p1));
-			System.out.println(Base.BASE16.unsigned(n2) + " vs. " + Base.BASE16.unsigned(p2));
-			System.out.println(Base.BASE16.unsigned(n3) + " vs. " + Base.BASE16.unsigned(p3));
-			System.out.println(Base.BASE16.unsigned(n4) + " vs. " + Base.BASE16.unsigned(p4));
-			System.out.println(Base.BASE16.unsigned(n5) + " vs. " + Base.BASE16.unsigned(p5));
-		}
-		{
-			long n0 = random.nextLong();
-			long n1 = random.nextLong();
-			long n2 = random.nextLong();
-			long n3 = random.nextLong();
-			long n4 = random.nextLong();
-			long n5 = random.nextLong();
-			System.out.println("Going back...");
-			long p5 = random.previousLong();
-			long p4 = random.previousLong();
-			long p3 = random.previousLong();
-			long p2 = random.previousLong();
-			long p1 = random.previousLong();
-			long p0 = random.previousLong();
-			System.out.println(n0 == p0);
-			System.out.println(n1 == p1);
-			System.out.println(n2 == p2);
-			System.out.println(n3 == p3);
-			System.out.println(n4 == p4);
-			System.out.println(n5 == p5);
-			System.out.println(Base.BASE16.unsigned(n0) + " vs. " + Base.BASE16.unsigned(p0));
-			System.out.println(Base.BASE16.unsigned(n1) + " vs. " + Base.BASE16.unsigned(p1));
-			System.out.println(Base.BASE16.unsigned(n2) + " vs. " + Base.BASE16.unsigned(p2));
-			System.out.println(Base.BASE16.unsigned(n3) + " vs. " + Base.BASE16.unsigned(p3));
-			System.out.println(Base.BASE16.unsigned(n4) + " vs. " + Base.BASE16.unsigned(p4));
-			System.out.println(Base.BASE16.unsigned(n5) + " vs. " + Base.BASE16.unsigned(p5));
-		}
-	}
-
 }

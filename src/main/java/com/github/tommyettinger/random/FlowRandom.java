@@ -25,12 +25,21 @@ package com.github.tommyettinger.random;
  * <br>
  * Even though a period of 2 to the 64 is just "good enough," it's tens of thousands of times longer
  * than java.util.Random, and equivalent to any individual SplittableRandom. The speed of this
- * generator is unknown, but probably isn't great, especially compared to designs that take advantage
- * of instruction-level parallelism. The streams are meant to avoid correlation, especially when
- * compared to LaserRandom (which has very correlated streams, but the same state size and period).
+ * generator is generally less than {@link DistinctRandom}, but not by much at all - only one more
+ * operation is used relative to DistinctRandom, incrementing a second state. The streams are meant
+ * to avoid correlation, especially when compared to LaserRandom (which has very correlated streams,
+ * and half as many, but the same state size and period).
  * <br>
- * Has passed 64TB of PractRand without anomalies. ReMort testing is ongoing;
- * over 25 petabytes have passed so far. Any individual stream will return
+ * You typically would want to reach for FlowRandom when you have two independent sources of states,
+ * using one for stateA and the other for stateB. Unlike LaserRandom, {@link MizuchiRandom}, or
+ * {@link PcgRXSMXSRandom}, where one state must be an odd number, here all long values are valid
+ * for both states. Other cases to use FlowRandom would likely involve its stronger handling of
+ * streams relative to any of the unknown-actual-period generators, like {@link AceRandom},
+ * {@link Sfc64Random}, or {@link RomuTrioRandom}. This supports skip() and {@link #previousLong()},
+ * which are also sometimes very desirable.
+ * <br>
+ * Has passed 64TB of PractRand without anomalies.
+ * Passed over 25 petabytes of ReMort testing. Any individual stream will return
  * 2 to the 64 {@code long} results before repeating, but within a stream, some
  * results will appear multiple times, and other results not at all. If you
  * append all streams to each other to form one sequence of length 2 to the 128,
