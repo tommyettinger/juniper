@@ -77,7 +77,9 @@ determines the current stream, and you can access a FlowRandom's stream with `ge
 FlowRandom isn't as fast as some other generators here that have streams (such as LaserRandom), but it seems to be much
 more robust statistically when its stream changes. Unlike DistinctRandom, a given stream can produce the same result
 more than once, and will generally be unable to produce roughly 1/3 of possible `long` outputs. All possible streams, if
-concatenated, would include every `long` result exactly 2 to the 64 times each.
+concatenated, would include every `long` result exactly 2 to the 64 times each. Concatenating all possible streams is,
+roughly, how `OrbitalRandom` works; its code is almost identical to FlowRandom's, but it has one cycle of 2 to the 128
+`long` outputs, at a small speed cost.
 
 AceRandom is the main recommended generator, this time with 5 states. It is the fastest generator here when benchmarked
 on Java 17 and newer. One state is a counter, which makes AceRandom have a minimum period of 2 to the 64, though its
@@ -290,15 +292,15 @@ do need the `EnhancedRandom` they use registered with Fury, but otherwise can ju
 With Gradle, the dependency (of the core module, if you have multiple) is:
 
 ```
-api "com.github.tommyettinger:juniper:0.6.3"
+api "com.github.tommyettinger:juniper:0.6.4"
 ```
 
 In a libGDX project that has a GWT/HTML backend, the `html/build.gradle` file
 should additionally have:
 
 ```
-implementation "com.github.tommyettinger:digital:0.5.4:sources"
-implementation "com.github.tommyettinger:juniper:0.6.3:sources"
+implementation "com.github.tommyettinger:digital:0.6.1:sources"
+implementation "com.github.tommyettinger:juniper:0.6.4:sources"
 ```
 
 And the `GdxDefinition.gwt.xml` file should have:
@@ -314,7 +316,7 @@ If you don't use Gradle, then with Maven, the dependency is:
 <dependency>
   <groupId>com.github.tommyettinger</groupId>
   <artifactId>juniper</artifactId>
-  <version>0.6.3</version>
+  <version>0.6.4</version>
 </dependency>
 ```
 

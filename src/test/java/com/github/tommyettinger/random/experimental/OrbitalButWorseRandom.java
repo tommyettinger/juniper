@@ -70,7 +70,7 @@ public class OrbitalButWorseRandom extends EnhancedRandom {
 
 	@Override
 	public String getTag() {
-		return "TwSR";
+		return "OBWR";
 	}
 
 	/**
@@ -190,20 +190,20 @@ public class OrbitalButWorseRandom extends EnhancedRandom {
 		long y = stateB;
 		stateA -= 0xD1B54A32D192ED03L;
 		stateB -= 0x9E3779B97F4A7C15L + BitConversion.countLeadingZeros(x);
-		x = (x ^ x >>> 32) * 0xBEA225F9EB34556DL;
-		y = (y ^ y >>> 29) * 0xF1357AEA2E62A9C5L;
-		final int q = (int)(x^x>>>58), r = (int)(y^y>>>58);
-		return ((y << q | y >>> 64 - q) ^ (x << r | x >>> 64 - r));
+		final int r = (int)(y);
+		y = (y ^ (x << r | x >>> 64 - r)) * 0xBEA225F9EB34556DL;
+		y = (y ^ y >>> 27) * 0xF1357AEA2E62A9C5L;
+		return (y ^ y >>> 37);
 	}
 
 	@Override
 	public int next (int bits) {
 		long x = (stateA += 0xD1B54A32D192ED03L);
 		long y = (stateB += 0x9E3779B97F4A7C15L + BitConversion.countLeadingZeros(x));
-		x = (x ^ x >>> 32) * 0xBEA225F9EB34556DL;
-		y = (y ^ y >>> 29) * 0xF1357AEA2E62A9C5L;
-		final int q = (int)(x^x>>>58), r = (int)(y^y>>>58);
-		return (int)((y << q | y >>> 64 - q) ^ (x << r | x >>> 64 - r)) >>> (32 - bits);
+		final int r = (int)(y);
+		y = (y ^ (x << r | x >>> 64 - r)) * 0xBEA225F9EB34556DL;
+		y = (y ^ y >>> 27) * 0xF1357AEA2E62A9C5L;
+		return (int)(y ^ y >>> 37) >>> (32 - bits);
 	}
 
 	@Override
