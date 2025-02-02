@@ -95,7 +95,7 @@ public class OrbitalRandom extends EnhancedRandom {
 
 	@Override
 	public String getTag() {
-		return "FloR";
+		return "OrbR";
 	}
 
 	/**

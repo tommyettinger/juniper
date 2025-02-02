@@ -1,3 +1,11 @@
+[0.6.5]
+- OrbitalRandom's tag was wrong, which messed with serialization. It has been fixed.
+
+[0.6.4]
+- [SEED BREAKING, POTENTIALLY] The digital dependency is now 0.6.1, which produces different results from hashBulk() methods. If these were used to seed generators here, then the seeds won't be the same. This isn't done by default in this library.
+- [DIFFERENT OUTPUT] In digital 0.6.1, the exact float output of nextGaussian() and other normal-distributed generation will be slightly different in some cases. The values should be very close, if different at all.
+- OrbitalRandom is new.
+
 [0.6.3]
 - SoloRandom, Taxon32Random, PcgRXSMXSRandom are new.
 - The digital dependency is now 0.5.4 .
