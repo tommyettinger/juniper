@@ -20,6 +20,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.github.tommyettinger.digital.ArrayTools;
 import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.ds.ObjectList;
+import com.github.tommyettinger.random.experimental.Chock32Random;
 import com.github.tommyettinger.random.experimental.OrbitalButWorseRandom;
 import com.github.tommyettinger.random.experimental.OrbitRXSMXSRandom;
 
@@ -112,15 +113,15 @@ public class InitialCorrelationEvaluator {
         StringBuilder sb = new StringBuilder(1024);
         EnhancedRandom[][] g = new EnhancedRandom[256][256];
 
-        ArrayList<EnhancedRandom> rs = ObjectList.with(
-                new PcgRXSMXSRandom(1, 1), new FlowRandom(1, 1), new MizuchiRandom(1, 1),
-                new Xoroshiro128StarStarRandom(1, 1), new LaserRandom(1, 1),
-                new OrbitalButWorseRandom(1, 1), new OrbitRXSMXSRandom(1, 1), new OrbitalRandom(1, 1),
-                new DistinctRandom(1));
+//        ArrayList<EnhancedRandom> rs = ObjectList.with(
+//                new PcgRXSMXSRandom(1, 1), new FlowRandom(1, 1), new MizuchiRandom(1, 1),
+//                new Xoroshiro128StarStarRandom(1, 1), new LaserRandom(1, 1),
+//                new OrbitalButWorseRandom(1, 1), new OrbitRXSMXSRandom(1, 1), new OrbitalRandom(1, 1),
+//                new DistinctRandom(1));
 
-//        ArrayList<EnhancedRandom> rs = ObjectList.with(new EnhancedRandom[]{
-//                new SoloRandom(1, 1, 1)
-//        });
+        ArrayList<EnhancedRandom> rs = ObjectList.with(new EnhancedRandom[]{
+                new Chock32Random(1, 1, 1, 1)
+        });
 
 //        ArrayList<EnhancedRandom> rs = ObjectList.with(new EnhancedRandom[]{
 //                new Bear32Random(1, 1, 1, 1), new Chill32Random(1, 1, 1), new ChopRandom(1, 1, 1, 1),
