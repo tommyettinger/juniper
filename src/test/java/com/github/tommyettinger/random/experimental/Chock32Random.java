@@ -38,6 +38,8 @@ import static com.github.tommyettinger.digital.BitConversion.imul;
  * period and quality. It is not possible to invert the generator given a known small number of outputs; the furthest
  * you can get when inverting the output is to get the current sum of all four states.
  * <br>
+ * This passes 64TB of PractRand testing with no anomalies, and also passes Juniper's InitialCorrelationTest (ICE test).
+ * <br>
  * This implements all optional methods in EnhancedRandom except {@link #skip(long)}; it does implement
  * {@link #previousLong()} and {@link #previousInt()} without using skip().
  */
@@ -295,55 +297,51 @@ public class Chock32Random extends EnhancedRandom {
 	@Override
 	public long nextLong () {
 		// This is the same as the following, but inlined manually:
-		return (long)nextInt() << 32 ^ nextInt();
+//		return (long)nextInt() << 32 ^ nextInt();
 
-//		final int fa = stateA;
-//		final int fb = stateB;
-//		final int fc = stateC;
-//		final int fd = stateD;
-//
-//		final int ga = fb - fc;
-//		final int gb = fa ^ fd;
-//		final int gc = (fb << fa | fb >>> -fa);
-//		final int gd = fd + 0xADB5B165;
-//		int hi = (ga + gb + gc + gd);
-//		hi = imul(hi ^ hi >>> 15, 0x735a2d97);
-//
-//		stateA = gb - gc | 0;
-//		stateB = ga ^ gd;
-//		stateC = (gb << ga | gb >>> -ga);
-//		stateD = gd + 0xADB5B165 | 0;
-//		int lo = (stateA + stateB + stateC + stateD);
-//		lo = imul(lo ^ lo >>> 15, 0x735a2d97);
-//
-//		return (long)(hi ^ hi >>> 16) << 32 ^ (lo ^ lo >>> 16);
+		final int fa = stateA;
+		final int fb = stateB;
+		final int fc = stateC;
+		final int fd = stateD;
+		final int ga = fb - fc;
+		final int gb = fa ^ fd;
+		final int gc = (fb << 11 | fb >>> 21);
+		final int gd = fd + 0xADB5B165;
+		int hi = (ga + gb);
+		hi ^= (hi << 14 | hi >>> 18) ^ (hi << 23 | hi >>> 9);
+
+		stateA = gb - gc | 0;
+		stateB = ga ^ gd;
+		stateC = (gb << 11 | gb >>> 21);
+		stateD = gd + 0xADB5B165 | 0;
+		int lo = (stateA + stateB);
+		lo ^= (lo << 14 | lo >>> 18) ^ (lo << 23 | lo >>> 9);
+		return (long)hi << 32 ^ lo;
 	}
 
 	@Override
 	public long previousLong () {
 		// This is the same as the following, but inlined manually:
-		return previousInt() ^ (long)previousInt() << 32;
+//		return previousInt() ^ (long)previousInt() << 32;
 
-//		final int ga = stateA;
-//		final int gb = stateB;
-//		final int gc = stateC;
-//		final int gd = stateD;
-//
-//		int lo = ga + gb + gc + gd;
-//		lo = imul(lo ^ lo >>> 15, 0x735a2d97);
-//		final int fd = gd - 0xADB5B165;
-//		final int fa = gb ^ fd;
-//		final int fb = (gc >>> fa | gc << -fa);
-//		final int fc = fb - ga;
-//
-//		int hi = fa + fb + fc + fd;
-//		hi = imul(hi ^ hi >>> 15, 0x735a2d97);
-//		stateD = fd - 0xADB5B165 | 0;
-//		stateA = fb ^ stateD;
-//		stateB = (fc >>> stateA | fc << -stateA);
-//		stateC = stateB - fa | 0;
-//
-//		return (lo ^ lo >>> 16) ^ (long)(hi ^ hi >>> 16) << 32;
+		final int ga = stateA;
+		final int gb = stateB;
+		final int gc = stateC;
+		final int gd = stateD;
+		int lo = (ga + gb);
+		lo ^= (lo << 14 | lo >>> 18) ^ (lo << 23 | lo >>> 9);
+		final int fd = gd - 0xADB5B165;
+		final int fa = gb ^ fd;
+		final int fb = (gc >>> 11 | gc << 21);
+		final int fc = fb - ga | 0;
+
+		int hi = (fa + fb);
+		hi ^= (hi << 14 | hi >>> 18) ^ (hi << 23 | hi >>> 9);
+		stateA = fb ^ (stateD = fd - 0xADB5B165 | 0);
+		stateB = (fc >>> 11 | fc << 21);
+		stateC = stateB - fa | 0;
+
+		return (long)hi << 32 ^ lo;
 	}
 
 	@Override
@@ -372,20 +370,6 @@ public class Chock32Random extends EnhancedRandom {
 		int res = (stateA + stateB);
 		return (res ^ (res << 14 | res >>> 18) ^ (res << 23 | res >>> 9)) >>> (32 - bits);
 	}
-
-	/*
-const uint32_t fa = stateA;
-const uint32_t fb = stateB;
-const uint32_t fc = stateC;
-const uint32_t fd = stateD;
-stateA = fb - fc;
-stateB = fa ^ fd;
-stateC = rotate32(fb, 11);
-stateD = fd + 0xADB5B165;
-uint32_t res = stateA + stateB;
-return res ^ rotate32(res, 14) ^ rotate32(res, 23);
-
-	 */
 
 	@Override
 	public int nextInt () {
@@ -479,4 +463,60 @@ return res ^ rotate32(res, 14) ^ rotate32(res, 23);
 	public String toString () {
 		return "Chock32Random{" + "stateA=" + (stateA) + ", stateB=" + (stateB) + ", stateC=" + (stateC) + ", stateD=" + (stateD) + "}";
 	}
+
+//	public static void main(String[] args) {
+//		Chock32Random random = new Chock32Random(1L);
+//		{
+//			int n0 = random.nextInt();
+//			int n1 = random.nextInt();
+//			int n2 = random.nextInt();
+//			int n3 = random.nextInt();
+//			int n4 = random.nextInt();
+//			int n5 = random.nextInt();
+//			int p5 = random.previousInt();
+//			int p4 = random.previousInt();
+//			int p3 = random.previousInt();
+//			int p2 = random.previousInt();
+//			int p1 = random.previousInt();
+//			int p0 = random.previousInt();
+//			System.out.println(n0 == p0);
+//			System.out.println(n1 == p1);
+//			System.out.println(n2 == p2);
+//			System.out.println(n3 == p3);
+//			System.out.println(n4 == p4);
+//			System.out.println(n5 == p5);
+//			System.out.println(Base.BASE16.unsigned(n0) + " vs. " + Base.BASE16.unsigned(p0));
+//			System.out.println(Base.BASE16.unsigned(n1) + " vs. " + Base.BASE16.unsigned(p1));
+//			System.out.println(Base.BASE16.unsigned(n2) + " vs. " + Base.BASE16.unsigned(p2));
+//			System.out.println(Base.BASE16.unsigned(n3) + " vs. " + Base.BASE16.unsigned(p3));
+//			System.out.println(Base.BASE16.unsigned(n4) + " vs. " + Base.BASE16.unsigned(p4));
+//			System.out.println(Base.BASE16.unsigned(n5) + " vs. " + Base.BASE16.unsigned(p5));
+//		}
+//		{
+//			long n0 = random.nextLong();
+//			long n1 = random.nextLong();
+//			long n2 = random.nextLong();
+//			long n3 = random.nextLong();
+//			long n4 = random.nextLong();
+//			long n5 = random.nextLong();
+//			long p5 = random.previousLong();
+//			long p4 = random.previousLong();
+//			long p3 = random.previousLong();
+//			long p2 = random.previousLong();
+//			long p1 = random.previousLong();
+//			long p0 = random.previousLong();
+//			System.out.println(n0 == p0);
+//			System.out.println(n1 == p1);
+//			System.out.println(n2 == p2);
+//			System.out.println(n3 == p3);
+//			System.out.println(n4 == p4);
+//			System.out.println(n5 == p5);
+//			System.out.println(Base.BASE16.unsigned(n0) + " vs. " + Base.BASE16.unsigned(p0));
+//			System.out.println(Base.BASE16.unsigned(n1) + " vs. " + Base.BASE16.unsigned(p1));
+//			System.out.println(Base.BASE16.unsigned(n2) + " vs. " + Base.BASE16.unsigned(p2));
+//			System.out.println(Base.BASE16.unsigned(n3) + " vs. " + Base.BASE16.unsigned(p3));
+//			System.out.println(Base.BASE16.unsigned(n4) + " vs. " + Base.BASE16.unsigned(p4));
+//			System.out.println(Base.BASE16.unsigned(n5) + " vs. " + Base.BASE16.unsigned(p5));
+//		}
+//	}
 }

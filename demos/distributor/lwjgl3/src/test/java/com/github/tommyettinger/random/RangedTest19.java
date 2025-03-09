@@ -1,5 +1,6 @@
 package com.github.tommyettinger.random;
 
+import com.github.tommyettinger.digital.RoughMath;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -19,7 +20,7 @@ public class RangedTest19 {
         ArrayList<EnhancedRandom> randoms = Deserializer.copyRandoms();
         for (int limit = 2; limit <= 1024; limit++) {
             // we need to use tanh because manually calculating can give very wrong results for high limits.
-            double threshold = 1.9 - Math.tanh(limit);
+            double threshold = 1.9 - RoughMath.tanhRough(limit);
             threshold *= threshold;
             System.out.println("Testing all EnhancedRandom using Math.unsignedMultiplyHigh("+limit+") with threshold " + threshold);
             for (int c = 0; c < randoms.size(); c++) {
