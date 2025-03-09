@@ -9,6 +9,7 @@ dependencies {
 	implementation project(':core')
 	implementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
 	implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+	testImplementation "com.esotericsoftware:kryo:4.0.3"
 	testImplementation "junit:junit:4.13.2"
 }
 
