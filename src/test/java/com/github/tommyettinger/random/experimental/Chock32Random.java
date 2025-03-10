@@ -111,7 +111,7 @@ public class Chock32Random extends EnhancedRandom {
 
 	@Override
 	public String getTag() {
-		return "ChoR";
+		return "ChcR";
 	}
 
 	/**
@@ -294,6 +294,7 @@ public class Chock32Random extends EnhancedRandom {
 		this.stateD = (int)stateD;
 	}
 
+	@SuppressWarnings("IntegerMultiplicationImplicitCastToLong")
 	@Override
 	public long nextLong () {
 		// This is the same as the following, but inlined manually:
@@ -303,22 +304,21 @@ public class Chock32Random extends EnhancedRandom {
 		final int fb = stateB;
 		final int fc = stateC;
 		final int fd = stateD;
+		final int hi = fa + fb;
 		final int ga = fb - fc;
 		final int gb = fa ^ fd;
 		final int gc = (fb << 11 | fb >>> 21);
 		final int gd = fd + 0xADB5B165;
-		int hi = (ga + gb);
-		hi ^= (hi << 14 | hi >>> 18) ^ (hi << 23 | hi >>> 9);
+		final int lo = ga + gb;
 
 		stateA = gb - gc | 0;
 		stateB = ga ^ gd;
 		stateC = (gb << 11 | gb >>> 21);
 		stateD = gd + 0xADB5B165 | 0;
-		int lo = (stateA + stateB);
-		lo ^= (lo << 14 | lo >>> 18) ^ (lo << 23 | lo >>> 9);
-		return (long)hi << 32 ^ lo;
+		return (long)(hi ^ (hi << 14 | hi >>> 18) ^ (hi << 23 | hi >>> 9)) << 32 ^ (lo ^ (lo << 14 | lo >>> 18) ^ (lo << 23 | lo >>> 9));
 	}
 
+	@SuppressWarnings("IntegerMultiplicationImplicitCastToLong")
 	@Override
 	public long previousLong () {
 		// This is the same as the following, but inlined manually:
@@ -328,20 +328,18 @@ public class Chock32Random extends EnhancedRandom {
 		final int gb = stateB;
 		final int gc = stateC;
 		final int gd = stateD;
-		int lo = (ga + gb);
-		lo ^= (lo << 14 | lo >>> 18) ^ (lo << 23 | lo >>> 9);
 		final int fd = gd - 0xADB5B165;
 		final int fa = gb ^ fd;
 		final int fb = (gc >>> 11 | gc << 21);
 		final int fc = fb - ga | 0;
+		final int lo = (fa + fb);
 
-		int hi = (fa + fb);
-		hi ^= (hi << 14 | hi >>> 18) ^ (hi << 23 | hi >>> 9);
 		stateA = fb ^ (stateD = fd - 0xADB5B165 | 0);
 		stateB = (fc >>> 11 | fc << 21);
 		stateC = stateB - fa | 0;
+		final int hi = (stateA + stateB);
 
-		return (long)hi << 32 ^ lo;
+		return (long)(hi ^ (hi << 14 | hi >>> 18) ^ (hi << 23 | hi >>> 9)) << 32 ^ (lo ^ (lo << 14 | lo >>> 18) ^ (lo << 23 | lo >>> 9));
 	}
 
 	@Override
@@ -350,10 +348,10 @@ public class Chock32Random extends EnhancedRandom {
 		final int gb = stateB;
 		final int gc = stateC;
 		final int gd = stateD;
-		int res = ga + gb;
 		stateA = gb ^ (stateD = gd - 0xADB5B165 | 0);
 		stateB = (gc >>> 11 | gc << 21);
 		stateC = stateB - ga | 0;
+		int res = stateA + stateB;
 		return (res ^ (res << 14 | res >>> 18) ^ (res << 23 | res >>> 9));
 	}
 
@@ -363,11 +361,11 @@ public class Chock32Random extends EnhancedRandom {
 		final int fb = stateB;
 		final int fc = stateC;
 		final int fd = stateD;
+		final int res = fa + fb;
 		stateA = fb - fc | 0;
 		stateB = fa ^ fd;
 		stateC = (fb << 11 | fb >>> 21);
 		stateD = fd + 0xADB5B165 | 0;
-		int res = (stateA + stateB);
 		return (res ^ (res << 14 | res >>> 18) ^ (res << 23 | res >>> 9)) >>> (32 - bits);
 	}
 
@@ -377,11 +375,11 @@ public class Chock32Random extends EnhancedRandom {
 		final int fb = stateB;
 		final int fc = stateC;
 		final int fd = stateD;
+		final int res = fa + fb;
 		stateA = fb - fc | 0;
 		stateB = fa ^ fd;
 		stateC = (fb << 11 | fb >>> 21);
 		stateD = fd + 0xADB5B165 | 0;
-		int res = (stateA + stateB);
 		return (res ^ (res << 14 | res >>> 18) ^ (res << 23 | res >>> 9));
 	}
 
@@ -394,6 +392,11 @@ public class Chock32Random extends EnhancedRandom {
 	public int nextSignedInt (int outerBound) {
 		outerBound = (int)(outerBound * (nextInt() & 0xFFFFFFFFL) >> 32);
 		return outerBound + (outerBound >>> 31);
+	}
+
+	@Override
+	public int nextUnsignedInt(int bound) {
+		return (int)((bound & 0xFFFFFFFFL) * (nextInt() & 0xFFFFFFFFL) >>> 32);
 	}
 
 	@Override

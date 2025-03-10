@@ -64,6 +64,7 @@ public final class Generators {
         randomList.add(new PcgBoostedRandom(1, 1));
         randomList.add(new OrbitRXSMXSRandom(1, 1));
         randomList.add(new OrbitalButWorseRandom(1, 1));
+        randomList.add(new Chock32Random(1, 1, 1, 1));
     }
     public static int randomCount = randomList.size();
 
