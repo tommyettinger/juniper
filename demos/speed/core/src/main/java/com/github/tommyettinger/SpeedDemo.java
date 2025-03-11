@@ -8,7 +8,13 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-/** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
+/** Results on LWJGL3:
+ * ChopRandom is usually fastest.
+ * Xoshiro128PlusPlusRandom sometimes beats ChopRandom.
+ * Chock32Random is usually close to the second-place position, never first-place.
+ * AceRandom, surprisingly, is not always the fastest on long-related math, despite internally only using long math.
+ * Chill32Random is always slowest.
+ */
 public class SpeedDemo extends Game {
     public static final int SCREEN_WIDTH = 512;
     public static final int SCREEN_HEIGHT = 520;

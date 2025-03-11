@@ -76,7 +76,7 @@ public class ChockScreen extends ScreenAdapter {
         }
         iterations += 1;
         for (int i = 0; i < SpeedDemo.STEPS; i++) {
-            int m = (int) (random.nextDouble() * 512);
+            int m = (int) (random.nextExclusiveFloat() * 512f);
             if(m >= 0 && m < 512)
                 amounts[m]++;
         }
@@ -100,7 +100,7 @@ public class ChockScreen extends ScreenAdapter {
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        font.draw(batch, Stringf.format("nextDouble() using %s at %d FPS", random.getTag(), Gdx.graphics.getFramesPerSecond()),
+        font.draw(batch, Stringf.format("nextExclusiveFloat() using %s at %d FPS", random.getTag(), Gdx.graphics.getFramesPerSecond()),
                 64, 522, 256+128, Align.center, true);
         batch.end();
 
