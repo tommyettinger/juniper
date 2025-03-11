@@ -1,4 +1,4 @@
-package com.github.tommyettinger.l;
+package com.github.tommyettinger.f;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -13,12 +13,12 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.github.tommyettinger.SpeedDemo;
 import com.github.tommyettinger.digital.Stringf;
-import com.github.tommyettinger.random.Bear32RandomBC;
+import com.github.tommyettinger.random.Chock32Random;
 
 import java.util.Arrays;
 
-public class BearBCScreen extends ScreenAdapter {
-    private Bear32RandomBC random;
+public class ChockScreen extends ScreenAdapter {
+    private Chock32Random random;
     private SpriteBatch batch;
     private ImmediateModeRenderer20 renderer;
     private final long[] amounts = new long[512];
@@ -30,7 +30,7 @@ public class BearBCScreen extends ScreenAdapter {
     @Override
     public void show() {
         font = mainGame.font;
-        random = new Bear32RandomBC();
+        random = new Chock32Random();
         batch = mainGame.batch;
         viewport = new ScreenViewport();
         renderer = new ImmediateModeRenderer20(512 * 3, false, true, 0);
@@ -39,7 +39,7 @@ public class BearBCScreen extends ScreenAdapter {
     }
     private final SpeedDemo mainGame;
 
-    public BearBCScreen(SpeedDemo main){
+    public ChockScreen(SpeedDemo main){
         mainGame = main;
     }
 
@@ -76,7 +76,7 @@ public class BearBCScreen extends ScreenAdapter {
         }
         iterations += 1;
         for (int i = 0; i < SpeedDemo.STEPS; i++) {
-            int m = (int) (random.nextLong(512L));
+            int m = (int) (random.nextFloat() * 512);
             if(m >= 0 && m < 512)
                 amounts[m]++;
         }
@@ -100,7 +100,7 @@ public class BearBCScreen extends ScreenAdapter {
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        font.draw(batch, Stringf.format("nextLong() using %s at %d FPS", random.getTag(), Gdx.graphics.getFramesPerSecond()),
+        font.draw(batch, Stringf.format("nextFloat() using %s at %d FPS", random.getTag(), Gdx.graphics.getFramesPerSecond()),
                 64, 522, 256+128, Align.center, true);
         batch.end();
 

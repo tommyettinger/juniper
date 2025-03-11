@@ -13,12 +13,13 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.github.tommyettinger.SpeedDemo;
 import com.github.tommyettinger.digital.Stringf;
-import com.github.tommyettinger.random.Bear32RandomBC;
+import com.github.tommyettinger.random.Xoshiro128PlusPlusRandom;
+import com.github.tommyettinger.random.Xoshiro128PlusPlusRandom;
 
 import java.util.Arrays;
 
-public class BearBCScreen extends ScreenAdapter {
-    private Bear32RandomBC random;
+public class Xoshiro128PPScreen extends ScreenAdapter {
+    private Xoshiro128PlusPlusRandom random;
     private SpriteBatch batch;
     private ImmediateModeRenderer20 renderer;
     private final long[] amounts = new long[512];
@@ -30,7 +31,7 @@ public class BearBCScreen extends ScreenAdapter {
     @Override
     public void show() {
         font = mainGame.font;
-        random = new Bear32RandomBC();
+        random = new Xoshiro128PlusPlusRandom();
         batch = mainGame.batch;
         viewport = new ScreenViewport();
         renderer = new ImmediateModeRenderer20(512 * 3, false, true, 0);
@@ -39,7 +40,7 @@ public class BearBCScreen extends ScreenAdapter {
     }
     private final SpeedDemo mainGame;
 
-    public BearBCScreen(SpeedDemo main){
+    public Xoshiro128PPScreen(SpeedDemo main){
         mainGame = main;
     }
 
