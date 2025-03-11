@@ -8,12 +8,27 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-/** Results on LWJGL3:
+/**
+ * Results on LWJGL3:
  * ChopRandom is usually fastest.
  * Xoshiro128PlusPlusRandom sometimes beats ChopRandom.
  * Chock32Random is usually close to the second-place position, never first-place.
  * AceRandom, surprisingly, is not always the fastest on long-related math, despite internally only using long math.
  * Chill32Random is always slowest.
+ * <br>
+ * Results on GWT:
+ * ChopRandom is usually fastest.
+ * Xoshiro128PlusPlusRandom does not perform nearly as well as it does on LWJGL3, and is usually 3rd-place
+ * Chock32Random is usually in the second-place position, just behind ChopRandom, except on bounded nextLong(), where it does poorly.
+ * AceRandom, as expected on GWT, is quite slow, sometimes slowest.
+ * Chill32Random is sometimes slowest, or sometimes second-slowest behind AceRandom.
+ * <br>
+ * Results on TeaVM:
+ * ChopRandom is usually fastest.
+ * Xoshiro128PlusPlusRandom does not perform nearly as well as it does on LWJGL3, and is usually 3rd-place
+ * Chock32Random is usually close to the second-place position, and is first-place on bounded nextLong().
+ * AceRandom, as expected on GWT, is quite slow, sometimes slowest.
+ * Chill32Random is sometimes slowest, or sometimes second-slowest behind AceRandom.
  */
 public class SpeedDemo extends Game {
     public static final int SCREEN_WIDTH = 512;
