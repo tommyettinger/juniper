@@ -15,7 +15,9 @@
  *
  */
 
-package com.github.tommyettinger.random;
+package com.github.tommyettinger.random.experimental;
+
+import com.github.tommyettinger.random.EnhancedRandom;
 
 import static com.github.tommyettinger.digital.BitConversion.imul;
 
@@ -25,7 +27,7 @@ import static com.github.tommyettinger.digital.BitConversion.imul;
  * It will usually be compiled out, but this does also use {@code variable = variable + constant | 0;} in order
  * to force additions to counters on GWT to actually overflow as they do (and should) on desktop JVMs.
  * <br>
- * Chock32Random has a guaranteed minimum period of 2 to the 32, and is very likely to have a much longer period for
+ * Chip32Random has a guaranteed minimum period of 2 to the 32, and is very likely to have a much longer period for
  * almost all initial states. There are expected to be several (double-digit) relatively long sub-cycles that most
  * states will be within, and relatively few sub-cycles nearing the smallest possible size (2 to the 32, or over 4
  * billion).
@@ -34,19 +36,21 @@ import static com.github.tommyettinger.digital.BitConversion.imul;
  * (this gives the guaranteed minimum period of 2 to the 32), and the others combine the values of the four states
  * across three variables. It is possible to invert the generator given a full 128-bit state; this is vital for its
  * period and quality. It is not possible to invert the generator given a known small number of outputs; the furthest
- * you can get when inverting the output is to get the current sum of two states.
+ * you can get when inverting the output is to get the current sum of all four states.
  * <br>
+ * TODO: Verify that 64TB of PractRand passes! Still experimental until it passes.
  * This passes 64TB of PractRand testing with no anomalies, and also passes Juniper's InitialCorrelationTest (ICE test).
  * It fails Juniper's ImmediateInitialCorrelationEvaluator test, which just checks if an RNG is also usable as a hash
- * function on its earliest outputs. Chock32Random appears to have fully uncorrelated output after generating somewhere
- * between 10 and 14 ints.
+ * function on its earliest outputs. Chip32Random appears to have fully uncorrelated output after generating about 22
+ * ints.
  * <br>
  * This implements all optional methods in EnhancedRandom except {@link #skip(long)}; it does implement
  * {@link #previousLong()} and {@link #previousInt()} without using skip(). This has been optimized as a 32-bit
  * generator, so it calls {@link #nextInt()} internally when it can avoid calling {@link #nextLong()}.
  * There is also a GWT-specialized version using super-sourcing (so that version is only used on GWT).
  */
-public class Chock32Random extends EnhancedRandom {
+@SuppressWarnings({"PointlessBitwiseExpression"}) // GWT actually needs these.
+public class Chip32Random extends EnhancedRandom {
 
 	/**
 	 * The first state; can be any int.
@@ -66,36 +70,36 @@ public class Chock32Random extends EnhancedRandom {
 	protected int stateD;
 
 	/**
-	 * Creates a new Chock32Random with a random state.
+	 * Creates a new Chip32Random with a random state.
 	 */
-	public Chock32Random() {
+	public Chip32Random() {
 		this((int)EnhancedRandom.seedFromMath(), (int)EnhancedRandom.seedFromMath(), (int)EnhancedRandom.seedFromMath(), (int)EnhancedRandom.seedFromMath());
 	}
 
 	/**
-	 * Creates a new Chock32Random with the given seed; all {@code long} values are permitted.
+	 * Creates a new Chip32Random with the given seed; all {@code long} values are permitted.
 	 * The seed will be passed to {@link #setSeed(long)} to attempt to adequately distribute the seed randomly.
 	 *
 	 * @param seed any {@code long} value
 	 */
-	public Chock32Random(long seed) {
+	public Chip32Random(long seed) {
 		super(seed);
 		setSeed(seed);
 	}
 
 	/**
-	 * Creates a new Chock32Random with the given seed; all {@code long} values are permitted.
+	 * Creates a new Chip32Random with the given seed; all {@code long} values are permitted.
 	 * The seed will be passed to {@link #setSeed(int)} to attempt to adequately distribute the seed randomly.
 	 *
 	 * @param seed any {@code long} value
 	 */
-	public Chock32Random(int seed) {
+	public Chip32Random(int seed) {
 		super(seed);
 		setSeed(seed);
 	}
 
 	/**
-	 * Creates a new Chock32Random with the given four states; all {@code int} values are permitted.
+	 * Creates a new Chip32Random with the given four states; all {@code int} values are permitted.
 	 * These states will be used verbatim.
 	 *
 	 * @param stateA any {@code int} value
@@ -103,7 +107,7 @@ public class Chock32Random extends EnhancedRandom {
 	 * @param stateC any {@code int} value
 	 * @param stateD any {@code int} value
 	 */
-	public Chock32Random(int stateA, int stateB, int stateC, int stateD) {
+	public Chip32Random(int stateA, int stateB, int stateC, int stateD) {
 		super(stateA);
 		this.stateA = stateA;
 		this.stateB = stateB;
@@ -113,7 +117,7 @@ public class Chock32Random extends EnhancedRandom {
 
 	@Override
 	public String getTag() {
-		return "ChcR";
+		return "ChiR";
 	}
 
 	/**
@@ -293,7 +297,6 @@ public class Chock32Random extends EnhancedRandom {
 		this.stateD = (int)stateD;
 	}
 
-	@SuppressWarnings("IntegerMultiplicationImplicitCastToLong")
 	@Override
 	public long nextLong () {
 		// This is the same as the following, but inlined manually:
@@ -303,21 +306,20 @@ public class Chock32Random extends EnhancedRandom {
 		final int fb = stateB;
 		final int fc = stateC;
 		final int fd = stateD;
-		final int hi = fa + fb;
+//		final int hi = fa + fb;
 		final int ga = fb - fc;
 		final int gb = fa ^ fd;
 		final int gc = (fb << 11 | fb >>> 21);
 		final int gd = fd + 0xADB5B165;
-		final int lo = ga + gb;
+//		final int lo = ga + gb;
 
-		stateA = gb - gc;
+		stateA = gb - gc | 0;
 		stateB = ga ^ gd;
 		stateC = (gb << 11 | gb >>> 21);
-		stateD = gd + 0xADB5B165;
-		return (long)(hi ^ (hi << 14 | hi >>> 18) ^ (hi << 23 | hi >>> 9)) << 32 ^ (lo ^ (lo << 14 | lo >>> 18) ^ (lo << 23 | lo >>> 9));
+		stateD = gd + 0xADB5B165 | 0;
+		return (long)fa << 32 ^ ga;
 	}
 
-	@SuppressWarnings("IntegerMultiplicationImplicitCastToLong")
 	@Override
 	public long previousLong () {
 		// This is the same as the following, but inlined manually:
@@ -330,15 +332,15 @@ public class Chock32Random extends EnhancedRandom {
 		final int fd = gd - 0xADB5B165;
 		final int fa = gb ^ fd;
 		final int fb = (gc >>> 11 | gc << 21);
-		final int fc = fb - ga;
-		final int lo = (fa + fb);
+		final int fc = fb - ga | 0;
+//		final int lo = (fa + fb);
 
-		stateA = fb ^ (stateD = fd - 0xADB5B16);
+		stateA = fb ^ (stateD = fd - 0xADB5B165 | 0);
 		stateB = (fc >>> 11 | fc << 21);
-		stateC = stateB - fa;
-		final int hi = (stateA + stateB);
+		stateC = stateB - fa | 0;
+//		final int hi = (stateA + stateB);
 
-		return (long)(hi ^ (hi << 14 | hi >>> 18) ^ (hi << 23 | hi >>> 9)) << 32 ^ (lo ^ (lo << 14 | lo >>> 18) ^ (lo << 23 | lo >>> 9));
+		return (long)stateA << 32 ^ fa;
 	}
 
 	@Override
@@ -347,11 +349,11 @@ public class Chock32Random extends EnhancedRandom {
 		final int gb = stateB;
 		final int gc = stateC;
 		final int gd = stateD;
-		stateA = gb ^ (stateD = gd - 0xADB5B165);
+		stateA = gb ^ (stateD = gd - 0xADB5B165 | 0);
 		stateB = (gc >>> 11 | gc << 21);
-		stateC = stateB - ga;
-		int res = stateA + stateB;
-		return (res ^ (res << 14 | res >>> 18) ^ (res << 23 | res >>> 9));
+		stateC = stateB - ga | 0;
+//		int res = stateA + stateB;
+		return stateA;
 	}
 
 	@Override
@@ -360,12 +362,12 @@ public class Chock32Random extends EnhancedRandom {
 		final int fb = stateB;
 		final int fc = stateC;
 		final int fd = stateD;
-		final int res = fa + fb;
-		stateA = fb - fc;
+//		final int res = fa + fb;
+		stateA = fb - fc | 0;
 		stateB = fa ^ fd;
 		stateC = (fb << 11 | fb >>> 21);
-		stateD = fd + 0xADB5B165;
-		return (res ^ (res << 14 | res >>> 18) ^ (res << 23 | res >>> 9)) >>> (32 - bits);
+		stateD = fd + 0xADB5B165 | 0;
+		return fa >>> (32 - bits);
 	}
 
 	@Override
@@ -374,12 +376,12 @@ public class Chock32Random extends EnhancedRandom {
 		final int fb = stateB;
 		final int fc = stateC;
 		final int fd = stateD;
-		final int res = fa + fb;
-		stateA = fb - fc;
+//		final int res = fa + fb;
+		stateA = fb - fc | 0;
 		stateB = fa ^ fd;
 		stateC = (fb << 11 | fb >>> 21);
-		stateD = fd + 0xADB5B165;
-		return (res ^ (res << 14 | res >>> 18) ^ (res << 23 | res >>> 9));
+		stateD = fd + 0xADB5B165 | 0;
+		return fa;
 	}
 
 	@Override
@@ -446,8 +448,8 @@ public class Chock32Random extends EnhancedRandom {
 	}
 
 	@Override
-	public Chock32Random copy () {
-		return new Chock32Random(stateA, stateB, stateC, stateD);
+	public Chip32Random copy () {
+		return new Chip32Random(stateA, stateB, stateC, stateD);
 	}
 
 	@Override
@@ -457,12 +459,12 @@ public class Chock32Random extends EnhancedRandom {
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		Chock32Random that = (Chock32Random)o;
+		Chip32Random that = (Chip32Random)o;
 
 		return stateA == that.stateA && stateB == that.stateB && stateC == that.stateC && stateD == that.stateD;
 	}
 
 	public String toString () {
-		return "Chock32Random{" + "stateA=" + (stateA) + ", stateB=" + (stateB) + ", stateC=" + (stateC) + ", stateD=" + (stateD) + "}";
+		return "Chip32Random{" + "stateA=" + (stateA) + ", stateB=" + (stateB) + ", stateC=" + (stateC) + ", stateD=" + (stateD) + "}";
 	}
 }
