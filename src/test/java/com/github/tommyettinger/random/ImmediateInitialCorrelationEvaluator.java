@@ -20,7 +20,6 @@ import com.badlogic.gdx.files.FileHandle;
 import com.github.tommyettinger.digital.ArrayTools;
 import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.ds.ObjectList;
-import com.github.tommyettinger.random.experimental.*;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -40,6 +39,7 @@ import java.util.Date;
 public class ImmediateInitialCorrelationEvaluator {
     public static long INTERVAL_X = 1;//2;//4;//8;//16;//0xC13FA9A902A6328FL;//
     public static long INTERVAL_Y = 2;//2;//4;//8;//16;//0x91E10DA5C79E7B1DL;//
+    public static int DROPPED_STEPS = 10;
     public double steps = 0;
     public int mode = 0;
     public double amount = 0;
@@ -85,7 +85,7 @@ public class ImmediateInitialCorrelationEvaluator {
             }
             double amountSum = 0;
             int minMode = Integer.MAX_VALUE;
-            for (int i = firstStepUsed; i < stepLimit; i++) {
+            for (int i = firstStepUsed, lim = firstStepUsed + stepLimit; i < lim; i++) {
                 step(bit);
                 amountSum += amount;
                 minMode = Math.min(mode, minMode);
@@ -165,7 +165,7 @@ public class ImmediateInitialCorrelationEvaluator {
                 }
             }
             ImmediateInitialCorrelationEvaluator evaluator = new ImmediateInitialCorrelationEvaluator();
-            double result = evaluator.run(g, 0, 4);
+            double result = evaluator.run(g, DROPPED_STEPS, 4);
             System.out.println("Lowest mode: "
                     + Base.BASE10.decimal(evaluator.actualMode, 8)
                     + " has mean amount " + Base.BASE10.decimal(evaluator.actualAmount, 12)
