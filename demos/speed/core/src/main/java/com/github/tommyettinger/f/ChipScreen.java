@@ -13,12 +13,12 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.github.tommyettinger.SpeedDemo;
 import com.github.tommyettinger.digital.Stringf;
-import com.github.tommyettinger.random.Chill32Random;
+import com.github.tommyettinger.random.Chip32Random;
 
 import java.util.Arrays;
 
-public class ChillScreen extends ScreenAdapter {
-    private Chill32Random random;
+public class ChipScreen extends ScreenAdapter {
+    private Chip32Random random;
     private SpriteBatch batch;
     private ImmediateModeRenderer20 renderer;
     private final long[] amounts = new long[512];
@@ -30,7 +30,7 @@ public class ChillScreen extends ScreenAdapter {
     @Override
     public void show() {
         font = mainGame.font;
-        random = new Chill32Random();
+        random = new Chip32Random();
         batch = mainGame.batch;
         viewport = new ScreenViewport();
         renderer = new ImmediateModeRenderer20(512 * 3, false, true, 0);
@@ -39,7 +39,7 @@ public class ChillScreen extends ScreenAdapter {
     }
     private final SpeedDemo mainGame;
 
-    public ChillScreen(SpeedDemo main){
+    public ChipScreen(SpeedDemo main){
         mainGame = main;
     }
 

@@ -1,4 +1,4 @@
-package com.github.tommyettinger.ul;
+package com.github.tommyettinger.d;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -13,12 +13,12 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.github.tommyettinger.SpeedDemo;
 import com.github.tommyettinger.digital.Stringf;
-import com.github.tommyettinger.random.Chill32Random;
+import com.github.tommyettinger.random.Chip32Random;
 
 import java.util.Arrays;
 
-public class ChillScreen extends ScreenAdapter {
-    private Chill32Random random;
+public class ChipScreen extends ScreenAdapter {
+    private Chip32Random random;
     private SpriteBatch batch;
     private ImmediateModeRenderer20 renderer;
     private final long[] amounts = new long[512];
@@ -30,7 +30,7 @@ public class ChillScreen extends ScreenAdapter {
     @Override
     public void show() {
         font = mainGame.font;
-        random = new Chill32Random();
+        random = new Chip32Random();
         batch = mainGame.batch;
         viewport = new ScreenViewport();
         renderer = new ImmediateModeRenderer20(512 * 3, false, true, 0);
@@ -39,7 +39,7 @@ public class ChillScreen extends ScreenAdapter {
     }
     private final SpeedDemo mainGame;
 
-    public ChillScreen(SpeedDemo main){
+    public ChipScreen(SpeedDemo main){
         mainGame = main;
     }
 
@@ -76,7 +76,7 @@ public class ChillScreen extends ScreenAdapter {
         }
         iterations += 1;
         for (int i = 0; i < SpeedDemo.STEPS; i++) {
-            int m = (int) (random.nextLong()>>>55);
+            int m = (int) (random.nextDouble() * 512);
             if(m >= 0 && m < 512)
                 amounts[m]++;
         }
@@ -100,7 +100,7 @@ public class ChillScreen extends ScreenAdapter {
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        font.draw(batch, Stringf.format("nextLong() (upper bits) using %s at %d FPS", random.getTag(), Gdx.graphics.getFramesPerSecond()),
+        font.draw(batch, Stringf.format("nextDouble() using %s at %d FPS", random.getTag(), Gdx.graphics.getFramesPerSecond()),
                 64, 522, 256+128, Align.center, true);
         batch.end();
 
