@@ -10,25 +10,24 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
  * Results on LWJGL3:
- * ChopRandom is usually fastest.
- * Xoshiro128PlusPlusRandom sometimes beats ChopRandom.
- * Chock32Random is usually close to the second-place position, never first-place.
+ * Chip32Random is often fastest.
+ * Xoshiro128PlusPlusRandom sometimes beats Chip32Random by a significant margin, but is usually a little slower.
+ * ChopRandom is usually close to the second-place position, but sometimes ties for first.
  * AceRandom, surprisingly, is not always the fastest on long-related math, despite internally only using long math.
- * Chill32Random is always slowest.
+ * Chock32Random is always slowest.
  * <br>
  * Results on GWT:
- * ChopRandom is usually fastest.
- * Xoshiro128PlusPlusRandom does not perform nearly as well as it does on LWJGL3, and is usually 3rd-place
- * Chock32Random is usually in the second-place position, just behind ChopRandom, except on bounded nextLong(), where it does poorly.
+ * Chip32Random is often tied for fastest, but does poorly on bounded nextLong().
+ * ChopRandom is usually tied for fastest with Chip32Random.
+ * Xoshiro128PlusPlusRandom usually performs reasonably well on everything, typically in second place.
+ * Chock32Random is usually in the second-to-last position, just ahead of AceRandom, and really performs badly on bounded nextLong().
  * AceRandom, as expected on GWT, is quite slow, sometimes slowest.
- * Chill32Random is sometimes slowest, or sometimes second-slowest behind AceRandom.
  * <br>
  * Results on TeaVM:
- * ChopRandom is usually fastest.
- * Xoshiro128PlusPlusRandom does not perform nearly as well as it does on LWJGL3, and is usually 3rd-place
- * Chock32Random is usually close to the second-place position, and is first-place on bounded nextLong().
- * AceRandom, as expected on GWT, is quite slow, sometimes slowest.
- * Chill32Random is sometimes slowest, or sometimes second-slowest behind AceRandom.
+ * Chip32Random, ChopRandom, and Chock32Random are very often nearly tied, within 1 FPS of each other.
+ * Xoshiro128PlusPlusRandom is sometimes also close to first-place, if not in it.
+ * AceRandom, as expected on GWT, is quite slow, usually slowest.
+ * All results are significantly slower than GWT (on Vivaldi 6.7.3329.39, Windows 11 Version 23H2, for both).
  */
 public class SpeedDemo extends Game {
     public static final int SCREEN_WIDTH = 512;
@@ -99,3 +98,27 @@ public class SpeedDemo extends Game {
         setScreen(screens[screenIndex]);
     }
 }
+
+/* OLD
+ *
+ * Results on LWJGL3:
+ * ChopRandom is usually fastest.
+ * Xoshiro128PlusPlusRandom sometimes beats ChopRandom.
+ * Chock32Random is usually close to the second-place position, never first-place.
+ * AceRandom, surprisingly, is not always the fastest on long-related math, despite internally only using long math.
+ * Chill32Random is always slowest.
+ * <br>
+ * Results on GWT:
+ * ChopRandom is usually fastest.
+ * Xoshiro128PlusPlusRandom does not perform nearly as well as it does on LWJGL3, and is usually 3rd-place
+ * Chock32Random is usually in the second-place position, just behind ChopRandom, except on bounded nextLong(), where it does poorly.
+ * AceRandom, as expected on GWT, is quite slow, sometimes slowest.
+ * Chill32Random is sometimes slowest, or sometimes second-slowest behind AceRandom.
+ * <br>
+ * Results on TeaVM:
+ * ChopRandom is usually fastest.
+ * Xoshiro128PlusPlusRandom does not perform nearly as well as it does on LWJGL3, and is usually 3rd-place
+ * Chock32Random is usually close to the second-place position, and is first-place on bounded nextLong().
+ * AceRandom, as expected on GWT, is quite slow, sometimes slowest.
+ * Chill32Random is sometimes slowest, or sometimes second-slowest behind AceRandom.
+ */
