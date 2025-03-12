@@ -23,9 +23,11 @@ import static com.github.tommyettinger.digital.BitConversion.imul;
 
 /**
  * A random number generator that is optimized for performance on 32-bit machines and with Google Web Toolkit.
- * This uses only add, subtract, (variable) bitwise-rotate, and XOR operations in its entirety.
- * It will usually be compiled out, but this does also use {@code variable = variable + constant | 0;} in order
- * to force additions to counters on GWT to actually overflow as they do (and should) on desktop JVMs.
+ * This uses only add, (fixed-distance) bitwise-rotate, and XOR operations in its entirety.
+ * On GWT, this is super-sourced so it uses {@code variable = variable + constant | 0;} in order to force additions to
+ * counters on GWT to actually overflow as they do (and should) on desktop JVMs. The bitwise OR operator is only used
+ * as part of bitwise rotations on desktop and other non-GWT platforms, and HotSpot can almost always compile the
+ * bitwise rotation code used here from {@code <<}, {@code |}, and {@code >>>} into a single processor instruction.
  * <br>
  * Chip32Random has a guaranteed minimum period of 2 to the 32, and is very likely to have a much longer period for
  * almost all initial states. There are expected to be several (double-digit) relatively long sub-cycles that most
@@ -306,17 +308,17 @@ public class Chip32Random extends EnhancedRandom {
 		final int fb = stateB;
 		final int fc = stateC;
 		final int fd = stateD;
-		final int hi = fa ^ (fa << 13 | fa >>> 19) ^ (fa << 23 | fa >>> 23);
-		final int ga = fb - fc;
+		final int hi = fa ^ (fa << 13 | fa >>> 19) ^ (fa << 23 | fa >>> 9);
+		final int ga = fb + fc;
 		final int gb = fa ^ fd;
 		final int gc = (fb << 11 | fb >>> 21);
-		final int gd = fd + 0xADB5B165;
+		final int gd = fd + 0x9E3779B9;
 
-		final int lo = ga ^ (ga << 13 | ga >>> 19) ^ (ga << 23 | ga >>> 23);
-		stateA = gb - gc | 0;
+		final int lo = ga ^ (ga << 13 | ga >>> 19) ^ (ga << 23 | ga >>> 9);
+		stateA = gb + gc | 0;
 		stateB = ga ^ gd;
 		stateC = (gb << 11 | gb >>> 21);
-		stateD = gd + 0xADB5B165 | 0;
+		stateD = gd + 0x9E3779B9 | 0;
 		return (long)hi << 32 ^ lo;
 	}
 
@@ -329,16 +331,16 @@ public class Chip32Random extends EnhancedRandom {
 		final int gb = stateB;
 		final int gc = stateC;
 		final int gd = stateD;
-		final int fd = gd - 0xADB5B165;
+		final int fd = gd - 0x9E3779B9;
 		final int fa = gb ^ fd;
 		final int fb = (gc >>> 11 | gc << 21);
-		final int fc = fb - ga | 0;
-		final int lo = fa ^ (fa << 13 | fa >>> 19) ^ (fa << 23 | fa >>> 23);
+		final int fc = ga - fb | 0;
+		final int lo = fa ^ (fa << 13 | fa >>> 19) ^ (fa << 23 | fa >>> 9);
 
-		stateA = fb ^ (stateD = fd - 0xADB5B165 | 0);
+		stateA = fb ^ (stateD = fd - 0x9E3779B9 | 0);
 		stateB = (fc >>> 11 | fc << 21);
-		stateC = stateB - fa | 0;
-		final int hi = stateA ^ (stateA << 13 | stateA >>> 19) ^ (stateA << 23 | stateA >>> 23);
+		stateC = fa - stateB | 0;
+		final int hi = stateA ^ (stateA << 13 | stateA >>> 19) ^ (stateA << 23 | stateA >>> 9);
 
 		return (long)hi << 32 ^ lo;
 	}
@@ -349,10 +351,10 @@ public class Chip32Random extends EnhancedRandom {
 		final int gb = stateB;
 		final int gc = stateC;
 		final int gd = stateD;
-		stateA = gb ^ (stateD = gd - 0xADB5B165 | 0);
+		stateA = gb ^ (stateD = gd - 0x9E3779B9 | 0);
 		stateB = (gc >>> 11 | gc << 21);
-		stateC = stateB - ga | 0;
-		return stateA ^ (stateA << 13 | stateA >>> 19) ^ (stateA << 23 | stateA >>> 23);
+		stateC = ga - stateB | 0;
+		return stateA ^ (stateA << 13 | stateA >>> 19) ^ (stateA << 23 | stateA >>> 9);
 	}
 
 	@Override
@@ -361,11 +363,11 @@ public class Chip32Random extends EnhancedRandom {
 		final int fb = stateB;
 		final int fc = stateC;
 		final int fd = stateD;
-		final int res = fa ^ (fa << 13 | fa >>> 19) ^ (fa << 23 | fa >>> 23);
-		stateA = fb - fc | 0;
+		final int res = fa ^ (fa << 13 | fa >>> 19) ^ (fa << 23 | fa >>> 9);
+		stateA = fb + fc | 0;
 		stateB = fa ^ fd;
 		stateC = (fb << 11 | fb >>> 21);
-		stateD = fd + 0xADB5B165 | 0;
+		stateD = fd + 0x9E3779B9 | 0;
 		return res >>> (32 - bits);
 	}
 
@@ -375,11 +377,11 @@ public class Chip32Random extends EnhancedRandom {
 		final int fb = stateB;
 		final int fc = stateC;
 		final int fd = stateD;
-		final int res = fa ^ (fa << 13 | fa >>> 19) ^ (fa << 23 | fa >>> 23);
-		stateA = fb - fc | 0;
+		final int res = fa ^ (fa << 13 | fa >>> 19) ^ (fa << 23 | fa >>> 9);
+		stateA = fb + fc | 0;
 		stateB = fa ^ fd;
 		stateC = (fb << 11 | fb >>> 21);
-		stateD = fd + 0xADB5B165 | 0;
+		stateD = fd + 0x9E3779B9 | 0;
 		return res;
 	}
 
