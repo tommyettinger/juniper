@@ -40,7 +40,7 @@ import java.util.Date;
 public class ImmediateInitialCorrelationEvaluator {
     public static long INTERVAL_X = 1;//2;//4;//8;//16;//0xC13FA9A902A6328FL;//
     public static long INTERVAL_Y = 2;//2;//4;//8;//16;//0x91E10DA5C79E7B1DL;//
-    public static int DROPPED_STEPS = 22;
+    public static int DROPPED_STEPS = 18;
     public double steps = 0;
     public int mode = 0;
     public double amount = 0;

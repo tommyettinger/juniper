@@ -35,14 +35,14 @@ import static com.github.tommyettinger.digital.BitConversion.imul;
  * The algorithm used here has four states purely to exploit instruction-level parallelism; one state is a counter
  * (this gives the guaranteed minimum period of 2 to the 32), and the others combine the values of the four states
  * across three variables. It is possible to invert the generator given a full 128-bit state; this is vital for its
- * period and quality. It is not possible to invert the generator given a known small number of outputs; the furthest
- * you can get when inverting the output is to get the current sum of all four states.
+ * period and quality. This generator can probably have its full state determined from sufficient outputs; one output
+ * is sufficient to get the exact value of stateA that went into producing that output.
  * <br>
  * TODO: Verify that 64TB of PractRand passes! Still experimental until it passes.
  * This passes 64TB of PractRand testing with no anomalies, and also passes Juniper's InitialCorrelationTest (ICE test).
  * It fails Juniper's ImmediateInitialCorrelationEvaluator test, which just checks if an RNG is also usable as a hash
- * function on its earliest outputs. Chip32Random appears to have fully uncorrelated output after generating about 22
- * ints.
+ * function on its earliest outputs. Chip32Random appears to have fully uncorrelated output after generating about 18
+ * to 22 ints.
  * <br>
  * This implements all optional methods in EnhancedRandom except {@link #skip(long)}; it does implement
  * {@link #previousLong()} and {@link #previousInt()} without using skip(). This has been optimized as a 32-bit
@@ -306,18 +306,18 @@ public class Chip32Random extends EnhancedRandom {
 		final int fb = stateB;
 		final int fc = stateC;
 		final int fd = stateD;
-//		final int hi = fa + fb;
+		final int hi = fa ^ (fa << 13 | fa >>> 19) ^ (fa << 23 | fa >>> 23);
 		final int ga = fb - fc;
 		final int gb = fa ^ fd;
 		final int gc = (fb << 11 | fb >>> 21);
 		final int gd = fd + 0xADB5B165;
-//		final int lo = ga + gb;
 
+		final int lo = ga ^ (ga << 13 | ga >>> 19) ^ (ga << 23 | ga >>> 23);
 		stateA = gb - gc | 0;
 		stateB = ga ^ gd;
 		stateC = (gb << 11 | gb >>> 21);
 		stateD = gd + 0xADB5B165 | 0;
-		return (long)fa << 32 ^ ga;
+		return (long)hi << 32 ^ lo;
 	}
 
 	@Override
@@ -333,14 +333,14 @@ public class Chip32Random extends EnhancedRandom {
 		final int fa = gb ^ fd;
 		final int fb = (gc >>> 11 | gc << 21);
 		final int fc = fb - ga | 0;
-//		final int lo = (fa + fb);
+		final int lo = fa ^ (fa << 13 | fa >>> 19) ^ (fa << 23 | fa >>> 23);
 
 		stateA = fb ^ (stateD = fd - 0xADB5B165 | 0);
 		stateB = (fc >>> 11 | fc << 21);
 		stateC = stateB - fa | 0;
-//		final int hi = (stateA + stateB);
+		final int hi = stateA ^ (stateA << 13 | stateA >>> 19) ^ (stateA << 23 | stateA >>> 23);
 
-		return (long)stateA << 32 ^ fa;
+		return (long)hi << 32 ^ lo;
 	}
 
 	@Override
@@ -352,8 +352,7 @@ public class Chip32Random extends EnhancedRandom {
 		stateA = gb ^ (stateD = gd - 0xADB5B165 | 0);
 		stateB = (gc >>> 11 | gc << 21);
 		stateC = stateB - ga | 0;
-//		int res = stateA + stateB;
-		return stateA;
+		return stateA ^ (stateA << 13 | stateA >>> 19) ^ (stateA << 23 | stateA >>> 23);
 	}
 
 	@Override
@@ -362,12 +361,12 @@ public class Chip32Random extends EnhancedRandom {
 		final int fb = stateB;
 		final int fc = stateC;
 		final int fd = stateD;
-//		final int res = fa + fb;
+		final int res = fa ^ (fa << 13 | fa >>> 19) ^ (fa << 23 | fa >>> 23);
 		stateA = fb - fc | 0;
 		stateB = fa ^ fd;
 		stateC = (fb << 11 | fb >>> 21);
 		stateD = fd + 0xADB5B165 | 0;
-		return fa >>> (32 - bits);
+		return res >>> (32 - bits);
 	}
 
 	@Override
@@ -376,12 +375,12 @@ public class Chip32Random extends EnhancedRandom {
 		final int fb = stateB;
 		final int fc = stateC;
 		final int fd = stateD;
-//		final int res = fa + fb;
+		final int res = fa ^ (fa << 13 | fa >>> 19) ^ (fa << 23 | fa >>> 23);
 		stateA = fb - fc | 0;
 		stateB = fa ^ fd;
 		stateC = (fb << 11 | fb >>> 21);
 		stateD = fd + 0xADB5B165 | 0;
-		return fa;
+		return res;
 	}
 
 	@Override
