@@ -59299,12 +59299,12 @@ let cgtr_Chip32Random_nextLong = $this => {
     $fb = $this.$stateB1;
     $fc = $this.$stateC2;
     $fd = $this.$stateD2;
-    $hi = $fc ^ ($fa << 13 | ($fa >>> 19 | 0)) ^ ($fb << 23 | ($fb >>> 9 | 0));
+    $hi = $fa ^ ($fa << 13 | ($fa >>> 19 | 0)) ^ ($fa << 23 | ($fa >>> 9 | 0));
     $ga = $fb + $fc | 0;
     $gb = $fa ^ $fd;
     $gc = $fb << 11 | ($fb >>> 21 | 0);
     $gd = $fd + (-1640531527) | 0;
-    $lo = $gc ^ ($ga << 13 | ($ga >>> 19 | 0)) ^ ($gb << 23 | ($gb >>> 9 | 0));
+    $lo = $ga ^ ($ga << 13 | ($ga >>> 19 | 0)) ^ ($ga << 23 | ($ga >>> 9 | 0));
     $this.$stateA1 = $gb + $gc | 0;
     $this.$stateB1 = $ga ^ $gd;
     $this.$stateC2 = $gb << 11 | ($gb >>> 21 | 0);
@@ -59317,7 +59317,7 @@ cgtr_Chip32Random_nextInt = $this => {
     $fb = $this.$stateB1;
     $fc = $this.$stateC2;
     $fd = $this.$stateD2;
-    $res = $fc ^ ($fa << 13 | ($fa >>> 19 | 0)) ^ ($fb << 23 | ($fb >>> 9 | 0));
+    $res = $fa ^ ($fa << 13 | ($fa >>> 19 | 0)) ^ ($fa << 23 | ($fa >>> 9 | 0));
     $this.$stateA1 = $fb + $fc | 0;
     $this.$stateB1 = $fa ^ $fd;
     $this.$stateC2 = $fb << 11 | ($fb >>> 21 | 0);

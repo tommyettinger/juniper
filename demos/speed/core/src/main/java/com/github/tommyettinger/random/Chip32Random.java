@@ -305,13 +305,13 @@ public class Chip32Random extends EnhancedRandom {
 		final int fb = stateB;
 		final int fc = stateC;
 		final int fd = stateD;
-		final int hi = fa ^ (fa << 13 | fa >>> 19) ^ (fa << 23 | fa >>> 9);
+		final int hi = fc ^ (fa << 13 | fa >>> 19) ^ (fb << 23 | fb >>> 9);
 		final int ga = fb + fc;
 		final int gb = fa ^ fd;
 		final int gc = (fb << 11 | fb >>> 21);
 		final int gd = fd + 0x9E3779B9;
 
-		final int lo = ga ^ (ga << 13 | ga >>> 19) ^ (ga << 23 | ga >>> 9);
+		final int lo = gc ^ (ga << 13 | ga >>> 19) ^ (gb << 23 | gb >>> 9);
 		stateA = gb + gc;
 		stateB = ga ^ gd;
 		stateC = (gb << 11 | gb >>> 21);
@@ -332,12 +332,12 @@ public class Chip32Random extends EnhancedRandom {
 		final int fa = gb ^ fd;
 		final int fb = (gc >>> 11 | gc << 21);
 		final int fc = ga - fb;
-		final int lo = fa ^ (fa << 13 | fa >>> 19) ^ (fa << 23 | fa >>> 9);
+		final int lo = fc ^ (fa << 13 | fa >>> 19) ^ (fb << 23 | fb >>> 9);
 
 		stateA = fb ^ (stateD = fd - 0x9E3779B9);
 		stateB = (fc >>> 11 | fc << 21);
 		stateC = fa - stateB;
-		final int hi = stateA ^ (stateA << 13 | stateA >>> 19) ^ (stateA << 23 | stateA >>> 9);
+		final int hi = stateC ^ (stateA << 13 | stateA >>> 19) ^ (stateB << 23 | stateB >>> 9);
 
 		return (long)hi << 32 ^ lo;
 	}
@@ -351,7 +351,7 @@ public class Chip32Random extends EnhancedRandom {
 		stateA = gb ^ (stateD = gd - 0x9E3779B9);
 		stateB = (gc >>> 11 | gc << 21);
 		stateC = ga - stateB;
-		return stateA ^ (stateA << 13 | stateA >>> 19) ^ (stateA << 23 | stateA >>> 9);
+		return stateC ^ (stateA << 13 | stateA >>> 19) ^ (stateB << 23 | stateB >>> 9);
 	}
 
 	@Override
@@ -360,7 +360,7 @@ public class Chip32Random extends EnhancedRandom {
 		final int fb = stateB;
 		final int fc = stateC;
 		final int fd = stateD;
-		final int res = fa ^ (fa << 13 | fa >>> 19) ^ (fa << 23 | fa >>> 9);
+		final int res = fc ^ (fa << 13 | fa >>> 19) ^ (fb << 23 | fb >>> 9);
 		stateA = fb + fc;
 		stateB = fa ^ fd;
 		stateC = (fb << 11 | fb >>> 21);
@@ -374,7 +374,7 @@ public class Chip32Random extends EnhancedRandom {
 		final int fb = stateB;
 		final int fc = stateC;
 		final int fd = stateD;
-		final int res = fa ^ (fa << 13 | fa >>> 19) ^ (fa << 23 | fa >>> 9);
+		final int res = fc ^ (fa << 13 | fa >>> 19) ^ (fb << 23 | fb >>> 9);
 		stateA = fb + fc;
 		stateB = fa ^ fd;
 		stateC = (fb << 11 | fb >>> 21);
