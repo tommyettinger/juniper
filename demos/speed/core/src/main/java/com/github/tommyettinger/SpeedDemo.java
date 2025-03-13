@@ -27,7 +27,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  * Chip32Random, ChopRandom, and Chock32Random are very often nearly tied, within 1 FPS of each other.
  * Xoshiro128PlusPlusRandom is sometimes also close to first-place, if not in it.
  * AceRandom, as expected on GWT, is quite slow, usually slowest.
- * All results are significantly slower than GWT (on Vivaldi 6.7.3329.39, Windows 11 Version 23H2, for both).
+ * All results are significantly slower than GWT (on Vivaldi 6.7.3329.39, Windows 11 Version 23H2, for both), except
+ * nextInt(), which has about twice the throughput on TeaVM relative to GWT.
  */
 public class SpeedDemo extends Game {
     public static final int SCREEN_WIDTH = 512;
