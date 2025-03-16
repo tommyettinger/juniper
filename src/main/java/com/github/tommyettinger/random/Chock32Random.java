@@ -333,7 +333,7 @@ public class Chock32Random extends EnhancedRandom {
 		final int fc = fb - ga;
 		final int lo = (fa + fb);
 
-		stateA = fb ^ (stateD = fd - 0xADB5B16);
+		stateA = fb ^ (stateD = fd - 0xADB5B165);
 		stateB = (fc >>> 11 | fc << 21);
 		stateC = stateB - fa;
 		final int hi = (stateA + stateB);
