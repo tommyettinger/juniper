@@ -246,13 +246,13 @@ public class ChopRandom extends EnhancedRandom {
         int ga = fb ^ fc; ga = (ga << 26 | ga >>>  6);
         int gb = fc ^ fd; gb = (gb << 11 | gb >>> 21);
         final int gc = fa ^ fb + fc;
-        final int gd = fd + 0xADB5B165 | 0;
+        final int gd = fd + 0xADB5B165;
         fa = gb ^ gc;
         stateA = (fa << 26 | fa >>> 6);
         fb = gc ^ gd;
         stateB = (fb << 11 | fb >>> 21);
         stateC = ga ^ gb + gc;
-        stateD = gd + 0xADB5B165 | 0;
+        stateD = fd + 0x5B6B62CA | 0;
         return (long)fc << 32 ^ gc;
     }
 
@@ -261,10 +261,10 @@ public class ChopRandom extends EnhancedRandom {
         final int fa = stateA;
         final int fb = stateB;
         final int fc = stateC;
-        final int gc = (fb >>> 11 | fb << 21) ^ (stateD = stateD - 0xADB5B165 | 0);
+        final int gc = (fb >>> 11 | fb << 21) ^ (stateD - 0xADB5B165);
         final int gb = (fa >>> 26 | fa << 6) ^ gc;
         final int ga = fc ^ gb + gc;
-        stateC = (gb >>> 11 | gb << 21) ^ (stateD = stateD - 0xADB5B165 | 0);
+        stateC = (gb >>> 11 | gb << 21) ^ (stateD = stateD - 0x5B6B62CA | 0);
         stateB = (ga >>> 26 | ga << 6) ^ stateC;
         stateA = gc ^ stateB + stateC;
 
@@ -333,7 +333,7 @@ public class ChopRandom extends EnhancedRandom {
         stateC = fa ^ fb + fc;
         stateD = fd + 0xADB5B165 | 0;
         outerBound = (int)(outerBound * (fc & 0xFFFFFFFFL) >> 32);
-        return outerBound + (outerBound >>> 31);
+        return outerBound + (outerBound >>> 31) | 0;
     }
 
     @Override
@@ -343,59 +343,45 @@ public class ChopRandom extends EnhancedRandom {
         int fc = stateC;
         int fd = stateD;
         int ga = fb ^ fc;
-        ga = (ga << 26 | ga >>> 6);
+        stateA = (ga << 26 | ga >>> 6);
         int gb = fc ^ fd;
-        gb = (gb << 11 | gb >>> 21);
-        int gc = fa ^ fb + fc;
-        int gd = fd + 0xADB5B165 | 0;
-        fa = gb ^ gc;
-        stateA = (fa << 26 | fa >>> 6);
-        fb = gc ^ gd;
-        stateB = (fb << 11 | fb >>> 21);
-        stateC = ga ^ gb + gc;
-        stateD = gd + 0xADB5B165 | 0;
+        stateB = (gb << 11 | gb >>> 21);
+        stateC = fa ^ fb + fc;
+        stateD = fd + 0xADB5B165 | 0;
         if(inner >= outer) return inner;
-        final long randLow = fc & 0xFFFFFFFFL;
-        final long randHigh = gc & 0xFFFFFFFFL;
-        final long bound = (long)outer - (long)inner;
-        final long boundLow = bound & 0xFFFFFFFFL;
-        final long boundHigh = (bound >>> 32);
-        return (int)(inner + (randHigh * boundLow >>> 32) + (randLow * boundHigh >>> 32) + randHigh * boundHigh);
+        return (int)(innerBound + (
+                ((outer - inner & 0xFFFFFFFFL) * (fc & 0xFFFFFFFFL) >>> 32)
+                        & ~((long)outerBound - (long)innerBound >> 63)));
     }
 
     @Override
     public int nextSignedInt (int innerBound, int outerBound) {
-        long inner, outer;
-        if(outerBound < innerBound) {
-            outer = innerBound + 1L;
-            inner = outerBound + 1L;
-        }
-        else {
-            inner = innerBound;
-            outer = outerBound;
-        }
-        final long bound = outer - inner;
         int fa = stateA;
         int fb = stateB;
         int fc = stateC;
         int fd = stateD;
         int ga = fb ^ fc;
-        ga = (ga << 26 | ga >>> 6);
+        stateA = (ga << 26 | ga >>> 6);
         int gb = fc ^ fd;
-        gb = (gb << 11 | gb >>> 21);
-        int gc = fa ^ fb + fc;
-        int gd = fd + 0xADB5B165 | 0;
-        fa = gb ^ gc;
-        stateA = (fa << 26 | fa >>> 6);
-        fb = gc ^ gd;
-        stateB = (fb << 11 | fb >>> 21);
-        stateC = ga ^ gb + gc;
-        stateD = gd + 0xADB5B165 | 0;
-        final long randLow = fc & 0xFFFFFFFFL;
-        final long randHigh = gc & 0xFFFFFFFFL;
-        final long boundLow = bound & 0xFFFFFFFFL;
-        final long boundHigh = (bound >>> 32);
-        return (int)(inner + (randHigh * boundLow >>> 32) + (randLow * boundHigh >>> 32) + randHigh * boundHigh);
+        stateB = (gb << 11 | gb >>> 21);
+        stateC = fa ^ fb + fc;
+        stateD = fd + 0xADB5B165 | 0;
+        if(inner >= outer) return inner;
+        return (int)(innerBound +
+                ((outer - inner & 0xFFFFFFFFL) * (fc & 0xFFFFFFFFL) >>> 32));
+    }
+
+    @Override
+    public int nextUnsignedInt(int bound) {
+        final int fa = stateA;
+        final int fb = stateB;
+        final int fc = stateC;
+        final int fd = stateD;
+        final int sa = fb ^ fc; stateA = (sa << 26 | sa >>>  6);
+        final int sb = fc ^ fd; stateB = (sb << 11 | sb >>> 21);
+        stateC = fa ^ fb + fc;
+        stateD = fd + 0xADB5B165 | 0;
+        return (int)((bound & 0xFFFFFFFFL) * (fc & 0xFFFFFFFFL) >>> 32);
     }
 
     @Override
@@ -426,13 +412,13 @@ public class ChopRandom extends EnhancedRandom {
         int gb = fc ^ fd;
         gb = (gb << 11 | gb >>> 21);
         int gc = fa ^ fb + fc;
-        int gd = fd + 0xADB5B165 | 0;
+        int gd = fd + 0xADB5B165;
         fa = gb ^ gc;
         stateA = (fa << 26 | fa >>> 6);
         fb = gc ^ gd;
         stateB = (fb << 11 | fb >>> 21);
         stateC = ga ^ gb + gc;
-        stateD = gd + 0xADB5B165 | 0;
+        stateD = fd + 0x5B6B62CA | 0;
         if(1 >= outer) return 0;
         final long randLow = fc & 0xFFFFFFFFL;
         final long randHigh = gc & 0xFFFFFFFFL;
@@ -452,13 +438,13 @@ public class ChopRandom extends EnhancedRandom {
         int gb = fc ^ fd;
         gb = (gb << 11 | gb >>> 21);
         int gc = fa ^ fb + fc;
-        int gd = fd + 0xADB5B165 | 0;
+        int gd = fd + 0xADB5B165;
         fa = gb ^ gc;
         stateA = (fa << 26 | fa >>> 6);
         fb = gc ^ gd;
         stateB = (fb << 11 | fb >>> 21);
         stateC = ga ^ gb + gc;
-        stateD = gd + 0xADB5B165 | 0;
+        stateD = fd + 0x5B6B62CA | 0;
         if(inner >= outer) return inner;
         final long randLow = fc & 0xFFFFFFFFL;
         final long randHigh = gc & 0xFFFFFFFFL;
@@ -488,13 +474,13 @@ public class ChopRandom extends EnhancedRandom {
         int gb = fc ^ fd;
         gb = (gb << 11 | gb >>> 21);
         int gc = fa ^ fb + fc;
-        int gd = fd + 0xADB5B165 | 0;
+        int gd = fd + 0xADB5B165;
         fa = gb ^ gc;
         stateA = (fa << 26 | fa >>> 6);
         fb = gc ^ gd;
         stateB = (fb << 11 | fb >>> 21);
         stateC = ga ^ gb + gc;
-        stateD = gd + 0xADB5B165 | 0;
+        stateD = fd + 0x5B6B62CA | 0;
         final long randLow = fc & 0xFFFFFFFFL;
         final long randHigh = gc & 0xFFFFFFFFL;
         final long boundLow = bound & 0xFFFFFFFFL;
@@ -519,13 +505,13 @@ public class ChopRandom extends EnhancedRandom {
         int gb = fc ^ fd;
         gb = (gb << 11 | gb >>> 21);
         int gc = fa ^ fb + fc;
-        int gd = fd + 0xADB5B165 | 0;
+        int gd = fd + 0xADB5B165;
         fa = gb ^ gc;
         stateA = (fa << 26 | fa >>> 6);
         fb = gc ^ gd;
         stateB = (fb << 11 | fb >>> 21);
         stateC = ga ^ gb + gc;
-        stateD = gd + 0xADB5B165 | 0;
+        stateD = fd + 0x5B6B62CA | 0;
         final long randLow = fc & 0xFFFFFFFFL;
         final long randHigh = gc & 0xFFFFFFFFL;
         final long boundLow = bound & 0xFFFFFFFFL;

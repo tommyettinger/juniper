@@ -292,7 +292,7 @@ public class ChopRandom extends EnhancedRandom {
 		int sb = gc ^ gd;
 		stateB = (sb << 11 | sb >>> 21);
 		stateC = ga ^ gb + gc;
-		stateD = gd + 0xADB5B165;
+		stateD = fd + 0x5B6B62CA;
 		return (long)fc << 32 ^ gc;
 	}
 
@@ -301,17 +301,14 @@ public class ChopRandom extends EnhancedRandom {
 		final int fa = stateA;
 		final int fb = stateB;
 		final int fc = stateC;
-		final int gc = (fb >>> 11 | fb << 21) ^ (stateD -= 0xADB5B165);
+		final int gc = (fb >>> 11 | fb << 21) ^ (stateD - 0xADB5B165);
 		final int gb = (fa >>> 26 | fa << 6) ^ gc;
 		final int ga = fc ^ gb + gc;
-		stateC = (gb >>> 11 | gb << 21) ^ (stateD -= 0xADB5B165);
+		stateC = (gb >>> 11 | gb << 21) ^ (stateD -= 0x5B6B62CA);
 		stateB = (ga >>> 26 | ga << 6) ^ stateC;
 		stateA = gc ^ stateB + stateC;
 
 		return (long)stateC << 32 ^ gc;
-//		fc = ((stateB >>> 11 | stateB << 21) ^ stateD - 0xADB5B165);
-//		fb = (stateA >>> 26 | stateA << 6) ^ fc;
-//		return (long)((fb >>> 11 | fb << 21) ^ stateD - 0x5B6B62CA) << 32 ^ fc;
 	}
 
 	@Override
@@ -365,6 +362,22 @@ public class ChopRandom extends EnhancedRandom {
 	public int nextSignedInt (int outerBound) {
 		outerBound = (int)(outerBound * (nextInt() & 0xFFFFFFFFL) >> 32);
 		return outerBound + (outerBound >>> 31);
+	}
+
+	@Override
+	public int nextSignedInt(int innerBound, int outerBound) {
+		return innerBound + (int)(((outerBound - innerBound) & 0xFFFFFFFFL) * (nextInt() & 0xFFFFFFFFL) >>> 32);
+	}
+
+	@Override
+	public int nextInt(int innerBound, int outerBound) {
+		return (int)(innerBound + ((((outerBound - innerBound) & 0xFFFFFFFFL) * (nextInt() & 0xFFFFFFFFL) >>> 32) & ~((long)outerBound - (long)innerBound >> 63)));
+
+	}
+
+	@Override
+	public int nextUnsignedInt(int bound) {
+		return (int)((bound & 0xFFFFFFFFL) * (nextInt() & 0xFFFFFFFFL) >>> 32);
 	}
 
 	@Override
