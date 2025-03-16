@@ -23,11 +23,12 @@ import static com.github.tommyettinger.digital.BitConversion.imul;
 
 /**
  * A random number generator that is optimized for performance on 32-bit machines and with Google Web Toolkit.
- * This uses only add, (fixed-distance) bitwise-rotate, and XOR operations in its entirety.
- * On GWT, this is super-sourced so it uses {@code variable = variable + constant | 0;} in order to force additions to
- * counters on GWT to actually overflow as they do (and should) on desktop JVMs. The bitwise OR operator is only used
- * as part of bitwise rotations on desktop and other non-GWT platforms, and HotSpot can almost always compile the
- * bitwise rotation code used here from {@code <<}, {@code |}, and {@code >>>} into a single processor instruction.
+ * This uses only add, (fixed-distance) bitwise-rotate, and XOR operations for {@link #nextInt()} and
+ * {@link #nextLong()}. On GWT, this is super-sourced so it uses {@code variable = variable + constant | 0;} in order to
+ * force additions to counters on GWT to actually overflow as they do (and should) on desktop JVMs. The bitwise OR
+ * operator is only used as part of bitwise rotations on desktop and other non-GWT platforms, and HotSpot can almost
+ * always compile the bitwise rotation code used here from {@code <<}, {@code |}, and {@code >>>} into a single
+ * processor instruction.
  * <br>
  * Chip32Random has a guaranteed minimum period of 2 to the 32, and is very likely to have a much longer period for
  * almost all initial states. There are expected to be several (double-digit) relatively long sub-cycles that most
@@ -40,11 +41,10 @@ import static com.github.tommyettinger.digital.BitConversion.imul;
  * period and quality. This generator can probably have its full state determined from sufficient outputs; one output
  * is sufficient to get the exact value of stateA that went into producing that output.
  * <br>
- * TODO: Verify that 64TB of PractRand passes! Still experimental until it passes.
  * This passes 64TB of PractRand testing with no anomalies, and also passes Juniper's InitialCorrelationTest (ICE test).
  * It fails Juniper's ImmediateInitialCorrelationEvaluator test, which just checks if an RNG is also usable as a hash
- * function on its earliest outputs. Chip32Random appears to have fully uncorrelated output after generating about 18
- * to 22 ints.
+ * function on its earliest outputs. Chip32Random appears to have fully uncorrelated output after generating about 16
+ * to 20 ints.
  * <br>
  * This implements all optional methods in EnhancedRandom except {@link #skip(long)}; it does implement
  * {@link #previousLong()} and {@link #previousInt()} without using skip(). This has been optimized as a 32-bit
@@ -308,13 +308,13 @@ public class Chip32Random extends EnhancedRandom {
 		final int fb = stateB;
 		final int fc = stateC;
 		final int fd = stateD;
-		final int hi = fc ^ (fa << 13 | fa >>> 19) ^ (fb << 23 | fb >>> 9);
+		final int hi = (fa << 14 | fa >>> 18) ^ (fb << 23 | fb >>> 9) + fc;
 		final int ga = fb + fc;
 		final int gb = fa ^ fd;
 		final int gc = (fb << 11 | fb >>> 21);
 		final int gd = fd + 0x9E3779B9;
 
-		final int lo = gc ^ (ga << 13 | ga >>> 19) ^ (gb << 23 | gb >>> 9);
+		final int lo = (ga << 14 | ga >>> 18) ^ (gb << 23 | gb >>> 9) + gc;
 		stateA = gb + gc | 0;
 		stateB = ga ^ gd;
 		stateC = (gb << 11 | gb >>> 21);
@@ -335,13 +335,12 @@ public class Chip32Random extends EnhancedRandom {
 		final int fa = gb ^ fd;
 		final int fb = (gc >>> 11 | gc << 21);
 		final int fc = ga - fb | 0;
-		final int lo = fc ^ (fa << 13 | fa >>> 19) ^ (fb << 23 | fb >>> 9);
+		final int lo = (fa << 14 | fa >>> 18) ^ (fb << 23 | fb >>> 9) + fc;
 
 		stateA = fb ^ (stateD = fd - 0x9E3779B9 | 0);
 		stateB = (fc >>> 11 | fc << 21);
 		stateC = fa - stateB | 0;
-		final int hi = stateC ^ (stateA << 13 | stateA >>> 19) ^ (stateB << 23 | stateB >>> 9);
-
+		final int hi = (stateA << 14 | stateA >>> 18) ^ (stateB << 23 | stateB >>> 9) + stateC;
 		return (long)hi << 32 ^ lo;
 	}
 
@@ -354,7 +353,7 @@ public class Chip32Random extends EnhancedRandom {
 		stateA = gb ^ (stateD = gd - 0x9E3779B9 | 0);
 		stateB = (gc >>> 11 | gc << 21);
 		stateC = ga - stateB | 0;
-		return stateC ^ (stateA << 13 | stateA >>> 19) ^ (stateB << 23 | stateB >>> 9);
+		return (stateA << 14 | stateA >>> 18) ^ (stateB << 23 | stateB >>> 9) + stateC;
 	}
 
 	@Override
@@ -363,12 +362,11 @@ public class Chip32Random extends EnhancedRandom {
 		final int fb = stateB;
 		final int fc = stateC;
 		final int fd = stateD;
-		final int res = fc ^ (fa << 13 | fa >>> 19) ^ (fb << 23 | fb >>> 9);
 		stateA = fb + fc | 0;
-		stateB = fa ^ fd;
+		stateB = fd ^ fa;
 		stateC = (fb << 11 | fb >>> 21);
 		stateD = fd + 0x9E3779B9 | 0;
-		return res >>> (32 - bits);
+		return ((fa << 14 | fa >>> 18) ^ (fb << 23 | fb >>> 9) + fc) >>> (32 - bits);
 	}
 
 	@Override
@@ -377,12 +375,11 @@ public class Chip32Random extends EnhancedRandom {
 		final int fb = stateB;
 		final int fc = stateC;
 		final int fd = stateD;
-		final int res = fc ^ (fa << 13 | fa >>> 19) ^ (fb << 23 | fb >>> 9);
 		stateA = fb + fc | 0;
-		stateB = fa ^ fd;
+		stateB = fd ^ fa;
 		stateC = (fb << 11 | fb >>> 21);
 		stateD = fd + 0x9E3779B9 | 0;
-		return res;
+		return (fa << 14 | fa >>> 18) ^ (fb << 23 | fb >>> 9) + fc;
 	}
 
 	@Override
