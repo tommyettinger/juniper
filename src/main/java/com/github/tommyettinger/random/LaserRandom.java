@@ -301,7 +301,13 @@ public class LaserRandom extends EnhancedRandom {
 	 * @throws NullPointerException if the byte array is null
 	 */
 	public void nextBytes (byte[] bytes) {
-		for (int i = 0; i < bytes.length; ) {for (long r = nextLong(), n = Math.min(bytes.length - i, 8); n-- > 0; r >>>= 8) {bytes[i++] = (byte)r;}}
+		if (bytes != null) {
+			for (int i = 0; i < bytes.length; ) {
+				for (long r = nextLong(), n = Math.min(bytes.length - i, 8); n-- > 0; r >>>= 8) {
+					bytes[i++] = (byte) r;
+				}
+			}
+		}
 	}
 
 	/**

@@ -286,7 +286,13 @@ public class Respite32Random extends EnhancedRandom {
 
 	@Override
 	public void nextBytes (byte[] bytes) {
-		for (int i = 0; i < bytes.length; ) {for (int r = nextInt(), n = Math.min(bytes.length - i, 4); n-- > 0; r >>>= 8) {bytes[i++] = (byte)r;}}
+		if (bytes != null) {
+			for (int i = 0; i < bytes.length; ) {
+				for (int r = nextInt(), n = Math.min(bytes.length - i, 4); n-- > 0; r >>>= 8) {
+					bytes[i++] = (byte) r;
+				}
+			}
+		}
 	}
 
 	@Override

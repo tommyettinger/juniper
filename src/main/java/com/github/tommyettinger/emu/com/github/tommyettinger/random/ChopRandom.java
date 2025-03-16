@@ -386,17 +386,21 @@ public class ChopRandom extends EnhancedRandom {
 
     @Override
     public void nextBytes (byte[] bytes) {
-        for (int i = 0; i < bytes.length; ) {
-            final int fa = stateA;
-            final int fb = stateB;
-            int fc = stateC;
-            final int fd = stateD;
-            final int sa = fb ^ fc; stateA = (sa << 26 | sa >>>  6);
-            final int sb = fc ^ fd; stateB = (sb << 11 | sb >>> 21);
-            stateC = fa ^ fb + fc;
-            stateD = fd + 0xADB5B165 | 0;
-            for (int n = Math.min(bytes.length - i, 4); n-- > 0; fc >>>= 8) {
-                bytes[i++] = (byte)fc;
+        if (bytes != null) {
+            for (int i = 0; i < bytes.length; ) {
+                final int fa = stateA;
+                final int fb = stateB;
+                int fc = stateC;
+                final int fd = stateD;
+                final int sa = fb ^ fc;
+                stateA = (sa << 26 | sa >>> 6);
+                final int sb = fc ^ fd;
+                stateB = (sb << 11 | sb >>> 21);
+                stateC = fa ^ fb + fc;
+                stateD = fd + 0xADB5B165 | 0;
+                for (int n = Math.min(bytes.length - i, 4); n-- > 0; fc >>>= 8) {
+                    bytes[i++] = (byte) fc;
+                }
             }
         }
     }

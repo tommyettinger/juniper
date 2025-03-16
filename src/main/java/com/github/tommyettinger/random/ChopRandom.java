@@ -372,7 +372,6 @@ public class ChopRandom extends EnhancedRandom {
 	@Override
 	public int nextInt(int innerBound, int outerBound) {
 		return (int)(innerBound + ((((outerBound - innerBound) & 0xFFFFFFFFL) * (nextInt() & 0xFFFFFFFFL) >>> 32) & ~((long)outerBound - (long)innerBound >> 63)));
-
 	}
 
 	@Override
@@ -382,7 +381,13 @@ public class ChopRandom extends EnhancedRandom {
 
 	@Override
 	public void nextBytes (byte[] bytes) {
-		for (int i = 0; i < bytes.length; ) {for (int r = nextInt(), n = Math.min(bytes.length - i, 4); n-- > 0; r >>>= 8) {bytes[i++] = (byte)r;}}
+		if(bytes != null) {
+			for (int i = 0; i < bytes.length; ) {
+				for (int r = nextInt(), n = Math.min(bytes.length - i, 4); n-- > 0; r >>>= 8) {
+					bytes[i++] = (byte)r;
+				}
+			}
+		}
 	}
 
 	@Override

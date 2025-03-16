@@ -354,18 +354,20 @@ public class Xoshiro128PlusPlusRandom extends EnhancedRandom {
 
 	@Override
 	public void nextBytes (byte[] bytes) {
-		for (int i = 0; i < bytes.length; ) {
-			int result = (stateA + stateD);
-			result = (result << 7 | result >>> 25) + stateA;
-			int t = stateB << 9;
-			stateC ^= stateA;
-			stateD ^= stateB;
-			stateB ^= stateC;
-			stateA ^= stateD;
-			stateC ^= t;
-			stateD = (stateD << 11 | stateD >>> 21);
-			for (int n = Math.min(bytes.length - i, 4); n-- > 0; result >>>= 8) {
-				bytes[i++] = (byte)result;
+		if (bytes != null) {
+			for (int i = 0; i < bytes.length; ) {
+				int result = (stateA + stateD);
+				result = (result << 7 | result >>> 25) + stateA;
+				int t = stateB << 9;
+				stateC ^= stateA;
+				stateD ^= stateB;
+				stateB ^= stateC;
+				stateA ^= stateD;
+				stateC ^= t;
+				stateD = (stateD << 11 | stateD >>> 21);
+				for (int n = Math.min(bytes.length - i, 4); n-- > 0; result >>>= 8) {
+					bytes[i++] = (byte) result;
+				}
 			}
 		}
 	}

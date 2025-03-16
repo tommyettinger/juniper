@@ -115,7 +115,13 @@ public class InterpolatedRandom extends EnhancedRandom {
 
     @Override
     public void nextBytes(byte[] bytes) {
-        for (int i = 0; i < bytes.length; ) { for (int n = Math.min(bytes.length - i, 8); n-- > 0;) { bytes[i++] = (byte)(256 * nextDouble()); } }
+        if (bytes != null) {
+            for (int i = 0; i < bytes.length; ) {
+                for (int n = Math.min(bytes.length - i, 8); n-- > 0; ) {
+                    bytes[i++] = (byte) (256 * nextDouble());
+                }
+            }
+        }
     }
 
     @Override
