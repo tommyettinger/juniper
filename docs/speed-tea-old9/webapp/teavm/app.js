@@ -36115,10 +36115,10 @@ let cgtf_ChipScreen_show = $this => {
     var$3 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$4 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$5 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
-    var$1.$stateA0 = var$2;
-    var$1.$stateB0 = var$3;
-    var$1.$stateC0 = var$4;
-    var$1.$stateD0 = var$5;
+    var$1.$stateA1 = var$2;
+    var$1.$stateB1 = var$3;
+    var$1.$stateC2 = var$4;
+    var$1.$stateD2 = var$5;
     $this.$random11 = var$1;
     $this.$batch7 = $this.$mainGame.$batch;
     var$1 = new cbguv_ScreenViewport;
@@ -36280,7 +36280,7 @@ cgtf_ChipScreen_render = ($this, $delta) => {
     $this.$iterations8 = Long_add($this.$iterations8, Long_fromInt(1));
     $i = 0;
     while ($i < 524288) {
-        $m = cgtr_Chip32Random_nextFloat($this.$random11) * 512.0 | 0;
+        $m = (cgtr_Chip32Random_nextInt($this.$random11) >>> 8 | 0) * 5.9604644775390625E-8 * 512.0 | 0;
         if ($m >= 0 && $m < 512) {
             var$2 = $this.$amounts33.data;
             var$2[$m] = Long_add(var$2[$m], Long_fromInt(1));
@@ -36488,10 +36488,10 @@ let cgtf_ChopScreen_show = $this => {
     var$3 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$4 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$5 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
-    var$1.$stateA1 = var$2;
-    var$1.$stateB1 = var$3;
-    var$1.$stateC2 = var$4;
-    var$1.$stateD2 = var$5;
+    var$1.$stateA0 = var$2;
+    var$1.$stateB0 = var$3;
+    var$1.$stateC1 = var$4;
+    var$1.$stateD1 = var$5;
     $this.$random24 = var$1;
     $this.$batch23 = $this.$mainGame14.$batch;
     var$1 = new cbguv_ScreenViewport;
@@ -36863,10 +36863,10 @@ let cgtf_Xoshiro128PPScreen_show = $this => {
     var$5 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$1.$stateA3 = var$2;
     var$1.$stateB3 = var$3;
-    var$1.$stateC1 = var$4;
+    var$1.$stateC0 = var$4;
     if (!(var$2 | var$3 | var$4 | var$5))
         var$5 = 1;
-    var$1.$stateD1 = var$5;
+    var$1.$stateD0 = var$5;
     $this.$random32 = var$1;
     $this.$batch31 = $this.$mainGame5.$batch;
     var$1 = new cbguv_ScreenViewport;
@@ -38364,10 +38364,10 @@ let cgte_ChipScreen_show = $this => {
     var$3 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$4 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$5 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
-    var$1.$stateA0 = var$2;
-    var$1.$stateB0 = var$3;
-    var$1.$stateC0 = var$4;
-    var$1.$stateD0 = var$5;
+    var$1.$stateA1 = var$2;
+    var$1.$stateB1 = var$3;
+    var$1.$stateC2 = var$4;
+    var$1.$stateD2 = var$5;
     $this.$random23 = var$1;
     $this.$batch16 = $this.$mainGame4.$batch;
     var$1 = new cbguv_ScreenViewport;
@@ -38738,10 +38738,10 @@ let cgte_ChopScreen_show = $this => {
     var$3 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$4 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$5 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
-    var$1.$stateA1 = var$2;
-    var$1.$stateB1 = var$3;
-    var$1.$stateC2 = var$4;
-    var$1.$stateD2 = var$5;
+    var$1.$stateA0 = var$2;
+    var$1.$stateB0 = var$3;
+    var$1.$stateC1 = var$4;
+    var$1.$stateD1 = var$5;
     $this.$random12 = var$1;
     $this.$batch6 = $this.$mainGame30.$batch;
     var$1 = new cbguv_ScreenViewport;
@@ -39114,10 +39114,10 @@ let cgte_Xoshiro128PPScreen_show = $this => {
     var$5 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$1.$stateA3 = var$2;
     var$1.$stateB3 = var$3;
-    var$1.$stateC1 = var$4;
+    var$1.$stateC0 = var$4;
     if (!(var$2 | var$3 | var$4 | var$5))
         var$5 = 1;
-    var$1.$stateD1 = var$5;
+    var$1.$stateD0 = var$5;
     $this.$random21 = var$1;
     $this.$batch9 = $this.$mainGame13.$batch;
     var$1 = new cbguv_ScreenViewport;
@@ -40616,10 +40616,10 @@ let cgtd_ChipScreen_show = $this => {
     var$3 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$4 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$5 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
-    var$1.$stateA0 = var$2;
-    var$1.$stateB0 = var$3;
-    var$1.$stateC0 = var$4;
-    var$1.$stateD0 = var$5;
+    var$1.$stateA1 = var$2;
+    var$1.$stateB1 = var$3;
+    var$1.$stateC2 = var$4;
+    var$1.$stateD2 = var$5;
     $this.$random13 = var$1;
     $this.$batch0 = $this.$mainGame19.$batch;
     var$1 = new cbguv_ScreenViewport;
@@ -40989,10 +40989,10 @@ let cgtd_ChopScreen_show = $this => {
     var$3 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$4 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$5 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
-    var$1.$stateA1 = var$2;
-    var$1.$stateB1 = var$3;
-    var$1.$stateC2 = var$4;
-    var$1.$stateD2 = var$5;
+    var$1.$stateA0 = var$2;
+    var$1.$stateB0 = var$3;
+    var$1.$stateC1 = var$4;
+    var$1.$stateD1 = var$5;
     $this.$random28 = var$1;
     $this.$batch18 = $this.$mainGame1.$batch;
     var$1 = new cbguv_ScreenViewport;
@@ -41364,10 +41364,10 @@ let cgtd_Xoshiro128PPScreen_show = $this => {
     var$5 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$1.$stateA3 = var$2;
     var$1.$stateB3 = var$3;
-    var$1.$stateC1 = var$4;
+    var$1.$stateC0 = var$4;
     if (!(var$2 | var$3 | var$4 | var$5))
         var$5 = 1;
-    var$1.$stateD1 = var$5;
+    var$1.$stateD0 = var$5;
     $this.$random7 = var$1;
     $this.$batch22 = $this.$mainGame16.$batch;
     var$1 = new cbguv_ScreenViewport;
@@ -42863,10 +42863,10 @@ let cgti_ChipScreen_show = $this => {
     var$3 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$4 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$5 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
-    var$1.$stateA0 = var$2;
-    var$1.$stateB0 = var$3;
-    var$1.$stateC0 = var$4;
-    var$1.$stateD0 = var$5;
+    var$1.$stateA1 = var$2;
+    var$1.$stateB1 = var$3;
+    var$1.$stateC2 = var$4;
+    var$1.$stateD2 = var$5;
     $this.$random22 = var$1;
     $this.$batch21 = $this.$mainGame34.$batch;
     var$1 = new cbguv_ScreenViewport;
@@ -42934,7 +42934,7 @@ let cgti_ChipScreen_show = $this => {
     $rt_throw(var$1);
 },
 cgti_ChipScreen_render = ($this, $delta) => {
-    let var$2, var$3, $i, $x, var$6, $camera, var$8, $j, $m, $color, var$12, var$13, var$14, var$15, $$je;
+    let var$2, var$3, $i, $x, var$6, $camera, var$8, $j, $m, $color, var$12, var$13, var$14, var$15, var$16, $$je;
     var$2 = cbg_Gdx_input.$justPressedKeys.data;
     if (var$2[71]) {
         var$3 = $this.$mainGame34;
@@ -43028,7 +43028,7 @@ cgti_ChipScreen_render = ($this, $delta) => {
     $this.$iterations19 = Long_add($this.$iterations19, Long_fromInt(1));
     $i = 0;
     while ($i < 524288) {
-        $m = cgtr_Chip32Random_nextInt($this.$random22, 512);
+        $m = Long_hi(Long_mul(Long_fromInt(512), Long_and(Long_fromInt(cgtr_Chip32Random_nextInt($this.$random22)), Long_create(4294967295, 0)))) & (-1);
         if ($m >= 0 && $m < 512) {
             var$2 = $this.$amounts8.data;
             var$2[$m] = Long_add(var$2[$m], Long_fromInt(1));
@@ -43097,12 +43097,12 @@ cgti_ChipScreen_render = ($this, $delta) => {
         var$13.$nativeString = $rt_charArrayToString(var$2.data, 0, $x);
         cbggg_BitmapFontCache_clear(var$3.$cache);
         var$14 = var$3.$cache;
-        $m = var$13.$nativeString.length;
-        var$15 = null;
+        var$15 = var$13.$nativeString.length;
+        var$16 = null;
         cbgu_Pools_$callClinit();
         $camera = cbgu_Pools_typePools;
-        $x = cbgu_ObjectMap_locateKey($camera, $rt_cls(cbggg_GlyphLayout));
-        $camera = $x < 0 ? null : $camera.$valueTable.data[$x];
+        $j = cbgu_ObjectMap_locateKey($camera, $rt_cls(cbggg_GlyphLayout));
+        $camera = $j < 0 ? null : $camera.$valueTable.data[$j];
         if ($camera === null) {
             $camera = new cbgu_ReflectionPool;
             jl_Object__init_($camera);
@@ -43158,39 +43158,39 @@ cgti_ChipScreen_render = ($this, $delta) => {
                 $x = $x - 1 | 0;
                 var$12.$size = $x;
                 var$2 = var$12.$items.data;
-                $camera = var$2[$x];
+                var$12 = var$2[$x];
                 var$2[$x] = null;
             } else {
-                var$12 = $camera;
+                $camera = $camera;
                 try {
-                    $camera = cbgur_Constructor_newInstance(var$12.$constructor, null);
+                    var$12 = cbgur_Constructor_newInstance($camera.$constructor, null);
                     break b;
                 } catch ($$e) {
                     $$je = $rt_wrapException($$e);
                     if ($$je instanceof jl_Exception) {
                         var$6 = $$je;
-                        $camera = new cbgu_GdxRuntimeException;
+                        var$12 = new cbgu_GdxRuntimeException;
                         var$3 = new jl_StringBuilder;
                         jl_AbstractStringBuilder__init_0(var$3, 16);
                         $i = var$3.$length0;
                         var$14 = var$3;
                         jl_StringBuilder_insert(var$14, $i, $rt_s(39));
-                        var$15 = var$12.$constructor.$constructor0.$declaringClass;
-                        if (var$15.$name === null)
-                            var$15.$name = $rt_str(var$15.$platformClass.$meta.name);
-                        var$12 = var$15.$name;
-                        jl_StringBuilder_insert(var$14, var$3.$length0, var$12);
-                        jl_Exception__init_1($camera, jl_String__init_(var$3.$buffer, 0, var$3.$length0), var$6);
-                        $rt_throw($camera);
+                        var$16 = $camera.$constructor.$constructor0.$declaringClass;
+                        if (var$16.$name === null)
+                            var$16.$name = $rt_str(var$16.$platformClass.$meta.name);
+                        $camera = var$16.$name;
+                        jl_StringBuilder_insert(var$14, var$3.$length0, $camera);
+                        jl_Exception__init_1(var$12, jl_String__init_(var$3.$buffer, 0, var$3.$length0), var$6);
+                        $rt_throw(var$12);
                     } else {
                         throw $$e;
                     }
                 }
             }
         }
-        $camera = $camera;
+        $camera = var$12;
         cbgu_Array_add(var$14.$pooledLayouts, $camera);
-        cbggg_GlyphLayout_setText($camera, var$14.$font, var$13, 0, $m, var$14.$color, 384.0, 1, 1, var$15);
+        cbggg_GlyphLayout_setText($camera, var$14.$font, var$13, 0, var$15, var$14.$color, 384.0, 1, 1, var$16);
         cbggg_BitmapFontCache_addToCache(var$14, $camera, 64.0, 522.0 + var$14.$font.$data0.$ascent);
         cbggg_BitmapFontCache_draw(var$3.$cache, var$6);
         cbggg_SpriteBatch_end($this.$batch21);
@@ -43236,10 +43236,10 @@ let cgti_ChopScreen_show = $this => {
     var$3 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$4 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$5 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
-    var$1.$stateA1 = var$2;
-    var$1.$stateB1 = var$3;
-    var$1.$stateC2 = var$4;
-    var$1.$stateD2 = var$5;
+    var$1.$stateA0 = var$2;
+    var$1.$stateB0 = var$3;
+    var$1.$stateC1 = var$4;
+    var$1.$stateD1 = var$5;
     $this.$random19 = var$1;
     $this.$batch14 = $this.$mainGame23.$batch;
     var$1 = new cbguv_ScreenViewport;
@@ -43611,10 +43611,10 @@ let cgti_Xoshiro128PPScreen_show = $this => {
     var$5 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$1.$stateA3 = var$2;
     var$1.$stateB3 = var$3;
-    var$1.$stateC1 = var$4;
+    var$1.$stateC0 = var$4;
     if (!(var$2 | var$3 | var$4 | var$5))
         var$5 = 1;
-    var$1.$stateD1 = var$5;
+    var$1.$stateD0 = var$5;
     $this.$random15 = var$1;
     $this.$batch2 = $this.$mainGame8.$batch;
     var$1 = new cbguv_ScreenViewport;
@@ -45110,10 +45110,10 @@ let cgtl_ChipScreen_show = $this => {
     var$3 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$4 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$5 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
-    var$1.$stateA0 = var$2;
-    var$1.$stateB0 = var$3;
-    var$1.$stateC0 = var$4;
-    var$1.$stateD0 = var$5;
+    var$1.$stateA1 = var$2;
+    var$1.$stateB1 = var$3;
+    var$1.$stateC2 = var$4;
+    var$1.$stateD2 = var$5;
     $this.$random25 = var$1;
     $this.$batch19 = $this.$mainGame22.$batch;
     var$1 = new cbguv_ScreenViewport;
@@ -45275,7 +45275,7 @@ cgtl_ChipScreen_render = ($this, $delta) => {
     $this.$iterations29 = Long_add($this.$iterations29, Long_fromInt(1));
     $i = 0;
     while ($i < 524288) {
-        $m = Long_lo((cgtr_Chip32Random_nextLong0($this.$random25, Long_fromInt(512))));
+        $m = Long_lo((cgtr_Chip32Random_nextLong0($this.$random25, Long_ZERO, Long_fromInt(512))));
         if ($m >= 0 && $m < 512) {
             var$2 = $this.$amounts19.data;
             var$2[$m] = Long_add(var$2[$m], Long_fromInt(1));
@@ -45483,10 +45483,10 @@ let cgtl_ChopScreen_show = $this => {
     var$3 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$4 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$5 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
-    var$1.$stateA1 = var$2;
-    var$1.$stateB1 = var$3;
-    var$1.$stateC2 = var$4;
-    var$1.$stateD2 = var$5;
+    var$1.$stateA0 = var$2;
+    var$1.$stateB0 = var$3;
+    var$1.$stateC1 = var$4;
+    var$1.$stateD1 = var$5;
     $this.$random17 = var$1;
     $this.$batch32 = $this.$mainGame32.$batch;
     var$1 = new cbguv_ScreenViewport;
@@ -45858,10 +45858,10 @@ let cgtl_Xoshiro128PPScreen_show = $this => {
     var$5 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$1.$stateA3 = var$2;
     var$1.$stateB3 = var$3;
-    var$1.$stateC1 = var$4;
+    var$1.$stateC0 = var$4;
     if (!(var$2 | var$3 | var$4 | var$5))
         var$5 = 1;
-    var$1.$stateD1 = var$5;
+    var$1.$stateD0 = var$5;
     $this.$random27 = var$1;
     $this.$batch35 = $this.$mainGame26.$batch;
     var$1 = new cbguv_ScreenViewport;
@@ -47346,10 +47346,10 @@ let cgtu_ChipScreen_show = $this => {
     var$3 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$4 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$5 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
-    var$1.$stateA0 = var$2;
-    var$1.$stateB0 = var$3;
-    var$1.$stateC0 = var$4;
-    var$1.$stateD0 = var$5;
+    var$1.$stateA1 = var$2;
+    var$1.$stateB1 = var$3;
+    var$1.$stateC2 = var$4;
+    var$1.$stateD2 = var$5;
     $this.$random14 = var$1;
     $this.$batch33 = $this.$mainGame21.$batch;
     var$1 = new cbguv_ScreenViewport;
@@ -47719,10 +47719,10 @@ let cgtu_ChopScreen_show = $this => {
     var$3 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$4 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$5 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
-    var$1.$stateA1 = var$2;
-    var$1.$stateB1 = var$3;
-    var$1.$stateC2 = var$4;
-    var$1.$stateD2 = var$5;
+    var$1.$stateA0 = var$2;
+    var$1.$stateB0 = var$3;
+    var$1.$stateC1 = var$4;
+    var$1.$stateD1 = var$5;
     $this.$random20 = var$1;
     $this.$batch17 = $this.$mainGame29.$batch;
     var$1 = new cbguv_ScreenViewport;
@@ -48094,10 +48094,10 @@ let cgtu_Xoshiro128PPScreen_show = $this => {
     var$5 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$1.$stateA3 = var$2;
     var$1.$stateB3 = var$3;
-    var$1.$stateC1 = var$4;
+    var$1.$stateC0 = var$4;
     if (!(var$2 | var$3 | var$4 | var$5))
         var$5 = 1;
-    var$1.$stateD1 = var$5;
+    var$1.$stateD0 = var$5;
     $this.$random2 = var$1;
     $this.$batch8 = $this.$mainGame7.$batch;
     var$1 = new cbguv_ScreenViewport;
@@ -59288,90 +59288,66 @@ cbggg_ImmediateModeRenderer20_createFragmentShader = ($hasNormals, $hasColors, $
 };
 function cgtr_Chip32Random() {
     let a = this; cgtr_EnhancedRandom.call(a);
-    a.$stateA0 = 0;
-    a.$stateB0 = 0;
-    a.$stateC0 = 0;
-    a.$stateD0 = 0;
-}
-let cgtr_Chip32Random_nextLong = $this => {
-    let $fa, $fb, $fc, $fd, $hi, $ga, $gb, $gc, $gd, $lo;
-    $fa = $this.$stateA0;
-    $fb = $this.$stateB0;
-    $fc = $this.$stateC0;
-    $fd = $this.$stateD0;
-    $hi = ($fa << 14 | ($fa >>> 18 | 0)) ^ (($fb << 23 | ($fb >>> 9 | 0)) + $fc | 0);
-    $ga = $fb + $fc | 0;
-    $gb = $fa ^ $fd;
-    $gc = $fb << 11 | ($fb >>> 21 | 0);
-    $gd = $fd + (-1640531527) | 0;
-    $lo = ($ga << 14 | ($ga >>> 18 | 0)) ^ (($gb << 23 | ($gb >>> 9 | 0)) + $gc | 0);
-    $this.$stateA0 = $gb + $gc | 0;
-    $this.$stateB0 = $ga ^ $gd;
-    $this.$stateC0 = $gb << 11 | ($gb >>> 21 | 0);
-    $this.$stateD0 = $fd + 1013904242 | 0;
-    return Long_xor(Long_shl(Long_fromInt($hi), 32), Long_fromInt($lo));
-},
-cgtr_Chip32Random_nextInt = ($this, $bound) => {
-    let $fa, $fb, $fc, $fd, $res;
-    $fa = $this.$stateA0;
-    $fb = $this.$stateB0;
-    $fc = $this.$stateC0;
-    $fd = $this.$stateD0;
-    $res = ($fa << 14 | ($fa >>> 18 | 0)) ^ (($fb << 23 | ($fb >>> 9 | 0)) + $fc | 0);
-    $this.$stateA0 = $fb + $fc | 0;
-    $this.$stateB0 = $fd ^ $fa;
-    $this.$stateC0 = $fb << 11 | ($fb >>> 21 | 0);
-    $this.$stateD0 = $fd + (-1640531527) | 0;
-    return Long_hi(Long_mul(Long_fromInt($bound), Long_and(Long_fromInt($res), Long_create(4294967295, 0)))) & ($bound >> 31 ^ (-1));
-},
-cgtr_Chip32Random_nextLong0 = ($this, $bound) => {
-    let $ga, $gb, $gc, $gd, $randLow, $fa, $fb, $fc, $fd, $randHigh, $boundLow, $boundHigh;
-    $ga = $this.$stateA0;
-    $gb = $this.$stateB0;
-    $gc = $this.$stateC0;
-    $gd = $this.$stateD0;
-    $randLow = Long_and(Long_fromInt(($ga << 14 | ($ga >>> 18 | 0)) ^ (($gb << 23 | ($gb >>> 9 | 0)) + $gc | 0)), Long_create(4294967295, 0));
-    $fa = $gb + $gc | 0;
-    $fb = $gd ^ $ga;
-    $fc = $gb << 11 | ($gb >>> 21 | 0);
-    $fd = $gd + (-1640531527) | 0;
-    $randHigh = Long_and(Long_fromInt(($fa << 14 | ($fa >>> 18 | 0)) ^ (($fb << 23 | ($fb >>> 9 | 0)) + $fc | 0)), Long_create(4294967295, 0));
-    $this.$stateA0 = $fb + $fc | 0;
-    $this.$stateB0 = $fd ^ $fa;
-    $this.$stateC0 = $fb << 11 | ($fb >>> 21 | 0);
-    $this.$stateD0 = $gd + 1013904242 | 0;
-    if (Long_ge(Long_fromInt(1), $bound))
-        return Long_ZERO;
-    $boundLow = Long_and($bound, Long_create(4294967295, 0));
-    $boundHigh = Long_shru($bound, 32);
-    return Long_add(Long_add(Long_shru(Long_mul($randHigh, $boundLow), 32), Long_shru(Long_mul($randLow, $boundHigh), 32)), Long_mul($randHigh, $boundHigh));
-},
-cgtr_Chip32Random_nextFloat = $this => {
-    let $fa, $fb, $fc, $fd, $res;
-    $fa = $this.$stateA0;
-    $fb = $this.$stateB0;
-    $fc = $this.$stateC0;
-    $fd = $this.$stateD0;
-    $res = ($fa << 14 | ($fa >>> 18 | 0)) ^ (($fb << 23 | ($fb >>> 9 | 0)) + $fc | 0);
-    $this.$stateA0 = $fb + $fc | 0;
-    $this.$stateB0 = $fd ^ $fa;
-    $this.$stateC0 = $fb << 11 | ($fb >>> 21 | 0);
-    $this.$stateD0 = $fd + (-1640531527) | 0;
-    return ($res >>> 8 | 0) * 5.9604644775390625E-8;
-};
-function cgtr_ChopRandom() {
-    let a = this; cgtr_EnhancedRandom.call(a);
     a.$stateA1 = 0;
     a.$stateB1 = 0;
     a.$stateC2 = 0;
     a.$stateD2 = 0;
 }
-let cgtr_ChopRandom_nextLong = $this => {
-    let $fa, $fb, $fc, $fd, $ga, $gb, $gc, $gd, $sa, $sb;
+let cgtr_Chip32Random_nextLong = $this => {
+    let $fa, $fb, $fc, $fd, $hi, $ga, $gb, $gc, $gd, $lo;
     $fa = $this.$stateA1;
     $fb = $this.$stateB1;
     $fc = $this.$stateC2;
     $fd = $this.$stateD2;
+    $hi = $fc ^ ($fa << 13 | ($fa >>> 19 | 0)) ^ ($fb << 23 | ($fb >>> 9 | 0));
+    $ga = $fb + $fc | 0;
+    $gb = $fa ^ $fd;
+    $gc = $fb << 11 | ($fb >>> 21 | 0);
+    $gd = $fd + (-1640531527) | 0;
+    $lo = $gc ^ ($ga << 13 | ($ga >>> 19 | 0)) ^ ($gb << 23 | ($gb >>> 9 | 0));
+    $this.$stateA1 = $gb + $gc | 0;
+    $this.$stateB1 = $ga ^ $gd;
+    $this.$stateC2 = $gb << 11 | ($gb >>> 21 | 0);
+    $this.$stateD2 = $gd + (-1640531527) | 0;
+    return Long_xor(Long_shl(Long_fromInt($hi), 32), Long_fromInt($lo));
+},
+cgtr_Chip32Random_nextInt = $this => {
+    let $fa, $fb, $fc, $fd, $res;
+    $fa = $this.$stateA1;
+    $fb = $this.$stateB1;
+    $fc = $this.$stateC2;
+    $fd = $this.$stateD2;
+    $res = $fc ^ ($fa << 13 | ($fa >>> 19 | 0)) ^ ($fb << 23 | ($fb >>> 9 | 0));
+    $this.$stateA1 = $fb + $fc | 0;
+    $this.$stateB1 = $fa ^ $fd;
+    $this.$stateC2 = $fb << 11 | ($fb >>> 21 | 0);
+    $this.$stateD2 = $fd + (-1640531527) | 0;
+    return $res;
+},
+cgtr_Chip32Random_nextLong0 = ($this, $inner, $outer) => {
+    let $randLow, $randHigh, $bound, $boundLow, $boundHigh;
+    $randLow = Long_and(Long_fromInt(cgtr_Chip32Random_nextInt($this)), Long_create(4294967295, 0));
+    $randHigh = Long_and(Long_fromInt(cgtr_Chip32Random_nextInt($this)), Long_create(4294967295, 0));
+    if (Long_ge($inner, $outer))
+        return $inner;
+    $bound = Long_sub($outer, $inner);
+    $boundLow = Long_and($bound, Long_create(4294967295, 0));
+    $boundHigh = Long_shru($bound, 32);
+    return Long_add(Long_add(Long_add($inner, Long_shru(Long_mul($randHigh, $boundLow), 32)), Long_shru(Long_mul($randLow, $boundHigh), 32)), Long_mul($randHigh, $boundHigh));
+};
+function cgtr_ChopRandom() {
+    let a = this; cgtr_EnhancedRandom.call(a);
+    a.$stateA0 = 0;
+    a.$stateB0 = 0;
+    a.$stateC1 = 0;
+    a.$stateD1 = 0;
+}
+let cgtr_ChopRandom_nextLong = $this => {
+    let $fa, $fb, $fc, $fd, $ga, $gb, $gc, $gd, $sa, $sb;
+    $fa = $this.$stateA0;
+    $fb = $this.$stateB0;
+    $fc = $this.$stateC1;
+    $fd = $this.$stateD1;
     $ga = $fb ^ $fc;
     $ga = $ga << 26 | ($ga >>> 6 | 0);
     $gb = $fc ^ $fd;
@@ -59379,25 +59355,25 @@ let cgtr_ChopRandom_nextLong = $this => {
     $gc = $fa ^ ($fb + $fc | 0);
     $gd = $fd + (-1380601499) | 0;
     $sa = $gb ^ $gc;
-    $this.$stateA1 = $sa << 26 | ($sa >>> 6 | 0);
+    $this.$stateA0 = $sa << 26 | ($sa >>> 6 | 0);
     $sb = $gc ^ $gd;
-    $this.$stateB1 = $sb << 11 | ($sb >>> 21 | 0);
-    $this.$stateC2 = $ga ^ ($gb + $gc | 0);
-    $this.$stateD2 = $gd + (-1380601499) | 0;
+    $this.$stateB0 = $sb << 11 | ($sb >>> 21 | 0);
+    $this.$stateC1 = $ga ^ ($gb + $gc | 0);
+    $this.$stateD1 = $gd + (-1380601499) | 0;
     return Long_xor(Long_shl(Long_fromInt($fc), 32), Long_fromInt($gc));
 },
 cgtr_ChopRandom_nextInt = $this => {
     let $fa, $fb, $fc, $fd, $sa, $sb;
-    $fa = $this.$stateA1;
-    $fb = $this.$stateB1;
-    $fc = $this.$stateC2;
-    $fd = $this.$stateD2;
+    $fa = $this.$stateA0;
+    $fb = $this.$stateB0;
+    $fc = $this.$stateC1;
+    $fd = $this.$stateD1;
     $sa = $fb ^ $fc;
-    $this.$stateA1 = $sa << 26 | ($sa >>> 6 | 0);
+    $this.$stateA0 = $sa << 26 | ($sa >>> 6 | 0);
     $sb = $fc ^ $fd;
-    $this.$stateB1 = $sb << 11 | ($sb >>> 21 | 0);
-    $this.$stateC2 = $fa ^ ($fb + $fc | 0);
-    $this.$stateD2 = $fd + (-1380601499) | 0;
+    $this.$stateB0 = $sb << 11 | ($sb >>> 21 | 0);
+    $this.$stateC1 = $fa ^ ($fb + $fc | 0);
+    $this.$stateD1 = $fd + (-1380601499) | 0;
     return $fc;
 },
 cgtr_ChopRandom_nextLong0 = ($this, $inner, $outer) => {
@@ -59415,46 +59391,46 @@ function cgtr_Xoshiro128PlusPlusRandom() {
     let a = this; cgtr_EnhancedRandom.call(a);
     a.$stateA3 = 0;
     a.$stateB3 = 0;
-    a.$stateC1 = 0;
-    a.$stateD1 = 0;
+    a.$stateC0 = 0;
+    a.$stateD0 = 0;
 }
 let cgtr_Xoshiro128PlusPlusRandom_nextLong = $this => {
     let var$1, var$2, $h, var$4, var$5, $l, var$7, $t;
     var$1 = $this.$stateA3;
-    var$2 = $this.$stateD1;
+    var$2 = $this.$stateD0;
     $h = var$1 + var$2 | 0;
     $h = ($h << 7 | ($h >>> 25 | 0)) + var$1 | 0;
-    var$4 = $this.$stateC1;
+    var$4 = $this.$stateC0;
     var$5 = $this.$stateB3;
     $l = var$4 - var$5 | 0;
     var$7 = ($l << 13 | ($l >>> 19 | 0)) + var$4 | 0;
     $t = var$5 << 9;
     var$4 = var$4 ^ var$1;
-    $this.$stateC1 = var$4;
+    $this.$stateC0 = var$4;
     var$2 = var$2 ^ var$5;
-    $this.$stateD1 = var$2;
+    $this.$stateD0 = var$2;
     $this.$stateB3 = var$5 ^ var$4;
     $this.$stateA3 = var$1 ^ var$2;
-    $this.$stateC1 = var$4 ^ $t;
-    $this.$stateD1 = var$2 << 11 | (var$2 >>> 21 | 0);
+    $this.$stateC0 = var$4 ^ $t;
+    $this.$stateD0 = var$2 << 11 | (var$2 >>> 21 | 0);
     return Long_xor(Long_shl(Long_fromInt($h), 32), Long_and(Long_fromInt(var$7), Long_create(4294967295, 0)));
 },
 cgtr_Xoshiro128PlusPlusRandom_nextInt = $this => {
     let var$1, var$2, $result, var$4, var$5, $t;
     var$1 = $this.$stateA3;
-    var$2 = $this.$stateD1;
+    var$2 = $this.$stateD0;
     $result = var$1 + var$2 | 0;
     var$4 = ($result << 7 | ($result >>> 25 | 0)) + var$1 | 0;
     var$5 = $this.$stateB3;
     $t = var$5 << 9;
-    $result = $this.$stateC1 ^ var$1;
-    $this.$stateC1 = $result;
+    $result = $this.$stateC0 ^ var$1;
+    $this.$stateC0 = $result;
     var$2 = var$2 ^ var$5;
-    $this.$stateD1 = var$2;
+    $this.$stateD0 = var$2;
     $this.$stateB3 = var$5 ^ $result;
     $this.$stateA3 = var$1 ^ var$2;
-    $this.$stateC1 = $result ^ $t;
-    $this.$stateD1 = var$2 << 11 | (var$2 >>> 21 | 0);
+    $this.$stateC0 = $result ^ $t;
+    $this.$stateD0 = var$2 << 11 | (var$2 >>> 21 | 0);
     return var$4;
 },
 cgtr_Xoshiro128PlusPlusRandom_nextLong0 = ($this, $inner, $outer) => {
@@ -64986,7 +64962,7 @@ cbguv_Viewport, 0, jl_Object, [], 1, 3, 0, 0, 0,
 cbguv_ScreenViewport, 0, cbguv_Viewport, [], 0, 3, 0, 0, 0,
 cbggg_ImmediateModeRenderer, 0, jl_Object, [], 3, 3, 0, 0, 0,
 cbggg_ImmediateModeRenderer20, 0, jl_Object, [cbggg_ImmediateModeRenderer], 0, 3, 0, 0, 0,
-cgtr_Chip32Random, 0, cgtr_EnhancedRandom, [], 0, 3, 0, 0, ["$nextLong", $rt_wrapFunction0(cgtr_Chip32Random_nextLong)],
+cgtr_Chip32Random, 0, cgtr_EnhancedRandom, [], 0, 3, 0, 0, ["$nextLong", $rt_wrapFunction0(cgtr_Chip32Random_nextLong), "$nextLong0", $rt_wrapFunction2(cgtr_Chip32Random_nextLong0)],
 cgtr_ChopRandom, 0, cgtr_EnhancedRandom, [], 0, 3, 0, 0, ["$nextLong", $rt_wrapFunction0(cgtr_ChopRandom_nextLong), "$nextLong0", $rt_wrapFunction2(cgtr_ChopRandom_nextLong0)],
 cgtr_Xoshiro128PlusPlusRandom, 0, cgtr_EnhancedRandom, [], 0, 3, 0, 0, ["$nextLong", $rt_wrapFunction0(cgtr_Xoshiro128PlusPlusRandom_nextLong), "$nextLong0", $rt_wrapFunction2(cgtr_Xoshiro128PlusPlusRandom_nextLong0)],
 cgtr_Chock32Random, 0, cgtr_EnhancedRandom, [], 0, 3, 0, 0, ["$nextLong", $rt_wrapFunction0(cgtr_Chock32Random_nextLong), "$nextLong0", $rt_wrapFunction2(cgtr_Chock32Random_nextLong0)],
