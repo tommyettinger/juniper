@@ -83,6 +83,7 @@ public final class Deserializer {
         register(new Chill32Random(1, 2, 3));
         register(new Bear32Random(1, 2, 3, 4));
         register(new Choo32Random(1, 2, 3, 4));
+        register(new Chip32Random(1, 2, 3, 4));
         register(new ChopRandom(1, 2, 3, 4));
         register(new Jsf32Random(1));
         register(new TrimRandom(1, 2, 3, 4));

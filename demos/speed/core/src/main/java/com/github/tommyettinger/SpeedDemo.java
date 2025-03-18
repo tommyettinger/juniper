@@ -17,8 +17,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  * Chock32Random is always slowest.
  * <br>
  * Results on GWT:
- * Chip32Random is often tied for fastest, but does poorly on bounded nextLong().
- * ChopRandom is usually tied for fastest with Chip32Random.
+ * Chip32Random is often neck-and-neck with ChopRandom for fastest.
+ * ChopRandom is usually tied for fastest with Chip32Random, and tends to be a few FPS faster.
  * Xoshiro128PlusPlusRandom usually performs reasonably well on everything, typically in second place.
  * Chock32Random is usually in the second-to-last position, just ahead of AceRandom, and really performs badly on bounded nextLong().
  * AceRandom, as expected on GWT, is quite slow, sometimes slowest.
