@@ -32,7 +32,8 @@ import com.github.tommyettinger.random.EnhancedRandom;
  * generators, like {@link ChopRandom}.
  * <br>
  * Xoshiro160RoadroxoRandom has a guaranteed period of {@code pow(2, 160) - pow(2, 32)}. For {@code int} outputs only,
- * it is 1-dimensionally equidistributed. For {@code long} outputs, equidistribution is unknown.
+ * it is 1-dimensionally equidistributed. For {@code long} outputs, equidistribution is unknown. It starts returning
+ * fully-decorrrelated results even given very-correlated initial states after about 10 calls to {@link #nextInt()}.
  * <br>
  * This implements all optional methods in EnhancedRandom except {@link #skip(long)}.
  * <br>

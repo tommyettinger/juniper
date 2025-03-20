@@ -21,6 +21,7 @@ import com.github.tommyettinger.digital.ArrayTools;
 import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.ds.ObjectList;
 import com.github.tommyettinger.random.experimental.Chip32Random;
+import com.github.tommyettinger.random.experimental.Xoshiro160RoadroxoRandom;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -40,7 +41,7 @@ import java.util.Date;
 public class ImmediateInitialCorrelationEvaluator {
     public static long INTERVAL_X = 1;//2;//4;//8;//16;//0xC13FA9A902A6328FL;//
     public static long INTERVAL_Y = 2;//2;//4;//8;//16;//0x91E10DA5C79E7B1DL;//
-    public static int DROPPED_STEPS = 16;
+    public static int DROPPED_STEPS = 10;
     public double steps = 0;
     public int mode = 0;
     public double amount = 0;
@@ -117,7 +118,11 @@ public class ImmediateInitialCorrelationEvaluator {
         EnhancedRandom[][] g = new EnhancedRandom[256][256];
 
         ArrayList<EnhancedRandom> rs = ObjectList.with(
-                new Chip32Random(1)
+                new Xoshiro160RoadroxoRandom(1, 1, 1, 1, 1),
+                new Xoshiro128PlusPlusRandom(1, 1, 1, 1),
+                new Xoshiro256StarStarRandom(1, 1, 1, 1),
+                new Xoshiro256MX3Random(1, 1, 1, 1)
+//                new Chip32Random(1)
 //                new Chock32Random(1)
         );
 //
