@@ -102,7 +102,7 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 
 	@Override
 	public String getTag() {
-		return "XPPR";
+		return "XRAR";
 	}
 
 	/**
@@ -287,56 +287,77 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 
 	@Override
 	public long nextLong () {
-		return (long)nextInt() << 32 ^ nextInt();
-//		int h = (stateA + stateD);
-//		h = (h << 7 | h >>> 25) + stateA;
-//		int l = stateC - stateB;
-//		l = (l << 13 | l >>> 19) + stateC;
-//		int t = stateB << 9;
-//		stateC ^= stateA;
-//		stateD ^= stateB;
-//		stateB ^= stateC;
-//		stateA ^= stateD;
-//		stateC ^= t;
-//		stateD = (stateD << 11 | stateD >>> 21);
-//		return (long) h << 32 ^ (l & 0xFFFFFFFFL);
+		// This is the same as the following, but inlined manually:
+//		return (long)nextInt() << 32 ^ nextInt();
+		int hi = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
+		int t = stateB << 9;
+		stateE += 0xC3564E95 ^ stateD;
+		stateC ^= stateA;
+		stateD ^= stateB;
+		stateB ^= stateC;
+		stateA ^= stateD;
+		stateC ^= t;
+		stateD = (stateD << 11 | stateD >>> 21);
+
+		int lo = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
+		t = stateB << 9;
+		stateE += 0xC3564E95 ^ stateD;
+		stateC ^= stateA;
+		stateD ^= stateB;
+		stateB ^= stateC;
+		stateA ^= stateD;
+		stateC ^= t;
+		stateD = (stateD << 11 | stateD >>> 21);
+		return (long)hi << 32 ^ lo;
 	}
 
-//	@Override
-//	public long previousLong () {
-//		stateD = (stateD << 21 | stateD >>> 11); // stateD has d ^ b
-//		int pa = stateA ^= stateD; // StateA has a
-//		stateC ^= stateB; // StateC has b ^ b << 9
-//		stateC ^= stateC << 9;
-//		stateC ^= stateC << 18; // StateC has b
-//		stateB ^= stateA; // StateB has b ^ c
-//		int pc = stateC ^= stateB; // StateC has c
-//		int pb = stateB ^= stateC; // StateB has b
-//		int pd = stateD ^= stateB; // StateD has d
-//
-//		pd = pa + pd;
-//		pd = (pd << 7 | pd >>> 25) + pa;
-//		pb = pc - pb;
-//		pb = (pb << 13 | pb >>> 19) + pc;
-//		return (long) pd << 32 | (pb & 0xFFFFFFFFL);
-//	}
-//
-//	@Override
-//	public int previousInt () {
-//		stateD = (stateD << 21 | stateD >>> 11); // stateD has d ^ b
-//		int pa = stateA ^= stateD; // StateA has a
-//		stateC ^= stateB; // StateC has b ^ b << 9
-//		stateC ^= stateC << 9;
-//		stateC ^= stateC << 18; // StateC has b
-//		stateB ^= stateA; // StateB has b ^ c
-//		stateC ^= stateB;// StateC has c
-//		stateB ^= stateC;// StateB has b
-//		int pd = stateD ^= stateB; // StateD has d
-//
-//		pd = pa + pd;
-//		pd = (pd << 7 | pd >>> 25) + pa;
-//		return pd;
-//	}
+	@Override
+	public long previousLong () {
+		// This is the same as the following, but inlined manually:
+//		return previousInt() ^ (long)previousInt() << 32;
+
+		stateD = (stateD << 21 | stateD >>> 11); // stateD has d ^ b
+		stateA ^= stateD; // StateA has a
+		stateC ^= stateB; // StateC has b ^ b << 9
+		stateC ^= stateC << 9;
+		stateC ^= stateC << 18; // StateC has b
+		stateB ^= stateA; // StateB has b ^ c
+		stateC ^= stateB;// StateC has c
+		stateB ^= stateC;// StateB has b
+		stateD ^= stateB; // StateD has d
+		stateE -= 0xC3564E95 ^ stateD;
+		int lo = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
+
+		stateD = (stateD << 21 | stateD >>> 11); // stateD has d ^ b
+		stateA ^= stateD; // StateA has a
+		stateC ^= stateB; // StateC has b ^ b << 9
+		stateC ^= stateC << 9;
+		stateC ^= stateC << 18; // StateC has b
+		stateB ^= stateA; // StateB has b ^ c
+		stateC ^= stateB;// StateC has c
+		stateB ^= stateC;// StateB has b
+		stateD ^= stateB; // StateD has d
+		stateE -= 0xC3564E95 ^ stateD;
+		int hi = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
+
+		return (long) hi << 32 ^ lo;
+	}
+
+	@Override
+	public int previousInt () {
+		stateD = (stateD << 21 | stateD >>> 11); // stateD has d ^ b
+		stateA ^= stateD; // StateA has a
+		stateC ^= stateB; // StateC has b ^ b << 9
+		stateC ^= stateC << 9;
+		stateC ^= stateC << 18; // StateC has b
+		stateB ^= stateA; // StateB has b ^ c
+		stateC ^= stateB;// StateC has c
+		stateB ^= stateC;// StateB has b
+		stateD ^= stateB; // StateD has d
+		stateE -= 0xC3564E95 ^ stateD;
+
+		return (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
+	}
 
 	@Override
 	public int next (int bits) {
