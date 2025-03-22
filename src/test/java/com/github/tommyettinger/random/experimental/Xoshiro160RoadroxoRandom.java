@@ -23,19 +23,24 @@ import com.github.tommyettinger.random.EnhancedRandom;
 /**
  * A random number generator that is optimized for performance on 32-bit machines and with Google Web Toolkit, this uses
  * no multiplication and is similar to the published xoshiro128 algorithm, but has an extra 32-bit state that acts like
- * a counter.
+ * a counter. Unlike any variations on xoshiro128 with four states, this is actually 1-dimensionally equidistributed -
+ * existing generators like {@code xoshiro128++} produce the result {@code 0} less frequently (by a tiny difference, but
+ * that is enough to mean it isn't <em>equal</em>). This produces all 32-bit results equally frequently with
+ * {@link #nextInt()}.
  * <br>
  * The actual speed of this is going to vary wildly depending on the platform being benchmarked. On GWT, which is the
  * main place where the performance of a random number generator might actually be a bottleneck in a game, this performs
- * very well, especially when producing {@code long} values. On desktop platforms, it is faster at generating
- * {@code int} values than {@code long}, which is to be expected for a 32-bit generator, but not as fast as some other
- * generators, like {@link ChopRandom}.
+ * very well. On desktop platforms, it is faster at generating {@code int} values than {@code long}, which is to be
+ * expected for a 32-bit generator, but not as fast as some other generators, like {@link ChopRandom}. However, this
+ * guarantees a larger <em>minimum period</em> than ChopRandom can possibly provide as a <em>maximum period</em>.
  * <br>
  * Xoshiro160RoadroxoRandom has a guaranteed period of {@code pow(2, 160) - pow(2, 32)}. For {@code int} outputs only,
  * it is 1-dimensionally equidistributed. For {@code long} outputs, equidistribution is unknown. It starts returning
  * fully-decorrrelated results even given very-correlated initial states after about 10 calls to {@link #nextInt()}.
+ * This passes 64TB of PractRand with no anomalies.
  * <br>
- * This implements all optional methods in EnhancedRandom except {@link #skip(long)}.
+ * This implements all optional methods in EnhancedRandom except {@link #skip(long)}. It also implements {@link #leap()}
+ * to allow jumping ahead by the equivalent of at least 2 to the 64 calls to {@link #nextInt()}.
  * <br>
  * Based on <a href="https://prng.di.unimi.it/xoshiro128plusplus.c">this public-domain code</a> by Vigna and Blackman.
  */
@@ -58,19 +63,19 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 	 */
 	protected int stateD;
 	/**
-	 * The fourth state; can be any int.
+	 * The fifth state; can be any int.
 	 */
 	protected int stateE;
 
 	/**
-	 * Creates a new Xoshiro128PlusPlusRandom with a random state.
+	 * Creates a new Xoshiro160RoadroxoRandom with a random state.
 	 */
 	public Xoshiro160RoadroxoRandom() {
 		this((int)EnhancedRandom.seedFromMath(), (int)EnhancedRandom.seedFromMath(), (int)EnhancedRandom.seedFromMath(), (int)EnhancedRandom.seedFromMath(), (int)EnhancedRandom.seedFromMath());
 	}
 
 	/**
-	 * Creates a new Xoshiro128PlusPlusRandom with the given seed; all {@code long} values are permitted.
+	 * Creates a new Xoshiro160RoadroxoRandom with the given seed; all {@code long} values are permitted.
 	 * The seed will be passed to {@link #setSeed(long)} to attempt to adequately distribute the seed randomly.
 	 *
 	 * @param seed any {@code long} value
@@ -81,7 +86,7 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Creates a new Xoshiro128PlusPlusRandom with the given four states; all {@code int} values are permitted.
+	 * Creates a new Xoshiro160RoadroxoRandom with the given four states; all {@code int} values are permitted.
 	 * These states will be used verbatim, unless the first 4 states are each 0 -- if those are all 0, then stateD is
 	 * replaced with 1. Note that stateE can have any int value without constraining the other states.
 	 *
@@ -459,12 +464,18 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Jumps extremely far in the generator's sequence, such that it requires {@code Math.pow(2, 64)} calls to leap() to
-	 * complete a cycle through the generator's entire sequence. This can be used to create over 18 quintillion
-	 * substreams of this generator's sequence, each with a period of {@code Math.pow(2, 64)}.
-	 * @return the result of what nextLong() would return if it was called at the state this jumped to
+	 * Jumps extremely far in the generator's sequence, to a state that would normally only be reached by calling
+	 * {@link #nextInt()} at least {@code Math.pow(2, 64)} times sequentially. "At least" here means a non-zero 32-bit
+	 * unsigned integer multiple of {@code Math.pow(2, 64)}, because this only changes states A, B, C, and D -- stateE
+	 * doesn't change, even though normally calling nextInt() 2 to the 64 times would change stateE by an unpredictable
+	 * amount. This can be used to create over 18 quintillion distinct substreams of this generator's sequence, each
+	 * with a period of at least {@code Math.pow(2, 64)}.
+	 * <br>
+	 * Note that this returns an {@code int}, unlike most leap() functions in other classes here.
+	 *
+	 * @return the result of what nextInt() would return if it was called at the state this jumped to
 	 */
-	public long leap()
+	public int leap()
 	{
 		int s0 = 0;
 		int s1 = 0;
@@ -516,21 +527,7 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 		stateC = s2;
 		stateD = s3;
 
-		s3 = (s3 << 21 | s3 >>> 11); // s3 has d ^ b
-		s0 ^= s3; // s0 has a
-		s2 ^= s1; // s2 has b ^ b << 9
-		s2 ^= s2 << 9;
-		s2 ^= s2 << 18; // s2 has b
-		s1 ^= s0; // s1 has b ^ c
-		s2 ^= s1; // s2 has c
-		s1 ^= s2; // s1 has b
-		s3 ^= s1; // s3 has d
-
-		s3 = s0 + s3;
-		s3 = (s3 << 7 | s3 >>> 25) + s0;
-		s1 = s2 - s1;
-		s1 = (s1 << 13 | s1 >>> 19) + s2;
-		return (long) s3 << 32 ^ (s1 & 0xFFFFFFFFL);
+		return  (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
 	}
 
 	@Override
@@ -542,7 +539,7 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 
 		Xoshiro160RoadroxoRandom that = (Xoshiro160RoadroxoRandom)o;
 
-		return stateA == that.stateA && stateB == that.stateB && stateC == that.stateC && stateD == that.stateD;
+		return stateA == that.stateA && stateB == that.stateB && stateC == that.stateC && stateD == that.stateD && stateE == that.stateE;
 	}
 
 	public String toString () {
