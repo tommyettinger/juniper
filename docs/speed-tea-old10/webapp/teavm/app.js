@@ -10933,183 +10933,183 @@ let cgt_SpeedDemo_create = $this => {
     var$4 = $rt_createArray(cbg_Screen, 36);
     var$5 = var$4.data;
     var$2 = new cgtf_RandomScreen;
-    var$2.$amounts29 = $rt_createLongArray(512);
-    var$2.$iterations3 = Long_ZERO;
+    var$2.$amounts30 = $rt_createLongArray(512);
+    var$2.$iterations5 = Long_ZERO;
     var$2.$mainGame0 = $this;
     var$5[0] = var$2;
     var$2 = new cgtf_ChipScreen;
     var$2.$amounts33 = $rt_createLongArray(512);
-    var$2.$iterations7 = Long_ZERO;
+    var$2.$iterations8 = Long_ZERO;
     var$2.$mainGame = $this;
     var$5[1] = var$2;
     var$2 = new cgtf_ChopScreen;
     var$2.$amounts0 = $rt_createLongArray(512);
     var$2.$iterations = Long_ZERO;
-    var$2.$mainGame15 = $this;
+    var$2.$mainGame14 = $this;
     var$5[2] = var$2;
     var$2 = new cgtf_Xoshiro128PPScreen;
-    var$2.$amounts9 = $rt_createLongArray(512);
+    var$2.$amounts10 = $rt_createLongArray(512);
     var$2.$iterations2 = Long_ZERO;
-    var$2.$mainGame4 = $this;
+    var$2.$mainGame5 = $this;
     var$5[3] = var$2;
-    var$2 = new cgtf_RarxScreen;
-    var$2.$amounts23 = $rt_createLongArray(512);
-    var$2.$iterations21 = Long_ZERO;
-    var$2.$mainGame7 = $this;
+    var$2 = new cgtf_ChockScreen;
+    var$2.$amounts11 = $rt_createLongArray(512);
+    var$2.$iterations0 = Long_ZERO;
+    var$2.$mainGame33 = $this;
     var$5[4] = var$2;
     var$2 = new cgtf_AceScreen;
     var$2.$amounts = $rt_createLongArray(512);
-    var$2.$iterations33 = Long_ZERO;
-    var$2.$mainGame16 = $this;
+    var$2.$iterations31 = Long_ZERO;
+    var$2.$mainGame15 = $this;
     var$5[5] = var$2;
     var$2 = new cgte_RandomScreen;
-    var$2.$amounts27 = $rt_createLongArray(512);
-    var$2.$iterations34 = Long_ZERO;
+    var$2.$amounts26 = $rt_createLongArray(512);
+    var$2.$iterations33 = Long_ZERO;
     var$2.$mainGame9 = $this;
     var$5[6] = var$2;
     var$2 = new cgte_ChipScreen;
-    var$2.$amounts14 = $rt_createLongArray(512);
-    var$2.$iterations14 = Long_ZERO;
-    var$2.$mainGame3 = $this;
+    var$2.$amounts15 = $rt_createLongArray(512);
+    var$2.$iterations15 = Long_ZERO;
+    var$2.$mainGame4 = $this;
     var$5[7] = var$2;
     var$2 = new cgte_ChopScreen;
-    var$2.$amounts11 = $rt_createLongArray(512);
-    var$2.$iterations4 = Long_ZERO;
-    var$2.$mainGame28 = $this;
+    var$2.$amounts12 = $rt_createLongArray(512);
+    var$2.$iterations6 = Long_ZERO;
+    var$2.$mainGame30 = $this;
     var$5[8] = var$2;
     var$2 = new cgte_Xoshiro128PPScreen;
     var$2.$amounts34 = $rt_createLongArray(512);
     var$2.$iterations11 = Long_ZERO;
-    var$2.$mainGame14 = $this;
+    var$2.$mainGame13 = $this;
     var$5[9] = var$2;
-    var$2 = new cgte_RarxScreen;
-    var$2.$amounts10 = $rt_createLongArray(512);
-    var$2.$iterations19 = Long_ZERO;
-    var$2.$mainGame30 = $this;
+    var$2 = new cgte_ChockScreen;
+    var$2.$amounts5 = $rt_createLongArray(512);
+    var$2.$iterations12 = Long_ZERO;
+    var$2.$mainGame18 = $this;
     var$5[10] = var$2;
     var$2 = new cgte_AceScreen;
-    var$2.$amounts13 = $rt_createLongArray(512);
-    var$2.$iterations28 = Long_ZERO;
-    var$2.$mainGame13 = $this;
+    var$2.$amounts14 = $rt_createLongArray(512);
+    var$2.$iterations27 = Long_ZERO;
+    var$2.$mainGame12 = $this;
     var$5[11] = var$2;
     var$2 = new cgtd_RandomScreen;
-    var$2.$amounts3 = $rt_createLongArray(512);
-    var$2.$iterations16 = Long_ZERO;
-    var$2.$mainGame11 = $this;
+    var$2.$amounts4 = $rt_createLongArray(512);
+    var$2.$iterations17 = Long_ZERO;
+    var$2.$mainGame10 = $this;
     var$5[12] = var$2;
     var$2 = new cgtd_ChipScreen;
-    var$2.$amounts26 = $rt_createLongArray(512);
-    var$2.$iterations25 = Long_ZERO;
+    var$2.$amounts25 = $rt_createLongArray(512);
+    var$2.$iterations24 = Long_ZERO;
     var$2.$mainGame19 = $this;
     var$5[13] = var$2;
     var$2 = new cgtd_ChopScreen;
-    var$2.$amounts31 = $rt_createLongArray(512);
-    var$2.$iterations32 = Long_ZERO;
+    var$2.$amounts32 = $rt_createLongArray(512);
+    var$2.$iterations30 = Long_ZERO;
     var$2.$mainGame1 = $this;
     var$5[14] = var$2;
     var$2 = new cgtd_Xoshiro128PPScreen;
     var$2.$amounts28 = $rt_createLongArray(512);
     var$2.$iterations20 = Long_ZERO;
-    var$2.$mainGame17 = $this;
+    var$2.$mainGame16 = $this;
     var$5[15] = var$2;
-    var$2 = new cgtd_RarxScreen;
-    var$2.$amounts22 = $rt_createLongArray(512);
-    var$2.$iterations6 = Long_ZERO;
-    var$2.$mainGame10 = $this;
+    var$2 = new cgtd_ChockScreen;
+    var$2.$amounts17 = $rt_createLongArray(512);
+    var$2.$iterations3 = Long_ZERO;
+    var$2.$mainGame28 = $this;
     var$5[16] = var$2;
     var$2 = new cgtd_AceScreen;
-    var$2.$amounts8 = $rt_createLongArray(512);
-    var$2.$iterations23 = Long_ZERO;
-    var$2.$mainGame29 = $this;
+    var$2.$amounts9 = $rt_createLongArray(512);
+    var$2.$iterations22 = Long_ZERO;
+    var$2.$mainGame31 = $this;
     var$5[17] = var$2;
     var$2 = new cgti_RandomScreen;
-    var$2.$amounts1 = $rt_createLongArray(512);
-    var$2.$iterations26 = Long_ZERO;
+    var$2.$amounts2 = $rt_createLongArray(512);
+    var$2.$iterations25 = Long_ZERO;
     var$2.$mainGame20 = $this;
     var$5[18] = var$2;
     var$2 = new cgti_ChipScreen;
-    var$2.$amounts7 = $rt_createLongArray(512);
-    var$2.$iterations18 = Long_ZERO;
+    var$2.$amounts8 = $rt_createLongArray(512);
+    var$2.$iterations19 = Long_ZERO;
     var$2.$mainGame34 = $this;
     var$5[19] = var$2;
     var$2 = new cgti_ChopScreen;
-    var$2.$amounts20 = $rt_createLongArray(512);
+    var$2.$amounts21 = $rt_createLongArray(512);
     var$2.$iterations10 = Long_ZERO;
-    var$2.$mainGame24 = $this;
+    var$2.$mainGame23 = $this;
     var$5[20] = var$2;
     var$2 = new cgti_Xoshiro128PPScreen;
-    var$2.$amounts19 = $rt_createLongArray(512);
-    var$2.$iterations5 = Long_ZERO;
+    var$2.$amounts20 = $rt_createLongArray(512);
+    var$2.$iterations7 = Long_ZERO;
     var$2.$mainGame8 = $this;
     var$5[21] = var$2;
-    var$2 = new cgti_RarxScreen;
-    var$2.$amounts5 = $rt_createLongArray(512);
-    var$2.$iterations29 = Long_ZERO;
-    var$2.$mainGame22 = $this;
+    var$2 = new cgti_ChockScreen;
+    var$2.$amounts1 = $rt_createLongArray(512);
+    var$2.$iterations34 = Long_ZERO;
+    var$2.$mainGame24 = $this;
     var$5[22] = var$2;
     var$2 = new cgti_AceScreen;
-    var$2.$amounts6 = $rt_createLongArray(512);
+    var$2.$amounts7 = $rt_createLongArray(512);
     var$2.$iterations1 = Long_ZERO;
     var$2.$mainGame2 = $this;
     var$5[23] = var$2;
     var$2 = new cgtl_RandomScreen;
-    var$2.$amounts2 = $rt_createLongArray(512);
+    var$2.$amounts3 = $rt_createLongArray(512);
     var$2.$iterations9 = Long_ZERO;
-    var$2.$mainGame12 = $this;
+    var$2.$mainGame11 = $this;
     var$5[24] = var$2;
     var$2 = new cgtl_ChipScreen;
-    var$2.$amounts18 = $rt_createLongArray(512);
-    var$2.$iterations31 = Long_ZERO;
-    var$2.$mainGame23 = $this;
+    var$2.$amounts19 = $rt_createLongArray(512);
+    var$2.$iterations29 = Long_ZERO;
+    var$2.$mainGame22 = $this;
     var$5[25] = var$2;
     var$2 = new cgtl_ChopScreen;
-    var$2.$amounts15 = $rt_createLongArray(512);
-    var$2.$iterations24 = Long_ZERO;
+    var$2.$amounts16 = $rt_createLongArray(512);
+    var$2.$iterations23 = Long_ZERO;
     var$2.$mainGame32 = $this;
     var$5[26] = var$2;
     var$2 = new cgtl_Xoshiro128PPScreen;
-    var$2.$amounts16 = $rt_createLongArray(512);
-    var$2.$iterations17 = Long_ZERO;
+    var$2.$amounts18 = $rt_createLongArray(512);
+    var$2.$iterations18 = Long_ZERO;
     var$2.$mainGame26 = $this;
     var$5[27] = var$2;
-    var$2 = new cgtl_RarxScreen;
-    var$2.$amounts17 = $rt_createLongArray(512);
-    var$2.$iterations0 = Long_ZERO;
-    var$2.$mainGame31 = $this;
+    var$2 = new cgtl_ChockScreen;
+    var$2.$amounts27 = $rt_createLongArray(512);
+    var$2.$iterations32 = Long_ZERO;
+    var$2.$mainGame3 = $this;
     var$5[28] = var$2;
     var$2 = new cgtl_AceScreen;
-    var$2.$amounts24 = $rt_createLongArray(512);
-    var$2.$iterations27 = Long_ZERO;
-    var$2.$mainGame5 = $this;
+    var$2.$amounts23 = $rt_createLongArray(512);
+    var$2.$iterations26 = Long_ZERO;
+    var$2.$mainGame6 = $this;
     var$5[29] = var$2;
     var$2 = new cgtu_RandomScreen;
-    var$2.$amounts30 = $rt_createLongArray(512);
-    var$2.$iterations15 = Long_ZERO;
-    var$2.$mainGame18 = $this;
+    var$2.$amounts31 = $rt_createLongArray(512);
+    var$2.$iterations16 = Long_ZERO;
+    var$2.$mainGame17 = $this;
     var$5[30] = var$2;
     var$2 = new cgtu_ChipScreen;
-    var$2.$amounts21 = $rt_createLongArray(512);
-    var$2.$iterations22 = Long_ZERO;
+    var$2.$amounts22 = $rt_createLongArray(512);
+    var$2.$iterations21 = Long_ZERO;
     var$2.$mainGame21 = $this;
     var$5[31] = var$2;
     var$2 = new cgtu_ChopScreen;
-    var$2.$amounts25 = $rt_createLongArray(512);
-    var$2.$iterations13 = Long_ZERO;
-    var$2.$mainGame27 = $this;
+    var$2.$amounts24 = $rt_createLongArray(512);
+    var$2.$iterations14 = Long_ZERO;
+    var$2.$mainGame29 = $this;
     var$5[32] = var$2;
     var$2 = new cgtu_Xoshiro128PPScreen;
-    var$2.$amounts12 = $rt_createLongArray(512);
-    var$2.$iterations30 = Long_ZERO;
-    var$2.$mainGame6 = $this;
+    var$2.$amounts13 = $rt_createLongArray(512);
+    var$2.$iterations28 = Long_ZERO;
+    var$2.$mainGame7 = $this;
     var$5[33] = var$2;
-    var$2 = new cgtu_RarxScreen;
-    var$2.$amounts32 = $rt_createLongArray(512);
-    var$2.$iterations8 = Long_ZERO;
-    var$2.$mainGame33 = $this;
+    var$2 = new cgtu_ChockScreen;
+    var$2.$amounts29 = $rt_createLongArray(512);
+    var$2.$iterations4 = Long_ZERO;
+    var$2.$mainGame27 = $this;
     var$5[34] = var$2;
     var$2 = new cgtu_AceScreen;
-    var$2.$amounts4 = $rt_createLongArray(512);
-    var$2.$iterations12 = Long_ZERO;
+    var$2.$amounts6 = $rt_createLongArray(512);
+    var$2.$iterations13 = Long_ZERO;
     var$2.$mainGame25 = $this;
     var$5[35] = var$2;
     $this.$screens = var$4;
@@ -35727,18 +35727,18 @@ cbg_ScreenAdapter_resume = $this => {
 };
 function cgtf_RandomScreen() {
     let a = this; cbg_ScreenAdapter.call(a);
-    a.$random11 = null;
-    a.$batch28 = null;
+    a.$random9 = null;
+    a.$batch27 = null;
     a.$renderer1 = null;
-    a.$amounts29 = null;
-    a.$iterations3 = Long_ZERO;
-    a.$font30 = null;
-    a.$viewport19 = null;
+    a.$amounts30 = null;
+    a.$iterations5 = Long_ZERO;
+    a.$font31 = null;
+    a.$viewport16 = null;
     a.$mainGame0 = null;
 }
 let cgtf_RandomScreen_show = $this => {
     let var$1, var$2, var$3, var$4, var$5, var$6, var$7, var$8, var$9, var$10, var$11;
-    $this.$font30 = $this.$mainGame0.$font0;
+    $this.$font31 = $this.$mainGame0.$font0;
     var$1 = new cgt_RandomRandom;
     var$2 = Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19));
     var$3 = new cgt_Random;
@@ -35746,8 +35746,8 @@ let cgtf_RandomScreen_show = $this => {
     cgt_Random_setSeed(var$3, Long_fromInt(1234567890));
     var$1.$base = var$3;
     cgt_Random_setSeed(var$3, var$2);
-    $this.$random11 = var$1;
-    $this.$batch28 = $this.$mainGame0.$batch;
+    $this.$random9 = var$1;
+    $this.$batch27 = $this.$mainGame0.$batch;
     var$1 = new cbguv_ScreenViewport;
     var$3 = new cbgg_OrthographicCamera;
     cbgg_Camera__init_(var$3);
@@ -35759,14 +35759,14 @@ let cgtf_RandomScreen_show = $this => {
     var$1.$tmp = new cbgm_Vector3;
     var$1.$unitsPerPixel = 1.0;
     var$1.$camera = var$3;
-    $this.$viewport19 = var$1;
+    $this.$viewport16 = var$1;
     var$1 = new cbggg_ImmediateModeRenderer20;
     var$5 = cbggg_ShaderProgram__init_(cbggg_ImmediateModeRenderer20_createVertexShader(0, 1, 0), cbggg_ImmediateModeRenderer20_createFragmentShader(0, 1, 0));
     if (var$5.$isCompiled) {
         cbggg_ImmediateModeRenderer20__init_(var$1, 1536, 0, 1, 0, var$5);
         var$1.$ownsShader = 1;
         $this.$renderer1 = var$1;
-        var$6 = $this.$amounts29.data;
+        var$6 = $this.$amounts30.data;
         var$7 = 0;
         var$8 = var$6.length;
         if (var$7 > var$8) {
@@ -35780,7 +35780,7 @@ let cgtf_RandomScreen_show = $this => {
             var$6[var$7] = Long_ZERO;
             var$7 = var$9;
         }
-        $this.$iterations3 = Long_ZERO;
+        $this.$iterations5 = Long_ZERO;
         return;
     }
     var$1 = new cbgu_GdxRuntimeException;
@@ -35850,11 +35850,11 @@ cgtf_RandomScreen_render = ($this, $delta) => {
         return;
     cbg_Gdx_gl.$glClearColor(1.0, 1.0, 1.0, 1.0);
     cbg_Gdx_gl.$glClear(16384);
-    $camera = $this.$viewport19.$camera;
+    $camera = $this.$viewport16.$camera;
     cbgg_OrthographicCamera_update($camera, 1);
     var$8 = cbg_Gdx_input.$pressedKeys.data;
     if (var$8[29]) {
-        var$2 = $this.$amounts29.data;
+        var$2 = $this.$amounts30.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -35868,10 +35868,10 @@ cgtf_RandomScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations3 = Long_ZERO;
+        $this.$iterations5 = Long_ZERO;
     }
     if (var$8[30]) {
-        var$2 = $this.$amounts29.data;
+        var$2 = $this.$amounts30.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -35885,10 +35885,10 @@ cgtf_RandomScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations3 = Long_ZERO;
+        $this.$iterations5 = Long_ZERO;
     }
     if (var$8[31]) {
-        var$2 = $this.$amounts29.data;
+        var$2 = $this.$amounts30.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -35902,14 +35902,14 @@ cgtf_RandomScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations3 = Long_ZERO;
+        $this.$iterations5 = Long_ZERO;
     }
-    $this.$iterations3 = Long_add($this.$iterations3, Long_fromInt(1));
+    $this.$iterations5 = Long_add($this.$iterations5, Long_fromInt(1));
     $i = 0;
     while ($i < 524288) {
-        $m = cgt_Random_nextInternal($this.$random11.$base, 24) * 5.9604644775390625E-8 * 512.0 | 0;
+        $m = cgt_Random_nextInternal($this.$random9.$base, 24) * 5.9604644775390625E-8 * 512.0 | 0;
         if ($m >= 0 && $m < 512) {
-            var$2 = $this.$amounts29.data;
+            var$2 = $this.$amounts30.data;
             var$2[$m] = Long_add(var$2[$m], Long_fromInt(1));
         }
         $i = $i + 1 | 0;
@@ -35927,7 +35927,7 @@ cgtf_RandomScreen_render = ($this, $delta) => {
         cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0, 0.0);
         var$3 = $this.$renderer1;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
-        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts29.data[$x]) / Long_toNumber($this.$iterations3), 0.0);
+        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts30.data[$x]) / Long_toNumber($this.$iterations5), 0.0);
         $x = $x + 1 | 0;
     }
     $j = 8;
@@ -35942,16 +35942,16 @@ cgtf_RandomScreen_render = ($this, $delta) => {
         $j = $j + 32 | 0;
     }
     cbggg_ImmediateModeRenderer20_flush($this.$renderer1);
-    var$3 = $this.$batch28;
+    var$3 = $this.$batch27;
     var$6 = $camera.$combined;
     if (var$3.$drawing)
         cbggg_SpriteBatch_flush(var$3);
     cbgm_Matrix4_set(var$3.$projectionMatrix, var$6.$val);
     if (var$3.$drawing)
         cbggg_SpriteBatch_setupMatrices(var$3);
-    cbggg_SpriteBatch_begin($this.$batch28);
-    var$3 = $this.$font30;
-    var$6 = $this.$batch28;
+    cbggg_SpriteBatch_begin($this.$batch27);
+    var$3 = $this.$font31;
+    var$6 = $this.$batch27;
     var$2 = $rt_createArray(jl_Object, 2);
     var$8 = var$2.data;
     var$8[0] = $rt_s(485);
@@ -36072,7 +36072,7 @@ cgtf_RandomScreen_render = ($this, $delta) => {
         cbggg_GlyphLayout_setText($camera, var$14.$font, var$13, 0, $m, var$14.$color, 384.0, 1, 1, var$15);
         cbggg_BitmapFontCache_addToCache(var$14, $camera, 64.0, 522.0 + var$14.$font.$data0.$ascent);
         cbggg_BitmapFontCache_draw(var$3.$cache, var$6);
-        cbggg_SpriteBatch_end($this.$batch28);
+        cbggg_SpriteBatch_end($this.$batch27);
         return;
     }
     var$3 = new jl_IndexOutOfBoundsException;
@@ -36081,7 +36081,7 @@ cgtf_RandomScreen_render = ($this, $delta) => {
 },
 cgtf_RandomScreen_resize = ($this, $width, $height) => {
     let var$3, var$4, var$5, var$6;
-    var$3 = $this.$viewport19;
+    var$3 = $this.$viewport16;
     var$4 = var$3;
     var$4.$screenX = 0;
     var$4.$screenY = 0;
@@ -36094,33 +36094,33 @@ cgtf_RandomScreen_resize = ($this, $width, $height) => {
     var$4.$worldWidth = var$5;
     var$4.$worldHeight = var$6;
     cbguv_Viewport_apply(var$4, 1);
-    cbguv_Viewport_apply($this.$viewport19, 1);
+    cbguv_Viewport_apply($this.$viewport16, 1);
 };
 function cgtf_ChipScreen() {
     let a = this; cbg_ScreenAdapter.call(a);
-    a.$random13 = null;
-    a.$batch5 = null;
+    a.$random11 = null;
+    a.$batch7 = null;
     a.$renderer31 = null;
     a.$amounts33 = null;
-    a.$iterations7 = Long_ZERO;
-    a.$font15 = null;
-    a.$viewport18 = null;
+    a.$iterations8 = Long_ZERO;
+    a.$font14 = null;
+    a.$viewport15 = null;
     a.$mainGame = null;
 }
 let cgtf_ChipScreen_show = $this => {
     let var$1, var$2, var$3, var$4, var$5, var$6, var$7, var$8, var$9, var$10, var$11;
-    $this.$font15 = $this.$mainGame.$font0;
+    $this.$font14 = $this.$mainGame.$font0;
     var$1 = new cgtr_Chip32Random;
     var$2 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$3 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$4 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$5 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
-    var$1.$stateA1 = var$2;
-    var$1.$stateB1 = var$3;
-    var$1.$stateC1 = var$4;
-    var$1.$stateD1 = var$5;
-    $this.$random13 = var$1;
-    $this.$batch5 = $this.$mainGame.$batch;
+    var$1.$stateA0 = var$2;
+    var$1.$stateB0 = var$3;
+    var$1.$stateC0 = var$4;
+    var$1.$stateD0 = var$5;
+    $this.$random11 = var$1;
+    $this.$batch7 = $this.$mainGame.$batch;
     var$1 = new cbguv_ScreenViewport;
     var$6 = new cbgg_OrthographicCamera;
     cbgg_Camera__init_(var$6);
@@ -36132,7 +36132,7 @@ let cgtf_ChipScreen_show = $this => {
     var$1.$tmp = new cbgm_Vector3;
     var$1.$unitsPerPixel = 1.0;
     var$1.$camera = var$6;
-    $this.$viewport18 = var$1;
+    $this.$viewport15 = var$1;
     var$1 = new cbggg_ImmediateModeRenderer20;
     var$8 = cbggg_ShaderProgram__init_(cbggg_ImmediateModeRenderer20_createVertexShader(0, 1, 0), cbggg_ImmediateModeRenderer20_createFragmentShader(0, 1, 0));
     if (var$8.$isCompiled) {
@@ -36153,7 +36153,7 @@ let cgtf_ChipScreen_show = $this => {
             var$9[var$2] = Long_ZERO;
             var$2 = var$4;
         }
-        $this.$iterations7 = Long_ZERO;
+        $this.$iterations8 = Long_ZERO;
         return;
     }
     var$1 = new cbgu_GdxRuntimeException;
@@ -36223,7 +36223,7 @@ cgtf_ChipScreen_render = ($this, $delta) => {
         return;
     cbg_Gdx_gl.$glClearColor(1.0, 1.0, 1.0, 1.0);
     cbg_Gdx_gl.$glClear(16384);
-    $camera = $this.$viewport18.$camera;
+    $camera = $this.$viewport15.$camera;
     cbgg_OrthographicCamera_update($camera, 1);
     var$8 = cbg_Gdx_input.$pressedKeys.data;
     if (var$8[29]) {
@@ -36241,7 +36241,7 @@ cgtf_ChipScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations7 = Long_ZERO;
+        $this.$iterations8 = Long_ZERO;
     }
     if (var$8[30]) {
         var$2 = $this.$amounts33.data;
@@ -36258,7 +36258,7 @@ cgtf_ChipScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations7 = Long_ZERO;
+        $this.$iterations8 = Long_ZERO;
     }
     if (var$8[31]) {
         var$2 = $this.$amounts33.data;
@@ -36275,12 +36275,12 @@ cgtf_ChipScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations7 = Long_ZERO;
+        $this.$iterations8 = Long_ZERO;
     }
-    $this.$iterations7 = Long_add($this.$iterations7, Long_fromInt(1));
+    $this.$iterations8 = Long_add($this.$iterations8, Long_fromInt(1));
     $i = 0;
     while ($i < 524288) {
-        $m = cgtr_Chip32Random_nextFloat($this.$random13) * 512.0 | 0;
+        $m = cgtr_Chip32Random_nextFloat($this.$random11) * 512.0 | 0;
         if ($m >= 0 && $m < 512) {
             var$2 = $this.$amounts33.data;
             var$2[$m] = Long_add(var$2[$m], Long_fromInt(1));
@@ -36300,7 +36300,7 @@ cgtf_ChipScreen_render = ($this, $delta) => {
         cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0, 0.0);
         var$3 = $this.$renderer31;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
-        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts33.data[$x]) / Long_toNumber($this.$iterations7), 0.0);
+        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts33.data[$x]) / Long_toNumber($this.$iterations8), 0.0);
         $x = $x + 1 | 0;
     }
     $j = 8;
@@ -36315,16 +36315,16 @@ cgtf_ChipScreen_render = ($this, $delta) => {
         $j = $j + 32 | 0;
     }
     cbggg_ImmediateModeRenderer20_flush($this.$renderer31);
-    var$3 = $this.$batch5;
+    var$3 = $this.$batch7;
     var$6 = $camera.$combined;
     if (var$3.$drawing)
         cbggg_SpriteBatch_flush(var$3);
     cbgm_Matrix4_set(var$3.$projectionMatrix, var$6.$val);
     if (var$3.$drawing)
         cbggg_SpriteBatch_setupMatrices(var$3);
-    cbggg_SpriteBatch_begin($this.$batch5);
-    var$3 = $this.$font15;
-    var$6 = $this.$batch5;
+    cbggg_SpriteBatch_begin($this.$batch7);
+    var$3 = $this.$font14;
+    var$6 = $this.$batch7;
     var$2 = $rt_createArray(jl_Object, 2);
     var$8 = var$2.data;
     var$8[0] = $rt_s(487);
@@ -36445,7 +36445,7 @@ cgtf_ChipScreen_render = ($this, $delta) => {
         cbggg_GlyphLayout_setText($camera, var$14.$font, var$13, 0, $m, var$14.$color, 384.0, 1, 1, var$15);
         cbggg_BitmapFontCache_addToCache(var$14, $camera, 64.0, 522.0 + var$14.$font.$data0.$ascent);
         cbggg_BitmapFontCache_draw(var$3.$cache, var$6);
-        cbggg_SpriteBatch_end($this.$batch5);
+        cbggg_SpriteBatch_end($this.$batch7);
         return;
     }
     var$3 = new jl_IndexOutOfBoundsException;
@@ -36454,7 +36454,7 @@ cgtf_ChipScreen_render = ($this, $delta) => {
 },
 cgtf_ChipScreen_resize = ($this, $width, $height) => {
     let var$3, var$4, var$5, var$6;
-    var$3 = $this.$viewport18;
+    var$3 = $this.$viewport15;
     var$4 = var$3;
     var$4.$screenX = 0;
     var$4.$screenY = 0;
@@ -36467,33 +36467,33 @@ cgtf_ChipScreen_resize = ($this, $width, $height) => {
     var$4.$worldWidth = var$5;
     var$4.$worldHeight = var$6;
     cbguv_Viewport_apply(var$4, 1);
-    cbguv_Viewport_apply($this.$viewport18, 1);
+    cbguv_Viewport_apply($this.$viewport15, 1);
 };
 function cgtf_ChopScreen() {
     let a = this; cbg_ScreenAdapter.call(a);
-    a.$random27 = null;
-    a.$batch22 = null;
-    a.$renderer20 = null;
+    a.$random24 = null;
+    a.$batch23 = null;
+    a.$renderer18 = null;
     a.$amounts0 = null;
     a.$iterations = Long_ZERO;
-    a.$font14 = null;
+    a.$font13 = null;
     a.$viewport = null;
-    a.$mainGame15 = null;
+    a.$mainGame14 = null;
 }
 let cgtf_ChopScreen_show = $this => {
     let var$1, var$2, var$3, var$4, var$5, var$6, var$7, var$8, var$9, var$10, var$11;
-    $this.$font14 = $this.$mainGame15.$font0;
+    $this.$font13 = $this.$mainGame14.$font0;
     var$1 = new cgtr_ChopRandom;
     var$2 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$3 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$4 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$5 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
-    var$1.$stateA2 = var$2;
-    var$1.$stateB2 = var$3;
-    var$1.$stateC3 = var$4;
-    var$1.$stateD3 = var$5;
-    $this.$random27 = var$1;
-    $this.$batch22 = $this.$mainGame15.$batch;
+    var$1.$stateA1 = var$2;
+    var$1.$stateB1 = var$3;
+    var$1.$stateC2 = var$4;
+    var$1.$stateD2 = var$5;
+    $this.$random24 = var$1;
+    $this.$batch23 = $this.$mainGame14.$batch;
     var$1 = new cbguv_ScreenViewport;
     var$6 = new cbgg_OrthographicCamera;
     cbgg_Camera__init_(var$6);
@@ -36511,7 +36511,7 @@ let cgtf_ChopScreen_show = $this => {
     if (var$8.$isCompiled) {
         cbggg_ImmediateModeRenderer20__init_(var$1, 1536, 0, 1, 0, var$8);
         var$1.$ownsShader = 1;
-        $this.$renderer20 = var$1;
+        $this.$renderer18 = var$1;
         var$9 = $this.$amounts0.data;
         var$2 = 0;
         var$3 = var$9.length;
@@ -36562,7 +36562,7 @@ cgtf_ChopScreen_render = ($this, $delta) => {
     let var$2, var$3, $i, $x, var$6, $camera, var$8, $j, $m, $color, var$12, var$13, var$14, var$15, $$je;
     var$2 = cbg_Gdx_input.$justPressedKeys.data;
     if (var$2[71]) {
-        var$3 = $this.$mainGame15;
+        var$3 = $this.$mainGame14;
         $i = var$3.$screenIndex;
         var$2 = var$3.$screens.data;
         $x = var$2.length;
@@ -36578,7 +36578,7 @@ cgtf_ChopScreen_render = ($this, $delta) => {
         return;
     }
     if (var$2[72]) {
-        var$3 = $this.$mainGame15;
+        var$3 = $this.$mainGame14;
         $i = var$3.$screenIndex + 1 | 0;
         var$2 = var$3.$screens.data;
         $i = $i % var$2.length | 0;
@@ -36653,51 +36653,51 @@ cgtf_ChopScreen_render = ($this, $delta) => {
     $this.$iterations = Long_add($this.$iterations, Long_fromInt(1));
     $i = 0;
     while ($i < 524288) {
-        $m = (cgtr_ChopRandom_nextInt($this.$random27) >>> 8 | 0) * 5.9604644775390625E-8 * 512.0 | 0;
+        $m = (cgtr_ChopRandom_nextInt($this.$random24) >>> 8 | 0) * 5.9604644775390625E-8 * 512.0 | 0;
         if ($m >= 0 && $m < 512) {
             var$2 = $this.$amounts0.data;
             var$2[$m] = Long_add(var$2[$m], Long_fromInt(1));
         }
         $i = $i + 1 | 0;
     }
-    var$3 = $this.$renderer20;
+    var$3 = $this.$renderer18;
     var$6 = $camera.$combined;
     cbgm_Matrix4_set(var$3.$projModelView, var$6.$val);
     var$3.$primitiveType = 1;
     $x = 0;
     while ($x < 512) {
         $color = $x & 63 ? (-1.5436749266448052E38) : (-1.5203096921934465E38);
-        var$3 = $this.$renderer20;
+        var$3 = $this.$renderer18;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
         $delta = $x;
         cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0, 0.0);
-        var$3 = $this.$renderer20;
+        var$3 = $this.$renderer18;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
         cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts0.data[$x]) / Long_toNumber($this.$iterations), 0.0);
         $x = $x + 1 | 0;
     }
     $j = 8;
     while ($j < 520) {
-        var$3 = $this.$renderer20;
+        var$3 = $this.$renderer18;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = (-6.221923240859403E37);
         $color = $j;
         cbggg_ImmediateModeRenderer20_vertex(var$3, 0.0, $color, 0.0);
-        var$3 = $this.$renderer20;
+        var$3 = $this.$renderer18;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = (-6.221923240859403E37);
         cbggg_ImmediateModeRenderer20_vertex(var$3, 10.0, $color, 0.0);
         $j = $j + 32 | 0;
     }
-    cbggg_ImmediateModeRenderer20_flush($this.$renderer20);
-    var$3 = $this.$batch22;
+    cbggg_ImmediateModeRenderer20_flush($this.$renderer18);
+    var$3 = $this.$batch23;
     var$6 = $camera.$combined;
     if (var$3.$drawing)
         cbggg_SpriteBatch_flush(var$3);
     cbgm_Matrix4_set(var$3.$projectionMatrix, var$6.$val);
     if (var$3.$drawing)
         cbggg_SpriteBatch_setupMatrices(var$3);
-    cbggg_SpriteBatch_begin($this.$batch22);
-    var$3 = $this.$font14;
-    var$6 = $this.$batch22;
+    cbggg_SpriteBatch_begin($this.$batch23);
+    var$3 = $this.$font13;
+    var$6 = $this.$batch23;
     var$2 = $rt_createArray(jl_Object, 2);
     var$8 = var$2.data;
     var$8[0] = $rt_s(488);
@@ -36818,7 +36818,7 @@ cgtf_ChopScreen_render = ($this, $delta) => {
         cbggg_GlyphLayout_setText($camera, var$14.$font, var$13, 0, $m, var$14.$color, 384.0, 1, 1, var$15);
         cbggg_BitmapFontCache_addToCache(var$14, $camera, 64.0, 522.0 + var$14.$font.$data0.$ascent);
         cbggg_BitmapFontCache_draw(var$3.$cache, var$6);
-        cbggg_SpriteBatch_end($this.$batch22);
+        cbggg_SpriteBatch_end($this.$batch23);
         return;
     }
     var$3 = new jl_IndexOutOfBoundsException;
@@ -36844,18 +36844,18 @@ cgtf_ChopScreen_resize = ($this, $width, $height) => {
 };
 function cgtf_Xoshiro128PPScreen() {
     let a = this; cbg_ScreenAdapter.call(a);
-    a.$random33 = null;
+    a.$random32 = null;
     a.$batch31 = null;
     a.$renderer2 = null;
-    a.$amounts9 = null;
+    a.$amounts10 = null;
     a.$iterations2 = Long_ZERO;
-    a.$font12 = null;
-    a.$viewport24 = null;
-    a.$mainGame4 = null;
+    a.$font10 = null;
+    a.$viewport22 = null;
+    a.$mainGame5 = null;
 }
 let cgtf_Xoshiro128PPScreen_show = $this => {
     let var$1, var$2, var$3, var$4, var$5, var$6, var$7, var$8, var$9, var$10, var$11;
-    $this.$font12 = $this.$mainGame4.$font0;
+    $this.$font10 = $this.$mainGame5.$font0;
     var$1 = new cgtr_Xoshiro128PlusPlusRandom;
     var$2 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$3 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
@@ -36863,12 +36863,12 @@ let cgtf_Xoshiro128PPScreen_show = $this => {
     var$5 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$1.$stateA3 = var$2;
     var$1.$stateB3 = var$3;
-    var$1.$stateC2 = var$4;
+    var$1.$stateC1 = var$4;
     if (!(var$2 | var$3 | var$4 | var$5))
         var$5 = 1;
-    var$1.$stateD2 = var$5;
-    $this.$random33 = var$1;
-    $this.$batch31 = $this.$mainGame4.$batch;
+    var$1.$stateD1 = var$5;
+    $this.$random32 = var$1;
+    $this.$batch31 = $this.$mainGame5.$batch;
     var$1 = new cbguv_ScreenViewport;
     var$6 = new cbgg_OrthographicCamera;
     cbgg_Camera__init_(var$6);
@@ -36880,14 +36880,14 @@ let cgtf_Xoshiro128PPScreen_show = $this => {
     var$1.$tmp = new cbgm_Vector3;
     var$1.$unitsPerPixel = 1.0;
     var$1.$camera = var$6;
-    $this.$viewport24 = var$1;
+    $this.$viewport22 = var$1;
     var$1 = new cbggg_ImmediateModeRenderer20;
     var$8 = cbggg_ShaderProgram__init_(cbggg_ImmediateModeRenderer20_createVertexShader(0, 1, 0), cbggg_ImmediateModeRenderer20_createFragmentShader(0, 1, 0));
     if (var$8.$isCompiled) {
         cbggg_ImmediateModeRenderer20__init_(var$1, 1536, 0, 1, 0, var$8);
         var$1.$ownsShader = 1;
         $this.$renderer2 = var$1;
-        var$9 = $this.$amounts9.data;
+        var$9 = $this.$amounts10.data;
         var$2 = 0;
         var$3 = var$9.length;
         if (var$2 > var$3) {
@@ -36937,7 +36937,7 @@ cgtf_Xoshiro128PPScreen_render = ($this, $delta) => {
     let var$2, var$3, $i, $x, var$6, $camera, var$8, $j, $m, $color, var$12, var$13, var$14, var$15, $$je;
     var$2 = cbg_Gdx_input.$justPressedKeys.data;
     if (var$2[71]) {
-        var$3 = $this.$mainGame4;
+        var$3 = $this.$mainGame5;
         $i = var$3.$screenIndex;
         var$2 = var$3.$screens.data;
         $x = var$2.length;
@@ -36953,7 +36953,7 @@ cgtf_Xoshiro128PPScreen_render = ($this, $delta) => {
         return;
     }
     if (var$2[72]) {
-        var$3 = $this.$mainGame4;
+        var$3 = $this.$mainGame5;
         $i = var$3.$screenIndex + 1 | 0;
         var$2 = var$3.$screens.data;
         $i = $i % var$2.length | 0;
@@ -36971,11 +36971,11 @@ cgtf_Xoshiro128PPScreen_render = ($this, $delta) => {
         return;
     cbg_Gdx_gl.$glClearColor(1.0, 1.0, 1.0, 1.0);
     cbg_Gdx_gl.$glClear(16384);
-    $camera = $this.$viewport24.$camera;
+    $camera = $this.$viewport22.$camera;
     cbgg_OrthographicCamera_update($camera, 1);
     var$8 = cbg_Gdx_input.$pressedKeys.data;
     if (var$8[29]) {
-        var$2 = $this.$amounts9.data;
+        var$2 = $this.$amounts10.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -36992,7 +36992,7 @@ cgtf_Xoshiro128PPScreen_render = ($this, $delta) => {
         $this.$iterations2 = Long_ZERO;
     }
     if (var$8[30]) {
-        var$2 = $this.$amounts9.data;
+        var$2 = $this.$amounts10.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -37009,7 +37009,7 @@ cgtf_Xoshiro128PPScreen_render = ($this, $delta) => {
         $this.$iterations2 = Long_ZERO;
     }
     if (var$8[31]) {
-        var$2 = $this.$amounts9.data;
+        var$2 = $this.$amounts10.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -37028,9 +37028,9 @@ cgtf_Xoshiro128PPScreen_render = ($this, $delta) => {
     $this.$iterations2 = Long_add($this.$iterations2, Long_fromInt(1));
     $i = 0;
     while ($i < 524288) {
-        $m = (cgtr_Xoshiro128PlusPlusRandom_nextInt($this.$random33) >>> 8 | 0) * 5.9604644775390625E-8 * 512.0 | 0;
+        $m = (cgtr_Xoshiro128PlusPlusRandom_nextInt($this.$random32) >>> 8 | 0) * 5.9604644775390625E-8 * 512.0 | 0;
         if ($m >= 0 && $m < 512) {
-            var$2 = $this.$amounts9.data;
+            var$2 = $this.$amounts10.data;
             var$2[$m] = Long_add(var$2[$m], Long_fromInt(1));
         }
         $i = $i + 1 | 0;
@@ -37048,7 +37048,7 @@ cgtf_Xoshiro128PPScreen_render = ($this, $delta) => {
         cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0, 0.0);
         var$3 = $this.$renderer2;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
-        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts9.data[$x]) / Long_toNumber($this.$iterations2), 0.0);
+        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts10.data[$x]) / Long_toNumber($this.$iterations2), 0.0);
         $x = $x + 1 | 0;
     }
     $j = 8;
@@ -37071,7 +37071,7 @@ cgtf_Xoshiro128PPScreen_render = ($this, $delta) => {
     if (var$3.$drawing)
         cbggg_SpriteBatch_setupMatrices(var$3);
     cbggg_SpriteBatch_begin($this.$batch31);
-    var$3 = $this.$font12;
+    var$3 = $this.$font10;
     var$6 = $this.$batch31;
     var$2 = $rt_createArray(jl_Object, 2);
     var$8 = var$2.data;
@@ -37202,7 +37202,7 @@ cgtf_Xoshiro128PPScreen_render = ($this, $delta) => {
 },
 cgtf_Xoshiro128PPScreen_resize = ($this, $width, $height) => {
     let var$3, var$4, var$5, var$6;
-    var$3 = $this.$viewport24;
+    var$3 = $this.$viewport22;
     var$4 = var$3;
     var$4.$screenX = 0;
     var$4.$screenY = 0;
@@ -37215,58 +37215,54 @@ cgtf_Xoshiro128PPScreen_resize = ($this, $width, $height) => {
     var$4.$worldWidth = var$5;
     var$4.$worldHeight = var$6;
     cbguv_Viewport_apply(var$4, 1);
-    cbguv_Viewport_apply($this.$viewport24, 1);
+    cbguv_Viewport_apply($this.$viewport22, 1);
 };
-function cgtf_RarxScreen() {
+function cgtf_ChockScreen() {
     let a = this; cbg_ScreenAdapter.call(a);
-    a.$random15 = null;
-    a.$batch24 = null;
-    a.$renderer5 = null;
-    a.$amounts23 = null;
-    a.$iterations21 = Long_ZERO;
-    a.$font10 = null;
-    a.$viewport12 = null;
-    a.$mainGame7 = null;
+    a.$random26 = null;
+    a.$batch28 = null;
+    a.$renderer29 = null;
+    a.$amounts11 = null;
+    a.$iterations0 = Long_ZERO;
+    a.$font21 = null;
+    a.$viewport28 = null;
+    a.$mainGame33 = null;
 }
-let cgtf_RarxScreen_show = $this => {
-    let var$1, var$2, var$3, var$4, var$5, var$6, var$7, var$8, var$9, var$10, var$11, var$12;
-    $this.$font10 = $this.$mainGame7.$font0;
-    var$1 = new cgtr_Xoshiro160RoadroxoRandom;
+let cgtf_ChockScreen_show = $this => {
+    let var$1, var$2, var$3, var$4, var$5, var$6, var$7, var$8, var$9, var$10, var$11;
+    $this.$font21 = $this.$mainGame33.$font0;
+    var$1 = new cgtr_Chock32Random;
     var$2 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$3 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$4 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$5 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
-    var$6 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
-    var$1.$stateA0 = var$2;
-    var$1.$stateB0 = var$3;
-    var$1.$stateC = var$4;
-    if (!(var$2 | var$3 | var$4 | var$5))
-        var$5 = 1;
-    var$1.$stateD = var$5;
-    var$1.$stateE0 = var$6;
-    $this.$random15 = var$1;
-    $this.$batch24 = $this.$mainGame7.$batch;
+    var$1.$stateA2 = var$2;
+    var$1.$stateB2 = var$3;
+    var$1.$stateC3 = var$4;
+    var$1.$stateD3 = var$5;
+    $this.$random26 = var$1;
+    $this.$batch28 = $this.$mainGame33.$batch;
     var$1 = new cbguv_ScreenViewport;
-    var$7 = new cbgg_OrthographicCamera;
-    cbgg_Camera__init_(var$7);
-    var$7.$zoom = 1.0;
-    var$8 = new cbgm_Vector3;
+    var$6 = new cbgg_OrthographicCamera;
+    cbgg_Camera__init_(var$6);
+    var$6.$zoom = 1.0;
+    var$7 = new cbgm_Vector3;
     cbgm_Vector3_$callClinit();
-    var$7.$tmp0 = var$8;
-    var$7.$near = 0.0;
+    var$6.$tmp0 = var$7;
+    var$6.$near = 0.0;
     var$1.$tmp = new cbgm_Vector3;
     var$1.$unitsPerPixel = 1.0;
-    var$1.$camera = var$7;
-    $this.$viewport12 = var$1;
+    var$1.$camera = var$6;
+    $this.$viewport28 = var$1;
     var$1 = new cbggg_ImmediateModeRenderer20;
-    var$9 = cbggg_ShaderProgram__init_(cbggg_ImmediateModeRenderer20_createVertexShader(0, 1, 0), cbggg_ImmediateModeRenderer20_createFragmentShader(0, 1, 0));
-    if (var$9.$isCompiled) {
-        cbggg_ImmediateModeRenderer20__init_(var$1, 1536, 0, 1, 0, var$9);
+    var$8 = cbggg_ShaderProgram__init_(cbggg_ImmediateModeRenderer20_createVertexShader(0, 1, 0), cbggg_ImmediateModeRenderer20_createFragmentShader(0, 1, 0));
+    if (var$8.$isCompiled) {
+        cbggg_ImmediateModeRenderer20__init_(var$1, 1536, 0, 1, 0, var$8);
         var$1.$ownsShader = 1;
-        $this.$renderer5 = var$1;
-        var$10 = $this.$amounts23.data;
+        $this.$renderer29 = var$1;
+        var$9 = $this.$amounts11.data;
         var$2 = 0;
-        var$3 = var$10.length;
+        var$3 = var$9.length;
         if (var$2 > var$3) {
             var$1 = new jl_IllegalArgumentException;
             var$1.$suppressionEnabled = 1;
@@ -37275,46 +37271,46 @@ let cgtf_RarxScreen_show = $this => {
         }
         while (var$2 < var$3) {
             var$4 = var$2 + 1 | 0;
-            var$10[var$2] = Long_ZERO;
+            var$9[var$2] = Long_ZERO;
             var$2 = var$4;
         }
-        $this.$iterations21 = Long_ZERO;
+        $this.$iterations0 = Long_ZERO;
         return;
     }
     var$1 = new cbgu_GdxRuntimeException;
-    var$7 = new jl_StringBuilder;
-    var$7.$buffer = $rt_createCharArray(16);
-    var$2 = var$7.$length0;
-    var$11 = var$7;
-    jl_AbstractStringBuilder_insert(var$11, var$2, $rt_s(479));
-    if (!var$9.$isCompiled)
-        var$8 = var$9.$log0;
+    var$6 = new jl_StringBuilder;
+    var$6.$buffer = $rt_createCharArray(16);
+    var$2 = var$6.$length0;
+    var$10 = var$6;
+    jl_AbstractStringBuilder_insert(var$10, var$2, $rt_s(479));
+    if (!var$8.$isCompiled)
+        var$7 = var$8.$log0;
     else {
-        var$8 = cbg_Gdx_gl20.$glGetProgramInfoLog(var$9.$program);
-        var$9.$log0 = var$8;
+        var$7 = cbg_Gdx_gl20.$glGetProgramInfoLog(var$8.$program);
+        var$8.$log0 = var$7;
     }
-    jl_AbstractStringBuilder_insert(var$11, var$7.$length0, var$8);
-    var$8 = new jl_String;
-    var$10 = var$7.$buffer;
-    var$12 = var$10.data;
-    var$3 = var$7.$length0;
-    var$4 = var$12.length;
+    jl_AbstractStringBuilder_insert(var$10, var$6.$length0, var$7);
+    var$7 = new jl_String;
+    var$9 = var$6.$buffer;
+    var$11 = var$9.data;
+    var$3 = var$6.$length0;
+    var$4 = var$11.length;
     if (var$3 >= 0 && var$3 <= (var$4 - 0 | 0)) {
-        var$8.$nativeString = $rt_charArrayToString(var$10.data, 0, var$3);
+        var$7.$nativeString = $rt_charArrayToString(var$9.data, 0, var$3);
         var$1.$suppressionEnabled = 1;
         var$1.$writableStackTrace = 1;
-        var$1.$message = var$8;
+        var$1.$message = var$7;
         $rt_throw(var$1);
     }
     var$1 = new jl_IndexOutOfBoundsException;
     jl_Exception__init_0(var$1);
     $rt_throw(var$1);
 },
-cgtf_RarxScreen_render = ($this, $delta) => {
+cgtf_ChockScreen_render = ($this, $delta) => {
     let var$2, var$3, $i, $x, var$6, $camera, var$8, $j, $m, $color, var$12, var$13, var$14, var$15, $$je;
     var$2 = cbg_Gdx_input.$justPressedKeys.data;
     if (var$2[71]) {
-        var$3 = $this.$mainGame7;
+        var$3 = $this.$mainGame33;
         $i = var$3.$screenIndex;
         var$2 = var$3.$screens.data;
         $x = var$2.length;
@@ -37330,7 +37326,7 @@ cgtf_RarxScreen_render = ($this, $delta) => {
         return;
     }
     if (var$2[72]) {
-        var$3 = $this.$mainGame7;
+        var$3 = $this.$mainGame33;
         $i = var$3.$screenIndex + 1 | 0;
         var$2 = var$3.$screens.data;
         $i = $i % var$2.length | 0;
@@ -37348,11 +37344,11 @@ cgtf_RarxScreen_render = ($this, $delta) => {
         return;
     cbg_Gdx_gl.$glClearColor(1.0, 1.0, 1.0, 1.0);
     cbg_Gdx_gl.$glClear(16384);
-    $camera = $this.$viewport12.$camera;
+    $camera = $this.$viewport28.$camera;
     cbgg_OrthographicCamera_update($camera, 1);
     var$8 = cbg_Gdx_input.$pressedKeys.data;
     if (var$8[29]) {
-        var$2 = $this.$amounts23.data;
+        var$2 = $this.$amounts11.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -37366,10 +37362,10 @@ cgtf_RarxScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations21 = Long_ZERO;
+        $this.$iterations0 = Long_ZERO;
     }
     if (var$8[30]) {
-        var$2 = $this.$amounts23.data;
+        var$2 = $this.$amounts11.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -37383,10 +37379,10 @@ cgtf_RarxScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations21 = Long_ZERO;
+        $this.$iterations0 = Long_ZERO;
     }
     if (var$8[31]) {
-        var$2 = $this.$amounts23.data;
+        var$2 = $this.$amounts11.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -37400,56 +37396,56 @@ cgtf_RarxScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations21 = Long_ZERO;
+        $this.$iterations0 = Long_ZERO;
     }
-    $this.$iterations21 = Long_add($this.$iterations21, Long_fromInt(1));
+    $this.$iterations0 = Long_add($this.$iterations0, Long_fromInt(1));
     $i = 0;
     while ($i < 524288) {
-        $m = cgtr_Xoshiro160RoadroxoRandom_nextFloat($this.$random15) * 512.0 | 0;
+        $m = (cgtr_Chock32Random_nextInt($this.$random26) >>> 8 | 0) * 5.9604644775390625E-8 * 512.0 | 0;
         if ($m >= 0 && $m < 512) {
-            var$2 = $this.$amounts23.data;
+            var$2 = $this.$amounts11.data;
             var$2[$m] = Long_add(var$2[$m], Long_fromInt(1));
         }
         $i = $i + 1 | 0;
     }
-    var$3 = $this.$renderer5;
+    var$3 = $this.$renderer29;
     var$6 = $camera.$combined;
     cbgm_Matrix4_set(var$3.$projModelView, var$6.$val);
     var$3.$primitiveType = 1;
     $x = 0;
     while ($x < 512) {
         $color = $x & 63 ? (-1.5436749266448052E38) : (-1.5203096921934465E38);
-        var$3 = $this.$renderer5;
+        var$3 = $this.$renderer29;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
         $delta = $x;
         cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0, 0.0);
-        var$3 = $this.$renderer5;
+        var$3 = $this.$renderer29;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
-        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts23.data[$x]) / Long_toNumber($this.$iterations21), 0.0);
+        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts11.data[$x]) / Long_toNumber($this.$iterations0), 0.0);
         $x = $x + 1 | 0;
     }
     $j = 8;
     while ($j < 520) {
-        var$3 = $this.$renderer5;
+        var$3 = $this.$renderer29;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = (-6.221923240859403E37);
         $color = $j;
         cbggg_ImmediateModeRenderer20_vertex(var$3, 0.0, $color, 0.0);
-        var$3 = $this.$renderer5;
+        var$3 = $this.$renderer29;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = (-6.221923240859403E37);
         cbggg_ImmediateModeRenderer20_vertex(var$3, 10.0, $color, 0.0);
         $j = $j + 32 | 0;
     }
-    cbggg_ImmediateModeRenderer20_flush($this.$renderer5);
-    var$3 = $this.$batch24;
+    cbggg_ImmediateModeRenderer20_flush($this.$renderer29);
+    var$3 = $this.$batch28;
     var$6 = $camera.$combined;
     if (var$3.$drawing)
         cbggg_SpriteBatch_flush(var$3);
     cbgm_Matrix4_set(var$3.$projectionMatrix, var$6.$val);
     if (var$3.$drawing)
         cbggg_SpriteBatch_setupMatrices(var$3);
-    cbggg_SpriteBatch_begin($this.$batch24);
-    var$3 = $this.$font10;
-    var$6 = $this.$batch24;
+    cbggg_SpriteBatch_begin($this.$batch28);
+    var$3 = $this.$font21;
+    var$6 = $this.$batch28;
     var$2 = $rt_createArray(jl_Object, 2);
     var$8 = var$2.data;
     var$8[0] = $rt_s(490);
@@ -37570,16 +37566,16 @@ cgtf_RarxScreen_render = ($this, $delta) => {
         cbggg_GlyphLayout_setText($camera, var$14.$font, var$13, 0, $m, var$14.$color, 384.0, 1, 1, var$15);
         cbggg_BitmapFontCache_addToCache(var$14, $camera, 64.0, 522.0 + var$14.$font.$data0.$ascent);
         cbggg_BitmapFontCache_draw(var$3.$cache, var$6);
-        cbggg_SpriteBatch_end($this.$batch24);
+        cbggg_SpriteBatch_end($this.$batch28);
         return;
     }
     var$3 = new jl_IndexOutOfBoundsException;
     jl_Throwable__init_(var$3);
     $rt_throw(var$3);
 },
-cgtf_RarxScreen_resize = ($this, $width, $height) => {
+cgtf_ChockScreen_resize = ($this, $width, $height) => {
     let var$3, var$4, var$5, var$6;
-    var$3 = $this.$viewport12;
+    var$3 = $this.$viewport28;
     var$4 = var$3;
     var$4.$screenX = 0;
     var$4.$screenY = 0;
@@ -37592,30 +37588,30 @@ cgtf_RarxScreen_resize = ($this, $width, $height) => {
     var$4.$worldWidth = var$5;
     var$4.$worldHeight = var$6;
     cbguv_Viewport_apply(var$4, 1);
-    cbguv_Viewport_apply($this.$viewport12, 1);
+    cbguv_Viewport_apply($this.$viewport28, 1);
 };
 function cgtf_AceScreen() {
     let a = this; cbg_ScreenAdapter.call(a);
-    a.$random2 = null;
-    a.$batch23 = null;
+    a.$random1 = null;
+    a.$batch24 = null;
     a.$renderer32 = null;
     a.$amounts = null;
-    a.$iterations33 = Long_ZERO;
-    a.$font26 = null;
-    a.$viewport4 = null;
-    a.$mainGame16 = null;
+    a.$iterations31 = Long_ZERO;
+    a.$font27 = null;
+    a.$viewport3 = null;
+    a.$mainGame15 = null;
 }
 let cgtf_AceScreen_show = $this => {
     let var$1, var$2, var$3, var$4, var$5, var$6, var$7, var$8, var$9, var$10;
-    $this.$font26 = $this.$mainGame16.$font0;
+    $this.$font27 = $this.$mainGame15.$font0;
     var$1 = new cgtr_AceRandom;
     var$1.$stateA = Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19));
     var$1.$stateB = Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19));
-    var$1.$stateC0 = Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19));
-    var$1.$stateD0 = Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19));
+    var$1.$stateC = Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19));
+    var$1.$stateD = Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19));
     var$1.$stateE = Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19));
-    $this.$random2 = var$1;
-    $this.$batch23 = $this.$mainGame16.$batch;
+    $this.$random1 = var$1;
+    $this.$batch24 = $this.$mainGame15.$batch;
     var$1 = new cbguv_ScreenViewport;
     var$2 = new cbgg_OrthographicCamera;
     cbgg_Camera__init_(var$2);
@@ -37627,7 +37623,7 @@ let cgtf_AceScreen_show = $this => {
     var$1.$tmp = new cbgm_Vector3;
     var$1.$unitsPerPixel = 1.0;
     var$1.$camera = var$2;
-    $this.$viewport4 = var$1;
+    $this.$viewport3 = var$1;
     var$1 = new cbggg_ImmediateModeRenderer20;
     var$4 = cbggg_ShaderProgram__init_(cbggg_ImmediateModeRenderer20_createVertexShader(0, 1, 0), cbggg_ImmediateModeRenderer20_createFragmentShader(0, 1, 0));
     if (var$4.$isCompiled) {
@@ -37648,7 +37644,7 @@ let cgtf_AceScreen_show = $this => {
             var$5[var$6] = Long_ZERO;
             var$6 = var$8;
         }
-        $this.$iterations33 = Long_ZERO;
+        $this.$iterations31 = Long_ZERO;
         return;
     }
     var$1 = new cbgu_GdxRuntimeException;
@@ -37684,7 +37680,7 @@ cgtf_AceScreen_render = ($this, $delta) => {
     let var$2, var$3, $i, $x, var$6, $camera, var$8, $j, var$10, var$11, var$12, var$13, var$14, var$15, $m, $color, var$18, var$19, var$20, var$21, $$je;
     var$2 = cbg_Gdx_input.$justPressedKeys.data;
     if (var$2[71]) {
-        var$3 = $this.$mainGame16;
+        var$3 = $this.$mainGame15;
         $i = var$3.$screenIndex;
         var$2 = var$3.$screens.data;
         $x = var$2.length;
@@ -37700,7 +37696,7 @@ cgtf_AceScreen_render = ($this, $delta) => {
         return;
     }
     if (var$2[72]) {
-        var$3 = $this.$mainGame16;
+        var$3 = $this.$mainGame15;
         $i = var$3.$screenIndex + 1 | 0;
         var$2 = var$3.$screens.data;
         $i = $i % var$2.length | 0;
@@ -37718,7 +37714,7 @@ cgtf_AceScreen_render = ($this, $delta) => {
         return;
     cbg_Gdx_gl.$glClearColor(1.0, 1.0, 1.0, 1.0);
     cbg_Gdx_gl.$glClear(16384);
-    $camera = $this.$viewport4.$camera;
+    $camera = $this.$viewport3.$camera;
     cbgg_OrthographicCamera_update($camera, 1);
     var$8 = cbg_Gdx_input.$pressedKeys.data;
     if (var$8[29]) {
@@ -37736,7 +37732,7 @@ cgtf_AceScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations33 = Long_ZERO;
+        $this.$iterations31 = Long_ZERO;
     }
     if (var$8[30]) {
         var$2 = $this.$amounts.data;
@@ -37753,7 +37749,7 @@ cgtf_AceScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations33 = Long_ZERO;
+        $this.$iterations31 = Long_ZERO;
     }
     if (var$8[31]) {
         var$2 = $this.$amounts.data;
@@ -37770,21 +37766,21 @@ cgtf_AceScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations33 = Long_ZERO;
+        $this.$iterations31 = Long_ZERO;
     }
-    $this.$iterations33 = Long_add($this.$iterations33, Long_fromInt(1));
+    $this.$iterations31 = Long_add($this.$iterations31, Long_fromInt(1));
     $i = 0;
     while ($i < 524288) {
-        var$3 = $this.$random2;
+        var$3 = $this.$random1;
         var$10 = var$3.$stateA;
         var$11 = var$3.$stateB;
-        var$12 = var$3.$stateC0;
-        var$13 = var$3.$stateD0;
+        var$12 = var$3.$stateC;
+        var$13 = var$3.$stateD;
         var$14 = var$3.$stateE;
         var$3.$stateA = Long_add(var$10, Long_create(2135587861, 2654435769));
         var$3.$stateB = Long_xor(var$10, var$14);
-        var$3.$stateC0 = Long_add(var$11, var$13);
-        var$3.$stateD0 = Long_or(Long_shl(var$12, 52), Long_shru(var$12, 12));
+        var$3.$stateC = Long_add(var$11, var$13);
+        var$3.$stateD = Long_or(Long_shl(var$12, 52), Long_shru(var$12, 12));
         var$15 = Long_sub(var$11, var$12);
         var$3.$stateE = var$15;
         $m = Long_toNumber(Long_shru(var$15, 40)) * 5.9604644775390625E-8 * 512.0 | 0;
@@ -37807,7 +37803,7 @@ cgtf_AceScreen_render = ($this, $delta) => {
         cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0, 0.0);
         var$3 = $this.$renderer32;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
-        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts.data[$x]) / Long_toNumber($this.$iterations33), 0.0);
+        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts.data[$x]) / Long_toNumber($this.$iterations31), 0.0);
         $x = $x + 1 | 0;
     }
     $j = 8;
@@ -37822,16 +37818,16 @@ cgtf_AceScreen_render = ($this, $delta) => {
         $j = $j + 32 | 0;
     }
     cbggg_ImmediateModeRenderer20_flush($this.$renderer32);
-    var$3 = $this.$batch23;
+    var$3 = $this.$batch24;
     var$6 = $camera.$combined;
     if (var$3.$drawing)
         cbggg_SpriteBatch_flush(var$3);
     cbgm_Matrix4_set(var$3.$projectionMatrix, var$6.$val);
     if (var$3.$drawing)
         cbggg_SpriteBatch_setupMatrices(var$3);
-    cbggg_SpriteBatch_begin($this.$batch23);
-    var$3 = $this.$font26;
-    var$6 = $this.$batch23;
+    cbggg_SpriteBatch_begin($this.$batch24);
+    var$3 = $this.$font27;
+    var$6 = $this.$batch24;
     var$2 = $rt_createArray(jl_Object, 2);
     var$8 = var$2.data;
     var$8[0] = $rt_s(491);
@@ -37952,7 +37948,7 @@ cgtf_AceScreen_render = ($this, $delta) => {
         cbggg_GlyphLayout_setText($camera, var$20.$font, var$19, 0, $m, var$20.$color, 384.0, 1, 1, var$21);
         cbggg_BitmapFontCache_addToCache(var$20, $camera, 64.0, 522.0 + var$20.$font.$data0.$ascent);
         cbggg_BitmapFontCache_draw(var$3.$cache, var$6);
-        cbggg_SpriteBatch_end($this.$batch23);
+        cbggg_SpriteBatch_end($this.$batch24);
         return;
     }
     var$3 = new jl_IndexOutOfBoundsException;
@@ -37961,7 +37957,7 @@ cgtf_AceScreen_render = ($this, $delta) => {
 },
 cgtf_AceScreen_resize = ($this, $width, $height) => {
     let var$3, var$4, var$5, var$6;
-    var$3 = $this.$viewport4;
+    var$3 = $this.$viewport3;
     var$4 = var$3;
     var$4.$screenX = 0;
     var$4.$screenY = 0;
@@ -37974,17 +37970,17 @@ cgtf_AceScreen_resize = ($this, $width, $height) => {
     var$4.$worldWidth = var$5;
     var$4.$worldHeight = var$6;
     cbguv_Viewport_apply(var$4, 1);
-    cbguv_Viewport_apply($this.$viewport4, 1);
+    cbguv_Viewport_apply($this.$viewport3, 1);
 };
 function cgte_RandomScreen() {
     let a = this; cbg_ScreenAdapter.call(a);
-    a.$random6 = null;
-    a.$batch9 = null;
-    a.$renderer7 = null;
-    a.$amounts27 = null;
-    a.$iterations34 = Long_ZERO;
+    a.$random4 = null;
+    a.$batch10 = null;
+    a.$renderer8 = null;
+    a.$amounts26 = null;
+    a.$iterations33 = Long_ZERO;
     a.$font5 = null;
-    a.$viewport11 = null;
+    a.$viewport10 = null;
     a.$mainGame9 = null;
 }
 let cgte_RandomScreen_show = $this => {
@@ -37997,8 +37993,8 @@ let cgte_RandomScreen_show = $this => {
     cgt_Random_setSeed(var$3, Long_fromInt(1234567890));
     var$1.$base = var$3;
     cgt_Random_setSeed(var$3, var$2);
-    $this.$random6 = var$1;
-    $this.$batch9 = $this.$mainGame9.$batch;
+    $this.$random4 = var$1;
+    $this.$batch10 = $this.$mainGame9.$batch;
     var$1 = new cbguv_ScreenViewport;
     var$3 = new cbgg_OrthographicCamera;
     cbgg_Camera__init_(var$3);
@@ -38010,14 +38006,14 @@ let cgte_RandomScreen_show = $this => {
     var$1.$tmp = new cbgm_Vector3;
     var$1.$unitsPerPixel = 1.0;
     var$1.$camera = var$3;
-    $this.$viewport11 = var$1;
+    $this.$viewport10 = var$1;
     var$1 = new cbggg_ImmediateModeRenderer20;
     var$5 = cbggg_ShaderProgram__init_(cbggg_ImmediateModeRenderer20_createVertexShader(0, 1, 0), cbggg_ImmediateModeRenderer20_createFragmentShader(0, 1, 0));
     if (var$5.$isCompiled) {
         cbggg_ImmediateModeRenderer20__init_(var$1, 1536, 0, 1, 0, var$5);
         var$1.$ownsShader = 1;
-        $this.$renderer7 = var$1;
-        var$6 = $this.$amounts27.data;
+        $this.$renderer8 = var$1;
+        var$6 = $this.$amounts26.data;
         var$7 = 0;
         var$8 = var$6.length;
         if (var$7 > var$8) {
@@ -38031,7 +38027,7 @@ let cgte_RandomScreen_show = $this => {
             var$6[var$7] = Long_ZERO;
             var$7 = var$9;
         }
-        $this.$iterations34 = Long_ZERO;
+        $this.$iterations33 = Long_ZERO;
         return;
     }
     var$1 = new cbgu_GdxRuntimeException;
@@ -38101,11 +38097,11 @@ cgte_RandomScreen_render = ($this, $delta) => {
         return;
     cbg_Gdx_gl.$glClearColor(1.0, 1.0, 1.0, 1.0);
     cbg_Gdx_gl.$glClear(16384);
-    $camera = $this.$viewport11.$camera;
+    $camera = $this.$viewport10.$camera;
     cbgg_OrthographicCamera_update($camera, 1);
     var$8 = cbg_Gdx_input.$pressedKeys.data;
     if (var$8[29]) {
-        var$2 = $this.$amounts27.data;
+        var$2 = $this.$amounts26.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -38119,10 +38115,10 @@ cgte_RandomScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations34 = Long_ZERO;
+        $this.$iterations33 = Long_ZERO;
     }
     if (var$8[30]) {
-        var$2 = $this.$amounts27.data;
+        var$2 = $this.$amounts26.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -38136,10 +38132,10 @@ cgte_RandomScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations34 = Long_ZERO;
+        $this.$iterations33 = Long_ZERO;
     }
     if (var$8[31]) {
-        var$2 = $this.$amounts27.data;
+        var$2 = $this.$amounts26.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -38153,48 +38149,1172 @@ cgte_RandomScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations34 = Long_ZERO;
+        $this.$iterations33 = Long_ZERO;
     }
-    $this.$iterations34 = Long_add($this.$iterations34, Long_fromInt(1));
+    $this.$iterations33 = Long_add($this.$iterations33, Long_fromInt(1));
     $i = 0;
     while ($i < 524288) {
-        var$3 = $this.$random6.$base;
+        var$3 = $this.$random4.$base;
         var$10 = Long_add(Long_shl(Long_fromNumber(cgt_Random_nextInternal(var$3, 32)), 32), Long_fromNumber(cgt_Random_nextInternal(var$3, 32)));
         $m = $rt_intBitsToFloat((126 - jl_Long_numberOfLeadingZeros(var$10) | 0) << 23 | Long_lo(var$10) & 8388607) * 512.0 | 0;
         if ($m >= 0 && $m < 512) {
-            var$2 = $this.$amounts27.data;
+            var$2 = $this.$amounts26.data;
             var$2[$m] = Long_add(var$2[$m], Long_fromInt(1));
         }
         $i = $i + 1 | 0;
     }
-    var$3 = $this.$renderer7;
+    var$3 = $this.$renderer8;
     var$6 = $camera.$combined;
     cbgm_Matrix4_set(var$3.$projModelView, var$6.$val);
     var$3.$primitiveType = 1;
     $x = 0;
     while ($x < 512) {
         $color = $x & 63 ? (-1.5436749266448052E38) : (-1.5203096921934465E38);
-        var$3 = $this.$renderer7;
+        var$3 = $this.$renderer8;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
         $delta = $x;
         cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0, 0.0);
-        var$3 = $this.$renderer7;
+        var$3 = $this.$renderer8;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
-        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts27.data[$x]) / Long_toNumber($this.$iterations34), 0.0);
+        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts26.data[$x]) / Long_toNumber($this.$iterations33), 0.0);
         $x = $x + 1 | 0;
     }
     $j = 8;
     while ($j < 520) {
-        var$3 = $this.$renderer7;
+        var$3 = $this.$renderer8;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = (-6.221923240859403E37);
         $color = $j;
         cbggg_ImmediateModeRenderer20_vertex(var$3, 0.0, $color, 0.0);
-        var$3 = $this.$renderer7;
+        var$3 = $this.$renderer8;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = (-6.221923240859403E37);
         cbggg_ImmediateModeRenderer20_vertex(var$3, 10.0, $color, 0.0);
         $j = $j + 32 | 0;
     }
-    cbggg_ImmediateModeRenderer20_flush($this.$renderer7);
+    cbggg_ImmediateModeRenderer20_flush($this.$renderer8);
+    var$3 = $this.$batch10;
+    var$6 = $camera.$combined;
+    if (var$3.$drawing)
+        cbggg_SpriteBatch_flush(var$3);
+    cbgm_Matrix4_set(var$3.$projectionMatrix, var$6.$val);
+    if (var$3.$drawing)
+        cbggg_SpriteBatch_setupMatrices(var$3);
+    cbggg_SpriteBatch_begin($this.$batch10);
+    var$3 = $this.$font5;
+    var$6 = $this.$batch10;
+    var$2 = $rt_createArray(jl_Object, 2);
+    var$8 = var$2.data;
+    var$8[0] = $rt_s(485);
+    $j = cbg_Gdx_graphics.$fps | 0;
+    if ($j >= (-128) && $j <= 127) {
+        jl_Integer_ensureIntegerCache();
+        var$13 = jl_Integer_integerCache.data[$j + 128 | 0];
+    } else {
+        var$13 = new jl_Integer;
+        var$13.$value = $j;
+    }
+    var$8[1] = var$13;
+    var$13 = new jl_StringBuilder;
+    var$13.$buffer = $rt_createCharArray($rt_s(492).$nativeString.length);
+    $camera = cgtd_Stringf_appendf(var$13, $rt_s(492), var$2);
+    var$14 = new jl_String;
+    var$2 = $camera.$buffer;
+    var$8 = var$2.data;
+    $x = $camera.$length0;
+    $j = var$8.length;
+    if ($x >= 0 && $x <= ($j - 0 | 0)) {
+        var$14.$nativeString = $rt_charArrayToString(var$2.data, 0, $x);
+        cbggg_BitmapFontCache_clear(var$3.$cache);
+        var$15 = var$3.$cache;
+        $m = var$14.$nativeString.length;
+        var$16 = null;
+        cbgu_Pools_$callClinit();
+        $camera = cbgu_Pools_typePools;
+        $x = cbgu_ObjectMap_locateKey($camera, $rt_cls(cbggg_GlyphLayout));
+        $camera = $x < 0 ? null : $camera.$valueTable.data[$x];
+        if ($camera === null) {
+            $camera = new cbgu_ReflectionPool;
+            jl_Object__init_($camera);
+            $camera.$freeObjects = cbgu_Array__init_(0, 4);
+            $camera.$max1 = 100;
+            a: {
+                try {
+                    var$13 = cbgur_ClassReflection_getConstructor($rt_cls(cbggg_GlyphLayout), null);
+                    break a;
+                } catch ($$e) {
+                    $$je = $rt_wrapException($$e);
+                    if ($$je instanceof jl_Exception) {
+                    } else {
+                        throw $$e;
+                    }
+                }
+                try {
+                    var$13 = cbgur_ClassReflection_getDeclaredConstructor($rt_cls(cbggg_GlyphLayout), null);
+                    cbgur_Constructor_setAccessible(var$13, 1);
+                    break a;
+                } catch ($$e) {
+                    $$je = $rt_wrapException($$e);
+                    if ($$je instanceof cbgur_ReflectionException) {
+                    } else {
+                        throw $$e;
+                    }
+                }
+                var$13 = null;
+            }
+            $camera.$constructor = var$13;
+            if (var$13 === null) {
+                var$3 = new jl_RuntimeException;
+                var$6 = new jl_StringBuilder;
+                jl_AbstractStringBuilder__init_(var$6);
+                jl_AbstractStringBuilder_append(var$6, $rt_s(33));
+                if ($rt_cls(cbggg_GlyphLayout).$name === null)
+                    $rt_cls(cbggg_GlyphLayout).$name = otp_Platform_getName($rt_cls(cbggg_GlyphLayout).$platformClass);
+                jl_AbstractStringBuilder_append(var$6, $rt_cls(cbggg_GlyphLayout).$name);
+                jl_Exception__init_(var$3, jl_AbstractStringBuilder_toString(var$6));
+                $rt_throw(var$3);
+            }
+            cbgu_ObjectMap_put(cbgu_Pools_typePools, $rt_cls(cbggg_GlyphLayout), $camera);
+        }
+        b: {
+            var$13 = $camera.$freeObjects;
+            $x = var$13.$size;
+            if ($x) {
+                if (!$x) {
+                    var$3 = new jl_IllegalStateException;
+                    jl_Exception__init_(var$3, $rt_s(38));
+                    $rt_throw(var$3);
+                }
+                $x = $x - 1 | 0;
+                var$13.$size = $x;
+                var$2 = var$13.$items.data;
+                $camera = var$2[$x];
+                var$2[$x] = null;
+            } else {
+                var$13 = $camera;
+                try {
+                    $camera = cbgur_Constructor_newInstance(var$13.$constructor, null);
+                    break b;
+                } catch ($$e) {
+                    $$je = $rt_wrapException($$e);
+                    if ($$je instanceof jl_Exception) {
+                        var$6 = $$je;
+                        $camera = new cbgu_GdxRuntimeException;
+                        var$3 = new jl_StringBuilder;
+                        jl_AbstractStringBuilder__init_0(var$3, 16);
+                        $i = var$3.$length0;
+                        var$15 = var$3;
+                        jl_StringBuilder_insert(var$15, $i, $rt_s(39));
+                        var$16 = var$13.$constructor.$constructor0.$declaringClass;
+                        if (var$16.$name === null)
+                            var$16.$name = $rt_str(var$16.$platformClass.$meta.name);
+                        var$13 = var$16.$name;
+                        jl_StringBuilder_insert(var$15, var$3.$length0, var$13);
+                        jl_Exception__init_1($camera, jl_String__init_(var$3.$buffer, 0, var$3.$length0), var$6);
+                        $rt_throw($camera);
+                    } else {
+                        throw $$e;
+                    }
+                }
+            }
+        }
+        $camera = $camera;
+        cbgu_Array_add(var$15.$pooledLayouts, $camera);
+        cbggg_GlyphLayout_setText($camera, var$15.$font, var$14, 0, $m, var$15.$color, 384.0, 1, 1, var$16);
+        cbggg_BitmapFontCache_addToCache(var$15, $camera, 64.0, 522.0 + var$15.$font.$data0.$ascent);
+        cbggg_BitmapFontCache_draw(var$3.$cache, var$6);
+        cbggg_SpriteBatch_end($this.$batch10);
+        return;
+    }
+    var$3 = new jl_IndexOutOfBoundsException;
+    jl_Throwable__init_(var$3);
+    $rt_throw(var$3);
+},
+cgte_RandomScreen_resize = ($this, $width, $height) => {
+    let var$3, var$4, var$5, var$6;
+    var$3 = $this.$viewport10;
+    var$4 = var$3;
+    var$4.$screenX = 0;
+    var$4.$screenY = 0;
+    var$4.$screenWidth = $width;
+    var$4.$screenHeight = $height;
+    var$5 = $width;
+    var$6 = var$3.$unitsPerPixel;
+    var$5 = var$5 * var$6;
+    var$6 = $height * var$6;
+    var$4.$worldWidth = var$5;
+    var$4.$worldHeight = var$6;
+    cbguv_Viewport_apply(var$4, 1);
+    cbguv_Viewport_apply($this.$viewport10, 1);
+};
+function cgte_ChipScreen() {
+    let a = this; cbg_ScreenAdapter.call(a);
+    a.$random23 = null;
+    a.$batch16 = null;
+    a.$renderer9 = null;
+    a.$amounts15 = null;
+    a.$iterations15 = Long_ZERO;
+    a.$font33 = null;
+    a.$viewport19 = null;
+    a.$mainGame4 = null;
+}
+let cgte_ChipScreen_show = $this => {
+    let var$1, var$2, var$3, var$4, var$5, var$6, var$7, var$8, var$9, var$10, var$11;
+    $this.$font33 = $this.$mainGame4.$font0;
+    var$1 = new cgtr_Chip32Random;
+    var$2 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
+    var$3 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
+    var$4 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
+    var$5 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
+    var$1.$stateA0 = var$2;
+    var$1.$stateB0 = var$3;
+    var$1.$stateC0 = var$4;
+    var$1.$stateD0 = var$5;
+    $this.$random23 = var$1;
+    $this.$batch16 = $this.$mainGame4.$batch;
+    var$1 = new cbguv_ScreenViewport;
+    var$6 = new cbgg_OrthographicCamera;
+    cbgg_Camera__init_(var$6);
+    var$6.$zoom = 1.0;
+    var$7 = new cbgm_Vector3;
+    cbgm_Vector3_$callClinit();
+    var$6.$tmp0 = var$7;
+    var$6.$near = 0.0;
+    var$1.$tmp = new cbgm_Vector3;
+    var$1.$unitsPerPixel = 1.0;
+    var$1.$camera = var$6;
+    $this.$viewport19 = var$1;
+    var$1 = new cbggg_ImmediateModeRenderer20;
+    var$8 = cbggg_ShaderProgram__init_(cbggg_ImmediateModeRenderer20_createVertexShader(0, 1, 0), cbggg_ImmediateModeRenderer20_createFragmentShader(0, 1, 0));
+    if (var$8.$isCompiled) {
+        cbggg_ImmediateModeRenderer20__init_(var$1, 1536, 0, 1, 0, var$8);
+        var$1.$ownsShader = 1;
+        $this.$renderer9 = var$1;
+        var$9 = $this.$amounts15.data;
+        var$2 = 0;
+        var$3 = var$9.length;
+        if (var$2 > var$3) {
+            var$1 = new jl_IllegalArgumentException;
+            var$1.$suppressionEnabled = 1;
+            var$1.$writableStackTrace = 1;
+            $rt_throw(var$1);
+        }
+        while (var$2 < var$3) {
+            var$4 = var$2 + 1 | 0;
+            var$9[var$2] = Long_ZERO;
+            var$2 = var$4;
+        }
+        $this.$iterations15 = Long_ZERO;
+        return;
+    }
+    var$1 = new cbgu_GdxRuntimeException;
+    var$6 = new jl_StringBuilder;
+    var$6.$buffer = $rt_createCharArray(16);
+    var$2 = var$6.$length0;
+    var$10 = var$6;
+    jl_AbstractStringBuilder_insert(var$10, var$2, $rt_s(479));
+    if (!var$8.$isCompiled)
+        var$7 = var$8.$log0;
+    else {
+        var$7 = cbg_Gdx_gl20.$glGetProgramInfoLog(var$8.$program);
+        var$8.$log0 = var$7;
+    }
+    jl_AbstractStringBuilder_insert(var$10, var$6.$length0, var$7);
+    var$7 = new jl_String;
+    var$9 = var$6.$buffer;
+    var$11 = var$9.data;
+    var$3 = var$6.$length0;
+    var$4 = var$11.length;
+    if (var$3 >= 0 && var$3 <= (var$4 - 0 | 0)) {
+        var$7.$nativeString = $rt_charArrayToString(var$9.data, 0, var$3);
+        var$1.$suppressionEnabled = 1;
+        var$1.$writableStackTrace = 1;
+        var$1.$message = var$7;
+        $rt_throw(var$1);
+    }
+    var$1 = new jl_IndexOutOfBoundsException;
+    jl_Exception__init_0(var$1);
+    $rt_throw(var$1);
+},
+cgte_ChipScreen_render = ($this, $delta) => {
+    let var$2, var$3, $i, $x, var$6, $camera, var$8, $j, var$10, $m, $color, var$13, var$14, var$15, var$16, $$je;
+    var$2 = cbg_Gdx_input.$justPressedKeys.data;
+    if (var$2[71]) {
+        var$3 = $this.$mainGame4;
+        $i = var$3.$screenIndex;
+        var$2 = var$3.$screens.data;
+        $x = var$2.length;
+        $i = (($i + $x | 0) - 1 | 0) % $x | 0;
+        var$3.$screenIndex = $i;
+        var$6 = var$2[$i];
+        var$3 = var$3;
+        var$3.$screen = var$6;
+        if (var$6 !== null) {
+            var$6.$show();
+            var$3.$screen.$resize0(cbg_Gdx_graphics.$canvas.width, cbg_Gdx_graphics.$canvas.height);
+        }
+        return;
+    }
+    if (var$2[72]) {
+        var$3 = $this.$mainGame4;
+        $i = var$3.$screenIndex + 1 | 0;
+        var$2 = var$3.$screens.data;
+        $i = $i % var$2.length | 0;
+        var$3.$screenIndex = $i;
+        var$6 = var$2[$i];
+        var$3 = var$3;
+        var$3.$screen = var$6;
+        if (var$6 !== null) {
+            var$6.$show();
+            var$3.$screen.$resize0(cbg_Gdx_graphics.$canvas.width, cbg_Gdx_graphics.$canvas.height);
+        }
+        return;
+    }
+    if (var$2[111])
+        return;
+    cbg_Gdx_gl.$glClearColor(1.0, 1.0, 1.0, 1.0);
+    cbg_Gdx_gl.$glClear(16384);
+    $camera = $this.$viewport19.$camera;
+    cbgg_OrthographicCamera_update($camera, 1);
+    var$8 = cbg_Gdx_input.$pressedKeys.data;
+    if (var$8[29]) {
+        var$2 = $this.$amounts15.data;
+        $i = 0;
+        $x = var$2.length;
+        if ($i > $x) {
+            var$3 = new jl_IllegalArgumentException;
+            var$3.$suppressionEnabled = 1;
+            var$3.$writableStackTrace = 1;
+            $rt_throw(var$3);
+        }
+        while ($i < $x) {
+            $j = $i + 1 | 0;
+            var$2[$i] = Long_ZERO;
+            $i = $j;
+        }
+        $this.$iterations15 = Long_ZERO;
+    }
+    if (var$8[30]) {
+        var$2 = $this.$amounts15.data;
+        $i = 0;
+        $x = var$2.length;
+        if ($i > $x) {
+            var$3 = new jl_IllegalArgumentException;
+            var$3.$suppressionEnabled = 1;
+            var$3.$writableStackTrace = 1;
+            $rt_throw(var$3);
+        }
+        while ($i < $x) {
+            $j = $i + 1 | 0;
+            var$2[$i] = Long_ZERO;
+            $i = $j;
+        }
+        $this.$iterations15 = Long_ZERO;
+    }
+    if (var$8[31]) {
+        var$2 = $this.$amounts15.data;
+        $i = 0;
+        $x = var$2.length;
+        if ($i > $x) {
+            var$3 = new jl_IllegalArgumentException;
+            var$3.$suppressionEnabled = 1;
+            var$3.$writableStackTrace = 1;
+            $rt_throw(var$3);
+        }
+        while ($i < $x) {
+            $j = $i + 1 | 0;
+            var$2[$i] = Long_ZERO;
+            $i = $j;
+        }
+        $this.$iterations15 = Long_ZERO;
+    }
+    $this.$iterations15 = Long_add($this.$iterations15, Long_fromInt(1));
+    $i = 0;
+    while ($i < 524288) {
+        var$10 = cgtr_Chip32Random_nextLong($this.$random23);
+        $m = $rt_intBitsToFloat((126 - jl_Long_numberOfLeadingZeros(var$10) | 0) << 23 | Long_lo(var$10) & 8388607) * 512.0 | 0;
+        if ($m >= 0 && $m < 512) {
+            var$2 = $this.$amounts15.data;
+            var$2[$m] = Long_add(var$2[$m], Long_fromInt(1));
+        }
+        $i = $i + 1 | 0;
+    }
+    var$3 = $this.$renderer9;
+    var$6 = $camera.$combined;
+    cbgm_Matrix4_set(var$3.$projModelView, var$6.$val);
+    var$3.$primitiveType = 1;
+    $x = 0;
+    while ($x < 512) {
+        $color = $x & 63 ? (-1.5436749266448052E38) : (-1.5203096921934465E38);
+        var$3 = $this.$renderer9;
+        var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
+        $delta = $x;
+        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0, 0.0);
+        var$3 = $this.$renderer9;
+        var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
+        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts15.data[$x]) / Long_toNumber($this.$iterations15), 0.0);
+        $x = $x + 1 | 0;
+    }
+    $j = 8;
+    while ($j < 520) {
+        var$3 = $this.$renderer9;
+        var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = (-6.221923240859403E37);
+        $color = $j;
+        cbggg_ImmediateModeRenderer20_vertex(var$3, 0.0, $color, 0.0);
+        var$3 = $this.$renderer9;
+        var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = (-6.221923240859403E37);
+        cbggg_ImmediateModeRenderer20_vertex(var$3, 10.0, $color, 0.0);
+        $j = $j + 32 | 0;
+    }
+    cbggg_ImmediateModeRenderer20_flush($this.$renderer9);
+    var$3 = $this.$batch16;
+    var$6 = $camera.$combined;
+    if (var$3.$drawing)
+        cbggg_SpriteBatch_flush(var$3);
+    cbgm_Matrix4_set(var$3.$projectionMatrix, var$6.$val);
+    if (var$3.$drawing)
+        cbggg_SpriteBatch_setupMatrices(var$3);
+    cbggg_SpriteBatch_begin($this.$batch16);
+    var$3 = $this.$font33;
+    var$6 = $this.$batch16;
+    var$2 = $rt_createArray(jl_Object, 2);
+    var$8 = var$2.data;
+    var$8[0] = $rt_s(487);
+    $j = cbg_Gdx_graphics.$fps | 0;
+    if ($j >= (-128) && $j <= 127) {
+        jl_Integer_ensureIntegerCache();
+        var$13 = jl_Integer_integerCache.data[$j + 128 | 0];
+    } else {
+        var$13 = new jl_Integer;
+        var$13.$value = $j;
+    }
+    var$8[1] = var$13;
+    var$13 = new jl_StringBuilder;
+    var$13.$buffer = $rt_createCharArray($rt_s(492).$nativeString.length);
+    $camera = cgtd_Stringf_appendf(var$13, $rt_s(492), var$2);
+    var$14 = new jl_String;
+    var$2 = $camera.$buffer;
+    var$8 = var$2.data;
+    $x = $camera.$length0;
+    $j = var$8.length;
+    if ($x >= 0 && $x <= ($j - 0 | 0)) {
+        var$14.$nativeString = $rt_charArrayToString(var$2.data, 0, $x);
+        cbggg_BitmapFontCache_clear(var$3.$cache);
+        var$15 = var$3.$cache;
+        $m = var$14.$nativeString.length;
+        var$16 = null;
+        cbgu_Pools_$callClinit();
+        $camera = cbgu_Pools_typePools;
+        $x = cbgu_ObjectMap_locateKey($camera, $rt_cls(cbggg_GlyphLayout));
+        $camera = $x < 0 ? null : $camera.$valueTable.data[$x];
+        if ($camera === null) {
+            $camera = new cbgu_ReflectionPool;
+            jl_Object__init_($camera);
+            $camera.$freeObjects = cbgu_Array__init_(0, 4);
+            $camera.$max1 = 100;
+            a: {
+                try {
+                    var$13 = cbgur_ClassReflection_getConstructor($rt_cls(cbggg_GlyphLayout), null);
+                    break a;
+                } catch ($$e) {
+                    $$je = $rt_wrapException($$e);
+                    if ($$je instanceof jl_Exception) {
+                    } else {
+                        throw $$e;
+                    }
+                }
+                try {
+                    var$13 = cbgur_ClassReflection_getDeclaredConstructor($rt_cls(cbggg_GlyphLayout), null);
+                    cbgur_Constructor_setAccessible(var$13, 1);
+                    break a;
+                } catch ($$e) {
+                    $$je = $rt_wrapException($$e);
+                    if ($$je instanceof cbgur_ReflectionException) {
+                    } else {
+                        throw $$e;
+                    }
+                }
+                var$13 = null;
+            }
+            $camera.$constructor = var$13;
+            if (var$13 === null) {
+                var$3 = new jl_RuntimeException;
+                var$6 = new jl_StringBuilder;
+                jl_AbstractStringBuilder__init_(var$6);
+                jl_AbstractStringBuilder_append(var$6, $rt_s(33));
+                if ($rt_cls(cbggg_GlyphLayout).$name === null)
+                    $rt_cls(cbggg_GlyphLayout).$name = otp_Platform_getName($rt_cls(cbggg_GlyphLayout).$platformClass);
+                jl_AbstractStringBuilder_append(var$6, $rt_cls(cbggg_GlyphLayout).$name);
+                jl_Exception__init_(var$3, jl_AbstractStringBuilder_toString(var$6));
+                $rt_throw(var$3);
+            }
+            cbgu_ObjectMap_put(cbgu_Pools_typePools, $rt_cls(cbggg_GlyphLayout), $camera);
+        }
+        b: {
+            var$13 = $camera.$freeObjects;
+            $x = var$13.$size;
+            if ($x) {
+                if (!$x) {
+                    var$3 = new jl_IllegalStateException;
+                    jl_Exception__init_(var$3, $rt_s(38));
+                    $rt_throw(var$3);
+                }
+                $x = $x - 1 | 0;
+                var$13.$size = $x;
+                var$2 = var$13.$items.data;
+                $camera = var$2[$x];
+                var$2[$x] = null;
+            } else {
+                var$13 = $camera;
+                try {
+                    $camera = cbgur_Constructor_newInstance(var$13.$constructor, null);
+                    break b;
+                } catch ($$e) {
+                    $$je = $rt_wrapException($$e);
+                    if ($$je instanceof jl_Exception) {
+                        var$6 = $$je;
+                        $camera = new cbgu_GdxRuntimeException;
+                        var$3 = new jl_StringBuilder;
+                        jl_AbstractStringBuilder__init_0(var$3, 16);
+                        $i = var$3.$length0;
+                        var$15 = var$3;
+                        jl_StringBuilder_insert(var$15, $i, $rt_s(39));
+                        var$16 = var$13.$constructor.$constructor0.$declaringClass;
+                        if (var$16.$name === null)
+                            var$16.$name = $rt_str(var$16.$platformClass.$meta.name);
+                        var$13 = var$16.$name;
+                        jl_StringBuilder_insert(var$15, var$3.$length0, var$13);
+                        jl_Exception__init_1($camera, jl_String__init_(var$3.$buffer, 0, var$3.$length0), var$6);
+                        $rt_throw($camera);
+                    } else {
+                        throw $$e;
+                    }
+                }
+            }
+        }
+        $camera = $camera;
+        cbgu_Array_add(var$15.$pooledLayouts, $camera);
+        cbggg_GlyphLayout_setText($camera, var$15.$font, var$14, 0, $m, var$15.$color, 384.0, 1, 1, var$16);
+        cbggg_BitmapFontCache_addToCache(var$15, $camera, 64.0, 522.0 + var$15.$font.$data0.$ascent);
+        cbggg_BitmapFontCache_draw(var$3.$cache, var$6);
+        cbggg_SpriteBatch_end($this.$batch16);
+        return;
+    }
+    var$3 = new jl_IndexOutOfBoundsException;
+    jl_Throwable__init_(var$3);
+    $rt_throw(var$3);
+},
+cgte_ChipScreen_resize = ($this, $width, $height) => {
+    let var$3, var$4, var$5, var$6;
+    var$3 = $this.$viewport19;
+    var$4 = var$3;
+    var$4.$screenX = 0;
+    var$4.$screenY = 0;
+    var$4.$screenWidth = $width;
+    var$4.$screenHeight = $height;
+    var$5 = $width;
+    var$6 = var$3.$unitsPerPixel;
+    var$5 = var$5 * var$6;
+    var$6 = $height * var$6;
+    var$4.$worldWidth = var$5;
+    var$4.$worldHeight = var$6;
+    cbguv_Viewport_apply(var$4, 1);
+    cbguv_Viewport_apply($this.$viewport19, 1);
+};
+function cgte_ChopScreen() {
+    let a = this; cbg_ScreenAdapter.call(a);
+    a.$random12 = null;
+    a.$batch6 = null;
+    a.$renderer30 = null;
+    a.$amounts12 = null;
+    a.$iterations6 = Long_ZERO;
+    a.$font36 = null;
+    a.$viewport30 = null;
+    a.$mainGame30 = null;
+}
+let cgte_ChopScreen_show = $this => {
+    let var$1, var$2, var$3, var$4, var$5, var$6, var$7, var$8, var$9, var$10, var$11;
+    $this.$font36 = $this.$mainGame30.$font0;
+    var$1 = new cgtr_ChopRandom;
+    var$2 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
+    var$3 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
+    var$4 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
+    var$5 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
+    var$1.$stateA1 = var$2;
+    var$1.$stateB1 = var$3;
+    var$1.$stateC2 = var$4;
+    var$1.$stateD2 = var$5;
+    $this.$random12 = var$1;
+    $this.$batch6 = $this.$mainGame30.$batch;
+    var$1 = new cbguv_ScreenViewport;
+    var$6 = new cbgg_OrthographicCamera;
+    cbgg_Camera__init_(var$6);
+    var$6.$zoom = 1.0;
+    var$7 = new cbgm_Vector3;
+    cbgm_Vector3_$callClinit();
+    var$6.$tmp0 = var$7;
+    var$6.$near = 0.0;
+    var$1.$tmp = new cbgm_Vector3;
+    var$1.$unitsPerPixel = 1.0;
+    var$1.$camera = var$6;
+    $this.$viewport30 = var$1;
+    var$1 = new cbggg_ImmediateModeRenderer20;
+    var$8 = cbggg_ShaderProgram__init_(cbggg_ImmediateModeRenderer20_createVertexShader(0, 1, 0), cbggg_ImmediateModeRenderer20_createFragmentShader(0, 1, 0));
+    if (var$8.$isCompiled) {
+        cbggg_ImmediateModeRenderer20__init_(var$1, 1536, 0, 1, 0, var$8);
+        var$1.$ownsShader = 1;
+        $this.$renderer30 = var$1;
+        var$9 = $this.$amounts12.data;
+        var$2 = 0;
+        var$3 = var$9.length;
+        if (var$2 > var$3) {
+            var$1 = new jl_IllegalArgumentException;
+            var$1.$suppressionEnabled = 1;
+            var$1.$writableStackTrace = 1;
+            $rt_throw(var$1);
+        }
+        while (var$2 < var$3) {
+            var$4 = var$2 + 1 | 0;
+            var$9[var$2] = Long_ZERO;
+            var$2 = var$4;
+        }
+        $this.$iterations6 = Long_ZERO;
+        return;
+    }
+    var$1 = new cbgu_GdxRuntimeException;
+    var$6 = new jl_StringBuilder;
+    var$6.$buffer = $rt_createCharArray(16);
+    var$2 = var$6.$length0;
+    var$10 = var$6;
+    jl_AbstractStringBuilder_insert(var$10, var$2, $rt_s(479));
+    if (!var$8.$isCompiled)
+        var$7 = var$8.$log0;
+    else {
+        var$7 = cbg_Gdx_gl20.$glGetProgramInfoLog(var$8.$program);
+        var$8.$log0 = var$7;
+    }
+    jl_AbstractStringBuilder_insert(var$10, var$6.$length0, var$7);
+    var$7 = new jl_String;
+    var$9 = var$6.$buffer;
+    var$11 = var$9.data;
+    var$3 = var$6.$length0;
+    var$4 = var$11.length;
+    if (var$3 >= 0 && var$3 <= (var$4 - 0 | 0)) {
+        var$7.$nativeString = $rt_charArrayToString(var$9.data, 0, var$3);
+        var$1.$suppressionEnabled = 1;
+        var$1.$writableStackTrace = 1;
+        var$1.$message = var$7;
+        $rt_throw(var$1);
+    }
+    var$1 = new jl_IndexOutOfBoundsException;
+    jl_Exception__init_0(var$1);
+    $rt_throw(var$1);
+},
+cgte_ChopScreen_render = ($this, $delta) => {
+    let var$2, var$3, $i, $x, var$6, $camera, var$8, $j, var$10, $m, $color, var$13, var$14, var$15, var$16, $$je;
+    var$2 = cbg_Gdx_input.$justPressedKeys.data;
+    if (var$2[71]) {
+        var$3 = $this.$mainGame30;
+        $i = var$3.$screenIndex;
+        var$2 = var$3.$screens.data;
+        $x = var$2.length;
+        $i = (($i + $x | 0) - 1 | 0) % $x | 0;
+        var$3.$screenIndex = $i;
+        var$6 = var$2[$i];
+        var$3 = var$3;
+        var$3.$screen = var$6;
+        if (var$6 !== null) {
+            var$6.$show();
+            var$3.$screen.$resize0(cbg_Gdx_graphics.$canvas.width, cbg_Gdx_graphics.$canvas.height);
+        }
+        return;
+    }
+    if (var$2[72]) {
+        var$3 = $this.$mainGame30;
+        $i = var$3.$screenIndex + 1 | 0;
+        var$2 = var$3.$screens.data;
+        $i = $i % var$2.length | 0;
+        var$3.$screenIndex = $i;
+        var$6 = var$2[$i];
+        var$3 = var$3;
+        var$3.$screen = var$6;
+        if (var$6 !== null) {
+            var$6.$show();
+            var$3.$screen.$resize0(cbg_Gdx_graphics.$canvas.width, cbg_Gdx_graphics.$canvas.height);
+        }
+        return;
+    }
+    if (var$2[111])
+        return;
+    cbg_Gdx_gl.$glClearColor(1.0, 1.0, 1.0, 1.0);
+    cbg_Gdx_gl.$glClear(16384);
+    $camera = $this.$viewport30.$camera;
+    cbgg_OrthographicCamera_update($camera, 1);
+    var$8 = cbg_Gdx_input.$pressedKeys.data;
+    if (var$8[29]) {
+        var$2 = $this.$amounts12.data;
+        $i = 0;
+        $x = var$2.length;
+        if ($i > $x) {
+            var$3 = new jl_IllegalArgumentException;
+            var$3.$suppressionEnabled = 1;
+            var$3.$writableStackTrace = 1;
+            $rt_throw(var$3);
+        }
+        while ($i < $x) {
+            $j = $i + 1 | 0;
+            var$2[$i] = Long_ZERO;
+            $i = $j;
+        }
+        $this.$iterations6 = Long_ZERO;
+    }
+    if (var$8[30]) {
+        var$2 = $this.$amounts12.data;
+        $i = 0;
+        $x = var$2.length;
+        if ($i > $x) {
+            var$3 = new jl_IllegalArgumentException;
+            var$3.$suppressionEnabled = 1;
+            var$3.$writableStackTrace = 1;
+            $rt_throw(var$3);
+        }
+        while ($i < $x) {
+            $j = $i + 1 | 0;
+            var$2[$i] = Long_ZERO;
+            $i = $j;
+        }
+        $this.$iterations6 = Long_ZERO;
+    }
+    if (var$8[31]) {
+        var$2 = $this.$amounts12.data;
+        $i = 0;
+        $x = var$2.length;
+        if ($i > $x) {
+            var$3 = new jl_IllegalArgumentException;
+            var$3.$suppressionEnabled = 1;
+            var$3.$writableStackTrace = 1;
+            $rt_throw(var$3);
+        }
+        while ($i < $x) {
+            $j = $i + 1 | 0;
+            var$2[$i] = Long_ZERO;
+            $i = $j;
+        }
+        $this.$iterations6 = Long_ZERO;
+    }
+    $this.$iterations6 = Long_add($this.$iterations6, Long_fromInt(1));
+    $i = 0;
+    while ($i < 524288) {
+        var$10 = cgtr_ChopRandom_nextLong($this.$random12);
+        $m = $rt_intBitsToFloat((126 - jl_Long_numberOfLeadingZeros(var$10) | 0) << 23 | Long_lo(var$10) & 8388607) * 512.0 | 0;
+        if ($m >= 0 && $m < 512) {
+            var$2 = $this.$amounts12.data;
+            var$2[$m] = Long_add(var$2[$m], Long_fromInt(1));
+        }
+        $i = $i + 1 | 0;
+    }
+    var$3 = $this.$renderer30;
+    var$6 = $camera.$combined;
+    cbgm_Matrix4_set(var$3.$projModelView, var$6.$val);
+    var$3.$primitiveType = 1;
+    $x = 0;
+    while ($x < 512) {
+        $color = $x & 63 ? (-1.5436749266448052E38) : (-1.5203096921934465E38);
+        var$3 = $this.$renderer30;
+        var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
+        $delta = $x;
+        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0, 0.0);
+        var$3 = $this.$renderer30;
+        var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
+        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts12.data[$x]) / Long_toNumber($this.$iterations6), 0.0);
+        $x = $x + 1 | 0;
+    }
+    $j = 8;
+    while ($j < 520) {
+        var$3 = $this.$renderer30;
+        var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = (-6.221923240859403E37);
+        $color = $j;
+        cbggg_ImmediateModeRenderer20_vertex(var$3, 0.0, $color, 0.0);
+        var$3 = $this.$renderer30;
+        var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = (-6.221923240859403E37);
+        cbggg_ImmediateModeRenderer20_vertex(var$3, 10.0, $color, 0.0);
+        $j = $j + 32 | 0;
+    }
+    cbggg_ImmediateModeRenderer20_flush($this.$renderer30);
+    var$3 = $this.$batch6;
+    var$6 = $camera.$combined;
+    if (var$3.$drawing)
+        cbggg_SpriteBatch_flush(var$3);
+    cbgm_Matrix4_set(var$3.$projectionMatrix, var$6.$val);
+    if (var$3.$drawing)
+        cbggg_SpriteBatch_setupMatrices(var$3);
+    cbggg_SpriteBatch_begin($this.$batch6);
+    var$3 = $this.$font36;
+    var$6 = $this.$batch6;
+    var$2 = $rt_createArray(jl_Object, 2);
+    var$8 = var$2.data;
+    var$8[0] = $rt_s(488);
+    $j = cbg_Gdx_graphics.$fps | 0;
+    if ($j >= (-128) && $j <= 127) {
+        jl_Integer_ensureIntegerCache();
+        var$13 = jl_Integer_integerCache.data[$j + 128 | 0];
+    } else {
+        var$13 = new jl_Integer;
+        var$13.$value = $j;
+    }
+    var$8[1] = var$13;
+    var$13 = new jl_StringBuilder;
+    var$13.$buffer = $rt_createCharArray($rt_s(492).$nativeString.length);
+    $camera = cgtd_Stringf_appendf(var$13, $rt_s(492), var$2);
+    var$14 = new jl_String;
+    var$2 = $camera.$buffer;
+    var$8 = var$2.data;
+    $x = $camera.$length0;
+    $j = var$8.length;
+    if ($x >= 0 && $x <= ($j - 0 | 0)) {
+        var$14.$nativeString = $rt_charArrayToString(var$2.data, 0, $x);
+        cbggg_BitmapFontCache_clear(var$3.$cache);
+        var$15 = var$3.$cache;
+        $m = var$14.$nativeString.length;
+        var$16 = null;
+        cbgu_Pools_$callClinit();
+        $camera = cbgu_Pools_typePools;
+        $x = cbgu_ObjectMap_locateKey($camera, $rt_cls(cbggg_GlyphLayout));
+        $camera = $x < 0 ? null : $camera.$valueTable.data[$x];
+        if ($camera === null) {
+            $camera = new cbgu_ReflectionPool;
+            jl_Object__init_($camera);
+            $camera.$freeObjects = cbgu_Array__init_(0, 4);
+            $camera.$max1 = 100;
+            a: {
+                try {
+                    var$13 = cbgur_ClassReflection_getConstructor($rt_cls(cbggg_GlyphLayout), null);
+                    break a;
+                } catch ($$e) {
+                    $$je = $rt_wrapException($$e);
+                    if ($$je instanceof jl_Exception) {
+                    } else {
+                        throw $$e;
+                    }
+                }
+                try {
+                    var$13 = cbgur_ClassReflection_getDeclaredConstructor($rt_cls(cbggg_GlyphLayout), null);
+                    cbgur_Constructor_setAccessible(var$13, 1);
+                    break a;
+                } catch ($$e) {
+                    $$je = $rt_wrapException($$e);
+                    if ($$je instanceof cbgur_ReflectionException) {
+                    } else {
+                        throw $$e;
+                    }
+                }
+                var$13 = null;
+            }
+            $camera.$constructor = var$13;
+            if (var$13 === null) {
+                var$3 = new jl_RuntimeException;
+                var$6 = new jl_StringBuilder;
+                jl_AbstractStringBuilder__init_(var$6);
+                jl_AbstractStringBuilder_append(var$6, $rt_s(33));
+                if ($rt_cls(cbggg_GlyphLayout).$name === null)
+                    $rt_cls(cbggg_GlyphLayout).$name = otp_Platform_getName($rt_cls(cbggg_GlyphLayout).$platformClass);
+                jl_AbstractStringBuilder_append(var$6, $rt_cls(cbggg_GlyphLayout).$name);
+                jl_Exception__init_(var$3, jl_AbstractStringBuilder_toString(var$6));
+                $rt_throw(var$3);
+            }
+            cbgu_ObjectMap_put(cbgu_Pools_typePools, $rt_cls(cbggg_GlyphLayout), $camera);
+        }
+        b: {
+            var$13 = $camera.$freeObjects;
+            $x = var$13.$size;
+            if ($x) {
+                if (!$x) {
+                    var$3 = new jl_IllegalStateException;
+                    jl_Exception__init_(var$3, $rt_s(38));
+                    $rt_throw(var$3);
+                }
+                $x = $x - 1 | 0;
+                var$13.$size = $x;
+                var$2 = var$13.$items.data;
+                $camera = var$2[$x];
+                var$2[$x] = null;
+            } else {
+                var$13 = $camera;
+                try {
+                    $camera = cbgur_Constructor_newInstance(var$13.$constructor, null);
+                    break b;
+                } catch ($$e) {
+                    $$je = $rt_wrapException($$e);
+                    if ($$je instanceof jl_Exception) {
+                        var$6 = $$je;
+                        $camera = new cbgu_GdxRuntimeException;
+                        var$3 = new jl_StringBuilder;
+                        jl_AbstractStringBuilder__init_0(var$3, 16);
+                        $i = var$3.$length0;
+                        var$15 = var$3;
+                        jl_StringBuilder_insert(var$15, $i, $rt_s(39));
+                        var$16 = var$13.$constructor.$constructor0.$declaringClass;
+                        if (var$16.$name === null)
+                            var$16.$name = $rt_str(var$16.$platformClass.$meta.name);
+                        var$13 = var$16.$name;
+                        jl_StringBuilder_insert(var$15, var$3.$length0, var$13);
+                        jl_Exception__init_1($camera, jl_String__init_(var$3.$buffer, 0, var$3.$length0), var$6);
+                        $rt_throw($camera);
+                    } else {
+                        throw $$e;
+                    }
+                }
+            }
+        }
+        $camera = $camera;
+        cbgu_Array_add(var$15.$pooledLayouts, $camera);
+        cbggg_GlyphLayout_setText($camera, var$15.$font, var$14, 0, $m, var$15.$color, 384.0, 1, 1, var$16);
+        cbggg_BitmapFontCache_addToCache(var$15, $camera, 64.0, 522.0 + var$15.$font.$data0.$ascent);
+        cbggg_BitmapFontCache_draw(var$3.$cache, var$6);
+        cbggg_SpriteBatch_end($this.$batch6);
+        return;
+    }
+    var$3 = new jl_IndexOutOfBoundsException;
+    jl_Throwable__init_(var$3);
+    $rt_throw(var$3);
+},
+cgte_ChopScreen_resize = ($this, $width, $height) => {
+    let var$3, var$4, var$5, var$6;
+    var$3 = $this.$viewport30;
+    var$4 = var$3;
+    var$4.$screenX = 0;
+    var$4.$screenY = 0;
+    var$4.$screenWidth = $width;
+    var$4.$screenHeight = $height;
+    var$5 = $width;
+    var$6 = var$3.$unitsPerPixel;
+    var$5 = var$5 * var$6;
+    var$6 = $height * var$6;
+    var$4.$worldWidth = var$5;
+    var$4.$worldHeight = var$6;
+    cbguv_Viewport_apply(var$4, 1);
+    cbguv_Viewport_apply($this.$viewport30, 1);
+};
+function cgte_Xoshiro128PPScreen() {
+    let a = this; cbg_ScreenAdapter.call(a);
+    a.$random21 = null;
+    a.$batch9 = null;
+    a.$renderer16 = null;
+    a.$amounts34 = null;
+    a.$iterations11 = Long_ZERO;
+    a.$font35 = null;
+    a.$viewport14 = null;
+    a.$mainGame13 = null;
+}
+let cgte_Xoshiro128PPScreen_show = $this => {
+    let var$1, var$2, var$3, var$4, var$5, var$6, var$7, var$8, var$9, var$10, var$11;
+    $this.$font35 = $this.$mainGame13.$font0;
+    var$1 = new cgtr_Xoshiro128PlusPlusRandom;
+    var$2 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
+    var$3 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
+    var$4 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
+    var$5 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
+    var$1.$stateA3 = var$2;
+    var$1.$stateB3 = var$3;
+    var$1.$stateC1 = var$4;
+    if (!(var$2 | var$3 | var$4 | var$5))
+        var$5 = 1;
+    var$1.$stateD1 = var$5;
+    $this.$random21 = var$1;
+    $this.$batch9 = $this.$mainGame13.$batch;
+    var$1 = new cbguv_ScreenViewport;
+    var$6 = new cbgg_OrthographicCamera;
+    cbgg_Camera__init_(var$6);
+    var$6.$zoom = 1.0;
+    var$7 = new cbgm_Vector3;
+    cbgm_Vector3_$callClinit();
+    var$6.$tmp0 = var$7;
+    var$6.$near = 0.0;
+    var$1.$tmp = new cbgm_Vector3;
+    var$1.$unitsPerPixel = 1.0;
+    var$1.$camera = var$6;
+    $this.$viewport14 = var$1;
+    var$1 = new cbggg_ImmediateModeRenderer20;
+    var$8 = cbggg_ShaderProgram__init_(cbggg_ImmediateModeRenderer20_createVertexShader(0, 1, 0), cbggg_ImmediateModeRenderer20_createFragmentShader(0, 1, 0));
+    if (var$8.$isCompiled) {
+        cbggg_ImmediateModeRenderer20__init_(var$1, 1536, 0, 1, 0, var$8);
+        var$1.$ownsShader = 1;
+        $this.$renderer16 = var$1;
+        var$9 = $this.$amounts34.data;
+        var$2 = 0;
+        var$3 = var$9.length;
+        if (var$2 > var$3) {
+            var$1 = new jl_IllegalArgumentException;
+            var$1.$suppressionEnabled = 1;
+            var$1.$writableStackTrace = 1;
+            $rt_throw(var$1);
+        }
+        while (var$2 < var$3) {
+            var$4 = var$2 + 1 | 0;
+            var$9[var$2] = Long_ZERO;
+            var$2 = var$4;
+        }
+        $this.$iterations11 = Long_ZERO;
+        return;
+    }
+    var$1 = new cbgu_GdxRuntimeException;
+    var$6 = new jl_StringBuilder;
+    var$6.$buffer = $rt_createCharArray(16);
+    var$2 = var$6.$length0;
+    var$10 = var$6;
+    jl_AbstractStringBuilder_insert(var$10, var$2, $rt_s(479));
+    if (!var$8.$isCompiled)
+        var$7 = var$8.$log0;
+    else {
+        var$7 = cbg_Gdx_gl20.$glGetProgramInfoLog(var$8.$program);
+        var$8.$log0 = var$7;
+    }
+    jl_AbstractStringBuilder_insert(var$10, var$6.$length0, var$7);
+    var$7 = new jl_String;
+    var$9 = var$6.$buffer;
+    var$11 = var$9.data;
+    var$3 = var$6.$length0;
+    var$4 = var$11.length;
+    if (var$3 >= 0 && var$3 <= (var$4 - 0 | 0)) {
+        var$7.$nativeString = $rt_charArrayToString(var$9.data, 0, var$3);
+        var$1.$suppressionEnabled = 1;
+        var$1.$writableStackTrace = 1;
+        var$1.$message = var$7;
+        $rt_throw(var$1);
+    }
+    var$1 = new jl_IndexOutOfBoundsException;
+    jl_Exception__init_0(var$1);
+    $rt_throw(var$1);
+},
+cgte_Xoshiro128PPScreen_render = ($this, $delta) => {
+    let var$2, var$3, $i, $x, var$6, $camera, var$8, $j, var$10, $m, $color, var$13, var$14, var$15, var$16, $$je;
+    var$2 = cbg_Gdx_input.$justPressedKeys.data;
+    if (var$2[71]) {
+        var$3 = $this.$mainGame13;
+        $i = var$3.$screenIndex;
+        var$2 = var$3.$screens.data;
+        $x = var$2.length;
+        $i = (($i + $x | 0) - 1 | 0) % $x | 0;
+        var$3.$screenIndex = $i;
+        var$6 = var$2[$i];
+        var$3 = var$3;
+        var$3.$screen = var$6;
+        if (var$6 !== null) {
+            var$6.$show();
+            var$3.$screen.$resize0(cbg_Gdx_graphics.$canvas.width, cbg_Gdx_graphics.$canvas.height);
+        }
+        return;
+    }
+    if (var$2[72]) {
+        var$3 = $this.$mainGame13;
+        $i = var$3.$screenIndex + 1 | 0;
+        var$2 = var$3.$screens.data;
+        $i = $i % var$2.length | 0;
+        var$3.$screenIndex = $i;
+        var$6 = var$2[$i];
+        var$3 = var$3;
+        var$3.$screen = var$6;
+        if (var$6 !== null) {
+            var$6.$show();
+            var$3.$screen.$resize0(cbg_Gdx_graphics.$canvas.width, cbg_Gdx_graphics.$canvas.height);
+        }
+        return;
+    }
+    if (var$2[111])
+        return;
+    cbg_Gdx_gl.$glClearColor(1.0, 1.0, 1.0, 1.0);
+    cbg_Gdx_gl.$glClear(16384);
+    $camera = $this.$viewport14.$camera;
+    cbgg_OrthographicCamera_update($camera, 1);
+    var$8 = cbg_Gdx_input.$pressedKeys.data;
+    if (var$8[29]) {
+        var$2 = $this.$amounts34.data;
+        $i = 0;
+        $x = var$2.length;
+        if ($i > $x) {
+            var$3 = new jl_IllegalArgumentException;
+            var$3.$suppressionEnabled = 1;
+            var$3.$writableStackTrace = 1;
+            $rt_throw(var$3);
+        }
+        while ($i < $x) {
+            $j = $i + 1 | 0;
+            var$2[$i] = Long_ZERO;
+            $i = $j;
+        }
+        $this.$iterations11 = Long_ZERO;
+    }
+    if (var$8[30]) {
+        var$2 = $this.$amounts34.data;
+        $i = 0;
+        $x = var$2.length;
+        if ($i > $x) {
+            var$3 = new jl_IllegalArgumentException;
+            var$3.$suppressionEnabled = 1;
+            var$3.$writableStackTrace = 1;
+            $rt_throw(var$3);
+        }
+        while ($i < $x) {
+            $j = $i + 1 | 0;
+            var$2[$i] = Long_ZERO;
+            $i = $j;
+        }
+        $this.$iterations11 = Long_ZERO;
+    }
+    if (var$8[31]) {
+        var$2 = $this.$amounts34.data;
+        $i = 0;
+        $x = var$2.length;
+        if ($i > $x) {
+            var$3 = new jl_IllegalArgumentException;
+            var$3.$suppressionEnabled = 1;
+            var$3.$writableStackTrace = 1;
+            $rt_throw(var$3);
+        }
+        while ($i < $x) {
+            $j = $i + 1 | 0;
+            var$2[$i] = Long_ZERO;
+            $i = $j;
+        }
+        $this.$iterations11 = Long_ZERO;
+    }
+    $this.$iterations11 = Long_add($this.$iterations11, Long_fromInt(1));
+    $i = 0;
+    while ($i < 524288) {
+        var$10 = cgtr_Xoshiro128PlusPlusRandom_nextLong($this.$random21);
+        $m = $rt_intBitsToFloat((126 - jl_Long_numberOfLeadingZeros(var$10) | 0) << 23 | Long_lo(var$10) & 8388607) * 512.0 | 0;
+        if ($m >= 0 && $m < 512) {
+            var$2 = $this.$amounts34.data;
+            var$2[$m] = Long_add(var$2[$m], Long_fromInt(1));
+        }
+        $i = $i + 1 | 0;
+    }
+    var$3 = $this.$renderer16;
+    var$6 = $camera.$combined;
+    cbgm_Matrix4_set(var$3.$projModelView, var$6.$val);
+    var$3.$primitiveType = 1;
+    $x = 0;
+    while ($x < 512) {
+        $color = $x & 63 ? (-1.5436749266448052E38) : (-1.5203096921934465E38);
+        var$3 = $this.$renderer16;
+        var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
+        $delta = $x;
+        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0, 0.0);
+        var$3 = $this.$renderer16;
+        var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
+        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts34.data[$x]) / Long_toNumber($this.$iterations11), 0.0);
+        $x = $x + 1 | 0;
+    }
+    $j = 8;
+    while ($j < 520) {
+        var$3 = $this.$renderer16;
+        var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = (-6.221923240859403E37);
+        $color = $j;
+        cbggg_ImmediateModeRenderer20_vertex(var$3, 0.0, $color, 0.0);
+        var$3 = $this.$renderer16;
+        var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = (-6.221923240859403E37);
+        cbggg_ImmediateModeRenderer20_vertex(var$3, 10.0, $color, 0.0);
+        $j = $j + 32 | 0;
+    }
+    cbggg_ImmediateModeRenderer20_flush($this.$renderer16);
     var$3 = $this.$batch9;
     var$6 = $camera.$combined;
     if (var$3.$drawing)
@@ -38203,11 +39323,11 @@ cgte_RandomScreen_render = ($this, $delta) => {
     if (var$3.$drawing)
         cbggg_SpriteBatch_setupMatrices(var$3);
     cbggg_SpriteBatch_begin($this.$batch9);
-    var$3 = $this.$font5;
+    var$3 = $this.$font35;
     var$6 = $this.$batch9;
     var$2 = $rt_createArray(jl_Object, 2);
     var$8 = var$2.data;
-    var$8[0] = $rt_s(485);
+    var$8[0] = $rt_s(489);
     $j = cbg_Gdx_graphics.$fps | 0;
     if ($j >= (-128) && $j <= 127) {
         jl_Integer_ensureIntegerCache();
@@ -38332,9 +39452,9 @@ cgte_RandomScreen_render = ($this, $delta) => {
     jl_Throwable__init_(var$3);
     $rt_throw(var$3);
 },
-cgte_RandomScreen_resize = ($this, $width, $height) => {
+cgte_Xoshiro128PPScreen_resize = ($this, $width, $height) => {
     let var$3, var$4, var$5, var$6;
-    var$3 = $this.$viewport11;
+    var$3 = $this.$viewport14;
     var$4 = var$3;
     var$4.$screenX = 0;
     var$4.$screenY = 0;
@@ -38347,397 +39467,23 @@ cgte_RandomScreen_resize = ($this, $width, $height) => {
     var$4.$worldWidth = var$5;
     var$4.$worldHeight = var$6;
     cbguv_Viewport_apply(var$4, 1);
-    cbguv_Viewport_apply($this.$viewport11, 1);
+    cbguv_Viewport_apply($this.$viewport14, 1);
 };
-function cgte_ChipScreen() {
+function cgte_ChockScreen() {
     let a = this; cbg_ScreenAdapter.call(a);
-    a.$random26 = null;
-    a.$batch13 = null;
-    a.$renderer8 = null;
-    a.$amounts14 = null;
-    a.$iterations14 = Long_ZERO;
-    a.$font32 = null;
-    a.$viewport22 = null;
-    a.$mainGame3 = null;
+    a.$random = null;
+    a.$batch15 = null;
+    a.$renderer22 = null;
+    a.$amounts5 = null;
+    a.$iterations12 = Long_ZERO;
+    a.$font24 = null;
+    a.$viewport4 = null;
+    a.$mainGame18 = null;
 }
-let cgte_ChipScreen_show = $this => {
+let cgte_ChockScreen_show = $this => {
     let var$1, var$2, var$3, var$4, var$5, var$6, var$7, var$8, var$9, var$10, var$11;
-    $this.$font32 = $this.$mainGame3.$font0;
-    var$1 = new cgtr_Chip32Random;
-    var$2 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
-    var$3 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
-    var$4 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
-    var$5 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
-    var$1.$stateA1 = var$2;
-    var$1.$stateB1 = var$3;
-    var$1.$stateC1 = var$4;
-    var$1.$stateD1 = var$5;
-    $this.$random26 = var$1;
-    $this.$batch13 = $this.$mainGame3.$batch;
-    var$1 = new cbguv_ScreenViewport;
-    var$6 = new cbgg_OrthographicCamera;
-    cbgg_Camera__init_(var$6);
-    var$6.$zoom = 1.0;
-    var$7 = new cbgm_Vector3;
-    cbgm_Vector3_$callClinit();
-    var$6.$tmp0 = var$7;
-    var$6.$near = 0.0;
-    var$1.$tmp = new cbgm_Vector3;
-    var$1.$unitsPerPixel = 1.0;
-    var$1.$camera = var$6;
-    $this.$viewport22 = var$1;
-    var$1 = new cbggg_ImmediateModeRenderer20;
-    var$8 = cbggg_ShaderProgram__init_(cbggg_ImmediateModeRenderer20_createVertexShader(0, 1, 0), cbggg_ImmediateModeRenderer20_createFragmentShader(0, 1, 0));
-    if (var$8.$isCompiled) {
-        cbggg_ImmediateModeRenderer20__init_(var$1, 1536, 0, 1, 0, var$8);
-        var$1.$ownsShader = 1;
-        $this.$renderer8 = var$1;
-        var$9 = $this.$amounts14.data;
-        var$2 = 0;
-        var$3 = var$9.length;
-        if (var$2 > var$3) {
-            var$1 = new jl_IllegalArgumentException;
-            var$1.$suppressionEnabled = 1;
-            var$1.$writableStackTrace = 1;
-            $rt_throw(var$1);
-        }
-        while (var$2 < var$3) {
-            var$4 = var$2 + 1 | 0;
-            var$9[var$2] = Long_ZERO;
-            var$2 = var$4;
-        }
-        $this.$iterations14 = Long_ZERO;
-        return;
-    }
-    var$1 = new cbgu_GdxRuntimeException;
-    var$6 = new jl_StringBuilder;
-    var$6.$buffer = $rt_createCharArray(16);
-    var$2 = var$6.$length0;
-    var$10 = var$6;
-    jl_AbstractStringBuilder_insert(var$10, var$2, $rt_s(479));
-    if (!var$8.$isCompiled)
-        var$7 = var$8.$log0;
-    else {
-        var$7 = cbg_Gdx_gl20.$glGetProgramInfoLog(var$8.$program);
-        var$8.$log0 = var$7;
-    }
-    jl_AbstractStringBuilder_insert(var$10, var$6.$length0, var$7);
-    var$7 = new jl_String;
-    var$9 = var$6.$buffer;
-    var$11 = var$9.data;
-    var$3 = var$6.$length0;
-    var$4 = var$11.length;
-    if (var$3 >= 0 && var$3 <= (var$4 - 0 | 0)) {
-        var$7.$nativeString = $rt_charArrayToString(var$9.data, 0, var$3);
-        var$1.$suppressionEnabled = 1;
-        var$1.$writableStackTrace = 1;
-        var$1.$message = var$7;
-        $rt_throw(var$1);
-    }
-    var$1 = new jl_IndexOutOfBoundsException;
-    jl_Exception__init_0(var$1);
-    $rt_throw(var$1);
-},
-cgte_ChipScreen_render = ($this, $delta) => {
-    let var$2, var$3, $i, $x, var$6, $camera, var$8, $j, var$10, $m, $color, var$13, var$14, var$15, var$16, $$je;
-    var$2 = cbg_Gdx_input.$justPressedKeys.data;
-    if (var$2[71]) {
-        var$3 = $this.$mainGame3;
-        $i = var$3.$screenIndex;
-        var$2 = var$3.$screens.data;
-        $x = var$2.length;
-        $i = (($i + $x | 0) - 1 | 0) % $x | 0;
-        var$3.$screenIndex = $i;
-        var$6 = var$2[$i];
-        var$3 = var$3;
-        var$3.$screen = var$6;
-        if (var$6 !== null) {
-            var$6.$show();
-            var$3.$screen.$resize0(cbg_Gdx_graphics.$canvas.width, cbg_Gdx_graphics.$canvas.height);
-        }
-        return;
-    }
-    if (var$2[72]) {
-        var$3 = $this.$mainGame3;
-        $i = var$3.$screenIndex + 1 | 0;
-        var$2 = var$3.$screens.data;
-        $i = $i % var$2.length | 0;
-        var$3.$screenIndex = $i;
-        var$6 = var$2[$i];
-        var$3 = var$3;
-        var$3.$screen = var$6;
-        if (var$6 !== null) {
-            var$6.$show();
-            var$3.$screen.$resize0(cbg_Gdx_graphics.$canvas.width, cbg_Gdx_graphics.$canvas.height);
-        }
-        return;
-    }
-    if (var$2[111])
-        return;
-    cbg_Gdx_gl.$glClearColor(1.0, 1.0, 1.0, 1.0);
-    cbg_Gdx_gl.$glClear(16384);
-    $camera = $this.$viewport22.$camera;
-    cbgg_OrthographicCamera_update($camera, 1);
-    var$8 = cbg_Gdx_input.$pressedKeys.data;
-    if (var$8[29]) {
-        var$2 = $this.$amounts14.data;
-        $i = 0;
-        $x = var$2.length;
-        if ($i > $x) {
-            var$3 = new jl_IllegalArgumentException;
-            var$3.$suppressionEnabled = 1;
-            var$3.$writableStackTrace = 1;
-            $rt_throw(var$3);
-        }
-        while ($i < $x) {
-            $j = $i + 1 | 0;
-            var$2[$i] = Long_ZERO;
-            $i = $j;
-        }
-        $this.$iterations14 = Long_ZERO;
-    }
-    if (var$8[30]) {
-        var$2 = $this.$amounts14.data;
-        $i = 0;
-        $x = var$2.length;
-        if ($i > $x) {
-            var$3 = new jl_IllegalArgumentException;
-            var$3.$suppressionEnabled = 1;
-            var$3.$writableStackTrace = 1;
-            $rt_throw(var$3);
-        }
-        while ($i < $x) {
-            $j = $i + 1 | 0;
-            var$2[$i] = Long_ZERO;
-            $i = $j;
-        }
-        $this.$iterations14 = Long_ZERO;
-    }
-    if (var$8[31]) {
-        var$2 = $this.$amounts14.data;
-        $i = 0;
-        $x = var$2.length;
-        if ($i > $x) {
-            var$3 = new jl_IllegalArgumentException;
-            var$3.$suppressionEnabled = 1;
-            var$3.$writableStackTrace = 1;
-            $rt_throw(var$3);
-        }
-        while ($i < $x) {
-            $j = $i + 1 | 0;
-            var$2[$i] = Long_ZERO;
-            $i = $j;
-        }
-        $this.$iterations14 = Long_ZERO;
-    }
-    $this.$iterations14 = Long_add($this.$iterations14, Long_fromInt(1));
-    $i = 0;
-    while ($i < 524288) {
-        var$10 = cgtr_Chip32Random_nextLong($this.$random26);
-        $m = $rt_intBitsToFloat((126 - jl_Long_numberOfLeadingZeros(var$10) | 0) << 23 | Long_lo(var$10) & 8388607) * 512.0 | 0;
-        if ($m >= 0 && $m < 512) {
-            var$2 = $this.$amounts14.data;
-            var$2[$m] = Long_add(var$2[$m], Long_fromInt(1));
-        }
-        $i = $i + 1 | 0;
-    }
-    var$3 = $this.$renderer8;
-    var$6 = $camera.$combined;
-    cbgm_Matrix4_set(var$3.$projModelView, var$6.$val);
-    var$3.$primitiveType = 1;
-    $x = 0;
-    while ($x < 512) {
-        $color = $x & 63 ? (-1.5436749266448052E38) : (-1.5203096921934465E38);
-        var$3 = $this.$renderer8;
-        var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
-        $delta = $x;
-        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0, 0.0);
-        var$3 = $this.$renderer8;
-        var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
-        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts14.data[$x]) / Long_toNumber($this.$iterations14), 0.0);
-        $x = $x + 1 | 0;
-    }
-    $j = 8;
-    while ($j < 520) {
-        var$3 = $this.$renderer8;
-        var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = (-6.221923240859403E37);
-        $color = $j;
-        cbggg_ImmediateModeRenderer20_vertex(var$3, 0.0, $color, 0.0);
-        var$3 = $this.$renderer8;
-        var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = (-6.221923240859403E37);
-        cbggg_ImmediateModeRenderer20_vertex(var$3, 10.0, $color, 0.0);
-        $j = $j + 32 | 0;
-    }
-    cbggg_ImmediateModeRenderer20_flush($this.$renderer8);
-    var$3 = $this.$batch13;
-    var$6 = $camera.$combined;
-    if (var$3.$drawing)
-        cbggg_SpriteBatch_flush(var$3);
-    cbgm_Matrix4_set(var$3.$projectionMatrix, var$6.$val);
-    if (var$3.$drawing)
-        cbggg_SpriteBatch_setupMatrices(var$3);
-    cbggg_SpriteBatch_begin($this.$batch13);
-    var$3 = $this.$font32;
-    var$6 = $this.$batch13;
-    var$2 = $rt_createArray(jl_Object, 2);
-    var$8 = var$2.data;
-    var$8[0] = $rt_s(487);
-    $j = cbg_Gdx_graphics.$fps | 0;
-    if ($j >= (-128) && $j <= 127) {
-        jl_Integer_ensureIntegerCache();
-        var$13 = jl_Integer_integerCache.data[$j + 128 | 0];
-    } else {
-        var$13 = new jl_Integer;
-        var$13.$value = $j;
-    }
-    var$8[1] = var$13;
-    var$13 = new jl_StringBuilder;
-    var$13.$buffer = $rt_createCharArray($rt_s(492).$nativeString.length);
-    $camera = cgtd_Stringf_appendf(var$13, $rt_s(492), var$2);
-    var$14 = new jl_String;
-    var$2 = $camera.$buffer;
-    var$8 = var$2.data;
-    $x = $camera.$length0;
-    $j = var$8.length;
-    if ($x >= 0 && $x <= ($j - 0 | 0)) {
-        var$14.$nativeString = $rt_charArrayToString(var$2.data, 0, $x);
-        cbggg_BitmapFontCache_clear(var$3.$cache);
-        var$15 = var$3.$cache;
-        $m = var$14.$nativeString.length;
-        var$16 = null;
-        cbgu_Pools_$callClinit();
-        $camera = cbgu_Pools_typePools;
-        $x = cbgu_ObjectMap_locateKey($camera, $rt_cls(cbggg_GlyphLayout));
-        $camera = $x < 0 ? null : $camera.$valueTable.data[$x];
-        if ($camera === null) {
-            $camera = new cbgu_ReflectionPool;
-            jl_Object__init_($camera);
-            $camera.$freeObjects = cbgu_Array__init_(0, 4);
-            $camera.$max1 = 100;
-            a: {
-                try {
-                    var$13 = cbgur_ClassReflection_getConstructor($rt_cls(cbggg_GlyphLayout), null);
-                    break a;
-                } catch ($$e) {
-                    $$je = $rt_wrapException($$e);
-                    if ($$je instanceof jl_Exception) {
-                    } else {
-                        throw $$e;
-                    }
-                }
-                try {
-                    var$13 = cbgur_ClassReflection_getDeclaredConstructor($rt_cls(cbggg_GlyphLayout), null);
-                    cbgur_Constructor_setAccessible(var$13, 1);
-                    break a;
-                } catch ($$e) {
-                    $$je = $rt_wrapException($$e);
-                    if ($$je instanceof cbgur_ReflectionException) {
-                    } else {
-                        throw $$e;
-                    }
-                }
-                var$13 = null;
-            }
-            $camera.$constructor = var$13;
-            if (var$13 === null) {
-                var$3 = new jl_RuntimeException;
-                var$6 = new jl_StringBuilder;
-                jl_AbstractStringBuilder__init_(var$6);
-                jl_AbstractStringBuilder_append(var$6, $rt_s(33));
-                if ($rt_cls(cbggg_GlyphLayout).$name === null)
-                    $rt_cls(cbggg_GlyphLayout).$name = otp_Platform_getName($rt_cls(cbggg_GlyphLayout).$platformClass);
-                jl_AbstractStringBuilder_append(var$6, $rt_cls(cbggg_GlyphLayout).$name);
-                jl_Exception__init_(var$3, jl_AbstractStringBuilder_toString(var$6));
-                $rt_throw(var$3);
-            }
-            cbgu_ObjectMap_put(cbgu_Pools_typePools, $rt_cls(cbggg_GlyphLayout), $camera);
-        }
-        b: {
-            var$13 = $camera.$freeObjects;
-            $x = var$13.$size;
-            if ($x) {
-                if (!$x) {
-                    var$3 = new jl_IllegalStateException;
-                    jl_Exception__init_(var$3, $rt_s(38));
-                    $rt_throw(var$3);
-                }
-                $x = $x - 1 | 0;
-                var$13.$size = $x;
-                var$2 = var$13.$items.data;
-                $camera = var$2[$x];
-                var$2[$x] = null;
-            } else {
-                var$13 = $camera;
-                try {
-                    $camera = cbgur_Constructor_newInstance(var$13.$constructor, null);
-                    break b;
-                } catch ($$e) {
-                    $$je = $rt_wrapException($$e);
-                    if ($$je instanceof jl_Exception) {
-                        var$6 = $$je;
-                        $camera = new cbgu_GdxRuntimeException;
-                        var$3 = new jl_StringBuilder;
-                        jl_AbstractStringBuilder__init_0(var$3, 16);
-                        $i = var$3.$length0;
-                        var$15 = var$3;
-                        jl_StringBuilder_insert(var$15, $i, $rt_s(39));
-                        var$16 = var$13.$constructor.$constructor0.$declaringClass;
-                        if (var$16.$name === null)
-                            var$16.$name = $rt_str(var$16.$platformClass.$meta.name);
-                        var$13 = var$16.$name;
-                        jl_StringBuilder_insert(var$15, var$3.$length0, var$13);
-                        jl_Exception__init_1($camera, jl_String__init_(var$3.$buffer, 0, var$3.$length0), var$6);
-                        $rt_throw($camera);
-                    } else {
-                        throw $$e;
-                    }
-                }
-            }
-        }
-        $camera = $camera;
-        cbgu_Array_add(var$15.$pooledLayouts, $camera);
-        cbggg_GlyphLayout_setText($camera, var$15.$font, var$14, 0, $m, var$15.$color, 384.0, 1, 1, var$16);
-        cbggg_BitmapFontCache_addToCache(var$15, $camera, 64.0, 522.0 + var$15.$font.$data0.$ascent);
-        cbggg_BitmapFontCache_draw(var$3.$cache, var$6);
-        cbggg_SpriteBatch_end($this.$batch13);
-        return;
-    }
-    var$3 = new jl_IndexOutOfBoundsException;
-    jl_Throwable__init_(var$3);
-    $rt_throw(var$3);
-},
-cgte_ChipScreen_resize = ($this, $width, $height) => {
-    let var$3, var$4, var$5, var$6;
-    var$3 = $this.$viewport22;
-    var$4 = var$3;
-    var$4.$screenX = 0;
-    var$4.$screenY = 0;
-    var$4.$screenWidth = $width;
-    var$4.$screenHeight = $height;
-    var$5 = $width;
-    var$6 = var$3.$unitsPerPixel;
-    var$5 = var$5 * var$6;
-    var$6 = $height * var$6;
-    var$4.$worldWidth = var$5;
-    var$4.$worldHeight = var$6;
-    cbguv_Viewport_apply(var$4, 1);
-    cbguv_Viewport_apply($this.$viewport22, 1);
-};
-function cgte_ChopScreen() {
-    let a = this; cbg_ScreenAdapter.call(a);
-    a.$random16 = null;
-    a.$batch4 = null;
-    a.$renderer29 = null;
-    a.$amounts11 = null;
-    a.$iterations4 = Long_ZERO;
-    a.$font36 = null;
-    a.$viewport28 = null;
-    a.$mainGame28 = null;
-}
-let cgte_ChopScreen_show = $this => {
-    let var$1, var$2, var$3, var$4, var$5, var$6, var$7, var$8, var$9, var$10, var$11;
-    $this.$font36 = $this.$mainGame28.$font0;
-    var$1 = new cgtr_ChopRandom;
+    $this.$font24 = $this.$mainGame18.$font0;
+    var$1 = new cgtr_Chock32Random;
     var$2 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$3 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$4 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
@@ -38746,783 +39492,29 @@ let cgte_ChopScreen_show = $this => {
     var$1.$stateB2 = var$3;
     var$1.$stateC3 = var$4;
     var$1.$stateD3 = var$5;
-    $this.$random16 = var$1;
-    $this.$batch4 = $this.$mainGame28.$batch;
-    var$1 = new cbguv_ScreenViewport;
-    var$6 = new cbgg_OrthographicCamera;
-    cbgg_Camera__init_(var$6);
-    var$6.$zoom = 1.0;
-    var$7 = new cbgm_Vector3;
-    cbgm_Vector3_$callClinit();
-    var$6.$tmp0 = var$7;
-    var$6.$near = 0.0;
-    var$1.$tmp = new cbgm_Vector3;
-    var$1.$unitsPerPixel = 1.0;
-    var$1.$camera = var$6;
-    $this.$viewport28 = var$1;
-    var$1 = new cbggg_ImmediateModeRenderer20;
-    var$8 = cbggg_ShaderProgram__init_(cbggg_ImmediateModeRenderer20_createVertexShader(0, 1, 0), cbggg_ImmediateModeRenderer20_createFragmentShader(0, 1, 0));
-    if (var$8.$isCompiled) {
-        cbggg_ImmediateModeRenderer20__init_(var$1, 1536, 0, 1, 0, var$8);
-        var$1.$ownsShader = 1;
-        $this.$renderer29 = var$1;
-        var$9 = $this.$amounts11.data;
-        var$2 = 0;
-        var$3 = var$9.length;
-        if (var$2 > var$3) {
-            var$1 = new jl_IllegalArgumentException;
-            var$1.$suppressionEnabled = 1;
-            var$1.$writableStackTrace = 1;
-            $rt_throw(var$1);
-        }
-        while (var$2 < var$3) {
-            var$4 = var$2 + 1 | 0;
-            var$9[var$2] = Long_ZERO;
-            var$2 = var$4;
-        }
-        $this.$iterations4 = Long_ZERO;
-        return;
-    }
-    var$1 = new cbgu_GdxRuntimeException;
-    var$6 = new jl_StringBuilder;
-    var$6.$buffer = $rt_createCharArray(16);
-    var$2 = var$6.$length0;
-    var$10 = var$6;
-    jl_AbstractStringBuilder_insert(var$10, var$2, $rt_s(479));
-    if (!var$8.$isCompiled)
-        var$7 = var$8.$log0;
-    else {
-        var$7 = cbg_Gdx_gl20.$glGetProgramInfoLog(var$8.$program);
-        var$8.$log0 = var$7;
-    }
-    jl_AbstractStringBuilder_insert(var$10, var$6.$length0, var$7);
-    var$7 = new jl_String;
-    var$9 = var$6.$buffer;
-    var$11 = var$9.data;
-    var$3 = var$6.$length0;
-    var$4 = var$11.length;
-    if (var$3 >= 0 && var$3 <= (var$4 - 0 | 0)) {
-        var$7.$nativeString = $rt_charArrayToString(var$9.data, 0, var$3);
-        var$1.$suppressionEnabled = 1;
-        var$1.$writableStackTrace = 1;
-        var$1.$message = var$7;
-        $rt_throw(var$1);
-    }
-    var$1 = new jl_IndexOutOfBoundsException;
-    jl_Exception__init_0(var$1);
-    $rt_throw(var$1);
-},
-cgte_ChopScreen_render = ($this, $delta) => {
-    let var$2, var$3, $i, $x, var$6, $camera, var$8, $j, var$10, $m, $color, var$13, var$14, var$15, var$16, $$je;
-    var$2 = cbg_Gdx_input.$justPressedKeys.data;
-    if (var$2[71]) {
-        var$3 = $this.$mainGame28;
-        $i = var$3.$screenIndex;
-        var$2 = var$3.$screens.data;
-        $x = var$2.length;
-        $i = (($i + $x | 0) - 1 | 0) % $x | 0;
-        var$3.$screenIndex = $i;
-        var$6 = var$2[$i];
-        var$3 = var$3;
-        var$3.$screen = var$6;
-        if (var$6 !== null) {
-            var$6.$show();
-            var$3.$screen.$resize0(cbg_Gdx_graphics.$canvas.width, cbg_Gdx_graphics.$canvas.height);
-        }
-        return;
-    }
-    if (var$2[72]) {
-        var$3 = $this.$mainGame28;
-        $i = var$3.$screenIndex + 1 | 0;
-        var$2 = var$3.$screens.data;
-        $i = $i % var$2.length | 0;
-        var$3.$screenIndex = $i;
-        var$6 = var$2[$i];
-        var$3 = var$3;
-        var$3.$screen = var$6;
-        if (var$6 !== null) {
-            var$6.$show();
-            var$3.$screen.$resize0(cbg_Gdx_graphics.$canvas.width, cbg_Gdx_graphics.$canvas.height);
-        }
-        return;
-    }
-    if (var$2[111])
-        return;
-    cbg_Gdx_gl.$glClearColor(1.0, 1.0, 1.0, 1.0);
-    cbg_Gdx_gl.$glClear(16384);
-    $camera = $this.$viewport28.$camera;
-    cbgg_OrthographicCamera_update($camera, 1);
-    var$8 = cbg_Gdx_input.$pressedKeys.data;
-    if (var$8[29]) {
-        var$2 = $this.$amounts11.data;
-        $i = 0;
-        $x = var$2.length;
-        if ($i > $x) {
-            var$3 = new jl_IllegalArgumentException;
-            var$3.$suppressionEnabled = 1;
-            var$3.$writableStackTrace = 1;
-            $rt_throw(var$3);
-        }
-        while ($i < $x) {
-            $j = $i + 1 | 0;
-            var$2[$i] = Long_ZERO;
-            $i = $j;
-        }
-        $this.$iterations4 = Long_ZERO;
-    }
-    if (var$8[30]) {
-        var$2 = $this.$amounts11.data;
-        $i = 0;
-        $x = var$2.length;
-        if ($i > $x) {
-            var$3 = new jl_IllegalArgumentException;
-            var$3.$suppressionEnabled = 1;
-            var$3.$writableStackTrace = 1;
-            $rt_throw(var$3);
-        }
-        while ($i < $x) {
-            $j = $i + 1 | 0;
-            var$2[$i] = Long_ZERO;
-            $i = $j;
-        }
-        $this.$iterations4 = Long_ZERO;
-    }
-    if (var$8[31]) {
-        var$2 = $this.$amounts11.data;
-        $i = 0;
-        $x = var$2.length;
-        if ($i > $x) {
-            var$3 = new jl_IllegalArgumentException;
-            var$3.$suppressionEnabled = 1;
-            var$3.$writableStackTrace = 1;
-            $rt_throw(var$3);
-        }
-        while ($i < $x) {
-            $j = $i + 1 | 0;
-            var$2[$i] = Long_ZERO;
-            $i = $j;
-        }
-        $this.$iterations4 = Long_ZERO;
-    }
-    $this.$iterations4 = Long_add($this.$iterations4, Long_fromInt(1));
-    $i = 0;
-    while ($i < 524288) {
-        var$10 = cgtr_ChopRandom_nextLong($this.$random16);
-        $m = $rt_intBitsToFloat((126 - jl_Long_numberOfLeadingZeros(var$10) | 0) << 23 | Long_lo(var$10) & 8388607) * 512.0 | 0;
-        if ($m >= 0 && $m < 512) {
-            var$2 = $this.$amounts11.data;
-            var$2[$m] = Long_add(var$2[$m], Long_fromInt(1));
-        }
-        $i = $i + 1 | 0;
-    }
-    var$3 = $this.$renderer29;
-    var$6 = $camera.$combined;
-    cbgm_Matrix4_set(var$3.$projModelView, var$6.$val);
-    var$3.$primitiveType = 1;
-    $x = 0;
-    while ($x < 512) {
-        $color = $x & 63 ? (-1.5436749266448052E38) : (-1.5203096921934465E38);
-        var$3 = $this.$renderer29;
-        var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
-        $delta = $x;
-        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0, 0.0);
-        var$3 = $this.$renderer29;
-        var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
-        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts11.data[$x]) / Long_toNumber($this.$iterations4), 0.0);
-        $x = $x + 1 | 0;
-    }
-    $j = 8;
-    while ($j < 520) {
-        var$3 = $this.$renderer29;
-        var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = (-6.221923240859403E37);
-        $color = $j;
-        cbggg_ImmediateModeRenderer20_vertex(var$3, 0.0, $color, 0.0);
-        var$3 = $this.$renderer29;
-        var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = (-6.221923240859403E37);
-        cbggg_ImmediateModeRenderer20_vertex(var$3, 10.0, $color, 0.0);
-        $j = $j + 32 | 0;
-    }
-    cbggg_ImmediateModeRenderer20_flush($this.$renderer29);
-    var$3 = $this.$batch4;
-    var$6 = $camera.$combined;
-    if (var$3.$drawing)
-        cbggg_SpriteBatch_flush(var$3);
-    cbgm_Matrix4_set(var$3.$projectionMatrix, var$6.$val);
-    if (var$3.$drawing)
-        cbggg_SpriteBatch_setupMatrices(var$3);
-    cbggg_SpriteBatch_begin($this.$batch4);
-    var$3 = $this.$font36;
-    var$6 = $this.$batch4;
-    var$2 = $rt_createArray(jl_Object, 2);
-    var$8 = var$2.data;
-    var$8[0] = $rt_s(488);
-    $j = cbg_Gdx_graphics.$fps | 0;
-    if ($j >= (-128) && $j <= 127) {
-        jl_Integer_ensureIntegerCache();
-        var$13 = jl_Integer_integerCache.data[$j + 128 | 0];
-    } else {
-        var$13 = new jl_Integer;
-        var$13.$value = $j;
-    }
-    var$8[1] = var$13;
-    var$13 = new jl_StringBuilder;
-    var$13.$buffer = $rt_createCharArray($rt_s(492).$nativeString.length);
-    $camera = cgtd_Stringf_appendf(var$13, $rt_s(492), var$2);
-    var$14 = new jl_String;
-    var$2 = $camera.$buffer;
-    var$8 = var$2.data;
-    $x = $camera.$length0;
-    $j = var$8.length;
-    if ($x >= 0 && $x <= ($j - 0 | 0)) {
-        var$14.$nativeString = $rt_charArrayToString(var$2.data, 0, $x);
-        cbggg_BitmapFontCache_clear(var$3.$cache);
-        var$15 = var$3.$cache;
-        $m = var$14.$nativeString.length;
-        var$16 = null;
-        cbgu_Pools_$callClinit();
-        $camera = cbgu_Pools_typePools;
-        $x = cbgu_ObjectMap_locateKey($camera, $rt_cls(cbggg_GlyphLayout));
-        $camera = $x < 0 ? null : $camera.$valueTable.data[$x];
-        if ($camera === null) {
-            $camera = new cbgu_ReflectionPool;
-            jl_Object__init_($camera);
-            $camera.$freeObjects = cbgu_Array__init_(0, 4);
-            $camera.$max1 = 100;
-            a: {
-                try {
-                    var$13 = cbgur_ClassReflection_getConstructor($rt_cls(cbggg_GlyphLayout), null);
-                    break a;
-                } catch ($$e) {
-                    $$je = $rt_wrapException($$e);
-                    if ($$je instanceof jl_Exception) {
-                    } else {
-                        throw $$e;
-                    }
-                }
-                try {
-                    var$13 = cbgur_ClassReflection_getDeclaredConstructor($rt_cls(cbggg_GlyphLayout), null);
-                    cbgur_Constructor_setAccessible(var$13, 1);
-                    break a;
-                } catch ($$e) {
-                    $$je = $rt_wrapException($$e);
-                    if ($$je instanceof cbgur_ReflectionException) {
-                    } else {
-                        throw $$e;
-                    }
-                }
-                var$13 = null;
-            }
-            $camera.$constructor = var$13;
-            if (var$13 === null) {
-                var$3 = new jl_RuntimeException;
-                var$6 = new jl_StringBuilder;
-                jl_AbstractStringBuilder__init_(var$6);
-                jl_AbstractStringBuilder_append(var$6, $rt_s(33));
-                if ($rt_cls(cbggg_GlyphLayout).$name === null)
-                    $rt_cls(cbggg_GlyphLayout).$name = otp_Platform_getName($rt_cls(cbggg_GlyphLayout).$platformClass);
-                jl_AbstractStringBuilder_append(var$6, $rt_cls(cbggg_GlyphLayout).$name);
-                jl_Exception__init_(var$3, jl_AbstractStringBuilder_toString(var$6));
-                $rt_throw(var$3);
-            }
-            cbgu_ObjectMap_put(cbgu_Pools_typePools, $rt_cls(cbggg_GlyphLayout), $camera);
-        }
-        b: {
-            var$13 = $camera.$freeObjects;
-            $x = var$13.$size;
-            if ($x) {
-                if (!$x) {
-                    var$3 = new jl_IllegalStateException;
-                    jl_Exception__init_(var$3, $rt_s(38));
-                    $rt_throw(var$3);
-                }
-                $x = $x - 1 | 0;
-                var$13.$size = $x;
-                var$2 = var$13.$items.data;
-                $camera = var$2[$x];
-                var$2[$x] = null;
-            } else {
-                var$13 = $camera;
-                try {
-                    $camera = cbgur_Constructor_newInstance(var$13.$constructor, null);
-                    break b;
-                } catch ($$e) {
-                    $$je = $rt_wrapException($$e);
-                    if ($$je instanceof jl_Exception) {
-                        var$6 = $$je;
-                        $camera = new cbgu_GdxRuntimeException;
-                        var$3 = new jl_StringBuilder;
-                        jl_AbstractStringBuilder__init_0(var$3, 16);
-                        $i = var$3.$length0;
-                        var$15 = var$3;
-                        jl_StringBuilder_insert(var$15, $i, $rt_s(39));
-                        var$16 = var$13.$constructor.$constructor0.$declaringClass;
-                        if (var$16.$name === null)
-                            var$16.$name = $rt_str(var$16.$platformClass.$meta.name);
-                        var$13 = var$16.$name;
-                        jl_StringBuilder_insert(var$15, var$3.$length0, var$13);
-                        jl_Exception__init_1($camera, jl_String__init_(var$3.$buffer, 0, var$3.$length0), var$6);
-                        $rt_throw($camera);
-                    } else {
-                        throw $$e;
-                    }
-                }
-            }
-        }
-        $camera = $camera;
-        cbgu_Array_add(var$15.$pooledLayouts, $camera);
-        cbggg_GlyphLayout_setText($camera, var$15.$font, var$14, 0, $m, var$15.$color, 384.0, 1, 1, var$16);
-        cbggg_BitmapFontCache_addToCache(var$15, $camera, 64.0, 522.0 + var$15.$font.$data0.$ascent);
-        cbggg_BitmapFontCache_draw(var$3.$cache, var$6);
-        cbggg_SpriteBatch_end($this.$batch4);
-        return;
-    }
-    var$3 = new jl_IndexOutOfBoundsException;
-    jl_Throwable__init_(var$3);
-    $rt_throw(var$3);
-},
-cgte_ChopScreen_resize = ($this, $width, $height) => {
-    let var$3, var$4, var$5, var$6;
-    var$3 = $this.$viewport28;
-    var$4 = var$3;
-    var$4.$screenX = 0;
-    var$4.$screenY = 0;
-    var$4.$screenWidth = $width;
-    var$4.$screenHeight = $height;
-    var$5 = $width;
-    var$6 = var$3.$unitsPerPixel;
-    var$5 = var$5 * var$6;
-    var$6 = $height * var$6;
-    var$4.$worldWidth = var$5;
-    var$4.$worldHeight = var$6;
-    cbguv_Viewport_apply(var$4, 1);
-    cbguv_Viewport_apply($this.$viewport28, 1);
-};
-function cgte_Xoshiro128PPScreen() {
-    let a = this; cbg_ScreenAdapter.call(a);
-    a.$random24 = null;
-    a.$batch8 = null;
-    a.$renderer17 = null;
-    a.$amounts34 = null;
-    a.$iterations11 = Long_ZERO;
-    a.$font35 = null;
-    a.$viewport17 = null;
-    a.$mainGame14 = null;
-}
-let cgte_Xoshiro128PPScreen_show = $this => {
-    let var$1, var$2, var$3, var$4, var$5, var$6, var$7, var$8, var$9, var$10, var$11;
-    $this.$font35 = $this.$mainGame14.$font0;
-    var$1 = new cgtr_Xoshiro128PlusPlusRandom;
-    var$2 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
-    var$3 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
-    var$4 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
-    var$5 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
-    var$1.$stateA3 = var$2;
-    var$1.$stateB3 = var$3;
-    var$1.$stateC2 = var$4;
-    if (!(var$2 | var$3 | var$4 | var$5))
-        var$5 = 1;
-    var$1.$stateD2 = var$5;
-    $this.$random24 = var$1;
-    $this.$batch8 = $this.$mainGame14.$batch;
-    var$1 = new cbguv_ScreenViewport;
-    var$6 = new cbgg_OrthographicCamera;
-    cbgg_Camera__init_(var$6);
-    var$6.$zoom = 1.0;
-    var$7 = new cbgm_Vector3;
-    cbgm_Vector3_$callClinit();
-    var$6.$tmp0 = var$7;
-    var$6.$near = 0.0;
-    var$1.$tmp = new cbgm_Vector3;
-    var$1.$unitsPerPixel = 1.0;
-    var$1.$camera = var$6;
-    $this.$viewport17 = var$1;
-    var$1 = new cbggg_ImmediateModeRenderer20;
-    var$8 = cbggg_ShaderProgram__init_(cbggg_ImmediateModeRenderer20_createVertexShader(0, 1, 0), cbggg_ImmediateModeRenderer20_createFragmentShader(0, 1, 0));
-    if (var$8.$isCompiled) {
-        cbggg_ImmediateModeRenderer20__init_(var$1, 1536, 0, 1, 0, var$8);
-        var$1.$ownsShader = 1;
-        $this.$renderer17 = var$1;
-        var$9 = $this.$amounts34.data;
-        var$2 = 0;
-        var$3 = var$9.length;
-        if (var$2 > var$3) {
-            var$1 = new jl_IllegalArgumentException;
-            var$1.$suppressionEnabled = 1;
-            var$1.$writableStackTrace = 1;
-            $rt_throw(var$1);
-        }
-        while (var$2 < var$3) {
-            var$4 = var$2 + 1 | 0;
-            var$9[var$2] = Long_ZERO;
-            var$2 = var$4;
-        }
-        $this.$iterations11 = Long_ZERO;
-        return;
-    }
-    var$1 = new cbgu_GdxRuntimeException;
-    var$6 = new jl_StringBuilder;
-    var$6.$buffer = $rt_createCharArray(16);
-    var$2 = var$6.$length0;
-    var$10 = var$6;
-    jl_AbstractStringBuilder_insert(var$10, var$2, $rt_s(479));
-    if (!var$8.$isCompiled)
-        var$7 = var$8.$log0;
-    else {
-        var$7 = cbg_Gdx_gl20.$glGetProgramInfoLog(var$8.$program);
-        var$8.$log0 = var$7;
-    }
-    jl_AbstractStringBuilder_insert(var$10, var$6.$length0, var$7);
-    var$7 = new jl_String;
-    var$9 = var$6.$buffer;
-    var$11 = var$9.data;
-    var$3 = var$6.$length0;
-    var$4 = var$11.length;
-    if (var$3 >= 0 && var$3 <= (var$4 - 0 | 0)) {
-        var$7.$nativeString = $rt_charArrayToString(var$9.data, 0, var$3);
-        var$1.$suppressionEnabled = 1;
-        var$1.$writableStackTrace = 1;
-        var$1.$message = var$7;
-        $rt_throw(var$1);
-    }
-    var$1 = new jl_IndexOutOfBoundsException;
-    jl_Exception__init_0(var$1);
-    $rt_throw(var$1);
-},
-cgte_Xoshiro128PPScreen_render = ($this, $delta) => {
-    let var$2, var$3, $i, $x, var$6, $camera, var$8, $j, var$10, $m, $color, var$13, var$14, var$15, var$16, $$je;
-    var$2 = cbg_Gdx_input.$justPressedKeys.data;
-    if (var$2[71]) {
-        var$3 = $this.$mainGame14;
-        $i = var$3.$screenIndex;
-        var$2 = var$3.$screens.data;
-        $x = var$2.length;
-        $i = (($i + $x | 0) - 1 | 0) % $x | 0;
-        var$3.$screenIndex = $i;
-        var$6 = var$2[$i];
-        var$3 = var$3;
-        var$3.$screen = var$6;
-        if (var$6 !== null) {
-            var$6.$show();
-            var$3.$screen.$resize0(cbg_Gdx_graphics.$canvas.width, cbg_Gdx_graphics.$canvas.height);
-        }
-        return;
-    }
-    if (var$2[72]) {
-        var$3 = $this.$mainGame14;
-        $i = var$3.$screenIndex + 1 | 0;
-        var$2 = var$3.$screens.data;
-        $i = $i % var$2.length | 0;
-        var$3.$screenIndex = $i;
-        var$6 = var$2[$i];
-        var$3 = var$3;
-        var$3.$screen = var$6;
-        if (var$6 !== null) {
-            var$6.$show();
-            var$3.$screen.$resize0(cbg_Gdx_graphics.$canvas.width, cbg_Gdx_graphics.$canvas.height);
-        }
-        return;
-    }
-    if (var$2[111])
-        return;
-    cbg_Gdx_gl.$glClearColor(1.0, 1.0, 1.0, 1.0);
-    cbg_Gdx_gl.$glClear(16384);
-    $camera = $this.$viewport17.$camera;
-    cbgg_OrthographicCamera_update($camera, 1);
-    var$8 = cbg_Gdx_input.$pressedKeys.data;
-    if (var$8[29]) {
-        var$2 = $this.$amounts34.data;
-        $i = 0;
-        $x = var$2.length;
-        if ($i > $x) {
-            var$3 = new jl_IllegalArgumentException;
-            var$3.$suppressionEnabled = 1;
-            var$3.$writableStackTrace = 1;
-            $rt_throw(var$3);
-        }
-        while ($i < $x) {
-            $j = $i + 1 | 0;
-            var$2[$i] = Long_ZERO;
-            $i = $j;
-        }
-        $this.$iterations11 = Long_ZERO;
-    }
-    if (var$8[30]) {
-        var$2 = $this.$amounts34.data;
-        $i = 0;
-        $x = var$2.length;
-        if ($i > $x) {
-            var$3 = new jl_IllegalArgumentException;
-            var$3.$suppressionEnabled = 1;
-            var$3.$writableStackTrace = 1;
-            $rt_throw(var$3);
-        }
-        while ($i < $x) {
-            $j = $i + 1 | 0;
-            var$2[$i] = Long_ZERO;
-            $i = $j;
-        }
-        $this.$iterations11 = Long_ZERO;
-    }
-    if (var$8[31]) {
-        var$2 = $this.$amounts34.data;
-        $i = 0;
-        $x = var$2.length;
-        if ($i > $x) {
-            var$3 = new jl_IllegalArgumentException;
-            var$3.$suppressionEnabled = 1;
-            var$3.$writableStackTrace = 1;
-            $rt_throw(var$3);
-        }
-        while ($i < $x) {
-            $j = $i + 1 | 0;
-            var$2[$i] = Long_ZERO;
-            $i = $j;
-        }
-        $this.$iterations11 = Long_ZERO;
-    }
-    $this.$iterations11 = Long_add($this.$iterations11, Long_fromInt(1));
-    $i = 0;
-    while ($i < 524288) {
-        var$10 = cgtr_Xoshiro128PlusPlusRandom_nextLong($this.$random24);
-        $m = $rt_intBitsToFloat((126 - jl_Long_numberOfLeadingZeros(var$10) | 0) << 23 | Long_lo(var$10) & 8388607) * 512.0 | 0;
-        if ($m >= 0 && $m < 512) {
-            var$2 = $this.$amounts34.data;
-            var$2[$m] = Long_add(var$2[$m], Long_fromInt(1));
-        }
-        $i = $i + 1 | 0;
-    }
-    var$3 = $this.$renderer17;
-    var$6 = $camera.$combined;
-    cbgm_Matrix4_set(var$3.$projModelView, var$6.$val);
-    var$3.$primitiveType = 1;
-    $x = 0;
-    while ($x < 512) {
-        $color = $x & 63 ? (-1.5436749266448052E38) : (-1.5203096921934465E38);
-        var$3 = $this.$renderer17;
-        var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
-        $delta = $x;
-        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0, 0.0);
-        var$3 = $this.$renderer17;
-        var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
-        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts34.data[$x]) / Long_toNumber($this.$iterations11), 0.0);
-        $x = $x + 1 | 0;
-    }
-    $j = 8;
-    while ($j < 520) {
-        var$3 = $this.$renderer17;
-        var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = (-6.221923240859403E37);
-        $color = $j;
-        cbggg_ImmediateModeRenderer20_vertex(var$3, 0.0, $color, 0.0);
-        var$3 = $this.$renderer17;
-        var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = (-6.221923240859403E37);
-        cbggg_ImmediateModeRenderer20_vertex(var$3, 10.0, $color, 0.0);
-        $j = $j + 32 | 0;
-    }
-    cbggg_ImmediateModeRenderer20_flush($this.$renderer17);
-    var$3 = $this.$batch8;
-    var$6 = $camera.$combined;
-    if (var$3.$drawing)
-        cbggg_SpriteBatch_flush(var$3);
-    cbgm_Matrix4_set(var$3.$projectionMatrix, var$6.$val);
-    if (var$3.$drawing)
-        cbggg_SpriteBatch_setupMatrices(var$3);
-    cbggg_SpriteBatch_begin($this.$batch8);
-    var$3 = $this.$font35;
-    var$6 = $this.$batch8;
-    var$2 = $rt_createArray(jl_Object, 2);
-    var$8 = var$2.data;
-    var$8[0] = $rt_s(489);
-    $j = cbg_Gdx_graphics.$fps | 0;
-    if ($j >= (-128) && $j <= 127) {
-        jl_Integer_ensureIntegerCache();
-        var$13 = jl_Integer_integerCache.data[$j + 128 | 0];
-    } else {
-        var$13 = new jl_Integer;
-        var$13.$value = $j;
-    }
-    var$8[1] = var$13;
-    var$13 = new jl_StringBuilder;
-    var$13.$buffer = $rt_createCharArray($rt_s(492).$nativeString.length);
-    $camera = cgtd_Stringf_appendf(var$13, $rt_s(492), var$2);
-    var$14 = new jl_String;
-    var$2 = $camera.$buffer;
-    var$8 = var$2.data;
-    $x = $camera.$length0;
-    $j = var$8.length;
-    if ($x >= 0 && $x <= ($j - 0 | 0)) {
-        var$14.$nativeString = $rt_charArrayToString(var$2.data, 0, $x);
-        cbggg_BitmapFontCache_clear(var$3.$cache);
-        var$15 = var$3.$cache;
-        $m = var$14.$nativeString.length;
-        var$16 = null;
-        cbgu_Pools_$callClinit();
-        $camera = cbgu_Pools_typePools;
-        $x = cbgu_ObjectMap_locateKey($camera, $rt_cls(cbggg_GlyphLayout));
-        $camera = $x < 0 ? null : $camera.$valueTable.data[$x];
-        if ($camera === null) {
-            $camera = new cbgu_ReflectionPool;
-            jl_Object__init_($camera);
-            $camera.$freeObjects = cbgu_Array__init_(0, 4);
-            $camera.$max1 = 100;
-            a: {
-                try {
-                    var$13 = cbgur_ClassReflection_getConstructor($rt_cls(cbggg_GlyphLayout), null);
-                    break a;
-                } catch ($$e) {
-                    $$je = $rt_wrapException($$e);
-                    if ($$je instanceof jl_Exception) {
-                    } else {
-                        throw $$e;
-                    }
-                }
-                try {
-                    var$13 = cbgur_ClassReflection_getDeclaredConstructor($rt_cls(cbggg_GlyphLayout), null);
-                    cbgur_Constructor_setAccessible(var$13, 1);
-                    break a;
-                } catch ($$e) {
-                    $$je = $rt_wrapException($$e);
-                    if ($$je instanceof cbgur_ReflectionException) {
-                    } else {
-                        throw $$e;
-                    }
-                }
-                var$13 = null;
-            }
-            $camera.$constructor = var$13;
-            if (var$13 === null) {
-                var$3 = new jl_RuntimeException;
-                var$6 = new jl_StringBuilder;
-                jl_AbstractStringBuilder__init_(var$6);
-                jl_AbstractStringBuilder_append(var$6, $rt_s(33));
-                if ($rt_cls(cbggg_GlyphLayout).$name === null)
-                    $rt_cls(cbggg_GlyphLayout).$name = otp_Platform_getName($rt_cls(cbggg_GlyphLayout).$platformClass);
-                jl_AbstractStringBuilder_append(var$6, $rt_cls(cbggg_GlyphLayout).$name);
-                jl_Exception__init_(var$3, jl_AbstractStringBuilder_toString(var$6));
-                $rt_throw(var$3);
-            }
-            cbgu_ObjectMap_put(cbgu_Pools_typePools, $rt_cls(cbggg_GlyphLayout), $camera);
-        }
-        b: {
-            var$13 = $camera.$freeObjects;
-            $x = var$13.$size;
-            if ($x) {
-                if (!$x) {
-                    var$3 = new jl_IllegalStateException;
-                    jl_Exception__init_(var$3, $rt_s(38));
-                    $rt_throw(var$3);
-                }
-                $x = $x - 1 | 0;
-                var$13.$size = $x;
-                var$2 = var$13.$items.data;
-                $camera = var$2[$x];
-                var$2[$x] = null;
-            } else {
-                var$13 = $camera;
-                try {
-                    $camera = cbgur_Constructor_newInstance(var$13.$constructor, null);
-                    break b;
-                } catch ($$e) {
-                    $$je = $rt_wrapException($$e);
-                    if ($$je instanceof jl_Exception) {
-                        var$6 = $$je;
-                        $camera = new cbgu_GdxRuntimeException;
-                        var$3 = new jl_StringBuilder;
-                        jl_AbstractStringBuilder__init_0(var$3, 16);
-                        $i = var$3.$length0;
-                        var$15 = var$3;
-                        jl_StringBuilder_insert(var$15, $i, $rt_s(39));
-                        var$16 = var$13.$constructor.$constructor0.$declaringClass;
-                        if (var$16.$name === null)
-                            var$16.$name = $rt_str(var$16.$platformClass.$meta.name);
-                        var$13 = var$16.$name;
-                        jl_StringBuilder_insert(var$15, var$3.$length0, var$13);
-                        jl_Exception__init_1($camera, jl_String__init_(var$3.$buffer, 0, var$3.$length0), var$6);
-                        $rt_throw($camera);
-                    } else {
-                        throw $$e;
-                    }
-                }
-            }
-        }
-        $camera = $camera;
-        cbgu_Array_add(var$15.$pooledLayouts, $camera);
-        cbggg_GlyphLayout_setText($camera, var$15.$font, var$14, 0, $m, var$15.$color, 384.0, 1, 1, var$16);
-        cbggg_BitmapFontCache_addToCache(var$15, $camera, 64.0, 522.0 + var$15.$font.$data0.$ascent);
-        cbggg_BitmapFontCache_draw(var$3.$cache, var$6);
-        cbggg_SpriteBatch_end($this.$batch8);
-        return;
-    }
-    var$3 = new jl_IndexOutOfBoundsException;
-    jl_Throwable__init_(var$3);
-    $rt_throw(var$3);
-},
-cgte_Xoshiro128PPScreen_resize = ($this, $width, $height) => {
-    let var$3, var$4, var$5, var$6;
-    var$3 = $this.$viewport17;
-    var$4 = var$3;
-    var$4.$screenX = 0;
-    var$4.$screenY = 0;
-    var$4.$screenWidth = $width;
-    var$4.$screenHeight = $height;
-    var$5 = $width;
-    var$6 = var$3.$unitsPerPixel;
-    var$5 = var$5 * var$6;
-    var$6 = $height * var$6;
-    var$4.$worldWidth = var$5;
-    var$4.$worldHeight = var$6;
-    cbguv_Viewport_apply(var$4, 1);
-    cbguv_Viewport_apply($this.$viewport17, 1);
-};
-function cgte_RarxScreen() {
-    let a = this; cbg_ScreenAdapter.call(a);
-    a.$random = null;
-    a.$batch20 = null;
-    a.$renderer19 = null;
-    a.$amounts10 = null;
-    a.$iterations19 = Long_ZERO;
-    a.$font19 = null;
-    a.$viewport30 = null;
-    a.$mainGame30 = null;
-}
-let cgte_RarxScreen_show = $this => {
-    let var$1, var$2, var$3, var$4, var$5, var$6, var$7, var$8, var$9, var$10, var$11, var$12;
-    $this.$font19 = $this.$mainGame30.$font0;
-    var$1 = new cgtr_Xoshiro160RoadroxoRandom;
-    var$2 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
-    var$3 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
-    var$4 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
-    var$5 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
-    var$6 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
-    var$1.$stateA0 = var$2;
-    var$1.$stateB0 = var$3;
-    var$1.$stateC = var$4;
-    if (!(var$2 | var$3 | var$4 | var$5))
-        var$5 = 1;
-    var$1.$stateD = var$5;
-    var$1.$stateE0 = var$6;
     $this.$random = var$1;
-    $this.$batch20 = $this.$mainGame30.$batch;
+    $this.$batch15 = $this.$mainGame18.$batch;
     var$1 = new cbguv_ScreenViewport;
-    var$7 = new cbgg_OrthographicCamera;
-    cbgg_Camera__init_(var$7);
-    var$7.$zoom = 1.0;
-    var$8 = new cbgm_Vector3;
+    var$6 = new cbgg_OrthographicCamera;
+    cbgg_Camera__init_(var$6);
+    var$6.$zoom = 1.0;
+    var$7 = new cbgm_Vector3;
     cbgm_Vector3_$callClinit();
-    var$7.$tmp0 = var$8;
-    var$7.$near = 0.0;
+    var$6.$tmp0 = var$7;
+    var$6.$near = 0.0;
     var$1.$tmp = new cbgm_Vector3;
     var$1.$unitsPerPixel = 1.0;
-    var$1.$camera = var$7;
-    $this.$viewport30 = var$1;
+    var$1.$camera = var$6;
+    $this.$viewport4 = var$1;
     var$1 = new cbggg_ImmediateModeRenderer20;
-    var$9 = cbggg_ShaderProgram__init_(cbggg_ImmediateModeRenderer20_createVertexShader(0, 1, 0), cbggg_ImmediateModeRenderer20_createFragmentShader(0, 1, 0));
-    if (var$9.$isCompiled) {
-        cbggg_ImmediateModeRenderer20__init_(var$1, 1536, 0, 1, 0, var$9);
+    var$8 = cbggg_ShaderProgram__init_(cbggg_ImmediateModeRenderer20_createVertexShader(0, 1, 0), cbggg_ImmediateModeRenderer20_createFragmentShader(0, 1, 0));
+    if (var$8.$isCompiled) {
+        cbggg_ImmediateModeRenderer20__init_(var$1, 1536, 0, 1, 0, var$8);
         var$1.$ownsShader = 1;
-        $this.$renderer19 = var$1;
-        var$10 = $this.$amounts10.data;
+        $this.$renderer22 = var$1;
+        var$9 = $this.$amounts5.data;
         var$2 = 0;
-        var$3 = var$10.length;
+        var$3 = var$9.length;
         if (var$2 > var$3) {
             var$1 = new jl_IllegalArgumentException;
             var$1.$suppressionEnabled = 1;
@@ -39531,46 +39523,46 @@ let cgte_RarxScreen_show = $this => {
         }
         while (var$2 < var$3) {
             var$4 = var$2 + 1 | 0;
-            var$10[var$2] = Long_ZERO;
+            var$9[var$2] = Long_ZERO;
             var$2 = var$4;
         }
-        $this.$iterations19 = Long_ZERO;
+        $this.$iterations12 = Long_ZERO;
         return;
     }
     var$1 = new cbgu_GdxRuntimeException;
-    var$7 = new jl_StringBuilder;
-    var$7.$buffer = $rt_createCharArray(16);
-    var$2 = var$7.$length0;
-    var$11 = var$7;
-    jl_AbstractStringBuilder_insert(var$11, var$2, $rt_s(479));
-    if (!var$9.$isCompiled)
-        var$8 = var$9.$log0;
+    var$6 = new jl_StringBuilder;
+    var$6.$buffer = $rt_createCharArray(16);
+    var$2 = var$6.$length0;
+    var$10 = var$6;
+    jl_AbstractStringBuilder_insert(var$10, var$2, $rt_s(479));
+    if (!var$8.$isCompiled)
+        var$7 = var$8.$log0;
     else {
-        var$8 = cbg_Gdx_gl20.$glGetProgramInfoLog(var$9.$program);
-        var$9.$log0 = var$8;
+        var$7 = cbg_Gdx_gl20.$glGetProgramInfoLog(var$8.$program);
+        var$8.$log0 = var$7;
     }
-    jl_AbstractStringBuilder_insert(var$11, var$7.$length0, var$8);
-    var$8 = new jl_String;
-    var$10 = var$7.$buffer;
-    var$12 = var$10.data;
-    var$3 = var$7.$length0;
-    var$4 = var$12.length;
+    jl_AbstractStringBuilder_insert(var$10, var$6.$length0, var$7);
+    var$7 = new jl_String;
+    var$9 = var$6.$buffer;
+    var$11 = var$9.data;
+    var$3 = var$6.$length0;
+    var$4 = var$11.length;
     if (var$3 >= 0 && var$3 <= (var$4 - 0 | 0)) {
-        var$8.$nativeString = $rt_charArrayToString(var$10.data, 0, var$3);
+        var$7.$nativeString = $rt_charArrayToString(var$9.data, 0, var$3);
         var$1.$suppressionEnabled = 1;
         var$1.$writableStackTrace = 1;
-        var$1.$message = var$8;
+        var$1.$message = var$7;
         $rt_throw(var$1);
     }
     var$1 = new jl_IndexOutOfBoundsException;
     jl_Exception__init_0(var$1);
     $rt_throw(var$1);
 },
-cgte_RarxScreen_render = ($this, $delta) => {
+cgte_ChockScreen_render = ($this, $delta) => {
     let var$2, var$3, $i, $x, var$6, $camera, var$8, $j, var$10, $m, $color, var$13, var$14, var$15, var$16, $$je;
     var$2 = cbg_Gdx_input.$justPressedKeys.data;
     if (var$2[71]) {
-        var$3 = $this.$mainGame30;
+        var$3 = $this.$mainGame18;
         $i = var$3.$screenIndex;
         var$2 = var$3.$screens.data;
         $x = var$2.length;
@@ -39586,7 +39578,7 @@ cgte_RarxScreen_render = ($this, $delta) => {
         return;
     }
     if (var$2[72]) {
-        var$3 = $this.$mainGame30;
+        var$3 = $this.$mainGame18;
         $i = var$3.$screenIndex + 1 | 0;
         var$2 = var$3.$screens.data;
         $i = $i % var$2.length | 0;
@@ -39604,11 +39596,11 @@ cgte_RarxScreen_render = ($this, $delta) => {
         return;
     cbg_Gdx_gl.$glClearColor(1.0, 1.0, 1.0, 1.0);
     cbg_Gdx_gl.$glClear(16384);
-    $camera = $this.$viewport30.$camera;
+    $camera = $this.$viewport4.$camera;
     cbgg_OrthographicCamera_update($camera, 1);
     var$8 = cbg_Gdx_input.$pressedKeys.data;
     if (var$8[29]) {
-        var$2 = $this.$amounts10.data;
+        var$2 = $this.$amounts5.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -39622,10 +39614,10 @@ cgte_RarxScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations19 = Long_ZERO;
+        $this.$iterations12 = Long_ZERO;
     }
     if (var$8[30]) {
-        var$2 = $this.$amounts10.data;
+        var$2 = $this.$amounts5.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -39639,10 +39631,10 @@ cgte_RarxScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations19 = Long_ZERO;
+        $this.$iterations12 = Long_ZERO;
     }
     if (var$8[31]) {
-        var$2 = $this.$amounts10.data;
+        var$2 = $this.$amounts5.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -39656,57 +39648,57 @@ cgte_RarxScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations19 = Long_ZERO;
+        $this.$iterations12 = Long_ZERO;
     }
-    $this.$iterations19 = Long_add($this.$iterations19, Long_fromInt(1));
+    $this.$iterations12 = Long_add($this.$iterations12, Long_fromInt(1));
     $i = 0;
     while ($i < 524288) {
-        var$10 = cgtr_Xoshiro160RoadroxoRandom_nextLong($this.$random);
+        var$10 = cgtr_Chock32Random_nextLong($this.$random);
         $m = $rt_intBitsToFloat((126 - jl_Long_numberOfLeadingZeros(var$10) | 0) << 23 | Long_lo(var$10) & 8388607) * 512.0 | 0;
         if ($m >= 0 && $m < 512) {
-            var$2 = $this.$amounts10.data;
+            var$2 = $this.$amounts5.data;
             var$2[$m] = Long_add(var$2[$m], Long_fromInt(1));
         }
         $i = $i + 1 | 0;
     }
-    var$3 = $this.$renderer19;
+    var$3 = $this.$renderer22;
     var$6 = $camera.$combined;
     cbgm_Matrix4_set(var$3.$projModelView, var$6.$val);
     var$3.$primitiveType = 1;
     $x = 0;
     while ($x < 512) {
         $color = $x & 63 ? (-1.5436749266448052E38) : (-1.5203096921934465E38);
-        var$3 = $this.$renderer19;
+        var$3 = $this.$renderer22;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
         $delta = $x;
         cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0, 0.0);
-        var$3 = $this.$renderer19;
+        var$3 = $this.$renderer22;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
-        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts10.data[$x]) / Long_toNumber($this.$iterations19), 0.0);
+        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts5.data[$x]) / Long_toNumber($this.$iterations12), 0.0);
         $x = $x + 1 | 0;
     }
     $j = 8;
     while ($j < 520) {
-        var$3 = $this.$renderer19;
+        var$3 = $this.$renderer22;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = (-6.221923240859403E37);
         $color = $j;
         cbggg_ImmediateModeRenderer20_vertex(var$3, 0.0, $color, 0.0);
-        var$3 = $this.$renderer19;
+        var$3 = $this.$renderer22;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = (-6.221923240859403E37);
         cbggg_ImmediateModeRenderer20_vertex(var$3, 10.0, $color, 0.0);
         $j = $j + 32 | 0;
     }
-    cbggg_ImmediateModeRenderer20_flush($this.$renderer19);
-    var$3 = $this.$batch20;
+    cbggg_ImmediateModeRenderer20_flush($this.$renderer22);
+    var$3 = $this.$batch15;
     var$6 = $camera.$combined;
     if (var$3.$drawing)
         cbggg_SpriteBatch_flush(var$3);
     cbgm_Matrix4_set(var$3.$projectionMatrix, var$6.$val);
     if (var$3.$drawing)
         cbggg_SpriteBatch_setupMatrices(var$3);
-    cbggg_SpriteBatch_begin($this.$batch20);
-    var$3 = $this.$font19;
-    var$6 = $this.$batch20;
+    cbggg_SpriteBatch_begin($this.$batch15);
+    var$3 = $this.$font24;
+    var$6 = $this.$batch15;
     var$2 = $rt_createArray(jl_Object, 2);
     var$8 = var$2.data;
     var$8[0] = $rt_s(490);
@@ -39827,16 +39819,16 @@ cgte_RarxScreen_render = ($this, $delta) => {
         cbggg_GlyphLayout_setText($camera, var$15.$font, var$14, 0, $m, var$15.$color, 384.0, 1, 1, var$16);
         cbggg_BitmapFontCache_addToCache(var$15, $camera, 64.0, 522.0 + var$15.$font.$data0.$ascent);
         cbggg_BitmapFontCache_draw(var$3.$cache, var$6);
-        cbggg_SpriteBatch_end($this.$batch20);
+        cbggg_SpriteBatch_end($this.$batch15);
         return;
     }
     var$3 = new jl_IndexOutOfBoundsException;
     jl_Throwable__init_(var$3);
     $rt_throw(var$3);
 },
-cgte_RarxScreen_resize = ($this, $width, $height) => {
+cgte_ChockScreen_resize = ($this, $width, $height) => {
     let var$3, var$4, var$5, var$6;
-    var$3 = $this.$viewport30;
+    var$3 = $this.$viewport4;
     var$4 = var$3;
     var$4.$screenX = 0;
     var$4.$screenY = 0;
@@ -39849,30 +39841,30 @@ cgte_RarxScreen_resize = ($this, $width, $height) => {
     var$4.$worldWidth = var$5;
     var$4.$worldHeight = var$6;
     cbguv_Viewport_apply(var$4, 1);
-    cbguv_Viewport_apply($this.$viewport30, 1);
+    cbguv_Viewport_apply($this.$viewport4, 1);
 };
 function cgte_AceScreen() {
     let a = this; cbg_ScreenAdapter.call(a);
     a.$random34 = null;
-    a.$batch2 = null;
+    a.$batch3 = null;
     a.$renderer14 = null;
-    a.$amounts13 = null;
-    a.$iterations28 = Long_ZERO;
+    a.$amounts14 = null;
+    a.$iterations27 = Long_ZERO;
     a.$font4 = null;
-    a.$viewport21 = null;
-    a.$mainGame13 = null;
+    a.$viewport18 = null;
+    a.$mainGame12 = null;
 }
 let cgte_AceScreen_show = $this => {
     let var$1, var$2, var$3, var$4, var$5, var$6, var$7, var$8, var$9, var$10;
-    $this.$font4 = $this.$mainGame13.$font0;
+    $this.$font4 = $this.$mainGame12.$font0;
     var$1 = new cgtr_AceRandom;
     var$1.$stateA = Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19));
     var$1.$stateB = Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19));
-    var$1.$stateC0 = Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19));
-    var$1.$stateD0 = Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19));
+    var$1.$stateC = Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19));
+    var$1.$stateD = Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19));
     var$1.$stateE = Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19));
     $this.$random34 = var$1;
-    $this.$batch2 = $this.$mainGame13.$batch;
+    $this.$batch3 = $this.$mainGame12.$batch;
     var$1 = new cbguv_ScreenViewport;
     var$2 = new cbgg_OrthographicCamera;
     cbgg_Camera__init_(var$2);
@@ -39884,14 +39876,14 @@ let cgte_AceScreen_show = $this => {
     var$1.$tmp = new cbgm_Vector3;
     var$1.$unitsPerPixel = 1.0;
     var$1.$camera = var$2;
-    $this.$viewport21 = var$1;
+    $this.$viewport18 = var$1;
     var$1 = new cbggg_ImmediateModeRenderer20;
     var$4 = cbggg_ShaderProgram__init_(cbggg_ImmediateModeRenderer20_createVertexShader(0, 1, 0), cbggg_ImmediateModeRenderer20_createFragmentShader(0, 1, 0));
     if (var$4.$isCompiled) {
         cbggg_ImmediateModeRenderer20__init_(var$1, 1536, 0, 1, 0, var$4);
         var$1.$ownsShader = 1;
         $this.$renderer14 = var$1;
-        var$5 = $this.$amounts13.data;
+        var$5 = $this.$amounts14.data;
         var$6 = 0;
         var$7 = var$5.length;
         if (var$6 > var$7) {
@@ -39905,7 +39897,7 @@ let cgte_AceScreen_show = $this => {
             var$5[var$6] = Long_ZERO;
             var$6 = var$8;
         }
-        $this.$iterations28 = Long_ZERO;
+        $this.$iterations27 = Long_ZERO;
         return;
     }
     var$1 = new cbgu_GdxRuntimeException;
@@ -39941,7 +39933,7 @@ cgte_AceScreen_render = ($this, $delta) => {
     let var$2, var$3, $i, $x, var$6, $camera, var$8, $j, var$10, var$11, var$12, var$13, var$14, var$15, $m, $color, var$18, var$19, var$20, var$21, $$je;
     var$2 = cbg_Gdx_input.$justPressedKeys.data;
     if (var$2[71]) {
-        var$3 = $this.$mainGame13;
+        var$3 = $this.$mainGame12;
         $i = var$3.$screenIndex;
         var$2 = var$3.$screens.data;
         $x = var$2.length;
@@ -39957,7 +39949,7 @@ cgte_AceScreen_render = ($this, $delta) => {
         return;
     }
     if (var$2[72]) {
-        var$3 = $this.$mainGame13;
+        var$3 = $this.$mainGame12;
         $i = var$3.$screenIndex + 1 | 0;
         var$2 = var$3.$screens.data;
         $i = $i % var$2.length | 0;
@@ -39975,11 +39967,11 @@ cgte_AceScreen_render = ($this, $delta) => {
         return;
     cbg_Gdx_gl.$glClearColor(1.0, 1.0, 1.0, 1.0);
     cbg_Gdx_gl.$glClear(16384);
-    $camera = $this.$viewport21.$camera;
+    $camera = $this.$viewport18.$camera;
     cbgg_OrthographicCamera_update($camera, 1);
     var$8 = cbg_Gdx_input.$pressedKeys.data;
     if (var$8[29]) {
-        var$2 = $this.$amounts13.data;
+        var$2 = $this.$amounts14.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -39993,10 +39985,10 @@ cgte_AceScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations28 = Long_ZERO;
+        $this.$iterations27 = Long_ZERO;
     }
     if (var$8[30]) {
-        var$2 = $this.$amounts13.data;
+        var$2 = $this.$amounts14.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -40010,10 +40002,10 @@ cgte_AceScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations28 = Long_ZERO;
+        $this.$iterations27 = Long_ZERO;
     }
     if (var$8[31]) {
-        var$2 = $this.$amounts13.data;
+        var$2 = $this.$amounts14.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -40027,26 +40019,26 @@ cgte_AceScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations28 = Long_ZERO;
+        $this.$iterations27 = Long_ZERO;
     }
-    $this.$iterations28 = Long_add($this.$iterations28, Long_fromInt(1));
+    $this.$iterations27 = Long_add($this.$iterations27, Long_fromInt(1));
     $i = 0;
     while ($i < 524288) {
         var$3 = $this.$random34;
         var$10 = var$3.$stateA;
         var$11 = var$3.$stateB;
-        var$12 = var$3.$stateC0;
-        var$13 = var$3.$stateD0;
+        var$12 = var$3.$stateC;
+        var$13 = var$3.$stateD;
         var$14 = var$3.$stateE;
         var$3.$stateA = Long_add(var$10, Long_create(2135587861, 2654435769));
         var$3.$stateB = Long_xor(var$10, var$14);
-        var$3.$stateC0 = Long_add(var$11, var$13);
-        var$3.$stateD0 = Long_or(Long_shl(var$12, 52), Long_shru(var$12, 12));
+        var$3.$stateC = Long_add(var$11, var$13);
+        var$3.$stateD = Long_or(Long_shl(var$12, 52), Long_shru(var$12, 12));
         var$15 = Long_sub(var$11, var$12);
         var$3.$stateE = var$15;
         $m = $rt_intBitsToFloat((126 - jl_Long_numberOfLeadingZeros(var$15) | 0) << 23 | Long_lo(var$15) & 8388607) * 512.0 | 0;
         if ($m >= 0 && $m < 512) {
-            var$2 = $this.$amounts13.data;
+            var$2 = $this.$amounts14.data;
             var$2[$m] = Long_add(var$2[$m], Long_fromInt(1));
         }
         $i = $i + 1 | 0;
@@ -40064,7 +40056,7 @@ cgte_AceScreen_render = ($this, $delta) => {
         cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0, 0.0);
         var$3 = $this.$renderer14;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
-        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts13.data[$x]) / Long_toNumber($this.$iterations28), 0.0);
+        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts14.data[$x]) / Long_toNumber($this.$iterations27), 0.0);
         $x = $x + 1 | 0;
     }
     $j = 8;
@@ -40079,16 +40071,16 @@ cgte_AceScreen_render = ($this, $delta) => {
         $j = $j + 32 | 0;
     }
     cbggg_ImmediateModeRenderer20_flush($this.$renderer14);
-    var$3 = $this.$batch2;
+    var$3 = $this.$batch3;
     var$6 = $camera.$combined;
     if (var$3.$drawing)
         cbggg_SpriteBatch_flush(var$3);
     cbgm_Matrix4_set(var$3.$projectionMatrix, var$6.$val);
     if (var$3.$drawing)
         cbggg_SpriteBatch_setupMatrices(var$3);
-    cbggg_SpriteBatch_begin($this.$batch2);
+    cbggg_SpriteBatch_begin($this.$batch3);
     var$3 = $this.$font4;
-    var$6 = $this.$batch2;
+    var$6 = $this.$batch3;
     var$2 = $rt_createArray(jl_Object, 2);
     var$8 = var$2.data;
     var$8[0] = $rt_s(491);
@@ -40209,7 +40201,7 @@ cgte_AceScreen_render = ($this, $delta) => {
         cbggg_GlyphLayout_setText($camera, var$20.$font, var$19, 0, $m, var$20.$color, 384.0, 1, 1, var$21);
         cbggg_BitmapFontCache_addToCache(var$20, $camera, 64.0, 522.0 + var$20.$font.$data0.$ascent);
         cbggg_BitmapFontCache_draw(var$3.$cache, var$6);
-        cbggg_SpriteBatch_end($this.$batch2);
+        cbggg_SpriteBatch_end($this.$batch3);
         return;
     }
     var$3 = new jl_IndexOutOfBoundsException;
@@ -40218,7 +40210,7 @@ cgte_AceScreen_render = ($this, $delta) => {
 },
 cgte_AceScreen_resize = ($this, $width, $height) => {
     let var$3, var$4, var$5, var$6;
-    var$3 = $this.$viewport21;
+    var$3 = $this.$viewport18;
     var$4 = var$3;
     var$4.$screenX = 0;
     var$4.$screenY = 0;
@@ -40231,22 +40223,22 @@ cgte_AceScreen_resize = ($this, $width, $height) => {
     var$4.$worldWidth = var$5;
     var$4.$worldHeight = var$6;
     cbguv_Viewport_apply(var$4, 1);
-    cbguv_Viewport_apply($this.$viewport21, 1);
+    cbguv_Viewport_apply($this.$viewport18, 1);
 };
 function cgtd_RandomScreen() {
     let a = this; cbg_ScreenAdapter.call(a);
-    a.$random32 = null;
-    a.$batch27 = null;
+    a.$random30 = null;
+    a.$batch26 = null;
     a.$renderer0 = null;
-    a.$amounts3 = null;
-    a.$iterations16 = Long_ZERO;
+    a.$amounts4 = null;
+    a.$iterations17 = Long_ZERO;
     a.$font6 = null;
-    a.$viewport14 = null;
-    a.$mainGame11 = null;
+    a.$viewport11 = null;
+    a.$mainGame10 = null;
 }
 let cgtd_RandomScreen_show = $this => {
     let var$1, var$2, var$3, var$4, var$5, var$6, var$7, var$8, var$9, var$10, var$11;
-    $this.$font6 = $this.$mainGame11.$font0;
+    $this.$font6 = $this.$mainGame10.$font0;
     var$1 = new cgt_RandomRandom;
     var$2 = Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19));
     var$3 = new cgt_Random;
@@ -40254,8 +40246,8 @@ let cgtd_RandomScreen_show = $this => {
     cgt_Random_setSeed(var$3, Long_fromInt(1234567890));
     var$1.$base = var$3;
     cgt_Random_setSeed(var$3, var$2);
-    $this.$random32 = var$1;
-    $this.$batch27 = $this.$mainGame11.$batch;
+    $this.$random30 = var$1;
+    $this.$batch26 = $this.$mainGame10.$batch;
     var$1 = new cbguv_ScreenViewport;
     var$3 = new cbgg_OrthographicCamera;
     cbgg_Camera__init_(var$3);
@@ -40267,14 +40259,14 @@ let cgtd_RandomScreen_show = $this => {
     var$1.$tmp = new cbgm_Vector3;
     var$1.$unitsPerPixel = 1.0;
     var$1.$camera = var$3;
-    $this.$viewport14 = var$1;
+    $this.$viewport11 = var$1;
     var$1 = new cbggg_ImmediateModeRenderer20;
     var$5 = cbggg_ShaderProgram__init_(cbggg_ImmediateModeRenderer20_createVertexShader(0, 1, 0), cbggg_ImmediateModeRenderer20_createFragmentShader(0, 1, 0));
     if (var$5.$isCompiled) {
         cbggg_ImmediateModeRenderer20__init_(var$1, 1536, 0, 1, 0, var$5);
         var$1.$ownsShader = 1;
         $this.$renderer0 = var$1;
-        var$6 = $this.$amounts3.data;
+        var$6 = $this.$amounts4.data;
         var$7 = 0;
         var$8 = var$6.length;
         if (var$7 > var$8) {
@@ -40288,7 +40280,7 @@ let cgtd_RandomScreen_show = $this => {
             var$6[var$7] = Long_ZERO;
             var$7 = var$9;
         }
-        $this.$iterations16 = Long_ZERO;
+        $this.$iterations17 = Long_ZERO;
         return;
     }
     var$1 = new cbgu_GdxRuntimeException;
@@ -40324,7 +40316,7 @@ cgtd_RandomScreen_render = ($this, $delta) => {
     let var$2, var$3, $i, $x, var$6, $camera, var$8, $j, $m, $color, var$12, var$13, var$14, var$15, $$je;
     var$2 = cbg_Gdx_input.$justPressedKeys.data;
     if (var$2[71]) {
-        var$3 = $this.$mainGame11;
+        var$3 = $this.$mainGame10;
         $i = var$3.$screenIndex;
         var$2 = var$3.$screens.data;
         $x = var$2.length;
@@ -40340,7 +40332,7 @@ cgtd_RandomScreen_render = ($this, $delta) => {
         return;
     }
     if (var$2[72]) {
-        var$3 = $this.$mainGame11;
+        var$3 = $this.$mainGame10;
         $i = var$3.$screenIndex + 1 | 0;
         var$2 = var$3.$screens.data;
         $i = $i % var$2.length | 0;
@@ -40358,11 +40350,11 @@ cgtd_RandomScreen_render = ($this, $delta) => {
         return;
     cbg_Gdx_gl.$glClearColor(1.0, 1.0, 1.0, 1.0);
     cbg_Gdx_gl.$glClear(16384);
-    $camera = $this.$viewport14.$camera;
+    $camera = $this.$viewport11.$camera;
     cbgg_OrthographicCamera_update($camera, 1);
     var$8 = cbg_Gdx_input.$pressedKeys.data;
     if (var$8[29]) {
-        var$2 = $this.$amounts3.data;
+        var$2 = $this.$amounts4.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -40376,10 +40368,10 @@ cgtd_RandomScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations16 = Long_ZERO;
+        $this.$iterations17 = Long_ZERO;
     }
     if (var$8[30]) {
-        var$2 = $this.$amounts3.data;
+        var$2 = $this.$amounts4.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -40393,10 +40385,10 @@ cgtd_RandomScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations16 = Long_ZERO;
+        $this.$iterations17 = Long_ZERO;
     }
     if (var$8[31]) {
-        var$2 = $this.$amounts3.data;
+        var$2 = $this.$amounts4.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -40410,15 +40402,15 @@ cgtd_RandomScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations16 = Long_ZERO;
+        $this.$iterations17 = Long_ZERO;
     }
-    $this.$iterations16 = Long_add($this.$iterations16, Long_fromInt(1));
+    $this.$iterations17 = Long_add($this.$iterations17, Long_fromInt(1));
     $i = 0;
     while ($i < 524288) {
-        var$3 = $this.$random32.$base;
+        var$3 = $this.$random30.$base;
         $m = (cgt_Random_nextInternal(var$3, 26) * 1.4901161193847656E-8 + cgt_Random_nextInternal(var$3, 27) * 1.1102230246251565E-16) * 512.0 | 0;
         if ($m >= 0 && $m < 512) {
-            var$2 = $this.$amounts3.data;
+            var$2 = $this.$amounts4.data;
             var$2[$m] = Long_add(var$2[$m], Long_fromInt(1));
         }
         $i = $i + 1 | 0;
@@ -40436,7 +40428,7 @@ cgtd_RandomScreen_render = ($this, $delta) => {
         cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0, 0.0);
         var$3 = $this.$renderer0;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
-        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts3.data[$x]) / Long_toNumber($this.$iterations16), 0.0);
+        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts4.data[$x]) / Long_toNumber($this.$iterations17), 0.0);
         $x = $x + 1 | 0;
     }
     $j = 8;
@@ -40451,16 +40443,16 @@ cgtd_RandomScreen_render = ($this, $delta) => {
         $j = $j + 32 | 0;
     }
     cbggg_ImmediateModeRenderer20_flush($this.$renderer0);
-    var$3 = $this.$batch27;
+    var$3 = $this.$batch26;
     var$6 = $camera.$combined;
     if (var$3.$drawing)
         cbggg_SpriteBatch_flush(var$3);
     cbgm_Matrix4_set(var$3.$projectionMatrix, var$6.$val);
     if (var$3.$drawing)
         cbggg_SpriteBatch_setupMatrices(var$3);
-    cbggg_SpriteBatch_begin($this.$batch27);
+    cbggg_SpriteBatch_begin($this.$batch26);
     var$3 = $this.$font6;
-    var$6 = $this.$batch27;
+    var$6 = $this.$batch26;
     var$2 = $rt_createArray(jl_Object, 2);
     var$8 = var$2.data;
     var$8[0] = $rt_s(485);
@@ -40581,7 +40573,7 @@ cgtd_RandomScreen_render = ($this, $delta) => {
         cbggg_GlyphLayout_setText($camera, var$14.$font, var$13, 0, $m, var$14.$color, 384.0, 1, 1, var$15);
         cbggg_BitmapFontCache_addToCache(var$14, $camera, 64.0, 522.0 + var$14.$font.$data0.$ascent);
         cbggg_BitmapFontCache_draw(var$3.$cache, var$6);
-        cbggg_SpriteBatch_end($this.$batch27);
+        cbggg_SpriteBatch_end($this.$batch26);
         return;
     }
     var$3 = new jl_IndexOutOfBoundsException;
@@ -40590,7 +40582,7 @@ cgtd_RandomScreen_render = ($this, $delta) => {
 },
 cgtd_RandomScreen_resize = ($this, $width, $height) => {
     let var$3, var$4, var$5, var$6;
-    var$3 = $this.$viewport14;
+    var$3 = $this.$viewport11;
     var$4 = var$3;
     var$4.$screenX = 0;
     var$4.$screenY = 0;
@@ -40603,17 +40595,17 @@ cgtd_RandomScreen_resize = ($this, $width, $height) => {
     var$4.$worldWidth = var$5;
     var$4.$worldHeight = var$6;
     cbguv_Viewport_apply(var$4, 1);
-    cbguv_Viewport_apply($this.$viewport14, 1);
+    cbguv_Viewport_apply($this.$viewport11, 1);
 };
 function cgtd_ChipScreen() {
     let a = this; cbg_ScreenAdapter.call(a);
-    a.$random17 = null;
+    a.$random13 = null;
     a.$batch0 = null;
-    a.$renderer23 = null;
-    a.$amounts26 = null;
-    a.$iterations25 = Long_ZERO;
+    a.$renderer21 = null;
+    a.$amounts25 = null;
+    a.$iterations24 = Long_ZERO;
     a.$font8 = null;
-    a.$viewport2 = null;
+    a.$viewport1 = null;
     a.$mainGame19 = null;
 }
 let cgtd_ChipScreen_show = $this => {
@@ -40624,11 +40616,11 @@ let cgtd_ChipScreen_show = $this => {
     var$3 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$4 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$5 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
-    var$1.$stateA1 = var$2;
-    var$1.$stateB1 = var$3;
-    var$1.$stateC1 = var$4;
-    var$1.$stateD1 = var$5;
-    $this.$random17 = var$1;
+    var$1.$stateA0 = var$2;
+    var$1.$stateB0 = var$3;
+    var$1.$stateC0 = var$4;
+    var$1.$stateD0 = var$5;
+    $this.$random13 = var$1;
     $this.$batch0 = $this.$mainGame19.$batch;
     var$1 = new cbguv_ScreenViewport;
     var$6 = new cbgg_OrthographicCamera;
@@ -40641,14 +40633,14 @@ let cgtd_ChipScreen_show = $this => {
     var$1.$tmp = new cbgm_Vector3;
     var$1.$unitsPerPixel = 1.0;
     var$1.$camera = var$6;
-    $this.$viewport2 = var$1;
+    $this.$viewport1 = var$1;
     var$1 = new cbggg_ImmediateModeRenderer20;
     var$8 = cbggg_ShaderProgram__init_(cbggg_ImmediateModeRenderer20_createVertexShader(0, 1, 0), cbggg_ImmediateModeRenderer20_createFragmentShader(0, 1, 0));
     if (var$8.$isCompiled) {
         cbggg_ImmediateModeRenderer20__init_(var$1, 1536, 0, 1, 0, var$8);
         var$1.$ownsShader = 1;
-        $this.$renderer23 = var$1;
-        var$9 = $this.$amounts26.data;
+        $this.$renderer21 = var$1;
+        var$9 = $this.$amounts25.data;
         var$2 = 0;
         var$3 = var$9.length;
         if (var$2 > var$3) {
@@ -40662,7 +40654,7 @@ let cgtd_ChipScreen_show = $this => {
             var$9[var$2] = Long_ZERO;
             var$2 = var$4;
         }
-        $this.$iterations25 = Long_ZERO;
+        $this.$iterations24 = Long_ZERO;
         return;
     }
     var$1 = new cbgu_GdxRuntimeException;
@@ -40732,11 +40724,11 @@ cgtd_ChipScreen_render = ($this, $delta) => {
         return;
     cbg_Gdx_gl.$glClearColor(1.0, 1.0, 1.0, 1.0);
     cbg_Gdx_gl.$glClear(16384);
-    $camera = $this.$viewport2.$camera;
+    $camera = $this.$viewport1.$camera;
     cbgg_OrthographicCamera_update($camera, 1);
     var$8 = cbg_Gdx_input.$pressedKeys.data;
     if (var$8[29]) {
-        var$2 = $this.$amounts26.data;
+        var$2 = $this.$amounts25.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -40750,10 +40742,10 @@ cgtd_ChipScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations25 = Long_ZERO;
+        $this.$iterations24 = Long_ZERO;
     }
     if (var$8[30]) {
-        var$2 = $this.$amounts26.data;
+        var$2 = $this.$amounts25.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -40767,10 +40759,10 @@ cgtd_ChipScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations25 = Long_ZERO;
+        $this.$iterations24 = Long_ZERO;
     }
     if (var$8[31]) {
-        var$2 = $this.$amounts26.data;
+        var$2 = $this.$amounts25.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -40784,46 +40776,46 @@ cgtd_ChipScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations25 = Long_ZERO;
+        $this.$iterations24 = Long_ZERO;
     }
-    $this.$iterations25 = Long_add($this.$iterations25, Long_fromInt(1));
+    $this.$iterations24 = Long_add($this.$iterations24, Long_fromInt(1));
     $i = 0;
     while ($i < 524288) {
-        $m = Long_toNumber(Long_shru(cgtr_Chip32Random_nextLong($this.$random17), 11)) * 1.1102230246251565E-16 * 512.0 | 0;
+        $m = Long_toNumber(Long_shru(cgtr_Chip32Random_nextLong($this.$random13), 11)) * 1.1102230246251565E-16 * 512.0 | 0;
         if ($m >= 0 && $m < 512) {
-            var$2 = $this.$amounts26.data;
+            var$2 = $this.$amounts25.data;
             var$2[$m] = Long_add(var$2[$m], Long_fromInt(1));
         }
         $i = $i + 1 | 0;
     }
-    var$3 = $this.$renderer23;
+    var$3 = $this.$renderer21;
     var$6 = $camera.$combined;
     cbgm_Matrix4_set(var$3.$projModelView, var$6.$val);
     var$3.$primitiveType = 1;
     $x = 0;
     while ($x < 512) {
         $color = $x & 63 ? (-1.5436749266448052E38) : (-1.5203096921934465E38);
-        var$3 = $this.$renderer23;
+        var$3 = $this.$renderer21;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
         $delta = $x;
         cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0, 0.0);
-        var$3 = $this.$renderer23;
+        var$3 = $this.$renderer21;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
-        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts26.data[$x]) / Long_toNumber($this.$iterations25), 0.0);
+        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts25.data[$x]) / Long_toNumber($this.$iterations24), 0.0);
         $x = $x + 1 | 0;
     }
     $j = 8;
     while ($j < 520) {
-        var$3 = $this.$renderer23;
+        var$3 = $this.$renderer21;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = (-6.221923240859403E37);
         $color = $j;
         cbggg_ImmediateModeRenderer20_vertex(var$3, 0.0, $color, 0.0);
-        var$3 = $this.$renderer23;
+        var$3 = $this.$renderer21;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = (-6.221923240859403E37);
         cbggg_ImmediateModeRenderer20_vertex(var$3, 10.0, $color, 0.0);
         $j = $j + 32 | 0;
     }
-    cbggg_ImmediateModeRenderer20_flush($this.$renderer23);
+    cbggg_ImmediateModeRenderer20_flush($this.$renderer21);
     var$3 = $this.$batch0;
     var$6 = $camera.$combined;
     if (var$3.$drawing)
@@ -40963,7 +40955,7 @@ cgtd_ChipScreen_render = ($this, $delta) => {
 },
 cgtd_ChipScreen_resize = ($this, $width, $height) => {
     let var$3, var$4, var$5, var$6;
-    var$3 = $this.$viewport2;
+    var$3 = $this.$viewport1;
     var$4 = var$3;
     var$4.$screenX = 0;
     var$4.$screenY = 0;
@@ -40976,17 +40968,17 @@ cgtd_ChipScreen_resize = ($this, $width, $height) => {
     var$4.$worldWidth = var$5;
     var$4.$worldHeight = var$6;
     cbguv_Viewport_apply(var$4, 1);
-    cbguv_Viewport_apply($this.$viewport2, 1);
+    cbguv_Viewport_apply($this.$viewport1, 1);
 };
 function cgtd_ChopScreen() {
     let a = this; cbg_ScreenAdapter.call(a);
-    a.$random30 = null;
-    a.$batch16 = null;
+    a.$random28 = null;
+    a.$batch18 = null;
     a.$renderer13 = null;
-    a.$amounts31 = null;
-    a.$iterations32 = Long_ZERO;
+    a.$amounts32 = null;
+    a.$iterations30 = Long_ZERO;
     a.$font28 = null;
-    a.$viewport20 = null;
+    a.$viewport17 = null;
     a.$mainGame1 = null;
 }
 let cgtd_ChopScreen_show = $this => {
@@ -40997,12 +40989,12 @@ let cgtd_ChopScreen_show = $this => {
     var$3 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$4 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$5 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
-    var$1.$stateA2 = var$2;
-    var$1.$stateB2 = var$3;
-    var$1.$stateC3 = var$4;
-    var$1.$stateD3 = var$5;
-    $this.$random30 = var$1;
-    $this.$batch16 = $this.$mainGame1.$batch;
+    var$1.$stateA1 = var$2;
+    var$1.$stateB1 = var$3;
+    var$1.$stateC2 = var$4;
+    var$1.$stateD2 = var$5;
+    $this.$random28 = var$1;
+    $this.$batch18 = $this.$mainGame1.$batch;
     var$1 = new cbguv_ScreenViewport;
     var$6 = new cbgg_OrthographicCamera;
     cbgg_Camera__init_(var$6);
@@ -41014,14 +41006,14 @@ let cgtd_ChopScreen_show = $this => {
     var$1.$tmp = new cbgm_Vector3;
     var$1.$unitsPerPixel = 1.0;
     var$1.$camera = var$6;
-    $this.$viewport20 = var$1;
+    $this.$viewport17 = var$1;
     var$1 = new cbggg_ImmediateModeRenderer20;
     var$8 = cbggg_ShaderProgram__init_(cbggg_ImmediateModeRenderer20_createVertexShader(0, 1, 0), cbggg_ImmediateModeRenderer20_createFragmentShader(0, 1, 0));
     if (var$8.$isCompiled) {
         cbggg_ImmediateModeRenderer20__init_(var$1, 1536, 0, 1, 0, var$8);
         var$1.$ownsShader = 1;
         $this.$renderer13 = var$1;
-        var$9 = $this.$amounts31.data;
+        var$9 = $this.$amounts32.data;
         var$2 = 0;
         var$3 = var$9.length;
         if (var$2 > var$3) {
@@ -41035,7 +41027,7 @@ let cgtd_ChopScreen_show = $this => {
             var$9[var$2] = Long_ZERO;
             var$2 = var$4;
         }
-        $this.$iterations32 = Long_ZERO;
+        $this.$iterations30 = Long_ZERO;
         return;
     }
     var$1 = new cbgu_GdxRuntimeException;
@@ -41105,11 +41097,11 @@ cgtd_ChopScreen_render = ($this, $delta) => {
         return;
     cbg_Gdx_gl.$glClearColor(1.0, 1.0, 1.0, 1.0);
     cbg_Gdx_gl.$glClear(16384);
-    $camera = $this.$viewport20.$camera;
+    $camera = $this.$viewport17.$camera;
     cbgg_OrthographicCamera_update($camera, 1);
     var$8 = cbg_Gdx_input.$pressedKeys.data;
     if (var$8[29]) {
-        var$2 = $this.$amounts31.data;
+        var$2 = $this.$amounts32.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -41123,10 +41115,10 @@ cgtd_ChopScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations32 = Long_ZERO;
+        $this.$iterations30 = Long_ZERO;
     }
     if (var$8[30]) {
-        var$2 = $this.$amounts31.data;
+        var$2 = $this.$amounts32.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -41140,10 +41132,10 @@ cgtd_ChopScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations32 = Long_ZERO;
+        $this.$iterations30 = Long_ZERO;
     }
     if (var$8[31]) {
-        var$2 = $this.$amounts31.data;
+        var$2 = $this.$amounts32.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -41157,14 +41149,14 @@ cgtd_ChopScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations32 = Long_ZERO;
+        $this.$iterations30 = Long_ZERO;
     }
-    $this.$iterations32 = Long_add($this.$iterations32, Long_fromInt(1));
+    $this.$iterations30 = Long_add($this.$iterations30, Long_fromInt(1));
     $i = 0;
     while ($i < 524288) {
-        $m = Long_toNumber(Long_shru(cgtr_ChopRandom_nextLong($this.$random30), 11)) * 1.1102230246251565E-16 * 512.0 | 0;
+        $m = Long_toNumber(Long_shru(cgtr_ChopRandom_nextLong($this.$random28), 11)) * 1.1102230246251565E-16 * 512.0 | 0;
         if ($m >= 0 && $m < 512) {
-            var$2 = $this.$amounts31.data;
+            var$2 = $this.$amounts32.data;
             var$2[$m] = Long_add(var$2[$m], Long_fromInt(1));
         }
         $i = $i + 1 | 0;
@@ -41182,7 +41174,7 @@ cgtd_ChopScreen_render = ($this, $delta) => {
         cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0, 0.0);
         var$3 = $this.$renderer13;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
-        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts31.data[$x]) / Long_toNumber($this.$iterations32), 0.0);
+        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts32.data[$x]) / Long_toNumber($this.$iterations30), 0.0);
         $x = $x + 1 | 0;
     }
     $j = 8;
@@ -41197,16 +41189,16 @@ cgtd_ChopScreen_render = ($this, $delta) => {
         $j = $j + 32 | 0;
     }
     cbggg_ImmediateModeRenderer20_flush($this.$renderer13);
-    var$3 = $this.$batch16;
+    var$3 = $this.$batch18;
     var$6 = $camera.$combined;
     if (var$3.$drawing)
         cbggg_SpriteBatch_flush(var$3);
     cbgm_Matrix4_set(var$3.$projectionMatrix, var$6.$val);
     if (var$3.$drawing)
         cbggg_SpriteBatch_setupMatrices(var$3);
-    cbggg_SpriteBatch_begin($this.$batch16);
+    cbggg_SpriteBatch_begin($this.$batch18);
     var$3 = $this.$font28;
-    var$6 = $this.$batch16;
+    var$6 = $this.$batch18;
     var$2 = $rt_createArray(jl_Object, 2);
     var$8 = var$2.data;
     var$8[0] = $rt_s(488);
@@ -41327,7 +41319,7 @@ cgtd_ChopScreen_render = ($this, $delta) => {
         cbggg_GlyphLayout_setText($camera, var$14.$font, var$13, 0, $m, var$14.$color, 384.0, 1, 1, var$15);
         cbggg_BitmapFontCache_addToCache(var$14, $camera, 64.0, 522.0 + var$14.$font.$data0.$ascent);
         cbggg_BitmapFontCache_draw(var$3.$cache, var$6);
-        cbggg_SpriteBatch_end($this.$batch16);
+        cbggg_SpriteBatch_end($this.$batch18);
         return;
     }
     var$3 = new jl_IndexOutOfBoundsException;
@@ -41336,7 +41328,7 @@ cgtd_ChopScreen_render = ($this, $delta) => {
 },
 cgtd_ChopScreen_resize = ($this, $width, $height) => {
     let var$3, var$4, var$5, var$6;
-    var$3 = $this.$viewport20;
+    var$3 = $this.$viewport17;
     var$4 = var$3;
     var$4.$screenX = 0;
     var$4.$screenY = 0;
@@ -41349,22 +41341,22 @@ cgtd_ChopScreen_resize = ($this, $width, $height) => {
     var$4.$worldWidth = var$5;
     var$4.$worldHeight = var$6;
     cbguv_Viewport_apply(var$4, 1);
-    cbguv_Viewport_apply($this.$viewport20, 1);
+    cbguv_Viewport_apply($this.$viewport17, 1);
 };
 function cgtd_Xoshiro128PPScreen() {
     let a = this; cbg_ScreenAdapter.call(a);
-    a.$random9 = null;
-    a.$batch21 = null;
+    a.$random7 = null;
+    a.$batch22 = null;
     a.$renderer11 = null;
     a.$amounts28 = null;
     a.$iterations20 = Long_ZERO;
-    a.$font29 = null;
+    a.$font30 = null;
     a.$viewport0 = null;
-    a.$mainGame17 = null;
+    a.$mainGame16 = null;
 }
 let cgtd_Xoshiro128PPScreen_show = $this => {
     let var$1, var$2, var$3, var$4, var$5, var$6, var$7, var$8, var$9, var$10, var$11;
-    $this.$font29 = $this.$mainGame17.$font0;
+    $this.$font30 = $this.$mainGame16.$font0;
     var$1 = new cgtr_Xoshiro128PlusPlusRandom;
     var$2 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$3 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
@@ -41372,12 +41364,12 @@ let cgtd_Xoshiro128PPScreen_show = $this => {
     var$5 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$1.$stateA3 = var$2;
     var$1.$stateB3 = var$3;
-    var$1.$stateC2 = var$4;
+    var$1.$stateC1 = var$4;
     if (!(var$2 | var$3 | var$4 | var$5))
         var$5 = 1;
-    var$1.$stateD2 = var$5;
-    $this.$random9 = var$1;
-    $this.$batch21 = $this.$mainGame17.$batch;
+    var$1.$stateD1 = var$5;
+    $this.$random7 = var$1;
+    $this.$batch22 = $this.$mainGame16.$batch;
     var$1 = new cbguv_ScreenViewport;
     var$6 = new cbgg_OrthographicCamera;
     cbgg_Camera__init_(var$6);
@@ -41446,7 +41438,7 @@ cgtd_Xoshiro128PPScreen_render = ($this, $delta) => {
     let var$2, var$3, $i, $x, var$6, $camera, var$8, $j, $m, $color, var$12, var$13, var$14, var$15, $$je;
     var$2 = cbg_Gdx_input.$justPressedKeys.data;
     if (var$2[71]) {
-        var$3 = $this.$mainGame17;
+        var$3 = $this.$mainGame16;
         $i = var$3.$screenIndex;
         var$2 = var$3.$screens.data;
         $x = var$2.length;
@@ -41462,7 +41454,7 @@ cgtd_Xoshiro128PPScreen_render = ($this, $delta) => {
         return;
     }
     if (var$2[72]) {
-        var$3 = $this.$mainGame17;
+        var$3 = $this.$mainGame16;
         $i = var$3.$screenIndex + 1 | 0;
         var$2 = var$3.$screens.data;
         $i = $i % var$2.length | 0;
@@ -41537,7 +41529,7 @@ cgtd_Xoshiro128PPScreen_render = ($this, $delta) => {
     $this.$iterations20 = Long_add($this.$iterations20, Long_fromInt(1));
     $i = 0;
     while ($i < 524288) {
-        $m = Long_toNumber(Long_shru(cgtr_Xoshiro128PlusPlusRandom_nextLong($this.$random9), 11)) * 1.1102230246251565E-16 * 512.0 | 0;
+        $m = Long_toNumber(Long_shru(cgtr_Xoshiro128PlusPlusRandom_nextLong($this.$random7), 11)) * 1.1102230246251565E-16 * 512.0 | 0;
         if ($m >= 0 && $m < 512) {
             var$2 = $this.$amounts28.data;
             var$2[$m] = Long_add(var$2[$m], Long_fromInt(1));
@@ -41572,16 +41564,16 @@ cgtd_Xoshiro128PPScreen_render = ($this, $delta) => {
         $j = $j + 32 | 0;
     }
     cbggg_ImmediateModeRenderer20_flush($this.$renderer11);
-    var$3 = $this.$batch21;
+    var$3 = $this.$batch22;
     var$6 = $camera.$combined;
     if (var$3.$drawing)
         cbggg_SpriteBatch_flush(var$3);
     cbgm_Matrix4_set(var$3.$projectionMatrix, var$6.$val);
     if (var$3.$drawing)
         cbggg_SpriteBatch_setupMatrices(var$3);
-    cbggg_SpriteBatch_begin($this.$batch21);
-    var$3 = $this.$font29;
-    var$6 = $this.$batch21;
+    cbggg_SpriteBatch_begin($this.$batch22);
+    var$3 = $this.$font30;
+    var$6 = $this.$batch22;
     var$2 = $rt_createArray(jl_Object, 2);
     var$8 = var$2.data;
     var$8[0] = $rt_s(489);
@@ -41702,7 +41694,7 @@ cgtd_Xoshiro128PPScreen_render = ($this, $delta) => {
         cbggg_GlyphLayout_setText($camera, var$14.$font, var$13, 0, $m, var$14.$color, 384.0, 1, 1, var$15);
         cbggg_BitmapFontCache_addToCache(var$14, $camera, 64.0, 522.0 + var$14.$font.$data0.$ascent);
         cbggg_BitmapFontCache_draw(var$3.$cache, var$6);
-        cbggg_SpriteBatch_end($this.$batch21);
+        cbggg_SpriteBatch_end($this.$batch22);
         return;
     }
     var$3 = new jl_IndexOutOfBoundsException;
@@ -41726,56 +41718,52 @@ cgtd_Xoshiro128PPScreen_resize = ($this, $width, $height) => {
     cbguv_Viewport_apply(var$4, 1);
     cbguv_Viewport_apply($this.$viewport0, 1);
 };
-function cgtd_RarxScreen() {
+function cgtd_ChockScreen() {
     let a = this; cbg_ScreenAdapter.call(a);
-    a.$random14 = null;
-    a.$batch10 = null;
-    a.$renderer9 = null;
-    a.$amounts22 = null;
-    a.$iterations6 = Long_ZERO;
+    a.$random16 = null;
+    a.$batch1 = null;
+    a.$renderer34 = null;
+    a.$amounts17 = null;
+    a.$iterations3 = Long_ZERO;
     a.$font2 = null;
-    a.$viewport13 = null;
-    a.$mainGame10 = null;
+    a.$viewport29 = null;
+    a.$mainGame28 = null;
 }
-let cgtd_RarxScreen_show = $this => {
-    let var$1, var$2, var$3, var$4, var$5, var$6, var$7, var$8, var$9, var$10, var$11, var$12;
-    $this.$font2 = $this.$mainGame10.$font0;
-    var$1 = new cgtr_Xoshiro160RoadroxoRandom;
+let cgtd_ChockScreen_show = $this => {
+    let var$1, var$2, var$3, var$4, var$5, var$6, var$7, var$8, var$9, var$10, var$11;
+    $this.$font2 = $this.$mainGame28.$font0;
+    var$1 = new cgtr_Chock32Random;
     var$2 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$3 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$4 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$5 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
-    var$6 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
-    var$1.$stateA0 = var$2;
-    var$1.$stateB0 = var$3;
-    var$1.$stateC = var$4;
-    if (!(var$2 | var$3 | var$4 | var$5))
-        var$5 = 1;
-    var$1.$stateD = var$5;
-    var$1.$stateE0 = var$6;
-    $this.$random14 = var$1;
-    $this.$batch10 = $this.$mainGame10.$batch;
+    var$1.$stateA2 = var$2;
+    var$1.$stateB2 = var$3;
+    var$1.$stateC3 = var$4;
+    var$1.$stateD3 = var$5;
+    $this.$random16 = var$1;
+    $this.$batch1 = $this.$mainGame28.$batch;
     var$1 = new cbguv_ScreenViewport;
-    var$7 = new cbgg_OrthographicCamera;
-    cbgg_Camera__init_(var$7);
-    var$7.$zoom = 1.0;
-    var$8 = new cbgm_Vector3;
+    var$6 = new cbgg_OrthographicCamera;
+    cbgg_Camera__init_(var$6);
+    var$6.$zoom = 1.0;
+    var$7 = new cbgm_Vector3;
     cbgm_Vector3_$callClinit();
-    var$7.$tmp0 = var$8;
-    var$7.$near = 0.0;
+    var$6.$tmp0 = var$7;
+    var$6.$near = 0.0;
     var$1.$tmp = new cbgm_Vector3;
     var$1.$unitsPerPixel = 1.0;
-    var$1.$camera = var$7;
-    $this.$viewport13 = var$1;
+    var$1.$camera = var$6;
+    $this.$viewport29 = var$1;
     var$1 = new cbggg_ImmediateModeRenderer20;
-    var$9 = cbggg_ShaderProgram__init_(cbggg_ImmediateModeRenderer20_createVertexShader(0, 1, 0), cbggg_ImmediateModeRenderer20_createFragmentShader(0, 1, 0));
-    if (var$9.$isCompiled) {
-        cbggg_ImmediateModeRenderer20__init_(var$1, 1536, 0, 1, 0, var$9);
+    var$8 = cbggg_ShaderProgram__init_(cbggg_ImmediateModeRenderer20_createVertexShader(0, 1, 0), cbggg_ImmediateModeRenderer20_createFragmentShader(0, 1, 0));
+    if (var$8.$isCompiled) {
+        cbggg_ImmediateModeRenderer20__init_(var$1, 1536, 0, 1, 0, var$8);
         var$1.$ownsShader = 1;
-        $this.$renderer9 = var$1;
-        var$10 = $this.$amounts22.data;
+        $this.$renderer34 = var$1;
+        var$9 = $this.$amounts17.data;
         var$2 = 0;
-        var$3 = var$10.length;
+        var$3 = var$9.length;
         if (var$2 > var$3) {
             var$1 = new jl_IllegalArgumentException;
             var$1.$suppressionEnabled = 1;
@@ -41784,46 +41772,46 @@ let cgtd_RarxScreen_show = $this => {
         }
         while (var$2 < var$3) {
             var$4 = var$2 + 1 | 0;
-            var$10[var$2] = Long_ZERO;
+            var$9[var$2] = Long_ZERO;
             var$2 = var$4;
         }
-        $this.$iterations6 = Long_ZERO;
+        $this.$iterations3 = Long_ZERO;
         return;
     }
     var$1 = new cbgu_GdxRuntimeException;
-    var$7 = new jl_StringBuilder;
-    var$7.$buffer = $rt_createCharArray(16);
-    var$2 = var$7.$length0;
-    var$11 = var$7;
-    jl_AbstractStringBuilder_insert(var$11, var$2, $rt_s(479));
-    if (!var$9.$isCompiled)
-        var$8 = var$9.$log0;
+    var$6 = new jl_StringBuilder;
+    var$6.$buffer = $rt_createCharArray(16);
+    var$2 = var$6.$length0;
+    var$10 = var$6;
+    jl_AbstractStringBuilder_insert(var$10, var$2, $rt_s(479));
+    if (!var$8.$isCompiled)
+        var$7 = var$8.$log0;
     else {
-        var$8 = cbg_Gdx_gl20.$glGetProgramInfoLog(var$9.$program);
-        var$9.$log0 = var$8;
+        var$7 = cbg_Gdx_gl20.$glGetProgramInfoLog(var$8.$program);
+        var$8.$log0 = var$7;
     }
-    jl_AbstractStringBuilder_insert(var$11, var$7.$length0, var$8);
-    var$8 = new jl_String;
-    var$10 = var$7.$buffer;
-    var$12 = var$10.data;
-    var$3 = var$7.$length0;
-    var$4 = var$12.length;
+    jl_AbstractStringBuilder_insert(var$10, var$6.$length0, var$7);
+    var$7 = new jl_String;
+    var$9 = var$6.$buffer;
+    var$11 = var$9.data;
+    var$3 = var$6.$length0;
+    var$4 = var$11.length;
     if (var$3 >= 0 && var$3 <= (var$4 - 0 | 0)) {
-        var$8.$nativeString = $rt_charArrayToString(var$10.data, 0, var$3);
+        var$7.$nativeString = $rt_charArrayToString(var$9.data, 0, var$3);
         var$1.$suppressionEnabled = 1;
         var$1.$writableStackTrace = 1;
-        var$1.$message = var$8;
+        var$1.$message = var$7;
         $rt_throw(var$1);
     }
     var$1 = new jl_IndexOutOfBoundsException;
     jl_Exception__init_0(var$1);
     $rt_throw(var$1);
 },
-cgtd_RarxScreen_render = ($this, $delta) => {
+cgtd_ChockScreen_render = ($this, $delta) => {
     let var$2, var$3, $i, $x, var$6, $camera, var$8, $j, $m, $color, var$12, var$13, var$14, var$15, $$je;
     var$2 = cbg_Gdx_input.$justPressedKeys.data;
     if (var$2[71]) {
-        var$3 = $this.$mainGame10;
+        var$3 = $this.$mainGame28;
         $i = var$3.$screenIndex;
         var$2 = var$3.$screens.data;
         $x = var$2.length;
@@ -41839,7 +41827,7 @@ cgtd_RarxScreen_render = ($this, $delta) => {
         return;
     }
     if (var$2[72]) {
-        var$3 = $this.$mainGame10;
+        var$3 = $this.$mainGame28;
         $i = var$3.$screenIndex + 1 | 0;
         var$2 = var$3.$screens.data;
         $i = $i % var$2.length | 0;
@@ -41857,11 +41845,11 @@ cgtd_RarxScreen_render = ($this, $delta) => {
         return;
     cbg_Gdx_gl.$glClearColor(1.0, 1.0, 1.0, 1.0);
     cbg_Gdx_gl.$glClear(16384);
-    $camera = $this.$viewport13.$camera;
+    $camera = $this.$viewport29.$camera;
     cbgg_OrthographicCamera_update($camera, 1);
     var$8 = cbg_Gdx_input.$pressedKeys.data;
     if (var$8[29]) {
-        var$2 = $this.$amounts22.data;
+        var$2 = $this.$amounts17.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -41875,10 +41863,10 @@ cgtd_RarxScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations6 = Long_ZERO;
+        $this.$iterations3 = Long_ZERO;
     }
     if (var$8[30]) {
-        var$2 = $this.$amounts22.data;
+        var$2 = $this.$amounts17.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -41892,10 +41880,10 @@ cgtd_RarxScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations6 = Long_ZERO;
+        $this.$iterations3 = Long_ZERO;
     }
     if (var$8[31]) {
-        var$2 = $this.$amounts22.data;
+        var$2 = $this.$amounts17.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -41909,56 +41897,56 @@ cgtd_RarxScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations6 = Long_ZERO;
+        $this.$iterations3 = Long_ZERO;
     }
-    $this.$iterations6 = Long_add($this.$iterations6, Long_fromInt(1));
+    $this.$iterations3 = Long_add($this.$iterations3, Long_fromInt(1));
     $i = 0;
     while ($i < 524288) {
-        $m = Long_toNumber(Long_shru(cgtr_Xoshiro160RoadroxoRandom_nextLong($this.$random14), 11)) * 1.1102230246251565E-16 * 512.0 | 0;
+        $m = Long_toNumber(Long_shru(cgtr_Chock32Random_nextLong($this.$random16), 11)) * 1.1102230246251565E-16 * 512.0 | 0;
         if ($m >= 0 && $m < 512) {
-            var$2 = $this.$amounts22.data;
+            var$2 = $this.$amounts17.data;
             var$2[$m] = Long_add(var$2[$m], Long_fromInt(1));
         }
         $i = $i + 1 | 0;
     }
-    var$3 = $this.$renderer9;
+    var$3 = $this.$renderer34;
     var$6 = $camera.$combined;
     cbgm_Matrix4_set(var$3.$projModelView, var$6.$val);
     var$3.$primitiveType = 1;
     $x = 0;
     while ($x < 512) {
         $color = $x & 63 ? (-1.5436749266448052E38) : (-1.5203096921934465E38);
-        var$3 = $this.$renderer9;
+        var$3 = $this.$renderer34;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
         $delta = $x;
         cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0, 0.0);
-        var$3 = $this.$renderer9;
+        var$3 = $this.$renderer34;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
-        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts22.data[$x]) / Long_toNumber($this.$iterations6), 0.0);
+        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts17.data[$x]) / Long_toNumber($this.$iterations3), 0.0);
         $x = $x + 1 | 0;
     }
     $j = 8;
     while ($j < 520) {
-        var$3 = $this.$renderer9;
+        var$3 = $this.$renderer34;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = (-6.221923240859403E37);
         $color = $j;
         cbggg_ImmediateModeRenderer20_vertex(var$3, 0.0, $color, 0.0);
-        var$3 = $this.$renderer9;
+        var$3 = $this.$renderer34;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = (-6.221923240859403E37);
         cbggg_ImmediateModeRenderer20_vertex(var$3, 10.0, $color, 0.0);
         $j = $j + 32 | 0;
     }
-    cbggg_ImmediateModeRenderer20_flush($this.$renderer9);
-    var$3 = $this.$batch10;
+    cbggg_ImmediateModeRenderer20_flush($this.$renderer34);
+    var$3 = $this.$batch1;
     var$6 = $camera.$combined;
     if (var$3.$drawing)
         cbggg_SpriteBatch_flush(var$3);
     cbgm_Matrix4_set(var$3.$projectionMatrix, var$6.$val);
     if (var$3.$drawing)
         cbggg_SpriteBatch_setupMatrices(var$3);
-    cbggg_SpriteBatch_begin($this.$batch10);
+    cbggg_SpriteBatch_begin($this.$batch1);
     var$3 = $this.$font2;
-    var$6 = $this.$batch10;
+    var$6 = $this.$batch1;
     var$2 = $rt_createArray(jl_Object, 2);
     var$8 = var$2.data;
     var$8[0] = $rt_s(490);
@@ -42079,16 +42067,16 @@ cgtd_RarxScreen_render = ($this, $delta) => {
         cbggg_GlyphLayout_setText($camera, var$14.$font, var$13, 0, $m, var$14.$color, 384.0, 1, 1, var$15);
         cbggg_BitmapFontCache_addToCache(var$14, $camera, 64.0, 522.0 + var$14.$font.$data0.$ascent);
         cbggg_BitmapFontCache_draw(var$3.$cache, var$6);
-        cbggg_SpriteBatch_end($this.$batch10);
+        cbggg_SpriteBatch_end($this.$batch1);
         return;
     }
     var$3 = new jl_IndexOutOfBoundsException;
     jl_Throwable__init_(var$3);
     $rt_throw(var$3);
 },
-cgtd_RarxScreen_resize = ($this, $width, $height) => {
+cgtd_ChockScreen_resize = ($this, $width, $height) => {
     let var$3, var$4, var$5, var$6;
-    var$3 = $this.$viewport13;
+    var$3 = $this.$viewport29;
     var$4 = var$3;
     var$4.$screenX = 0;
     var$4.$screenY = 0;
@@ -42101,30 +42089,30 @@ cgtd_RarxScreen_resize = ($this, $width, $height) => {
     var$4.$worldWidth = var$5;
     var$4.$worldHeight = var$6;
     cbguv_Viewport_apply(var$4, 1);
-    cbguv_Viewport_apply($this.$viewport13, 1);
+    cbguv_Viewport_apply($this.$viewport29, 1);
 };
 function cgtd_AceScreen() {
     let a = this; cbg_ScreenAdapter.call(a);
-    a.$random10 = null;
-    a.$batch26 = null;
-    a.$renderer18 = null;
-    a.$amounts8 = null;
-    a.$iterations23 = Long_ZERO;
-    a.$font11 = null;
-    a.$viewport31 = null;
-    a.$mainGame29 = null;
+    a.$random8 = null;
+    a.$batch25 = null;
+    a.$renderer17 = null;
+    a.$amounts9 = null;
+    a.$iterations22 = Long_ZERO;
+    a.$font9 = null;
+    a.$viewport32 = null;
+    a.$mainGame31 = null;
 }
 let cgtd_AceScreen_show = $this => {
     let var$1, var$2, var$3, var$4, var$5, var$6, var$7, var$8, var$9, var$10;
-    $this.$font11 = $this.$mainGame29.$font0;
+    $this.$font9 = $this.$mainGame31.$font0;
     var$1 = new cgtr_AceRandom;
     var$1.$stateA = Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19));
     var$1.$stateB = Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19));
-    var$1.$stateC0 = Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19));
-    var$1.$stateD0 = Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19));
+    var$1.$stateC = Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19));
+    var$1.$stateD = Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19));
     var$1.$stateE = Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19));
-    $this.$random10 = var$1;
-    $this.$batch26 = $this.$mainGame29.$batch;
+    $this.$random8 = var$1;
+    $this.$batch25 = $this.$mainGame31.$batch;
     var$1 = new cbguv_ScreenViewport;
     var$2 = new cbgg_OrthographicCamera;
     cbgg_Camera__init_(var$2);
@@ -42136,14 +42124,14 @@ let cgtd_AceScreen_show = $this => {
     var$1.$tmp = new cbgm_Vector3;
     var$1.$unitsPerPixel = 1.0;
     var$1.$camera = var$2;
-    $this.$viewport31 = var$1;
+    $this.$viewport32 = var$1;
     var$1 = new cbggg_ImmediateModeRenderer20;
     var$4 = cbggg_ShaderProgram__init_(cbggg_ImmediateModeRenderer20_createVertexShader(0, 1, 0), cbggg_ImmediateModeRenderer20_createFragmentShader(0, 1, 0));
     if (var$4.$isCompiled) {
         cbggg_ImmediateModeRenderer20__init_(var$1, 1536, 0, 1, 0, var$4);
         var$1.$ownsShader = 1;
-        $this.$renderer18 = var$1;
-        var$5 = $this.$amounts8.data;
+        $this.$renderer17 = var$1;
+        var$5 = $this.$amounts9.data;
         var$6 = 0;
         var$7 = var$5.length;
         if (var$6 > var$7) {
@@ -42157,7 +42145,7 @@ let cgtd_AceScreen_show = $this => {
             var$5[var$6] = Long_ZERO;
             var$6 = var$8;
         }
-        $this.$iterations23 = Long_ZERO;
+        $this.$iterations22 = Long_ZERO;
         return;
     }
     var$1 = new cbgu_GdxRuntimeException;
@@ -42193,7 +42181,7 @@ cgtd_AceScreen_render = ($this, $delta) => {
     let var$2, var$3, $i, $x, var$6, $camera, var$8, $j, var$10, var$11, var$12, var$13, var$14, var$15, $m, $color, var$18, var$19, var$20, var$21, $$je;
     var$2 = cbg_Gdx_input.$justPressedKeys.data;
     if (var$2[71]) {
-        var$3 = $this.$mainGame29;
+        var$3 = $this.$mainGame31;
         $i = var$3.$screenIndex;
         var$2 = var$3.$screens.data;
         $x = var$2.length;
@@ -42209,7 +42197,7 @@ cgtd_AceScreen_render = ($this, $delta) => {
         return;
     }
     if (var$2[72]) {
-        var$3 = $this.$mainGame29;
+        var$3 = $this.$mainGame31;
         $i = var$3.$screenIndex + 1 | 0;
         var$2 = var$3.$screens.data;
         $i = $i % var$2.length | 0;
@@ -42227,11 +42215,11 @@ cgtd_AceScreen_render = ($this, $delta) => {
         return;
     cbg_Gdx_gl.$glClearColor(1.0, 1.0, 1.0, 1.0);
     cbg_Gdx_gl.$glClear(16384);
-    $camera = $this.$viewport31.$camera;
+    $camera = $this.$viewport32.$camera;
     cbgg_OrthographicCamera_update($camera, 1);
     var$8 = cbg_Gdx_input.$pressedKeys.data;
     if (var$8[29]) {
-        var$2 = $this.$amounts8.data;
+        var$2 = $this.$amounts9.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -42245,10 +42233,10 @@ cgtd_AceScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations23 = Long_ZERO;
+        $this.$iterations22 = Long_ZERO;
     }
     if (var$8[30]) {
-        var$2 = $this.$amounts8.data;
+        var$2 = $this.$amounts9.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -42262,10 +42250,10 @@ cgtd_AceScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations23 = Long_ZERO;
+        $this.$iterations22 = Long_ZERO;
     }
     if (var$8[31]) {
-        var$2 = $this.$amounts8.data;
+        var$2 = $this.$amounts9.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -42279,68 +42267,68 @@ cgtd_AceScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations23 = Long_ZERO;
+        $this.$iterations22 = Long_ZERO;
     }
-    $this.$iterations23 = Long_add($this.$iterations23, Long_fromInt(1));
+    $this.$iterations22 = Long_add($this.$iterations22, Long_fromInt(1));
     $i = 0;
     while ($i < 524288) {
-        var$3 = $this.$random10;
+        var$3 = $this.$random8;
         var$10 = var$3.$stateA;
         var$11 = var$3.$stateB;
-        var$12 = var$3.$stateC0;
-        var$13 = var$3.$stateD0;
+        var$12 = var$3.$stateC;
+        var$13 = var$3.$stateD;
         var$14 = var$3.$stateE;
         var$3.$stateA = Long_add(var$10, Long_create(2135587861, 2654435769));
         var$3.$stateB = Long_xor(var$10, var$14);
-        var$3.$stateC0 = Long_add(var$11, var$13);
-        var$3.$stateD0 = Long_or(Long_shl(var$12, 52), Long_shru(var$12, 12));
+        var$3.$stateC = Long_add(var$11, var$13);
+        var$3.$stateD = Long_or(Long_shl(var$12, 52), Long_shru(var$12, 12));
         var$15 = Long_sub(var$11, var$12);
         var$3.$stateE = var$15;
         $m = Long_toNumber(Long_shru(var$15, 11)) * 1.1102230246251565E-16 * 512.0 | 0;
         if ($m >= 0 && $m < 512) {
-            var$2 = $this.$amounts8.data;
+            var$2 = $this.$amounts9.data;
             var$2[$m] = Long_add(var$2[$m], Long_fromInt(1));
         }
         $i = $i + 1 | 0;
     }
-    var$3 = $this.$renderer18;
+    var$3 = $this.$renderer17;
     var$6 = $camera.$combined;
     cbgm_Matrix4_set(var$3.$projModelView, var$6.$val);
     var$3.$primitiveType = 1;
     $x = 0;
     while ($x < 512) {
         $color = $x & 63 ? (-1.5436749266448052E38) : (-1.5203096921934465E38);
-        var$3 = $this.$renderer18;
+        var$3 = $this.$renderer17;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
         $delta = $x;
         cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0, 0.0);
-        var$3 = $this.$renderer18;
+        var$3 = $this.$renderer17;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
-        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts8.data[$x]) / Long_toNumber($this.$iterations23), 0.0);
+        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts9.data[$x]) / Long_toNumber($this.$iterations22), 0.0);
         $x = $x + 1 | 0;
     }
     $j = 8;
     while ($j < 520) {
-        var$3 = $this.$renderer18;
+        var$3 = $this.$renderer17;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = (-6.221923240859403E37);
         $color = $j;
         cbggg_ImmediateModeRenderer20_vertex(var$3, 0.0, $color, 0.0);
-        var$3 = $this.$renderer18;
+        var$3 = $this.$renderer17;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = (-6.221923240859403E37);
         cbggg_ImmediateModeRenderer20_vertex(var$3, 10.0, $color, 0.0);
         $j = $j + 32 | 0;
     }
-    cbggg_ImmediateModeRenderer20_flush($this.$renderer18);
-    var$3 = $this.$batch26;
+    cbggg_ImmediateModeRenderer20_flush($this.$renderer17);
+    var$3 = $this.$batch25;
     var$6 = $camera.$combined;
     if (var$3.$drawing)
         cbggg_SpriteBatch_flush(var$3);
     cbgm_Matrix4_set(var$3.$projectionMatrix, var$6.$val);
     if (var$3.$drawing)
         cbggg_SpriteBatch_setupMatrices(var$3);
-    cbggg_SpriteBatch_begin($this.$batch26);
-    var$3 = $this.$font11;
-    var$6 = $this.$batch26;
+    cbggg_SpriteBatch_begin($this.$batch25);
+    var$3 = $this.$font9;
+    var$6 = $this.$batch25;
     var$2 = $rt_createArray(jl_Object, 2);
     var$8 = var$2.data;
     var$8[0] = $rt_s(491);
@@ -42461,7 +42449,7 @@ cgtd_AceScreen_render = ($this, $delta) => {
         cbggg_GlyphLayout_setText($camera, var$20.$font, var$19, 0, $m, var$20.$color, 384.0, 1, 1, var$21);
         cbggg_BitmapFontCache_addToCache(var$20, $camera, 64.0, 522.0 + var$20.$font.$data0.$ascent);
         cbggg_BitmapFontCache_draw(var$3.$cache, var$6);
-        cbggg_SpriteBatch_end($this.$batch26);
+        cbggg_SpriteBatch_end($this.$batch25);
         return;
     }
     var$3 = new jl_IndexOutOfBoundsException;
@@ -42470,7 +42458,7 @@ cgtd_AceScreen_render = ($this, $delta) => {
 },
 cgtd_AceScreen_resize = ($this, $width, $height) => {
     let var$3, var$4, var$5, var$6;
-    var$3 = $this.$viewport31;
+    var$3 = $this.$viewport32;
     var$4 = var$3;
     var$4.$screenX = 0;
     var$4.$screenY = 0;
@@ -42483,22 +42471,22 @@ cgtd_AceScreen_resize = ($this, $width, $height) => {
     var$4.$worldWidth = var$5;
     var$4.$worldHeight = var$6;
     cbguv_Viewport_apply(var$4, 1);
-    cbguv_Viewport_apply($this.$viewport31, 1);
+    cbguv_Viewport_apply($this.$viewport32, 1);
 };
 function cgti_RandomScreen() {
     let a = this; cbg_ScreenAdapter.call(a);
     a.$random0 = null;
-    a.$batch18 = null;
-    a.$renderer21 = null;
-    a.$amounts1 = null;
-    a.$iterations26 = Long_ZERO;
-    a.$font21 = null;
-    a.$viewport3 = null;
+    a.$batch20 = null;
+    a.$renderer19 = null;
+    a.$amounts2 = null;
+    a.$iterations25 = Long_ZERO;
+    a.$font19 = null;
+    a.$viewport2 = null;
     a.$mainGame20 = null;
 }
 let cgti_RandomScreen_show = $this => {
     let var$1, var$2, var$3, var$4, var$5, var$6, var$7, var$8, var$9, var$10, var$11;
-    $this.$font21 = $this.$mainGame20.$font0;
+    $this.$font19 = $this.$mainGame20.$font0;
     var$1 = new cgt_RandomRandom;
     var$2 = Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19));
     var$3 = new cgt_Random;
@@ -42507,7 +42495,7 @@ let cgti_RandomScreen_show = $this => {
     var$1.$base = var$3;
     cgt_Random_setSeed(var$3, var$2);
     $this.$random0 = var$1;
-    $this.$batch18 = $this.$mainGame20.$batch;
+    $this.$batch20 = $this.$mainGame20.$batch;
     var$1 = new cbguv_ScreenViewport;
     var$3 = new cbgg_OrthographicCamera;
     cbgg_Camera__init_(var$3);
@@ -42519,14 +42507,14 @@ let cgti_RandomScreen_show = $this => {
     var$1.$tmp = new cbgm_Vector3;
     var$1.$unitsPerPixel = 1.0;
     var$1.$camera = var$3;
-    $this.$viewport3 = var$1;
+    $this.$viewport2 = var$1;
     var$1 = new cbggg_ImmediateModeRenderer20;
     var$5 = cbggg_ShaderProgram__init_(cbggg_ImmediateModeRenderer20_createVertexShader(0, 1, 0), cbggg_ImmediateModeRenderer20_createFragmentShader(0, 1, 0));
     if (var$5.$isCompiled) {
         cbggg_ImmediateModeRenderer20__init_(var$1, 1536, 0, 1, 0, var$5);
         var$1.$ownsShader = 1;
-        $this.$renderer21 = var$1;
-        var$6 = $this.$amounts1.data;
+        $this.$renderer19 = var$1;
+        var$6 = $this.$amounts2.data;
         var$7 = 0;
         var$8 = var$6.length;
         if (var$7 > var$8) {
@@ -42540,7 +42528,7 @@ let cgti_RandomScreen_show = $this => {
             var$6[var$7] = Long_ZERO;
             var$7 = var$9;
         }
-        $this.$iterations26 = Long_ZERO;
+        $this.$iterations25 = Long_ZERO;
         return;
     }
     var$1 = new cbgu_GdxRuntimeException;
@@ -42610,11 +42598,11 @@ cgti_RandomScreen_render = ($this, $delta) => {
         return;
     cbg_Gdx_gl.$glClearColor(1.0, 1.0, 1.0, 1.0);
     cbg_Gdx_gl.$glClear(16384);
-    $camera = $this.$viewport3.$camera;
+    $camera = $this.$viewport2.$camera;
     cbgg_OrthographicCamera_update($camera, 1);
     var$8 = cbg_Gdx_input.$pressedKeys.data;
     if (var$8[29]) {
-        var$2 = $this.$amounts1.data;
+        var$2 = $this.$amounts2.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -42628,10 +42616,10 @@ cgti_RandomScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations26 = Long_ZERO;
+        $this.$iterations25 = Long_ZERO;
     }
     if (var$8[30]) {
-        var$2 = $this.$amounts1.data;
+        var$2 = $this.$amounts2.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -42645,10 +42633,10 @@ cgti_RandomScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations26 = Long_ZERO;
+        $this.$iterations25 = Long_ZERO;
     }
     if (var$8[31]) {
-        var$2 = $this.$amounts1.data;
+        var$2 = $this.$amounts2.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -42662,56 +42650,56 @@ cgti_RandomScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations26 = Long_ZERO;
+        $this.$iterations25 = Long_ZERO;
     }
-    $this.$iterations26 = Long_add($this.$iterations26, Long_fromInt(1));
+    $this.$iterations25 = Long_add($this.$iterations25, Long_fromInt(1));
     $i = 0;
     while ($i < 524288) {
         $m = cgt_Random_nextInt($this.$random0.$base, 512);
         if ($m >= 0 && $m < 512) {
-            var$2 = $this.$amounts1.data;
+            var$2 = $this.$amounts2.data;
             var$2[$m] = Long_add(var$2[$m], Long_fromInt(1));
         }
         $i = $i + 1 | 0;
     }
-    var$3 = $this.$renderer21;
+    var$3 = $this.$renderer19;
     var$6 = $camera.$combined;
     cbgm_Matrix4_set(var$3.$projModelView, var$6.$val);
     var$3.$primitiveType = 1;
     $x = 0;
     while ($x < 512) {
         $color = $x & 63 ? (-1.5436749266448052E38) : (-1.5203096921934465E38);
-        var$3 = $this.$renderer21;
+        var$3 = $this.$renderer19;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
         $delta = $x;
         cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0, 0.0);
-        var$3 = $this.$renderer21;
+        var$3 = $this.$renderer19;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
-        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts1.data[$x]) / Long_toNumber($this.$iterations26), 0.0);
+        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts2.data[$x]) / Long_toNumber($this.$iterations25), 0.0);
         $x = $x + 1 | 0;
     }
     $j = 8;
     while ($j < 520) {
-        var$3 = $this.$renderer21;
+        var$3 = $this.$renderer19;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = (-6.221923240859403E37);
         $color = $j;
         cbggg_ImmediateModeRenderer20_vertex(var$3, 0.0, $color, 0.0);
-        var$3 = $this.$renderer21;
+        var$3 = $this.$renderer19;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = (-6.221923240859403E37);
         cbggg_ImmediateModeRenderer20_vertex(var$3, 10.0, $color, 0.0);
         $j = $j + 32 | 0;
     }
-    cbggg_ImmediateModeRenderer20_flush($this.$renderer21);
-    var$3 = $this.$batch18;
+    cbggg_ImmediateModeRenderer20_flush($this.$renderer19);
+    var$3 = $this.$batch20;
     var$6 = $camera.$combined;
     if (var$3.$drawing)
         cbggg_SpriteBatch_flush(var$3);
     cbgm_Matrix4_set(var$3.$projectionMatrix, var$6.$val);
     if (var$3.$drawing)
         cbggg_SpriteBatch_setupMatrices(var$3);
-    cbggg_SpriteBatch_begin($this.$batch18);
-    var$3 = $this.$font21;
-    var$6 = $this.$batch18;
+    cbggg_SpriteBatch_begin($this.$batch20);
+    var$3 = $this.$font19;
+    var$6 = $this.$batch20;
     var$2 = $rt_createArray(jl_Object, 2);
     var$8 = var$2.data;
     var$8[0] = $rt_s(485);
@@ -42832,7 +42820,7 @@ cgti_RandomScreen_render = ($this, $delta) => {
         cbggg_GlyphLayout_setText($camera, var$14.$font, var$13, 0, $m, var$14.$color, 384.0, 1, 1, var$15);
         cbggg_BitmapFontCache_addToCache(var$14, $camera, 64.0, 522.0 + var$14.$font.$data0.$ascent);
         cbggg_BitmapFontCache_draw(var$3.$cache, var$6);
-        cbggg_SpriteBatch_end($this.$batch18);
+        cbggg_SpriteBatch_end($this.$batch20);
         return;
     }
     var$3 = new jl_IndexOutOfBoundsException;
@@ -42841,7 +42829,7 @@ cgti_RandomScreen_render = ($this, $delta) => {
 },
 cgti_RandomScreen_resize = ($this, $width, $height) => {
     let var$3, var$4, var$5, var$6;
-    var$3 = $this.$viewport3;
+    var$3 = $this.$viewport2;
     var$4 = var$3;
     var$4.$screenX = 0;
     var$4.$screenY = 0;
@@ -42854,17 +42842,17 @@ cgti_RandomScreen_resize = ($this, $width, $height) => {
     var$4.$worldWidth = var$5;
     var$4.$worldHeight = var$6;
     cbguv_Viewport_apply(var$4, 1);
-    cbguv_Viewport_apply($this.$viewport3, 1);
+    cbguv_Viewport_apply($this.$viewport2, 1);
 };
 function cgti_ChipScreen() {
     let a = this; cbg_ScreenAdapter.call(a);
-    a.$random25 = null;
-    a.$batch19 = null;
-    a.$renderer26 = null;
-    a.$amounts7 = null;
-    a.$iterations18 = Long_ZERO;
+    a.$random22 = null;
+    a.$batch21 = null;
+    a.$renderer25 = null;
+    a.$amounts8 = null;
+    a.$iterations19 = Long_ZERO;
     a.$font1 = null;
-    a.$viewport32 = null;
+    a.$viewport33 = null;
     a.$mainGame34 = null;
 }
 let cgti_ChipScreen_show = $this => {
@@ -42875,12 +42863,12 @@ let cgti_ChipScreen_show = $this => {
     var$3 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$4 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$5 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
-    var$1.$stateA1 = var$2;
-    var$1.$stateB1 = var$3;
-    var$1.$stateC1 = var$4;
-    var$1.$stateD1 = var$5;
-    $this.$random25 = var$1;
-    $this.$batch19 = $this.$mainGame34.$batch;
+    var$1.$stateA0 = var$2;
+    var$1.$stateB0 = var$3;
+    var$1.$stateC0 = var$4;
+    var$1.$stateD0 = var$5;
+    $this.$random22 = var$1;
+    $this.$batch21 = $this.$mainGame34.$batch;
     var$1 = new cbguv_ScreenViewport;
     var$6 = new cbgg_OrthographicCamera;
     cbgg_Camera__init_(var$6);
@@ -42892,14 +42880,14 @@ let cgti_ChipScreen_show = $this => {
     var$1.$tmp = new cbgm_Vector3;
     var$1.$unitsPerPixel = 1.0;
     var$1.$camera = var$6;
-    $this.$viewport32 = var$1;
+    $this.$viewport33 = var$1;
     var$1 = new cbggg_ImmediateModeRenderer20;
     var$8 = cbggg_ShaderProgram__init_(cbggg_ImmediateModeRenderer20_createVertexShader(0, 1, 0), cbggg_ImmediateModeRenderer20_createFragmentShader(0, 1, 0));
     if (var$8.$isCompiled) {
         cbggg_ImmediateModeRenderer20__init_(var$1, 1536, 0, 1, 0, var$8);
         var$1.$ownsShader = 1;
-        $this.$renderer26 = var$1;
-        var$9 = $this.$amounts7.data;
+        $this.$renderer25 = var$1;
+        var$9 = $this.$amounts8.data;
         var$2 = 0;
         var$3 = var$9.length;
         if (var$2 > var$3) {
@@ -42913,7 +42901,7 @@ let cgti_ChipScreen_show = $this => {
             var$9[var$2] = Long_ZERO;
             var$2 = var$4;
         }
-        $this.$iterations18 = Long_ZERO;
+        $this.$iterations19 = Long_ZERO;
         return;
     }
     var$1 = new cbgu_GdxRuntimeException;
@@ -42983,11 +42971,11 @@ cgti_ChipScreen_render = ($this, $delta) => {
         return;
     cbg_Gdx_gl.$glClearColor(1.0, 1.0, 1.0, 1.0);
     cbg_Gdx_gl.$glClear(16384);
-    $camera = $this.$viewport32.$camera;
+    $camera = $this.$viewport33.$camera;
     cbgg_OrthographicCamera_update($camera, 1);
     var$8 = cbg_Gdx_input.$pressedKeys.data;
     if (var$8[29]) {
-        var$2 = $this.$amounts7.data;
+        var$2 = $this.$amounts8.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -43001,10 +42989,10 @@ cgti_ChipScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations18 = Long_ZERO;
+        $this.$iterations19 = Long_ZERO;
     }
     if (var$8[30]) {
-        var$2 = $this.$amounts7.data;
+        var$2 = $this.$amounts8.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -43018,10 +43006,10 @@ cgti_ChipScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations18 = Long_ZERO;
+        $this.$iterations19 = Long_ZERO;
     }
     if (var$8[31]) {
-        var$2 = $this.$amounts7.data;
+        var$2 = $this.$amounts8.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -43035,56 +43023,56 @@ cgti_ChipScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations18 = Long_ZERO;
+        $this.$iterations19 = Long_ZERO;
     }
-    $this.$iterations18 = Long_add($this.$iterations18, Long_fromInt(1));
+    $this.$iterations19 = Long_add($this.$iterations19, Long_fromInt(1));
     $i = 0;
     while ($i < 524288) {
-        $m = cgtr_Chip32Random_nextInt($this.$random25, 512);
+        $m = cgtr_Chip32Random_nextInt($this.$random22, 512);
         if ($m >= 0 && $m < 512) {
-            var$2 = $this.$amounts7.data;
+            var$2 = $this.$amounts8.data;
             var$2[$m] = Long_add(var$2[$m], Long_fromInt(1));
         }
         $i = $i + 1 | 0;
     }
-    var$3 = $this.$renderer26;
+    var$3 = $this.$renderer25;
     var$6 = $camera.$combined;
     cbgm_Matrix4_set(var$3.$projModelView, var$6.$val);
     var$3.$primitiveType = 1;
     $x = 0;
     while ($x < 512) {
         $color = $x & 63 ? (-1.5436749266448052E38) : (-1.5203096921934465E38);
-        var$3 = $this.$renderer26;
+        var$3 = $this.$renderer25;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
         $delta = $x;
         cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0, 0.0);
-        var$3 = $this.$renderer26;
+        var$3 = $this.$renderer25;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
-        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts7.data[$x]) / Long_toNumber($this.$iterations18), 0.0);
+        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts8.data[$x]) / Long_toNumber($this.$iterations19), 0.0);
         $x = $x + 1 | 0;
     }
     $j = 8;
     while ($j < 520) {
-        var$3 = $this.$renderer26;
+        var$3 = $this.$renderer25;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = (-6.221923240859403E37);
         $color = $j;
         cbggg_ImmediateModeRenderer20_vertex(var$3, 0.0, $color, 0.0);
-        var$3 = $this.$renderer26;
+        var$3 = $this.$renderer25;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = (-6.221923240859403E37);
         cbggg_ImmediateModeRenderer20_vertex(var$3, 10.0, $color, 0.0);
         $j = $j + 32 | 0;
     }
-    cbggg_ImmediateModeRenderer20_flush($this.$renderer26);
-    var$3 = $this.$batch19;
+    cbggg_ImmediateModeRenderer20_flush($this.$renderer25);
+    var$3 = $this.$batch21;
     var$6 = $camera.$combined;
     if (var$3.$drawing)
         cbggg_SpriteBatch_flush(var$3);
     cbgm_Matrix4_set(var$3.$projectionMatrix, var$6.$val);
     if (var$3.$drawing)
         cbggg_SpriteBatch_setupMatrices(var$3);
-    cbggg_SpriteBatch_begin($this.$batch19);
+    cbggg_SpriteBatch_begin($this.$batch21);
     var$3 = $this.$font1;
-    var$6 = $this.$batch19;
+    var$6 = $this.$batch21;
     var$2 = $rt_createArray(jl_Object, 2);
     var$8 = var$2.data;
     var$8[0] = $rt_s(487);
@@ -43205,7 +43193,7 @@ cgti_ChipScreen_render = ($this, $delta) => {
         cbggg_GlyphLayout_setText($camera, var$14.$font, var$13, 0, $m, var$14.$color, 384.0, 1, 1, var$15);
         cbggg_BitmapFontCache_addToCache(var$14, $camera, 64.0, 522.0 + var$14.$font.$data0.$ascent);
         cbggg_BitmapFontCache_draw(var$3.$cache, var$6);
-        cbggg_SpriteBatch_end($this.$batch19);
+        cbggg_SpriteBatch_end($this.$batch21);
         return;
     }
     var$3 = new jl_IndexOutOfBoundsException;
@@ -43214,7 +43202,7 @@ cgti_ChipScreen_render = ($this, $delta) => {
 },
 cgti_ChipScreen_resize = ($this, $width, $height) => {
     let var$3, var$4, var$5, var$6;
-    var$3 = $this.$viewport32;
+    var$3 = $this.$viewport33;
     var$4 = var$3;
     var$4.$screenX = 0;
     var$4.$screenY = 0;
@@ -43227,33 +43215,33 @@ cgti_ChipScreen_resize = ($this, $width, $height) => {
     var$4.$worldWidth = var$5;
     var$4.$worldHeight = var$6;
     cbguv_Viewport_apply(var$4, 1);
-    cbguv_Viewport_apply($this.$viewport32, 1);
+    cbguv_Viewport_apply($this.$viewport33, 1);
 };
 function cgti_ChopScreen() {
     let a = this; cbg_ScreenAdapter.call(a);
-    a.$random22 = null;
-    a.$batch12 = null;
-    a.$renderer25 = null;
-    a.$amounts20 = null;
+    a.$random19 = null;
+    a.$batch14 = null;
+    a.$renderer24 = null;
+    a.$amounts21 = null;
     a.$iterations10 = Long_ZERO;
-    a.$font23 = null;
-    a.$viewport8 = null;
-    a.$mainGame24 = null;
+    a.$font22 = null;
+    a.$viewport7 = null;
+    a.$mainGame23 = null;
 }
 let cgti_ChopScreen_show = $this => {
     let var$1, var$2, var$3, var$4, var$5, var$6, var$7, var$8, var$9, var$10, var$11;
-    $this.$font23 = $this.$mainGame24.$font0;
+    $this.$font22 = $this.$mainGame23.$font0;
     var$1 = new cgtr_ChopRandom;
     var$2 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$3 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$4 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$5 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
-    var$1.$stateA2 = var$2;
-    var$1.$stateB2 = var$3;
-    var$1.$stateC3 = var$4;
-    var$1.$stateD3 = var$5;
-    $this.$random22 = var$1;
-    $this.$batch12 = $this.$mainGame24.$batch;
+    var$1.$stateA1 = var$2;
+    var$1.$stateB1 = var$3;
+    var$1.$stateC2 = var$4;
+    var$1.$stateD2 = var$5;
+    $this.$random19 = var$1;
+    $this.$batch14 = $this.$mainGame23.$batch;
     var$1 = new cbguv_ScreenViewport;
     var$6 = new cbgg_OrthographicCamera;
     cbgg_Camera__init_(var$6);
@@ -43265,14 +43253,14 @@ let cgti_ChopScreen_show = $this => {
     var$1.$tmp = new cbgm_Vector3;
     var$1.$unitsPerPixel = 1.0;
     var$1.$camera = var$6;
-    $this.$viewport8 = var$1;
+    $this.$viewport7 = var$1;
     var$1 = new cbggg_ImmediateModeRenderer20;
     var$8 = cbggg_ShaderProgram__init_(cbggg_ImmediateModeRenderer20_createVertexShader(0, 1, 0), cbggg_ImmediateModeRenderer20_createFragmentShader(0, 1, 0));
     if (var$8.$isCompiled) {
         cbggg_ImmediateModeRenderer20__init_(var$1, 1536, 0, 1, 0, var$8);
         var$1.$ownsShader = 1;
-        $this.$renderer25 = var$1;
-        var$9 = $this.$amounts20.data;
+        $this.$renderer24 = var$1;
+        var$9 = $this.$amounts21.data;
         var$2 = 0;
         var$3 = var$9.length;
         if (var$2 > var$3) {
@@ -43322,7 +43310,7 @@ cgti_ChopScreen_render = ($this, $delta) => {
     let var$2, var$3, $i, $x, var$6, $camera, var$8, $j, $m, $color, var$12, var$13, var$14, var$15, var$16, $$je;
     var$2 = cbg_Gdx_input.$justPressedKeys.data;
     if (var$2[71]) {
-        var$3 = $this.$mainGame24;
+        var$3 = $this.$mainGame23;
         $i = var$3.$screenIndex;
         var$2 = var$3.$screens.data;
         $x = var$2.length;
@@ -43338,7 +43326,7 @@ cgti_ChopScreen_render = ($this, $delta) => {
         return;
     }
     if (var$2[72]) {
-        var$3 = $this.$mainGame24;
+        var$3 = $this.$mainGame23;
         $i = var$3.$screenIndex + 1 | 0;
         var$2 = var$3.$screens.data;
         $i = $i % var$2.length | 0;
@@ -43356,11 +43344,11 @@ cgti_ChopScreen_render = ($this, $delta) => {
         return;
     cbg_Gdx_gl.$glClearColor(1.0, 1.0, 1.0, 1.0);
     cbg_Gdx_gl.$glClear(16384);
-    $camera = $this.$viewport8.$camera;
+    $camera = $this.$viewport7.$camera;
     cbgg_OrthographicCamera_update($camera, 1);
     var$8 = cbg_Gdx_input.$pressedKeys.data;
     if (var$8[29]) {
-        var$2 = $this.$amounts20.data;
+        var$2 = $this.$amounts21.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -43377,7 +43365,7 @@ cgti_ChopScreen_render = ($this, $delta) => {
         $this.$iterations10 = Long_ZERO;
     }
     if (var$8[30]) {
-        var$2 = $this.$amounts20.data;
+        var$2 = $this.$amounts21.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -43394,7 +43382,7 @@ cgti_ChopScreen_render = ($this, $delta) => {
         $this.$iterations10 = Long_ZERO;
     }
     if (var$8[31]) {
-        var$2 = $this.$amounts20.data;
+        var$2 = $this.$amounts21.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -43413,51 +43401,51 @@ cgti_ChopScreen_render = ($this, $delta) => {
     $this.$iterations10 = Long_add($this.$iterations10, Long_fromInt(1));
     $i = 0;
     while ($i < 524288) {
-        $m = Long_hi(Long_mul(Long_fromInt(512), Long_and(Long_fromInt(cgtr_ChopRandom_nextInt($this.$random22)), Long_create(4294967295, 0)))) & (-1);
+        $m = Long_hi(Long_mul(Long_fromInt(512), Long_and(Long_fromInt(cgtr_ChopRandom_nextInt($this.$random19)), Long_create(4294967295, 0)))) & (-1);
         if ($m >= 0 && $m < 512) {
-            var$2 = $this.$amounts20.data;
+            var$2 = $this.$amounts21.data;
             var$2[$m] = Long_add(var$2[$m], Long_fromInt(1));
         }
         $i = $i + 1 | 0;
     }
-    var$3 = $this.$renderer25;
+    var$3 = $this.$renderer24;
     var$6 = $camera.$combined;
     cbgm_Matrix4_set(var$3.$projModelView, var$6.$val);
     var$3.$primitiveType = 1;
     $x = 0;
     while ($x < 512) {
         $color = $x & 63 ? (-1.5436749266448052E38) : (-1.5203096921934465E38);
-        var$3 = $this.$renderer25;
+        var$3 = $this.$renderer24;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
         $delta = $x;
         cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0, 0.0);
-        var$3 = $this.$renderer25;
+        var$3 = $this.$renderer24;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
-        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts20.data[$x]) / Long_toNumber($this.$iterations10), 0.0);
+        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts21.data[$x]) / Long_toNumber($this.$iterations10), 0.0);
         $x = $x + 1 | 0;
     }
     $j = 8;
     while ($j < 520) {
-        var$3 = $this.$renderer25;
+        var$3 = $this.$renderer24;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = (-6.221923240859403E37);
         $color = $j;
         cbggg_ImmediateModeRenderer20_vertex(var$3, 0.0, $color, 0.0);
-        var$3 = $this.$renderer25;
+        var$3 = $this.$renderer24;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = (-6.221923240859403E37);
         cbggg_ImmediateModeRenderer20_vertex(var$3, 10.0, $color, 0.0);
         $j = $j + 32 | 0;
     }
-    cbggg_ImmediateModeRenderer20_flush($this.$renderer25);
-    var$3 = $this.$batch12;
+    cbggg_ImmediateModeRenderer20_flush($this.$renderer24);
+    var$3 = $this.$batch14;
     var$6 = $camera.$combined;
     if (var$3.$drawing)
         cbggg_SpriteBatch_flush(var$3);
     cbgm_Matrix4_set(var$3.$projectionMatrix, var$6.$val);
     if (var$3.$drawing)
         cbggg_SpriteBatch_setupMatrices(var$3);
-    cbggg_SpriteBatch_begin($this.$batch12);
-    var$3 = $this.$font23;
-    var$6 = $this.$batch12;
+    cbggg_SpriteBatch_begin($this.$batch14);
+    var$3 = $this.$font22;
+    var$6 = $this.$batch14;
     var$2 = $rt_createArray(jl_Object, 2);
     var$8 = var$2.data;
     var$8[0] = $rt_s(488);
@@ -43578,7 +43566,7 @@ cgti_ChopScreen_render = ($this, $delta) => {
         cbggg_GlyphLayout_setText($camera, var$14.$font, var$13, 0, var$15, var$14.$color, 384.0, 1, 1, var$16);
         cbggg_BitmapFontCache_addToCache(var$14, $camera, 64.0, 522.0 + var$14.$font.$data0.$ascent);
         cbggg_BitmapFontCache_draw(var$3.$cache, var$6);
-        cbggg_SpriteBatch_end($this.$batch12);
+        cbggg_SpriteBatch_end($this.$batch14);
         return;
     }
     var$3 = new jl_IndexOutOfBoundsException;
@@ -43587,7 +43575,7 @@ cgti_ChopScreen_render = ($this, $delta) => {
 },
 cgti_ChopScreen_resize = ($this, $width, $height) => {
     let var$3, var$4, var$5, var$6;
-    var$3 = $this.$viewport8;
+    var$3 = $this.$viewport7;
     var$4 = var$3;
     var$4.$screenX = 0;
     var$4.$screenY = 0;
@@ -43600,22 +43588,22 @@ cgti_ChopScreen_resize = ($this, $width, $height) => {
     var$4.$worldWidth = var$5;
     var$4.$worldHeight = var$6;
     cbguv_Viewport_apply(var$4, 1);
-    cbguv_Viewport_apply($this.$viewport8, 1);
+    cbguv_Viewport_apply($this.$viewport7, 1);
 };
 function cgti_Xoshiro128PPScreen() {
     let a = this; cbg_ScreenAdapter.call(a);
-    a.$random19 = null;
-    a.$batch1 = null;
-    a.$renderer6 = null;
-    a.$amounts19 = null;
-    a.$iterations5 = Long_ZERO;
-    a.$font31 = null;
-    a.$viewport10 = null;
+    a.$random15 = null;
+    a.$batch2 = null;
+    a.$renderer7 = null;
+    a.$amounts20 = null;
+    a.$iterations7 = Long_ZERO;
+    a.$font32 = null;
+    a.$viewport9 = null;
     a.$mainGame8 = null;
 }
 let cgti_Xoshiro128PPScreen_show = $this => {
     let var$1, var$2, var$3, var$4, var$5, var$6, var$7, var$8, var$9, var$10, var$11;
-    $this.$font31 = $this.$mainGame8.$font0;
+    $this.$font32 = $this.$mainGame8.$font0;
     var$1 = new cgtr_Xoshiro128PlusPlusRandom;
     var$2 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$3 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
@@ -43623,12 +43611,12 @@ let cgti_Xoshiro128PPScreen_show = $this => {
     var$5 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$1.$stateA3 = var$2;
     var$1.$stateB3 = var$3;
-    var$1.$stateC2 = var$4;
+    var$1.$stateC1 = var$4;
     if (!(var$2 | var$3 | var$4 | var$5))
         var$5 = 1;
-    var$1.$stateD2 = var$5;
-    $this.$random19 = var$1;
-    $this.$batch1 = $this.$mainGame8.$batch;
+    var$1.$stateD1 = var$5;
+    $this.$random15 = var$1;
+    $this.$batch2 = $this.$mainGame8.$batch;
     var$1 = new cbguv_ScreenViewport;
     var$6 = new cbgg_OrthographicCamera;
     cbgg_Camera__init_(var$6);
@@ -43640,14 +43628,14 @@ let cgti_Xoshiro128PPScreen_show = $this => {
     var$1.$tmp = new cbgm_Vector3;
     var$1.$unitsPerPixel = 1.0;
     var$1.$camera = var$6;
-    $this.$viewport10 = var$1;
+    $this.$viewport9 = var$1;
     var$1 = new cbggg_ImmediateModeRenderer20;
     var$8 = cbggg_ShaderProgram__init_(cbggg_ImmediateModeRenderer20_createVertexShader(0, 1, 0), cbggg_ImmediateModeRenderer20_createFragmentShader(0, 1, 0));
     if (var$8.$isCompiled) {
         cbggg_ImmediateModeRenderer20__init_(var$1, 1536, 0, 1, 0, var$8);
         var$1.$ownsShader = 1;
-        $this.$renderer6 = var$1;
-        var$9 = $this.$amounts19.data;
+        $this.$renderer7 = var$1;
+        var$9 = $this.$amounts20.data;
         var$2 = 0;
         var$3 = var$9.length;
         if (var$2 > var$3) {
@@ -43661,7 +43649,7 @@ let cgti_Xoshiro128PPScreen_show = $this => {
             var$9[var$2] = Long_ZERO;
             var$2 = var$4;
         }
-        $this.$iterations5 = Long_ZERO;
+        $this.$iterations7 = Long_ZERO;
         return;
     }
     var$1 = new cbgu_GdxRuntimeException;
@@ -43731,11 +43719,11 @@ cgti_Xoshiro128PPScreen_render = ($this, $delta) => {
         return;
     cbg_Gdx_gl.$glClearColor(1.0, 1.0, 1.0, 1.0);
     cbg_Gdx_gl.$glClear(16384);
-    $camera = $this.$viewport10.$camera;
+    $camera = $this.$viewport9.$camera;
     cbgg_OrthographicCamera_update($camera, 1);
     var$8 = cbg_Gdx_input.$pressedKeys.data;
     if (var$8[29]) {
-        var$2 = $this.$amounts19.data;
+        var$2 = $this.$amounts20.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -43749,10 +43737,10 @@ cgti_Xoshiro128PPScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations5 = Long_ZERO;
+        $this.$iterations7 = Long_ZERO;
     }
     if (var$8[30]) {
-        var$2 = $this.$amounts19.data;
+        var$2 = $this.$amounts20.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -43766,10 +43754,10 @@ cgti_Xoshiro128PPScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations5 = Long_ZERO;
+        $this.$iterations7 = Long_ZERO;
     }
     if (var$8[31]) {
-        var$2 = $this.$amounts19.data;
+        var$2 = $this.$amounts20.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -43783,56 +43771,56 @@ cgti_Xoshiro128PPScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations5 = Long_ZERO;
+        $this.$iterations7 = Long_ZERO;
     }
-    $this.$iterations5 = Long_add($this.$iterations5, Long_fromInt(1));
+    $this.$iterations7 = Long_add($this.$iterations7, Long_fromInt(1));
     $i = 0;
     while ($i < 524288) {
-        $m = Long_hi(Long_mul(Long_fromInt(512), Long_and(Long_fromInt(cgtr_Xoshiro128PlusPlusRandom_nextInt($this.$random19)), Long_create(4294967295, 0)))) & (-1);
+        $m = Long_hi(Long_mul(Long_fromInt(512), Long_and(Long_fromInt(cgtr_Xoshiro128PlusPlusRandom_nextInt($this.$random15)), Long_create(4294967295, 0)))) & (-1);
         if ($m >= 0 && $m < 512) {
-            var$2 = $this.$amounts19.data;
+            var$2 = $this.$amounts20.data;
             var$2[$m] = Long_add(var$2[$m], Long_fromInt(1));
         }
         $i = $i + 1 | 0;
     }
-    var$3 = $this.$renderer6;
+    var$3 = $this.$renderer7;
     var$6 = $camera.$combined;
     cbgm_Matrix4_set(var$3.$projModelView, var$6.$val);
     var$3.$primitiveType = 1;
     $x = 0;
     while ($x < 512) {
         $color = $x & 63 ? (-1.5436749266448052E38) : (-1.5203096921934465E38);
-        var$3 = $this.$renderer6;
+        var$3 = $this.$renderer7;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
         $delta = $x;
         cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0, 0.0);
-        var$3 = $this.$renderer6;
+        var$3 = $this.$renderer7;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
-        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts19.data[$x]) / Long_toNumber($this.$iterations5), 0.0);
+        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts20.data[$x]) / Long_toNumber($this.$iterations7), 0.0);
         $x = $x + 1 | 0;
     }
     $j = 8;
     while ($j < 520) {
-        var$3 = $this.$renderer6;
+        var$3 = $this.$renderer7;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = (-6.221923240859403E37);
         $color = $j;
         cbggg_ImmediateModeRenderer20_vertex(var$3, 0.0, $color, 0.0);
-        var$3 = $this.$renderer6;
+        var$3 = $this.$renderer7;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = (-6.221923240859403E37);
         cbggg_ImmediateModeRenderer20_vertex(var$3, 10.0, $color, 0.0);
         $j = $j + 32 | 0;
     }
-    cbggg_ImmediateModeRenderer20_flush($this.$renderer6);
-    var$3 = $this.$batch1;
+    cbggg_ImmediateModeRenderer20_flush($this.$renderer7);
+    var$3 = $this.$batch2;
     var$6 = $camera.$combined;
     if (var$3.$drawing)
         cbggg_SpriteBatch_flush(var$3);
     cbgm_Matrix4_set(var$3.$projectionMatrix, var$6.$val);
     if (var$3.$drawing)
         cbggg_SpriteBatch_setupMatrices(var$3);
-    cbggg_SpriteBatch_begin($this.$batch1);
-    var$3 = $this.$font31;
-    var$6 = $this.$batch1;
+    cbggg_SpriteBatch_begin($this.$batch2);
+    var$3 = $this.$font32;
+    var$6 = $this.$batch2;
     var$2 = $rt_createArray(jl_Object, 2);
     var$8 = var$2.data;
     var$8[0] = $rt_s(489);
@@ -43953,7 +43941,7 @@ cgti_Xoshiro128PPScreen_render = ($this, $delta) => {
         cbggg_GlyphLayout_setText($camera, var$14.$font, var$13, 0, var$15, var$14.$color, 384.0, 1, 1, var$16);
         cbggg_BitmapFontCache_addToCache(var$14, $camera, 64.0, 522.0 + var$14.$font.$data0.$ascent);
         cbggg_BitmapFontCache_draw(var$3.$cache, var$6);
-        cbggg_SpriteBatch_end($this.$batch1);
+        cbggg_SpriteBatch_end($this.$batch2);
         return;
     }
     var$3 = new jl_IndexOutOfBoundsException;
@@ -43962,7 +43950,7 @@ cgti_Xoshiro128PPScreen_render = ($this, $delta) => {
 },
 cgti_Xoshiro128PPScreen_resize = ($this, $width, $height) => {
     let var$3, var$4, var$5, var$6;
-    var$3 = $this.$viewport10;
+    var$3 = $this.$viewport9;
     var$4 = var$3;
     var$4.$screenX = 0;
     var$4.$screenY = 0;
@@ -43975,58 +43963,54 @@ cgti_Xoshiro128PPScreen_resize = ($this, $width, $height) => {
     var$4.$worldWidth = var$5;
     var$4.$worldHeight = var$6;
     cbguv_Viewport_apply(var$4, 1);
-    cbguv_Viewport_apply($this.$viewport10, 1);
+    cbguv_Viewport_apply($this.$viewport9, 1);
 };
-function cgti_RarxScreen() {
+function cgti_ChockScreen() {
     let a = this; cbg_ScreenAdapter.call(a);
-    a.$random1 = null;
-    a.$batch14 = null;
-    a.$renderer16 = null;
-    a.$amounts5 = null;
-    a.$iterations29 = Long_ZERO;
-    a.$font9 = null;
-    a.$viewport7 = null;
-    a.$mainGame22 = null;
+    a.$random31 = null;
+    a.$batch11 = null;
+    a.$renderer4 = null;
+    a.$amounts1 = null;
+    a.$iterations34 = Long_ZERO;
+    a.$font26 = null;
+    a.$viewport25 = null;
+    a.$mainGame24 = null;
 }
-let cgti_RarxScreen_show = $this => {
-    let var$1, var$2, var$3, var$4, var$5, var$6, var$7, var$8, var$9, var$10, var$11, var$12;
-    $this.$font9 = $this.$mainGame22.$font0;
-    var$1 = new cgtr_Xoshiro160RoadroxoRandom;
+let cgti_ChockScreen_show = $this => {
+    let var$1, var$2, var$3, var$4, var$5, var$6, var$7, var$8, var$9, var$10, var$11;
+    $this.$font26 = $this.$mainGame24.$font0;
+    var$1 = new cgtr_Chock32Random;
     var$2 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$3 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$4 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$5 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
-    var$6 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
-    var$1.$stateA0 = var$2;
-    var$1.$stateB0 = var$3;
-    var$1.$stateC = var$4;
-    if (!(var$2 | var$3 | var$4 | var$5))
-        var$5 = 1;
-    var$1.$stateD = var$5;
-    var$1.$stateE0 = var$6;
-    $this.$random1 = var$1;
-    $this.$batch14 = $this.$mainGame22.$batch;
+    var$1.$stateA2 = var$2;
+    var$1.$stateB2 = var$3;
+    var$1.$stateC3 = var$4;
+    var$1.$stateD3 = var$5;
+    $this.$random31 = var$1;
+    $this.$batch11 = $this.$mainGame24.$batch;
     var$1 = new cbguv_ScreenViewport;
-    var$7 = new cbgg_OrthographicCamera;
-    cbgg_Camera__init_(var$7);
-    var$7.$zoom = 1.0;
-    var$8 = new cbgm_Vector3;
+    var$6 = new cbgg_OrthographicCamera;
+    cbgg_Camera__init_(var$6);
+    var$6.$zoom = 1.0;
+    var$7 = new cbgm_Vector3;
     cbgm_Vector3_$callClinit();
-    var$7.$tmp0 = var$8;
-    var$7.$near = 0.0;
+    var$6.$tmp0 = var$7;
+    var$6.$near = 0.0;
     var$1.$tmp = new cbgm_Vector3;
     var$1.$unitsPerPixel = 1.0;
-    var$1.$camera = var$7;
-    $this.$viewport7 = var$1;
+    var$1.$camera = var$6;
+    $this.$viewport25 = var$1;
     var$1 = new cbggg_ImmediateModeRenderer20;
-    var$9 = cbggg_ShaderProgram__init_(cbggg_ImmediateModeRenderer20_createVertexShader(0, 1, 0), cbggg_ImmediateModeRenderer20_createFragmentShader(0, 1, 0));
-    if (var$9.$isCompiled) {
-        cbggg_ImmediateModeRenderer20__init_(var$1, 1536, 0, 1, 0, var$9);
+    var$8 = cbggg_ShaderProgram__init_(cbggg_ImmediateModeRenderer20_createVertexShader(0, 1, 0), cbggg_ImmediateModeRenderer20_createFragmentShader(0, 1, 0));
+    if (var$8.$isCompiled) {
+        cbggg_ImmediateModeRenderer20__init_(var$1, 1536, 0, 1, 0, var$8);
         var$1.$ownsShader = 1;
-        $this.$renderer16 = var$1;
-        var$10 = $this.$amounts5.data;
+        $this.$renderer4 = var$1;
+        var$9 = $this.$amounts1.data;
         var$2 = 0;
-        var$3 = var$10.length;
+        var$3 = var$9.length;
         if (var$2 > var$3) {
             var$1 = new jl_IllegalArgumentException;
             var$1.$suppressionEnabled = 1;
@@ -44035,46 +44019,46 @@ let cgti_RarxScreen_show = $this => {
         }
         while (var$2 < var$3) {
             var$4 = var$2 + 1 | 0;
-            var$10[var$2] = Long_ZERO;
+            var$9[var$2] = Long_ZERO;
             var$2 = var$4;
         }
-        $this.$iterations29 = Long_ZERO;
+        $this.$iterations34 = Long_ZERO;
         return;
     }
     var$1 = new cbgu_GdxRuntimeException;
-    var$7 = new jl_StringBuilder;
-    var$7.$buffer = $rt_createCharArray(16);
-    var$2 = var$7.$length0;
-    var$11 = var$7;
-    jl_AbstractStringBuilder_insert(var$11, var$2, $rt_s(479));
-    if (!var$9.$isCompiled)
-        var$8 = var$9.$log0;
+    var$6 = new jl_StringBuilder;
+    var$6.$buffer = $rt_createCharArray(16);
+    var$2 = var$6.$length0;
+    var$10 = var$6;
+    jl_AbstractStringBuilder_insert(var$10, var$2, $rt_s(479));
+    if (!var$8.$isCompiled)
+        var$7 = var$8.$log0;
     else {
-        var$8 = cbg_Gdx_gl20.$glGetProgramInfoLog(var$9.$program);
-        var$9.$log0 = var$8;
+        var$7 = cbg_Gdx_gl20.$glGetProgramInfoLog(var$8.$program);
+        var$8.$log0 = var$7;
     }
-    jl_AbstractStringBuilder_insert(var$11, var$7.$length0, var$8);
-    var$8 = new jl_String;
-    var$10 = var$7.$buffer;
-    var$12 = var$10.data;
-    var$3 = var$7.$length0;
-    var$4 = var$12.length;
+    jl_AbstractStringBuilder_insert(var$10, var$6.$length0, var$7);
+    var$7 = new jl_String;
+    var$9 = var$6.$buffer;
+    var$11 = var$9.data;
+    var$3 = var$6.$length0;
+    var$4 = var$11.length;
     if (var$3 >= 0 && var$3 <= (var$4 - 0 | 0)) {
-        var$8.$nativeString = $rt_charArrayToString(var$10.data, 0, var$3);
+        var$7.$nativeString = $rt_charArrayToString(var$9.data, 0, var$3);
         var$1.$suppressionEnabled = 1;
         var$1.$writableStackTrace = 1;
-        var$1.$message = var$8;
+        var$1.$message = var$7;
         $rt_throw(var$1);
     }
     var$1 = new jl_IndexOutOfBoundsException;
     jl_Exception__init_0(var$1);
     $rt_throw(var$1);
 },
-cgti_RarxScreen_render = ($this, $delta) => {
-    let var$2, var$3, $i, $x, var$6, $camera, var$8, $j, $m, $color, var$12, var$13, var$14, var$15, $$je;
+cgti_ChockScreen_render = ($this, $delta) => {
+    let var$2, var$3, $i, $x, var$6, $camera, var$8, $j, $m, $color, var$12, var$13, var$14, var$15, var$16, $$je;
     var$2 = cbg_Gdx_input.$justPressedKeys.data;
     if (var$2[71]) {
-        var$3 = $this.$mainGame22;
+        var$3 = $this.$mainGame24;
         $i = var$3.$screenIndex;
         var$2 = var$3.$screens.data;
         $x = var$2.length;
@@ -44090,7 +44074,7 @@ cgti_RarxScreen_render = ($this, $delta) => {
         return;
     }
     if (var$2[72]) {
-        var$3 = $this.$mainGame22;
+        var$3 = $this.$mainGame24;
         $i = var$3.$screenIndex + 1 | 0;
         var$2 = var$3.$screens.data;
         $i = $i % var$2.length | 0;
@@ -44108,11 +44092,11 @@ cgti_RarxScreen_render = ($this, $delta) => {
         return;
     cbg_Gdx_gl.$glClearColor(1.0, 1.0, 1.0, 1.0);
     cbg_Gdx_gl.$glClear(16384);
-    $camera = $this.$viewport7.$camera;
+    $camera = $this.$viewport25.$camera;
     cbgg_OrthographicCamera_update($camera, 1);
     var$8 = cbg_Gdx_input.$pressedKeys.data;
     if (var$8[29]) {
-        var$2 = $this.$amounts5.data;
+        var$2 = $this.$amounts1.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -44126,10 +44110,10 @@ cgti_RarxScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations29 = Long_ZERO;
+        $this.$iterations34 = Long_ZERO;
     }
     if (var$8[30]) {
-        var$2 = $this.$amounts5.data;
+        var$2 = $this.$amounts1.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -44143,10 +44127,10 @@ cgti_RarxScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations29 = Long_ZERO;
+        $this.$iterations34 = Long_ZERO;
     }
     if (var$8[31]) {
-        var$2 = $this.$amounts5.data;
+        var$2 = $this.$amounts1.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -44160,56 +44144,56 @@ cgti_RarxScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations29 = Long_ZERO;
+        $this.$iterations34 = Long_ZERO;
     }
-    $this.$iterations29 = Long_add($this.$iterations29, Long_fromInt(1));
+    $this.$iterations34 = Long_add($this.$iterations34, Long_fromInt(1));
     $i = 0;
     while ($i < 524288) {
-        $m = cgtr_Xoshiro160RoadroxoRandom_nextInt($this.$random1, 512);
+        $m = Long_hi(Long_mul(Long_fromInt(512), Long_and(Long_fromInt(cgtr_Chock32Random_nextInt($this.$random31)), Long_create(4294967295, 0)))) & (-1);
         if ($m >= 0 && $m < 512) {
-            var$2 = $this.$amounts5.data;
+            var$2 = $this.$amounts1.data;
             var$2[$m] = Long_add(var$2[$m], Long_fromInt(1));
         }
         $i = $i + 1 | 0;
     }
-    var$3 = $this.$renderer16;
+    var$3 = $this.$renderer4;
     var$6 = $camera.$combined;
     cbgm_Matrix4_set(var$3.$projModelView, var$6.$val);
     var$3.$primitiveType = 1;
     $x = 0;
     while ($x < 512) {
         $color = $x & 63 ? (-1.5436749266448052E38) : (-1.5203096921934465E38);
-        var$3 = $this.$renderer16;
+        var$3 = $this.$renderer4;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
         $delta = $x;
         cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0, 0.0);
-        var$3 = $this.$renderer16;
+        var$3 = $this.$renderer4;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
-        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts5.data[$x]) / Long_toNumber($this.$iterations29), 0.0);
+        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts1.data[$x]) / Long_toNumber($this.$iterations34), 0.0);
         $x = $x + 1 | 0;
     }
     $j = 8;
     while ($j < 520) {
-        var$3 = $this.$renderer16;
+        var$3 = $this.$renderer4;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = (-6.221923240859403E37);
         $color = $j;
         cbggg_ImmediateModeRenderer20_vertex(var$3, 0.0, $color, 0.0);
-        var$3 = $this.$renderer16;
+        var$3 = $this.$renderer4;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = (-6.221923240859403E37);
         cbggg_ImmediateModeRenderer20_vertex(var$3, 10.0, $color, 0.0);
         $j = $j + 32 | 0;
     }
-    cbggg_ImmediateModeRenderer20_flush($this.$renderer16);
-    var$3 = $this.$batch14;
+    cbggg_ImmediateModeRenderer20_flush($this.$renderer4);
+    var$3 = $this.$batch11;
     var$6 = $camera.$combined;
     if (var$3.$drawing)
         cbggg_SpriteBatch_flush(var$3);
     cbgm_Matrix4_set(var$3.$projectionMatrix, var$6.$val);
     if (var$3.$drawing)
         cbggg_SpriteBatch_setupMatrices(var$3);
-    cbggg_SpriteBatch_begin($this.$batch14);
-    var$3 = $this.$font9;
-    var$6 = $this.$batch14;
+    cbggg_SpriteBatch_begin($this.$batch11);
+    var$3 = $this.$font26;
+    var$6 = $this.$batch11;
     var$2 = $rt_createArray(jl_Object, 2);
     var$8 = var$2.data;
     var$8[0] = $rt_s(490);
@@ -44234,12 +44218,12 @@ cgti_RarxScreen_render = ($this, $delta) => {
         var$13.$nativeString = $rt_charArrayToString(var$2.data, 0, $x);
         cbggg_BitmapFontCache_clear(var$3.$cache);
         var$14 = var$3.$cache;
-        $m = var$13.$nativeString.length;
-        var$15 = null;
+        var$15 = var$13.$nativeString.length;
+        var$16 = null;
         cbgu_Pools_$callClinit();
         $camera = cbgu_Pools_typePools;
-        $x = cbgu_ObjectMap_locateKey($camera, $rt_cls(cbggg_GlyphLayout));
-        $camera = $x < 0 ? null : $camera.$valueTable.data[$x];
+        $j = cbgu_ObjectMap_locateKey($camera, $rt_cls(cbggg_GlyphLayout));
+        $camera = $j < 0 ? null : $camera.$valueTable.data[$j];
         if ($camera === null) {
             $camera = new cbgu_ReflectionPool;
             jl_Object__init_($camera);
@@ -44295,51 +44279,51 @@ cgti_RarxScreen_render = ($this, $delta) => {
                 $x = $x - 1 | 0;
                 var$12.$size = $x;
                 var$2 = var$12.$items.data;
-                $camera = var$2[$x];
+                var$12 = var$2[$x];
                 var$2[$x] = null;
             } else {
-                var$12 = $camera;
+                $camera = $camera;
                 try {
-                    $camera = cbgur_Constructor_newInstance(var$12.$constructor, null);
+                    var$12 = cbgur_Constructor_newInstance($camera.$constructor, null);
                     break b;
                 } catch ($$e) {
                     $$je = $rt_wrapException($$e);
                     if ($$je instanceof jl_Exception) {
                         var$6 = $$je;
-                        $camera = new cbgu_GdxRuntimeException;
+                        var$12 = new cbgu_GdxRuntimeException;
                         var$3 = new jl_StringBuilder;
                         jl_AbstractStringBuilder__init_0(var$3, 16);
                         $i = var$3.$length0;
                         var$14 = var$3;
                         jl_StringBuilder_insert(var$14, $i, $rt_s(39));
-                        var$15 = var$12.$constructor.$constructor0.$declaringClass;
-                        if (var$15.$name === null)
-                            var$15.$name = $rt_str(var$15.$platformClass.$meta.name);
-                        var$12 = var$15.$name;
-                        jl_StringBuilder_insert(var$14, var$3.$length0, var$12);
-                        jl_Exception__init_1($camera, jl_String__init_(var$3.$buffer, 0, var$3.$length0), var$6);
-                        $rt_throw($camera);
+                        var$16 = $camera.$constructor.$constructor0.$declaringClass;
+                        if (var$16.$name === null)
+                            var$16.$name = $rt_str(var$16.$platformClass.$meta.name);
+                        $camera = var$16.$name;
+                        jl_StringBuilder_insert(var$14, var$3.$length0, $camera);
+                        jl_Exception__init_1(var$12, jl_String__init_(var$3.$buffer, 0, var$3.$length0), var$6);
+                        $rt_throw(var$12);
                     } else {
                         throw $$e;
                     }
                 }
             }
         }
-        $camera = $camera;
+        $camera = var$12;
         cbgu_Array_add(var$14.$pooledLayouts, $camera);
-        cbggg_GlyphLayout_setText($camera, var$14.$font, var$13, 0, $m, var$14.$color, 384.0, 1, 1, var$15);
+        cbggg_GlyphLayout_setText($camera, var$14.$font, var$13, 0, var$15, var$14.$color, 384.0, 1, 1, var$16);
         cbggg_BitmapFontCache_addToCache(var$14, $camera, 64.0, 522.0 + var$14.$font.$data0.$ascent);
         cbggg_BitmapFontCache_draw(var$3.$cache, var$6);
-        cbggg_SpriteBatch_end($this.$batch14);
+        cbggg_SpriteBatch_end($this.$batch11);
         return;
     }
     var$3 = new jl_IndexOutOfBoundsException;
     jl_Throwable__init_(var$3);
     $rt_throw(var$3);
 },
-cgti_RarxScreen_resize = ($this, $width, $height) => {
+cgti_ChockScreen_resize = ($this, $width, $height) => {
     let var$3, var$4, var$5, var$6;
-    var$3 = $this.$viewport7;
+    var$3 = $this.$viewport25;
     var$4 = var$3;
     var$4.$screenX = 0;
     var$4.$screenY = 0;
@@ -44352,29 +44336,29 @@ cgti_RarxScreen_resize = ($this, $width, $height) => {
     var$4.$worldWidth = var$5;
     var$4.$worldHeight = var$6;
     cbguv_Viewport_apply(var$4, 1);
-    cbguv_Viewport_apply($this.$viewport7, 1);
+    cbguv_Viewport_apply($this.$viewport25, 1);
 };
 function cgti_AceScreen() {
     let a = this; cbg_ScreenAdapter.call(a);
-    a.$random8 = null;
+    a.$random6 = null;
     a.$batch30 = null;
-    a.$renderer24 = null;
-    a.$amounts6 = null;
+    a.$renderer23 = null;
+    a.$amounts7 = null;
     a.$iterations1 = Long_ZERO;
-    a.$font18 = null;
-    a.$viewport23 = null;
+    a.$font17 = null;
+    a.$viewport20 = null;
     a.$mainGame2 = null;
 }
 let cgti_AceScreen_show = $this => {
     let var$1, var$2, var$3, var$4, var$5, var$6, var$7, var$8, var$9, var$10;
-    $this.$font18 = $this.$mainGame2.$font0;
+    $this.$font17 = $this.$mainGame2.$font0;
     var$1 = new cgtr_AceRandom;
     var$1.$stateA = Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19));
     var$1.$stateB = Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19));
-    var$1.$stateC0 = Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19));
-    var$1.$stateD0 = Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19));
+    var$1.$stateC = Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19));
+    var$1.$stateD = Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19));
     var$1.$stateE = Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19));
-    $this.$random8 = var$1;
+    $this.$random6 = var$1;
     $this.$batch30 = $this.$mainGame2.$batch;
     var$1 = new cbguv_ScreenViewport;
     var$2 = new cbgg_OrthographicCamera;
@@ -44387,14 +44371,14 @@ let cgti_AceScreen_show = $this => {
     var$1.$tmp = new cbgm_Vector3;
     var$1.$unitsPerPixel = 1.0;
     var$1.$camera = var$2;
-    $this.$viewport23 = var$1;
+    $this.$viewport20 = var$1;
     var$1 = new cbggg_ImmediateModeRenderer20;
     var$4 = cbggg_ShaderProgram__init_(cbggg_ImmediateModeRenderer20_createVertexShader(0, 1, 0), cbggg_ImmediateModeRenderer20_createFragmentShader(0, 1, 0));
     if (var$4.$isCompiled) {
         cbggg_ImmediateModeRenderer20__init_(var$1, 1536, 0, 1, 0, var$4);
         var$1.$ownsShader = 1;
-        $this.$renderer24 = var$1;
-        var$5 = $this.$amounts6.data;
+        $this.$renderer23 = var$1;
+        var$5 = $this.$amounts7.data;
         var$6 = 0;
         var$7 = var$5.length;
         if (var$6 > var$7) {
@@ -44478,11 +44462,11 @@ cgti_AceScreen_render = ($this, $delta) => {
         return;
     cbg_Gdx_gl.$glClearColor(1.0, 1.0, 1.0, 1.0);
     cbg_Gdx_gl.$glClear(16384);
-    $camera = $this.$viewport23.$camera;
+    $camera = $this.$viewport20.$camera;
     cbgg_OrthographicCamera_update($camera, 1);
     var$8 = cbg_Gdx_input.$pressedKeys.data;
     if (var$8[29]) {
-        var$2 = $this.$amounts6.data;
+        var$2 = $this.$amounts7.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -44499,7 +44483,7 @@ cgti_AceScreen_render = ($this, $delta) => {
         $this.$iterations1 = Long_ZERO;
     }
     if (var$8[30]) {
-        var$2 = $this.$amounts6.data;
+        var$2 = $this.$amounts7.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -44516,7 +44500,7 @@ cgti_AceScreen_render = ($this, $delta) => {
         $this.$iterations1 = Long_ZERO;
     }
     if (var$8[31]) {
-        var$2 = $this.$amounts6.data;
+        var$2 = $this.$amounts7.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -44535,53 +44519,53 @@ cgti_AceScreen_render = ($this, $delta) => {
     $this.$iterations1 = Long_add($this.$iterations1, Long_fromInt(1));
     $i = 0;
     while ($i < 524288) {
-        var$3 = $this.$random8;
+        var$3 = $this.$random6;
         var$10 = var$3.$stateA;
         var$11 = var$3.$stateB;
-        var$12 = var$3.$stateC0;
-        var$13 = var$3.$stateD0;
+        var$12 = var$3.$stateC;
+        var$13 = var$3.$stateD;
         var$14 = var$3.$stateE;
         var$3.$stateA = Long_add(var$10, Long_create(2135587861, 2654435769));
         var$3.$stateB = Long_xor(var$10, var$14);
-        var$3.$stateC0 = Long_add(var$11, var$13);
-        var$3.$stateD0 = Long_or(Long_shl(var$12, 52), Long_shru(var$12, 12));
+        var$3.$stateC = Long_add(var$11, var$13);
+        var$3.$stateD = Long_or(Long_shl(var$12, 52), Long_shru(var$12, 12));
         var$10 = Long_sub(var$11, var$12);
         var$3.$stateE = var$10;
         $m = Long_hi(Long_mul(Long_fromInt(512), Long_and(var$10, Long_create(4294967295, 0)))) & (-1);
         if ($m >= 0 && $m < 512) {
-            var$2 = $this.$amounts6.data;
+            var$2 = $this.$amounts7.data;
             var$2[$m] = Long_add(var$2[$m], Long_fromInt(1));
         }
         $i = $i + 1 | 0;
     }
-    var$3 = $this.$renderer24;
+    var$3 = $this.$renderer23;
     var$6 = $camera.$combined;
     cbgm_Matrix4_set(var$3.$projModelView, var$6.$val);
     var$3.$primitiveType = 1;
     $x = 0;
     while ($x < 512) {
         $color = $x & 63 ? (-1.5436749266448052E38) : (-1.5203096921934465E38);
-        var$3 = $this.$renderer24;
+        var$3 = $this.$renderer23;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
         $delta = $x;
         cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0, 0.0);
-        var$3 = $this.$renderer24;
+        var$3 = $this.$renderer23;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
-        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts6.data[$x]) / Long_toNumber($this.$iterations1), 0.0);
+        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts7.data[$x]) / Long_toNumber($this.$iterations1), 0.0);
         $x = $x + 1 | 0;
     }
     $j = 8;
     while ($j < 520) {
-        var$3 = $this.$renderer24;
+        var$3 = $this.$renderer23;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = (-6.221923240859403E37);
         $color = $j;
         cbggg_ImmediateModeRenderer20_vertex(var$3, 0.0, $color, 0.0);
-        var$3 = $this.$renderer24;
+        var$3 = $this.$renderer23;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = (-6.221923240859403E37);
         cbggg_ImmediateModeRenderer20_vertex(var$3, 10.0, $color, 0.0);
         $j = $j + 32 | 0;
     }
-    cbggg_ImmediateModeRenderer20_flush($this.$renderer24);
+    cbggg_ImmediateModeRenderer20_flush($this.$renderer23);
     var$3 = $this.$batch30;
     var$6 = $camera.$combined;
     if (var$3.$drawing)
@@ -44590,7 +44574,7 @@ cgti_AceScreen_render = ($this, $delta) => {
     if (var$3.$drawing)
         cbggg_SpriteBatch_setupMatrices(var$3);
     cbggg_SpriteBatch_begin($this.$batch30);
-    var$3 = $this.$font18;
+    var$3 = $this.$font17;
     var$6 = $this.$batch30;
     var$2 = $rt_createArray(jl_Object, 2);
     var$8 = var$2.data;
@@ -44721,7 +44705,7 @@ cgti_AceScreen_render = ($this, $delta) => {
 },
 cgti_AceScreen_resize = ($this, $width, $height) => {
     let var$3, var$4, var$5, var$6;
-    var$3 = $this.$viewport23;
+    var$3 = $this.$viewport20;
     var$4 = var$3;
     var$4.$screenX = 0;
     var$4.$screenY = 0;
@@ -44734,22 +44718,22 @@ cgti_AceScreen_resize = ($this, $width, $height) => {
     var$4.$worldWidth = var$5;
     var$4.$worldHeight = var$6;
     cbguv_Viewport_apply(var$4, 1);
-    cbguv_Viewport_apply($this.$viewport23, 1);
+    cbguv_Viewport_apply($this.$viewport20, 1);
 };
 function cgtl_RandomScreen() {
     let a = this; cbg_ScreenAdapter.call(a);
-    a.$random5 = null;
-    a.$batch3 = null;
-    a.$renderer4 = null;
-    a.$amounts2 = null;
+    a.$random3 = null;
+    a.$batch4 = null;
+    a.$renderer6 = null;
+    a.$amounts3 = null;
     a.$iterations9 = Long_ZERO;
     a.$font34 = null;
-    a.$viewport15 = null;
-    a.$mainGame12 = null;
+    a.$viewport12 = null;
+    a.$mainGame11 = null;
 }
 let cgtl_RandomScreen_show = $this => {
     let var$1, var$2, var$3, var$4, var$5, var$6, var$7, var$8, var$9, var$10, var$11;
-    $this.$font34 = $this.$mainGame12.$font0;
+    $this.$font34 = $this.$mainGame11.$font0;
     var$1 = new cgt_RandomRandom;
     var$2 = Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19));
     var$3 = new cgt_Random;
@@ -44757,8 +44741,8 @@ let cgtl_RandomScreen_show = $this => {
     cgt_Random_setSeed(var$3, Long_fromInt(1234567890));
     var$1.$base = var$3;
     cgt_Random_setSeed(var$3, var$2);
-    $this.$random5 = var$1;
-    $this.$batch3 = $this.$mainGame12.$batch;
+    $this.$random3 = var$1;
+    $this.$batch4 = $this.$mainGame11.$batch;
     var$1 = new cbguv_ScreenViewport;
     var$3 = new cbgg_OrthographicCamera;
     cbgg_Camera__init_(var$3);
@@ -44770,14 +44754,14 @@ let cgtl_RandomScreen_show = $this => {
     var$1.$tmp = new cbgm_Vector3;
     var$1.$unitsPerPixel = 1.0;
     var$1.$camera = var$3;
-    $this.$viewport15 = var$1;
+    $this.$viewport12 = var$1;
     var$1 = new cbggg_ImmediateModeRenderer20;
     var$5 = cbggg_ShaderProgram__init_(cbggg_ImmediateModeRenderer20_createVertexShader(0, 1, 0), cbggg_ImmediateModeRenderer20_createFragmentShader(0, 1, 0));
     if (var$5.$isCompiled) {
         cbggg_ImmediateModeRenderer20__init_(var$1, 1536, 0, 1, 0, var$5);
         var$1.$ownsShader = 1;
-        $this.$renderer4 = var$1;
-        var$6 = $this.$amounts2.data;
+        $this.$renderer6 = var$1;
+        var$6 = $this.$amounts3.data;
         var$7 = 0;
         var$8 = var$6.length;
         if (var$7 > var$8) {
@@ -44827,7 +44811,7 @@ cgtl_RandomScreen_render = ($this, $delta) => {
     let var$2, var$3, $i, $x, var$6, $camera, var$8, $j, $m, $color, var$12, var$13, var$14, var$15, $$je;
     var$2 = cbg_Gdx_input.$justPressedKeys.data;
     if (var$2[71]) {
-        var$3 = $this.$mainGame12;
+        var$3 = $this.$mainGame11;
         $i = var$3.$screenIndex;
         var$2 = var$3.$screens.data;
         $x = var$2.length;
@@ -44843,7 +44827,7 @@ cgtl_RandomScreen_render = ($this, $delta) => {
         return;
     }
     if (var$2[72]) {
-        var$3 = $this.$mainGame12;
+        var$3 = $this.$mainGame11;
         $i = var$3.$screenIndex + 1 | 0;
         var$2 = var$3.$screens.data;
         $i = $i % var$2.length | 0;
@@ -44861,11 +44845,11 @@ cgtl_RandomScreen_render = ($this, $delta) => {
         return;
     cbg_Gdx_gl.$glClearColor(1.0, 1.0, 1.0, 1.0);
     cbg_Gdx_gl.$glClear(16384);
-    $camera = $this.$viewport15.$camera;
+    $camera = $this.$viewport12.$camera;
     cbgg_OrthographicCamera_update($camera, 1);
     var$8 = cbg_Gdx_input.$pressedKeys.data;
     if (var$8[29]) {
-        var$2 = $this.$amounts2.data;
+        var$2 = $this.$amounts3.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -44882,7 +44866,7 @@ cgtl_RandomScreen_render = ($this, $delta) => {
         $this.$iterations9 = Long_ZERO;
     }
     if (var$8[30]) {
-        var$2 = $this.$amounts2.data;
+        var$2 = $this.$amounts3.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -44899,7 +44883,7 @@ cgtl_RandomScreen_render = ($this, $delta) => {
         $this.$iterations9 = Long_ZERO;
     }
     if (var$8[31]) {
-        var$2 = $this.$amounts2.data;
+        var$2 = $this.$amounts3.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -44918,51 +44902,51 @@ cgtl_RandomScreen_render = ($this, $delta) => {
     $this.$iterations9 = Long_add($this.$iterations9, Long_fromInt(1));
     $i = 0;
     while ($i < 524288) {
-        $m = Long_lo((cgtr_EnhancedRandom_nextLong($this.$random5, Long_ZERO, Long_fromInt(512))));
+        $m = Long_lo((cgtr_EnhancedRandom_nextLong($this.$random3, Long_ZERO, Long_fromInt(512))));
         if ($m >= 0 && $m < 512) {
-            var$2 = $this.$amounts2.data;
+            var$2 = $this.$amounts3.data;
             var$2[$m] = Long_add(var$2[$m], Long_fromInt(1));
         }
         $i = $i + 1 | 0;
     }
-    var$3 = $this.$renderer4;
+    var$3 = $this.$renderer6;
     var$6 = $camera.$combined;
     cbgm_Matrix4_set(var$3.$projModelView, var$6.$val);
     var$3.$primitiveType = 1;
     $x = 0;
     while ($x < 512) {
         $color = $x & 63 ? (-1.5436749266448052E38) : (-1.5203096921934465E38);
-        var$3 = $this.$renderer4;
+        var$3 = $this.$renderer6;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
         $delta = $x;
         cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0, 0.0);
-        var$3 = $this.$renderer4;
+        var$3 = $this.$renderer6;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
-        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts2.data[$x]) / Long_toNumber($this.$iterations9), 0.0);
+        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts3.data[$x]) / Long_toNumber($this.$iterations9), 0.0);
         $x = $x + 1 | 0;
     }
     $j = 8;
     while ($j < 520) {
-        var$3 = $this.$renderer4;
+        var$3 = $this.$renderer6;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = (-6.221923240859403E37);
         $color = $j;
         cbggg_ImmediateModeRenderer20_vertex(var$3, 0.0, $color, 0.0);
-        var$3 = $this.$renderer4;
+        var$3 = $this.$renderer6;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = (-6.221923240859403E37);
         cbggg_ImmediateModeRenderer20_vertex(var$3, 10.0, $color, 0.0);
         $j = $j + 32 | 0;
     }
-    cbggg_ImmediateModeRenderer20_flush($this.$renderer4);
-    var$3 = $this.$batch3;
+    cbggg_ImmediateModeRenderer20_flush($this.$renderer6);
+    var$3 = $this.$batch4;
     var$6 = $camera.$combined;
     if (var$3.$drawing)
         cbggg_SpriteBatch_flush(var$3);
     cbgm_Matrix4_set(var$3.$projectionMatrix, var$6.$val);
     if (var$3.$drawing)
         cbggg_SpriteBatch_setupMatrices(var$3);
-    cbggg_SpriteBatch_begin($this.$batch3);
+    cbggg_SpriteBatch_begin($this.$batch4);
     var$3 = $this.$font34;
-    var$6 = $this.$batch3;
+    var$6 = $this.$batch4;
     var$2 = $rt_createArray(jl_Object, 2);
     var$8 = var$2.data;
     var$8[0] = $rt_s(485);
@@ -45083,7 +45067,7 @@ cgtl_RandomScreen_render = ($this, $delta) => {
         cbggg_GlyphLayout_setText($camera, var$14.$font, var$13, 0, $m, var$14.$color, 384.0, 1, 1, var$15);
         cbggg_BitmapFontCache_addToCache(var$14, $camera, 64.0, 522.0 + var$14.$font.$data0.$ascent);
         cbggg_BitmapFontCache_draw(var$3.$cache, var$6);
-        cbggg_SpriteBatch_end($this.$batch3);
+        cbggg_SpriteBatch_end($this.$batch4);
         return;
     }
     var$3 = new jl_IndexOutOfBoundsException;
@@ -45092,7 +45076,7 @@ cgtl_RandomScreen_render = ($this, $delta) => {
 },
 cgtl_RandomScreen_resize = ($this, $width, $height) => {
     let var$3, var$4, var$5, var$6;
-    var$3 = $this.$viewport15;
+    var$3 = $this.$viewport12;
     var$4 = var$3;
     var$4.$screenX = 0;
     var$4.$screenY = 0;
@@ -45105,33 +45089,33 @@ cgtl_RandomScreen_resize = ($this, $width, $height) => {
     var$4.$worldWidth = var$5;
     var$4.$worldHeight = var$6;
     cbguv_Viewport_apply(var$4, 1);
-    cbguv_Viewport_apply($this.$viewport15, 1);
+    cbguv_Viewport_apply($this.$viewport12, 1);
 };
 function cgtl_ChipScreen() {
     let a = this; cbg_ScreenAdapter.call(a);
-    a.$random28 = null;
-    a.$batch17 = null;
-    a.$renderer22 = null;
-    a.$amounts18 = null;
-    a.$iterations31 = Long_ZERO;
-    a.$font17 = null;
+    a.$random25 = null;
+    a.$batch19 = null;
+    a.$renderer20 = null;
+    a.$amounts19 = null;
+    a.$iterations29 = Long_ZERO;
+    a.$font16 = null;
     a.$viewport6 = null;
-    a.$mainGame23 = null;
+    a.$mainGame22 = null;
 }
 let cgtl_ChipScreen_show = $this => {
     let var$1, var$2, var$3, var$4, var$5, var$6, var$7, var$8, var$9, var$10, var$11;
-    $this.$font17 = $this.$mainGame23.$font0;
+    $this.$font16 = $this.$mainGame22.$font0;
     var$1 = new cgtr_Chip32Random;
     var$2 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$3 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$4 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$5 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
-    var$1.$stateA1 = var$2;
-    var$1.$stateB1 = var$3;
-    var$1.$stateC1 = var$4;
-    var$1.$stateD1 = var$5;
-    $this.$random28 = var$1;
-    $this.$batch17 = $this.$mainGame23.$batch;
+    var$1.$stateA0 = var$2;
+    var$1.$stateB0 = var$3;
+    var$1.$stateC0 = var$4;
+    var$1.$stateD0 = var$5;
+    $this.$random25 = var$1;
+    $this.$batch19 = $this.$mainGame22.$batch;
     var$1 = new cbguv_ScreenViewport;
     var$6 = new cbgg_OrthographicCamera;
     cbgg_Camera__init_(var$6);
@@ -45149,8 +45133,8 @@ let cgtl_ChipScreen_show = $this => {
     if (var$8.$isCompiled) {
         cbggg_ImmediateModeRenderer20__init_(var$1, 1536, 0, 1, 0, var$8);
         var$1.$ownsShader = 1;
-        $this.$renderer22 = var$1;
-        var$9 = $this.$amounts18.data;
+        $this.$renderer20 = var$1;
+        var$9 = $this.$amounts19.data;
         var$2 = 0;
         var$3 = var$9.length;
         if (var$2 > var$3) {
@@ -45164,7 +45148,7 @@ let cgtl_ChipScreen_show = $this => {
             var$9[var$2] = Long_ZERO;
             var$2 = var$4;
         }
-        $this.$iterations31 = Long_ZERO;
+        $this.$iterations29 = Long_ZERO;
         return;
     }
     var$1 = new cbgu_GdxRuntimeException;
@@ -45200,7 +45184,7 @@ cgtl_ChipScreen_render = ($this, $delta) => {
     let var$2, var$3, $i, $x, var$6, $camera, var$8, $j, $m, $color, var$12, var$13, var$14, var$15, $$je;
     var$2 = cbg_Gdx_input.$justPressedKeys.data;
     if (var$2[71]) {
-        var$3 = $this.$mainGame23;
+        var$3 = $this.$mainGame22;
         $i = var$3.$screenIndex;
         var$2 = var$3.$screens.data;
         $x = var$2.length;
@@ -45216,7 +45200,7 @@ cgtl_ChipScreen_render = ($this, $delta) => {
         return;
     }
     if (var$2[72]) {
-        var$3 = $this.$mainGame23;
+        var$3 = $this.$mainGame22;
         $i = var$3.$screenIndex + 1 | 0;
         var$2 = var$3.$screens.data;
         $i = $i % var$2.length | 0;
@@ -45238,7 +45222,7 @@ cgtl_ChipScreen_render = ($this, $delta) => {
     cbgg_OrthographicCamera_update($camera, 1);
     var$8 = cbg_Gdx_input.$pressedKeys.data;
     if (var$8[29]) {
-        var$2 = $this.$amounts18.data;
+        var$2 = $this.$amounts19.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -45252,10 +45236,10 @@ cgtl_ChipScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations31 = Long_ZERO;
+        $this.$iterations29 = Long_ZERO;
     }
     if (var$8[30]) {
-        var$2 = $this.$amounts18.data;
+        var$2 = $this.$amounts19.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -45269,10 +45253,10 @@ cgtl_ChipScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations31 = Long_ZERO;
+        $this.$iterations29 = Long_ZERO;
     }
     if (var$8[31]) {
-        var$2 = $this.$amounts18.data;
+        var$2 = $this.$amounts19.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -45286,56 +45270,56 @@ cgtl_ChipScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations31 = Long_ZERO;
+        $this.$iterations29 = Long_ZERO;
     }
-    $this.$iterations31 = Long_add($this.$iterations31, Long_fromInt(1));
+    $this.$iterations29 = Long_add($this.$iterations29, Long_fromInt(1));
     $i = 0;
     while ($i < 524288) {
-        $m = Long_lo((cgtr_Chip32Random_nextLong0($this.$random28, Long_fromInt(512))));
+        $m = Long_lo((cgtr_Chip32Random_nextLong0($this.$random25, Long_fromInt(512))));
         if ($m >= 0 && $m < 512) {
-            var$2 = $this.$amounts18.data;
+            var$2 = $this.$amounts19.data;
             var$2[$m] = Long_add(var$2[$m], Long_fromInt(1));
         }
         $i = $i + 1 | 0;
     }
-    var$3 = $this.$renderer22;
+    var$3 = $this.$renderer20;
     var$6 = $camera.$combined;
     cbgm_Matrix4_set(var$3.$projModelView, var$6.$val);
     var$3.$primitiveType = 1;
     $x = 0;
     while ($x < 512) {
         $color = $x & 63 ? (-1.5436749266448052E38) : (-1.5203096921934465E38);
-        var$3 = $this.$renderer22;
+        var$3 = $this.$renderer20;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
         $delta = $x;
         cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0, 0.0);
-        var$3 = $this.$renderer22;
+        var$3 = $this.$renderer20;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
-        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts18.data[$x]) / Long_toNumber($this.$iterations31), 0.0);
+        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts19.data[$x]) / Long_toNumber($this.$iterations29), 0.0);
         $x = $x + 1 | 0;
     }
     $j = 8;
     while ($j < 520) {
-        var$3 = $this.$renderer22;
+        var$3 = $this.$renderer20;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = (-6.221923240859403E37);
         $color = $j;
         cbggg_ImmediateModeRenderer20_vertex(var$3, 0.0, $color, 0.0);
-        var$3 = $this.$renderer22;
+        var$3 = $this.$renderer20;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = (-6.221923240859403E37);
         cbggg_ImmediateModeRenderer20_vertex(var$3, 10.0, $color, 0.0);
         $j = $j + 32 | 0;
     }
-    cbggg_ImmediateModeRenderer20_flush($this.$renderer22);
-    var$3 = $this.$batch17;
+    cbggg_ImmediateModeRenderer20_flush($this.$renderer20);
+    var$3 = $this.$batch19;
     var$6 = $camera.$combined;
     if (var$3.$drawing)
         cbggg_SpriteBatch_flush(var$3);
     cbgm_Matrix4_set(var$3.$projectionMatrix, var$6.$val);
     if (var$3.$drawing)
         cbggg_SpriteBatch_setupMatrices(var$3);
-    cbggg_SpriteBatch_begin($this.$batch17);
-    var$3 = $this.$font17;
-    var$6 = $this.$batch17;
+    cbggg_SpriteBatch_begin($this.$batch19);
+    var$3 = $this.$font16;
+    var$6 = $this.$batch19;
     var$2 = $rt_createArray(jl_Object, 2);
     var$8 = var$2.data;
     var$8[0] = $rt_s(487);
@@ -45456,7 +45440,7 @@ cgtl_ChipScreen_render = ($this, $delta) => {
         cbggg_GlyphLayout_setText($camera, var$14.$font, var$13, 0, $m, var$14.$color, 384.0, 1, 1, var$15);
         cbggg_BitmapFontCache_addToCache(var$14, $camera, 64.0, 522.0 + var$14.$font.$data0.$ascent);
         cbggg_BitmapFontCache_draw(var$3.$cache, var$6);
-        cbggg_SpriteBatch_end($this.$batch17);
+        cbggg_SpriteBatch_end($this.$batch19);
         return;
     }
     var$3 = new jl_IndexOutOfBoundsException;
@@ -45482,28 +45466,28 @@ cgtl_ChipScreen_resize = ($this, $width, $height) => {
 };
 function cgtl_ChopScreen() {
     let a = this; cbg_ScreenAdapter.call(a);
-    a.$random20 = null;
+    a.$random17 = null;
     a.$batch32 = null;
-    a.$renderer34 = null;
-    a.$amounts15 = null;
-    a.$iterations24 = Long_ZERO;
-    a.$font16 = null;
-    a.$viewport29 = null;
+    a.$renderer33 = null;
+    a.$amounts16 = null;
+    a.$iterations23 = Long_ZERO;
+    a.$font15 = null;
+    a.$viewport31 = null;
     a.$mainGame32 = null;
 }
 let cgtl_ChopScreen_show = $this => {
     let var$1, var$2, var$3, var$4, var$5, var$6, var$7, var$8, var$9, var$10, var$11;
-    $this.$font16 = $this.$mainGame32.$font0;
+    $this.$font15 = $this.$mainGame32.$font0;
     var$1 = new cgtr_ChopRandom;
     var$2 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$3 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$4 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$5 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
-    var$1.$stateA2 = var$2;
-    var$1.$stateB2 = var$3;
-    var$1.$stateC3 = var$4;
-    var$1.$stateD3 = var$5;
-    $this.$random20 = var$1;
+    var$1.$stateA1 = var$2;
+    var$1.$stateB1 = var$3;
+    var$1.$stateC2 = var$4;
+    var$1.$stateD2 = var$5;
+    $this.$random17 = var$1;
     $this.$batch32 = $this.$mainGame32.$batch;
     var$1 = new cbguv_ScreenViewport;
     var$6 = new cbgg_OrthographicCamera;
@@ -45516,14 +45500,14 @@ let cgtl_ChopScreen_show = $this => {
     var$1.$tmp = new cbgm_Vector3;
     var$1.$unitsPerPixel = 1.0;
     var$1.$camera = var$6;
-    $this.$viewport29 = var$1;
+    $this.$viewport31 = var$1;
     var$1 = new cbggg_ImmediateModeRenderer20;
     var$8 = cbggg_ShaderProgram__init_(cbggg_ImmediateModeRenderer20_createVertexShader(0, 1, 0), cbggg_ImmediateModeRenderer20_createFragmentShader(0, 1, 0));
     if (var$8.$isCompiled) {
         cbggg_ImmediateModeRenderer20__init_(var$1, 1536, 0, 1, 0, var$8);
         var$1.$ownsShader = 1;
-        $this.$renderer34 = var$1;
-        var$9 = $this.$amounts15.data;
+        $this.$renderer33 = var$1;
+        var$9 = $this.$amounts16.data;
         var$2 = 0;
         var$3 = var$9.length;
         if (var$2 > var$3) {
@@ -45537,7 +45521,7 @@ let cgtl_ChopScreen_show = $this => {
             var$9[var$2] = Long_ZERO;
             var$2 = var$4;
         }
-        $this.$iterations24 = Long_ZERO;
+        $this.$iterations23 = Long_ZERO;
         return;
     }
     var$1 = new cbgu_GdxRuntimeException;
@@ -45607,11 +45591,11 @@ cgtl_ChopScreen_render = ($this, $delta) => {
         return;
     cbg_Gdx_gl.$glClearColor(1.0, 1.0, 1.0, 1.0);
     cbg_Gdx_gl.$glClear(16384);
-    $camera = $this.$viewport29.$camera;
+    $camera = $this.$viewport31.$camera;
     cbgg_OrthographicCamera_update($camera, 1);
     var$8 = cbg_Gdx_input.$pressedKeys.data;
     if (var$8[29]) {
-        var$2 = $this.$amounts15.data;
+        var$2 = $this.$amounts16.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -45625,10 +45609,10 @@ cgtl_ChopScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations24 = Long_ZERO;
+        $this.$iterations23 = Long_ZERO;
     }
     if (var$8[30]) {
-        var$2 = $this.$amounts15.data;
+        var$2 = $this.$amounts16.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -45642,10 +45626,10 @@ cgtl_ChopScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations24 = Long_ZERO;
+        $this.$iterations23 = Long_ZERO;
     }
     if (var$8[31]) {
-        var$2 = $this.$amounts15.data;
+        var$2 = $this.$amounts16.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -45659,46 +45643,46 @@ cgtl_ChopScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations24 = Long_ZERO;
+        $this.$iterations23 = Long_ZERO;
     }
-    $this.$iterations24 = Long_add($this.$iterations24, Long_fromInt(1));
+    $this.$iterations23 = Long_add($this.$iterations23, Long_fromInt(1));
     $i = 0;
     while ($i < 524288) {
-        $m = Long_lo((cgtr_ChopRandom_nextLong0($this.$random20, Long_ZERO, Long_fromInt(512))));
+        $m = Long_lo((cgtr_ChopRandom_nextLong0($this.$random17, Long_ZERO, Long_fromInt(512))));
         if ($m >= 0 && $m < 512) {
-            var$2 = $this.$amounts15.data;
+            var$2 = $this.$amounts16.data;
             var$2[$m] = Long_add(var$2[$m], Long_fromInt(1));
         }
         $i = $i + 1 | 0;
     }
-    var$3 = $this.$renderer34;
+    var$3 = $this.$renderer33;
     var$6 = $camera.$combined;
     cbgm_Matrix4_set(var$3.$projModelView, var$6.$val);
     var$3.$primitiveType = 1;
     $x = 0;
     while ($x < 512) {
         $color = $x & 63 ? (-1.5436749266448052E38) : (-1.5203096921934465E38);
-        var$3 = $this.$renderer34;
+        var$3 = $this.$renderer33;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
         $delta = $x;
         cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0, 0.0);
-        var$3 = $this.$renderer34;
+        var$3 = $this.$renderer33;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
-        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts15.data[$x]) / Long_toNumber($this.$iterations24), 0.0);
+        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts16.data[$x]) / Long_toNumber($this.$iterations23), 0.0);
         $x = $x + 1 | 0;
     }
     $j = 8;
     while ($j < 520) {
-        var$3 = $this.$renderer34;
+        var$3 = $this.$renderer33;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = (-6.221923240859403E37);
         $color = $j;
         cbggg_ImmediateModeRenderer20_vertex(var$3, 0.0, $color, 0.0);
-        var$3 = $this.$renderer34;
+        var$3 = $this.$renderer33;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = (-6.221923240859403E37);
         cbggg_ImmediateModeRenderer20_vertex(var$3, 10.0, $color, 0.0);
         $j = $j + 32 | 0;
     }
-    cbggg_ImmediateModeRenderer20_flush($this.$renderer34);
+    cbggg_ImmediateModeRenderer20_flush($this.$renderer33);
     var$3 = $this.$batch32;
     var$6 = $camera.$combined;
     if (var$3.$drawing)
@@ -45707,7 +45691,7 @@ cgtl_ChopScreen_render = ($this, $delta) => {
     if (var$3.$drawing)
         cbggg_SpriteBatch_setupMatrices(var$3);
     cbggg_SpriteBatch_begin($this.$batch32);
-    var$3 = $this.$font16;
+    var$3 = $this.$font15;
     var$6 = $this.$batch32;
     var$2 = $rt_createArray(jl_Object, 2);
     var$8 = var$2.data;
@@ -45838,7 +45822,7 @@ cgtl_ChopScreen_render = ($this, $delta) => {
 },
 cgtl_ChopScreen_resize = ($this, $width, $height) => {
     let var$3, var$4, var$5, var$6;
-    var$3 = $this.$viewport29;
+    var$3 = $this.$viewport31;
     var$4 = var$3;
     var$4.$screenX = 0;
     var$4.$screenY = 0;
@@ -45851,22 +45835,22 @@ cgtl_ChopScreen_resize = ($this, $width, $height) => {
     var$4.$worldWidth = var$5;
     var$4.$worldHeight = var$6;
     cbguv_Viewport_apply(var$4, 1);
-    cbguv_Viewport_apply($this.$viewport29, 1);
+    cbguv_Viewport_apply($this.$viewport31, 1);
 };
 function cgtl_Xoshiro128PPScreen() {
     let a = this; cbg_ScreenAdapter.call(a);
-    a.$random29 = null;
+    a.$random27 = null;
     a.$batch35 = null;
     a.$renderer27 = null;
-    a.$amounts16 = null;
-    a.$iterations17 = Long_ZERO;
-    a.$font22 = null;
+    a.$amounts18 = null;
+    a.$iterations18 = Long_ZERO;
+    a.$font20 = null;
     a.$viewport27 = null;
     a.$mainGame26 = null;
 }
 let cgtl_Xoshiro128PPScreen_show = $this => {
     let var$1, var$2, var$3, var$4, var$5, var$6, var$7, var$8, var$9, var$10, var$11;
-    $this.$font22 = $this.$mainGame26.$font0;
+    $this.$font20 = $this.$mainGame26.$font0;
     var$1 = new cgtr_Xoshiro128PlusPlusRandom;
     var$2 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$3 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
@@ -45874,11 +45858,11 @@ let cgtl_Xoshiro128PPScreen_show = $this => {
     var$5 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$1.$stateA3 = var$2;
     var$1.$stateB3 = var$3;
-    var$1.$stateC2 = var$4;
+    var$1.$stateC1 = var$4;
     if (!(var$2 | var$3 | var$4 | var$5))
         var$5 = 1;
-    var$1.$stateD2 = var$5;
-    $this.$random29 = var$1;
+    var$1.$stateD1 = var$5;
+    $this.$random27 = var$1;
     $this.$batch35 = $this.$mainGame26.$batch;
     var$1 = new cbguv_ScreenViewport;
     var$6 = new cbgg_OrthographicCamera;
@@ -45898,7 +45882,7 @@ let cgtl_Xoshiro128PPScreen_show = $this => {
         cbggg_ImmediateModeRenderer20__init_(var$1, 1536, 0, 1, 0, var$8);
         var$1.$ownsShader = 1;
         $this.$renderer27 = var$1;
-        var$9 = $this.$amounts16.data;
+        var$9 = $this.$amounts18.data;
         var$2 = 0;
         var$3 = var$9.length;
         if (var$2 > var$3) {
@@ -45912,7 +45896,7 @@ let cgtl_Xoshiro128PPScreen_show = $this => {
             var$9[var$2] = Long_ZERO;
             var$2 = var$4;
         }
-        $this.$iterations17 = Long_ZERO;
+        $this.$iterations18 = Long_ZERO;
         return;
     }
     var$1 = new cbgu_GdxRuntimeException;
@@ -45986,7 +45970,7 @@ cgtl_Xoshiro128PPScreen_render = ($this, $delta) => {
     cbgg_OrthographicCamera_update($camera, 1);
     var$8 = cbg_Gdx_input.$pressedKeys.data;
     if (var$8[29]) {
-        var$2 = $this.$amounts16.data;
+        var$2 = $this.$amounts18.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -46000,10 +45984,10 @@ cgtl_Xoshiro128PPScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations17 = Long_ZERO;
+        $this.$iterations18 = Long_ZERO;
     }
     if (var$8[30]) {
-        var$2 = $this.$amounts16.data;
+        var$2 = $this.$amounts18.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -46017,10 +46001,10 @@ cgtl_Xoshiro128PPScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations17 = Long_ZERO;
+        $this.$iterations18 = Long_ZERO;
     }
     if (var$8[31]) {
-        var$2 = $this.$amounts16.data;
+        var$2 = $this.$amounts18.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -46034,14 +46018,14 @@ cgtl_Xoshiro128PPScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations17 = Long_ZERO;
+        $this.$iterations18 = Long_ZERO;
     }
-    $this.$iterations17 = Long_add($this.$iterations17, Long_fromInt(1));
+    $this.$iterations18 = Long_add($this.$iterations18, Long_fromInt(1));
     $i = 0;
     while ($i < 524288) {
-        $m = Long_lo((cgtr_Xoshiro128PlusPlusRandom_nextLong0($this.$random29, Long_ZERO, Long_fromInt(512))));
+        $m = Long_lo((cgtr_Xoshiro128PlusPlusRandom_nextLong0($this.$random27, Long_ZERO, Long_fromInt(512))));
         if ($m >= 0 && $m < 512) {
-            var$2 = $this.$amounts16.data;
+            var$2 = $this.$amounts18.data;
             var$2[$m] = Long_add(var$2[$m], Long_fromInt(1));
         }
         $i = $i + 1 | 0;
@@ -46059,7 +46043,7 @@ cgtl_Xoshiro128PPScreen_render = ($this, $delta) => {
         cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0, 0.0);
         var$3 = $this.$renderer27;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
-        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts16.data[$x]) / Long_toNumber($this.$iterations17), 0.0);
+        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts18.data[$x]) / Long_toNumber($this.$iterations18), 0.0);
         $x = $x + 1 | 0;
     }
     $j = 8;
@@ -46082,7 +46066,7 @@ cgtl_Xoshiro128PPScreen_render = ($this, $delta) => {
     if (var$3.$drawing)
         cbggg_SpriteBatch_setupMatrices(var$3);
     cbggg_SpriteBatch_begin($this.$batch35);
-    var$3 = $this.$font22;
+    var$3 = $this.$font20;
     var$6 = $this.$batch35;
     var$2 = $rt_createArray(jl_Object, 2);
     var$8 = var$2.data;
@@ -46228,56 +46212,52 @@ cgtl_Xoshiro128PPScreen_resize = ($this, $width, $height) => {
     cbguv_Viewport_apply(var$4, 1);
     cbguv_Viewport_apply($this.$viewport27, 1);
 };
-function cgtl_RarxScreen() {
+function cgtl_ChockScreen() {
     let a = this; cbg_ScreenAdapter.call(a);
-    a.$random3 = null;
-    a.$batch25 = null;
-    a.$renderer33 = null;
-    a.$amounts17 = null;
-    a.$iterations0 = Long_ZERO;
-    a.$font33 = null;
-    a.$viewport1 = null;
-    a.$mainGame31 = null;
+    a.$random33 = null;
+    a.$batch5 = null;
+    a.$renderer5 = null;
+    a.$amounts27 = null;
+    a.$iterations32 = Long_ZERO;
+    a.$font29 = null;
+    a.$viewport21 = null;
+    a.$mainGame3 = null;
 }
-let cgtl_RarxScreen_show = $this => {
-    let var$1, var$2, var$3, var$4, var$5, var$6, var$7, var$8, var$9, var$10, var$11, var$12;
-    $this.$font33 = $this.$mainGame31.$font0;
-    var$1 = new cgtr_Xoshiro160RoadroxoRandom;
+let cgtl_ChockScreen_show = $this => {
+    let var$1, var$2, var$3, var$4, var$5, var$6, var$7, var$8, var$9, var$10, var$11;
+    $this.$font29 = $this.$mainGame3.$font0;
+    var$1 = new cgtr_Chock32Random;
     var$2 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$3 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$4 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$5 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
-    var$6 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
-    var$1.$stateA0 = var$2;
-    var$1.$stateB0 = var$3;
-    var$1.$stateC = var$4;
-    if (!(var$2 | var$3 | var$4 | var$5))
-        var$5 = 1;
-    var$1.$stateD = var$5;
-    var$1.$stateE0 = var$6;
-    $this.$random3 = var$1;
-    $this.$batch25 = $this.$mainGame31.$batch;
+    var$1.$stateA2 = var$2;
+    var$1.$stateB2 = var$3;
+    var$1.$stateC3 = var$4;
+    var$1.$stateD3 = var$5;
+    $this.$random33 = var$1;
+    $this.$batch5 = $this.$mainGame3.$batch;
     var$1 = new cbguv_ScreenViewport;
-    var$7 = new cbgg_OrthographicCamera;
-    cbgg_Camera__init_(var$7);
-    var$7.$zoom = 1.0;
-    var$8 = new cbgm_Vector3;
+    var$6 = new cbgg_OrthographicCamera;
+    cbgg_Camera__init_(var$6);
+    var$6.$zoom = 1.0;
+    var$7 = new cbgm_Vector3;
     cbgm_Vector3_$callClinit();
-    var$7.$tmp0 = var$8;
-    var$7.$near = 0.0;
+    var$6.$tmp0 = var$7;
+    var$6.$near = 0.0;
     var$1.$tmp = new cbgm_Vector3;
     var$1.$unitsPerPixel = 1.0;
-    var$1.$camera = var$7;
-    $this.$viewport1 = var$1;
+    var$1.$camera = var$6;
+    $this.$viewport21 = var$1;
     var$1 = new cbggg_ImmediateModeRenderer20;
-    var$9 = cbggg_ShaderProgram__init_(cbggg_ImmediateModeRenderer20_createVertexShader(0, 1, 0), cbggg_ImmediateModeRenderer20_createFragmentShader(0, 1, 0));
-    if (var$9.$isCompiled) {
-        cbggg_ImmediateModeRenderer20__init_(var$1, 1536, 0, 1, 0, var$9);
+    var$8 = cbggg_ShaderProgram__init_(cbggg_ImmediateModeRenderer20_createVertexShader(0, 1, 0), cbggg_ImmediateModeRenderer20_createFragmentShader(0, 1, 0));
+    if (var$8.$isCompiled) {
+        cbggg_ImmediateModeRenderer20__init_(var$1, 1536, 0, 1, 0, var$8);
         var$1.$ownsShader = 1;
-        $this.$renderer33 = var$1;
-        var$10 = $this.$amounts17.data;
+        $this.$renderer5 = var$1;
+        var$9 = $this.$amounts27.data;
         var$2 = 0;
-        var$3 = var$10.length;
+        var$3 = var$9.length;
         if (var$2 > var$3) {
             var$1 = new jl_IllegalArgumentException;
             var$1.$suppressionEnabled = 1;
@@ -46286,46 +46266,46 @@ let cgtl_RarxScreen_show = $this => {
         }
         while (var$2 < var$3) {
             var$4 = var$2 + 1 | 0;
-            var$10[var$2] = Long_ZERO;
+            var$9[var$2] = Long_ZERO;
             var$2 = var$4;
         }
-        $this.$iterations0 = Long_ZERO;
+        $this.$iterations32 = Long_ZERO;
         return;
     }
     var$1 = new cbgu_GdxRuntimeException;
-    var$7 = new jl_StringBuilder;
-    var$7.$buffer = $rt_createCharArray(16);
-    var$2 = var$7.$length0;
-    var$11 = var$7;
-    jl_AbstractStringBuilder_insert(var$11, var$2, $rt_s(479));
-    if (!var$9.$isCompiled)
-        var$8 = var$9.$log0;
+    var$6 = new jl_StringBuilder;
+    var$6.$buffer = $rt_createCharArray(16);
+    var$2 = var$6.$length0;
+    var$10 = var$6;
+    jl_AbstractStringBuilder_insert(var$10, var$2, $rt_s(479));
+    if (!var$8.$isCompiled)
+        var$7 = var$8.$log0;
     else {
-        var$8 = cbg_Gdx_gl20.$glGetProgramInfoLog(var$9.$program);
-        var$9.$log0 = var$8;
+        var$7 = cbg_Gdx_gl20.$glGetProgramInfoLog(var$8.$program);
+        var$8.$log0 = var$7;
     }
-    jl_AbstractStringBuilder_insert(var$11, var$7.$length0, var$8);
-    var$8 = new jl_String;
-    var$10 = var$7.$buffer;
-    var$12 = var$10.data;
-    var$3 = var$7.$length0;
-    var$4 = var$12.length;
+    jl_AbstractStringBuilder_insert(var$10, var$6.$length0, var$7);
+    var$7 = new jl_String;
+    var$9 = var$6.$buffer;
+    var$11 = var$9.data;
+    var$3 = var$6.$length0;
+    var$4 = var$11.length;
     if (var$3 >= 0 && var$3 <= (var$4 - 0 | 0)) {
-        var$8.$nativeString = $rt_charArrayToString(var$10.data, 0, var$3);
+        var$7.$nativeString = $rt_charArrayToString(var$9.data, 0, var$3);
         var$1.$suppressionEnabled = 1;
         var$1.$writableStackTrace = 1;
-        var$1.$message = var$8;
+        var$1.$message = var$7;
         $rt_throw(var$1);
     }
     var$1 = new jl_IndexOutOfBoundsException;
     jl_Exception__init_0(var$1);
     $rt_throw(var$1);
 },
-cgtl_RarxScreen_render = ($this, $delta) => {
+cgtl_ChockScreen_render = ($this, $delta) => {
     let var$2, var$3, $i, $x, var$6, $camera, var$8, $j, $m, $color, var$12, var$13, var$14, var$15, $$je;
     var$2 = cbg_Gdx_input.$justPressedKeys.data;
     if (var$2[71]) {
-        var$3 = $this.$mainGame31;
+        var$3 = $this.$mainGame3;
         $i = var$3.$screenIndex;
         var$2 = var$3.$screens.data;
         $x = var$2.length;
@@ -46341,7 +46321,7 @@ cgtl_RarxScreen_render = ($this, $delta) => {
         return;
     }
     if (var$2[72]) {
-        var$3 = $this.$mainGame31;
+        var$3 = $this.$mainGame3;
         $i = var$3.$screenIndex + 1 | 0;
         var$2 = var$3.$screens.data;
         $i = $i % var$2.length | 0;
@@ -46359,11 +46339,11 @@ cgtl_RarxScreen_render = ($this, $delta) => {
         return;
     cbg_Gdx_gl.$glClearColor(1.0, 1.0, 1.0, 1.0);
     cbg_Gdx_gl.$glClear(16384);
-    $camera = $this.$viewport1.$camera;
+    $camera = $this.$viewport21.$camera;
     cbgg_OrthographicCamera_update($camera, 1);
     var$8 = cbg_Gdx_input.$pressedKeys.data;
     if (var$8[29]) {
-        var$2 = $this.$amounts17.data;
+        var$2 = $this.$amounts27.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -46377,10 +46357,10 @@ cgtl_RarxScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations0 = Long_ZERO;
+        $this.$iterations32 = Long_ZERO;
     }
     if (var$8[30]) {
-        var$2 = $this.$amounts17.data;
+        var$2 = $this.$amounts27.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -46394,10 +46374,10 @@ cgtl_RarxScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations0 = Long_ZERO;
+        $this.$iterations32 = Long_ZERO;
     }
     if (var$8[31]) {
-        var$2 = $this.$amounts17.data;
+        var$2 = $this.$amounts27.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -46411,56 +46391,56 @@ cgtl_RarxScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations0 = Long_ZERO;
+        $this.$iterations32 = Long_ZERO;
     }
-    $this.$iterations0 = Long_add($this.$iterations0, Long_fromInt(1));
+    $this.$iterations32 = Long_add($this.$iterations32, Long_fromInt(1));
     $i = 0;
     while ($i < 524288) {
-        $m = Long_lo((cgtr_Xoshiro160RoadroxoRandom_nextLong0($this.$random3, Long_fromInt(512))));
+        $m = Long_lo((cgtr_Chock32Random_nextLong0($this.$random33, Long_ZERO, Long_fromInt(512))));
         if ($m >= 0 && $m < 512) {
-            var$2 = $this.$amounts17.data;
+            var$2 = $this.$amounts27.data;
             var$2[$m] = Long_add(var$2[$m], Long_fromInt(1));
         }
         $i = $i + 1 | 0;
     }
-    var$3 = $this.$renderer33;
+    var$3 = $this.$renderer5;
     var$6 = $camera.$combined;
     cbgm_Matrix4_set(var$3.$projModelView, var$6.$val);
     var$3.$primitiveType = 1;
     $x = 0;
     while ($x < 512) {
         $color = $x & 63 ? (-1.5436749266448052E38) : (-1.5203096921934465E38);
-        var$3 = $this.$renderer33;
+        var$3 = $this.$renderer5;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
         $delta = $x;
         cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0, 0.0);
-        var$3 = $this.$renderer33;
+        var$3 = $this.$renderer5;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
-        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts17.data[$x]) / Long_toNumber($this.$iterations0), 0.0);
+        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts27.data[$x]) / Long_toNumber($this.$iterations32), 0.0);
         $x = $x + 1 | 0;
     }
     $j = 8;
     while ($j < 520) {
-        var$3 = $this.$renderer33;
+        var$3 = $this.$renderer5;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = (-6.221923240859403E37);
         $color = $j;
         cbggg_ImmediateModeRenderer20_vertex(var$3, 0.0, $color, 0.0);
-        var$3 = $this.$renderer33;
+        var$3 = $this.$renderer5;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = (-6.221923240859403E37);
         cbggg_ImmediateModeRenderer20_vertex(var$3, 10.0, $color, 0.0);
         $j = $j + 32 | 0;
     }
-    cbggg_ImmediateModeRenderer20_flush($this.$renderer33);
-    var$3 = $this.$batch25;
+    cbggg_ImmediateModeRenderer20_flush($this.$renderer5);
+    var$3 = $this.$batch5;
     var$6 = $camera.$combined;
     if (var$3.$drawing)
         cbggg_SpriteBatch_flush(var$3);
     cbgm_Matrix4_set(var$3.$projectionMatrix, var$6.$val);
     if (var$3.$drawing)
         cbggg_SpriteBatch_setupMatrices(var$3);
-    cbggg_SpriteBatch_begin($this.$batch25);
-    var$3 = $this.$font33;
-    var$6 = $this.$batch25;
+    cbggg_SpriteBatch_begin($this.$batch5);
+    var$3 = $this.$font29;
+    var$6 = $this.$batch5;
     var$2 = $rt_createArray(jl_Object, 2);
     var$8 = var$2.data;
     var$8[0] = $rt_s(490);
@@ -46581,16 +46561,16 @@ cgtl_RarxScreen_render = ($this, $delta) => {
         cbggg_GlyphLayout_setText($camera, var$14.$font, var$13, 0, $m, var$14.$color, 384.0, 1, 1, var$15);
         cbggg_BitmapFontCache_addToCache(var$14, $camera, 64.0, 522.0 + var$14.$font.$data0.$ascent);
         cbggg_BitmapFontCache_draw(var$3.$cache, var$6);
-        cbggg_SpriteBatch_end($this.$batch25);
+        cbggg_SpriteBatch_end($this.$batch5);
         return;
     }
     var$3 = new jl_IndexOutOfBoundsException;
     jl_Throwable__init_(var$3);
     $rt_throw(var$3);
 },
-cgtl_RarxScreen_resize = ($this, $width, $height) => {
+cgtl_ChockScreen_resize = ($this, $width, $height) => {
     let var$3, var$4, var$5, var$6;
-    var$3 = $this.$viewport1;
+    var$3 = $this.$viewport21;
     var$4 = var$3;
     var$4.$screenX = 0;
     var$4.$screenY = 0;
@@ -46603,30 +46583,30 @@ cgtl_RarxScreen_resize = ($this, $width, $height) => {
     var$4.$worldWidth = var$5;
     var$4.$worldHeight = var$6;
     cbguv_Viewport_apply(var$4, 1);
-    cbguv_Viewport_apply($this.$viewport1, 1);
+    cbguv_Viewport_apply($this.$viewport21, 1);
 };
 function cgtl_AceScreen() {
     let a = this; cbg_ScreenAdapter.call(a);
-    a.$random21 = null;
-    a.$batch11 = null;
+    a.$random18 = null;
+    a.$batch13 = null;
     a.$renderer10 = null;
-    a.$amounts24 = null;
-    a.$iterations27 = Long_ZERO;
-    a.$font20 = null;
-    a.$viewport16 = null;
-    a.$mainGame5 = null;
+    a.$amounts23 = null;
+    a.$iterations26 = Long_ZERO;
+    a.$font18 = null;
+    a.$viewport13 = null;
+    a.$mainGame6 = null;
 }
 let cgtl_AceScreen_show = $this => {
     let var$1, var$2, var$3, var$4, var$5, var$6, var$7, var$8, var$9, var$10;
-    $this.$font20 = $this.$mainGame5.$font0;
+    $this.$font18 = $this.$mainGame6.$font0;
     var$1 = new cgtr_AceRandom;
     var$1.$stateA = Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19));
     var$1.$stateB = Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19));
-    var$1.$stateC0 = Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19));
-    var$1.$stateD0 = Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19));
+    var$1.$stateC = Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19));
+    var$1.$stateD = Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19));
     var$1.$stateE = Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19));
-    $this.$random21 = var$1;
-    $this.$batch11 = $this.$mainGame5.$batch;
+    $this.$random18 = var$1;
+    $this.$batch13 = $this.$mainGame6.$batch;
     var$1 = new cbguv_ScreenViewport;
     var$2 = new cbgg_OrthographicCamera;
     cbgg_Camera__init_(var$2);
@@ -46638,14 +46618,14 @@ let cgtl_AceScreen_show = $this => {
     var$1.$tmp = new cbgm_Vector3;
     var$1.$unitsPerPixel = 1.0;
     var$1.$camera = var$2;
-    $this.$viewport16 = var$1;
+    $this.$viewport13 = var$1;
     var$1 = new cbggg_ImmediateModeRenderer20;
     var$4 = cbggg_ShaderProgram__init_(cbggg_ImmediateModeRenderer20_createVertexShader(0, 1, 0), cbggg_ImmediateModeRenderer20_createFragmentShader(0, 1, 0));
     if (var$4.$isCompiled) {
         cbggg_ImmediateModeRenderer20__init_(var$1, 1536, 0, 1, 0, var$4);
         var$1.$ownsShader = 1;
         $this.$renderer10 = var$1;
-        var$5 = $this.$amounts24.data;
+        var$5 = $this.$amounts23.data;
         var$6 = 0;
         var$7 = var$5.length;
         if (var$6 > var$7) {
@@ -46659,7 +46639,7 @@ let cgtl_AceScreen_show = $this => {
             var$5[var$6] = Long_ZERO;
             var$6 = var$8;
         }
-        $this.$iterations27 = Long_ZERO;
+        $this.$iterations26 = Long_ZERO;
         return;
     }
     var$1 = new cbgu_GdxRuntimeException;
@@ -46695,7 +46675,7 @@ cgtl_AceScreen_render = ($this, $delta) => {
     let var$2, var$3, $i, $x, var$6, $camera, var$8, $j, $m, $color, var$12, var$13, var$14, var$15, $$je;
     var$2 = cbg_Gdx_input.$justPressedKeys.data;
     if (var$2[71]) {
-        var$3 = $this.$mainGame5;
+        var$3 = $this.$mainGame6;
         $i = var$3.$screenIndex;
         var$2 = var$3.$screens.data;
         $x = var$2.length;
@@ -46711,7 +46691,7 @@ cgtl_AceScreen_render = ($this, $delta) => {
         return;
     }
     if (var$2[72]) {
-        var$3 = $this.$mainGame5;
+        var$3 = $this.$mainGame6;
         $i = var$3.$screenIndex + 1 | 0;
         var$2 = var$3.$screens.data;
         $i = $i % var$2.length | 0;
@@ -46729,11 +46709,11 @@ cgtl_AceScreen_render = ($this, $delta) => {
         return;
     cbg_Gdx_gl.$glClearColor(1.0, 1.0, 1.0, 1.0);
     cbg_Gdx_gl.$glClear(16384);
-    $camera = $this.$viewport16.$camera;
+    $camera = $this.$viewport13.$camera;
     cbgg_OrthographicCamera_update($camera, 1);
     var$8 = cbg_Gdx_input.$pressedKeys.data;
     if (var$8[29]) {
-        var$2 = $this.$amounts24.data;
+        var$2 = $this.$amounts23.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -46747,10 +46727,10 @@ cgtl_AceScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations27 = Long_ZERO;
+        $this.$iterations26 = Long_ZERO;
     }
     if (var$8[30]) {
-        var$2 = $this.$amounts24.data;
+        var$2 = $this.$amounts23.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -46764,10 +46744,10 @@ cgtl_AceScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations27 = Long_ZERO;
+        $this.$iterations26 = Long_ZERO;
     }
     if (var$8[31]) {
-        var$2 = $this.$amounts24.data;
+        var$2 = $this.$amounts23.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -46781,14 +46761,14 @@ cgtl_AceScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations27 = Long_ZERO;
+        $this.$iterations26 = Long_ZERO;
     }
-    $this.$iterations27 = Long_add($this.$iterations27, Long_fromInt(1));
+    $this.$iterations26 = Long_add($this.$iterations26, Long_fromInt(1));
     $i = 0;
     while ($i < 524288) {
-        $m = Long_lo((cgtr_EnhancedRandom_nextLong($this.$random21, Long_ZERO, Long_fromInt(512))));
+        $m = Long_lo((cgtr_EnhancedRandom_nextLong($this.$random18, Long_ZERO, Long_fromInt(512))));
         if ($m >= 0 && $m < 512) {
-            var$2 = $this.$amounts24.data;
+            var$2 = $this.$amounts23.data;
             var$2[$m] = Long_add(var$2[$m], Long_fromInt(1));
         }
         $i = $i + 1 | 0;
@@ -46806,7 +46786,7 @@ cgtl_AceScreen_render = ($this, $delta) => {
         cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0, 0.0);
         var$3 = $this.$renderer10;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
-        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts24.data[$x]) / Long_toNumber($this.$iterations27), 0.0);
+        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts23.data[$x]) / Long_toNumber($this.$iterations26), 0.0);
         $x = $x + 1 | 0;
     }
     $j = 8;
@@ -46821,16 +46801,16 @@ cgtl_AceScreen_render = ($this, $delta) => {
         $j = $j + 32 | 0;
     }
     cbggg_ImmediateModeRenderer20_flush($this.$renderer10);
-    var$3 = $this.$batch11;
+    var$3 = $this.$batch13;
     var$6 = $camera.$combined;
     if (var$3.$drawing)
         cbggg_SpriteBatch_flush(var$3);
     cbgm_Matrix4_set(var$3.$projectionMatrix, var$6.$val);
     if (var$3.$drawing)
         cbggg_SpriteBatch_setupMatrices(var$3);
-    cbggg_SpriteBatch_begin($this.$batch11);
-    var$3 = $this.$font20;
-    var$6 = $this.$batch11;
+    cbggg_SpriteBatch_begin($this.$batch13);
+    var$3 = $this.$font18;
+    var$6 = $this.$batch13;
     var$2 = $rt_createArray(jl_Object, 2);
     var$8 = var$2.data;
     var$8[0] = $rt_s(491);
@@ -46951,7 +46931,7 @@ cgtl_AceScreen_render = ($this, $delta) => {
         cbggg_GlyphLayout_setText($camera, var$14.$font, var$13, 0, $m, var$14.$color, 384.0, 1, 1, var$15);
         cbggg_BitmapFontCache_addToCache(var$14, $camera, 64.0, 522.0 + var$14.$font.$data0.$ascent);
         cbggg_BitmapFontCache_draw(var$3.$cache, var$6);
-        cbggg_SpriteBatch_end($this.$batch11);
+        cbggg_SpriteBatch_end($this.$batch13);
         return;
     }
     var$3 = new jl_IndexOutOfBoundsException;
@@ -46960,7 +46940,7 @@ cgtl_AceScreen_render = ($this, $delta) => {
 },
 cgtl_AceScreen_resize = ($this, $width, $height) => {
     let var$3, var$4, var$5, var$6;
-    var$3 = $this.$viewport16;
+    var$3 = $this.$viewport13;
     var$4 = var$3;
     var$4.$screenX = 0;
     var$4.$screenY = 0;
@@ -46973,22 +46953,22 @@ cgtl_AceScreen_resize = ($this, $width, $height) => {
     var$4.$worldWidth = var$5;
     var$4.$worldHeight = var$6;
     cbguv_Viewport_apply(var$4, 1);
-    cbguv_Viewport_apply($this.$viewport16, 1);
+    cbguv_Viewport_apply($this.$viewport13, 1);
 };
 function cgtu_RandomScreen() {
     let a = this; cbg_ScreenAdapter.call(a);
-    a.$random7 = null;
+    a.$random5 = null;
     a.$batch34 = null;
     a.$renderer12 = null;
-    a.$amounts30 = null;
-    a.$iterations15 = Long_ZERO;
-    a.$font13 = null;
+    a.$amounts31 = null;
+    a.$iterations16 = Long_ZERO;
+    a.$font12 = null;
     a.$viewport5 = null;
-    a.$mainGame18 = null;
+    a.$mainGame17 = null;
 }
 let cgtu_RandomScreen_show = $this => {
     let var$1, var$2, var$3, var$4, var$5, var$6, var$7, var$8, var$9, var$10, var$11;
-    $this.$font13 = $this.$mainGame18.$font0;
+    $this.$font12 = $this.$mainGame17.$font0;
     var$1 = new cgt_RandomRandom;
     var$2 = Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19));
     var$3 = new cgt_Random;
@@ -46996,8 +46976,8 @@ let cgtu_RandomScreen_show = $this => {
     cgt_Random_setSeed(var$3, Long_fromInt(1234567890));
     var$1.$base = var$3;
     cgt_Random_setSeed(var$3, var$2);
-    $this.$random7 = var$1;
-    $this.$batch34 = $this.$mainGame18.$batch;
+    $this.$random5 = var$1;
+    $this.$batch34 = $this.$mainGame17.$batch;
     var$1 = new cbguv_ScreenViewport;
     var$3 = new cbgg_OrthographicCamera;
     cbgg_Camera__init_(var$3);
@@ -47016,7 +46996,7 @@ let cgtu_RandomScreen_show = $this => {
         cbggg_ImmediateModeRenderer20__init_(var$1, 1536, 0, 1, 0, var$5);
         var$1.$ownsShader = 1;
         $this.$renderer12 = var$1;
-        var$6 = $this.$amounts30.data;
+        var$6 = $this.$amounts31.data;
         var$7 = 0;
         var$8 = var$6.length;
         if (var$7 > var$8) {
@@ -47030,7 +47010,7 @@ let cgtu_RandomScreen_show = $this => {
             var$6[var$7] = Long_ZERO;
             var$7 = var$9;
         }
-        $this.$iterations15 = Long_ZERO;
+        $this.$iterations16 = Long_ZERO;
         return;
     }
     var$1 = new cbgu_GdxRuntimeException;
@@ -47066,7 +47046,7 @@ cgtu_RandomScreen_render = ($this, $delta) => {
     let var$2, var$3, $i, $x, var$6, $camera, var$8, $j, $m, $color, var$12, var$13, var$14, var$15, $$je;
     var$2 = cbg_Gdx_input.$justPressedKeys.data;
     if (var$2[71]) {
-        var$3 = $this.$mainGame18;
+        var$3 = $this.$mainGame17;
         $i = var$3.$screenIndex;
         var$2 = var$3.$screens.data;
         $x = var$2.length;
@@ -47082,7 +47062,7 @@ cgtu_RandomScreen_render = ($this, $delta) => {
         return;
     }
     if (var$2[72]) {
-        var$3 = $this.$mainGame18;
+        var$3 = $this.$mainGame17;
         $i = var$3.$screenIndex + 1 | 0;
         var$2 = var$3.$screens.data;
         $i = $i % var$2.length | 0;
@@ -47104,7 +47084,7 @@ cgtu_RandomScreen_render = ($this, $delta) => {
     cbgg_OrthographicCamera_update($camera, 1);
     var$8 = cbg_Gdx_input.$pressedKeys.data;
     if (var$8[29]) {
-        var$2 = $this.$amounts30.data;
+        var$2 = $this.$amounts31.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -47118,10 +47098,10 @@ cgtu_RandomScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations15 = Long_ZERO;
+        $this.$iterations16 = Long_ZERO;
     }
     if (var$8[30]) {
-        var$2 = $this.$amounts30.data;
+        var$2 = $this.$amounts31.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -47135,10 +47115,10 @@ cgtu_RandomScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations15 = Long_ZERO;
+        $this.$iterations16 = Long_ZERO;
     }
     if (var$8[31]) {
-        var$2 = $this.$amounts30.data;
+        var$2 = $this.$amounts31.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -47152,15 +47132,15 @@ cgtu_RandomScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations15 = Long_ZERO;
+        $this.$iterations16 = Long_ZERO;
     }
-    $this.$iterations15 = Long_add($this.$iterations15, Long_fromInt(1));
+    $this.$iterations16 = Long_add($this.$iterations16, Long_fromInt(1));
     $i = 0;
     while ($i < 524288) {
-        var$3 = $this.$random7.$base;
+        var$3 = $this.$random5.$base;
         $m = Long_lo(Long_shru(Long_add(Long_shl(Long_fromNumber(cgt_Random_nextInternal(var$3, 32)), 32), Long_fromNumber(cgt_Random_nextInternal(var$3, 32))), 55));
         if ($m >= 0 && $m < 512) {
-            var$2 = $this.$amounts30.data;
+            var$2 = $this.$amounts31.data;
             var$2[$m] = Long_add(var$2[$m], Long_fromInt(1));
         }
         $i = $i + 1 | 0;
@@ -47178,7 +47158,7 @@ cgtu_RandomScreen_render = ($this, $delta) => {
         cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0, 0.0);
         var$3 = $this.$renderer12;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
-        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts30.data[$x]) / Long_toNumber($this.$iterations15), 0.0);
+        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts31.data[$x]) / Long_toNumber($this.$iterations16), 0.0);
         $x = $x + 1 | 0;
     }
     $j = 8;
@@ -47201,7 +47181,7 @@ cgtu_RandomScreen_render = ($this, $delta) => {
     if (var$3.$drawing)
         cbggg_SpriteBatch_setupMatrices(var$3);
     cbggg_SpriteBatch_begin($this.$batch34);
-    var$3 = $this.$font13;
+    var$3 = $this.$font12;
     var$6 = $this.$batch34;
     var$2 = $rt_createArray(jl_Object, 2);
     var$8 = var$2.data;
@@ -47349,13 +47329,13 @@ cgtu_RandomScreen_resize = ($this, $width, $height) => {
 };
 function cgtu_ChipScreen() {
     let a = this; cbg_ScreenAdapter.call(a);
-    a.$random18 = null;
+    a.$random14 = null;
     a.$batch33 = null;
     a.$renderer15 = null;
-    a.$amounts21 = null;
-    a.$iterations22 = Long_ZERO;
+    a.$amounts22 = null;
+    a.$iterations21 = Long_ZERO;
     a.$font25 = null;
-    a.$viewport9 = null;
+    a.$viewport8 = null;
     a.$mainGame21 = null;
 }
 let cgtu_ChipScreen_show = $this => {
@@ -47366,11 +47346,11 @@ let cgtu_ChipScreen_show = $this => {
     var$3 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$4 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$5 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
-    var$1.$stateA1 = var$2;
-    var$1.$stateB1 = var$3;
-    var$1.$stateC1 = var$4;
-    var$1.$stateD1 = var$5;
-    $this.$random18 = var$1;
+    var$1.$stateA0 = var$2;
+    var$1.$stateB0 = var$3;
+    var$1.$stateC0 = var$4;
+    var$1.$stateD0 = var$5;
+    $this.$random14 = var$1;
     $this.$batch33 = $this.$mainGame21.$batch;
     var$1 = new cbguv_ScreenViewport;
     var$6 = new cbgg_OrthographicCamera;
@@ -47383,14 +47363,14 @@ let cgtu_ChipScreen_show = $this => {
     var$1.$tmp = new cbgm_Vector3;
     var$1.$unitsPerPixel = 1.0;
     var$1.$camera = var$6;
-    $this.$viewport9 = var$1;
+    $this.$viewport8 = var$1;
     var$1 = new cbggg_ImmediateModeRenderer20;
     var$8 = cbggg_ShaderProgram__init_(cbggg_ImmediateModeRenderer20_createVertexShader(0, 1, 0), cbggg_ImmediateModeRenderer20_createFragmentShader(0, 1, 0));
     if (var$8.$isCompiled) {
         cbggg_ImmediateModeRenderer20__init_(var$1, 1536, 0, 1, 0, var$8);
         var$1.$ownsShader = 1;
         $this.$renderer15 = var$1;
-        var$9 = $this.$amounts21.data;
+        var$9 = $this.$amounts22.data;
         var$2 = 0;
         var$3 = var$9.length;
         if (var$2 > var$3) {
@@ -47404,7 +47384,7 @@ let cgtu_ChipScreen_show = $this => {
             var$9[var$2] = Long_ZERO;
             var$2 = var$4;
         }
-        $this.$iterations22 = Long_ZERO;
+        $this.$iterations21 = Long_ZERO;
         return;
     }
     var$1 = new cbgu_GdxRuntimeException;
@@ -47474,11 +47454,11 @@ cgtu_ChipScreen_render = ($this, $delta) => {
         return;
     cbg_Gdx_gl.$glClearColor(1.0, 1.0, 1.0, 1.0);
     cbg_Gdx_gl.$glClear(16384);
-    $camera = $this.$viewport9.$camera;
+    $camera = $this.$viewport8.$camera;
     cbgg_OrthographicCamera_update($camera, 1);
     var$8 = cbg_Gdx_input.$pressedKeys.data;
     if (var$8[29]) {
-        var$2 = $this.$amounts21.data;
+        var$2 = $this.$amounts22.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -47492,10 +47472,10 @@ cgtu_ChipScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations22 = Long_ZERO;
+        $this.$iterations21 = Long_ZERO;
     }
     if (var$8[30]) {
-        var$2 = $this.$amounts21.data;
+        var$2 = $this.$amounts22.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -47509,10 +47489,10 @@ cgtu_ChipScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations22 = Long_ZERO;
+        $this.$iterations21 = Long_ZERO;
     }
     if (var$8[31]) {
-        var$2 = $this.$amounts21.data;
+        var$2 = $this.$amounts22.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -47526,14 +47506,14 @@ cgtu_ChipScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations22 = Long_ZERO;
+        $this.$iterations21 = Long_ZERO;
     }
-    $this.$iterations22 = Long_add($this.$iterations22, Long_fromInt(1));
+    $this.$iterations21 = Long_add($this.$iterations21, Long_fromInt(1));
     $i = 0;
     while ($i < 524288) {
-        $m = Long_lo(Long_shru(cgtr_Chip32Random_nextLong($this.$random18), 55));
+        $m = Long_lo(Long_shru(cgtr_Chip32Random_nextLong($this.$random14), 55));
         if ($m >= 0 && $m < 512) {
-            var$2 = $this.$amounts21.data;
+            var$2 = $this.$amounts22.data;
             var$2[$m] = Long_add(var$2[$m], Long_fromInt(1));
         }
         $i = $i + 1 | 0;
@@ -47551,7 +47531,7 @@ cgtu_ChipScreen_render = ($this, $delta) => {
         cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0, 0.0);
         var$3 = $this.$renderer15;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
-        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts21.data[$x]) / Long_toNumber($this.$iterations22), 0.0);
+        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts22.data[$x]) / Long_toNumber($this.$iterations21), 0.0);
         $x = $x + 1 | 0;
     }
     $j = 8;
@@ -47705,7 +47685,7 @@ cgtu_ChipScreen_render = ($this, $delta) => {
 },
 cgtu_ChipScreen_resize = ($this, $width, $height) => {
     let var$3, var$4, var$5, var$6;
-    var$3 = $this.$viewport9;
+    var$3 = $this.$viewport8;
     var$4 = var$3;
     var$4.$screenX = 0;
     var$4.$screenY = 0;
@@ -47718,33 +47698,33 @@ cgtu_ChipScreen_resize = ($this, $width, $height) => {
     var$4.$worldWidth = var$5;
     var$4.$worldHeight = var$6;
     cbguv_Viewport_apply(var$4, 1);
-    cbguv_Viewport_apply($this.$viewport9, 1);
+    cbguv_Viewport_apply($this.$viewport8, 1);
 };
 function cgtu_ChopScreen() {
     let a = this; cbg_ScreenAdapter.call(a);
-    a.$random23 = null;
-    a.$batch15 = null;
+    a.$random20 = null;
+    a.$batch17 = null;
     a.$renderer = null;
-    a.$amounts25 = null;
-    a.$iterations13 = Long_ZERO;
+    a.$amounts24 = null;
+    a.$iterations14 = Long_ZERO;
     a.$font3 = null;
-    a.$viewport33 = null;
-    a.$mainGame27 = null;
+    a.$viewport34 = null;
+    a.$mainGame29 = null;
 }
 let cgtu_ChopScreen_show = $this => {
     let var$1, var$2, var$3, var$4, var$5, var$6, var$7, var$8, var$9, var$10, var$11;
-    $this.$font3 = $this.$mainGame27.$font0;
+    $this.$font3 = $this.$mainGame29.$font0;
     var$1 = new cgtr_ChopRandom;
     var$2 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$3 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$4 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$5 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
-    var$1.$stateA2 = var$2;
-    var$1.$stateB2 = var$3;
-    var$1.$stateC3 = var$4;
-    var$1.$stateD3 = var$5;
-    $this.$random23 = var$1;
-    $this.$batch15 = $this.$mainGame27.$batch;
+    var$1.$stateA1 = var$2;
+    var$1.$stateB1 = var$3;
+    var$1.$stateC2 = var$4;
+    var$1.$stateD2 = var$5;
+    $this.$random20 = var$1;
+    $this.$batch17 = $this.$mainGame29.$batch;
     var$1 = new cbguv_ScreenViewport;
     var$6 = new cbgg_OrthographicCamera;
     cbgg_Camera__init_(var$6);
@@ -47756,14 +47736,14 @@ let cgtu_ChopScreen_show = $this => {
     var$1.$tmp = new cbgm_Vector3;
     var$1.$unitsPerPixel = 1.0;
     var$1.$camera = var$6;
-    $this.$viewport33 = var$1;
+    $this.$viewport34 = var$1;
     var$1 = new cbggg_ImmediateModeRenderer20;
     var$8 = cbggg_ShaderProgram__init_(cbggg_ImmediateModeRenderer20_createVertexShader(0, 1, 0), cbggg_ImmediateModeRenderer20_createFragmentShader(0, 1, 0));
     if (var$8.$isCompiled) {
         cbggg_ImmediateModeRenderer20__init_(var$1, 1536, 0, 1, 0, var$8);
         var$1.$ownsShader = 1;
         $this.$renderer = var$1;
-        var$9 = $this.$amounts25.data;
+        var$9 = $this.$amounts24.data;
         var$2 = 0;
         var$3 = var$9.length;
         if (var$2 > var$3) {
@@ -47777,7 +47757,7 @@ let cgtu_ChopScreen_show = $this => {
             var$9[var$2] = Long_ZERO;
             var$2 = var$4;
         }
-        $this.$iterations13 = Long_ZERO;
+        $this.$iterations14 = Long_ZERO;
         return;
     }
     var$1 = new cbgu_GdxRuntimeException;
@@ -47813,7 +47793,7 @@ cgtu_ChopScreen_render = ($this, $delta) => {
     let var$2, var$3, $i, $x, var$6, $camera, var$8, $j, $m, $color, var$12, var$13, var$14, var$15, $$je;
     var$2 = cbg_Gdx_input.$justPressedKeys.data;
     if (var$2[71]) {
-        var$3 = $this.$mainGame27;
+        var$3 = $this.$mainGame29;
         $i = var$3.$screenIndex;
         var$2 = var$3.$screens.data;
         $x = var$2.length;
@@ -47829,7 +47809,7 @@ cgtu_ChopScreen_render = ($this, $delta) => {
         return;
     }
     if (var$2[72]) {
-        var$3 = $this.$mainGame27;
+        var$3 = $this.$mainGame29;
         $i = var$3.$screenIndex + 1 | 0;
         var$2 = var$3.$screens.data;
         $i = $i % var$2.length | 0;
@@ -47847,11 +47827,11 @@ cgtu_ChopScreen_render = ($this, $delta) => {
         return;
     cbg_Gdx_gl.$glClearColor(1.0, 1.0, 1.0, 1.0);
     cbg_Gdx_gl.$glClear(16384);
-    $camera = $this.$viewport33.$camera;
+    $camera = $this.$viewport34.$camera;
     cbgg_OrthographicCamera_update($camera, 1);
     var$8 = cbg_Gdx_input.$pressedKeys.data;
     if (var$8[29]) {
-        var$2 = $this.$amounts25.data;
+        var$2 = $this.$amounts24.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -47865,10 +47845,10 @@ cgtu_ChopScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations13 = Long_ZERO;
+        $this.$iterations14 = Long_ZERO;
     }
     if (var$8[30]) {
-        var$2 = $this.$amounts25.data;
+        var$2 = $this.$amounts24.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -47882,10 +47862,10 @@ cgtu_ChopScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations13 = Long_ZERO;
+        $this.$iterations14 = Long_ZERO;
     }
     if (var$8[31]) {
-        var$2 = $this.$amounts25.data;
+        var$2 = $this.$amounts24.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -47899,14 +47879,14 @@ cgtu_ChopScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations13 = Long_ZERO;
+        $this.$iterations14 = Long_ZERO;
     }
-    $this.$iterations13 = Long_add($this.$iterations13, Long_fromInt(1));
+    $this.$iterations14 = Long_add($this.$iterations14, Long_fromInt(1));
     $i = 0;
     while ($i < 524288) {
-        $m = Long_lo(Long_shru(cgtr_ChopRandom_nextLong($this.$random23), 55));
+        $m = Long_lo(Long_shru(cgtr_ChopRandom_nextLong($this.$random20), 55));
         if ($m >= 0 && $m < 512) {
-            var$2 = $this.$amounts25.data;
+            var$2 = $this.$amounts24.data;
             var$2[$m] = Long_add(var$2[$m], Long_fromInt(1));
         }
         $i = $i + 1 | 0;
@@ -47924,7 +47904,7 @@ cgtu_ChopScreen_render = ($this, $delta) => {
         cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0, 0.0);
         var$3 = $this.$renderer;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
-        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts25.data[$x]) / Long_toNumber($this.$iterations13), 0.0);
+        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts24.data[$x]) / Long_toNumber($this.$iterations14), 0.0);
         $x = $x + 1 | 0;
     }
     $j = 8;
@@ -47939,16 +47919,16 @@ cgtu_ChopScreen_render = ($this, $delta) => {
         $j = $j + 32 | 0;
     }
     cbggg_ImmediateModeRenderer20_flush($this.$renderer);
-    var$3 = $this.$batch15;
+    var$3 = $this.$batch17;
     var$6 = $camera.$combined;
     if (var$3.$drawing)
         cbggg_SpriteBatch_flush(var$3);
     cbgm_Matrix4_set(var$3.$projectionMatrix, var$6.$val);
     if (var$3.$drawing)
         cbggg_SpriteBatch_setupMatrices(var$3);
-    cbggg_SpriteBatch_begin($this.$batch15);
+    cbggg_SpriteBatch_begin($this.$batch17);
     var$3 = $this.$font3;
-    var$6 = $this.$batch15;
+    var$6 = $this.$batch17;
     var$2 = $rt_createArray(jl_Object, 2);
     var$8 = var$2.data;
     var$8[0] = $rt_s(488);
@@ -48069,7 +48049,7 @@ cgtu_ChopScreen_render = ($this, $delta) => {
         cbggg_GlyphLayout_setText($camera, var$14.$font, var$13, 0, $m, var$14.$color, 384.0, 1, 1, var$15);
         cbggg_BitmapFontCache_addToCache(var$14, $camera, 64.0, 522.0 + var$14.$font.$data0.$ascent);
         cbggg_BitmapFontCache_draw(var$3.$cache, var$6);
-        cbggg_SpriteBatch_end($this.$batch15);
+        cbggg_SpriteBatch_end($this.$batch17);
         return;
     }
     var$3 = new jl_IndexOutOfBoundsException;
@@ -48078,7 +48058,7 @@ cgtu_ChopScreen_render = ($this, $delta) => {
 },
 cgtu_ChopScreen_resize = ($this, $width, $height) => {
     let var$3, var$4, var$5, var$6;
-    var$3 = $this.$viewport33;
+    var$3 = $this.$viewport34;
     var$4 = var$3;
     var$4.$screenX = 0;
     var$4.$screenY = 0;
@@ -48091,22 +48071,22 @@ cgtu_ChopScreen_resize = ($this, $width, $height) => {
     var$4.$worldWidth = var$5;
     var$4.$worldHeight = var$6;
     cbguv_Viewport_apply(var$4, 1);
-    cbguv_Viewport_apply($this.$viewport33, 1);
+    cbguv_Viewport_apply($this.$viewport34, 1);
 };
 function cgtu_Xoshiro128PPScreen() {
     let a = this; cbg_ScreenAdapter.call(a);
-    a.$random4 = null;
-    a.$batch6 = null;
+    a.$random2 = null;
+    a.$batch8 = null;
     a.$renderer3 = null;
-    a.$amounts12 = null;
-    a.$iterations30 = Long_ZERO;
-    a.$font24 = null;
-    a.$viewport25 = null;
-    a.$mainGame6 = null;
+    a.$amounts13 = null;
+    a.$iterations28 = Long_ZERO;
+    a.$font23 = null;
+    a.$viewport23 = null;
+    a.$mainGame7 = null;
 }
 let cgtu_Xoshiro128PPScreen_show = $this => {
     let var$1, var$2, var$3, var$4, var$5, var$6, var$7, var$8, var$9, var$10, var$11;
-    $this.$font24 = $this.$mainGame6.$font0;
+    $this.$font23 = $this.$mainGame7.$font0;
     var$1 = new cgtr_Xoshiro128PlusPlusRandom;
     var$2 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$3 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
@@ -48114,12 +48094,12 @@ let cgtu_Xoshiro128PPScreen_show = $this => {
     var$5 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$1.$stateA3 = var$2;
     var$1.$stateB3 = var$3;
-    var$1.$stateC2 = var$4;
+    var$1.$stateC1 = var$4;
     if (!(var$2 | var$3 | var$4 | var$5))
         var$5 = 1;
-    var$1.$stateD2 = var$5;
-    $this.$random4 = var$1;
-    $this.$batch6 = $this.$mainGame6.$batch;
+    var$1.$stateD1 = var$5;
+    $this.$random2 = var$1;
+    $this.$batch8 = $this.$mainGame7.$batch;
     var$1 = new cbguv_ScreenViewport;
     var$6 = new cbgg_OrthographicCamera;
     cbgg_Camera__init_(var$6);
@@ -48131,14 +48111,14 @@ let cgtu_Xoshiro128PPScreen_show = $this => {
     var$1.$tmp = new cbgm_Vector3;
     var$1.$unitsPerPixel = 1.0;
     var$1.$camera = var$6;
-    $this.$viewport25 = var$1;
+    $this.$viewport23 = var$1;
     var$1 = new cbggg_ImmediateModeRenderer20;
     var$8 = cbggg_ShaderProgram__init_(cbggg_ImmediateModeRenderer20_createVertexShader(0, 1, 0), cbggg_ImmediateModeRenderer20_createFragmentShader(0, 1, 0));
     if (var$8.$isCompiled) {
         cbggg_ImmediateModeRenderer20__init_(var$1, 1536, 0, 1, 0, var$8);
         var$1.$ownsShader = 1;
         $this.$renderer3 = var$1;
-        var$9 = $this.$amounts12.data;
+        var$9 = $this.$amounts13.data;
         var$2 = 0;
         var$3 = var$9.length;
         if (var$2 > var$3) {
@@ -48152,7 +48132,7 @@ let cgtu_Xoshiro128PPScreen_show = $this => {
             var$9[var$2] = Long_ZERO;
             var$2 = var$4;
         }
-        $this.$iterations30 = Long_ZERO;
+        $this.$iterations28 = Long_ZERO;
         return;
     }
     var$1 = new cbgu_GdxRuntimeException;
@@ -48188,7 +48168,7 @@ cgtu_Xoshiro128PPScreen_render = ($this, $delta) => {
     let var$2, var$3, $i, $x, var$6, $camera, var$8, $j, $m, $color, var$12, var$13, var$14, var$15, $$je;
     var$2 = cbg_Gdx_input.$justPressedKeys.data;
     if (var$2[71]) {
-        var$3 = $this.$mainGame6;
+        var$3 = $this.$mainGame7;
         $i = var$3.$screenIndex;
         var$2 = var$3.$screens.data;
         $x = var$2.length;
@@ -48204,7 +48184,7 @@ cgtu_Xoshiro128PPScreen_render = ($this, $delta) => {
         return;
     }
     if (var$2[72]) {
-        var$3 = $this.$mainGame6;
+        var$3 = $this.$mainGame7;
         $i = var$3.$screenIndex + 1 | 0;
         var$2 = var$3.$screens.data;
         $i = $i % var$2.length | 0;
@@ -48222,11 +48202,11 @@ cgtu_Xoshiro128PPScreen_render = ($this, $delta) => {
         return;
     cbg_Gdx_gl.$glClearColor(1.0, 1.0, 1.0, 1.0);
     cbg_Gdx_gl.$glClear(16384);
-    $camera = $this.$viewport25.$camera;
+    $camera = $this.$viewport23.$camera;
     cbgg_OrthographicCamera_update($camera, 1);
     var$8 = cbg_Gdx_input.$pressedKeys.data;
     if (var$8[29]) {
-        var$2 = $this.$amounts12.data;
+        var$2 = $this.$amounts13.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -48240,10 +48220,10 @@ cgtu_Xoshiro128PPScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations30 = Long_ZERO;
+        $this.$iterations28 = Long_ZERO;
     }
     if (var$8[30]) {
-        var$2 = $this.$amounts12.data;
+        var$2 = $this.$amounts13.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -48257,10 +48237,10 @@ cgtu_Xoshiro128PPScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations30 = Long_ZERO;
+        $this.$iterations28 = Long_ZERO;
     }
     if (var$8[31]) {
-        var$2 = $this.$amounts12.data;
+        var$2 = $this.$amounts13.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -48274,14 +48254,14 @@ cgtu_Xoshiro128PPScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations30 = Long_ZERO;
+        $this.$iterations28 = Long_ZERO;
     }
-    $this.$iterations30 = Long_add($this.$iterations30, Long_fromInt(1));
+    $this.$iterations28 = Long_add($this.$iterations28, Long_fromInt(1));
     $i = 0;
     while ($i < 524288) {
-        $m = Long_lo(Long_shru(cgtr_Xoshiro128PlusPlusRandom_nextLong($this.$random4), 55));
+        $m = Long_lo(Long_shru(cgtr_Xoshiro128PlusPlusRandom_nextLong($this.$random2), 55));
         if ($m >= 0 && $m < 512) {
-            var$2 = $this.$amounts12.data;
+            var$2 = $this.$amounts13.data;
             var$2[$m] = Long_add(var$2[$m], Long_fromInt(1));
         }
         $i = $i + 1 | 0;
@@ -48299,7 +48279,7 @@ cgtu_Xoshiro128PPScreen_render = ($this, $delta) => {
         cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0, 0.0);
         var$3 = $this.$renderer3;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
-        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts12.data[$x]) / Long_toNumber($this.$iterations30), 0.0);
+        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts13.data[$x]) / Long_toNumber($this.$iterations28), 0.0);
         $x = $x + 1 | 0;
     }
     $j = 8;
@@ -48314,16 +48294,16 @@ cgtu_Xoshiro128PPScreen_render = ($this, $delta) => {
         $j = $j + 32 | 0;
     }
     cbggg_ImmediateModeRenderer20_flush($this.$renderer3);
-    var$3 = $this.$batch6;
+    var$3 = $this.$batch8;
     var$6 = $camera.$combined;
     if (var$3.$drawing)
         cbggg_SpriteBatch_flush(var$3);
     cbgm_Matrix4_set(var$3.$projectionMatrix, var$6.$val);
     if (var$3.$drawing)
         cbggg_SpriteBatch_setupMatrices(var$3);
-    cbggg_SpriteBatch_begin($this.$batch6);
-    var$3 = $this.$font24;
-    var$6 = $this.$batch6;
+    cbggg_SpriteBatch_begin($this.$batch8);
+    var$3 = $this.$font23;
+    var$6 = $this.$batch8;
     var$2 = $rt_createArray(jl_Object, 2);
     var$8 = var$2.data;
     var$8[0] = $rt_s(489);
@@ -48444,7 +48424,7 @@ cgtu_Xoshiro128PPScreen_render = ($this, $delta) => {
         cbggg_GlyphLayout_setText($camera, var$14.$font, var$13, 0, $m, var$14.$color, 384.0, 1, 1, var$15);
         cbggg_BitmapFontCache_addToCache(var$14, $camera, 64.0, 522.0 + var$14.$font.$data0.$ascent);
         cbggg_BitmapFontCache_draw(var$3.$cache, var$6);
-        cbggg_SpriteBatch_end($this.$batch6);
+        cbggg_SpriteBatch_end($this.$batch8);
         return;
     }
     var$3 = new jl_IndexOutOfBoundsException;
@@ -48453,7 +48433,7 @@ cgtu_Xoshiro128PPScreen_render = ($this, $delta) => {
 },
 cgtu_Xoshiro128PPScreen_resize = ($this, $width, $height) => {
     let var$3, var$4, var$5, var$6;
-    var$3 = $this.$viewport25;
+    var$3 = $this.$viewport23;
     var$4 = var$3;
     var$4.$screenX = 0;
     var$4.$screenY = 0;
@@ -48466,58 +48446,54 @@ cgtu_Xoshiro128PPScreen_resize = ($this, $width, $height) => {
     var$4.$worldWidth = var$5;
     var$4.$worldHeight = var$6;
     cbguv_Viewport_apply(var$4, 1);
-    cbguv_Viewport_apply($this.$viewport25, 1);
+    cbguv_Viewport_apply($this.$viewport23, 1);
 };
-function cgtu_RarxScreen() {
+function cgtu_ChockScreen() {
     let a = this; cbg_ScreenAdapter.call(a);
-    a.$random12 = null;
-    a.$batch7 = null;
-    a.$renderer30 = null;
-    a.$amounts32 = null;
-    a.$iterations8 = Long_ZERO;
-    a.$font27 = null;
-    a.$viewport34 = null;
-    a.$mainGame33 = null;
+    a.$random10 = null;
+    a.$batch12 = null;
+    a.$renderer26 = null;
+    a.$amounts29 = null;
+    a.$iterations4 = Long_ZERO;
+    a.$font11 = null;
+    a.$viewport26 = null;
+    a.$mainGame27 = null;
 }
-let cgtu_RarxScreen_show = $this => {
-    let var$1, var$2, var$3, var$4, var$5, var$6, var$7, var$8, var$9, var$10, var$11, var$12;
-    $this.$font27 = $this.$mainGame33.$font0;
-    var$1 = new cgtr_Xoshiro160RoadroxoRandom;
+let cgtu_ChockScreen_show = $this => {
+    let var$1, var$2, var$3, var$4, var$5, var$6, var$7, var$8, var$9, var$10, var$11;
+    $this.$font11 = $this.$mainGame27.$font0;
+    var$1 = new cgtr_Chock32Random;
     var$2 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$3 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$4 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
     var$5 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
-    var$6 = Long_lo(Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19)));
-    var$1.$stateA0 = var$2;
-    var$1.$stateB0 = var$3;
-    var$1.$stateC = var$4;
-    if (!(var$2 | var$3 | var$4 | var$5))
-        var$5 = 1;
-    var$1.$stateD = var$5;
-    var$1.$stateE0 = var$6;
-    $this.$random12 = var$1;
-    $this.$batch7 = $this.$mainGame33.$batch;
+    var$1.$stateA2 = var$2;
+    var$1.$stateB2 = var$3;
+    var$1.$stateC3 = var$4;
+    var$1.$stateD3 = var$5;
+    $this.$random10 = var$1;
+    $this.$batch12 = $this.$mainGame27.$batch;
     var$1 = new cbguv_ScreenViewport;
-    var$7 = new cbgg_OrthographicCamera;
-    cbgg_Camera__init_(var$7);
-    var$7.$zoom = 1.0;
-    var$8 = new cbgm_Vector3;
+    var$6 = new cbgg_OrthographicCamera;
+    cbgg_Camera__init_(var$6);
+    var$6.$zoom = 1.0;
+    var$7 = new cbgm_Vector3;
     cbgm_Vector3_$callClinit();
-    var$7.$tmp0 = var$8;
-    var$7.$near = 0.0;
+    var$6.$tmp0 = var$7;
+    var$6.$near = 0.0;
     var$1.$tmp = new cbgm_Vector3;
     var$1.$unitsPerPixel = 1.0;
-    var$1.$camera = var$7;
-    $this.$viewport34 = var$1;
+    var$1.$camera = var$6;
+    $this.$viewport26 = var$1;
     var$1 = new cbggg_ImmediateModeRenderer20;
-    var$9 = cbggg_ShaderProgram__init_(cbggg_ImmediateModeRenderer20_createVertexShader(0, 1, 0), cbggg_ImmediateModeRenderer20_createFragmentShader(0, 1, 0));
-    if (var$9.$isCompiled) {
-        cbggg_ImmediateModeRenderer20__init_(var$1, 1536, 0, 1, 0, var$9);
+    var$8 = cbggg_ShaderProgram__init_(cbggg_ImmediateModeRenderer20_createVertexShader(0, 1, 0), cbggg_ImmediateModeRenderer20_createFragmentShader(0, 1, 0));
+    if (var$8.$isCompiled) {
+        cbggg_ImmediateModeRenderer20__init_(var$1, 1536, 0, 1, 0, var$8);
         var$1.$ownsShader = 1;
-        $this.$renderer30 = var$1;
-        var$10 = $this.$amounts32.data;
+        $this.$renderer26 = var$1;
+        var$9 = $this.$amounts29.data;
         var$2 = 0;
-        var$3 = var$10.length;
+        var$3 = var$9.length;
         if (var$2 > var$3) {
             var$1 = new jl_IllegalArgumentException;
             var$1.$suppressionEnabled = 1;
@@ -48526,46 +48502,46 @@ let cgtu_RarxScreen_show = $this => {
         }
         while (var$2 < var$3) {
             var$4 = var$2 + 1 | 0;
-            var$10[var$2] = Long_ZERO;
+            var$9[var$2] = Long_ZERO;
             var$2 = var$4;
         }
-        $this.$iterations8 = Long_ZERO;
+        $this.$iterations4 = Long_ZERO;
         return;
     }
     var$1 = new cbgu_GdxRuntimeException;
-    var$7 = new jl_StringBuilder;
-    var$7.$buffer = $rt_createCharArray(16);
-    var$2 = var$7.$length0;
-    var$11 = var$7;
-    jl_AbstractStringBuilder_insert(var$11, var$2, $rt_s(479));
-    if (!var$9.$isCompiled)
-        var$8 = var$9.$log0;
+    var$6 = new jl_StringBuilder;
+    var$6.$buffer = $rt_createCharArray(16);
+    var$2 = var$6.$length0;
+    var$10 = var$6;
+    jl_AbstractStringBuilder_insert(var$10, var$2, $rt_s(479));
+    if (!var$8.$isCompiled)
+        var$7 = var$8.$log0;
     else {
-        var$8 = cbg_Gdx_gl20.$glGetProgramInfoLog(var$9.$program);
-        var$9.$log0 = var$8;
+        var$7 = cbg_Gdx_gl20.$glGetProgramInfoLog(var$8.$program);
+        var$8.$log0 = var$7;
     }
-    jl_AbstractStringBuilder_insert(var$11, var$7.$length0, var$8);
-    var$8 = new jl_String;
-    var$10 = var$7.$buffer;
-    var$12 = var$10.data;
-    var$3 = var$7.$length0;
-    var$4 = var$12.length;
+    jl_AbstractStringBuilder_insert(var$10, var$6.$length0, var$7);
+    var$7 = new jl_String;
+    var$9 = var$6.$buffer;
+    var$11 = var$9.data;
+    var$3 = var$6.$length0;
+    var$4 = var$11.length;
     if (var$3 >= 0 && var$3 <= (var$4 - 0 | 0)) {
-        var$8.$nativeString = $rt_charArrayToString(var$10.data, 0, var$3);
+        var$7.$nativeString = $rt_charArrayToString(var$9.data, 0, var$3);
         var$1.$suppressionEnabled = 1;
         var$1.$writableStackTrace = 1;
-        var$1.$message = var$8;
+        var$1.$message = var$7;
         $rt_throw(var$1);
     }
     var$1 = new jl_IndexOutOfBoundsException;
     jl_Exception__init_0(var$1);
     $rt_throw(var$1);
 },
-cgtu_RarxScreen_render = ($this, $delta) => {
+cgtu_ChockScreen_render = ($this, $delta) => {
     let var$2, var$3, $i, $x, var$6, $camera, var$8, $j, $m, $color, var$12, var$13, var$14, var$15, $$je;
     var$2 = cbg_Gdx_input.$justPressedKeys.data;
     if (var$2[71]) {
-        var$3 = $this.$mainGame33;
+        var$3 = $this.$mainGame27;
         $i = var$3.$screenIndex;
         var$2 = var$3.$screens.data;
         $x = var$2.length;
@@ -48581,7 +48557,7 @@ cgtu_RarxScreen_render = ($this, $delta) => {
         return;
     }
     if (var$2[72]) {
-        var$3 = $this.$mainGame33;
+        var$3 = $this.$mainGame27;
         $i = var$3.$screenIndex + 1 | 0;
         var$2 = var$3.$screens.data;
         $i = $i % var$2.length | 0;
@@ -48599,11 +48575,11 @@ cgtu_RarxScreen_render = ($this, $delta) => {
         return;
     cbg_Gdx_gl.$glClearColor(1.0, 1.0, 1.0, 1.0);
     cbg_Gdx_gl.$glClear(16384);
-    $camera = $this.$viewport34.$camera;
+    $camera = $this.$viewport26.$camera;
     cbgg_OrthographicCamera_update($camera, 1);
     var$8 = cbg_Gdx_input.$pressedKeys.data;
     if (var$8[29]) {
-        var$2 = $this.$amounts32.data;
+        var$2 = $this.$amounts29.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -48617,10 +48593,10 @@ cgtu_RarxScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations8 = Long_ZERO;
+        $this.$iterations4 = Long_ZERO;
     }
     if (var$8[30]) {
-        var$2 = $this.$amounts32.data;
+        var$2 = $this.$amounts29.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -48634,10 +48610,10 @@ cgtu_RarxScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations8 = Long_ZERO;
+        $this.$iterations4 = Long_ZERO;
     }
     if (var$8[31]) {
-        var$2 = $this.$amounts32.data;
+        var$2 = $this.$amounts29.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -48651,56 +48627,56 @@ cgtu_RarxScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations8 = Long_ZERO;
+        $this.$iterations4 = Long_ZERO;
     }
-    $this.$iterations8 = Long_add($this.$iterations8, Long_fromInt(1));
+    $this.$iterations4 = Long_add($this.$iterations4, Long_fromInt(1));
     $i = 0;
     while ($i < 524288) {
-        $m = Long_lo(Long_shru(cgtr_Xoshiro160RoadroxoRandom_nextLong($this.$random12), 55));
+        $m = Long_lo(Long_shru(cgtr_Chock32Random_nextLong($this.$random10), 55));
         if ($m >= 0 && $m < 512) {
-            var$2 = $this.$amounts32.data;
+            var$2 = $this.$amounts29.data;
             var$2[$m] = Long_add(var$2[$m], Long_fromInt(1));
         }
         $i = $i + 1 | 0;
     }
-    var$3 = $this.$renderer30;
+    var$3 = $this.$renderer26;
     var$6 = $camera.$combined;
     cbgm_Matrix4_set(var$3.$projModelView, var$6.$val);
     var$3.$primitiveType = 1;
     $x = 0;
     while ($x < 512) {
         $color = $x & 63 ? (-1.5436749266448052E38) : (-1.5203096921934465E38);
-        var$3 = $this.$renderer30;
+        var$3 = $this.$renderer26;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
         $delta = $x;
         cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0, 0.0);
-        var$3 = $this.$renderer30;
+        var$3 = $this.$renderer26;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
-        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts32.data[$x]) / Long_toNumber($this.$iterations8), 0.0);
+        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts29.data[$x]) / Long_toNumber($this.$iterations4), 0.0);
         $x = $x + 1 | 0;
     }
     $j = 8;
     while ($j < 520) {
-        var$3 = $this.$renderer30;
+        var$3 = $this.$renderer26;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = (-6.221923240859403E37);
         $color = $j;
         cbggg_ImmediateModeRenderer20_vertex(var$3, 0.0, $color, 0.0);
-        var$3 = $this.$renderer30;
+        var$3 = $this.$renderer26;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = (-6.221923240859403E37);
         cbggg_ImmediateModeRenderer20_vertex(var$3, 10.0, $color, 0.0);
         $j = $j + 32 | 0;
     }
-    cbggg_ImmediateModeRenderer20_flush($this.$renderer30);
-    var$3 = $this.$batch7;
+    cbggg_ImmediateModeRenderer20_flush($this.$renderer26);
+    var$3 = $this.$batch12;
     var$6 = $camera.$combined;
     if (var$3.$drawing)
         cbggg_SpriteBatch_flush(var$3);
     cbgm_Matrix4_set(var$3.$projectionMatrix, var$6.$val);
     if (var$3.$drawing)
         cbggg_SpriteBatch_setupMatrices(var$3);
-    cbggg_SpriteBatch_begin($this.$batch7);
-    var$3 = $this.$font27;
-    var$6 = $this.$batch7;
+    cbggg_SpriteBatch_begin($this.$batch12);
+    var$3 = $this.$font11;
+    var$6 = $this.$batch12;
     var$2 = $rt_createArray(jl_Object, 2);
     var$8 = var$2.data;
     var$8[0] = $rt_s(490);
@@ -48821,16 +48797,16 @@ cgtu_RarxScreen_render = ($this, $delta) => {
         cbggg_GlyphLayout_setText($camera, var$14.$font, var$13, 0, $m, var$14.$color, 384.0, 1, 1, var$15);
         cbggg_BitmapFontCache_addToCache(var$14, $camera, 64.0, 522.0 + var$14.$font.$data0.$ascent);
         cbggg_BitmapFontCache_draw(var$3.$cache, var$6);
-        cbggg_SpriteBatch_end($this.$batch7);
+        cbggg_SpriteBatch_end($this.$batch12);
         return;
     }
     var$3 = new jl_IndexOutOfBoundsException;
     jl_Throwable__init_(var$3);
     $rt_throw(var$3);
 },
-cgtu_RarxScreen_resize = ($this, $width, $height) => {
+cgtu_ChockScreen_resize = ($this, $width, $height) => {
     let var$3, var$4, var$5, var$6;
-    var$3 = $this.$viewport34;
+    var$3 = $this.$viewport26;
     var$4 = var$3;
     var$4.$screenX = 0;
     var$4.$screenY = 0;
@@ -48843,17 +48819,17 @@ cgtu_RarxScreen_resize = ($this, $width, $height) => {
     var$4.$worldWidth = var$5;
     var$4.$worldHeight = var$6;
     cbguv_Viewport_apply(var$4, 1);
-    cbguv_Viewport_apply($this.$viewport34, 1);
+    cbguv_Viewport_apply($this.$viewport26, 1);
 };
 function cgtu_AceScreen() {
     let a = this; cbg_ScreenAdapter.call(a);
-    a.$random31 = null;
+    a.$random29 = null;
     a.$batch29 = null;
     a.$renderer28 = null;
-    a.$amounts4 = null;
-    a.$iterations12 = Long_ZERO;
+    a.$amounts6 = null;
+    a.$iterations13 = Long_ZERO;
     a.$font7 = null;
-    a.$viewport26 = null;
+    a.$viewport24 = null;
     a.$mainGame25 = null;
 }
 let cgtu_AceScreen_show = $this => {
@@ -48862,10 +48838,10 @@ let cgtu_AceScreen_show = $this => {
     var$1 = new cgtr_AceRandom;
     var$1.$stateA = Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19));
     var$1.$stateB = Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19));
-    var$1.$stateC0 = Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19));
-    var$1.$stateD0 = Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19));
+    var$1.$stateC = Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19));
+    var$1.$stateD = Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19));
     var$1.$stateE = Long_xor(Long_fromNumber((jl_Math_randomImpl() - 0.5) * 4.503599627370496E15), Long_fromNumber((jl_Math_randomImpl() - 0.5) * 1.8446744073709552E19));
-    $this.$random31 = var$1;
+    $this.$random29 = var$1;
     $this.$batch29 = $this.$mainGame25.$batch;
     var$1 = new cbguv_ScreenViewport;
     var$2 = new cbgg_OrthographicCamera;
@@ -48878,14 +48854,14 @@ let cgtu_AceScreen_show = $this => {
     var$1.$tmp = new cbgm_Vector3;
     var$1.$unitsPerPixel = 1.0;
     var$1.$camera = var$2;
-    $this.$viewport26 = var$1;
+    $this.$viewport24 = var$1;
     var$1 = new cbggg_ImmediateModeRenderer20;
     var$4 = cbggg_ShaderProgram__init_(cbggg_ImmediateModeRenderer20_createVertexShader(0, 1, 0), cbggg_ImmediateModeRenderer20_createFragmentShader(0, 1, 0));
     if (var$4.$isCompiled) {
         cbggg_ImmediateModeRenderer20__init_(var$1, 1536, 0, 1, 0, var$4);
         var$1.$ownsShader = 1;
         $this.$renderer28 = var$1;
-        var$5 = $this.$amounts4.data;
+        var$5 = $this.$amounts6.data;
         var$6 = 0;
         var$7 = var$5.length;
         if (var$6 > var$7) {
@@ -48899,7 +48875,7 @@ let cgtu_AceScreen_show = $this => {
             var$5[var$6] = Long_ZERO;
             var$6 = var$8;
         }
-        $this.$iterations12 = Long_ZERO;
+        $this.$iterations13 = Long_ZERO;
         return;
     }
     var$1 = new cbgu_GdxRuntimeException;
@@ -48969,11 +48945,11 @@ cgtu_AceScreen_render = ($this, $delta) => {
         return;
     cbg_Gdx_gl.$glClearColor(1.0, 1.0, 1.0, 1.0);
     cbg_Gdx_gl.$glClear(16384);
-    $camera = $this.$viewport26.$camera;
+    $camera = $this.$viewport24.$camera;
     cbgg_OrthographicCamera_update($camera, 1);
     var$8 = cbg_Gdx_input.$pressedKeys.data;
     if (var$8[29]) {
-        var$2 = $this.$amounts4.data;
+        var$2 = $this.$amounts6.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -48987,10 +48963,10 @@ cgtu_AceScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations12 = Long_ZERO;
+        $this.$iterations13 = Long_ZERO;
     }
     if (var$8[30]) {
-        var$2 = $this.$amounts4.data;
+        var$2 = $this.$amounts6.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -49004,10 +48980,10 @@ cgtu_AceScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations12 = Long_ZERO;
+        $this.$iterations13 = Long_ZERO;
     }
     if (var$8[31]) {
-        var$2 = $this.$amounts4.data;
+        var$2 = $this.$amounts6.data;
         $i = 0;
         $x = var$2.length;
         if ($i > $x) {
@@ -49021,26 +48997,26 @@ cgtu_AceScreen_render = ($this, $delta) => {
             var$2[$i] = Long_ZERO;
             $i = $j;
         }
-        $this.$iterations12 = Long_ZERO;
+        $this.$iterations13 = Long_ZERO;
     }
-    $this.$iterations12 = Long_add($this.$iterations12, Long_fromInt(1));
+    $this.$iterations13 = Long_add($this.$iterations13, Long_fromInt(1));
     $i = 0;
     while ($i < 524288) {
-        var$3 = $this.$random31;
+        var$3 = $this.$random29;
         var$10 = var$3.$stateA;
         var$11 = var$3.$stateB;
-        var$12 = var$3.$stateC0;
-        var$13 = var$3.$stateD0;
+        var$12 = var$3.$stateC;
+        var$13 = var$3.$stateD;
         var$14 = var$3.$stateE;
         var$3.$stateA = Long_add(var$10, Long_create(2135587861, 2654435769));
         var$3.$stateB = Long_xor(var$10, var$14);
-        var$3.$stateC0 = Long_add(var$11, var$13);
-        var$3.$stateD0 = Long_or(Long_shl(var$12, 52), Long_shru(var$12, 12));
+        var$3.$stateC = Long_add(var$11, var$13);
+        var$3.$stateD = Long_or(Long_shl(var$12, 52), Long_shru(var$12, 12));
         var$15 = Long_sub(var$11, var$12);
         var$3.$stateE = var$15;
         $m = Long_lo(Long_shru(var$15, 55));
         if ($m >= 0 && $m < 512) {
-            var$2 = $this.$amounts4.data;
+            var$2 = $this.$amounts6.data;
             var$2[$m] = Long_add(var$2[$m], Long_fromInt(1));
         }
         $i = $i + 1 | 0;
@@ -49058,7 +49034,7 @@ cgtu_AceScreen_render = ($this, $delta) => {
         cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0, 0.0);
         var$3 = $this.$renderer28;
         var$3.$vertices.data[var$3.$vertexIdx + var$3.$colorOffset | 0] = $color;
-        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts4.data[$x]) / Long_toNumber($this.$iterations12), 0.0);
+        cbggg_ImmediateModeRenderer20_vertex(var$3, $delta, 0.0625 * Long_toNumber($this.$amounts6.data[$x]) / Long_toNumber($this.$iterations13), 0.0);
         $x = $x + 1 | 0;
     }
     $j = 8;
@@ -49212,7 +49188,7 @@ cgtu_AceScreen_render = ($this, $delta) => {
 },
 cgtu_AceScreen_resize = ($this, $width, $height) => {
     let var$3, var$4, var$5, var$6;
-    var$3 = $this.$viewport26;
+    var$3 = $this.$viewport24;
     var$4 = var$3;
     var$4.$screenX = 0;
     var$4.$screenY = 0;
@@ -49225,7 +49201,7 @@ cgtu_AceScreen_resize = ($this, $width, $height) => {
     var$4.$worldWidth = var$5;
     var$4.$worldHeight = var$6;
     cbguv_Viewport_apply(var$4, 1);
-    cbguv_Viewport_apply($this.$viewport26, 1);
+    cbguv_Viewport_apply($this.$viewport24, 1);
 };
 function jl_Thread$start$lambda$_4_0() {
     jl_Object.call(this);
@@ -59312,58 +59288,58 @@ cbggg_ImmediateModeRenderer20_createFragmentShader = ($hasNormals, $hasColors, $
 };
 function cgtr_Chip32Random() {
     let a = this; cgtr_EnhancedRandom.call(a);
-    a.$stateA1 = 0;
-    a.$stateB1 = 0;
-    a.$stateC1 = 0;
-    a.$stateD1 = 0;
+    a.$stateA0 = 0;
+    a.$stateB0 = 0;
+    a.$stateC0 = 0;
+    a.$stateD0 = 0;
 }
 let cgtr_Chip32Random_nextLong = $this => {
     let $fa, $fb, $fc, $fd, $hi, $ga, $gb, $gc, $gd, $lo;
-    $fa = $this.$stateA1;
-    $fb = $this.$stateB1;
-    $fc = $this.$stateC1;
-    $fd = $this.$stateD1;
+    $fa = $this.$stateA0;
+    $fb = $this.$stateB0;
+    $fc = $this.$stateC0;
+    $fd = $this.$stateD0;
     $hi = ($fa << 14 | ($fa >>> 18 | 0)) ^ (($fb << 23 | ($fb >>> 9 | 0)) + $fc | 0);
     $ga = $fb + $fc | 0;
     $gb = $fa ^ $fd;
     $gc = $fb << 11 | ($fb >>> 21 | 0);
     $gd = $fd + (-1640531527) | 0;
     $lo = ($ga << 14 | ($ga >>> 18 | 0)) ^ (($gb << 23 | ($gb >>> 9 | 0)) + $gc | 0);
-    $this.$stateA1 = $gb + $gc | 0;
-    $this.$stateB1 = $ga ^ $gd;
-    $this.$stateC1 = $gb << 11 | ($gb >>> 21 | 0);
-    $this.$stateD1 = $fd + 1013904242 | 0;
+    $this.$stateA0 = $gb + $gc | 0;
+    $this.$stateB0 = $ga ^ $gd;
+    $this.$stateC0 = $gb << 11 | ($gb >>> 21 | 0);
+    $this.$stateD0 = $fd + 1013904242 | 0;
     return Long_xor(Long_shl(Long_fromInt($hi), 32), Long_fromInt($lo));
 },
 cgtr_Chip32Random_nextInt = ($this, $bound) => {
     let $fa, $fb, $fc, $fd, $res;
-    $fa = $this.$stateA1;
-    $fb = $this.$stateB1;
-    $fc = $this.$stateC1;
-    $fd = $this.$stateD1;
+    $fa = $this.$stateA0;
+    $fb = $this.$stateB0;
+    $fc = $this.$stateC0;
+    $fd = $this.$stateD0;
     $res = ($fa << 14 | ($fa >>> 18 | 0)) ^ (($fb << 23 | ($fb >>> 9 | 0)) + $fc | 0);
-    $this.$stateA1 = $fb + $fc | 0;
-    $this.$stateB1 = $fd ^ $fa;
-    $this.$stateC1 = $fb << 11 | ($fb >>> 21 | 0);
-    $this.$stateD1 = $fd + (-1640531527) | 0;
+    $this.$stateA0 = $fb + $fc | 0;
+    $this.$stateB0 = $fd ^ $fa;
+    $this.$stateC0 = $fb << 11 | ($fb >>> 21 | 0);
+    $this.$stateD0 = $fd + (-1640531527) | 0;
     return Long_hi(Long_mul(Long_fromInt($bound), Long_and(Long_fromInt($res), Long_create(4294967295, 0)))) & ($bound >> 31 ^ (-1));
 },
 cgtr_Chip32Random_nextLong0 = ($this, $bound) => {
     let $ga, $gb, $gc, $gd, $randLow, $fa, $fb, $fc, $fd, $randHigh, $boundLow, $boundHigh;
-    $ga = $this.$stateA1;
-    $gb = $this.$stateB1;
-    $gc = $this.$stateC1;
-    $gd = $this.$stateD1;
+    $ga = $this.$stateA0;
+    $gb = $this.$stateB0;
+    $gc = $this.$stateC0;
+    $gd = $this.$stateD0;
     $randLow = Long_and(Long_fromInt(($ga << 14 | ($ga >>> 18 | 0)) ^ (($gb << 23 | ($gb >>> 9 | 0)) + $gc | 0)), Long_create(4294967295, 0));
     $fa = $gb + $gc | 0;
     $fb = $gd ^ $ga;
     $fc = $gb << 11 | ($gb >>> 21 | 0);
     $fd = $gd + (-1640531527) | 0;
     $randHigh = Long_and(Long_fromInt(($fa << 14 | ($fa >>> 18 | 0)) ^ (($fb << 23 | ($fb >>> 9 | 0)) + $fc | 0)), Long_create(4294967295, 0));
-    $this.$stateA1 = $fb + $fc | 0;
-    $this.$stateB1 = $fd ^ $fa;
-    $this.$stateC1 = $fb << 11 | ($fb >>> 21 | 0);
-    $this.$stateD1 = $gd + 1013904242 | 0;
+    $this.$stateA0 = $fb + $fc | 0;
+    $this.$stateB0 = $fd ^ $fa;
+    $this.$stateC0 = $fb << 11 | ($fb >>> 21 | 0);
+    $this.$stateD0 = $gd + 1013904242 | 0;
     if (Long_ge(Long_fromInt(1), $bound))
         return Long_ZERO;
     $boundLow = Long_and($bound, Long_create(4294967295, 0));
@@ -59372,30 +59348,30 @@ cgtr_Chip32Random_nextLong0 = ($this, $bound) => {
 },
 cgtr_Chip32Random_nextFloat = $this => {
     let $fa, $fb, $fc, $fd, $res;
-    $fa = $this.$stateA1;
-    $fb = $this.$stateB1;
-    $fc = $this.$stateC1;
-    $fd = $this.$stateD1;
+    $fa = $this.$stateA0;
+    $fb = $this.$stateB0;
+    $fc = $this.$stateC0;
+    $fd = $this.$stateD0;
     $res = ($fa << 14 | ($fa >>> 18 | 0)) ^ (($fb << 23 | ($fb >>> 9 | 0)) + $fc | 0);
-    $this.$stateA1 = $fb + $fc | 0;
-    $this.$stateB1 = $fd ^ $fa;
-    $this.$stateC1 = $fb << 11 | ($fb >>> 21 | 0);
-    $this.$stateD1 = $fd + (-1640531527) | 0;
+    $this.$stateA0 = $fb + $fc | 0;
+    $this.$stateB0 = $fd ^ $fa;
+    $this.$stateC0 = $fb << 11 | ($fb >>> 21 | 0);
+    $this.$stateD0 = $fd + (-1640531527) | 0;
     return ($res >>> 8 | 0) * 5.9604644775390625E-8;
 };
 function cgtr_ChopRandom() {
     let a = this; cgtr_EnhancedRandom.call(a);
-    a.$stateA2 = 0;
-    a.$stateB2 = 0;
-    a.$stateC3 = 0;
-    a.$stateD3 = 0;
+    a.$stateA1 = 0;
+    a.$stateB1 = 0;
+    a.$stateC2 = 0;
+    a.$stateD2 = 0;
 }
 let cgtr_ChopRandom_nextLong = $this => {
     let $fa, $fb, $fc, $fd, $ga, $gb, $gc, $gd, $sa, $sb;
-    $fa = $this.$stateA2;
-    $fb = $this.$stateB2;
-    $fc = $this.$stateC3;
-    $fd = $this.$stateD3;
+    $fa = $this.$stateA1;
+    $fb = $this.$stateB1;
+    $fc = $this.$stateC2;
+    $fd = $this.$stateD2;
     $ga = $fb ^ $fc;
     $ga = $ga << 26 | ($ga >>> 6 | 0);
     $gb = $fc ^ $fd;
@@ -59403,25 +59379,25 @@ let cgtr_ChopRandom_nextLong = $this => {
     $gc = $fa ^ ($fb + $fc | 0);
     $gd = $fd + (-1380601499) | 0;
     $sa = $gb ^ $gc;
-    $this.$stateA2 = $sa << 26 | ($sa >>> 6 | 0);
+    $this.$stateA1 = $sa << 26 | ($sa >>> 6 | 0);
     $sb = $gc ^ $gd;
-    $this.$stateB2 = $sb << 11 | ($sb >>> 21 | 0);
-    $this.$stateC3 = $ga ^ ($gb + $gc | 0);
-    $this.$stateD3 = $gd + (-1380601499) | 0;
+    $this.$stateB1 = $sb << 11 | ($sb >>> 21 | 0);
+    $this.$stateC2 = $ga ^ ($gb + $gc | 0);
+    $this.$stateD2 = $gd + (-1380601499) | 0;
     return Long_xor(Long_shl(Long_fromInt($fc), 32), Long_fromInt($gc));
 },
 cgtr_ChopRandom_nextInt = $this => {
     let $fa, $fb, $fc, $fd, $sa, $sb;
-    $fa = $this.$stateA2;
-    $fb = $this.$stateB2;
-    $fc = $this.$stateC3;
-    $fd = $this.$stateD3;
+    $fa = $this.$stateA1;
+    $fb = $this.$stateB1;
+    $fc = $this.$stateC2;
+    $fd = $this.$stateD2;
     $sa = $fb ^ $fc;
-    $this.$stateA2 = $sa << 26 | ($sa >>> 6 | 0);
+    $this.$stateA1 = $sa << 26 | ($sa >>> 6 | 0);
     $sb = $fc ^ $fd;
-    $this.$stateB2 = $sb << 11 | ($sb >>> 21 | 0);
-    $this.$stateC3 = $fa ^ ($fb + $fc | 0);
-    $this.$stateD3 = $fd + (-1380601499) | 0;
+    $this.$stateB1 = $sb << 11 | ($sb >>> 21 | 0);
+    $this.$stateC2 = $fa ^ ($fb + $fc | 0);
+    $this.$stateD2 = $fd + (-1380601499) | 0;
     return $fc;
 },
 cgtr_ChopRandom_nextLong0 = ($this, $inner, $outer) => {
@@ -59439,46 +59415,46 @@ function cgtr_Xoshiro128PlusPlusRandom() {
     let a = this; cgtr_EnhancedRandom.call(a);
     a.$stateA3 = 0;
     a.$stateB3 = 0;
-    a.$stateC2 = 0;
-    a.$stateD2 = 0;
+    a.$stateC1 = 0;
+    a.$stateD1 = 0;
 }
 let cgtr_Xoshiro128PlusPlusRandom_nextLong = $this => {
     let var$1, var$2, $h, var$4, var$5, $l, var$7, $t;
     var$1 = $this.$stateA3;
-    var$2 = $this.$stateD2;
+    var$2 = $this.$stateD1;
     $h = var$1 + var$2 | 0;
     $h = ($h << 7 | ($h >>> 25 | 0)) + var$1 | 0;
-    var$4 = $this.$stateC2;
+    var$4 = $this.$stateC1;
     var$5 = $this.$stateB3;
     $l = var$4 - var$5 | 0;
     var$7 = ($l << 13 | ($l >>> 19 | 0)) + var$4 | 0;
     $t = var$5 << 9;
     var$4 = var$4 ^ var$1;
-    $this.$stateC2 = var$4;
+    $this.$stateC1 = var$4;
     var$2 = var$2 ^ var$5;
-    $this.$stateD2 = var$2;
+    $this.$stateD1 = var$2;
     $this.$stateB3 = var$5 ^ var$4;
     $this.$stateA3 = var$1 ^ var$2;
-    $this.$stateC2 = var$4 ^ $t;
-    $this.$stateD2 = var$2 << 11 | (var$2 >>> 21 | 0);
+    $this.$stateC1 = var$4 ^ $t;
+    $this.$stateD1 = var$2 << 11 | (var$2 >>> 21 | 0);
     return Long_xor(Long_shl(Long_fromInt($h), 32), Long_and(Long_fromInt(var$7), Long_create(4294967295, 0)));
 },
 cgtr_Xoshiro128PlusPlusRandom_nextInt = $this => {
     let var$1, var$2, $result, var$4, var$5, $t;
     var$1 = $this.$stateA3;
-    var$2 = $this.$stateD2;
+    var$2 = $this.$stateD1;
     $result = var$1 + var$2 | 0;
     var$4 = ($result << 7 | ($result >>> 25 | 0)) + var$1 | 0;
     var$5 = $this.$stateB3;
     $t = var$5 << 9;
-    $result = $this.$stateC2 ^ var$1;
-    $this.$stateC2 = $result;
+    $result = $this.$stateC1 ^ var$1;
+    $this.$stateC1 = $result;
     var$2 = var$2 ^ var$5;
-    $this.$stateD2 = var$2;
+    $this.$stateD1 = var$2;
     $this.$stateB3 = var$5 ^ $result;
     $this.$stateA3 = var$1 ^ var$2;
-    $this.$stateC2 = $result ^ $t;
-    $this.$stateD2 = var$2 << 11 | (var$2 >>> 21 | 0);
+    $this.$stateC1 = $result ^ $t;
+    $this.$stateD1 = var$2 << 11 | (var$2 >>> 21 | 0);
     return var$4;
 },
 cgtr_Xoshiro128PlusPlusRandom_nextLong0 = ($this, $inner, $outer) => {
@@ -59493,153 +59469,74 @@ cgtr_Xoshiro128PlusPlusRandom_nextLong0 = ($this, $inner, $outer) => {
     $boundHigh = Long_shru($bound, 32);
     return Long_add(Long_add(Long_add($inner, Long_shru(Long_mul($randHigh, $boundLow), 32)), Long_shru(Long_mul($randLow, $boundHigh), 32)), Long_mul($randHigh, $boundHigh));
 };
-function cgtr_Xoshiro160RoadroxoRandom() {
+function cgtr_Chock32Random() {
     let a = this; cgtr_EnhancedRandom.call(a);
-    a.$stateA0 = 0;
-    a.$stateB0 = 0;
-    a.$stateC = 0;
-    a.$stateD = 0;
-    a.$stateE0 = 0;
+    a.$stateA2 = 0;
+    a.$stateB2 = 0;
+    a.$stateC3 = 0;
+    a.$stateD3 = 0;
 }
-let cgtr_Xoshiro160RoadroxoRandom_nextLong = $this => {
-    let $lo, $t, var$3, $hi, var$5, var$6, var$7, var$8, var$9, var$10;
-    $lo = $this.$stateE0;
-    $t = $lo << 23 | ($lo >>> 9 | 0);
-    var$3 = $this.$stateA0;
-    $hi = var$3 << 14 | (var$3 >>> 18 | 0);
-    var$5 = $this.$stateB0;
-    $hi = $t ^ ($hi + var$5 | 0);
-    $t = var$5 << 9;
-    var$6 = $this.$stateD;
-    var$7 = $lo + ((-1017753963) ^ var$6) | 0;
-    $this.$stateE0 = var$7;
-    $lo = $this.$stateC ^ var$3;
-    $this.$stateC = $lo;
-    var$8 = var$6 ^ var$5;
-    $this.$stateD = var$8;
-    var$6 = var$5 ^ $lo;
-    $this.$stateB0 = var$6;
-    var$9 = var$3 ^ var$8;
-    $this.$stateA0 = var$9;
-    var$10 = $lo ^ $t;
-    $this.$stateC = var$10;
-    var$5 = var$8 << 11 | (var$8 >>> 21 | 0);
-    $this.$stateD = var$5;
-    $lo = (var$7 << 23 | (var$7 >>> 9 | 0)) ^ ((var$9 << 14 | (var$9 >>> 18 | 0)) + var$6 | 0);
-    $t = var$6 << 9;
-    $this.$stateE0 = var$7 + ((-1017753963) ^ var$5) | 0;
-    var$3 = var$10 ^ var$9;
-    $this.$stateC = var$3;
-    var$5 = var$5 ^ var$6;
-    $this.$stateD = var$5;
-    $this.$stateB0 = var$6 ^ var$3;
-    $this.$stateA0 = var$9 ^ var$5;
-    $this.$stateC = var$3 ^ $t;
-    $this.$stateD = var$5 << 11 | (var$5 >>> 21 | 0);
-    return Long_xor(Long_shl(Long_fromInt($hi), 32), Long_fromInt($lo));
+let cgtr_Chock32Random_nextLong = $this => {
+    let $fa, $fb, $fc, $fd, $hi, $ga, $gb, $gc, $gd, $lo;
+    $fa = $this.$stateA2;
+    $fb = $this.$stateB2;
+    $fc = $this.$stateC3;
+    $fd = $this.$stateD3;
+    $hi = $fa + $fb | 0;
+    $ga = $fb - $fc | 0;
+    $gb = $fa ^ $fd;
+    $gc = $fb << 11 | ($fb >>> 21 | 0);
+    $gd = $fd + (-1380601499) | 0;
+    $lo = $ga + $gb | 0;
+    $this.$stateA2 = $gb - $gc | 0;
+    $this.$stateB2 = $ga ^ $gd;
+    $this.$stateC3 = $gb << 11 | ($gb >>> 21 | 0);
+    $this.$stateD3 = $gd + (-1380601499) | 0;
+    return Long_xor(Long_shl(Long_fromInt($hi ^ ($hi << 14 | ($hi >>> 18 | 0)) ^ ($hi << 23 | ($hi >>> 9 | 0))), 32), Long_fromInt($lo ^ ($lo << 14 | ($lo >>> 18 | 0)) ^ ($lo << 23 | ($lo >>> 9 | 0))));
 },
-cgtr_Xoshiro160RoadroxoRandom_nextInt = ($this, $bound) => {
-    let var$2, $t, var$4, $res, var$6, var$7, var$8;
-    var$2 = $this.$stateE0;
-    $t = var$2 << 23 | (var$2 >>> 9 | 0);
-    var$4 = $this.$stateA0;
-    $res = var$4 << 14 | (var$4 >>> 18 | 0);
-    var$6 = $this.$stateB0;
-    $res = $t ^ ($res + var$6 | 0);
-    $t = var$6 << 9;
-    var$7 = $this.$stateD;
-    $this.$stateE0 = var$2 + ((-1017753963) ^ var$7) | 0;
-    var$2 = $this.$stateC ^ var$4;
-    $this.$stateC = var$2;
-    var$8 = var$7 ^ var$6;
-    $this.$stateD = var$8;
-    $this.$stateB0 = var$6 ^ var$2;
-    $this.$stateA0 = var$4 ^ var$8;
-    $this.$stateC = var$2 ^ $t;
-    $this.$stateD = var$8 << 11 | (var$8 >>> 21 | 0);
-    return Long_hi(Long_mul(Long_fromInt($bound), Long_and(Long_fromInt($res), Long_create(4294967295, 0)))) & ($bound >> 31 ^ (-1));
+cgtr_Chock32Random_nextInt = $this => {
+    let $fa, $fb, $fc, $fd, $res;
+    $fa = $this.$stateA2;
+    $fb = $this.$stateB2;
+    $fc = $this.$stateC3;
+    $fd = $this.$stateD3;
+    $res = $fa + $fb | 0;
+    $this.$stateA2 = $fb - $fc | 0;
+    $this.$stateB2 = $fa ^ $fd;
+    $this.$stateC3 = $fb << 11 | ($fb >>> 21 | 0);
+    $this.$stateD3 = $fd + (-1380601499) | 0;
+    return $res ^ ($res << 14 | ($res >>> 18 | 0)) ^ ($res << 23 | ($res >>> 9 | 0));
 },
-cgtr_Xoshiro160RoadroxoRandom_nextLong0 = ($this, $bound) => {
-    let var$2, var$3, var$4, $t, var$6, $randHigh, var$8, $randLow, var$10, $boundLow, $boundHigh;
-    var$2 = $this.$stateE0;
-    var$3 = var$2 << 23 | (var$2 >>> 9 | 0);
-    var$4 = $this.$stateA0;
-    $t = var$4 << 14 | (var$4 >>> 18 | 0);
-    var$6 = $this.$stateB0;
-    $randHigh = Long_and(Long_fromInt(var$3 ^ ($t + var$6 | 0)), Long_create(4294967295, 0));
-    $t = var$6 << 9;
-    var$8 = $this.$stateD;
-    var$2 = var$2 + ((-1017753963) ^ var$8) | 0;
-    $this.$stateE0 = var$2;
-    var$3 = $this.$stateC ^ var$4;
-    $this.$stateC = var$3;
-    var$8 = var$8 ^ var$6;
-    $this.$stateD = var$8;
-    var$6 = var$6 ^ var$3;
-    $this.$stateB0 = var$6;
-    var$4 = var$4 ^ var$8;
-    $this.$stateA0 = var$4;
-    var$3 = var$3 ^ $t;
-    $this.$stateC = var$3;
-    var$8 = var$8 << 11 | (var$8 >>> 21 | 0);
-    $this.$stateD = var$8;
-    $randLow = Long_and(Long_fromInt((var$2 << 23 | (var$2 >>> 9 | 0)) ^ ((var$4 << 14 | (var$4 >>> 18 | 0)) + var$6 | 0)), Long_create(4294967295, 0));
-    var$10 = var$6 << 9;
-    $this.$stateE0 = var$2 + ((-1017753963) ^ var$8) | 0;
-    $t = var$3 ^ var$4;
-    $this.$stateC = $t;
-    var$2 = var$8 ^ var$6;
-    $this.$stateD = var$2;
-    $this.$stateB0 = var$6 ^ $t;
-    $this.$stateA0 = var$4 ^ var$2;
-    $this.$stateC = $t ^ var$10;
-    $this.$stateD = var$2 << 11 | (var$2 >>> 21 | 0);
-    if (Long_ge(Long_fromInt(1), $bound))
-        return Long_ZERO;
+cgtr_Chock32Random_nextLong0 = ($this, $inner, $outer) => {
+    let $randLow, $randHigh, $bound, $boundLow, $boundHigh;
+    $randLow = Long_and(Long_fromInt(cgtr_Chock32Random_nextInt($this)), Long_create(4294967295, 0));
+    $randHigh = Long_and(Long_fromInt(cgtr_Chock32Random_nextInt($this)), Long_create(4294967295, 0));
+    if (Long_ge($inner, $outer))
+        return $inner;
+    $bound = Long_sub($outer, $inner);
     $boundLow = Long_and($bound, Long_create(4294967295, 0));
     $boundHigh = Long_shru($bound, 32);
-    return Long_add(Long_add(Long_shru(Long_mul($randHigh, $boundLow), 32), Long_shru(Long_mul($randLow, $boundHigh), 32)), Long_mul($randHigh, $boundHigh));
-},
-cgtr_Xoshiro160RoadroxoRandom_nextFloat = $this => {
-    let var$1, $res, var$3, var$4, var$5, $t, var$7;
-    var$1 = $this.$stateE0;
-    $res = var$1 << 23 | (var$1 >>> 9 | 0);
-    var$3 = $this.$stateA0;
-    var$4 = var$3 << 14 | (var$3 >>> 18 | 0);
-    var$5 = $this.$stateB0;
-    $res = $res ^ (var$4 + var$5 | 0);
-    $t = var$5 << 9;
-    var$7 = $this.$stateD;
-    $this.$stateE0 = var$1 + ((-1017753963) ^ var$7) | 0;
-    var$4 = $this.$stateC ^ var$3;
-    $this.$stateC = var$4;
-    var$1 = var$7 ^ var$5;
-    $this.$stateD = var$1;
-    $this.$stateB0 = var$5 ^ var$4;
-    $this.$stateA0 = var$3 ^ var$1;
-    $this.$stateC = var$4 ^ $t;
-    $this.$stateD = var$1 << 11 | (var$1 >>> 21 | 0);
-    return ($res >>> 8 | 0) * 5.9604644775390625E-8;
+    return Long_add(Long_add(Long_add($inner, Long_shru(Long_mul($randHigh, $boundLow), 32)), Long_shru(Long_mul($randLow, $boundHigh), 32)), Long_mul($randHigh, $boundHigh));
 };
 function cgtr_AceRandom() {
     let a = this; cgtr_EnhancedRandom.call(a);
     a.$stateA = Long_ZERO;
     a.$stateB = Long_ZERO;
-    a.$stateC0 = Long_ZERO;
-    a.$stateD0 = Long_ZERO;
+    a.$stateC = Long_ZERO;
+    a.$stateD = Long_ZERO;
     a.$stateE = Long_ZERO;
 }
 let cgtr_AceRandom_nextLong = $this => {
     let $fa, $fb, $fc, $fd, $fe, var$6;
     $fa = $this.$stateA;
     $fb = $this.$stateB;
-    $fc = $this.$stateC0;
-    $fd = $this.$stateD0;
+    $fc = $this.$stateC;
+    $fd = $this.$stateD;
     $fe = $this.$stateE;
     $this.$stateA = Long_add($fa, Long_create(2135587861, 2654435769));
     $this.$stateB = Long_xor($fa, $fe);
-    $this.$stateC0 = Long_add($fb, $fd);
-    $this.$stateD0 = Long_or(Long_shl($fc, 52), Long_shru($fc, 12));
+    $this.$stateC = Long_add($fb, $fd);
+    $this.$stateD = Long_or(Long_shl($fc, 52), Long_shru($fc, 12));
     var$6 = Long_sub($fb, $fc);
     $this.$stateE = var$6;
     return var$6;
@@ -64948,37 +64845,37 @@ cgtf_RandomScreen, 0, cbg_ScreenAdapter, [], 0, 3, 0, 0, ["$show", $rt_wrapFunct
 cgtf_ChipScreen, 0, cbg_ScreenAdapter, [], 0, 3, 0, 0, ["$show", $rt_wrapFunction0(cgtf_ChipScreen_show), "$render", $rt_wrapFunction1(cgtf_ChipScreen_render), "$resize0", $rt_wrapFunction2(cgtf_ChipScreen_resize)],
 cgtf_ChopScreen, 0, cbg_ScreenAdapter, [], 0, 3, 0, 0, ["$show", $rt_wrapFunction0(cgtf_ChopScreen_show), "$render", $rt_wrapFunction1(cgtf_ChopScreen_render), "$resize0", $rt_wrapFunction2(cgtf_ChopScreen_resize)],
 cgtf_Xoshiro128PPScreen, 0, cbg_ScreenAdapter, [], 0, 3, 0, 0, ["$show", $rt_wrapFunction0(cgtf_Xoshiro128PPScreen_show), "$render", $rt_wrapFunction1(cgtf_Xoshiro128PPScreen_render), "$resize0", $rt_wrapFunction2(cgtf_Xoshiro128PPScreen_resize)],
-cgtf_RarxScreen, 0, cbg_ScreenAdapter, [], 0, 3, 0, 0, ["$show", $rt_wrapFunction0(cgtf_RarxScreen_show), "$render", $rt_wrapFunction1(cgtf_RarxScreen_render), "$resize0", $rt_wrapFunction2(cgtf_RarxScreen_resize)],
+cgtf_ChockScreen, 0, cbg_ScreenAdapter, [], 0, 3, 0, 0, ["$show", $rt_wrapFunction0(cgtf_ChockScreen_show), "$render", $rt_wrapFunction1(cgtf_ChockScreen_render), "$resize0", $rt_wrapFunction2(cgtf_ChockScreen_resize)],
 cgtf_AceScreen, 0, cbg_ScreenAdapter, [], 0, 3, 0, 0, ["$show", $rt_wrapFunction0(cgtf_AceScreen_show), "$render", $rt_wrapFunction1(cgtf_AceScreen_render), "$resize0", $rt_wrapFunction2(cgtf_AceScreen_resize)],
 cgte_RandomScreen, 0, cbg_ScreenAdapter, [], 0, 3, 0, 0, ["$show", $rt_wrapFunction0(cgte_RandomScreen_show), "$render", $rt_wrapFunction1(cgte_RandomScreen_render), "$resize0", $rt_wrapFunction2(cgte_RandomScreen_resize)],
 cgte_ChipScreen, 0, cbg_ScreenAdapter, [], 0, 3, 0, 0, ["$show", $rt_wrapFunction0(cgte_ChipScreen_show), "$render", $rt_wrapFunction1(cgte_ChipScreen_render), "$resize0", $rt_wrapFunction2(cgte_ChipScreen_resize)],
 cgte_ChopScreen, 0, cbg_ScreenAdapter, [], 0, 3, 0, 0, ["$show", $rt_wrapFunction0(cgte_ChopScreen_show), "$render", $rt_wrapFunction1(cgte_ChopScreen_render), "$resize0", $rt_wrapFunction2(cgte_ChopScreen_resize)],
 cgte_Xoshiro128PPScreen, 0, cbg_ScreenAdapter, [], 0, 3, 0, 0, ["$show", $rt_wrapFunction0(cgte_Xoshiro128PPScreen_show), "$render", $rt_wrapFunction1(cgte_Xoshiro128PPScreen_render), "$resize0", $rt_wrapFunction2(cgte_Xoshiro128PPScreen_resize)],
-cgte_RarxScreen, 0, cbg_ScreenAdapter, [], 0, 3, 0, 0, ["$show", $rt_wrapFunction0(cgte_RarxScreen_show), "$render", $rt_wrapFunction1(cgte_RarxScreen_render), "$resize0", $rt_wrapFunction2(cgte_RarxScreen_resize)],
+cgte_ChockScreen, 0, cbg_ScreenAdapter, [], 0, 3, 0, 0, ["$show", $rt_wrapFunction0(cgte_ChockScreen_show), "$render", $rt_wrapFunction1(cgte_ChockScreen_render), "$resize0", $rt_wrapFunction2(cgte_ChockScreen_resize)],
 cgte_AceScreen, 0, cbg_ScreenAdapter, [], 0, 3, 0, 0, ["$show", $rt_wrapFunction0(cgte_AceScreen_show), "$render", $rt_wrapFunction1(cgte_AceScreen_render), "$resize0", $rt_wrapFunction2(cgte_AceScreen_resize)],
 cgtd_RandomScreen, 0, cbg_ScreenAdapter, [], 0, 3, 0, 0, ["$show", $rt_wrapFunction0(cgtd_RandomScreen_show), "$render", $rt_wrapFunction1(cgtd_RandomScreen_render), "$resize0", $rt_wrapFunction2(cgtd_RandomScreen_resize)],
 cgtd_ChipScreen, 0, cbg_ScreenAdapter, [], 0, 3, 0, 0, ["$show", $rt_wrapFunction0(cgtd_ChipScreen_show), "$render", $rt_wrapFunction1(cgtd_ChipScreen_render), "$resize0", $rt_wrapFunction2(cgtd_ChipScreen_resize)],
 cgtd_ChopScreen, 0, cbg_ScreenAdapter, [], 0, 3, 0, 0, ["$show", $rt_wrapFunction0(cgtd_ChopScreen_show), "$render", $rt_wrapFunction1(cgtd_ChopScreen_render), "$resize0", $rt_wrapFunction2(cgtd_ChopScreen_resize)],
 cgtd_Xoshiro128PPScreen, 0, cbg_ScreenAdapter, [], 0, 3, 0, 0, ["$show", $rt_wrapFunction0(cgtd_Xoshiro128PPScreen_show), "$render", $rt_wrapFunction1(cgtd_Xoshiro128PPScreen_render), "$resize0", $rt_wrapFunction2(cgtd_Xoshiro128PPScreen_resize)],
-cgtd_RarxScreen, 0, cbg_ScreenAdapter, [], 0, 3, 0, 0, ["$show", $rt_wrapFunction0(cgtd_RarxScreen_show), "$render", $rt_wrapFunction1(cgtd_RarxScreen_render), "$resize0", $rt_wrapFunction2(cgtd_RarxScreen_resize)],
+cgtd_ChockScreen, 0, cbg_ScreenAdapter, [], 0, 3, 0, 0, ["$show", $rt_wrapFunction0(cgtd_ChockScreen_show), "$render", $rt_wrapFunction1(cgtd_ChockScreen_render), "$resize0", $rt_wrapFunction2(cgtd_ChockScreen_resize)],
 cgtd_AceScreen, 0, cbg_ScreenAdapter, [], 0, 3, 0, 0, ["$show", $rt_wrapFunction0(cgtd_AceScreen_show), "$render", $rt_wrapFunction1(cgtd_AceScreen_render), "$resize0", $rt_wrapFunction2(cgtd_AceScreen_resize)],
 cgti_RandomScreen, 0, cbg_ScreenAdapter, [], 0, 3, 0, 0, ["$show", $rt_wrapFunction0(cgti_RandomScreen_show), "$render", $rt_wrapFunction1(cgti_RandomScreen_render), "$resize0", $rt_wrapFunction2(cgti_RandomScreen_resize)],
 cgti_ChipScreen, 0, cbg_ScreenAdapter, [], 0, 3, 0, 0, ["$show", $rt_wrapFunction0(cgti_ChipScreen_show), "$render", $rt_wrapFunction1(cgti_ChipScreen_render), "$resize0", $rt_wrapFunction2(cgti_ChipScreen_resize)],
 cgti_ChopScreen, 0, cbg_ScreenAdapter, [], 0, 3, 0, 0, ["$show", $rt_wrapFunction0(cgti_ChopScreen_show), "$render", $rt_wrapFunction1(cgti_ChopScreen_render), "$resize0", $rt_wrapFunction2(cgti_ChopScreen_resize)],
 cgti_Xoshiro128PPScreen, 0, cbg_ScreenAdapter, [], 0, 3, 0, 0, ["$show", $rt_wrapFunction0(cgti_Xoshiro128PPScreen_show), "$render", $rt_wrapFunction1(cgti_Xoshiro128PPScreen_render), "$resize0", $rt_wrapFunction2(cgti_Xoshiro128PPScreen_resize)],
-cgti_RarxScreen, 0, cbg_ScreenAdapter, [], 0, 3, 0, 0, ["$show", $rt_wrapFunction0(cgti_RarxScreen_show), "$render", $rt_wrapFunction1(cgti_RarxScreen_render), "$resize0", $rt_wrapFunction2(cgti_RarxScreen_resize)],
+cgti_ChockScreen, 0, cbg_ScreenAdapter, [], 0, 3, 0, 0, ["$show", $rt_wrapFunction0(cgti_ChockScreen_show), "$render", $rt_wrapFunction1(cgti_ChockScreen_render), "$resize0", $rt_wrapFunction2(cgti_ChockScreen_resize)],
 cgti_AceScreen, 0, cbg_ScreenAdapter, [], 0, 3, 0, 0, ["$show", $rt_wrapFunction0(cgti_AceScreen_show), "$render", $rt_wrapFunction1(cgti_AceScreen_render), "$resize0", $rt_wrapFunction2(cgti_AceScreen_resize)],
 cgtl_RandomScreen, 0, cbg_ScreenAdapter, [], 0, 3, 0, 0, ["$show", $rt_wrapFunction0(cgtl_RandomScreen_show), "$render", $rt_wrapFunction1(cgtl_RandomScreen_render), "$resize0", $rt_wrapFunction2(cgtl_RandomScreen_resize)],
 cgtl_ChipScreen, 0, cbg_ScreenAdapter, [], 0, 3, 0, 0, ["$show", $rt_wrapFunction0(cgtl_ChipScreen_show), "$render", $rt_wrapFunction1(cgtl_ChipScreen_render), "$resize0", $rt_wrapFunction2(cgtl_ChipScreen_resize)],
 cgtl_ChopScreen, 0, cbg_ScreenAdapter, [], 0, 3, 0, 0, ["$show", $rt_wrapFunction0(cgtl_ChopScreen_show), "$render", $rt_wrapFunction1(cgtl_ChopScreen_render), "$resize0", $rt_wrapFunction2(cgtl_ChopScreen_resize)],
 cgtl_Xoshiro128PPScreen, 0, cbg_ScreenAdapter, [], 0, 3, 0, 0, ["$show", $rt_wrapFunction0(cgtl_Xoshiro128PPScreen_show), "$render", $rt_wrapFunction1(cgtl_Xoshiro128PPScreen_render), "$resize0", $rt_wrapFunction2(cgtl_Xoshiro128PPScreen_resize)],
-cgtl_RarxScreen, 0, cbg_ScreenAdapter, [], 0, 3, 0, 0, ["$show", $rt_wrapFunction0(cgtl_RarxScreen_show), "$render", $rt_wrapFunction1(cgtl_RarxScreen_render), "$resize0", $rt_wrapFunction2(cgtl_RarxScreen_resize)],
+cgtl_ChockScreen, 0, cbg_ScreenAdapter, [], 0, 3, 0, 0, ["$show", $rt_wrapFunction0(cgtl_ChockScreen_show), "$render", $rt_wrapFunction1(cgtl_ChockScreen_render), "$resize0", $rt_wrapFunction2(cgtl_ChockScreen_resize)],
 cgtl_AceScreen, 0, cbg_ScreenAdapter, [], 0, 3, 0, 0, ["$show", $rt_wrapFunction0(cgtl_AceScreen_show), "$render", $rt_wrapFunction1(cgtl_AceScreen_render), "$resize0", $rt_wrapFunction2(cgtl_AceScreen_resize)],
 cgtu_RandomScreen, 0, cbg_ScreenAdapter, [], 0, 3, 0, 0, ["$show", $rt_wrapFunction0(cgtu_RandomScreen_show), "$render", $rt_wrapFunction1(cgtu_RandomScreen_render), "$resize0", $rt_wrapFunction2(cgtu_RandomScreen_resize)],
 cgtu_ChipScreen, 0, cbg_ScreenAdapter, [], 0, 3, 0, 0, ["$show", $rt_wrapFunction0(cgtu_ChipScreen_show), "$render", $rt_wrapFunction1(cgtu_ChipScreen_render), "$resize0", $rt_wrapFunction2(cgtu_ChipScreen_resize)],
 cgtu_ChopScreen, 0, cbg_ScreenAdapter, [], 0, 3, 0, 0, ["$show", $rt_wrapFunction0(cgtu_ChopScreen_show), "$render", $rt_wrapFunction1(cgtu_ChopScreen_render), "$resize0", $rt_wrapFunction2(cgtu_ChopScreen_resize)],
 cgtu_Xoshiro128PPScreen, 0, cbg_ScreenAdapter, [], 0, 3, 0, 0, ["$show", $rt_wrapFunction0(cgtu_Xoshiro128PPScreen_show), "$render", $rt_wrapFunction1(cgtu_Xoshiro128PPScreen_render), "$resize0", $rt_wrapFunction2(cgtu_Xoshiro128PPScreen_resize)],
-cgtu_RarxScreen, 0, cbg_ScreenAdapter, [], 0, 3, 0, 0, ["$show", $rt_wrapFunction0(cgtu_RarxScreen_show), "$render", $rt_wrapFunction1(cgtu_RarxScreen_render), "$resize0", $rt_wrapFunction2(cgtu_RarxScreen_resize)],
+cgtu_ChockScreen, 0, cbg_ScreenAdapter, [], 0, 3, 0, 0, ["$show", $rt_wrapFunction0(cgtu_ChockScreen_show), "$render", $rt_wrapFunction1(cgtu_ChockScreen_render), "$resize0", $rt_wrapFunction2(cgtu_ChockScreen_resize)],
 cgtu_AceScreen, 0, cbg_ScreenAdapter, [], 0, 3, 0, 0, ["$show", $rt_wrapFunction0(cgtu_AceScreen_show), "$render", $rt_wrapFunction1(cgtu_AceScreen_render), "$resize0", $rt_wrapFunction2(cgtu_AceScreen_resize)],
 jl_Thread$start$lambda$_4_0, 0, jl_Object, [otp_PlatformRunnable], 0, 3, 0, 0, ["$run", $rt_wrapFunction0(jl_Thread$start$lambda$_4_0_run)]]);
 $rt_metadata([cgxgbtfi_IndexedDBFileData, 0, jl_Object, [otj_JSObject], 1, 3, 0, 0, 0,
@@ -65092,7 +64989,7 @@ cbggg_ImmediateModeRenderer20, 0, jl_Object, [cbggg_ImmediateModeRenderer], 0, 3
 cgtr_Chip32Random, 0, cgtr_EnhancedRandom, [], 0, 3, 0, 0, ["$nextLong", $rt_wrapFunction0(cgtr_Chip32Random_nextLong)],
 cgtr_ChopRandom, 0, cgtr_EnhancedRandom, [], 0, 3, 0, 0, ["$nextLong", $rt_wrapFunction0(cgtr_ChopRandom_nextLong), "$nextLong0", $rt_wrapFunction2(cgtr_ChopRandom_nextLong0)],
 cgtr_Xoshiro128PlusPlusRandom, 0, cgtr_EnhancedRandom, [], 0, 3, 0, 0, ["$nextLong", $rt_wrapFunction0(cgtr_Xoshiro128PlusPlusRandom_nextLong), "$nextLong0", $rt_wrapFunction2(cgtr_Xoshiro128PlusPlusRandom_nextLong0)],
-cgtr_Xoshiro160RoadroxoRandom, 0, cgtr_EnhancedRandom, [], 0, 3, 0, 0, ["$nextLong", $rt_wrapFunction0(cgtr_Xoshiro160RoadroxoRandom_nextLong)],
+cgtr_Chock32Random, 0, cgtr_EnhancedRandom, [], 0, 3, 0, 0, ["$nextLong", $rt_wrapFunction0(cgtr_Chock32Random_nextLong), "$nextLong0", $rt_wrapFunction2(cgtr_Chock32Random_nextLong0)],
 cgtr_AceRandom, 0, cgtr_EnhancedRandom, [], 0, 3, 0, 0, ["$nextLong", $rt_wrapFunction0(cgtr_AceRandom_nextLong)],
 cbggg_TextureAtlas$AtlasRegion, 0, cbggg_TextureRegion, [], 0, 3, 0, 0, 0,
 ji_ByteArrayOutputStream, 0, ji_OutputStream, [], 0, 3, 0, 0, 0,
@@ -65165,7 +65062,7 @@ $rt_stringPool(["Can\'t enter monitor from another thread synchronously", "null"
 "SmallFormVariants", "ArabicPresentationForms-B", "HalfwidthandFullwidthForms", "Specials", "Cn", "IsL", "Lu", "Ll", "Lt", "Lm", "Lo", "IsM", "Mn", "Me", "Mc", "N", "Nd", "Nl", "No", "IsZ", "Zs", "Zl", "Zp", "IsC", "Cc", "Cf", "Co", "Cs", "IsP", "Pd", "Ps", "Pe", "Pc", "Po", "IsS", "Sm", "Sc", "Sk", "So", "Pi", "Pf", "posFSet", " ", "^ ", "range:", "CompositeRangeSet:  <nonsurrogate> ", " <surrogate> ", "UCI range:", "decomposed Hangul syllable:", "UCI ", "CI ", "decomposed char:", "<DotAllQuant>", "<DotQuant>",
 "<SOL>", "WordBoundary", "PreviousMatch", "<EOL>", "EOI", "^", "DotAll", "<Unix MultiLine $>", "<MultiLine $>", "CI back reference: ", "back reference: ", "UCI back reference: ", "sequence: ", "UCI sequence: ", "CI sequence: ", "PX", "PCT", "EM", "EX", "PT", "PC", "IN", "CM", "MM", "main", "success", "failure", "Script download success: ", "Script download failed: ", "Total: ", " loaded: ", " URL: ", "#iterator() cannot be used nested.", "Buffer should have ArrayBufferView interface", "No support for buffer ",
 "Invalid assets description file. ", "1", "c", "l", "Binary", "b", "Directory", "Can\'t have more than 8191 sprites per batch: ", "a_position", "a_color", "a_texCoord0", "attribute vec4 a_position;\nattribute vec4 a_color;\nattribute vec2 a_texCoord0;\nuniform mat4 u_projTrans;\nvarying vec4 v_color;\nvarying vec2 v_texCoords;\n\nvoid main()\n{\n   v_color = a_color;\n   v_color.a = v_color.a * (255.0/254.0);\n   v_texCoords = a_texCoord0;\n   gl_Position =  u_projTrans * a_position;\n}\n", "#ifdef GL_ES\n#define LOWP lowp\nprecision mediump float;\n#else\n#define LOWP \n#endif\nvarying LOWP vec4 v_color;\nvarying vec2 v_texCoords;\nuniform sampler2D u_texture;\nvoid main()\n{\n  gl_FragColor = v_color * texture2D(u_texture, v_texCoords);\n}",
-"Error compiling shader: ", "SpriteBatch.end must be called before begin.", "SpriteBatch.begin must be called before end.", "SpriteBatch.begin must be called before draw.", "u_projTrans", "u_texture", "RndR", "nextFloat() using %s at %d FPS", "ChiR", "ChpR", "XPPR", "XRAR", "AceR", "nextExclusiveFloat() using %s at %d FPS", "nextDouble() using %s at %d FPS", "nextInt() using %s at %d FPS", "nextLong() using %s at %d FPS", "nextLong() (upper bits) using %s at %d FPS", "IndexedDB Error putting file: ", "Already loaded.",
+"Error compiling shader: ", "SpriteBatch.end must be called before begin.", "SpriteBatch.begin must be called before end.", "SpriteBatch.begin must be called before draw.", "u_projTrans", "u_texture", "RndR", "nextFloat() using %s at %d FPS", "ChiR", "ChpR", "XPPR", "ChcR", "AceR", "nextExclusiveFloat() using %s at %d FPS", "nextDouble() using %s at %d FPS", "nextInt() using %s at %d FPS", "nextLong() using %s at %d FPS", "nextLong() (upper bits) using %s at %d FPS", "IndexedDB Error putting file: ", "Already loaded.",
 "newAction must be non-null", "File is empty.", "padding=", ",", "Invalid padding.", "Missing common header.", "Invalid common header.", "lineHeight=", "Missing: lineHeight", "base=", "Missing: base", "pages=", "Missing additional page definitions.", ".*id=(\\d+)", ".*file=\"?([^\"]+)\"?", "\\\\", "Missing: file", "Page IDs must be indices starting at 0: ", "Invalid page id: ", "kernings ", "metrics ", "char ", " =", "kerning ", "Error loading font file: ", "No glyphs found.", "VertexArray", "VertexBufferObject",
 "VertexBufferObjectSubData", "VertexBufferObjectWithVAO", "Capacity is negative: ", "Mesh attempting to access memory outside of the index buffer (count: ", ", offset: ", ", max: ", ")", "attributes must be >= 1", "vertex shader must not be null", "fragment shader must not be null", "Fragment shader:\n", "Vertex shader\n", "No uniform with name \'", "\' in shader", "An attempted fetch uniform from uncompiled shader \n", "data must be a ByteBuffer or FloatBuffer", "No buffer allocated!", "IndexBufferObject cannot be used after it has been disposed.",
 "New position ", " is outside of range [0;", "New limit ", "The last float in src ", " is outside of array of size ", "Length ", " must be non-negative", "Offset ", "The last short in src ", "The last byte in dst ", "The last byte in src ", "Already prepared", "Error reading file: ", "Index ", "None", "SourceOver", "NearestNeighbour", "BiLinear", "FileType \'", "\' Not supported in web backend", "File not found: ", " (", "Nearest", "Linear", "MipMap", "MipMapNearestNearest", "MipMapLinearNearest", "MipMapNearestLinear",
