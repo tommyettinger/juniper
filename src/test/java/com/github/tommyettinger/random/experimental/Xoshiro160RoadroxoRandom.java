@@ -34,13 +34,15 @@ import com.github.tommyettinger.random.EnhancedRandom;
  * expected for a 32-bit generator, but not as fast as some other generators, like {@link ChopRandom}. However, this
  * guarantees a larger <em>minimum period</em> than ChopRandom can possibly provide as a <em>maximum period</em>.
  * <br>
- * Xoshiro160RoadroxoRandom has a guaranteed period of {@code pow(2, 160) - pow(2, 32)}. For {@code int} outputs only,
+ * Xoshiro160RoadroxoRandom has a guaranteed period of {@code pow(2, 160) - pow(2, 32)}. The only disallowed states have
+ * each of stateA, stateB, stateC, and stateD equal to 0; stateE is unconstrained. For {@code int} outputs only,
  * it is 1-dimensionally equidistributed. For {@code long} outputs, equidistribution is unknown. It starts returning
  * fully-decorrrelated results even given very-correlated initial states after about 10 calls to {@link #nextInt()}.
  * This passes 64TB of PractRand with no anomalies.
  * <br>
  * This implements all optional methods in EnhancedRandom except {@link #skip(long)}. It also implements {@link #leap()}
- * to allow jumping ahead by the equivalent of at least 2 to the 64 calls to {@link #nextInt()}.
+ * to allow jumping ahead by the equivalent of at least 2 to the 64 calls to {@link #nextInt()}. Methods that can use
+ * only {@link #nextInt()}, without needing {@link #nextLong()} to produce equal-quality results, do so.
  * <br>
  * Based on <a href="https://prng.di.unimi.it/xoshiro128plusplus.c">this public-domain code</a> by Vigna and Blackman.
  */
@@ -294,7 +296,7 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 	public long nextLong () {
 		// This is the same as the following, but inlined manually:
 //		return (long)nextInt() << 32 ^ nextInt();
-		int hi = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
+		final int hi = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
 		int t = stateB << 9;
 		stateE += 0xC3564E95 ^ stateD;
 		stateC ^= stateA;
@@ -304,7 +306,7 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 		stateC ^= t;
 		stateD = (stateD << 11 | stateD >>> 21);
 
-		int lo = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
+		final int lo = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
 		t = stateB << 9;
 		stateE += 0xC3564E95 ^ stateD;
 		stateC ^= stateA;
@@ -331,7 +333,7 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 		stateB ^= stateC;// StateB has b
 		stateD ^= stateB; // StateD has d
 		stateE -= 0xC3564E95 ^ stateD;
-		int lo = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
+		final int lo = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
 
 		stateD = (stateD << 21 | stateD >>> 11); // stateD has d ^ b
 		stateA ^= stateD; // StateA has a
@@ -343,7 +345,7 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 		stateB ^= stateC;// StateB has b
 		stateD ^= stateB; // StateD has d
 		stateE -= 0xC3564E95 ^ stateD;
-		int hi = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
+		final int hi = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
 
 		return (long) hi << 32 ^ lo;
 	}
@@ -366,8 +368,8 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 
 	@Override
 	public int next (int bits) {
-		int result = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
-		int t = stateB << 9;
+		final int result = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
+		final int t = stateB << 9;
 		stateE += 0xC3564E95 ^ stateD;
 		stateC ^= stateA;
 		stateD ^= stateB;
@@ -380,7 +382,113 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 
 	@Override
 	public int nextInt () {
-		int result = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
+		final int res = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
+		final int t = stateB << 9;
+		stateE += 0xC3564E95 ^ stateD;
+		stateC ^= stateA;
+		stateD ^= stateB;
+		stateB ^= stateC;
+		stateA ^= stateD;
+		stateC ^= t;
+		stateD = (stateD << 11 | stateD >>> 21);
+		return res;
+	}
+
+
+	@Override
+	public int nextInt (int bound) {
+		final int res = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
+		final int t = stateB << 9;
+		stateE += 0xC3564E95 ^ stateD;
+		stateC ^= stateA;
+		stateD ^= stateB;
+		stateB ^= stateC;
+		stateA ^= stateD;
+		stateC ^= t;
+		stateD = (stateD << 11 | stateD >>> 21);
+		return (int)(bound * (res & 0xFFFFFFFFL) >> 32) & ~(bound >> 31);
+	}
+
+	@Override
+	public int nextSignedInt (int outerBound) {
+		final int res = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
+		final int t = stateB << 9;
+		stateE += 0xC3564E95 ^ stateD;
+		stateC ^= stateA;
+		stateD ^= stateB;
+		stateB ^= stateC;
+		stateA ^= stateD;
+		stateC ^= t;
+		stateD = (stateD << 11 | stateD >>> 21);
+		outerBound = (int)(outerBound * (res & 0xFFFFFFFFL) >> 32);
+		return outerBound + (outerBound >>> 31);
+	}
+
+	@Override
+	public int nextUnsignedInt(int bound) {
+		final int res = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
+		final int t = stateB << 9;
+		stateE += 0xC3564E95 ^ stateD;
+		stateC ^= stateA;
+		stateD ^= stateB;
+		stateB ^= stateC;
+		stateA ^= stateD;
+		stateC ^= t;
+		stateD = (stateD << 11 | stateD >>> 21);
+		return (int)((bound & 0xFFFFFFFFL) * (res & 0xFFFFFFFFL) >>> 32);
+	}
+
+	@Override
+	public void nextBytes (byte[] bytes) {
+		if (bytes != null) {
+			for (int i = 0; i < bytes.length; ) {
+				int r = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
+				final int t = stateB << 9;
+				stateE += 0xC3564E95 ^ stateD;
+				stateC ^= stateA;
+				stateD ^= stateB;
+				stateB ^= stateC;
+				stateA ^= stateD;
+				stateC ^= t;
+				stateD = (stateD << 11 | stateD >>> 21);
+				for (int n = Math.min(bytes.length - i, 4); n-- > 0; r >>>= 8) {
+					bytes[i++] = (byte) r;
+				}
+			}
+		}
+	}
+
+	@Override
+	public int nextInt(int innerBound, int outerBound) {
+		final int res = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
+		final int t = stateB << 9;
+		stateE += 0xC3564E95 ^ stateD;
+		stateC ^= stateA;
+		stateD ^= stateB;
+		stateB ^= stateC;
+		stateA ^= stateD;
+		stateC ^= t;
+		stateD = (stateD << 11 | stateD >>> 21);
+		return (int)(innerBound + ((((outerBound - innerBound) & 0xFFFFFFFFL) * (res & 0xFFFFFFFFL) >>> 32) & ~((long)outerBound - (long)innerBound >> 63)));
+	}
+
+	@Override
+	public int nextSignedInt(int innerBound, int outerBound) {
+		final int res = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
+		final int t = stateB << 9;
+		stateE += 0xC3564E95 ^ stateD;
+		stateC ^= stateA;
+		stateD ^= stateB;
+		stateB ^= stateC;
+		stateA ^= stateD;
+		stateC ^= t;
+		stateD = (stateD << 11 | stateD >>> 21);
+		return innerBound + (int)(((outerBound - innerBound) & 0xFFFFFFFFL) * (res & 0xFFFFFFFFL) >>> 32);
+	}
+
+	@Override
+	public long nextLong(long bound) {
+		final long randHigh = ((stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB) & 0xFFFFFFFFL;;
 		int t = stateB << 9;
 		stateE += 0xC3564E95 ^ stateD;
 		stateC ^= stateA;
@@ -389,38 +497,84 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 		stateA ^= stateD;
 		stateC ^= t;
 		stateD = (stateD << 11 | stateD >>> 21);
-		return result;
+
+		final long randLow = ((stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB) & 0xFFFFFFFFL;
+		t = stateB << 9;
+		stateE += 0xC3564E95 ^ stateD;
+		stateC ^= stateA;
+		stateD ^= stateB;
+		stateB ^= stateC;
+		stateA ^= stateD;
+		stateC ^= t;
+		stateD = (stateD << 11 | stateD >>> 21);
+
+		if (1 >= bound)
+			return 0;
+		final long boundLow = bound & 0xFFFFFFFFL;
+		final long boundHigh = (bound >>> 32);
+		return (randHigh * boundLow >>> 32) + (randLow * boundHigh >>> 32) + randHigh * boundHigh;
 	}
 
 	@Override
-	public int nextInt (int bound) {
-		return (int)(bound * (nextInt() & 0xFFFFFFFFL) >> 32) & ~(bound >> 31);
-	}
-
-	@Override
-	public int nextSignedInt (int outerBound) {
-		outerBound = (int)(outerBound * (nextInt() & 0xFFFFFFFFL) >> 32);
-		return outerBound + (outerBound >>> 31);
-	}
-
-	@Override
-	public void nextBytes (byte[] bytes) {
-		if (bytes != null) {
-			for (int i = 0; i < bytes.length; ) {
-				for (int r = nextInt(), n = Math.min(bytes.length - i, 4); n-- > 0; r >>>= 8) {
-					bytes[i++] = (byte) r;
-				}
-			}
+	public long nextSignedLong(long outer) {
+		long inner;
+		if (outer < 0) {
+			long t = outer;
+			outer = 1L;
+			inner = t + 1L;
+		} else {
+			inner = 0L;
 		}
+		final long bound = outer - inner;
+		final long randHigh = ((stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB) & 0xFFFFFFFFL;
+		int t = stateB << 9;
+		stateE += 0xC3564E95 ^ stateD;
+		stateC ^= stateA;
+		stateD ^= stateB;
+		stateB ^= stateC;
+		stateA ^= stateD;
+		stateC ^= t;
+		stateD = (stateD << 11 | stateD >>> 21);
+
+		final long randLow = ((stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB) & 0xFFFFFFFFL;
+		t = stateB << 9;
+		stateE += 0xC3564E95 ^ stateD;
+		stateC ^= stateA;
+		stateD ^= stateB;
+		stateB ^= stateC;
+		stateA ^= stateD;
+		stateC ^= t;
+		stateD = (stateD << 11 | stateD >>> 21);
+
+		final long boundLow = bound & 0xFFFFFFFFL;
+		final long boundHigh = (bound >>> 32);
+		return inner + (randHigh * boundLow >>> 32) + (randLow * boundHigh >>> 32) + randHigh * boundHigh;
 	}
 
 	@Override
 	public long nextLong (long inner, long outer) {
-		final long rand = nextLong();
+		final long randHigh = ((stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB) & 0xFFFFFFFFL;
+		int t = stateB << 9;
+		stateE += 0xC3564E95 ^ stateD;
+		stateC ^= stateA;
+		stateD ^= stateB;
+		stateB ^= stateC;
+		stateA ^= stateD;
+		stateC ^= t;
+		stateD = (stateD << 11 | stateD >>> 21);
+
+		final long randLow = ((stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB) & 0xFFFFFFFFL;
+		t = stateB << 9;
+		stateE += 0xC3564E95 ^ stateD;
+		stateC ^= stateA;
+		stateD ^= stateB;
+		stateB ^= stateC;
+		stateA ^= stateD;
+		stateC ^= t;
+		stateD = (stateD << 11 | stateD >>> 21);
+
 		if (inner >= outer)
 			return inner;
-		final long randLow = rand & 0xFFFFFFFFL;
-		final long randHigh = rand >>> 32;
 		final long bound = outer - inner;
 		final long boundLow = bound & 0xFFFFFFFFL;
 		final long boundHigh = (bound >>> 32);
@@ -435,27 +589,72 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 			inner = t + 1L;
 		}
 		final long bound = outer - inner;
-		final long rand = nextLong();
-		final long randLow = rand & 0xFFFFFFFFL;
-		final long randHigh = rand >>> 32;
+		final long randHigh = ((stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB) & 0xFFFFFFFFL;
+		int t = stateB << 9;
+		stateE += 0xC3564E95 ^ stateD;
+		stateC ^= stateA;
+		stateD ^= stateB;
+		stateB ^= stateC;
+		stateA ^= stateD;
+		stateC ^= t;
+		stateD = (stateD << 11 | stateD >>> 21);
+
+		final long randLow = ((stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB) & 0xFFFFFFFFL;
+		t = stateB << 9;
+		stateE += 0xC3564E95 ^ stateD;
+		stateC ^= stateA;
+		stateD ^= stateB;
+		stateB ^= stateC;
+		stateA ^= stateD;
+		stateC ^= t;
+		stateD = (stateD << 11 | stateD >>> 21);
+
 		final long boundLow = bound & 0xFFFFFFFFL;
 		final long boundHigh = (bound >>> 32);
 		return inner + (randHigh * boundLow >>> 32) + (randLow * boundHigh >>> 32) + randHigh * boundHigh;
 	}
 
 	@Override
-	public boolean nextBoolean () {
-		return nextInt() < 0;
+	public boolean nextBoolean ()
+	{
+		final int res = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
+		final int t = stateB << 9;
+		stateE += 0xC3564E95 ^ stateD;
+		stateC ^= stateA;
+		stateD ^= stateB;
+		stateB ^= stateC;
+		stateA ^= stateD;
+		stateC ^= t;
+		stateD = (stateD << 11 | stateD >>> 21);
+		return res < 0;
 	}
 
 	@Override
 	public float nextFloat () {
-		return (nextInt() >>> 8) * 0x1p-24f;
+		final int res = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
+		final int t = stateB << 9;
+		stateE += 0xC3564E95 ^ stateD;
+		stateC ^= stateA;
+		stateD ^= stateB;
+		stateB ^= stateC;
+		stateA ^= stateD;
+		stateC ^= t;
+		stateD = (stateD << 11 | stateD >>> 21);
+		return (res >>> 8) * 0x1p-24f;
 	}
 
 	@Override
 	public float nextInclusiveFloat () {
-		return (0x1000001L * (nextInt() & 0xFFFFFFFFL) >> 32) * 0x1p-24f;
+		final int res = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
+		final int t = stateB << 9;
+		stateE += 0xC3564E95 ^ stateD;
+		stateC ^= stateA;
+		stateD ^= stateB;
+		stateB ^= stateC;
+		stateA ^= stateD;
+		stateC ^= t;
+		stateD = (stateD << 11 | stateD >>> 21);
+		return (0x1000001L * (res & 0xFFFFFFFFL) >> 32) * 0x1p-24f;
 	}
 
 	@Override
