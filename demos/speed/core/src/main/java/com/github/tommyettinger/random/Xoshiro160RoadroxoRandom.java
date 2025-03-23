@@ -17,6 +17,8 @@
 
 package com.github.tommyettinger.random;
 
+import static com.github.tommyettinger.digital.BitConversion.imul;
+
 /**
  * A random number generator that is optimized for performance on 32-bit machines and with Google Web Toolkit, this uses
  * no multiplication and is similar to the published xoshiro128 algorithm, but has an extra 32-bit state that acts like
@@ -200,6 +202,30 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 		stateE = (int)(seed ^ seed >>> 32);
 	}
 
+	/**
+	 * This initializes all 4 states of the generator to random values based on the given seed.
+	 * (2 to the 32) possible initial generator states can be produced here.
+	 *
+	 * @param seed the initial seed; may be any int
+	 */
+	public void setSeed (int seed) {
+		int a = seed ^ 0xDB4F0B91, b = (seed << 8 | seed >>> 24) ^ 0xBBE05633,
+				c = (seed << 16 | seed >>> 16) ^ 0xA0F2EC75, d = (seed << 24 | seed >>> 8) ^ 0x89E18285;
+		a = imul(a ^ a >>> 16, 0x21f0aaad);
+		a = imul(a ^ a >>> 15, 0x735a2d97);
+		stateA = a ^ a >>> 15;
+		b = imul(b ^ b >>> 16, 0x21f0aaad);
+		b = imul(b ^ b >>> 15, 0x735a2d97);
+		stateB = b ^ b >>> 15;
+		c = imul(c ^ c >>> 16, 0x21f0aaad);
+		c = imul(c ^ c >>> 15, 0x735a2d97);
+		stateC = c ^ c >>> 15;
+		d = imul(d ^ d >>> 16, 0x21f0aaad);
+		d = imul(d ^ d >>> 15, 0x735a2d97);
+		stateD = d ^ d >>> 15;
+		stateE = seed ^ seed >>> 16;
+	}
+
 	public long getStateA () {
 		return stateA;
 	}
@@ -211,6 +237,7 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 	 */
 	public void setStateA (long stateA) {
 		this.stateA = (int)stateA;
+		if((this.stateA|this.stateB|this.stateC|this.stateD) == 0) this.stateD = 1;
 	}
 
 	public long getStateB () {
@@ -224,6 +251,7 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 	 */
 	public void setStateB (long stateB) {
 		this.stateB = (int)stateB;
+		if((this.stateA|this.stateB|this.stateC|this.stateD) == 0) this.stateD = 1;
 	}
 
 	public long getStateC () {
@@ -237,6 +265,7 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 	 */
 	public void setStateC (long stateC) {
 		this.stateC = (int)stateC;
+		if((this.stateA|this.stateB|this.stateC|this.stateD) == 0) this.stateD = 1;
 	}
 
 	public long getStateD () {
