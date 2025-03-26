@@ -28,7 +28,18 @@ import static com.github.tommyettinger.digital.BitConversion.imul;
  * a counter. Unlike any variations on xoshiro128 with four states, this is actually 1-dimensionally equidistributed -
  * existing generators like {@code xoshiro128++} produce the result {@code 0} less frequently (by a tiny difference, but
  * that is enough to mean it isn't <em>equal</em>). This produces all 32-bit results equally frequently with
- * {@link #nextInt()}.
+ * {@link #nextInt()}. It is also <em>almost</em> 1-dimensionally equidistributed with {@link #nextLong()}; of the
+ * {@code Math.pow(2, 64)} possible results for nextLong(), all but {@code Math.pow(2, 32)} results are returned
+ * {@code Math.pow(2, 128)} times, and the remaining {@code Math.pow(2, 32)} results are returned
+ * {@code Math.pow(2, 128) - 1} times. Note that the pow() call is pseudocode; real Java code would consider
+ * {@code Math.pow(2, 128)} and {@code Math.pow(2, 128) - 1} equal.
+ * <br>
+ * An unusual property of this generator is that the state changes in exactly the same way and by the same distance
+ * regardless of whether {@link #nextInt()} or {@link #nextLong()} is called (and the same for the reverse-direction
+ * methods {@link #previousInt()} and {@link #previousLong()}). The result is calculated differently for 64-bit output
+ * than 32-bit output. For {@link #nextInt()}, stateA, stateB, and stateE are combined by rotating some, adding a pair
+ * of states, and XORing the two halves. For {@link #nextLong()}, all states are combined by forming two 32-bit outputs
+ * (using 32-bit math) and combining them into one 64-bit value only at the end.
  * <br>
  * The actual speed of this is going to vary wildly depending on the platform being benchmarked. On GWT, which is the
  * main place where the performance of a random number generator might actually be a bottleneck in a game, this performs
@@ -37,8 +48,7 @@ import static com.github.tommyettinger.digital.BitConversion.imul;
  * guarantees a larger <em>minimum period</em> than ChopRandom can possibly provide as a <em>maximum period</em>.
  * <br>
  * Xoshiro160RoadroxoRandom has a guaranteed period of {@code pow(2, 160) - pow(2, 32)}. The only disallowed states have
- * each of stateA, stateB, stateC, and stateD equal to 0; stateE is unconstrained. For {@code int} outputs only,
- * it is 1-dimensionally equidistributed. For {@code long} outputs, equidistribution is unknown. It starts returning
+ * each of stateA, stateB, stateC, and stateD equal to 0; stateE is unconstrained. It starts returning
  * fully-decorrrelated results even given very-correlated initial states after about 10 calls to {@link #nextInt()}.
  * This passes 64TB of PractRand with no anomalies.
  * <br>
@@ -48,6 +58,7 @@ import static com.github.tommyettinger.digital.BitConversion.imul;
  * <br>
  * Based on <a href="https://prng.di.unimi.it/xoshiro128plusplus.c">this public-domain code</a> by Vigna and Blackman.
  */
+@SuppressWarnings("IntegerMultiplicationImplicitCastToLong")
 public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 
 	/**
@@ -323,9 +334,8 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 
 	@Override
 	public long nextLong () {
-		// This is the same as the following, but inlined manually:
-//		return (long)nextInt() << 32 ^ nextInt();
 		final int hi = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
+		final int lo = (stateC << 19 | stateC >>> 13) ^ (stateE << 7 | stateE >>> 25) + stateD;
 		int t = stateB << 9;
 		stateE += 0xC3564E95 ^ stateD;
 		stateC ^= stateA;
@@ -334,36 +344,11 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 		stateA ^= stateD;
 		stateC ^= t;
 		stateD = (stateD << 11 | stateD >>> 21);
-
-		final int lo = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
-		t = stateB << 9;
-		stateE += 0xC3564E95 ^ stateD;
-		stateC ^= stateA;
-		stateD ^= stateB;
-		stateB ^= stateC;
-		stateA ^= stateD;
-		stateC ^= t;
-		stateD = (stateD << 11 | stateD >>> 21);
-		return (long)hi << 32 ^ lo;
+		return (long) hi << 32 ^ lo;
 	}
 
 	@Override
 	public long previousLong () {
-		// This is the same as the following, but inlined manually:
-//		return previousInt() ^ (long)previousInt() << 32;
-
-		stateD = (stateD << 21 | stateD >>> 11); // stateD has d ^ b
-		stateA ^= stateD; // StateA has a
-		stateC ^= stateB; // StateC has b ^ b << 9
-		stateC ^= stateC << 9;
-		stateC ^= stateC << 18; // StateC has b
-		stateB ^= stateA; // StateB has b ^ c
-		stateC ^= stateB;// StateC has c
-		stateB ^= stateC;// StateB has b
-		stateD ^= stateB; // StateD has d
-		stateE -= 0xC3564E95 ^ stateD;
-		final int lo = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
-
 		stateD = (stateD << 21 | stateD >>> 11); // stateD has d ^ b
 		stateA ^= stateD; // StateA has a
 		stateC ^= stateB; // StateC has b ^ b << 9
@@ -375,7 +360,7 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 		stateD ^= stateB; // StateD has d
 		stateE -= 0xC3564E95 ^ stateD;
 		final int hi = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
-
+		final int lo = (stateC << 19 | stateC >>> 13) ^ (stateE << 7 | stateE >>> 25) + stateD;
 		return (long) hi << 32 ^ lo;
 	}
 
@@ -517,18 +502,9 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 
 	@Override
 	public long nextLong(long bound) {
-		final long randHigh = ((stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB) & 0xFFFFFFFFL;;
+		final long randHi = ((stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB) & 0xFFFFFFFFL;
+		final long randLo = ((stateC << 19 | stateC >>> 13) ^ (stateE << 7 | stateE >>> 25) + stateD) & 0xFFFFFFFFL;
 		int t = stateB << 9;
-		stateE += 0xC3564E95 ^ stateD;
-		stateC ^= stateA;
-		stateD ^= stateB;
-		stateB ^= stateC;
-		stateA ^= stateD;
-		stateC ^= t;
-		stateD = (stateD << 11 | stateD >>> 21);
-
-		final long randLow = ((stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB) & 0xFFFFFFFFL;
-		t = stateB << 9;
 		stateE += 0xC3564E95 ^ stateD;
 		stateC ^= stateA;
 		stateD ^= stateB;
@@ -541,7 +517,7 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 			return 0;
 		final long boundLow = bound & 0xFFFFFFFFL;
 		final long boundHigh = (bound >>> 32);
-		return (randHigh * boundLow >>> 32) + (randLow * boundHigh >>> 32) + randHigh * boundHigh;
+		return (randHi * boundLow >>> 32) + (randLo * boundHigh >>> 32) + randHi * boundHigh;
 	}
 
 	@Override
@@ -555,18 +531,9 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 			inner = 0L;
 		}
 		final long bound = outer - inner;
-		final long randHigh = ((stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB) & 0xFFFFFFFFL;
+		final long randHi = ((stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB) & 0xFFFFFFFFL;
+		final long randLo = ((stateC << 19 | stateC >>> 13) ^ (stateE << 7 | stateE >>> 25) + stateD) & 0xFFFFFFFFL;
 		int t = stateB << 9;
-		stateE += 0xC3564E95 ^ stateD;
-		stateC ^= stateA;
-		stateD ^= stateB;
-		stateB ^= stateC;
-		stateA ^= stateD;
-		stateC ^= t;
-		stateD = (stateD << 11 | stateD >>> 21);
-
-		final long randLow = ((stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB) & 0xFFFFFFFFL;
-		t = stateB << 9;
 		stateE += 0xC3564E95 ^ stateD;
 		stateC ^= stateA;
 		stateD ^= stateB;
@@ -577,23 +544,14 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 
 		final long boundLow = bound & 0xFFFFFFFFL;
 		final long boundHigh = (bound >>> 32);
-		return inner + (randHigh * boundLow >>> 32) + (randLow * boundHigh >>> 32) + randHigh * boundHigh;
+		return inner + (randHi * boundLow >>> 32) + (randLo * boundHigh >>> 32) + randHi * boundHigh;
 	}
 
 	@Override
 	public long nextLong (long inner, long outer) {
-		final long randHigh = ((stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB) & 0xFFFFFFFFL;
+		final long randHi = ((stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB) & 0xFFFFFFFFL;
+		final long randLo = ((stateC << 19 | stateC >>> 13) ^ (stateE << 7 | stateE >>> 25) + stateD) & 0xFFFFFFFFL;
 		int t = stateB << 9;
-		stateE += 0xC3564E95 ^ stateD;
-		stateC ^= stateA;
-		stateD ^= stateB;
-		stateB ^= stateC;
-		stateA ^= stateD;
-		stateC ^= t;
-		stateD = (stateD << 11 | stateD >>> 21);
-
-		final long randLow = ((stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB) & 0xFFFFFFFFL;
-		t = stateB << 9;
 		stateE += 0xC3564E95 ^ stateD;
 		stateC ^= stateA;
 		stateD ^= stateB;
@@ -607,7 +565,7 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 		final long bound = outer - inner;
 		final long boundLow = bound & 0xFFFFFFFFL;
 		final long boundHigh = (bound >>> 32);
-		return inner + (randHigh * boundLow >>> 32) + (randLow * boundHigh >>> 32) + randHigh * boundHigh;
+		return inner + (randHi * boundLow >>> 32) + (randLo * boundHigh >>> 32) + randHi * boundHigh;
 	}
 
 	@Override
@@ -618,18 +576,9 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 			inner = t + 1L;
 		}
 		final long bound = outer - inner;
-		final long randHigh = ((stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB) & 0xFFFFFFFFL;
+		final long randHi = ((stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB) & 0xFFFFFFFFL;
+		final long randLo = ((stateC << 19 | stateC >>> 13) ^ (stateE << 7 | stateE >>> 25) + stateD) & 0xFFFFFFFFL;
 		int t = stateB << 9;
-		stateE += 0xC3564E95 ^ stateD;
-		stateC ^= stateA;
-		stateD ^= stateB;
-		stateB ^= stateC;
-		stateA ^= stateD;
-		stateC ^= t;
-		stateD = (stateD << 11 | stateD >>> 21);
-
-		final long randLow = ((stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB) & 0xFFFFFFFFL;
-		t = stateB << 9;
 		stateE += 0xC3564E95 ^ stateD;
 		stateC ^= stateA;
 		stateD ^= stateB;
@@ -640,7 +589,7 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 
 		final long boundLow = bound & 0xFFFFFFFFL;
 		final long boundHigh = (bound >>> 32);
-		return inner + (randHigh * boundLow >>> 32) + (randLow * boundHigh >>> 32) + randHigh * boundHigh;
+		return inner + (randHi * boundLow >>> 32) + (randLo * boundHigh >>> 32) + randHi * boundHigh;
 	}
 
 	@Override

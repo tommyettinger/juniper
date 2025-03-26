@@ -1,0 +1,4 @@
+Lowest mode: 94.00000 has mean amount 0.0219602435  FAIL 💀 for Xoshiro128PlusPlusRandom
+Lowest mode: 116.0000 has mean amount 0.0306156128  PASS 👍 for Xoshiro160RoadroxoRandom
+Lowest mode: 115.0000 has mean amount 0.0311290174  PASS 👍 for Xoshiro256MX3Random
+Lowest mode: 82.00000 has mean amount 0.0184437632  FAIL 💀 for Xoshiro256StarStarRandom
