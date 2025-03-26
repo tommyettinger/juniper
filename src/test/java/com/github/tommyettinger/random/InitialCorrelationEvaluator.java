@@ -34,6 +34,7 @@ public class InitialCorrelationEvaluator {
      * How many steps to run before measurement starts.
      */
     public static int STEPS_BEFORE = 100;
+    public static int STEP_LIMIT = 32;
     public static long INTERVAL_X = 1;//2;//4;//8;//16;//0xC13FA9A902A6328FL;//
     // We use 2 here because several generators use only odd numbers for stateB.
     public static long INTERVAL_Y = 2;//2;//4;//8;//16;//0x91E10DA5C79E7B1DL;//
@@ -168,7 +169,7 @@ public class InitialCorrelationEvaluator {
                 }
             }
             InitialCorrelationEvaluator evaluator = new InitialCorrelationEvaluator();
-            double result = evaluator.run(g, STEPS_BEFORE, STEPS_BEFORE + 32);
+            double result = evaluator.run(g, STEPS_BEFORE, STEPS_BEFORE + STEP_LIMIT);
             System.out.println("Lowest mode: "
                     + Base.BASE10.decimal(evaluator.actualMode, 8)
                     + " has mean amount " + Base.BASE10.decimal(evaluator.actualAmount, 12)
@@ -183,7 +184,7 @@ public class InitialCorrelationEvaluator {
         Date date = new Date();
         FileHandle loc = new FileHandle(new File("results/").getAbsoluteFile());
         loc.mkdirs();
-        loc = loc.child("InitialCorrelation_" + INTERVAL_X + "x" + INTERVAL_Y + "_" + date.getTime() + '_' +
+        loc = loc.child("InitialCorrelation["+STEPS_BEFORE+","+STEP_LIMIT+"]_" + INTERVAL_X + "x" + INTERVAL_Y + "_" + date.getTime() + '_' +
                 date.toString().replace(':', '_') + ".txt");
         loc.writeString(sb.toString(), false, "UTF-8");
     }

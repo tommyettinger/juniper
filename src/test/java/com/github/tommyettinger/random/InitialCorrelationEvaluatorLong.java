@@ -20,7 +20,6 @@ import com.badlogic.gdx.files.FileHandle;
 import com.github.tommyettinger.digital.ArrayTools;
 import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.ds.ObjectList;
-import com.github.tommyettinger.random.experimental.Chip32Random;
 import com.github.tommyettinger.random.experimental.Xoshiro160RoadroxoRandom;
 
 import java.io.File;
@@ -28,20 +27,16 @@ import java.util.ArrayList;
 import java.util.Date;
 
 /**
- * Like {@link InitialCorrelationEvaluator}, but only checks the first four generations, discarding none.
- * This means this essentially isn't evaluating generators as traditional sequential random number generators,
- * but rather as hashes of their initial state, continued for just a short amount of time. It is entirely likely
- * that specific flaws could slip past detection in this test, but trigger red flags quickly in a test suite for
- * random number generators that tests them sequentially, like PractRand. It is actually known that generators
- * capable of passing stringent testing, such as PcgRXSMXSRandom, Xoshiro256StarStarRandom, and AceRandom will
- * fail this evaluation, because they shouldn't be used as a hash of their initial state. So, this shouldn't be
- * considered as checking the quality of a random number generator, but checking how hash-like a random number
- * generator is.
  */
-public class ImmediateInitialCorrelationEvaluator {
+public class InitialCorrelationEvaluatorLong {
+    /**
+     * How many steps to run before measurement starts.
+     */
+    public static int STEPS_BEFORE = 100;
+    public static int STEP_LIMIT = 32;
     public static long INTERVAL_X = 1;//2;//4;//8;//16;//0xC13FA9A902A6328FL;//
+    // We use 2 here because several generators use only odd numbers for stateB.
     public static long INTERVAL_Y = 2;//2;//4;//8;//16;//0x91E10DA5C79E7B1DL;//
-    public static int DROPPED_STEPS = 10;
     public double steps = 0;
     public int mode = 0;
     public double amount = 0;
@@ -51,7 +46,7 @@ public class ImmediateInitialCorrelationEvaluator {
     private double[][] imag;
     public EnhancedRandom[][] randoms;
 
-    public ImmediateInitialCorrelationEvaluator() {
+    public InitialCorrelationEvaluatorLong() {
 
     }
 
@@ -68,7 +63,7 @@ public class ImmediateInitialCorrelationEvaluator {
         imag = new double[randoms.length][randoms[0].length];
         actualAmount = 0;
         actualMode = 0;
-        for (int bit = 0; bit < 32; bit++) {
+        for (int bit = 0; bit < 64; bit++) {
             steps = 0;
             for (int x = 0; x < randomGrid.length; x++) {
                 for (int y = 0; y < randomGrid[0].length; y++) {
@@ -81,13 +76,13 @@ public class ImmediateInitialCorrelationEvaluator {
             for (int i = 0; i < firstStepUsed; i++) {
                 for (int x = 0; x < randoms.length; x++) {
                     for (int y = 0; y < randoms[x].length; y++) {
-                        randoms[x][y].nextInt();
+                        randoms[x][y].nextLong();
                     }
                 }
             }
             double amountSum = 0;
             int minMode = Integer.MAX_VALUE;
-            for (int i = firstStepUsed, lim = firstStepUsed + stepLimit; i < lim; i++) {
+            for (int i = firstStepUsed; i < stepLimit; i++) {
                 step(bit);
                 amountSum += amount;
                 minMode = Math.min(mode, minMode);
@@ -95,8 +90,8 @@ public class ImmediateInitialCorrelationEvaluator {
             actualAmount += amountSum / steps;
             actualMode = minMode;
         }
-//        actualMode *= 0.5; // not sure why this is needed to get similar behavior to before...
-        return 2.5 - Math.abs(actualMode - 116.5) - (actualAmount - 0.031) * 10;
+        actualAmount *= 0.5; // for long math, the amount is twice where it should be.
+        return 1.0 - Math.abs(actualMode - 115.5) * 0.5f - (actualAmount - 0.031) * 50;
     }
     public void step(int bit) {
         ++steps;
@@ -104,7 +99,7 @@ public class ImmediateInitialCorrelationEvaluator {
 
         for (int x = 0; x < randoms.length; x++) {
             for (int y = 0; y < randoms[x].length; y++) {
-                real[x][y] = randoms[x][y].nextInt() >>> bit & 1;
+                real[x][y] = randoms[x][y].nextLong() >>> bit & 1L;
             }
         }
         Fft.transformWindowless2D(real, imag);
@@ -117,15 +112,6 @@ public class ImmediateInitialCorrelationEvaluator {
         StringBuilder sb = new StringBuilder(1024);
         EnhancedRandom[][] g = new EnhancedRandom[256][256];
 
-        ArrayList<EnhancedRandom> rs = ObjectList.with(
-                new Xoshiro160RoadroxoRandom(1, 1, 1, 1, 1),
-                new Xoshiro128PlusPlusRandom(1, 1, 1, 1),
-                new Xoshiro256StarStarRandom(1, 1, 1, 1),
-                new Xoshiro256MX3Random(1, 1, 1, 1)
-//                new Chip32Random(1)
-//                new Chock32Random(1)
-        );
-//
 //        ArrayList<EnhancedRandom> rs = ObjectList.with(
 //                new PcgRXSMXSRandom(1, 1), new FlowRandom(1, 1), new MizuchiRandom(1, 1),
 //                new Xoroshiro128StarStarRandom(1, 1), new LaserRandom(1, 1),
@@ -133,6 +119,20 @@ public class ImmediateInitialCorrelationEvaluator {
 //                new DistinctRandom(1));
 
 //        ArrayList<EnhancedRandom> rs = ObjectList.with(new EnhancedRandom[]{
+//                new Xoshiro160RoadroxoRandom(1, 1, 1, 1, 1),
+//                new Xoshiro128PlusPlusRandom(1, 1, 1, 1),
+//                new Xoshiro256StarStarRandom(1, 1, 1, 1),
+//                new Xoshiro256MX3Random(1, 1, 1, 1)
+//        });
+
+//        ArrayList<EnhancedRandom> rs = ObjectList.with(new EnhancedRandom[]{
+//                new Bear32Random(1, 1, 1, 1), new Chill32Random(1, 1, 1), new ChopRandom(1, 1, 1, 1),
+//                new Jsf32Random(1, 1, 1, 1), new Respite32Random(1, 1, 1), new Resolute32Random(1, 1, 1),
+//                new Rawr32Random(1, 1, 1, 1), new Recipe32Random(1, 1, 1), new Xoshiro128PlusPlusRandom(1, 1, 1, 1),
+//                new Taxman32Random(1, 1), new Taxon32Random(1, 1), new Silk32Random(1, 1),
+//                new CupolaRandom(1, 1)
+//                new Fluff32Random(1, 1)
+
 //                new PcgRXSMXSRandom(1, 1), new PcgBoostedRandom(1, 1),
 //                new OrbitalRandom(1, 1), new OrbitRXSMXSRandom(1, 1),
 //                new Xoshiro256StarStarRandom(1, 1, 1, 1), new Xoshiro128PlusPlusRandom(1, 1, 1, 1),
@@ -143,15 +143,7 @@ public class ImmediateInitialCorrelationEvaluator {
 //                new Crand64Random(1, 1, 1, 1, 1), new RomuTrioRandom(1, 1, 1), new Sfc64Random(1, 1, 1, 1),
 //                new LCG48Random(1),
 //        });
-
-//        ArrayList<EnhancedRandom> rs = ObjectList.with(
-//                new Bear32Random(1, 1, 1, 1), new Chill32Random(1, 1, 1), new ChopRandom(1, 1, 1, 1),
-//                new Jsf32Random(1, 1, 1, 1), new Respite32Random(1, 1, 1), new Resolute32Random(1, 1, 1),
-//                new Rawr32Random(1, 1, 1, 1), new Recipe32Random(1, 1, 1), new Xoshiro128PlusPlusRandom(1, 1, 1, 1),
-//                new Taxman32Random(1, 1), new Taxon32Random(1, 1), new Silk32Random(1, 1),
-//                new Choo32Random(1, 1, 1, 1));
-
-//        ArrayList<EnhancedRandom> rs = Generators.randomList;
+        ArrayList<EnhancedRandom> rs = Generators.randomList;
 
         rs.sort((l, r) -> l.getClass().getSimpleName().compareTo(r.getClass().getSimpleName()));
 //        rs.sort(Comparator.comparing(EnhancedRandom::getClass, Comparator.comparing(Class::getSimpleName)));
@@ -173,13 +165,13 @@ public class ImmediateInitialCorrelationEvaluator {
                         g[x][y].setState(x * INTERVAL_X, y * INTERVAL_Y, 1L, 1L, 1L);
                 }
             }
-            ImmediateInitialCorrelationEvaluator evaluator = new ImmediateInitialCorrelationEvaluator();
-            double result = evaluator.run(g, DROPPED_STEPS, 4);
+            InitialCorrelationEvaluatorLong evaluator = new InitialCorrelationEvaluatorLong();
+            double result = evaluator.run(g, STEPS_BEFORE, STEPS_BEFORE + STEP_LIMIT);
             System.out.println("Lowest mode: "
                     + Base.BASE10.decimal(evaluator.actualMode, 8)
                     + " has mean amount " + Base.BASE10.decimal(evaluator.actualAmount, 12)
                     + (result > 0.0 ? "  PASS 👍 for " : "  FAIL 💀 for ") + r.getClass().getSimpleName());
-            sb.append("[Immediate] Lowest mode: ");
+            sb.append("Lowest mode: ");
             Base.BASE10.appendDecimal(sb, evaluator.actualMode, 8);
             sb.append(" has mean amount ");
             Base.BASE10.appendDecimal(sb, evaluator.actualAmount, 12);
@@ -189,7 +181,7 @@ public class ImmediateInitialCorrelationEvaluator {
         Date date = new Date();
         FileHandle loc = new FileHandle(new File("results/").getAbsoluteFile());
         loc.mkdirs();
-        loc = loc.child("ImmediateInitialCorrelation["+DROPPED_STEPS+",4]_" + INTERVAL_X + "x" + INTERVAL_Y + "_" + date.getTime() + '_' +
+        loc = loc.child("InitialCorrelationLong["+STEPS_BEFORE+","+STEP_LIMIT+"]_" + INTERVAL_X + "x" + INTERVAL_Y + "_" + date.getTime() + '_' +
                 date.toString().replace(':', '_') + ".txt");
         loc.writeString(sb.toString(), false, "UTF-8");
     }
