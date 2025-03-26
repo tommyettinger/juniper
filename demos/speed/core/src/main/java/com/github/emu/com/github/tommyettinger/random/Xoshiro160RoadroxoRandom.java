@@ -320,9 +320,8 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 
 	@Override
 	public long nextLong () {
-		// This is the same as the following, but inlined manually:
-//		return (long)nextInt() << 32 ^ nextInt();
-		final int hi = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
+		final long a = stateA, b = stateB, c = stateC, d = stateD, e = stateE,
+				res = (a << 11 | a >>> 53) + b + (c << 39 | c >>> 25) + (d << 25 | d >>> 39) + (e << 52 | e >>> 12);
 		int t = stateB << 9;
 		stateE = stateE + (0xC3564E95 ^ stateD) | 0;
 		stateC ^= stateA;
@@ -331,24 +330,11 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 		stateA ^= stateD;
 		stateC ^= t;
 		stateD = (stateD << 11 | stateD >>> 21);
-
-		final int lo = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
-		t = stateB << 9;
-		stateE = stateE + (0xC3564E95 ^ stateD) | 0;
-		stateC ^= stateA;
-		stateD ^= stateB;
-		stateB ^= stateC;
-		stateA ^= stateD;
-		stateC ^= t;
-		stateD = (stateD << 11 | stateD >>> 21);
-		return (long)hi << 32 ^ lo;
+		return res;
 	}
 
 	@Override
 	public long previousLong () {
-		// This is the same as the following, but inlined manually:
-//		return previousInt() ^ (long)previousInt() << 32;
-
 		stateD = (stateD << 21 | stateD >>> 11); // stateD has d ^ b
 		stateA ^= stateD; // StateA has a
 		stateC ^= stateB; // StateC has b ^ b << 9
@@ -359,21 +345,8 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 		stateB ^= stateC;// StateB has b
 		stateD ^= stateB; // StateD has d
 		stateE = stateE - (0xC3564E95 ^ stateD) | 0;
-		final int lo = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
-
-		stateD = (stateD << 21 | stateD >>> 11); // stateD has d ^ b
-		stateA ^= stateD; // StateA has a
-		stateC ^= stateB; // StateC has b ^ b << 9
-		stateC ^= stateC << 9;
-		stateC ^= stateC << 18; // StateC has b
-		stateB ^= stateA; // StateB has b ^ c
-		stateC ^= stateB;// StateC has c
-		stateB ^= stateC;// StateB has b
-		stateD ^= stateB; // StateD has d
-		stateE = stateE - (0xC3564E95 ^ stateD) | 0;
-		final int hi = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
-
-		return (long) hi << 32 ^ lo;
+		final long a = stateA, b = stateB, c = stateC, d = stateD, e = stateE;
+		return (a << 11 | a >>> 53) + b + (c << 39 | c >>> 25) + (d << 25 | d >>> 39) + (e << 52 | e >>> 12);
 	}
 
 	@Override
@@ -514,18 +487,10 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 
 	@Override
 	public long nextLong(long bound) {
-		final long randHigh = ((stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB) & 0xFFFFFFFFL;;
+		final long a = stateA, b = stateB, c = stateC, d = stateD, e = stateE,
+				res = (a << 11 | a >>> 53) + b + (c << 39 | c >>> 25) + (d << 25 | d >>> 39) + (e << 52 | e >>> 12);
+		final long randHigh = res >>> 32, randLow = res & 0xFFFFFFFFL;
 		int t = stateB << 9;
-		stateE = stateE + (0xC3564E95 ^ stateD) | 0;
-		stateC ^= stateA;
-		stateD ^= stateB;
-		stateB ^= stateC;
-		stateA ^= stateD;
-		stateC ^= t;
-		stateD = (stateD << 11 | stateD >>> 21);
-
-		final long randLow = ((stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB) & 0xFFFFFFFFL;
-		t = stateB << 9;
 		stateE = stateE + (0xC3564E95 ^ stateD) | 0;
 		stateC ^= stateA;
 		stateD ^= stateB;
@@ -552,18 +517,10 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 			inner = 0L;
 		}
 		final long bound = outer - inner;
-		final long randHigh = ((stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB) & 0xFFFFFFFFL;
+		final long a = stateA, b = stateB, c = stateC, d = stateD, e = stateE,
+				res = (a << 11 | a >>> 53) + b + (c << 39 | c >>> 25) + (d << 25 | d >>> 39) + (e << 52 | e >>> 12);
+		final long randHigh = res >>> 32, randLow = res & 0xFFFFFFFFL;
 		int t = stateB << 9;
-		stateE = stateE + (0xC3564E95 ^ stateD) | 0;
-		stateC ^= stateA;
-		stateD ^= stateB;
-		stateB ^= stateC;
-		stateA ^= stateD;
-		stateC ^= t;
-		stateD = (stateD << 11 | stateD >>> 21);
-
-		final long randLow = ((stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB) & 0xFFFFFFFFL;
-		t = stateB << 9;
 		stateE = stateE + (0xC3564E95 ^ stateD) | 0;
 		stateC ^= stateA;
 		stateD ^= stateB;
@@ -579,18 +536,10 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 
 	@Override
 	public long nextLong (long inner, long outer) {
-		final long randHigh = ((stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB) & 0xFFFFFFFFL;
+		final long a = stateA, b = stateB, c = stateC, d = stateD, e = stateE,
+				res = (a << 11 | a >>> 53) + b + (c << 39 | c >>> 25) + (d << 25 | d >>> 39) + (e << 52 | e >>> 12);
+		final long randHigh = res >>> 32, randLow = res & 0xFFFFFFFFL;
 		int t = stateB << 9;
-		stateE = stateE + (0xC3564E95 ^ stateD) | 0;
-		stateC ^= stateA;
-		stateD ^= stateB;
-		stateB ^= stateC;
-		stateA ^= stateD;
-		stateC ^= t;
-		stateD = (stateD << 11 | stateD >>> 21);
-
-		final long randLow = ((stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB) & 0xFFFFFFFFL;
-		t = stateB << 9;
 		stateE = stateE + (0xC3564E95 ^ stateD) | 0;
 		stateC ^= stateA;
 		stateD ^= stateB;
@@ -615,18 +564,10 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 			inner = t + 1L;
 		}
 		final long bound = outer - inner;
-		final long randHigh = ((stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB) & 0xFFFFFFFFL;
+		final long a = stateA, b = stateB, c = stateC, d = stateD, e = stateE,
+				res = (a << 11 | a >>> 53) + b + (c << 39 | c >>> 25) + (d << 25 | d >>> 39) + (e << 52 | e >>> 12);
+		final long randHigh = res >>> 32, randLow = res & 0xFFFFFFFFL;
 		int t = stateB << 9;
-		stateE = stateE + (0xC3564E95 ^ stateD) | 0;
-		stateC ^= stateA;
-		stateD ^= stateB;
-		stateB ^= stateC;
-		stateA ^= stateD;
-		stateC ^= t;
-		stateD = (stateD << 11 | stateD >>> 21);
-
-		final long randLow = ((stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB) & 0xFFFFFFFFL;
-		t = stateB << 9;
 		stateE = stateE + (0xC3564E95 ^ stateD) | 0;
 		stateC ^= stateA;
 		stateD ^= stateB;
