@@ -59502,29 +59502,29 @@ function cgtr_Xoshiro160RoadroxoRandom() {
     a.$stateE0 = 0;
 }
 let cgtr_Xoshiro160RoadroxoRandom_nextLong = $this => {
-    let var$1, $t, var$3, $lo, var$5, $hi, var$7, var$8, var$9;
-    var$1 = $this.$stateE0;
-    $t = var$1 << 23 | (var$1 >>> 9 | 0);
-    var$3 = $this.$stateA0;
-    $lo = var$3 << 14 | (var$3 >>> 18 | 0);
-    var$5 = $this.$stateB0;
-    $hi = $t ^ ($lo + var$5 | 0);
-    var$7 = $this.$stateC;
-    $lo = var$7 << 19 | (var$7 >>> 13 | 0);
-    $t = var$1 << 7 | (var$1 >>> 25 | 0);
-    var$8 = $this.$stateD;
-    $lo = $lo ^ ($t + var$8 | 0);
-    $t = var$5 << 9;
-    $this.$stateE0 = var$1 + ((-1017753963) ^ var$8) | 0;
-    var$1 = var$7 ^ var$3;
-    $this.$stateC = var$1;
-    var$9 = var$8 ^ var$5;
-    $this.$stateD = var$9;
-    $this.$stateB0 = var$5 ^ var$1;
-    $this.$stateA0 = var$3 ^ var$9;
-    $this.$stateC = var$1 ^ $t;
-    $this.$stateD = var$9 << 11 | (var$9 >>> 21 | 0);
-    return Long_xor(Long_shl(Long_fromInt($hi), 32), Long_fromInt($lo));
+    let var$1, $a, var$3, $b, var$5, $c, var$7, $d, var$9, $e, $res, $t, var$13;
+    var$1 = $this.$stateA0;
+    $a = Long_fromInt(var$1);
+    var$3 = $this.$stateB0;
+    $b = Long_fromInt(var$3);
+    var$5 = $this.$stateC;
+    $c = Long_fromInt(var$5);
+    var$7 = $this.$stateD;
+    $d = Long_fromInt(var$7);
+    var$9 = $this.$stateE0;
+    $e = Long_fromInt(var$9);
+    $res = Long_add(Long_add(Long_add(Long_add(Long_or(Long_shl($a, 11), Long_shru($a, 53)), $b), Long_or(Long_shl($c, 39), Long_shru($c, 25))), Long_or(Long_shl($d, 25), Long_shru($d, 39))), Long_or(Long_shl($e, 52), Long_shru($e, 12)));
+    $t = var$3 << 9;
+    $this.$stateE0 = var$9 + ((-1017753963) ^ var$7) | 0;
+    var$13 = var$5 ^ var$1;
+    $this.$stateC = var$13;
+    var$5 = var$7 ^ var$3;
+    $this.$stateD = var$5;
+    $this.$stateB0 = var$3 ^ var$13;
+    $this.$stateA0 = var$1 ^ var$5;
+    $this.$stateC = var$13 ^ $t;
+    $this.$stateD = var$5 << 11 | (var$5 >>> 21 | 0);
+    return $res;
 },
 cgtr_Xoshiro160RoadroxoRandom_nextInt = ($this, $bound) => {
     let var$2, $t, var$4, $res, var$6, var$7, var$8;
@@ -59548,33 +59548,35 @@ cgtr_Xoshiro160RoadroxoRandom_nextInt = ($this, $bound) => {
     return Long_hi(Long_mul(Long_fromInt($bound), Long_and(Long_fromInt($res), Long_create(4294967295, 0)))) & ($bound >> 31 ^ (-1));
 },
 cgtr_Xoshiro160RoadroxoRandom_nextLong0 = ($this, $bound) => {
-    let var$2, var$3, var$4, $t, var$6, $randHi, var$8, var$9, $randLo, $boundLow, $boundHigh;
-    var$2 = $this.$stateE0;
-    var$3 = var$2 << 23 | (var$2 >>> 9 | 0);
-    var$4 = $this.$stateA0;
-    $t = var$4 << 14 | (var$4 >>> 18 | 0);
-    var$6 = $this.$stateB0;
-    $randHi = Long_and(Long_fromInt(var$3 ^ ($t + var$6 | 0)), Long_create(4294967295, 0));
-    var$8 = $this.$stateC;
-    $t = var$8 << 19 | (var$8 >>> 13 | 0);
-    var$3 = var$2 << 7 | (var$2 >>> 25 | 0);
-    var$9 = $this.$stateD;
-    $randLo = Long_and(Long_fromInt($t ^ (var$3 + var$9 | 0)), Long_create(4294967295, 0));
-    $t = var$6 << 9;
-    $this.$stateE0 = var$2 + ((-1017753963) ^ var$9) | 0;
-    var$2 = var$8 ^ var$4;
-    $this.$stateC = var$2;
-    var$3 = var$9 ^ var$6;
-    $this.$stateD = var$3;
-    $this.$stateB0 = var$6 ^ var$2;
-    $this.$stateA0 = var$4 ^ var$3;
-    $this.$stateC = var$2 ^ $t;
-    $this.$stateD = var$3 << 11 | (var$3 >>> 21 | 0);
+    let var$2, $a, var$4, $b, var$6, $c, var$8, $d, var$10, $e, $res, $randHigh, $randLow, $t, var$16, $boundLow, $boundHigh;
+    var$2 = $this.$stateA0;
+    $a = Long_fromInt(var$2);
+    var$4 = $this.$stateB0;
+    $b = Long_fromInt(var$4);
+    var$6 = $this.$stateC;
+    $c = Long_fromInt(var$6);
+    var$8 = $this.$stateD;
+    $d = Long_fromInt(var$8);
+    var$10 = $this.$stateE0;
+    $e = Long_fromInt(var$10);
+    $res = Long_add(Long_add(Long_add(Long_add(Long_or(Long_shl($a, 11), Long_shru($a, 53)), $b), Long_or(Long_shl($c, 39), Long_shru($c, 25))), Long_or(Long_shl($d, 25), Long_shru($d, 39))), Long_or(Long_shl($e, 52), Long_shru($e, 12)));
+    $randHigh = Long_shru($res, 32);
+    $randLow = Long_and($res, Long_create(4294967295, 0));
+    $t = var$4 << 9;
+    $this.$stateE0 = var$10 + ((-1017753963) ^ var$8) | 0;
+    var$6 = var$6 ^ var$2;
+    $this.$stateC = var$6;
+    var$16 = var$8 ^ var$4;
+    $this.$stateD = var$16;
+    $this.$stateB0 = var$4 ^ var$6;
+    $this.$stateA0 = var$2 ^ var$16;
+    $this.$stateC = var$6 ^ $t;
+    $this.$stateD = var$16 << 11 | (var$16 >>> 21 | 0);
     if (Long_ge(Long_fromInt(1), $bound))
         return Long_ZERO;
     $boundLow = Long_and($bound, Long_create(4294967295, 0));
     $boundHigh = Long_shru($bound, 32);
-    return Long_add(Long_add(Long_shru(Long_mul($randHi, $boundLow), 32), Long_shru(Long_mul($randLo, $boundHigh), 32)), Long_mul($randHi, $boundHigh));
+    return Long_add(Long_add(Long_shru(Long_mul($randHigh, $boundLow), 32), Long_shru(Long_mul($randLow, $boundHigh), 32)), Long_mul($randHigh, $boundHigh));
 },
 cgtr_Xoshiro160RoadroxoRandom_nextFloat = $this => {
     let var$1, $res, var$3, var$4, var$5, $t, var$7;
