@@ -14,20 +14,21 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  * Xoshiro128PlusPlusRandom sometimes beats Chip32Random by a significant margin, but is usually a little slower.
  * ChopRandom is usually close to the second-place position, but sometimes ties for first.
  * AceRandom, surprisingly, is not always the fastest on long-related math, despite internally only using long math.
- * Xoshiro160RoadroxoRandom is usually slowest, often by a significant degree.
+ * Xoshiro160RoadroxoRandom is usually in the same territory as Xoshiro128PlusPlusRandom, though it is slower on
+ * nextInt() by a more substantial degree than on any other test.
  * <br>
  * Results on GWT:
  * Chip32Random is often neck-and-neck with ChopRandom for fastest.
  * ChopRandom is usually tied for fastest with Chip32Random, and tends to be a few FPS faster.
  * Xoshiro128PlusPlusRandom usually performs OK on everything, typically in fourth place.
- * Xoshiro160RoadroxoRandom often performs better than Xoshiro128PlusPlusRandom, and is usually behind Chip and Chop.
- * AceRandom, as expected on GWT, is quite slow, sometimes slowest.
+ * Xoshiro160RoadroxoRandom (RARX) performs absolutely miserably when nextLong() code is used...
+ * AceRandom, as expected on GWT, is quite slow, but for nextLong() is faster than RARX.
  * <br>
  * Results on TeaVM:
  * Chip32Random and ChopRandom are very often nearly tied, within 1 FPS of each other, but ChipRandom sometimes has a larger edge, and rarely is it smaller.
- * Xoshiro160RoadroxoRandom is sometimes also close to first-place, if not in it.
  * Xoshiro128PlusPlusRandom is usually a little slower than Xoshiro160RoadroxoRandom.
- * AceRandom, as expected on GWT, is quite slow, usually slowest.
+ * Xoshiro160RoadroxoRandom (RARX) performs absolutely miserably when nextLong() code is used...
+ * AceRandom, as expected on GWT, is quite slow, but for nextLong() is faster than RARX.
  * All results are significantly slower than GWT (on Vivaldi 6.7.3329.39, Windows 11 Version 23H2, for both), except
  * nextInt(), which has about twice the throughput on TeaVM relative to GWT.
  */
