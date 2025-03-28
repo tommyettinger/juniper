@@ -69,6 +69,7 @@ public final class Generators {
         randomList.add(new L64X256StarStarRandom(1, 1, 1, 1, 1));
         randomList.add(new L64X256MoremurRandom(1, 1, 1, 1, 1));
         randomList.add(new C64X256MoremurRandom(1, 1, 1, 1, 1));
+        randomList.add(new I64X256MoremurRandom(1, 1, 1, 1, 1));
     }
     public static int randomCount = randomList.size();
 

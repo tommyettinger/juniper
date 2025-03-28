@@ -1,0 +1,5 @@
+Lowest mode: 116.0000 has mean amount 0.0311046987  PASS 👍 for C64X256MoremurRandom
+Lowest mode: 116.0000 has mean amount 0.0311114266  PASS 👍 for I64X256MoremurRandom
+Lowest mode: 116.0000 has mean amount 0.0310928821  PASS 👍 for L64X256MoremurRandom
+Lowest mode: 0.000000 has mean amount 0.0966377407  FAIL 💀 for L64X256NoMixRandom
+Lowest mode: 100.0000 has mean amount 0.0220155939  FAIL 💀 for L64X256StarStarRandom
