@@ -99,6 +99,7 @@ public final class Deserializer {
         register(new PasarRandom(1, 2, 3, 4, 5));
         register(new Crand64Random(1, 2, 3, 4, 5));
         register(new AceRandom(1, 2, 3, 4, 5));
+        register(new Xoshiro160RoadroxoRandom(1, 2, 3, 4, 5));
         register(new KnownSequenceRandom(LongSequence.with(1337L, 42L, 23L, 666L)));
 
         register(new ReverseWrapper(1));

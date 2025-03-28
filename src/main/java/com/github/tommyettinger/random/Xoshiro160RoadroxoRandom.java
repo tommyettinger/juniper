@@ -20,9 +20,44 @@ package com.github.tommyettinger.random;
 import static com.github.tommyettinger.digital.BitConversion.imul;
 
 /**
+ * A random number generator that is optimized for performance on 32-bit machines and with Google Web Toolkit, this uses
+ * no multiplication and is similar to the published xoshiro128 algorithm, but has an extra 32-bit state that acts like
+ * a counter. Unlike any variations on xoshiro128 with four states, this is actually 1-dimensionally equidistributed -
+ * existing generators like {@code xoshiro128++} produce the result {@code 0} less frequently (by a tiny difference, but
+ * that is enough to mean it isn't <em>equal</em>). This produces all 32-bit results equally frequently with
+ * {@link #nextInt()}. It is also <em>almost</em> 1-dimensionally equidistributed with {@link #nextLong()}; of the
+ * {@code Math.pow(2, 64)} possible results for nextLong(), all but {@code Math.pow(2, 32)} results are returned
+ * {@code Math.pow(2, 128)} times, and the remaining {@code Math.pow(2, 32)} results are returned
+ * {@code Math.pow(2, 128) - 1} times. Note that the pow() call is pseudocode; real Java code would consider
+ * {@code Math.pow(2, 128)} and {@code Math.pow(2, 128) - 1} equal. It is important to emphasize that nextLong() is not
+ * actually equidistributed, just very close to that, in the same way that {@code xoshiro128++} is not actually
+ * equidistributed, just very close to it.
+ * <br>
+ * An unusual property of this generator is that the state changes in exactly the same way and by the same distance
+ * regardless of whether {@link #nextInt()} or {@link #nextLong()} is called (and the same for the reverse-direction
+ * methods {@link #previousInt()} and {@link #previousLong()}). The result is calculated differently for 64-bit output
+ * than 32-bit output. For {@link #nextInt()}, stateA, stateB, and stateE are combined by rotating some, adding a pair
+ * of states, and XORing the two halves. For {@link #nextLong()}, all states are combined by forming two 32-bit outputs
+ * (using the same or similar 32-bit math as for nextInt()) and combining them into one 64-bit value only at the end.
+ * <br>
+ * The actual speed of this is going to vary wildly depending on the platform being benchmarked. On GWT, which is the
+ * main place where the performance of a random number generator might actually be a bottleneck in a game, this performs
+ * very well. On desktop platforms, it is faster at generating {@code int} values than {@code long}, which is to be
+ * expected for a 32-bit generator, but not as fast as some other generators, like {@link ChopRandom}. However, this
+ * guarantees a larger <em>minimum period</em> than ChopRandom can possibly provide as a <em>maximum period</em>.
+ * <br>
+ * Xoshiro160RoadroxoRandom has a guaranteed period of {@code pow(2, 160) - pow(2, 32)}. The only disallowed states have
+ * each of stateA, stateB, stateC, and stateD equal to 0; stateE is unconstrained. It starts returning
+ * fully-decorrrelated results even given very-correlated initial states after about 10 calls to {@link #nextInt()}.
+ * This passes 64TB of PractRand with no anomalies, both for nextInt() and the different algorith for nextLong().
+ * <br>
+ * This implements all optional methods in EnhancedRandom except {@link #skip(long)}. It also implements {@link #leap()}
+ * to allow jumping ahead by the equivalent of at least 2 to the 64 calls to {@link #nextInt()}. Methods that can use
+ * only {@link #nextInt()}, without needing {@link #nextLong()} to produce equal-quality results, do so.
+ * <br>
  * Based on <a href="https://prng.di.unimi.it/xoshiro128plusplus.c">this public-domain code</a> by Vigna and Blackman.
- * Modified for this library by Tommy Ettinger.
  */
+@SuppressWarnings("IntegerMultiplicationImplicitCastToLong")
 public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 
 	/**
@@ -301,7 +336,7 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 		final int hi = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
 		final int lo = (stateC << 19 | stateC >>> 13) ^ (stateE << 7 | stateE >>> 25) + stateD;
 		int t = stateB << 9;
-		stateE = stateE + (0xC3564E95 ^ stateD) | 0;
+		stateE += 0xC3564E95 ^ stateD;
 		stateC ^= stateA;
 		stateD ^= stateB;
 		stateB ^= stateC;
@@ -322,7 +357,7 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 		stateC ^= stateB;// StateC has c
 		stateB ^= stateC;// StateB has b
 		stateD ^= stateB; // StateD has d
-		stateE = stateE - (0xC3564E95 ^ stateD) | 0;
+		stateE -= 0xC3564E95 ^ stateD;
 		final int hi = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
 		final int lo = (stateC << 19 | stateC >>> 13) ^ (stateE << 7 | stateE >>> 25) + stateD;
 		return (long) hi << 32 ^ lo;
@@ -339,7 +374,7 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 		stateC ^= stateB;// StateC has c
 		stateB ^= stateC;// StateB has b
 		stateD ^= stateB; // StateD has d
-		stateE = stateE - (0xC3564E95 ^ stateD) | 0;
+		stateE -= 0xC3564E95 ^ stateD;
 
 		return (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
 	}
@@ -348,7 +383,7 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 	public int next (int bits) {
 		final int result = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
 		final int t = stateB << 9;
-		stateE = stateE + (0xC3564E95 ^ stateD) | 0;
+		stateE += 0xC3564E95 ^ stateD;
 		stateC ^= stateA;
 		stateD ^= stateB;
 		stateB ^= stateC;
@@ -362,7 +397,7 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 	public int nextInt () {
 		final int res = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
 		final int t = stateB << 9;
-		stateE = stateE + (0xC3564E95 ^ stateD) | 0;
+		stateE += 0xC3564E95 ^ stateD;
 		stateC ^= stateA;
 		stateD ^= stateB;
 		stateB ^= stateC;
@@ -377,7 +412,7 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 	public int nextInt (int bound) {
 		final int res = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
 		final int t = stateB << 9;
-		stateE = stateE + (0xC3564E95 ^ stateD) | 0;
+		stateE += 0xC3564E95 ^ stateD;
 		stateC ^= stateA;
 		stateD ^= stateB;
 		stateB ^= stateC;
@@ -391,7 +426,7 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 	public int nextSignedInt (int outerBound) {
 		final int res = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
 		final int t = stateB << 9;
-		stateE = stateE + (0xC3564E95 ^ stateD) | 0;
+		stateE += 0xC3564E95 ^ stateD;
 		stateC ^= stateA;
 		stateD ^= stateB;
 		stateB ^= stateC;
@@ -406,7 +441,7 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 	public int nextUnsignedInt(int bound) {
 		final int res = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
 		final int t = stateB << 9;
-		stateE = stateE + (0xC3564E95 ^ stateD) | 0;
+		stateE += 0xC3564E95 ^ stateD;
 		stateC ^= stateA;
 		stateD ^= stateB;
 		stateB ^= stateC;
@@ -422,7 +457,7 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 			for (int i = 0; i < bytes.length; ) {
 				int r = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
 				final int t = stateB << 9;
-				stateE = stateE + (0xC3564E95 ^ stateD) | 0;
+				stateE += 0xC3564E95 ^ stateD;
 				stateC ^= stateA;
 				stateD ^= stateB;
 				stateB ^= stateC;
@@ -440,7 +475,7 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 	public int nextInt(int innerBound, int outerBound) {
 		final int res = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
 		final int t = stateB << 9;
-		stateE = stateE + (0xC3564E95 ^ stateD) | 0;
+		stateE += 0xC3564E95 ^ stateD;
 		stateC ^= stateA;
 		stateD ^= stateB;
 		stateB ^= stateC;
@@ -454,7 +489,7 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 	public int nextSignedInt(int innerBound, int outerBound) {
 		final int res = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
 		final int t = stateB << 9;
-		stateE = stateE + (0xC3564E95 ^ stateD) | 0;
+		stateE += 0xC3564E95 ^ stateD;
 		stateC ^= stateA;
 		stateD ^= stateB;
 		stateB ^= stateC;
@@ -469,7 +504,7 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 		final long randHi = ((stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB) & 0xFFFFFFFFL;
 		final long randLo = ((stateC << 19 | stateC >>> 13) ^ (stateE << 7 | stateE >>> 25) + stateD) & 0xFFFFFFFFL;
 		int t = stateB << 9;
-		stateE = stateE + (0xC3564E95 ^ stateD) | 0;
+		stateE += 0xC3564E95 ^ stateD;
 		stateC ^= stateA;
 		stateD ^= stateB;
 		stateB ^= stateC;
@@ -498,7 +533,7 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 		final long randHi = ((stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB) & 0xFFFFFFFFL;
 		final long randLo = ((stateC << 19 | stateC >>> 13) ^ (stateE << 7 | stateE >>> 25) + stateD) & 0xFFFFFFFFL;
 		int t = stateB << 9;
-		stateE = stateE + (0xC3564E95 ^ stateD) | 0;
+		stateE += 0xC3564E95 ^ stateD;
 		stateC ^= stateA;
 		stateD ^= stateB;
 		stateB ^= stateC;
@@ -516,7 +551,7 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 		final long randHi = ((stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB) & 0xFFFFFFFFL;
 		final long randLo = ((stateC << 19 | stateC >>> 13) ^ (stateE << 7 | stateE >>> 25) + stateD) & 0xFFFFFFFFL;
 		int t = stateB << 9;
-		stateE = stateE + (0xC3564E95 ^ stateD) | 0;
+		stateE += 0xC3564E95 ^ stateD;
 		stateC ^= stateA;
 		stateD ^= stateB;
 		stateB ^= stateC;
@@ -543,7 +578,7 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 		final long randHi = ((stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB) & 0xFFFFFFFFL;
 		final long randLo = ((stateC << 19 | stateC >>> 13) ^ (stateE << 7 | stateE >>> 25) + stateD) & 0xFFFFFFFFL;
 		int t = stateB << 9;
-		stateE = stateE + (0xC3564E95 ^ stateD) | 0;
+		stateE += 0xC3564E95 ^ stateD;
 		stateC ^= stateA;
 		stateD ^= stateB;
 		stateB ^= stateC;
@@ -561,7 +596,7 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 	{
 		final int res = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
 		final int t = stateB << 9;
-		stateE = stateE + (0xC3564E95 ^ stateD) | 0;
+		stateE += 0xC3564E95 ^ stateD;
 		stateC ^= stateA;
 		stateD ^= stateB;
 		stateB ^= stateC;
@@ -575,7 +610,7 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 	public float nextFloat () {
 		final int res = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
 		final int t = stateB << 9;
-		stateE = stateE + (0xC3564E95 ^ stateD) | 0;
+		stateE += 0xC3564E95 ^ stateD;
 		stateC ^= stateA;
 		stateD ^= stateB;
 		stateB ^= stateC;
@@ -589,7 +624,7 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 	public float nextInclusiveFloat () {
 		final int res = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
 		final int t = stateB << 9;
-		stateE = stateE + (0xC3564E95 ^ stateD) | 0;
+		stateE += 0xC3564E95 ^ stateD;
 		stateC ^= stateA;
 		stateD ^= stateB;
 		stateB ^= stateC;
