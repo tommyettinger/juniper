@@ -50,7 +50,7 @@ public class L64X256MoremurRandom extends EnhancedRandom {
 	protected long stateE;
 
 	/**
-	 * Creates a new L64X256StarStarRandom with a random state.
+	 * Creates a new L64X256MoremurRandom with a random state.
 	 */
 	public L64X256MoremurRandom() {
 		super();
@@ -64,7 +64,7 @@ public class L64X256MoremurRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Creates a new L64X256StarStarRandom with the given seed; all {@code long} values are permitted.
+	 * Creates a new L64X256MoremurRandom with the given seed; all {@code long} values are permitted.
 	 * The seed will be passed to {@link #setSeed(long)} to attempt to adequately distribute the seed randomly.
 	 *
 	 * @param seed any {@code long} value
@@ -75,7 +75,7 @@ public class L64X256MoremurRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Creates a new L64X256StarStarRandom with the given four states; all {@code long} values are permitted.
+	 * Creates a new L64X256MoremurRandom with the given four states; all {@code long} values are permitted.
 	 * These states will be used verbatim, as long as they are not all 0. In that case, stateD is changed.
 	 *
 	 * @param stateA any {@code long} value
@@ -96,7 +96,7 @@ public class L64X256MoremurRandom extends EnhancedRandom {
 
 	@Override
 	public String getTag() {
-		return "LXNR";
+		return "CXUR";
 	}
 
 	/**
@@ -438,6 +438,6 @@ public class L64X256MoremurRandom extends EnhancedRandom {
 	}
 
 	public String toString () {
-		return "L64X256StarStarRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L, stateD=" + (stateD) + "L, stateE=" + (stateE) + "L}";
+		return "L64X256MoremurRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L, stateD=" + (stateD) + "L, stateE=" + (stateE) + "L}";
 	}
 }
