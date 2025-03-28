@@ -1,0 +1,1 @@
+Lowest mode: 71.00000 has mean amount 0.0228690356  FAIL 💀 for L64X256StarStarRandom

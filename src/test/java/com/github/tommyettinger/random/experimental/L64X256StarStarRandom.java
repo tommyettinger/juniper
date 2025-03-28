@@ -287,7 +287,7 @@ public class L64X256StarStarRandom extends EnhancedRandom {
 
 	@Override
 	public long nextLong () {
-		long res = (stateE + stateA) * 5;
+		long res = (stateE + stateA) * 0x7FFFFFFF;
 		stateE = stateE * 0xD1342543DE82EF95L + 1L;
 		long t = stateB << 17;
 		stateC ^= stateA;
@@ -296,12 +296,12 @@ public class L64X256StarStarRandom extends EnhancedRandom {
 		stateA ^= stateD;
 		stateC ^= t;
 		stateD = (stateD << 45 | stateD >>> 19);
-		return (res << 7 | res >>> 57) * 9;
+		return (res << 17 | res >>> 47) * 31;
 	}
 
 	@Override
 	public int next (int bits) {
-		long res = (stateE + stateA) * 5;
+		long res = (stateE + stateA) * 0x7FFFFFFF;
 		stateE = stateE * 0xD1342543DE82EF95L + 1L;
 		long t = stateB << 17;
 		stateC ^= stateA;
@@ -310,7 +310,7 @@ public class L64X256StarStarRandom extends EnhancedRandom {
 		stateA ^= stateD;
 		stateC ^= t;
 		stateD = (stateD << 45 | stateD >>> 19);
-		return (int)(((res << 7 | res >>> 57) * 9) >>> 64 - bits);
+		return (int)(((res << 17 | res >>> 47) * 31) >>> 64 - bits);
 	}
 
 	@Override
@@ -325,8 +325,8 @@ public class L64X256StarStarRandom extends EnhancedRandom {
 		stateB ^= stateC; // StateB has b;
 		stateD ^= stateB; // StateD has d;
 		stateE = (stateE - 1L) * 0x572B5EE77A54E3BDL;
-		long res = (stateE + stateA) * 5;
-		return (res << 7 | res >>> 57) * 9;
+		long res = (stateE + stateA) * 0x7FFFFFFF;
+		return (res << 17 | res >>> 47) * 31;
 	}
 
 	/**
@@ -401,8 +401,8 @@ public class L64X256StarStarRandom extends EnhancedRandom {
 		s2 ^= s1; // s2 has c;
 		s1 ^= s2; // StateB has b;
 
-		long res = (s0 + ((stateE - 1L) * 0x572B5EE77A54E3BDL)) * 5;
-		return (res << 7 | res >>> 57) * 9;
+		long res = (s0 + ((stateE - 1L) * 0x572B5EE77A54E3BDL)) * 0x7FFFFFFF;
+		return (res << 17 | res >>> 47) * 31;
 	}
 
 
