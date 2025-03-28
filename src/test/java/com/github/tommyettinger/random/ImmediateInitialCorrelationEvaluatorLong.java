@@ -19,6 +19,8 @@ package com.github.tommyettinger.random;
 import com.badlogic.gdx.files.FileHandle;
 import com.github.tommyettinger.digital.ArrayTools;
 import com.github.tommyettinger.digital.Base;
+import com.github.tommyettinger.ds.ObjectList;
+import com.github.tommyettinger.random.experimental.L64X256NoMixRandom;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -38,7 +40,7 @@ import java.util.Date;
 public class ImmediateInitialCorrelationEvaluatorLong {
     public static long INTERVAL_X = 1;//2;//4;//8;//16;//0xC13FA9A902A6328FL;//
     public static long INTERVAL_Y = 2;//2;//4;//8;//16;//0x91E10DA5C79E7B1DL;//
-    public static int DROPPED_STEPS = 10;
+    public static int DROPPED_STEPS = 30;
     public double steps = 0;
     public int mode = 0;
     public double amount = 0;
@@ -114,12 +116,9 @@ public class ImmediateInitialCorrelationEvaluatorLong {
         StringBuilder sb = new StringBuilder(1024);
         EnhancedRandom[][] g = new EnhancedRandom[256][256];
 
-//        ArrayList<EnhancedRandom> rs = ObjectList.with(
-//                new Xoshiro160RoadroxoRandom(1, 1, 1, 1, 1),
-//                new Xoshiro128PlusPlusRandom(1, 1, 1, 1),
-//                new Xoshiro256StarStarRandom(1, 1, 1, 1),
-//                new Xoshiro256MX3Random(1, 1, 1, 1)
-//        );
+        ArrayList<EnhancedRandom> rs = ObjectList.with(
+                new L64X256NoMixRandom(1, 1, 1, 1, 1)
+        );
 //
 //        ArrayList<EnhancedRandom> rs = ObjectList.with(
 //                new PcgRXSMXSRandom(1, 1), new FlowRandom(1, 1), new MizuchiRandom(1, 1),
@@ -146,7 +145,7 @@ public class ImmediateInitialCorrelationEvaluatorLong {
 //                new Taxman32Random(1, 1), new Taxon32Random(1, 1), new Silk32Random(1, 1),
 //                new Choo32Random(1, 1, 1, 1));
 
-        ArrayList<EnhancedRandom> rs = Generators.randomList;
+//        ArrayList<EnhancedRandom> rs = Generators.randomList;
 
         rs.sort((l, r) -> l.getClass().getSimpleName().compareTo(r.getClass().getSimpleName()));
 //        rs.sort(Comparator.comparing(EnhancedRandom::getClass, Comparator.comparing(Class::getSimpleName)));

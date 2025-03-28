@@ -19,6 +19,8 @@ package com.github.tommyettinger.random;
 import com.badlogic.gdx.files.FileHandle;
 import com.github.tommyettinger.digital.ArrayTools;
 import com.github.tommyettinger.digital.Base;
+import com.github.tommyettinger.ds.ObjectList;
+import com.github.tommyettinger.random.experimental.L64X256NoMixRandom;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -116,12 +118,9 @@ public class InitialCorrelationEvaluatorLong {
 //                new OrbitalButWorseRandom(1, 1), new OrbitRXSMXSRandom(1, 1), new OrbitalRandom(1, 1),
 //                new DistinctRandom(1));
 
-//        ArrayList<EnhancedRandom> rs = ObjectList.with(new EnhancedRandom[]{
-//                new Xoshiro160RoadroxoRandom(1, 1, 1, 1, 1),
-//                new Xoshiro128PlusPlusRandom(1, 1, 1, 1),
-//                new Xoshiro256StarStarRandom(1, 1, 1, 1),
-//                new Xoshiro256MX3Random(1, 1, 1, 1)
-//        });
+        ArrayList<EnhancedRandom> rs = ObjectList.with(new EnhancedRandom[]{
+                new L64X256NoMixRandom(1, 1, 1, 1, 1)
+        });
 
 //        ArrayList<EnhancedRandom> rs = ObjectList.with(new EnhancedRandom[]{
 //                new Bear32Random(1, 1, 1, 1), new Chill32Random(1, 1, 1), new ChopRandom(1, 1, 1, 1),
@@ -141,7 +140,7 @@ public class InitialCorrelationEvaluatorLong {
 //                new Crand64Random(1, 1, 1, 1, 1), new RomuTrioRandom(1, 1, 1), new Sfc64Random(1, 1, 1, 1),
 //                new LCG48Random(1),
 //        });
-        ArrayList<EnhancedRandom> rs = Generators.randomList;
+//        ArrayList<EnhancedRandom> rs = Generators.randomList;
 
         rs.sort((l, r) -> l.getClass().getSimpleName().compareTo(r.getClass().getSimpleName()));
 //        rs.sort(Comparator.comparing(EnhancedRandom::getClass, Comparator.comparing(Class::getSimpleName)));
