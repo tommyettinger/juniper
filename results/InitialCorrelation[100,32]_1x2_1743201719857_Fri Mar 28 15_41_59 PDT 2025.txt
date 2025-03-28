@@ -1,0 +1,3 @@
+Lowest mode: 116.0000 has mean amount 0.0310880839  PASS 👍 for L64X256MoremurRandom
+Lowest mode: 0.000000 has mean amount 0.1656517386  FAIL 💀 for L64X256NoMixRandom
+Lowest mode: 71.00000 has mean amount 0.0228690356  FAIL 💀 for L64X256StarStarRandom

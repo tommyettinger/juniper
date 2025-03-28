@@ -20,14 +20,13 @@ package com.github.tommyettinger.random.experimental;
 import com.github.tommyettinger.random.EnhancedRandom;
 
 /**
- * An LXM generator with the Mix step changed to a modified "StarStar" mixer.
- * This is related to L64X256MixRandom in JDK 17 and newer.
+ * An LXM generator with the Mix step changed to Moremur. This is related to L64X256MixRandom in JDK 17 and newer.
  * <br>
  * Xoshiro256** was written in 2018 by David Blackman and Sebastiano Vigna. You can consult their paper for technical details:
  * <a href="https://vigna.di.unimi.it/ftp/papers/ScrambledLinear.pdf">PDF link here</a>.
  * <a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/util/random/package-summary.html">The java.util.random package docs are also useful.</a>
  */
-public class L64X256StarStarRandom extends EnhancedRandom {
+public class L64X256MoremurRandom extends EnhancedRandom {
 
 	/**
 	 * The first state; can be any long, as long as the first four states are not 0.
@@ -53,7 +52,7 @@ public class L64X256StarStarRandom extends EnhancedRandom {
 	/**
 	 * Creates a new L64X256StarStarRandom with a random state.
 	 */
-	public L64X256StarStarRandom() {
+	public L64X256MoremurRandom() {
 		super();
 		stateA = EnhancedRandom.seedFromMath();
 		stateB = EnhancedRandom.seedFromMath();
@@ -70,7 +69,7 @@ public class L64X256StarStarRandom extends EnhancedRandom {
 	 *
 	 * @param seed any {@code long} value
 	 */
-	public L64X256StarStarRandom(long seed) {
+	public L64X256MoremurRandom(long seed) {
 		super(seed);
 		setSeed(seed);
 	}
@@ -84,7 +83,7 @@ public class L64X256StarStarRandom extends EnhancedRandom {
 	 * @param stateC any {@code long} value
 	 * @param stateD any {@code long} value
 	 */
-	public L64X256StarStarRandom(long stateA, long stateB, long stateC, long stateD, long stateE) {
+	public L64X256MoremurRandom(long stateA, long stateB, long stateC, long stateD, long stateE) {
 		super(stateA);
 		this.stateA = stateA;
 		this.stateB = stateB;
@@ -288,7 +287,7 @@ public class L64X256StarStarRandom extends EnhancedRandom {
 
 	@Override
 	public long nextLong () {
-		long res = (stateE + stateA) * 0x7FFFFFFF;
+		long res = moremur(stateE + stateA);
 		stateE = stateE * 0xD1342543DE82EF95L + 1L;
 		long t = stateB << 17;
 		stateC ^= stateA;
@@ -297,12 +296,12 @@ public class L64X256StarStarRandom extends EnhancedRandom {
 		stateA ^= stateD;
 		stateC ^= t;
 		stateD = (stateD << 45 | stateD >>> 19);
-		return (res << 17 | res >>> 47) * 31;
+		return res;
 	}
 
 	@Override
 	public int next (int bits) {
-		long res = (stateE + stateA) * 0x7FFFFFFF;
+		long res = moremur(stateE + stateA);
 		stateE = stateE * 0xD1342543DE82EF95L + 1L;
 		long t = stateB << 17;
 		stateC ^= stateA;
@@ -311,7 +310,7 @@ public class L64X256StarStarRandom extends EnhancedRandom {
 		stateA ^= stateD;
 		stateC ^= t;
 		stateD = (stateD << 45 | stateD >>> 19);
-		return (int)(((res << 17 | res >>> 47) * 31) >>> 64 - bits);
+		return (int)(res >>> 64 - bits);
 	}
 
 	@Override
@@ -326,8 +325,7 @@ public class L64X256StarStarRandom extends EnhancedRandom {
 		stateB ^= stateC; // StateB has b;
 		stateD ^= stateB; // StateD has d;
 		stateE = (stateE - 1L) * 0x572B5EE77A54E3BDL;
-		long res = (stateE + stateA) * 0x7FFFFFFF;
-		return (res << 17 | res >>> 47) * 31;
+		return moremur(stateE + stateA);
 	}
 
 	/**
@@ -402,14 +400,21 @@ public class L64X256StarStarRandom extends EnhancedRandom {
 		s2 ^= s1; // s2 has c;
 		s1 ^= s2; // StateB has b;
 
-		long res = (s0 + ((stateE - 1L) * 0x572B5EE77A54E3BDL)) * 0x7FFFFFFF;
-		return (res << 17 | res >>> 47) * 31;
+		return moremur(s0 + ((stateE - 1L) * 0x572B5EE77A54E3BDL));
 	}
 
+	public static long moremur(long x) {
+		x ^= x >>> 27;
+		x *= 0x3C79AC492BA7B653L;
+		x ^= x >>> 33;
+		x *= 0x1C69B3F74AC4AE35L;
+		return x ^ x >>> 27;
+
+	}
 
 	@Override
-	public L64X256StarStarRandom copy () {
-		return new L64X256StarStarRandom(stateA, stateB, stateC, stateD, stateE);
+	public L64X256MoremurRandom copy () {
+		return new L64X256MoremurRandom(stateA, stateB, stateC, stateD, stateE);
 	}
 
 	@Override
@@ -419,7 +424,7 @@ public class L64X256StarStarRandom extends EnhancedRandom {
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		L64X256StarStarRandom that = (L64X256StarStarRandom)o;
+		L64X256MoremurRandom that = (L64X256MoremurRandom)o;
 
 		if (stateA != that.stateA)
 			return false;
