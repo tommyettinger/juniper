@@ -21,6 +21,7 @@ import com.github.tommyettinger.digital.ArrayTools;
 import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.ds.ObjectList;
 import com.github.tommyettinger.random.experimental.L64X256NoMixRandom;
+import com.github.tommyettinger.random.experimental.L64X256StarStarRandom;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -119,7 +120,7 @@ public class InitialCorrelationEvaluatorLong {
 //                new DistinctRandom(1));
 
         ArrayList<EnhancedRandom> rs = ObjectList.with(new EnhancedRandom[]{
-                new L64X256NoMixRandom(1, 1, 1, 1, 1)
+                new L64X256StarStarRandom(1, 1, 1, 1, 1)
         });
 
 //        ArrayList<EnhancedRandom> rs = ObjectList.with(new EnhancedRandom[]{

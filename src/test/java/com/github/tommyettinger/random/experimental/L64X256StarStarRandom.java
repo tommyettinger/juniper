@@ -18,7 +18,6 @@
 package com.github.tommyettinger.random.experimental;
 
 import com.github.tommyettinger.random.EnhancedRandom;
-import com.github.tommyettinger.random.Xoshiro256StarStarRandom;
 
 /**
  * An LXM generator with the Mix step removed. This is related to L64X256MixRandom in JDK 17 and newer.
@@ -27,7 +26,7 @@ import com.github.tommyettinger.random.Xoshiro256StarStarRandom;
  * <a href="https://vigna.di.unimi.it/ftp/papers/ScrambledLinear.pdf">PDF link here</a>.
  * <a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/util/random/package-summary.html">The java.util.random package docs are also useful.</a>
  */
-public class L64X256NoMixRandom extends EnhancedRandom {
+public class L64X256StarStarRandom extends EnhancedRandom {
 
 	/**
 	 * The first state; can be any long, as long as the first four states are not 0.
@@ -51,9 +50,9 @@ public class L64X256NoMixRandom extends EnhancedRandom {
 	protected long stateE;
 
 	/**
-	 * Creates a new L64X256NoMixRandom with a random state.
+	 * Creates a new L64X256StarStarRandom with a random state.
 	 */
-	public L64X256NoMixRandom() {
+	public L64X256StarStarRandom() {
 		super();
 		stateA = EnhancedRandom.seedFromMath();
 		stateB = EnhancedRandom.seedFromMath();
@@ -65,18 +64,18 @@ public class L64X256NoMixRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Creates a new L64X256NoMixRandom with the given seed; all {@code long} values are permitted.
+	 * Creates a new L64X256StarStarRandom with the given seed; all {@code long} values are permitted.
 	 * The seed will be passed to {@link #setSeed(long)} to attempt to adequately distribute the seed randomly.
 	 *
 	 * @param seed any {@code long} value
 	 */
-	public L64X256NoMixRandom(long seed) {
+	public L64X256StarStarRandom(long seed) {
 		super(seed);
 		setSeed(seed);
 	}
 
 	/**
-	 * Creates a new L64X256NoMixRandom with the given four states; all {@code long} values are permitted.
+	 * Creates a new L64X256StarStarRandom with the given four states; all {@code long} values are permitted.
 	 * These states will be used verbatim, as long as they are not all 0. In that case, stateD is changed.
 	 *
 	 * @param stateA any {@code long} value
@@ -84,7 +83,7 @@ public class L64X256NoMixRandom extends EnhancedRandom {
 	 * @param stateC any {@code long} value
 	 * @param stateD any {@code long} value
 	 */
-	public L64X256NoMixRandom(long stateA, long stateB, long stateC, long stateD, long stateE) {
+	public L64X256StarStarRandom(long stateA, long stateB, long stateC, long stateD, long stateE) {
 		super(stateA);
 		this.stateA = stateA;
 		this.stateB = stateB;
@@ -145,20 +144,20 @@ public class L64X256NoMixRandom extends EnhancedRandom {
 	@Override
 	public void setSelectedState (int selection, long value) {
 		switch (selection) {
-			case 0:
-				stateA = ((value | stateB | stateC | stateD) == 0L) ? 0x9E3779B97F4A7C15L : value;
-				break;
-			case 1:
-				stateB = ((stateA | value | stateC | stateD) == 0L) ? 0x9E3779B97F4A7C15L : value;
-				break;
-			case 2:
-				stateC = ((stateA | stateB | value | stateD) == 0L) ? 0x9E3779B97F4A7C15L : value;
-				break;
-			case 3:
-				stateD = ((stateA | stateB | stateC | value) == 0L) ? 0x9E3779B97F4A7C15L : value;
-				break;
+            case 0:
+                stateA = ((value | stateB | stateC | stateD) == 0L) ? 0x9E3779B97F4A7C15L : value;
+                break;
+            case 1:
+                stateB = ((stateA | value | stateC | stateD) == 0L) ? 0x9E3779B97F4A7C15L : value;
+                break;
+            case 2:
+                stateC = ((stateA | stateB | value | stateD) == 0L) ? 0x9E3779B97F4A7C15L : value;
+                break;
+            case 3:
+                stateD = ((stateA | stateB | stateC | value) == 0L) ? 0x9E3779B97F4A7C15L : value;
+                break;
 			default:
-				stateE = value;
+                stateE = value;
 		}
 	}
 
@@ -288,7 +287,7 @@ public class L64X256NoMixRandom extends EnhancedRandom {
 
 	@Override
 	public long nextLong () {
-		long result = stateE + stateA;
+		long res = (stateE + stateA) * 5;
 		stateE = stateE * 0xD1342543DE82EF95L + 1L;
 		long t = stateB << 17;
 		stateC ^= stateA;
@@ -297,12 +296,12 @@ public class L64X256NoMixRandom extends EnhancedRandom {
 		stateA ^= stateD;
 		stateC ^= t;
 		stateD = (stateD << 45 | stateD >>> 19);
-		return result;
+		return (res << 7 | res >>> 57) * 9;
 	}
 
 	@Override
 	public int next (int bits) {
-		long result = stateE + stateA;
+		long res = (stateE + stateA) * 5;
 		stateE = stateE * 0xD1342543DE82EF95L + 1L;
 		long t = stateB << 17;
 		stateC ^= stateA;
@@ -311,7 +310,7 @@ public class L64X256NoMixRandom extends EnhancedRandom {
 		stateA ^= stateD;
 		stateC ^= t;
 		stateD = (stateD << 45 | stateD >>> 19);
-		return (int)(result >>> 64 - bits);
+		return (int)(((res << 7 | res >>> 57) * 9) >>> 64 - bits);
 	}
 
 	@Override
@@ -326,7 +325,8 @@ public class L64X256NoMixRandom extends EnhancedRandom {
 		stateB ^= stateC; // StateB has b;
 		stateD ^= stateB; // StateD has d;
 		stateE = (stateE - 1L) * 0x572B5EE77A54E3BDL;
-        return stateE + stateA;
+		long res = (stateE + stateA) * 5;
+		return (res << 7 | res >>> 57) * 9;
 	}
 
 	/**
@@ -401,13 +401,14 @@ public class L64X256NoMixRandom extends EnhancedRandom {
 		s2 ^= s1; // s2 has c;
 		s1 ^= s2; // StateB has b;
 
-		return s0 + ((stateE - 1L) * 0x572B5EE77A54E3BDL);
+		long res = (s0 + ((stateE - 1L) * 0x572B5EE77A54E3BDL)) * 5;
+		return (res << 7 | res >>> 57) * 9;
 	}
 
 
 	@Override
-	public L64X256NoMixRandom copy () {
-		return new L64X256NoMixRandom(stateA, stateB, stateC, stateD, stateE);
+	public L64X256StarStarRandom copy () {
+		return new L64X256StarStarRandom(stateA, stateB, stateC, stateD, stateE);
 	}
 
 	@Override
@@ -417,7 +418,7 @@ public class L64X256NoMixRandom extends EnhancedRandom {
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		L64X256NoMixRandom that = (L64X256NoMixRandom)o;
+		L64X256StarStarRandom that = (L64X256StarStarRandom)o;
 
 		if (stateA != that.stateA)
 			return false;
@@ -431,6 +432,6 @@ public class L64X256NoMixRandom extends EnhancedRandom {
 	}
 
 	public String toString () {
-		return "L64X256NoMixRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L, stateD=" + (stateD) + "L, stateE=" + (stateE) + "L}";
+		return "L64X256StarStarRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L, stateD=" + (stateD) + "L, stateE=" + (stateE) + "L}";
 	}
 }
