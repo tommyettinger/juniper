@@ -52,7 +52,7 @@ public class I64X256Speck1Random extends EnhancedRandom {
 	protected long stateE;
 
 	/**
-	 * Creates a new I64X256MoremurRandom with a random state.
+	 * Creates a new I64X256Speck1Random with a random state.
 	 */
 	public I64X256Speck1Random() {
 		super();
@@ -66,7 +66,7 @@ public class I64X256Speck1Random extends EnhancedRandom {
 	}
 
 	/**
-	 * Creates a new I64X256MoremurRandom with the given seed; all {@code long} values are permitted.
+	 * Creates a new I64X256Speck1Random with the given seed; all {@code long} values are permitted.
 	 * The seed will be passed to {@link #setSeed(long)} to attempt to adequately distribute the seed randomly.
 	 *
 	 * @param seed any {@code long} value
@@ -77,7 +77,7 @@ public class I64X256Speck1Random extends EnhancedRandom {
 	}
 
 	/**
-	 * Creates a new I64X256MoremurRandom with the given four states; all {@code long} values are permitted.
+	 * Creates a new I64X256Speck1Random with the given four states; all {@code long} values are permitted.
 	 * These states will be used verbatim, as long as they are not all 0. In that case, stateD is changed.
 	 *
 	 * @param stateA any {@code long} value
@@ -444,6 +444,6 @@ public class I64X256Speck1Random extends EnhancedRandom {
 	}
 
 	public String toString () {
-		return "I64X256MoremurRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L, stateD=" + (stateD) + "L, stateE=" + (stateE) + "L}";
+		return "I64X256Speck1Random{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L, stateD=" + (stateD) + "L, stateE=" + (stateE) + "L}";
 	}
 }

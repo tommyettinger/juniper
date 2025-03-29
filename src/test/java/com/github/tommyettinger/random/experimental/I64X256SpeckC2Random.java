@@ -28,7 +28,7 @@ import com.github.tommyettinger.random.EnhancedRandom;
  * <a href="https://vigna.di.unimi.it/ftp/papers/ScrambledLinear.pdf">PDF link here</a>.
  * <a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/util/random/package-summary.html">The java.util.random package docs are also useful.</a>
  */
-public class I64X256Speck2Random extends EnhancedRandom {
+public class I64X256SpeckC2Random extends EnhancedRandom {
 
 	/**
 	 * The first state; can be any long, as long as the first four states are not 0.
@@ -52,9 +52,9 @@ public class I64X256Speck2Random extends EnhancedRandom {
 	protected long stateE;
 
 	/**
-	 * Creates a new I64X256Speck2Random with a random state.
+	 * Creates a new I64X256SpeckC2Random with a random state.
 	 */
-	public I64X256Speck2Random() {
+	public I64X256SpeckC2Random() {
 		super();
 		stateA = EnhancedRandom.seedFromMath();
 		stateB = EnhancedRandom.seedFromMath();
@@ -66,18 +66,18 @@ public class I64X256Speck2Random extends EnhancedRandom {
 	}
 
 	/**
-	 * Creates a new I64X256Speck2Random with the given seed; all {@code long} values are permitted.
+	 * Creates a new I64X256SpeckC2Random with the given seed; all {@code long} values are permitted.
 	 * The seed will be passed to {@link #setSeed(long)} to attempt to adequately distribute the seed randomly.
 	 *
 	 * @param seed any {@code long} value
 	 */
-	public I64X256Speck2Random(long seed) {
+	public I64X256SpeckC2Random(long seed) {
 		super(seed);
 		setSeed(seed);
 	}
 
 	/**
-	 * Creates a new I64X256Speck2Random with the given four states; all {@code long} values are permitted.
+	 * Creates a new I64X256SpeckC2Random with the given four states; all {@code long} values are permitted.
 	 * These states will be used verbatim, as long as they are not all 0. In that case, stateD is changed.
 	 *
 	 * @param stateA any {@code long} value
@@ -85,7 +85,7 @@ public class I64X256Speck2Random extends EnhancedRandom {
 	 * @param stateC any {@code long} value
 	 * @param stateD any {@code long} value
 	 */
-	public I64X256Speck2Random(long stateA, long stateB, long stateC, long stateD, long stateE) {
+	public I64X256SpeckC2Random(long stateA, long stateB, long stateC, long stateD, long stateE) {
 		super(stateA);
 		this.stateA = stateA;
 		this.stateB = stateB;
@@ -289,7 +289,7 @@ public class I64X256Speck2Random extends EnhancedRandom {
 
 	@Override
 	public long nextLong () {
-		long res = speck(stateA, stateE);
+		long res = speck(stateA, stateE, stateB);
 		++stateE;
 		long t = stateB << 17;
 		stateC ^= stateA;
@@ -303,7 +303,7 @@ public class I64X256Speck2Random extends EnhancedRandom {
 
 	@Override
 	public int next (int bits) {
-		long res = speck(stateA, stateE);
+		long res = speck(stateA, stateE, stateB);
 		++stateE;
 		long t = stateB << 17;
 		stateC ^= stateA;
@@ -327,7 +327,7 @@ public class I64X256Speck2Random extends EnhancedRandom {
 		stateB ^= stateC; // StateB has b;
 		stateD ^= stateB; // StateD has d;
 		--stateE;
-		return speck(stateA, stateE);
+		return speck(stateA, stateE, stateB);
 	}
 
 	/**
@@ -395,33 +395,33 @@ public class I64X256Speck2Random extends EnhancedRandom {
 
 		s3 = (s3 << 19 | s3 >>> 45); // s3 has d ^ b
 		s0 ^= s3; // s0 has a
-//		s2 ^= s1; // s2 has b ^ b << 17;
-//		s2 ^= s2 << 17;
-//		s2 ^= s2 << 34; // s2 has b
-//		s1 ^= s0; // s1 has b ^ c
-//		s2 ^= s1; // s2 has c;
-//		s1 ^= s2; // StateB has b;
+		s2 ^= s1; // s2 has b ^ b << 17;
+		s2 ^= s2 << 17;
+		s2 ^= s2 << 34; // s2 has b
+		s1 ^= s0; // s1 has b ^ c
+		s2 ^= s1; // s2 has c;
+		s1 ^= s2; // StateB has b;
 
-		return speck(s0, stateE - 1);
+		return speck(s0, stateE - 1, s1);
 	}
 
 	private static final long C = 0x3C79AC492BA7B653L;
 
-	public static long speck(long a, long b) {
+	public static long speck(long a, long b, long c) {
 		// one round
 //		return ((a << 3 | a >>> 61) ^ (((b << 56 | b >>> 8) + a ^ C)));
 
 		// two rounds
-		b = (b << 56 | b >>> 8) + a ^ C;
-		a = ((a << 3 | a >>> 61) ^ b);
-		b = (b << 51 | b >>> 13) + a ^ C;
-		a = ((a << 5 | a >>> 59) ^ b);
+		b = (b << 47 | b >>> 17) + a ^ c;
+		a = ((a << 11 | a >>> 53) ^ b);
+		b = (b << 51 | b >>> 13) + a ^ c + C;
+		a = ((a << 5  | a >>> 59) ^ b);
 		return a;
 	}
 
 	@Override
-	public I64X256Speck2Random copy () {
-		return new I64X256Speck2Random(stateA, stateB, stateC, stateD, stateE);
+	public I64X256SpeckC2Random copy () {
+		return new I64X256SpeckC2Random(stateA, stateB, stateC, stateD, stateE);
 	}
 
 	@Override
@@ -431,7 +431,7 @@ public class I64X256Speck2Random extends EnhancedRandom {
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		I64X256Speck2Random that = (I64X256Speck2Random)o;
+		I64X256SpeckC2Random that = (I64X256SpeckC2Random)o;
 
 		if (stateA != that.stateA)
 			return false;
@@ -445,6 +445,6 @@ public class I64X256Speck2Random extends EnhancedRandom {
 	}
 
 	public String toString () {
-		return "I64X256Speck2Random{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L, stateD=" + (stateD) + "L, stateE=" + (stateE) + "L}";
+		return "I64X256SpeckC2Random{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L, stateD=" + (stateD) + "L, stateE=" + (stateE) + "L}";
 	}
 }
