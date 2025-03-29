@@ -74,6 +74,7 @@ public final class Generators {
         randomList.add(new I64X256Speck2Random(1, 1, 1, 1, 1));
         randomList.add(new I64X256SpeckC2Random(1, 1, 1, 1, 1));
         randomList.add(new C64X256Speck2Random(1, 1, 1, 1, 1));
+        randomList.add(new L64X256Speck2Random(1, 1, 1, 1, 1));
     }
     public static int randomCount = randomList.size();
 
