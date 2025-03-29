@@ -1,0 +1,12 @@
+Lowest mode: 115.0000 has mean amount 0.0311233103  PASS 👍 for C64X256MoremurRandom
+Lowest mode: 106.0000 has mean amount 0.0247863531  FAIL 💀 for C64X256Speck2Random
+Lowest mode: 115.0000 has mean amount 0.0689741224  FAIL 💀 for I64X256AxRandom
+Lowest mode: 116.0000 has mean amount 0.0310815423  PASS 👍 for I64X256MoremurRandom
+Lowest mode: 0.000000 has mean amount 0.4231246858  FAIL 💀 for I64X256Speck1Random
+Lowest mode: 64.00000 has mean amount 0.0540992468  FAIL 💀 for I64X256Speck2Random
+Lowest mode: 95.00000 has mean amount 0.0210242122  FAIL 💀 for I64X256SpeckC2Random
+Lowest mode: 116.0000 has mean amount 0.0310880839  PASS 👍 for L64X256MoremurRandom
+Lowest mode: 0.000000 has mean amount 0.1656517386  FAIL 💀 for L64X256NoMixRandom
+Lowest mode: 104.0000 has mean amount 0.0249412208  FAIL 💀 for L64X256Speck2Random
+Lowest mode: 71.00000 has mean amount 0.0228690356  FAIL 💀 for L64X256StarStarRandom
+Lowest mode: 116.0000 has mean amount 0.0580613464  FAIL 💀 for V64X256AxRandom

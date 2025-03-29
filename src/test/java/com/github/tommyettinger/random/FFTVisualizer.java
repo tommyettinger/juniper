@@ -326,7 +326,7 @@ public class FFTVisualizer extends ApplicationAdapter {
         config.setTitle("Juniper FFT Visualization");
         config.setWindowedMode(width << 1, height);
         config.useVsync(false);
-        config.setForegroundFPS(120);
+        config.setForegroundFPS(500);
         config.setResizable(false);
         new Lwjgl3Application(new FFTVisualizer(), config);
     }
