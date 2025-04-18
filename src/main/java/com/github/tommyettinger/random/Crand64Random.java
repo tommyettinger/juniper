@@ -296,6 +296,21 @@ public class Crand64Random extends EnhancedRandom {
 	}
 
 	@Override
+	public long previousLong() {
+		long oa = stateA;
+		long ob = stateB;
+		long oc = stateC;
+		stateC = ob * 0x8E38E38E38E38E39L; /* modular multiplicative inverse of 9L */
+		long result = oc - (stateC << 24 | stateC >>> 40);
+		stateB = oa ^ oa >>> 11;
+		stateB ^= stateB >>> 22;
+		stateB ^= stateB >>> 44;
+		stateA = result - stateB ^ stateD;
+		stateD -= stateE;
+		return result;
+	}
+
+	@Override
 	public int next (int bits) {
 		final long result = (stateA ^ (stateD += stateE)) + stateB;
 		stateA = stateB ^ (stateB >>> 11);
@@ -325,5 +340,4 @@ public class Crand64Random extends EnhancedRandom {
 	public String toString () {
 		return "Crand64Random{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L, stateD=" + (stateD) + "L, stateE=" + (stateE) + "L}";
 	}
-
 }

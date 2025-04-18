@@ -31,7 +31,9 @@ import static com.github.tommyettinger.digital.BitConversion.imul;
  * {@code Math.pow(2, 128) - 1} times. Note that the pow() call is pseudocode; real Java code would consider
  * {@code Math.pow(2, 128)} and {@code Math.pow(2, 128) - 1} equal. It is important to emphasize that nextLong() is not
  * actually equidistributed, just very close to that, in the same way that {@code xoshiro128++} is not actually
- * equidistributed, just very close to it.
+ * equidistributed, just very close to it. This is also very close to 2D-equidistributed for 32-bit outputs, with (2 to
+ * the 32) output pairs occurring once less often than the remaining (2 to the 64) minus (2 to the 32) pairs. Each
+ * output will occur either (2 to the 128) or ((2 to the 128) minus 1) times.
  * <br>
  * An unusual property of this generator is that the state changes in exactly the same way and by the same distance
  * regardless of whether {@link #nextInt()} or {@link #nextLong()} is called (and the same for the reverse-direction
@@ -48,8 +50,9 @@ import static com.github.tommyettinger.digital.BitConversion.imul;
  * <br>
  * Xoshiro160RoadroxoRandom has a guaranteed period of {@code pow(2, 160) - pow(2, 32)}. The only disallowed states have
  * each of stateA, stateB, stateC, and stateD equal to 0; stateE is unconstrained. It starts returning
- * fully-decorrrelated results even given very-correlated initial states after about 10 calls to {@link #nextInt()}.
- * This passes 64TB of PractRand with no anomalies, both for nextInt() and the different algorith for nextLong().
+ * fully-decorrrelated results even given very-correlated initial states after about 10 calls to {@link #nextInt()} or
+ * {@link #nextLong()}.
+ * This passes 64TB of PractRand with no anomalies, both for nextInt() and the different algorithm for nextLong().
  * <br>
  * This implements all optional methods in EnhancedRandom except {@link #skip(long)}. It also implements {@link #leap()}
  * to allow jumping ahead by the equivalent of at least 2 to the 64 calls to {@link #nextInt()}. Methods that can use
