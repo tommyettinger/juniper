@@ -119,18 +119,19 @@ public class InitialCorrelationEvaluator {
 //                new DistinctRandom(1));
 
         ArrayList<EnhancedRandom> rs = ObjectList.with(new EnhancedRandom[]{
-                new L64X256NoMixRandom(1, 1, 1, 1, 1),
-                new L64X256StarStarRandom(1, 1, 1, 1, 1),
-                new L64X256MoremurRandom(1, 1, 1, 1, 1),
-                new C64X256MoremurRandom(1, 1, 1, 1, 1),
-                new I64X256MoremurRandom(1, 1, 1, 1, 1),
-                new I64X256Speck1Random(1, 1, 1, 1, 1),
-                new I64X256Speck2Random(1, 1, 1, 1, 1),
-                new I64X256SpeckC2Random(1, 1, 1, 1, 1),
-                new C64X256Speck2Random(1, 1, 1, 1, 1),
-                new L64X256Speck2Random(1, 1, 1, 1, 1),
-                new I64X256AxRandom(1, 1, 1, 1, 1),
-                new V64X256AxRandom(1, 1, 1, 1, 1)
+                new Xoshiro160GrittyRandom(1, 1, 1, 1, 1),
+//                new L64X256NoMixRandom(1, 1, 1, 1, 1),
+//                new L64X256StarStarRandom(1, 1, 1, 1, 1),
+//                new L64X256MoremurRandom(1, 1, 1, 1, 1),
+//                new C64X256MoremurRandom(1, 1, 1, 1, 1),
+//                new I64X256MoremurRandom(1, 1, 1, 1, 1),
+//                new I64X256Speck1Random(1, 1, 1, 1, 1),
+//                new I64X256Speck2Random(1, 1, 1, 1, 1),
+//                new I64X256SpeckC2Random(1, 1, 1, 1, 1),
+//                new C64X256Speck2Random(1, 1, 1, 1, 1),
+//                new L64X256Speck2Random(1, 1, 1, 1, 1),
+//                new I64X256AxRandom(1, 1, 1, 1, 1),
+//                new V64X256AxRandom(1, 1, 1, 1, 1)
         });
 
 //        ArrayList<EnhancedRandom> rs = ObjectList.with(new EnhancedRandom[]{

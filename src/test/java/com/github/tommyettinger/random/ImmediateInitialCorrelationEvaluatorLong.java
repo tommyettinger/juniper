@@ -40,7 +40,7 @@ import java.util.Date;
 public class ImmediateInitialCorrelationEvaluatorLong {
     public static long INTERVAL_X = 1;//2;//4;//8;//16;//0xC13FA9A902A6328FL;//
     public static long INTERVAL_Y = 2;//2;//4;//8;//16;//0x91E10DA5C79E7B1DL;//
-    public static int DROPPED_STEPS = 30;
+    public static int DROPPED_STEPS = 3;
     public double steps = 0;
     public int mode = 0;
     public double amount = 0;
@@ -117,18 +117,19 @@ public class ImmediateInitialCorrelationEvaluatorLong {
         EnhancedRandom[][] g = new EnhancedRandom[256][256];
 
         ArrayList<EnhancedRandom> rs = ObjectList.with(
-                new L64X256NoMixRandom(1, 1, 1, 1, 1),
-                new L64X256StarStarRandom(1, 1, 1, 1, 1),
-                new L64X256MoremurRandom(1, 1, 1, 1, 1),
-                new C64X256MoremurRandom(1, 1, 1, 1, 1),
-                new I64X256MoremurRandom(1, 1, 1, 1, 1),
-                new I64X256Speck1Random(1, 1, 1, 1, 1),
-                new I64X256Speck2Random(1, 1, 1, 1, 1),
-                new I64X256SpeckC2Random(1, 1, 1, 1, 1),
-                new C64X256Speck2Random(1, 1, 1, 1, 1),
-                new L64X256Speck2Random(1, 1, 1, 1, 1),
-                new I64X256AxRandom(1, 1, 1, 1, 1),
-                new V64X256AxRandom(1, 1, 1, 1, 1)
+                new Xoshiro160GrittyRandom(1, 1, 1, 1, 1)
+//                new L64X256NoMixRandom(1, 1, 1, 1, 1),
+//                new L64X256StarStarRandom(1, 1, 1, 1, 1),
+//                new L64X256MoremurRandom(1, 1, 1, 1, 1),
+//                new C64X256MoremurRandom(1, 1, 1, 1, 1),
+//                new I64X256MoremurRandom(1, 1, 1, 1, 1),
+//                new I64X256Speck1Random(1, 1, 1, 1, 1),
+//                new I64X256Speck2Random(1, 1, 1, 1, 1),
+//                new I64X256SpeckC2Random(1, 1, 1, 1, 1),
+//                new C64X256Speck2Random(1, 1, 1, 1, 1),
+//                new L64X256Speck2Random(1, 1, 1, 1, 1),
+//                new I64X256AxRandom(1, 1, 1, 1, 1),
+//                new V64X256AxRandom(1, 1, 1, 1, 1)
         );
 //
 //        ArrayList<EnhancedRandom> rs = ObjectList.with(
