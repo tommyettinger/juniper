@@ -349,9 +349,9 @@ public class ChopRandom extends EnhancedRandom {
         stateC = fa ^ fb + fc;
         stateD = fd + 0xADB5B165 | 0;
         if(inner >= outer) return inner;
-        return (int)(innerBound + (
+        return (int)(inner + (
                 ((outer - inner & 0xFFFFFFFFL) * (fc & 0xFFFFFFFFL) >>> 32)
-                        & ~((long)outerBound - (long)innerBound >> 63)));
+                        & ~((long)outer - (long)inner >> 63)));
     }
 
     @Override
@@ -366,9 +366,9 @@ public class ChopRandom extends EnhancedRandom {
         stateB = (gb << 11 | gb >>> 21);
         stateC = fa ^ fb + fc;
         stateD = fd + 0xADB5B165 | 0;
-        if(inner >= outer) return inner;
+        if(inner >= outer) return innerBound;
         return (int)(innerBound +
-                ((outer - inner & 0xFFFFFFFFL) * (fc & 0xFFFFFFFFL) >>> 32));
+                ((outerBound - innerBound & 0xFFFFFFFFL) * (fc & 0xFFFFFFFFL) >>> 32));
     }
 
     @Override
