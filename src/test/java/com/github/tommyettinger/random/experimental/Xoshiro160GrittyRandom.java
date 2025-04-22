@@ -19,31 +19,24 @@ package com.github.tommyettinger.random.experimental;
 
 import com.github.tommyettinger.random.ChopRandom;
 import com.github.tommyettinger.random.EnhancedRandom;
+import com.github.tommyettinger.random.Xoshiro160RoadroxoRandom;
 
 import static com.github.tommyettinger.digital.BitConversion.imul;
 
 /**
  * A random number generator that is optimized for performance on 32-bit machines and with Google Web Toolkit, this uses
  * no multiplication and is similar to the published xoshiro128 algorithm, but has an extra 32-bit state that acts like
- * a counter. Unlike any variations on xoshiro128 with four states, this is actually 1-dimensionally equidistributed -
+ * a counter. Unlike any variations on xoshiro128 with four states, this is exactly 1-dimensionally equidistributed -
  * existing generators like {@code xoshiro128++} produce the result {@code 0} less frequently (by a tiny difference, but
  * that is enough to mean it isn't <em>equal</em>). This produces all 32-bit results equally frequently with
- * {@link #nextInt()}. It is also <em>almost</em> 1-dimensionally equidistributed with {@link #nextLong()}; of the
- * {@code Math.pow(2, 64)} possible results for nextLong(), all but {@code Math.pow(2, 32)} results are returned
- * {@code Math.pow(2, 128)} times, and the remaining {@code Math.pow(2, 32)} results are returned
- * {@code Math.pow(2, 128) - 1} times. Note that the pow() call is pseudocode; real Java code would consider
- * {@code Math.pow(2, 128)} and {@code Math.pow(2, 128) - 1} equal. It is important to emphasize that nextLong() is not
- * actually equidistributed, just very close to that, in the same way that {@code xoshiro128++} is not actually
- * equidistributed, just very close to it. This is also very close to 2D-equidistributed for 32-bit outputs, with (2 to
- * the 32) output pairs occurring once less often than the remaining (2 to the 64) minus (2 to the 32) pairs. Each
- * output will occur either (2 to the 128) or ((2 to the 128) minus 1) times.
- * <br>
- * An unusual property of this generator is that the state changes in exactly the same way and by the same distance
- * regardless of whether {@link #nextInt()} or {@link #nextLong()} is called (and the same for the reverse-direction
- * methods {@link #previousInt()} and {@link #previousLong()}). The result is calculated differently for 64-bit output
- * than 32-bit output. For {@link #nextInt()}, stateA, stateB, and stateE are combined by rotating some, adding a pair
- * of states, and XORing the two halves. For {@link #nextLong()}, all states are combined by forming two 32-bit outputs
- * (using the same or similar 32-bit math as for nextInt()) and combining them into one 64-bit value only at the end.
+ * {@link #nextInt()}. It is also <em>almost</em> 4-dimensionally equidistributed with {@link #nextInt()}; of the
+ * {@code Math.pow(2, 128)} possible 4-tuples of int results, all but {@code Math.pow(2, 32)} results are returned
+ * {@code Math.pow(2, 32)} times, and the remaining {@code Math.pow(2, 32)} results are returned
+ * {@code Math.pow(2, 32) - 1} times. This means it is also almost equidistributed for 3-tuples and 2-tuples of
+ * nextInt() results. This is closest to {@link Xoshiro160RoadroxoRandom} in structure, but that generator is at most
+ * (almost) 2-dimensionally equidistributed for nextInt() or nextLong(), and no higher. The Roadroxo version is almost
+ * certainly faster, but probably also takes more results after seeding to produce noticeably different results from
+ * similar initial seeds. Both should be rather fast at differentiating their results, though.
  * <br>
  * The actual speed of this is going to vary wildly depending on the platform being benchmarked. On GWT, which is the
  * main place where the performance of a random number generator might actually be a bottleneck in a game, this performs
@@ -53,9 +46,10 @@ import static com.github.tommyettinger.digital.BitConversion.imul;
  * <br>
  * Xoshiro160GrittyRandom has a guaranteed period of {@code pow(2, 160) - pow(2, 32)}. The only disallowed states have
  * each of stateA, stateB, stateC, and stateD equal to 0; stateE is unconstrained. It starts returning
- * fully-decorrrelated results even given very-correlated initial states after about 10 calls to {@link #nextInt()} or
- * {@link #nextLong()}.
- * This passes 64TB of PractRand with no anomalies, both for nextInt() and the different algorithm for nextLong().
+ * fully-decorrrelated results even given very-correlated initial states after about 3 calls to {@link #nextInt()}.
+ * This passes 64TB of PractRand with no anomalies, at least for nextInt().
+ * Unlike {@link Xoshiro160RoadroxoRandom}, this doesn't change to a different algorithm
+ * for {@link #nextLong()}.
  * <br>
  * This implements all optional methods in EnhancedRandom except {@link #skip(long)}. It also implements {@link #leap()}
  * to allow jumping ahead by the equivalent of at least 2 to the 64 calls to {@link #nextInt()}. Methods that can use
@@ -127,7 +121,7 @@ public class Xoshiro160GrittyRandom extends EnhancedRandom {
 
 	@Override
 	public String getTag() {
-		return "XRGR";
+		return "XGrR";
 	}
 
 	/**
@@ -367,7 +361,7 @@ public class Xoshiro160GrittyRandom extends EnhancedRandom {
 	@Override
 	public int next (int bits) {
 		final int res = (stateE ^ stateE >>> 15) * 0x19E37B;
-		final int t = stateB >> 9;
+		final int t = stateB >>> 9;
 		stateE += 0xC3564E95 + stateD;
 		stateC ^= stateA;
 		stateD ^= stateB;
@@ -381,7 +375,7 @@ public class Xoshiro160GrittyRandom extends EnhancedRandom {
 	@Override
 	public int nextInt () {
 		final int res = (stateE ^ stateE >>> 15) * 0x19E37B;
-		final int t = stateB >> 9;
+		final int t = stateB >>> 9;
 		stateE += 0xC3564E95 + stateD;
 		stateC ^= stateA;
 		stateD ^= stateB;
@@ -395,62 +389,63 @@ public class Xoshiro160GrittyRandom extends EnhancedRandom {
 
 	@Override
 	public int nextInt (int bound) {
-		final int res = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
-		final int t = stateB << 9;
-		stateE += 0xC3564E95 ^ stateD;
+		final int res = (stateE ^ stateE >>> 15) * 0x19E37B;
+		final int t = stateB >>> 9;
+		stateE += 0xC3564E95 + stateD;
 		stateC ^= stateA;
 		stateD ^= stateB;
 		stateB ^= stateC;
 		stateA ^= stateD;
 		stateC ^= t;
 		stateD = (stateD << 11 | stateD >>> 21);
-		return (int)(bound * (res & 0xFFFFFFFFL) >> 32) & ~(bound >> 31);
+		return (int)(bound * ((res ^ (res << 17 | res >>> 15) ^ (res << 13 | res >>> 19)) & 0xFFFFFFFFL) >> 32) & ~(bound >> 31);
 	}
 
 	@Override
 	public int nextSignedInt (int outerBound) {
-		final int res = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
-		final int t = stateB << 9;
-		stateE += 0xC3564E95 ^ stateD;
+		final int res = (stateE ^ stateE >>> 15) * 0x19E37B;
+		final int t = stateB >>> 9;
+		stateE += 0xC3564E95 + stateD;
 		stateC ^= stateA;
 		stateD ^= stateB;
 		stateB ^= stateC;
 		stateA ^= stateD;
 		stateC ^= t;
 		stateD = (stateD << 11 | stateD >>> 21);
-		outerBound = (int)(outerBound * (res & 0xFFFFFFFFL) >> 32);
+		outerBound = (int)(outerBound * ((res ^ (res << 17 | res >>> 15) ^ (res << 13 | res >>> 19)) & 0xFFFFFFFFL) >> 32);
 		return outerBound + (outerBound >>> 31);
 	}
 
 	@Override
 	public int nextUnsignedInt(int bound) {
-		final int res = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
-		final int t = stateB << 9;
-		stateE += 0xC3564E95 ^ stateD;
+		final int res = (stateE ^ stateE >>> 15) * 0x19E37B;
+		final int t = stateB >>> 9;
+		stateE += 0xC3564E95 + stateD;
 		stateC ^= stateA;
 		stateD ^= stateB;
 		stateB ^= stateC;
 		stateA ^= stateD;
 		stateC ^= t;
 		stateD = (stateD << 11 | stateD >>> 21);
-		return (int)((bound & 0xFFFFFFFFL) * (res & 0xFFFFFFFFL) >>> 32);
+		return (int)((bound & 0xFFFFFFFFL) * ((res ^ (res << 17 | res >>> 15) ^ (res << 13 | res >>> 19)) & 0xFFFFFFFFL) >>> 32);
 	}
 
 	@Override
 	public void nextBytes (byte[] bytes) {
 		if (bytes != null) {
 			for (int i = 0; i < bytes.length; ) {
-				int r = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
-				final int t = stateB << 9;
-				stateE += 0xC3564E95 ^ stateD;
+				int res = (stateE ^ stateE >>> 15) * 0x19E37B;
+				res ^= (res << 17 | res >>> 15) ^ (res << 13 | res >>> 19);
+				final int t = stateB >>> 9;
+				stateE += 0xC3564E95 + stateD;
 				stateC ^= stateA;
 				stateD ^= stateB;
 				stateB ^= stateC;
 				stateA ^= stateD;
 				stateC ^= t;
 				stateD = (stateD << 11 | stateD >>> 21);
-				for (int n = Math.min(bytes.length - i, 4); n-- > 0; r >>>= 8) {
-					bytes[i++] = (byte) r;
+				for (int n = Math.min(bytes.length - i, 4); n-- > 0; res >>>= 8) {
+					bytes[i++] = (byte) res;
 				}
 			}
 		}
@@ -458,44 +453,36 @@ public class Xoshiro160GrittyRandom extends EnhancedRandom {
 
 	@Override
 	public int nextInt(int innerBound, int outerBound) {
-		final int res = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
-		final int t = stateB << 9;
-		stateE += 0xC3564E95 ^ stateD;
+		final int res = (stateE ^ stateE >>> 15) * 0x19E37B;
+		final int t = stateB >>> 9;
+		stateE += 0xC3564E95 + stateD;
 		stateC ^= stateA;
 		stateD ^= stateB;
 		stateB ^= stateC;
 		stateA ^= stateD;
 		stateC ^= t;
 		stateD = (stateD << 11 | stateD >>> 21);
-		return (int)(innerBound + ((((outerBound - innerBound) & 0xFFFFFFFFL) * (res & 0xFFFFFFFFL) >>> 32) & ~((long)outerBound - (long)innerBound >> 63)));
+		return (int)(innerBound + ((((outerBound - innerBound) & 0xFFFFFFFFL) * ((res ^ (res << 17 | res >>> 15) ^ (res << 13 | res >>> 19)) & 0xFFFFFFFFL) >>> 32) & ~((long)outerBound - (long)innerBound >> 63)));
 	}
 
 	@Override
 	public int nextSignedInt(int innerBound, int outerBound) {
-		final int res = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
-		final int t = stateB << 9;
-		stateE += 0xC3564E95 ^ stateD;
+		final int res = (stateE ^ stateE >>> 15) * 0x19E37B;
+		final int t = stateB >>> 9;
+		stateE += 0xC3564E95 + stateD;
 		stateC ^= stateA;
 		stateD ^= stateB;
 		stateB ^= stateC;
 		stateA ^= stateD;
 		stateC ^= t;
 		stateD = (stateD << 11 | stateD >>> 21);
-		return innerBound + (int)(((outerBound - innerBound) & 0xFFFFFFFFL) * (res & 0xFFFFFFFFL) >>> 32);
+		return innerBound + (int)(((outerBound - innerBound) & 0xFFFFFFFFL) * ((res ^ (res << 17 | res >>> 15) ^ (res << 13 | res >>> 19)) & 0xFFFFFFFFL) >>> 32);
 	}
 
 	@Override
 	public long nextLong(long bound) {
-		final long randHi = ((stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB) & 0xFFFFFFFFL;
-		final long randLo = ((stateC << 19 | stateC >>> 13) ^ (stateE << 7 | stateE >>> 25) + stateD) & 0xFFFFFFFFL;
-		int t = stateB << 9;
-		stateE += 0xC3564E95 ^ stateD;
-		stateC ^= stateA;
-		stateD ^= stateB;
-		stateB ^= stateC;
-		stateA ^= stateD;
-		stateC ^= t;
-		stateD = (stateD << 11 | stateD >>> 21);
+		final long randHi = nextInt() & 0xFFFFFFFFL;
+		final long randLo = nextInt() & 0xFFFFFFFFL;
 
 		if (1 >= bound)
 			return 0;
@@ -515,16 +502,8 @@ public class Xoshiro160GrittyRandom extends EnhancedRandom {
 			inner = 0L;
 		}
 		final long bound = outer - inner;
-		final long randHi = ((stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB) & 0xFFFFFFFFL;
-		final long randLo = ((stateC << 19 | stateC >>> 13) ^ (stateE << 7 | stateE >>> 25) + stateD) & 0xFFFFFFFFL;
-		int t = stateB << 9;
-		stateE += 0xC3564E95 ^ stateD;
-		stateC ^= stateA;
-		stateD ^= stateB;
-		stateB ^= stateC;
-		stateA ^= stateD;
-		stateC ^= t;
-		stateD = (stateD << 11 | stateD >>> 21);
+		final long randHi = nextInt() & 0xFFFFFFFFL;
+		final long randLo = nextInt() & 0xFFFFFFFFL;
 
 		final long boundLow = bound & 0xFFFFFFFFL;
 		final long boundHigh = (bound >>> 32);
@@ -533,16 +512,8 @@ public class Xoshiro160GrittyRandom extends EnhancedRandom {
 
 	@Override
 	public long nextLong (long inner, long outer) {
-		final long randHi = ((stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB) & 0xFFFFFFFFL;
-		final long randLo = ((stateC << 19 | stateC >>> 13) ^ (stateE << 7 | stateE >>> 25) + stateD) & 0xFFFFFFFFL;
-		int t = stateB << 9;
-		stateE += 0xC3564E95 ^ stateD;
-		stateC ^= stateA;
-		stateD ^= stateB;
-		stateB ^= stateC;
-		stateA ^= stateD;
-		stateC ^= t;
-		stateD = (stateD << 11 | stateD >>> 21);
+		final long randHi = nextInt() & 0xFFFFFFFFL;
+		final long randLo = nextInt() & 0xFFFFFFFFL;
 
 		if (inner >= outer)
 			return inner;
@@ -560,16 +531,8 @@ public class Xoshiro160GrittyRandom extends EnhancedRandom {
 			inner = t + 1L;
 		}
 		final long bound = outer - inner;
-		final long randHi = ((stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB) & 0xFFFFFFFFL;
-		final long randLo = ((stateC << 19 | stateC >>> 13) ^ (stateE << 7 | stateE >>> 25) + stateD) & 0xFFFFFFFFL;
-		int t = stateB << 9;
-		stateE += 0xC3564E95 ^ stateD;
-		stateC ^= stateA;
-		stateD ^= stateB;
-		stateB ^= stateC;
-		stateA ^= stateD;
-		stateC ^= t;
-		stateD = (stateD << 11 | stateD >>> 21);
+		final long randHi = nextInt() & 0xFFFFFFFFL;
+		final long randLo = nextInt() & 0xFFFFFFFFL;
 
 		final long boundLow = bound & 0xFFFFFFFFL;
 		final long boundHigh = (bound >>> 32);
@@ -579,44 +542,44 @@ public class Xoshiro160GrittyRandom extends EnhancedRandom {
 	@Override
 	public boolean nextBoolean ()
 	{
-		final int res = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
-		final int t = stateB << 9;
-		stateE += 0xC3564E95 ^ stateD;
+		final int res = (stateE ^ stateE >>> 15) * 0x19E37B;
+		final int t = stateB >>> 9;
+		stateE += 0xC3564E95 + stateD;
 		stateC ^= stateA;
 		stateD ^= stateB;
 		stateB ^= stateC;
 		stateA ^= stateD;
 		stateC ^= t;
 		stateD = (stateD << 11 | stateD >>> 21);
-		return res < 0;
+		return (res ^ (res << 17 | res >>> 15) ^ (res << 13 | res >>> 19)) < 0;
 	}
 
 	@Override
 	public float nextFloat () {
-		final int res = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
-		final int t = stateB << 9;
-		stateE += 0xC3564E95 ^ stateD;
+		final int res = (stateE ^ stateE >>> 15) * 0x19E37B;
+		final int t = stateB >>> 9;
+		stateE += 0xC3564E95 + stateD;
 		stateC ^= stateA;
 		stateD ^= stateB;
 		stateB ^= stateC;
 		stateA ^= stateD;
 		stateC ^= t;
 		stateD = (stateD << 11 | stateD >>> 21);
-		return (res >>> 8) * 0x1p-24f;
+		return ((res ^ (res << 17 | res >>> 15) ^ (res << 13 | res >>> 19)) >>> 8) * 0x1p-24f;
 	}
 
 	@Override
 	public float nextInclusiveFloat () {
-		final int res = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
-		final int t = stateB << 9;
-		stateE += 0xC3564E95 ^ stateD;
+		final int res = (stateE ^ stateE >>> 15) * 0x19E37B;
+		final int t = stateB >>> 9;
+		stateE += 0xC3564E95 + stateD;
 		stateC ^= stateA;
 		stateD ^= stateB;
 		stateB ^= stateC;
 		stateA ^= stateD;
 		stateC ^= t;
 		stateD = (stateD << 11 | stateD >>> 21);
-		return (0x1000001L * (res & 0xFFFFFFFFL) >> 32) * 0x1p-24f;
+		return (0x1000001L * ((res ^ (res << 17 | res >>> 15) ^ (res << 13 | res >>> 19)) & 0xFFFFFFFFL) >> 32) * 0x1p-24f;
 	}
 
 	@Override
@@ -687,8 +650,8 @@ public class Xoshiro160GrittyRandom extends EnhancedRandom {
 		stateB = s1;
 		stateC = s2;
 		stateD = s3;
-
-		return  (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
+		final int res = (stateE ^ stateE >>> 15) * 0x19E37B;
+		return (res ^ (res << 17 | res >>> 15) ^ (res << 13 | res >>> 19));
 	}
 
 	@Override
