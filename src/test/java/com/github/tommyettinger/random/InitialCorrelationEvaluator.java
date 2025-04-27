@@ -120,7 +120,8 @@ public class InitialCorrelationEvaluator {
 
         ArrayList<EnhancedRandom> rs = ObjectList.with(new EnhancedRandom[]{
                 new Xoshiro160GrittyRandom(1, 1, 1, 1, 1),
-                new Xoshiro160RoadroxoRandom(1, 1, 1, 1, 1)
+                new Xoshiro160RoadroxoRandom(1, 1, 1, 1, 1),
+                new O128X256LowMixRandom(1, 1, 1, 1, 1, 1)
 //                new L64X256NoMixRandom(1, 1, 1, 1, 1),
 //                new L64X256StarStarRandom(1, 1, 1, 1, 1),
 //                new L64X256MoremurRandom(1, 1, 1, 1, 1),
@@ -172,7 +173,7 @@ public class InitialCorrelationEvaluator {
 ////                        g[x][y].setState(y + ((x + y) * (x + y + 1L) >> 1)); // Cantor pairing function
                     else
 ////                        g[x][y].setState((long)x<<1|1L, (long)y<<1|1L, 1L, 1L, 1L);
-                        g[x][y].setState(x * INTERVAL_X, y * INTERVAL_Y, 1L, 1L, 1L);
+                        g[x][y].setState(x * INTERVAL_X, y * INTERVAL_Y, 1L, 1L, 1L, 1L);
                 }
             }
             InitialCorrelationEvaluator evaluator = new InitialCorrelationEvaluator();
