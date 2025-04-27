@@ -80,6 +80,7 @@ public final class Generators {
         randomList.add(new Xoshiro160RoadroxoRandom(1, 1, 1, 1, 1));
         randomList.add(new Xoshiro160GrittyRandom(1, 1, 1, 1, 1));
         randomList.add(new O128X256LowMixRandom(1, 1, 1, 1, 1, 1));
+        randomList.add(new OC128X256LowMixRandom(1, 1, 1, 1, 1, 1));
     }
     public static int randomCount = randomList.size();
 
