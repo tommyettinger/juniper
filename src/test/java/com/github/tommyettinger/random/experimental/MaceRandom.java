@@ -150,13 +150,13 @@ public class MaceRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * This generator has 5 {@code long} states, so this returns 5.
+	 * This generator has 6 {@code long} states, so this returns 6.
 	 *
-	 * @return 5 (five)
+	 * @return 6 (six)
 	 */
 	@Override
 	public int getStateCount () {
-		return 5;
+		return 6;
 	}
 
 	/**

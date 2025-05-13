@@ -104,6 +104,9 @@ public class CorrelationVisualizer extends ApplicationAdapter {
                         case 5:
                             g[x][y].setState((long)x*INTERVAL_X, (long)y*INTERVAL_Y, 1L, 1L, 1L);
                             break;
+                        case 6:
+                            g[x][y].setState((long)x*INTERVAL_X, (long)y*INTERVAL_Y, 1L, 1L, 1L, 1L);
+                            break;
                     }
                 }
             }

@@ -61,6 +61,9 @@ public class CorrelationAnalyst extends ApplicationAdapter {
                     case 5:
                         g[x][y].setState(x, y, 1L, 1L, 1L);
                         break;
+                    case 6:
+                        g[x][y].setState(x, y, 1L, 1L, 1L, 1L);
+                        break;
                 }
             }
         }
@@ -86,6 +89,9 @@ public class CorrelationAnalyst extends ApplicationAdapter {
                             break;
                         case 5:
                             randoms[i][x][y].setState(x, y, 1L, 1L, 1L);
+                            break;
+                        case 6:
+                            randoms[i][x][y].setState(x, y, 1L, 1L, 1L, 1L);
                             break;
                     }
                 }
