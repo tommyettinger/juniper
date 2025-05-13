@@ -40,7 +40,7 @@ import java.util.Date;
 public class ImmediateInitialCorrelationEvaluatorLong {
     public static long INTERVAL_X = 1;//2;//4;//8;//16;//0xC13FA9A902A6328FL;//
     public static long INTERVAL_Y = 2;//2;//4;//8;//16;//0x91E10DA5C79E7B1DL;//
-    public static int DROPPED_STEPS = 27;
+    public static int DROPPED_STEPS = 30;
     public double steps = 0;
     public int mode = 0;
     public double amount = 0;
@@ -95,7 +95,7 @@ public class ImmediateInitialCorrelationEvaluatorLong {
             actualMode = minMode;
         }
         actualAmount *= 0.5; // for long math, the amount is twice where it should be.
-        return 2.5 - Math.abs(actualMode - 116.5) - (actualAmount - 0.031) * 10;
+        return 3.5 - Math.abs(actualMode - 116.5) - (actualAmount - 0.031) * 10;
     }
     public void step(int bit) {
         ++steps;
@@ -117,8 +117,10 @@ public class ImmediateInitialCorrelationEvaluatorLong {
         EnhancedRandom[][] g = new EnhancedRandom[256][256];
 
         ArrayList<EnhancedRandom> rs = ObjectList.with(
+                new LaceRandom(1, 1, 1, 1, 1),
                 new MaceRandom(1, 1, 1, 1, 1, 1),
                 new OC128X256LowMixRandom(1, 1, 1, 1, 1, 1)
+
 //                new Xoshiro160GrittyRandom(1, 1, 1, 1, 1),
 //                new Xoshiro160RoadroxoRandom(1, 1, 1, 1, 1),
 //                new OC128X256LowMixRandom(1, 1, 1, 1, 1, 1)

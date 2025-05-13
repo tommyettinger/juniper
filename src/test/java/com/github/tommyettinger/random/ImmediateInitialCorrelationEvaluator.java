@@ -95,7 +95,7 @@ public class ImmediateInitialCorrelationEvaluator {
             actualMode = minMode;
         }
 //        actualMode *= 0.5; // not sure why this is needed to get similar behavior to before...
-        return 2.5 - Math.abs(actualMode - 116.5) - (actualAmount - 0.031) * 10;
+        return 3.5 - Math.abs(actualMode - 116.5) - (actualAmount - 0.031) * 10;
     }
     public void step(int bit) {
         ++steps;
@@ -117,6 +117,7 @@ public class ImmediateInitialCorrelationEvaluator {
         EnhancedRandom[][] g = new EnhancedRandom[256][256];
 
         ArrayList<EnhancedRandom> rs = ObjectList.with(
+                new LaceRandom(1, 1, 1, 1, 1),
                 new MaceRandom(1, 1, 1, 1, 1, 1),
                 new OC128X256LowMixRandom(1, 1, 1, 1, 1, 1)
 //                new Xoshiro160GrittyRandom(1, 1, 1, 1, 1),
