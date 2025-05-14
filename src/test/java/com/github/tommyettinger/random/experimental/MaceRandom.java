@@ -17,6 +17,7 @@
 
 package com.github.tommyettinger.random.experimental;
 
+import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.random.EnhancedRandom;
 
 /**
@@ -39,11 +40,11 @@ public class MaceRandom extends EnhancedRandom {
 
 	public static long deposit(long bits) {
 		bits &= 0xFFFFFF;
-		bits = (bits & ~TABLE_0) | (bits <<  1 & TABLE_0);
-		bits = (bits & ~TABLE_1) | (bits <<  2 & TABLE_1);
-		bits = (bits & ~TABLE_2) | (bits <<  4 & TABLE_2);
-		bits = (bits & ~TABLE_3) | (bits <<  8 & TABLE_3);
 		bits = (bits & ~TABLE_4) | (bits << 16 & TABLE_4);
+		bits = (bits & ~TABLE_3) | (bits <<  8 & TABLE_3);
+		bits = (bits & ~TABLE_2) | (bits <<  4 & TABLE_2);
+		bits = (bits & ~TABLE_1) | (bits <<  2 & TABLE_1);
+		bits = (bits & ~TABLE_0) | (bits <<  1 & TABLE_0);
 		return (bits & MASK) ^ GOLDEN_64;
 	}
 	/**
@@ -436,6 +437,15 @@ public class MaceRandom extends EnhancedRandom {
 	public String toString () {
 		return "MaceRandom{" + "streamIdentifier=" + getStreamIdentifier() + ", stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L, stateD=" + (stateD) + "L, stateE=" + (stateE) + "L}";
 	}
+
+//	public static void main(String[] args) {
+//		MaceRandom random = new MaceRandom(1, 1, 1, 1, 1, 1);
+//		System.out.println(Base.BASE16.unsigned(GOLDEN_64));
+//		System.out.println(Base.BASE16.unsigned(random.stream));
+//		System.out.println(Base.BASE16.unsigned(random.stream ^ GOLDEN_64));
+//		System.out.println(random);
+//		System.out.println(random.copy());
+//	}
 
 //	public static void main(String[] args) {
 //		MaceRandom random = new MaceRandom(1L);

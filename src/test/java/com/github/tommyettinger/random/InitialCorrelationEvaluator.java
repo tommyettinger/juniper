@@ -119,9 +119,12 @@ public class InitialCorrelationEvaluator {
 //                new DistinctRandom(1));
 
         ArrayList<EnhancedRandom> rs = ObjectList.with(new EnhancedRandom[]{
-                new LaceRandom(1, 1, 1, 1, 1),
-                new MaceRandom(1, 1, 1, 1, 1, 1),
-                new OC128X256LowMixRandom(1, 1, 1, 1, 1, 1)
+                new MaceRandom(1, 1, 1, 1, 1, 1)
+
+//                new LaceRandom(1, 1, 1, 1, 1),
+//                new MaceRandom(1, 1, 1, 1, 1, 1),
+//                new OC128X256LowMixRandom(1, 1, 1, 1, 1, 1)
+
 //                new Xoshiro160GrittyRandom(1, 1, 1, 1, 1),
 //                new Xoshiro160RoadroxoRandom(1, 1, 1, 1, 1),
 //                new OC128X256LowMixRandom(1, 1, 1, 1, 1, 1)
