@@ -17,7 +17,6 @@
 
 package com.github.tommyettinger.random.experimental;
 
-import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.random.EnhancedRandom;
 
 /**
@@ -30,14 +29,54 @@ import com.github.tommyettinger.random.EnhancedRandom;
  * and the tests were run starting May 10, 2025.
  */
 public class MaceRandom extends EnhancedRandom {
+	/**
+	 * A long mask with 24 bits set, all symmetrical around the middle bits, leaving 10 bits all zero at the most
+	 * significant and the least significant ends. This is used to determine which bits of {@link #GOLDEN_64} can be
+	 * changed by the stream.
+	 */
 	public static final long MASK = 0x003569CA5369AC00L;
+	/**
+	 * 2 to the 64 divided by the golden ratio. In general this is a good number to use in an additive sequence (like a
+	 * counter with a large increment), and small changes to the middle bits still tend to result in good numbers.
+	 */
 	public static final long GOLDEN_64 = 0x9E3779B97F4A7C15L;
-	private static final long TABLE_0 = 0x0004600240602000L,
-			TABLE_1 = 0x0030380830381C00L,
-			TABLE_2 = 0x000F0003000F8000L,
-			TABLE_3 = 0x0000FFC00000FF00L,
-			TABLE_4 = 0x000000FFFF000000L;
+	/**
+	 * One of the precomputed table values needed to perform the software bit deposit and extract operations for the
+	 * specific {@link #MASK} used here.
+	 */
+	private static final long TABLE_0 = 0x0004600240602000L;
+	/**
+	 * One of the precomputed table values needed to perform the software bit deposit and extract operations for the
+	 * specific {@link #MASK} used here.
+	 */
+    private static final long TABLE_1 = 0x0030380830381C00L;
+	/**
+	 * One of the precomputed table values needed to perform the software bit deposit and extract operations for the
+	 * specific {@link #MASK} used here.
+	 */
+    private static final long TABLE_2 = 0x000F0003000F8000L;
+	/**
+	 * One of the precomputed table values needed to perform the software bit deposit and extract operations for the
+	 * specific {@link #MASK} used here.
+	 */
+    private static final long TABLE_3 = 0x0000FFC00000FF00L;
+	/**
+	 * One of the precomputed table values needed to perform the software bit deposit and extract operations for the
+	 * specific {@link #MASK} used here.
+	 */
+    private static final long TABLE_4 = 0x000000FFFF000000L;
 
+	/**
+	 * Given a long {@code bits} where the first 24 positions can have variable bits, uses {@link #MASK} to
+	 * produce a long where the least-significant 24 bits of {@code bits} have been placed into consecutively
+	 * greater set bits in {@code mask}. It finished by XORing the masked bits with {@link #GOLDEN_64}.
+	 * This method does not allocate. The parameter is usually provided by {@link #getStreamIdentifier()} or by
+	 * calling {@link #extract(long)}.
+	 * <br>
+	 * Based on Hacker's Delight (2nd edition).
+	 * @param bits the bit values to be deposited into positions denoted by mask
+	 * @return a long starting with {@link #GOLDEN_64} where only bits in {@link #MASK} can be changed
+	 */
 	public static long deposit(long bits) {
 		bits &= 0xFFFFFF;
 		bits = (bits & ~TABLE_4) | (bits << 16 & TABLE_4);
@@ -48,9 +87,11 @@ public class MaceRandom extends EnhancedRandom {
 		return (bits & MASK) ^ GOLDEN_64;
 	}
 	/**
-	 * Given a long {@code bits} which should be a {@link }, takes {@link #MASK} (with 24 bits set to 1) to determine
-	 * which positions in {@code bits} will matter, and produces a long result starting with {@link #GOLDEN_64} and with
-	 * positions in {@code bits} matching positions in {@code mask} flipped where
+	 * Given a long {@code bits} which should be a result of {@link #getStream()}, uses {@link #MASK} (with 24 bits set
+	 * to 1) to determine which positions in {@code bits} will matter, and produces a long result of up to 24 bits, with
+	 * each successive bit corresponding to a successive position in {@link #MASK} changed from {@link #GOLDEN_64}. This
+	 * produces a "stream identifier" for a given {@link #getStream() stream}, as used by
+	 * {@link #getStreamIdentifier()} and {@link #setStreamIdentifier(int)}.
 	 * <br>
 	 * Based on Hacker's Delight (2nd edition).
 	 * @param bits the bit values that will be masked by {@code mask} and placed into the low-order bits of the result
@@ -212,7 +253,7 @@ public class MaceRandom extends EnhancedRandom {
 				stateE = value;
 				break;
 			default:
-				setStreamIdentifier((int)value);
+				setStreamIdentifier(value);
 				break;
 
 		}
@@ -260,7 +301,7 @@ public class MaceRandom extends EnhancedRandom {
 		s0 = (s0 <<  3 | s0 >>> 61) ^ s1;
 		stateE += s0;
 
-		setStreamIdentifier((int)((s0 <<  3 | s0 >>> 61) ^ (s1 << 56 | s1 >>>  8) + s0 ^ (ctr + 0xBEA225F9EB34556DL)));
+		setStreamIdentifier((s0 <<  3 | s0 >>> 61) ^ (s1 << 56 | s1 >>>  8) + s0 ^ (ctr + 0xBEA225F9EB34556DL));
 	}
 
 	public long getStream () {
@@ -277,12 +318,21 @@ public class MaceRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Sets the stream using the low-order 24 bits of the given long.
+	 * Sets the stream using the low-order 24 bits of the given int.
 	 *
-	 * @param streamID can be any long, but only the lowest-order 24 bits matter
+	 * @param streamID can be any int, but only the lowest-order 24 bits matter
 	 */
 	public void setStreamIdentifier(int streamID) {
 		this.stream = deposit(streamID);
+	}
+
+	/**
+	 * Sets the stream using all mixed bits of the given long.
+	 *
+	 * @param value can be any long, and will have all bits mixed into a stream identifier
+	 */
+	public void setStreamIdentifier(long value) {
+		this.stream = deposit((value ^ value >>> 24 ^ value >>> 48));
 	}
 
 	public long getStateA () {
@@ -352,11 +402,11 @@ public class MaceRandom extends EnhancedRandom {
 
 	/**
 	 * Sets the state completely to the given six state variables.
-	 * This is the same as calling {@link #setStreamIdentifier(int)}, {@link #setStateA(long)},
+	 * This is the same as calling {@link #setStreamIdentifier(long)}, {@link #setStateA(long)},
 	 * {@link #setStateB(long)}, {@link #setStateC(long)}, {@link #setStateD(long)}, and {@link #setStateE(long)}
 	 * as a group.
 	 *
-	 * @param streamID an up-to-24-bit int (between 0 and 16777215, inclusive); higher bits are ignored
+	 * @param streamID an up-to-24-bit int (between 0 and 16777215, inclusive); higher bits will be mixed in, and if present the stream may not be unique
 	 * @param stateA the first state; can be any long
 	 * @param stateB the second state; can be any long
 	 * @param stateC the third state; can be any long
@@ -364,7 +414,7 @@ public class MaceRandom extends EnhancedRandom {
 	 * @param stateE the fifth state; can be any long
 	 */
 	public void setState (long streamID, long stateA, long stateB, long stateC, long stateD, long stateE) {
-		setStreamIdentifier((int)streamID);
+		setStreamIdentifier(streamID);
 		this.stateA = stateA;
 		this.stateB = stateB;
 		this.stateC = stateC;
@@ -437,41 +487,4 @@ public class MaceRandom extends EnhancedRandom {
 	public String toString () {
 		return "MaceRandom{" + "streamIdentifier=" + getStreamIdentifier() + ", stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L, stateD=" + (stateD) + "L, stateE=" + (stateE) + "L}";
 	}
-
-//	public static void main(String[] args) {
-//		MaceRandom random = new MaceRandom(1, 1, 1, 1, 1, 1);
-//		System.out.println(Base.BASE16.unsigned(GOLDEN_64));
-//		System.out.println(Base.BASE16.unsigned(random.stream));
-//		System.out.println(Base.BASE16.unsigned(random.stream ^ GOLDEN_64));
-//		System.out.println(random);
-//		System.out.println(random.copy());
-//	}
-
-//	public static void main(String[] args) {
-//		MaceRandom random = new MaceRandom(1L);
-//		long n0 = random.nextLong();
-//		long n1 = random.nextLong();
-//		long n2 = random.nextLong();
-//		long n3 = random.nextLong();
-//		long n4 = random.nextLong();
-//		long n5 = random.nextLong();
-//		long p5 = random.previousLong();
-//		long p4 = random.previousLong();
-//		long p3 = random.previousLong();
-//		long p2 = random.previousLong();
-//		long p1 = random.previousLong();
-//		long p0 = random.previousLong();
-//		System.out.println(n0 == p0);
-//		System.out.println(n1 == p1);
-//		System.out.println(n2 == p2);
-//		System.out.println(n3 == p3);
-//		System.out.println(n4 == p4);
-//		System.out.println(n5 == p5);
-//		System.out.println(n0 + " vs. " + p0);
-//		System.out.println(n1 + " vs. " + p1);
-//		System.out.println(n2 + " vs. " + p2);
-//		System.out.println(n3 + " vs. " + p3);
-//		System.out.println(n4 + " vs. " + p4);
-//		System.out.println(n5 + " vs. " + p5);
-//	}
 }
