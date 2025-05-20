@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 See AUTHORS file.
+ * Copyright (c) 2025 See AUTHORS file.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,18 +15,29 @@
  *
  */
 
-package com.github.tommyettinger.random.experimental;
-
-import com.github.tommyettinger.random.EnhancedRandom;
+package com.github.tommyettinger.random;
 
 /**
  * Like AceRandom with five 64-bit states but also one unchanging 24-bit stream; does not use multiplication, only add,
- * XOR, and bitwise-rotate operations. Has a state that runs like a counter, guaranteeing a minimum period of 2 to the
- * 64, and each stream should be independent of any other stream after a small number of generations.
+ * XOR, and bitwise-rotate operations (this is an ARX generator). Has a state that runs like a counter, guaranteeing a
+ * minimum period of 2 to the 64, and each stream should be independent of any other stream after a small number of
+ * generations. The expected period is about 2 to the 310 calls to nextLong(), though this is an overly cautious
+ * estimate. Even if using the old stand-by advice, that only the square root of the period can be used before a
+ * generator starts to have problems, would permit an enormous 2 to the 160 calls before becoming, in some vague way,
+ * "bad." That's a trillion, quintillion, quintillion numbers. With 16 million possible streams, on top of that.
  * <br>
  * At least one stream passes 64TB with no anomalies, and at least 1% of all total streams pass 256MB without failures
  * or lingering anomalies. Only 1% were tested because testing 100% would take at least until the year 2026 to finish,
  * and the tests were run starting May 10, 2025.
+ * <br>
+ * After about 30 calls to {@link #nextLong()}, any two different streams with otherwise identical states should have no
+ * correlations to each other. This avoids the issue with SplitMix64 where "gamma" receives problem values, because it
+ * only allows changes to 24 bits of the constant {@code 0x9E3779B97F4A7C15L}. The specific bits that may change are the
+ * '1' bits in {@code 0x003569CA5369AC00L}, which are all spaced out so the changeable bits never clump into groups of 4
+ * or more sequential bits, and they have gaps in the changeable bits of no more than 2 '0' bits. So far, no truly
+ * problematic streams have been found, despite the stream being an increment for a counter like in SplitMix64. This
+ * does also use quite a lot more state than SplitMix64, and those extra 320 bits of state change in their own complex
+ * ways, both related and unrelated to the stream.
  */
 public class MaceRandom extends EnhancedRandom {
 	/**
