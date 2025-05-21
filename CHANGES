@@ -1,3 +1,13 @@
+[0.6.8]
+- Add MaceRandom, which is just like AceRandom or LaceRandom but with about 16 million possible distinct streams.
+
+[0.6.7]
+- Fix ChopRandom's GWT emulated version.
+
+[0.6.6]
+- Add Chip32Random, a 32-bit optimized generator in the vein of TrimRandom.
+- Add Xoshiro160RoadroxoRandom, another 32-bit optimized generator that mixes xoshiro128 with a variable counter.
+
 [0.6.5]
 - OrbitalRandom's tag was wrong, which messed with serialization. It has been fixed.
 
