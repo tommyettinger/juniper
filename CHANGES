@@ -1,5 +1,9 @@
+[0.6.9]
+- Out of an abundance of caution, this downgrades libGDX (which should only be used in tests) to 1.13.1 .
+
 [0.6.8]
 - Add MaceRandom, which is just like AceRandom or LaceRandom but with about 16 million possible distinct streams.
+- Update libGDX dependency, which is only used in tests, to 1.13.5 .
 
 [0.6.7]
 - Fix ChopRandom's GWT emulated version.
