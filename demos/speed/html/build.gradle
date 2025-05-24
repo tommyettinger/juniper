@@ -84,9 +84,9 @@ task superDev(type: GwtSuperDev) {
 //// The war/ folder shouldn't be committed to version control.
 clean.delete += [file("war")]
 
-//String outputPath = "build/dist/"
+String outputPath = "build/dist/"
 //String outputPath = "../../../docs/${appName}-old"
-String outputPath = "../../../docs/${appName}"
+//String outputPath = "../../../docs/${appName}"
 
 task dist(dependsOn: [clean, compileGwt]) {
 	doLast {

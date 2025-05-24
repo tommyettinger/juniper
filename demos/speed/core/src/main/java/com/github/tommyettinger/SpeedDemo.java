@@ -34,7 +34,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class SpeedDemo extends Game {
     public static final int SCREEN_WIDTH = 512;
     public static final int SCREEN_HEIGHT = 520;
-    public static final int STEPS = 0x80000;
+    public static final int STEPS = 0x200000;
 
     private Screen[] screens;
     private int screenIndex;
