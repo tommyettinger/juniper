@@ -53,6 +53,7 @@ public class HoleTest {
     public void testExclusiveFloat() {
         IntIntOrderedMap fractionFrequencies = new IntIntOrderedMap(PARTITIONS);
         DistinctRandom random = new DistinctRandom(123L);
+        System.out.println("With the [0,1) range subdivided into " + PARTITIONS + " sections...");
         for (int i = 0; i < 0x10000000; i++) {
             int pos = (int)(random.nextExclusiveFloat() * PARTITIONS);
             fractionFrequencies.getAndIncrement(pos, 0, 1);
@@ -67,7 +68,6 @@ public class HoleTest {
             System.out.println(fractionFrequencies.keyAt(i) + ": " + fractionFrequencies.getAt(i));
         }
     }
-
 
     @Test
     public void testExclusiveDouble() {
@@ -96,6 +96,7 @@ public class HoleTest {
     public void testExclusiveFloatNew() {
         IntIntOrderedMap fractionFrequencies = new IntIntOrderedMap(PARTITIONS);
         DistinctRandom random = new DistinctRandom(123L);
+        System.out.println("With the [0,1) range subdivided into " + PARTITIONS + " sections...");
         for (int i = 0; i < 0x10000000; i++) {
             int pos = (int)(nextExclusiveFloatNew(random) * PARTITIONS);
             fractionFrequencies.getAndIncrement(pos, 0, 1);
@@ -156,4 +157,48 @@ public class HoleTest {
 //        final long bits = random.nextLong();
 //        return BitConversion.longBitsToDouble((1022L - 63L) + BitConversion.countLeadingZeros(1L | BitConversion.lowestOneBit(bits)) << 52 | bits >>> 12);
 //    }
+
+    private float nextFloatGodot(EnhancedRandom random) {
+        /*
+        uint32_t proto_exp_offset = rand();
+		if (unlikely(proto_exp_offset == 0)) {
+			return 0;
+		}
+		return std::ldexp((float)(rand() | 0x80000001), -32 - CLZ32(proto_exp_offset));
+         */
+        long bits = random.nextLong();
+        int proto_exp_offset = (int) bits;
+        if(proto_exp_offset == 0) return 0f;
+        return Math.scalb((float) (bits >>> 32 | 0x80000001L), -32 - BitConversion.countLeadingZeros(proto_exp_offset));
+    }
+
+    /**
+     * Godot's randf() method is inclusive on both 0 and 1, which I just learned by writing this.
+     */
+    @Test
+    public void testGodotFloat() {
+        IntIntOrderedMap fractionFrequencies = new IntIntOrderedMap(PARTITIONS);
+        DistinctRandom random = new DistinctRandom(123L);
+        int highCount = 0, lowCount = 0;
+        System.out.println("With the [0,1] range subdivided into " + PARTITIONS + " sections...");
+        for (int i = 0; i < 0x10000000; i++) {
+            float r = nextFloatGodot(random);
+            if(r == 1f) highCount++;
+            else if(r == 0f) lowCount++;
+            int pos = (int)(r * PARTITIONS);
+            fractionFrequencies.getAndIncrement(pos, 0, 1);
+        }
+        System.out.println("The least frequent...");
+        fractionFrequencies.sortByValue(IntComparators.NATURAL_COMPARATOR);
+        for (int i = 0; i < 20; i++) {
+            System.out.println(fractionFrequencies.keyAt(i) + ": " + fractionFrequencies.getAt(i));
+        }
+        System.out.println("And the most frequent...");
+        for (int i = fractionFrequencies.size() - 20; i < fractionFrequencies.size(); i++) {
+            System.out.println(fractionFrequencies.keyAt(i) + ": " + fractionFrequencies.getAt(i));
+        }
+        System.out.println(lowCount + " values were equal to 0.0f .");
+        System.out.println(highCount + " values were equal to 1.0f .");
+    }
+
 }
