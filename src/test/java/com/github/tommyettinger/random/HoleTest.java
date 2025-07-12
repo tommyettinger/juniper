@@ -3,6 +3,7 @@ package com.github.tommyettinger.random;
 import com.github.tommyettinger.digital.BitConversion;
 import com.github.tommyettinger.ds.IntIntOrderedMap;
 import com.github.tommyettinger.ds.support.sort.IntComparators;
+import com.github.tommyettinger.random.experimental.L64X256MoremurRandom;
 import org.junit.Test;
 
 /**
@@ -11,6 +12,7 @@ import org.junit.Test;
  */
 public class HoleTest {
     public static final int PARTITIONS = 1 << 18;
+    public static final int INC_PARTITIONS = PARTITIONS + 1;
     @Test
     public void testInt() {
         IntIntOrderedMap fractionFrequencies = new IntIntOrderedMap(PARTITIONS);
@@ -177,12 +179,38 @@ public class HoleTest {
      */
     @Test
     public void testGodotFloat() {
-        IntIntOrderedMap fractionFrequencies = new IntIntOrderedMap(PARTITIONS);
-        DistinctRandom random = new DistinctRandom(123L);
+        IntIntOrderedMap fractionFrequencies = new IntIntOrderedMap(INC_PARTITIONS);
+        EnhancedRandom random = new L64X256MoremurRandom(123L);
         int highCount = 0, lowCount = 0;
-        System.out.println("With the [0,1] range subdivided into " + PARTITIONS + " sections...");
+        System.out.println("With the [0,1] range subdivided into " + INC_PARTITIONS + " sections...");
         for (int i = 0; i < 0x10000000; i++) {
             float r = nextFloatGodot(random);
+            if(r == 1f) highCount++;
+            else if(r == 0f) lowCount++;
+            int pos = (int)(r * PARTITIONS);
+            fractionFrequencies.getAndIncrement(pos, 0, 1);
+        }
+        System.out.println("The least frequent...");
+        fractionFrequencies.sortByValue(IntComparators.NATURAL_COMPARATOR);
+        for (int i = 0; i < 20; i++) {
+            System.out.println(fractionFrequencies.keyAt(i) + ": " + fractionFrequencies.getAt(i));
+        }
+        System.out.println("And the most frequent...");
+        for (int i = fractionFrequencies.size() - 20; i < fractionFrequencies.size(); i++) {
+            System.out.println(fractionFrequencies.keyAt(i) + ": " + fractionFrequencies.getAt(i));
+        }
+        System.out.println(lowCount + " values were equal to 0.0f .");
+        System.out.println(highCount + " values were equal to 1.0f .");
+    }
+
+    @Test
+    public void testInclusiveFloat() {
+        IntIntOrderedMap fractionFrequencies = new IntIntOrderedMap(INC_PARTITIONS);
+        EnhancedRandom random = new L64X256MoremurRandom(123L);
+        int highCount = 0, lowCount = 0;
+        System.out.println("With the [0,1] range subdivided into " + INC_PARTITIONS + " sections...");
+        for (int i = 0; i < 0x10000000; i++) {
+            float r = random.nextInclusiveFloat();
             if(r == 1f) highCount++;
             else if(r == 0f) lowCount++;
             int pos = (int)(r * PARTITIONS);
