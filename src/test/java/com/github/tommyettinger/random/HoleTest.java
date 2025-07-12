@@ -190,6 +190,7 @@ public class HoleTest {
      * 1 values were equal to 0.0f .
      * 59 values were equal to 0.75f .
      * 29 values were equal to 1.0f .
+     * The total of all least-significant bits is 536877447, and should optimally be 536870912 .
      * </pre>
      * <br>
      * It sure looks like 1.0f is produced half as frequently as 0.75f. This not only doesn't make sense from a purely
@@ -203,15 +204,18 @@ public class HoleTest {
      */
     @Test
     public void testGodotFloat() {
+        final int LIMIT = 0x40000000, EXPECTED_HALF_LIMIT = LIMIT >>> 1;
         IntIntOrderedMap fractionFrequencies = new IntIntOrderedMap(INC_PARTITIONS);
         EnhancedRandom random = new L64X256MoremurRandom(-256L);
         int highCount = 0, lowCount = 0, midHighCount = 0;
+        int lowestBitSum = 0;
         System.out.println("With the [0,1] range subdivided into " + INC_PARTITIONS + " sections...");
-        for (int i = 0; i < 0x40000000; i++) {
+        for (int i = 0; i < LIMIT; i++) {
             float r = nextFloatGodot(random);
             if(r == 1f) highCount++;
             else if(r == 0f) lowCount++;
             else if(r == 0.75f) midHighCount++;
+            lowestBitSum += BitConversion.floatToIntBits(r) & 1;
             int pos = (int)(r * PARTITIONS);
             fractionFrequencies.getAndIncrement(pos, 0, 1);
         }
@@ -227,6 +231,7 @@ public class HoleTest {
         System.out.println(lowCount + " values were equal to 0.0f .");
         System.out.println(midHighCount + " values were equal to 0.75f .");
         System.out.println(highCount + " values were equal to 1.0f .");
+        System.out.println("The total of all least-significant bits is " + lowestBitSum + ", and should optimally be " + EXPECTED_HALF_LIMIT + " .");
     }
 
     /**
@@ -243,19 +248,23 @@ public class HoleTest {
      * 0 values were equal to 0.0f .
      * 58 values were equal to 0.75f .
      * 55 values were equal to 1.0f .
+     * The total of all least-significant bits is 536893016, and should optimally be 536870912 .
      * </pre>
      */
     @Test
     public void testInclusiveFloat() {
+        final int LIMIT = 0x40000000, EXPECTED_HALF_LIMIT = LIMIT >>> 1;
         IntIntOrderedMap fractionFrequencies = new IntIntOrderedMap(INC_PARTITIONS);
         EnhancedRandom random = new L64X256MoremurRandom(-256L);
         int highCount = 0, lowCount = 0, midHighCount = 0;
+        int lowestBitSum = 0;
         System.out.println("With the [0,1] range subdivided into " + INC_PARTITIONS + " sections...");
-        for (int i = 0; i < 0x40000000; i++) {
+        for (int i = 0; i < LIMIT; i++) {
             float r = random.nextInclusiveFloat();
             if(r == 1f) highCount++;
             else if(r == 0f) lowCount++;
             else if(r == 0.75f) midHighCount++;
+            lowestBitSum += BitConversion.floatToIntBits(r) & 1;
             int pos = (int)(r * PARTITIONS);
             fractionFrequencies.getAndIncrement(pos, 0, 1);
         }
@@ -271,6 +280,7 @@ public class HoleTest {
         System.out.println(lowCount + " values were equal to 0.0f .");
         System.out.println(midHighCount + " values were equal to 0.75f .");
         System.out.println(highCount + " values were equal to 1.0f .");
+        System.out.println("The total of all least-significant bits is " + lowestBitSum + ", and should optimally be " + EXPECTED_HALF_LIMIT + " .");
     }
 
 }
