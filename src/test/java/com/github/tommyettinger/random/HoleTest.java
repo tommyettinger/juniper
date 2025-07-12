@@ -176,17 +176,42 @@ public class HoleTest {
 
     /**
      * Godot's randf() method is inclusive on both 0 and 1, which I just learned by writing this.
+     * <br>
+     * <pre>
+     * Seed 123:
+     * 0 values were equal to 0.0f .
+     * 67 values were equal to 0.75f .
+     * 27 values were equal to 1.0f .
+     * Seed 12345:
+     * 2 values were equal to 0.0f .
+     * 67 values were equal to 0.75f .
+     * 39 values were equal to 1.0f .
+     * Seed -256:
+     * 1 values were equal to 0.0f .
+     * 59 values were equal to 0.75f .
+     * 29 values were equal to 1.0f .
+     * </pre>
+     * <br>
+     * It sure looks like 1.0f is produced half as frequently as 0.75f. This not only doesn't make sense from a purely
+     * mathematical standpoint, it doesn't make sense considering IEEE rules either -- because there are supposed to be
+     * exactly as many float values possible in [0.5, 1.0) as there are in [1.0, 2.0), there should actually be the
+     * opposite case happening if a truly random real number in a slightly larger range on both sides than [0.0,1.0] and
+     * rounded to the nearest IEEE float. It could be considered accurate if you consider generating a uniform random
+     * real number actually in the range [0.0,1.0] (not the rounding-expanded version considered before) and round to
+     * the nearest representable float, because there are equally-distant representable floats above <em>and</em> below
+     * 0.75, while 1.0 only has an equally-distant representable float <em>below</em>, and nothing above is generated.
      */
     @Test
     public void testGodotFloat() {
         IntIntOrderedMap fractionFrequencies = new IntIntOrderedMap(INC_PARTITIONS);
-        EnhancedRandom random = new L64X256MoremurRandom(123L);
-        int highCount = 0, lowCount = 0;
+        EnhancedRandom random = new L64X256MoremurRandom(-256L);
+        int highCount = 0, lowCount = 0, midHighCount = 0;
         System.out.println("With the [0,1] range subdivided into " + INC_PARTITIONS + " sections...");
-        for (int i = 0; i < 0x10000000; i++) {
+        for (int i = 0; i < 0x40000000; i++) {
             float r = nextFloatGodot(random);
             if(r == 1f) highCount++;
             else if(r == 0f) lowCount++;
+            else if(r == 0.75f) midHighCount++;
             int pos = (int)(r * PARTITIONS);
             fractionFrequencies.getAndIncrement(pos, 0, 1);
         }
@@ -200,19 +225,37 @@ public class HoleTest {
             System.out.println(fractionFrequencies.keyAt(i) + ": " + fractionFrequencies.getAt(i));
         }
         System.out.println(lowCount + " values were equal to 0.0f .");
+        System.out.println(midHighCount + " values were equal to 0.75f .");
         System.out.println(highCount + " values were equal to 1.0f .");
     }
 
+    /**
+     * <pre>
+     * Seed 123:
+     * 0 values were equal to 0.0f .
+     * 69 values were equal to 0.75f .
+     * 59 values were equal to 1.0f .
+     * Seed 12345:
+     * 0 values were equal to 0.0f .
+     * 59 values were equal to 0.75f .
+     * 70 values were equal to 1.0f .
+     * Seed -256:
+     * 0 values were equal to 0.0f .
+     * 58 values were equal to 0.75f .
+     * 55 values were equal to 1.0f .
+     * </pre>
+     */
     @Test
     public void testInclusiveFloat() {
         IntIntOrderedMap fractionFrequencies = new IntIntOrderedMap(INC_PARTITIONS);
-        EnhancedRandom random = new L64X256MoremurRandom(123L);
-        int highCount = 0, lowCount = 0;
+        EnhancedRandom random = new L64X256MoremurRandom(-256L);
+        int highCount = 0, lowCount = 0, midHighCount = 0;
         System.out.println("With the [0,1] range subdivided into " + INC_PARTITIONS + " sections...");
-        for (int i = 0; i < 0x10000000; i++) {
+        for (int i = 0; i < 0x40000000; i++) {
             float r = random.nextInclusiveFloat();
             if(r == 1f) highCount++;
             else if(r == 0f) lowCount++;
+            else if(r == 0.75f) midHighCount++;
             int pos = (int)(r * PARTITIONS);
             fractionFrequencies.getAndIncrement(pos, 0, 1);
         }
@@ -226,6 +269,7 @@ public class HoleTest {
             System.out.println(fractionFrequencies.keyAt(i) + ": " + fractionFrequencies.getAt(i));
         }
         System.out.println(lowCount + " values were equal to 0.0f .");
+        System.out.println(midHighCount + " values were equal to 0.75f .");
         System.out.println(highCount + " values were equal to 1.0f .");
     }
 
