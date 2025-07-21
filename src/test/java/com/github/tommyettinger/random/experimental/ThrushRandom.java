@@ -22,26 +22,11 @@ import com.github.tommyettinger.random.EnhancedRandom;
 import com.github.tommyettinger.random.WhiskerRandom;
 
 /**
- * A subcycle generator with a counter, using only Add-Rotate-XOR operations.
- * The whole nextLong() method can fit on one (lengthy) line, where a, b, and c can each be any long:
- * <br>
- * {@code return a=(b=(b<<47|b>>>17)^(c+=0xD1B54A32D192ED03L))+(a<<23|a>>>41);}
- * <br>
- * This has 192 bits of state. Period is at minimum 2 to the 64, and is always a multiple of 2 to the 64, but the
- * expected period is much, much longer. This passes at least 16TB of PractRand with no anomalies. This takes more generations
- * to decorrelate given initially similar starting states, but does completely decorrelate by 100 {@link #nextLong()}
- * calls or earlier. Generators like {@link AceRandom} decorrelate by maybe 40-50 calls, and generators like
- * {@link WhiskerRandom} effectively never decorrelate.
- * <br>
- * At least according to QuickBench for C++, this is
- * <a href="https://quick-bench.com/q/B_lQWqFW-I9lOOuJUrmE1Qcm92A">insanely fast</a>.
- * <br>
- * Pick up the pace!
  */
-public class ThrashRandom extends EnhancedRandom {
+public class ThrushRandom extends EnhancedRandom {
 	@Override
 	public String getTag() {
-		return "ThaR";
+		return "ThuR";
 	}
 
 	/**
@@ -56,14 +41,19 @@ public class ThrashRandom extends EnhancedRandom {
 	 * The third state; can be any long.
 	 */
 	protected long stateC;
+	/**
+	 * The third state; can be any long.
+	 */
+	protected long stateD;
 
 	/**
 	 * Creates a new ThrashRandom with a random state.
 	 */
-	public ThrashRandom() {
+	public ThrushRandom() {
 		stateA = EnhancedRandom.seedFromMath();
 		stateB = EnhancedRandom.seedFromMath();
 		stateC = EnhancedRandom.seedFromMath();
+		stateD = EnhancedRandom.seedFromMath();
 	}
 
 	/**
@@ -72,7 +62,7 @@ public class ThrashRandom extends EnhancedRandom {
 	 *
 	 * @param seed any {@code long} value
 	 */
-	public ThrashRandom(long seed) {
+	public ThrushRandom(long seed) {
 		setSeed(seed);
 	}
 
@@ -83,10 +73,11 @@ public class ThrashRandom extends EnhancedRandom {
 	 * @param stateA any {@code long} value
 	 * @param stateB any {@code long} value
 	 */
-	public ThrashRandom(long stateA, long stateB) {
+	public ThrushRandom(long stateA, long stateB) {
 		this.stateA = stateA;
 		this.stateB = stateB;
 		this.stateC = 1L;
+		this.stateD = -1L;
 	}
 
 	/**
@@ -96,28 +87,30 @@ public class ThrashRandom extends EnhancedRandom {
 	 * @param stateA any {@code long} value
 	 * @param stateB any {@code long} value
 	 * @param stateC any {@code long} value
+	 * @param stateD any {@code long} value
 	 */
-	public ThrashRandom(long stateA, long stateB, long stateC) {
+	public ThrushRandom(long stateA, long stateB, long stateC, long stateD) {
 		this.stateA = stateA;
 		this.stateB = stateB;
 		this.stateC = stateC;
+		this.stateD = stateD;
 	}
 
 	/**
-	 * This generator has 3 {@code long} states, so this returns 3.
+	 * This generator has 4 {@code long} states, so this returns 4.
 	 *
-	 * @return 3 (three)
+	 * @return 4 (four)
 	 */
 	@Override
 	public int getStateCount () {
-		return 3;
+		return 4;
 	}
 
 	/**
 	 * Gets the state determined by {@code selection}, as-is. The value for selection should be
-	 * between 0 and 2, inclusive; if it is any other value this gets state C as if 2 was given.
+	 * between 0 and 3, inclusive; if it is any other value this gets state D as if 3 was given.
 	 *
-	 * @param selection used to select which state variable to get; generally 0, 1, or 2
+	 * @param selection used to select which state variable to get; generally 0, 1, 2, or 3
 	 * @return the value of the selected state
 	 */
 	@Override
@@ -127,17 +120,19 @@ public class ThrashRandom extends EnhancedRandom {
 				return stateA;
 			case 1:
 				return stateB;
-			default:
+			case 2:
 				return stateC;
+			default:
+				return stateD;
 		}
 	}
 
 	/**
 	 * Sets one of the states, determined by {@code selection}, to {@code value}, as-is.
-	 * Selections 0, 1, and 2 refer to states A, B, and C, and if the selection is anything
+	 * Selections 0, 1, 2, and 3 refer to states A, B, C, and D, and if the selection is anything
 	 * else, this ignores it and sets nothing.
 	 *
-	 * @param selection used to select which state variable to set; generally 0, 1, or 2
+	 * @param selection used to select which state variable to set; generally 0, 1, 2, or 3
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
@@ -152,13 +147,16 @@ public class ThrashRandom extends EnhancedRandom {
 		case 2:
 			stateC = value;
 			break;
+		case 3:
+			stateD = value;
+			break;
 		}
 	}
 
 	/**
-	 * This initializes all 3 states of the generator to random values based on the given seed.
+	 * This initializes all 4 states of the generator to random values based on the given seed.
 	 * (2 to the 64) possible initial generator states can be produced here, though there are
-	 * (2 to the 192) possible states in total.
+	 * (2 to the 256) possible states in total.
 	 *
 	 * @param s the initial seed; may be any long
 	 */
@@ -173,6 +171,9 @@ public class ThrashRandom extends EnhancedRandom {
 		s += 0xF1357AEA2E62A9C5L;
 		s = (s ^ (s << 43 | s >>> 21) ^ (s << 37 | s >>> 27)) ^ 0xC6BC279692B5C323L;
 		stateC = s;
+		s += 0xF1357AEA2E62A9C5L;
+		s = (s ^ (s << 43 | s >>> 21) ^ (s << 37 | s >>> 27)) ^ 0xC6BC279692B5C323L;
+		stateD = s;
 	}
 
 	public long getStateA () {
@@ -214,21 +215,33 @@ public class ThrashRandom extends EnhancedRandom {
 		this.stateC = stateC;
 	}
 
+	public long getStateD () {
+		return stateD;
+	}
+
 	/**
-	 * Equivalent to {@code setState(stateA, stateB, 1L)}.
+	 * Sets the fourth part of the state.
+	 *
+	 * @param stateD can be any long
+	 */
+	public void setStateD (long stateD) {
+		this.stateD = stateD;
+	}
+
+	/**
+	 * Equivalent to {@code setState(stateA, stateB, 1L, -1L)}.
 	 *
 	 * @param stateA the long value to use for stateA
 	 * @param stateB the long value to use for stateB
 	 */
 	@Override
 	public void setState(long stateA, long stateB) {
-		setState(stateA, stateB, 1L);
+		setState(stateA, stateB, 1L, -1L);
 	}
 
 	/**
-	 * Sets the state completely to the given three state variables.
 	 * This is the same as calling {@link #setStateA(long)}, {@link #setStateB(long)},
-	 * and {@link #setStateC(long)} as a group.
+	 * and {@link #setStateC(long)} as a group, and {@link #setStateD(long)} with -1L .
 	 *
 	 * @param stateA the first state; can be any long
 	 * @param stateB the second state; can be any long
@@ -239,32 +252,53 @@ public class ThrashRandom extends EnhancedRandom {
 		this.stateA = stateA;
 		this.stateB = stateB;
 		this.stateC = stateC;
+		this.stateD = -1L;
+	}
+
+	/**
+	 * Sets the state completely to the given four state variables.
+	 * This is the same as calling {@link #setStateA(long)}, {@link #setStateB(long)},
+	 * {@link #setStateC(long)}, and {@link #setStateD(long)} as a group.
+	 *
+	 * @param stateA the first state; can be any long
+	 * @param stateB the second state; can be any long
+	 * @param stateC the third state; can be any long
+	 * @param stateD the fourth state; can be any long
+	 */
+	@Override
+	public void setState (long stateA, long stateB, long stateC, long stateD) {
+		this.stateA = stateA;
+		this.stateB = stateB;
+		this.stateC = stateC;
+		this.stateD = stateD;
 	}
 
 	@Override
 	public long nextLong () {
-		return stateA = (stateB = (stateB << 47 | stateB >>> 17) ^ (stateC += 0xD1B54A32D192ED03L))
-				+ (stateA << 23 | stateA >>> 41);
+		return stateD ^= (stateA = (stateB = (stateB << 47 | stateB >>> 17) ^ (stateC += 0xD1B54A32D192ED03L))
+				+ (stateA << 23 | stateA >>> 41));
 	}
 	// variant, one-line version
-//      return a=(b=(b<<47|b>>>17)^(c+=0xD1B54A32D192ED03L))+(a<<23|a>>>41);
+//      return d^=a=(b=(b<<47|b>>>17)^(c+=0xD1B54A32D192ED03L))+(a<<23|a>>>41);
 
 	@Override
 	public long previousLong () {
 		final long a = stateA;
 		final long b = stateB;
 		final long c = stateC;
+		final long d = stateD;
 		stateC -= 0xD1B54A32D192ED03L;
 		stateB = b ^ c;
 		stateB = (stateB << 17 | stateB >>> 47);
 		stateA = (a - b);
 		stateA = (stateA << 41 | stateA >>> 23);
-		return a;
+		stateD ^= a;
+		return d;
 	}
 	@Override
 	public int next (int bits) {
-		return (int)(stateA = (stateB = (stateB << 47 | stateB >>> 17) ^ (stateC += 0xD1B54A32D192ED03L))
-				 + (stateA << 23 | stateA >>> 41)) >>> (32 - bits);
+		return (int)(stateD ^= (stateA = (stateB = (stateB << 47 | stateB >>> 17) ^ (stateC += 0xD1B54A32D192ED03L))
+				 + (stateA << 23 | stateA >>> 41))) >>> (32 - bits);
 	}
 
 	/**
@@ -279,13 +313,13 @@ public class ThrashRandom extends EnhancedRandom {
 	 */
 	@Override
 	public int nextInt() {
-		return (int)(stateA = (stateB = (stateB << 47 | stateB >>> 17) ^ (stateC += 0xD1B54A32D192ED03L))
-				 + (stateA << 23 | stateA >>> 41));
+		return (int)(stateD ^= (stateA = (stateB = (stateB << 47 | stateB >>> 17) ^ (stateC += 0xD1B54A32D192ED03L))
+				 + (stateA << 23 | stateA >>> 41)));
 	}
 
 	@Override
-	public ThrashRandom copy () {
-		return new ThrashRandom(stateA, stateB, stateC);
+	public ThrushRandom copy () {
+		return new ThrushRandom(stateA, stateB, stateC, stateD);
 	}
 
 	@Override
@@ -295,17 +329,17 @@ public class ThrashRandom extends EnhancedRandom {
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		ThrashRandom that = (ThrashRandom)o;
+		ThrushRandom that = (ThrushRandom)o;
 
-		return stateA == that.stateA && stateB == that.stateB && stateC == that.stateC;
+		return stateA == that.stateA && stateB == that.stateB && stateC == that.stateC && stateD == that.stateD;
 	}
 
 	public String toString () {
-		return "ThrashRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L}";
+		return "ThrashRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L, stateD=" + (stateD) + "L}";
 	}
 
 //	public static void main(String[] args) {
-//		ThrashRandom random = new ThrashRandom(1L);
+//		ThrushRandom random = new ThrushRandom(1L);
 //		{
 //			int n0 = random.nextInt();
 //			int n1 = random.nextInt();
@@ -332,7 +366,7 @@ public class ThrashRandom extends EnhancedRandom {
 //			System.out.println(Base.BASE16.unsigned(n4) + " vs. " + Base.BASE16.unsigned(p4));
 //			System.out.println(Base.BASE16.unsigned(n5) + " vs. " + Base.BASE16.unsigned(p5));
 //		}
-//		random = new ThrashRandom(1L);
+//		random = new ThrushRandom(1L);
 //		{
 //			long n0 = random.nextLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL\n", random.stateA, random.stateB, random.stateC);
 //			long n1 = random.nextLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL\n", random.stateA, random.stateB, random.stateC);
