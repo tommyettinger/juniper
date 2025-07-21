@@ -21,6 +21,7 @@ import com.github.tommyettinger.digital.ArrayTools;
 import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.ds.ObjectList;
 import com.github.tommyettinger.random.experimental.ThrashRandom;
+import com.github.tommyettinger.random.experimental.ThrushRandom;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -119,7 +120,7 @@ public class InitialCorrelationEvaluatorLong {
 //                new DistinctRandom(1));
 
         ArrayList<EnhancedRandom> rs = ObjectList.with(new EnhancedRandom[]{
-                new ThrashRandom(1, 1, 1)
+                new ThrushRandom(1, 1, 1, 1)
 
 //                new LaceRandom(1, 1, 1, 1, 1),
 //                new MaceRandom(1, 1, 1, 1, 1, 1),
