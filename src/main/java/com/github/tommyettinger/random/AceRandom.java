@@ -235,7 +235,7 @@ public class AceRandom extends EnhancedRandom {
 		stateC = seed ^ ~0xD3833E804F4C574BL;                      // updates are spread across the MX3 hash
 		seed *= 0xBEA225F9EB34556DL;
 		seed ^= seed >>> 32;
-		stateD = seed ^ 0xC6BC279692B5C323L;;
+		stateD = seed ^ 0xC6BC279692B5C323L;
 		seed *= 0xBEA225F9EB34556DL;
 		seed ^= seed >>> 29;
 		stateE = seed;
