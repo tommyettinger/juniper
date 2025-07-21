@@ -17,11 +17,13 @@
 
 package com.github.tommyettinger.random.experimental;
 
-import com.github.tommyettinger.random.AceRandom;
 import com.github.tommyettinger.random.EnhancedRandom;
-import com.github.tommyettinger.random.WhiskerRandom;
 
 /**
+ * <a href="https://quick-bench.com/q/B7frBOfTJMmzkchoRegccrpULQM">Very fast!</a>
+ * Passes Initial Correlation Testing with 100 steps, possibly less.
+ * No clue how it does on PractRand, but it's based on ThrashRandom internally, which passes 16TB with no anomalies (at
+ * least 16TB).
  */
 public class ThrushRandom extends EnhancedRandom {
 	@Override
