@@ -28,13 +28,11 @@ import com.github.tommyettinger.random.WhiskerRandom;
  * {@code return a=(b=(b<<47|b>>>17)^(c+=0xD1B54A32D192ED03L))+(a<<23|a>>>41);}
  * <br>
  * This has 192 bits of state. Period is at minimum 2 to the 64, and is always a multiple of 2 to the 64, but the
- * expected period is much, much longer. This passes at least 16TB of PractRand with no anomalies. This takes more generations
- * to decorrelate given initially similar starting states, but does completely decorrelate by 100 {@link #nextLong()}
- * calls or earlier. Generators like {@link AceRandom} decorrelate by maybe 40-50 calls, and generators like
- * {@link WhiskerRandom} effectively never decorrelate.
+ * expected period is much, much longer. This passes at least 32TB of PractRand with no anomalies. This fails ICE and
+ * IICE tests, so it doesn't decorrelate over normal spans of time to be using a generator.
  * <br>
  * At least according to QuickBench for C++, this is
- * <a href="https://quick-bench.com/q/B_lQWqFW-I9lOOuJUrmE1Qcm92A">insanely fast</a>.
+ * <a href="https://quick-bench.com/q/PAv1jXfDEXfBZpcgRbLRhKXCXEQ">insanely fast</a>.
  * <br>
  * Pick up the pace!
  */

@@ -20,10 +20,10 @@ package com.github.tommyettinger.random.experimental;
 import com.github.tommyettinger.random.EnhancedRandom;
 
 /**
- * <a href="https://quick-bench.com/q/B7frBOfTJMmzkchoRegccrpULQM">Very fast!</a>
- * Passes Initial Correlation Testing with 100 steps, possibly less.
- * No clue how it does on PractRand, but it's based on ThrashRandom internally, which passes 16TB with no anomalies (at
- * least 16TB).
+ * <a href="https://quick-bench.com/q/PAv1jXfDEXfBZpcgRbLRhKXCXEQ">Very fast!</a>
+ * Passes Initial Correlation Testing with 66 steps.
+ * No clue how it does on PractRand, but it's based on ThrashRandom internally, which passes 32TB with no anomalies (at
+ * least 32TB).
  */
 public class ThrushRandom extends EnhancedRandom {
 	@Override
