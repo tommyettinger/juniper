@@ -1,0 +1,1 @@
+[Immediate] Lowest mode: 102.0000 has mean amount 0.0249012708  FAIL 💀 for ThrushRandom
