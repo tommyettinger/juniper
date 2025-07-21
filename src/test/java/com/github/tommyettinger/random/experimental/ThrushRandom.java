@@ -277,8 +277,8 @@ public class ThrushRandom extends EnhancedRandom {
 
 	@Override
 	public long nextLong () {
-		return stateD += (stateA = (stateB = (stateB << 47 | stateB >>> 17) ^ (stateC += 0xD1B54A32D192ED03L))
-				+ (stateA << 23 | stateA >>> 41));
+		return stateD = (stateA = (stateB = (stateB << 47 | stateB >>> 17) ^ (stateC += 0xD1B54A32D192ED03L))
+				+ (stateA << 23 | stateA >>> 41)) ^ (stateD << 5 | stateD >>> 59);
 	}
 	// variant, one-line version
 //      return d^=a=(b=(b<<47|b>>>17)^(c+=0xD1B54A32D192ED03L))+(a<<23|a>>>41);
@@ -294,13 +294,14 @@ public class ThrushRandom extends EnhancedRandom {
 		stateB = (stateB << 17 | stateB >>> 47);
 		stateA = (a - b);
 		stateA = (stateA << 41 | stateA >>> 23);
-		stateD -= a;
+		stateD = d ^ a;
+		stateD = (stateD << 59 | stateD >>> 5);
 		return d;
 	}
 	@Override
 	public int next (int bits) {
-		return (int)(stateD += (stateA = (stateB = (stateB << 47 | stateB >>> 17) ^ (stateC += 0xD1B54A32D192ED03L))
-				 + (stateA << 23 | stateA >>> 41))) >>> (32 - bits);
+		return (int)(stateD = (stateA = (stateB = (stateB << 47 | stateB >>> 17) ^ (stateC += 0xD1B54A32D192ED03L))
+				 + (stateA << 23 | stateA >>> 41)) ^ (stateD << 5 | stateD >>> 59)) >>> (32 - bits);
 	}
 
 	/**
@@ -315,8 +316,8 @@ public class ThrushRandom extends EnhancedRandom {
 	 */
 	@Override
 	public int nextInt() {
-		return (int)(stateD += (stateA = (stateB = (stateB << 47 | stateB >>> 17) ^ (stateC += 0xD1B54A32D192ED03L))
-				 + (stateA << 23 | stateA >>> 41)));
+		return (int)(stateD = (stateA = (stateB = (stateB << 47 | stateB >>> 17) ^ (stateC += 0xD1B54A32D192ED03L))
+				 + (stateA << 23 | stateA >>> 41)) ^ (stateD << 5 | stateD >>> 59));
 	}
 
 	@Override
