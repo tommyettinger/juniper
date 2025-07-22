@@ -20,10 +20,10 @@ package com.github.tommyettinger.random.experimental;
 import com.github.tommyettinger.random.EnhancedRandom;
 
 /**
- * <a href="https://quick-bench.com/q/PAv1jXfDEXfBZpcgRbLRhKXCXEQ">Very fast!</a>
+ * <a href="https://quick-bench.com/q/dYHUBBQYy7yRtt3CL9Q_EQ6p-o8">Very fast!</a>
  * Passes Initial Correlation Testing with 66 steps.
- * No clue how it does on PractRand, but it's based on ThrashRandom internally, which passes 32TB with no anomalies (at
- * least 32TB).
+ * No clue how it does on PractRand, but it's based on ThrashRandom internally, which passes 32TB with no anomalies (but
+ * not 64TB, where it has one "unusual" anomaly).
  */
 public class ThrushRandom extends EnhancedRandom {
 	@Override
@@ -277,11 +277,11 @@ public class ThrushRandom extends EnhancedRandom {
 
 	@Override
 	public long nextLong () {
-		return stateD = (stateA = (stateB = (stateB << 47 | stateB >>> 17) ^ (stateC += 0xD1B54A32D192ED03L))
-				+ (stateA << 23 | stateA >>> 41)) + (stateD << 11 | stateD >>> 53);
+		return stateD ^= (stateA = (stateB = (stateB << 41 | stateB >>> 23) ^ (stateC += 0xBEA225F9EB34556DL))
+				+ (stateA << 26 | stateA >>> 38));
 	}
 	// variant, one-line version
-//      return d^=a=(b=(b<<47|b>>>17)^(c+=0xD1B54A32D192ED03L))+(a<<23|a>>>41);
+//      return d=(a=(b=(b<<50|b>>>14)+(c+=0xBEA225F9EB34556DL))+(a<<25|a>>>39))^(d<<11|d>>>53);
 
 	@Override
 	public long previousLong () {
@@ -289,19 +289,18 @@ public class ThrushRandom extends EnhancedRandom {
 		final long b = stateB;
 		final long c = stateC;
 		final long d = stateD;
-		stateC -= 0xD1B54A32D192ED03L;
+		stateC -= 0xBEA225F9EB34556DL;
 		stateB = b ^ c;
-		stateB = (stateB << 17 | stateB >>> 47);
+		stateB = (stateB << 23 | stateB >>> 41);
 		stateA = a - b;
-		stateA = (stateA << 41 | stateA >>> 23);
-		stateD = d - a;
-		stateD = (stateD << 53 | stateD >>> 11);
+		stateA = (stateA << 38 | stateA >>> 26);
+		stateD = d ^ a;
 		return d;
 	}
 	@Override
 	public int next (int bits) {
-		return (int)(stateD = (stateA = (stateB = (stateB << 47 | stateB >>> 17) ^ (stateC += 0xD1B54A32D192ED03L))
-				 + (stateA << 23 | stateA >>> 41)) + (stateD << 11 | stateD >>> 53)) >>> (32 - bits);
+		return (int)(stateD ^= (stateA = (stateB = (stateB << 41 | stateB >>> 23) ^ (stateC += 0xBEA225F9EB34556DL))
+				+ (stateA << 26 | stateA >>> 38))) >>> (32 - bits);
 	}
 
 	/**
@@ -316,8 +315,8 @@ public class ThrushRandom extends EnhancedRandom {
 	 */
 	@Override
 	public int nextInt() {
-		return (int)(stateD = (stateA = (stateB = (stateB << 47 | stateB >>> 17) ^ (stateC += 0xD1B54A32D192ED03L))
-				 + (stateA << 23 | stateA >>> 41)) + (stateD << 11 | stateD >>> 53));
+		return (int)(stateD ^= (stateA = (stateB = (stateB << 41 | stateB >>> 23) ^ (stateC += 0xBEA225F9EB34556DL))
+				+ (stateA << 26 | stateA >>> 38)));
 	}
 
 	@Override

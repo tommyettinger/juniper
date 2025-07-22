@@ -1,0 +1,1 @@
+Lowest mode: 115.0000 has mean amount 0.0308434069  PASS 👍 for ThrushRandom

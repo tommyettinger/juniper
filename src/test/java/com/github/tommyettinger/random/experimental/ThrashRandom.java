@@ -28,8 +28,9 @@ import com.github.tommyettinger.random.WhiskerRandom;
  * {@code return a=(b=(b<<47|b>>>17)^(c+=0xD1B54A32D192ED03L))+(a<<23|a>>>41);}
  * <br>
  * This has 192 bits of state. Period is at minimum 2 to the 64, and is always a multiple of 2 to the 64, but the
- * expected period is much, much longer. This passes at least 32TB of PractRand with no anomalies. This fails ICE and
- * IICE tests, so it doesn't decorrelate over normal spans of time to be using a generator.
+ * expected period is much, much longer. This passes 32TB of PractRand with no anomalies, and gets one "unusual" anomaly
+ * at 64TB. Variations on this generator (with different constants) may be able to pass without anomalies.
+ * This fails ICE and IICE tests, so it doesn't decorrelate over normal spans of time to be using a generator.
  * <br>
  * At least according to QuickBench for C++, this is
  * <a href="https://quick-bench.com/q/PAv1jXfDEXfBZpcgRbLRhKXCXEQ">insanely fast</a>.
