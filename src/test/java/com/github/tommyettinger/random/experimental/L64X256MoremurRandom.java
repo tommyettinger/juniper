@@ -24,6 +24,7 @@ import com.github.tommyettinger.random.EnhancedRandom;
  * <br>
  * Xoshiro256** was written in 2018 by David Blackman and Sebastiano Vigna. You can consult their paper for technical details:
  * <a href="https://vigna.di.unimi.it/ftp/papers/ScrambledLinear.pdf">PDF link here</a>.
+ * The <a href="https://mostlymangling.blogspot.com/2019/12/stronger-better-morer-moremur-better.html">Moremur mixer</a> is described here, by Pelle Evensen.
  * <a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/util/random/package-summary.html">The java.util.random package docs are also useful.</a>
  */
 public class L64X256MoremurRandom extends EnhancedRandom {
@@ -409,7 +410,6 @@ public class L64X256MoremurRandom extends EnhancedRandom {
 		x ^= x >>> 33;
 		x *= 0x1C69B3F74AC4AE35L;
 		return x ^ x >>> 27;
-
 	}
 
 	@Override

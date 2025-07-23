@@ -20,17 +20,18 @@ package com.github.tommyettinger.random.experimental;
 import com.github.tommyettinger.random.EnhancedRandom;
 
 /**
- * An LXM generator with the Mix step changed to PCG-Random's RXSMXS operation and the Xorshift generator changed to a
+ * An LXM generator with the Mix step changed to the Moremur unary hash and the Xorshift generator changed to a
  * simple 64-bit LFSR. This is somewhat related to L64X256MixRandom in JDK 17 and newer.
  * <br>
  * The 64-bit LFSR was found by <a href="https://github.com/hayguen/mlpolygen">mlpolygen</a>.
- * <a href="">PCG-Random was created by M.E. O'Neill</a>; this uses one of its mixers.
-  * <a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/util/random/package-summary.html">The java.util.random package docs are also useful.</a>
+ * The <a href="https://mostlymangling.blogspot.com/2019/12/stronger-better-morer-moremur-better.html">Moremur mixer</a> is described here, by Pelle Evensen.
+ * <a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/util/random/package-summary.html">The java.util.random package docs are also useful.</a>
  * <br>
  * This is largely an excuse to use the hex constant {@code 0xfeedbabedeadbeefL} in production, since it is somehow made
- * of real words and is also still a full-period LFSR polynomial.
+ * of real words and is also still a full-period LFSR polynomial. The other reason it exists is to compare Moremur
+ * against the PCG-Random-based step used by {@link LCG64LFSR64PcgRandom}, which doesn't randomize that well sometimes.
  */
-public class LCG64LFSR64PcgRandom extends EnhancedRandom {
+public class LCG64LFSR64MoremurRandom extends EnhancedRandom {
 
 	/**
 	 * The first (LFSR) state; can be any long except 0.
@@ -44,7 +45,7 @@ public class LCG64LFSR64PcgRandom extends EnhancedRandom {
 	/**
 	 * Creates a new LCG64LFSR64PcgRandom with a random state.
 	 */
-	public LCG64LFSR64PcgRandom() {
+	public LCG64LFSR64MoremurRandom() {
 		super();
 		stateA = EnhancedRandom.seedFromMath();
 		stateB = EnhancedRandom.seedFromMath();
@@ -58,7 +59,7 @@ public class LCG64LFSR64PcgRandom extends EnhancedRandom {
 	 *
 	 * @param seed any {@code long} value
 	 */
-	public LCG64LFSR64PcgRandom(long seed) {
+	public LCG64LFSR64MoremurRandom(long seed) {
 		super(seed);
 		setSeed(seed);
 	}
@@ -70,7 +71,7 @@ public class LCG64LFSR64PcgRandom extends EnhancedRandom {
 	 * @param stateA any {@code long} value except 0
 	 * @param stateB any {@code long} value
 	 */
-	public LCG64LFSR64PcgRandom(long stateA, long stateB) {
+	public LCG64LFSR64MoremurRandom(long stateA, long stateB) {
 		super(stateA);
 		this.stateA = stateA;
 		this.stateB = stateB;
@@ -189,17 +190,17 @@ public class LCG64LFSR64PcgRandom extends EnhancedRandom {
 
 	@Override
 	public long nextLong () {
-		return pcg((stateA = (stateA << 1) ^ (stateA >> 63 & 0xfeedbabedeadbeefL)) + (stateB = stateB * 0xD1342543DE82EF95L + 1L));
+		return moremur((stateA = (stateA << 1) ^ (stateA >> 63 & 0xfeedbabedeadbeefL)) + (stateB = stateB * 0xD1342543DE82EF95L + 1L));
 	}
 
 	@Override
 	public int next (int bits) {
-		return (int)(pcg((stateA = (stateA << 1) ^ (stateA >> 63 & 0xfeedbabedeadbeefL)) + (stateB = stateB * 0xD1342543DE82EF95L + 1L)) >>> 64 - bits);
+		return (int)(moremur((stateA = (stateA << 1) ^ (stateA >> 63 & 0xfeedbabedeadbeefL)) + (stateB = stateB * 0xD1342543DE82EF95L + 1L)) >>> 64 - bits);
 	}
 
 	@Override
 	public long previousLong () {
-		long result = pcg(stateA + stateB);
+		long result = moremur(stateA + stateB);
 		stateA = (stateA >>> 1) ^ (-(stateA & 1L) & 0xfeedbabedeadbeefL);
 		stateB = (stateB - 1L) * 0x572B5EE77A54E3BDL;
 		return result;
@@ -213,18 +214,20 @@ public class LCG64LFSR64PcgRandom extends EnhancedRandom {
 	 */
 	public long leap()
 	{
-		return pcg((stateA = (stateA << 1) ^ (stateA >> 63 & 0xfeedbabedeadbeefL)) + stateB);
+		return moremur((stateA = (stateA << 1) ^ (stateA >> 63 & 0xfeedbabedeadbeefL)) + stateB);
 	}
 
-	public static long pcg(long z) {
-		z = (z ^ z >>> ((z >>> 59) + 5)) * 0xAEF17502108EF2D9L;
-		return (z ^ z >>> 43);
-
+	public static long moremur(long x) {
+		x ^= x >>> 27;
+		x *= 0x3C79AC492BA7B653L;
+		x ^= x >>> 33;
+		x *= 0x1C69B3F74AC4AE35L;
+		return x ^ x >>> 27;
 	}
 
 	@Override
-	public LCG64LFSR64PcgRandom copy () {
-		return new LCG64LFSR64PcgRandom(stateA, stateB);
+	public LCG64LFSR64MoremurRandom copy () {
+		return new LCG64LFSR64MoremurRandom(stateA, stateB);
 	}
 
 	@Override
@@ -234,7 +237,7 @@ public class LCG64LFSR64PcgRandom extends EnhancedRandom {
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		LCG64LFSR64PcgRandom that = (LCG64LFSR64PcgRandom)o;
+		LCG64LFSR64MoremurRandom that = (LCG64LFSR64MoremurRandom)o;
 
 		if (stateA != that.stateA)
 			return false;

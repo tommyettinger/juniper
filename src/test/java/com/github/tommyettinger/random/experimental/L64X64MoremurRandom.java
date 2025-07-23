@@ -25,6 +25,7 @@ import com.github.tommyettinger.random.EnhancedRandom;
  * JDK 17 and newer.
  * <br>
  * The 7-and-9 Xorshift is documented at least on Wikipedia, which <a href="https://en.wikipedia.org/wiki/Xorshift#cite_note-5">has this citation for it</a>.
+ * The <a href="https://mostlymangling.blogspot.com/2019/12/stronger-better-morer-moremur-better.html">Moremur mixer</a> is described here, by Pelle Evensen.
   * <a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/util/random/package-summary.html">The java.util.random package docs are also useful.</a>
  */
 public class L64X64MoremurRandom extends EnhancedRandom {
