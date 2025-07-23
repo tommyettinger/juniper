@@ -1,0 +1,1 @@
+[Immediate] Lowest mode: 117.0000 has mean amount 0.0311191678  PASS 👍 for LCG64LFSR64MoremurRandom
