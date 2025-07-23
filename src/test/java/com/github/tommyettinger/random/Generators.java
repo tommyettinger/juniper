@@ -84,6 +84,7 @@ public final class Generators {
         randomList.add(new ThrashRandom(1, 1, 1));
         randomList.add(new ThrushRandom(1, 1, 1, 1));
         randomList.add(new L64X64MoremurRandom(1, 1));
+        randomList.add(new L64X64PcgRandom(1, 1));
     }
     public static int randomCount = randomList.size();
 

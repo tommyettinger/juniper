@@ -1,0 +1,1 @@
+[Immediate] Lowest mode: 119.0000 has mean amount 0.0311254858  PASS 👍 for L64X64PcgRandom
