@@ -20,10 +20,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.github.tommyettinger.digital.ArrayTools;
 import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.ds.ObjectList;
-import com.github.tommyettinger.random.experimental.L64X64MoremurRandom;
-import com.github.tommyettinger.random.experimental.L64X64PcgRandom;
-import com.github.tommyettinger.random.experimental.ThrashRandom;
-import com.github.tommyettinger.random.experimental.ThrushRandom;
+import com.github.tommyettinger.random.experimental.*;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -122,7 +119,8 @@ public class InitialCorrelationEvaluatorLong {
 //                new DistinctRandom(1));
 
         ArrayList<EnhancedRandom> rs = ObjectList.with(new EnhancedRandom[]{
-                new L64X64PcgRandom(1, 1)
+                new LCG64LFSR64PcgRandom(1, 1)
+//                new L64X64PcgRandom(1, 1)
 //                new L64X64MoremurRandom(1, 1)
 //                new ThrushRandom(1, 1, 1, 1)
 
