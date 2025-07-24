@@ -117,7 +117,8 @@ public class ImmediateInitialCorrelationEvaluator {
         EnhancedRandom[][] g = new EnhancedRandom[256][256];
 
         ArrayList<EnhancedRandom> rs = ObjectList.with(
-                new I64LFSR64MoremurRandom(1, 1)
+                new I64LFSR64MX3Random(1, 1)
+//                new I64LFSR64MoremurRandom(1, 1)
 //                new LCG64LFSR64MoremurRandom(1, 1)
 //                new LCG64LFSR64PcgRandom(1, 1)
 //                new L64X64PcgRandom(1, 1)

@@ -88,6 +88,7 @@ public final class Generators {
         randomList.add(new LCG64LFSR64PcgRandom(1, 1));
         randomList.add(new LCG64LFSR64MoremurRandom(1, 1));
         randomList.add(new I64LFSR64MoremurRandom(1, 1));
+        randomList.add(new I64LFSR64MX3Random(1, 1));
     }
     public static int randomCount = randomList.size();
 
