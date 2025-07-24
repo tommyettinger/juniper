@@ -82,7 +82,7 @@ public class I64LFSR64MoremurRandom extends EnhancedRandom {
 
 	@Override
 	public String getTag() {
-		return "LrPR";
+		return "IrUR";
 	}
 
 	/**

@@ -35,8 +35,8 @@ package com.github.tommyettinger.random;
  * {@link #previousLong()} without using skip().
  * <br>
  * Xoshiro256** was written in 2018 by David Blackman and Sebastiano Vigna. You can consult their paper for technical details:
- * <a href="https://vigna.di.unimi.it/ftp/papers/ScrambledLinear.pdf">PDF link here</a>. The MX3 unary hash was written
- * 2020 by Jon Maiga, <a href="https://github.com/jonmaiga/mx3">GitHub repo here</a>.
+ * <a href="https://vigna.di.unimi.it/ftp/papers/ScrambledLinear.pdf">PDF link here</a>.
+ * The MX3 unary hash was written 2020 by Jon Maiga, <a href="https://github.com/jonmaiga/mx3">GitHub repo here</a>.
  */
 public class Xoshiro256MX3Random extends EnhancedRandom {
 
