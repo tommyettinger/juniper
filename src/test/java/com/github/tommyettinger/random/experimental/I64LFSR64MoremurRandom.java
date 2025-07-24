@@ -191,12 +191,12 @@ public class I64LFSR64MoremurRandom extends EnhancedRandom {
 
 	@Override
 	public long nextLong () {
-		return moremur((stateA = (stateA << 1) ^ (stateA >> 63 & 0xfeedbabedeadbeefL)) + ++stateB);
+		return moremur((stateA = (stateA << 1) ^ (stateA >> 63 & 0xfeedbabedeadbeefL)) + (stateB += 0xBEA225F9EB34556DL));
 	}
 
 	@Override
 	public int next (int bits) {
-		return (int)(moremur((stateA = (stateA << 1) ^ (stateA >> 63 & 0xfeedbabedeadbeefL)) + ++stateB) >>> 64 - bits);
+		return (int)(moremur((stateA = (stateA << 1) ^ (stateA >> 63 & 0xfeedbabedeadbeefL)) + (stateB += 0xBEA225F9EB34556DL)) >>> 64 - bits);
 	}
 
 	@Override
@@ -205,7 +205,7 @@ public class I64LFSR64MoremurRandom extends EnhancedRandom {
 		long lsb = (stateA & 1L);
 		stateA ^= (-lsb & 0xfeedbabedeadbeefL);
 		stateA = (stateA >>> 1) ^ lsb << 63;
-		stateB--;
+		stateB -= 0xBEA225F9EB34556DL;
 		return result;
 	}
 
