@@ -20,10 +20,25 @@ package com.github.tommyettinger.random.experimental;
 import com.github.tommyettinger.random.EnhancedRandom;
 
 /**
- * <a href="https://quick-bench.com/q/dYHUBBQYy7yRtt3CL9Q_EQ6p-o8">Very fast!</a>
- * Passes Initial Correlation Testing with 66 steps.
- * No clue how it does on PractRand, but it's based on ThrashRandom internally, which passes 32TB with no anomalies (but
- * not 64TB, where it has one "unusual" anomaly).
+ * A tiny generator using four 64-bit states assigned all on one line, using only ARX operations (add, bitwise rotate,
+ * and XOR). <a href="https://quick-bench.com/q/dYHUBBQYy7yRtt3CL9Q_EQ6p-o8">It is very fast!</a>
+ * Passes Initial Correlation Evaluator (ICE) testing with 66 steps; passes 64TB of PractRand with no anomalies.
+ * The ICE test indicates whether similar initial states decorrelate over time, and they do here, but not immediately.
+ * The PractRand test suite tests for a wide array of quality issues, but only uses one initial state per run, and runs
+ * for a very long time.
+ * <br>
+ * This has a minimum guaranteed period of 2 to the 64, and the period is always a multiple of 2 to the 64. This is
+ * closely related to an earlier generator, ThrashRandom, and Thrush mostly is different by including and returning
+ * {@code d ^= } before the rest of the long statement. Using d improves quality, but not period, though the period is
+ * quite likely long enough already for any game. All states are allowed to have any values; some rare combinations of
+ * states will have the minimum period (which takes over 18 quintillion calls to nextLong() to exhaust), but the vast
+ * majority of the 2 to the 256 possible states are in longer cycles.
+ * <br>
+ * The name comes from being a variant on ThrashRandom, which was chosen as a name because it initially was meant to be
+ * very fast (like thrash metal music) even if quality wasn't always great (...also like thrash metal music). A Thrush
+ * is a type of small bird, and the code here is indeed quite small. Really, <em>quite</em> small... If the states are
+ * renamed to a, b, c, and d, then the code can be this one-liner:
+ * {@code return d^=(a=(b=(b<<41|b>>>23)^(c+=0xBEA225F9EB34556DL))+(a<<26|a>>>38));}
  */
 public class ThrushRandom extends EnhancedRandom {
 	@Override
@@ -49,7 +64,7 @@ public class ThrushRandom extends EnhancedRandom {
 	protected long stateD;
 
 	/**
-	 * Creates a new ThrashRandom with a random state.
+	 * Creates a new ThrushRandom with a random state.
 	 */
 	public ThrushRandom() {
 		stateA = EnhancedRandom.seedFromMath();
@@ -59,7 +74,7 @@ public class ThrushRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Creates a new ThrashRandom with the given seed; all {@code long} values are permitted.
+	 * Creates a new ThrushRandom with the given seed; all {@code long} values are permitted.
 	 * The seed will be passed to {@link #setSeed(long)} to attempt to adequately distribute the seed randomly.
 	 *
 	 * @param seed any {@code long} value
@@ -69,7 +84,7 @@ public class ThrushRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Creates a new ThrashRandom with the given two states; all {@code long} values are permitted.
+	 * Creates a new ThrushRandom with the given two states; all {@code long} values are permitted.
 	 * These states will be used verbatim for stateA and stateB. stateC will be assigned 1.
 	 *
 	 * @param stateA any {@code long} value
@@ -83,7 +98,7 @@ public class ThrushRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Creates a new ThrashRandom with the given three states; all {@code long} values are permitted.
+	 * Creates a new ThrushRandom with the given three states; all {@code long} values are permitted.
 	 * These states will be used verbatim.
 	 *
 	 * @param stateA any {@code long} value
@@ -281,7 +296,7 @@ public class ThrushRandom extends EnhancedRandom {
 				+ (stateA << 26 | stateA >>> 38));
 	}
 	// variant, one-line version
-//      return d=(a=(b=(b<<50|b>>>14)+(c+=0xBEA225F9EB34556DL))+(a<<25|a>>>39))^(d<<11|d>>>53);
+//      return d^=(a=(b=(b<<41|b>>>23)+(c+=0xBEA225F9EB34556DL))+(a<<26|a>>>38));
 
 	@Override
 	public long previousLong () {
@@ -337,7 +352,7 @@ public class ThrushRandom extends EnhancedRandom {
 	}
 
 	public String toString () {
-		return "ThrashRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L, stateD=" + (stateD) + "L}";
+		return "ThrushRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L, stateD=" + (stateD) + "L}";
 	}
 
 //	public static void main(String[] args) {
