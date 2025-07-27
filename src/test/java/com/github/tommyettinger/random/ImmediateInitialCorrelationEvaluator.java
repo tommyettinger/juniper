@@ -25,6 +25,7 @@ import com.github.tommyettinger.random.experimental.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Like {@link InitialCorrelationEvaluator}, but only checks the first four generations, discarding none.
@@ -116,38 +117,13 @@ public class ImmediateInitialCorrelationEvaluator {
         StringBuilder sb = new StringBuilder(1024);
         EnhancedRandom[][] g = new EnhancedRandom[256][256];
 
-        ArrayList<EnhancedRandom> rs = ObjectList.with(
-                new I64LFSR64MX3Random(1, 1)
-//                new I64LFSR64MoremurRandom(1, 1)
-//                new LCG64LFSR64MoremurRandom(1, 1)
-//                new LCG64LFSR64PcgRandom(1, 1)
-//                new L64X64PcgRandom(1, 1)
-//                new L64X64MoremurRandom(1, 1)
-//                new ThrushRandom(1, 1, 1, 1)
-
-//                new LaceRandom(1, 1, 1, 1, 1),
-//                new MaceRandom(1, 1, 1, 1, 1, 1),
-//                new OC128X256LowMixRandom(1, 1, 1, 1, 1, 1)
-
-//                new Xoshiro160GrittyRandom(1, 1, 1, 1, 1),
-//                new Xoshiro160RoadroxoRandom(1, 1, 1, 1, 1),
-//                new OC128X256LowMixRandom(1, 1, 1, 1, 1, 1)
-//                new O128X256LowMixRandom(1, 1, 1, 1, 1, 1)
-//                new L64X256NoMixRandom(1, 1, 1, 1, 1),
-//                new L64X256StarStarRandom(1, 1, 1, 1, 1),
-//                new L64X256MoremurRandom(1, 1, 1, 1, 1),
-//                new C64X256MoremurRandom(1, 1, 1, 1, 1),
-//                new I64X256MoremurRandom(1, 1, 1, 1, 1),
-//                new I64X256Speck1Random(1, 1, 1, 1, 1),
-//                new I64X256Speck2Random(1, 1, 1, 1, 1),
-//                new I64X256SpeckC2Random(1, 1, 1, 1, 1),
-//                new C64X256Speck2Random(1, 1, 1, 1, 1),
-//                new L64X256Speck2Random(1, 1, 1, 1, 1),
-//                new I64X256AxRandom(1, 1, 1, 1, 1),
-//                new V64X256AxRandom(1, 1, 1, 1, 1)
-        );
+        List<EnhancedRandom> rs =
+                Generators.randomList.subList(Generators.randomCount - 1, Generators.randomCount);
+//        List<EnhancedRandom> rs = ObjectList.with(
+//                new I64LFSR64MX3Random(1, 1)
+//        );
 //
-//        ArrayList<EnhancedRandom> rs = ObjectList.with(
+//        List<EnhancedRandom> rs = ObjectList.with(
 //                new PcgRXSMXSRandom(1, 1), new FlowRandom(1, 1), new MizuchiRandom(1, 1),
 //                new Xoroshiro128StarStarRandom(1, 1), new LaserRandom(1, 1),
 //                new OrbitalButWorseRandom(1, 1), new OrbitRXSMXSRandom(1, 1), new OrbitalRandom(1, 1),
