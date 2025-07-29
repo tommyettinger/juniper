@@ -31,12 +31,12 @@ public class SerializationTest {
         PasarRandom pasar = new PasarRandom(-1L);
         EnhancedRandom[] all = new EnhancedRandom[]{chop, distinct, mizuchi, tricycle, trim, pasar};
         String[] serialized = new String[]{
-                "ChpR`-361951A2~-1AB901CD~-2D8237BC~-373C0F56`",
-                "DisR`-1`",
-                "MizR`87164D5C9E6AE5E~67B862BCE546FE33`",
-                "TriR`87164D5C9E6AE5E~67B862BCE546FE33~329AE2C1D27DC844`",
-                "TrmR`507BEC21852B4AD5~69383448E8617609~AF8413DE7AD4B52A~96C7CBB7179E89F6`",
-                "PasR`-1~-69383448E861760A~-507BEC21852B4AD6~69383448E8617609~507BEC21852B4AD5`",
+                "ChpR$-361951A2+-1AB901CD+-2D8237BC+-373C0F56$",
+                "DisR$-1$",
+                "MizR$87164D5C9E6AE5E+67B862BCE546FE33$",
+                "TriR$87164D5C9E6AE5E+67B862BCE546FE33+329AE2C1D27DC844$",
+                "TrmR$507BEC21852B4AD5+69383448E8617609+AF8413DE7AD4B52A+96C7CBB7179E89F6$",
+                "PasR$-1+-69383448E861760A+-507BEC21852B4AD6+69383448E8617609+507BEC21852B4AD5$",
         };
         int idx = 0;
         for(String s : serialized){

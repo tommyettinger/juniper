@@ -231,7 +231,7 @@ public final class Deserializer {
      * @return a new Distribution with the appropriate type internally, using the state from data
      */
     public static Distribution deserializeDistribution(String data, Base base) {
-        int idx = data.indexOf('~');
+        int idx = data.indexOf(base.positiveSign);
         if (idx == -1)
             throw new IllegalArgumentException("String given cannot represent a valid distribution.");
         String tagData = data.substring(0, idx);
