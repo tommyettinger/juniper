@@ -254,7 +254,7 @@ public class InterpolatedRandom extends EnhancedRandom {
      */
     @Override
     public String stringSerialize(Base base) {
-        return getTag() + "`" + interpolator.getTag() + "~" + random.stringSerialize(base);
+        return getTag() + base.paddingChar + interpolator.getTag() + base.positiveSign + random.stringSerialize(base);
     }
 
     /**
@@ -264,8 +264,8 @@ public class InterpolatedRandom extends EnhancedRandom {
      */
     @Override
     public InterpolatedRandom stringDeserialize(String data, Base base) {
-        int idx = data.indexOf('`');
-        interpolator = Interpolations.get(data.substring(idx + 1, (idx = data.indexOf('~', idx + 1))));
+        int idx = data.indexOf(base.paddingChar);
+        interpolator = Interpolations.get(data.substring(idx + 1, (idx = data.indexOf(base.positiveSign, idx + 1))));
         random = Deserializer.deserialize(data.substring(idx + 1), base);
         return this;
     }
