@@ -190,11 +190,11 @@ public class KnownSequenceRandom extends EnhancedRandom {
     }
 
     public StringBuilder appendSerialized(StringBuilder sb, Base base) {
-        sb.append(getTag()).append('`');
+        sb.append(getTag()).append(base.paddingChar);
         base.appendSigned(sb, index);
-        sb.append('~');
+        sb.append(base.positiveSign);
         known.appendSerialized(sb, base);
-        return sb.append('`');
+        return sb.append(base.paddingChar);
     }
     public StringBuilder appendSerialized(StringBuilder sb) {
         return appendSerialized(sb, Base.BASE10);
@@ -224,9 +224,9 @@ public class KnownSequenceRandom extends EnhancedRandom {
      */
     @Override
     public KnownSequenceRandom stringDeserialize(String data, Base base) {
-        int tilde;
-        index = base.readInt(data, data.indexOf('`')+1, tilde = data.indexOf('~'));
-        known.stringDeserialize(data.substring(tilde+1), base);
+        int separator;
+        index = base.readInt(data, data.indexOf(base.paddingChar)+1, separator = data.indexOf(base.positiveSign));
+        known.stringDeserialize(data.substring(separator+1), base);
         return this;
     }
 
