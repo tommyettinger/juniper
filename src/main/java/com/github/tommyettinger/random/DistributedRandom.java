@@ -335,7 +335,7 @@ public class DistributedRandom extends EnhancedRandom {
      */
     @Override
     public String stringSerialize(Base base) {
-        return getTag() + "`" + base.signed(reduction.ordinal()) + "~" + distribution.stringSerialize(base);
+        return getTag() + base.paddingChar + base.signed(reduction.ordinal()) + base.positiveSign + distribution.stringSerialize(base);
     }
 
     /**
@@ -345,8 +345,8 @@ public class DistributedRandom extends EnhancedRandom {
      */
     @Override
     public DistributedRandom stringDeserialize(String data, Base base) {
-        int idx = data.indexOf('`');
-        setReduction(MODES[base.readInt(data, idx + 1, (idx = data.indexOf('~', idx + 1)))]);
+        int idx = data.indexOf(base.paddingChar);
+        setReduction(MODES[base.readInt(data, idx + 1, (idx = data.indexOf(base.positiveSign, idx + 1)))]);
         distribution = Deserializer.deserializeDistribution(data.substring(idx + 1), base);
         return this;
     }
