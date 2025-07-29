@@ -163,14 +163,14 @@ public abstract class Distribution {
      * @return a String storing the current generator and parameters of this Distribution
      */
     public String stringSerialize(Base base) {
-        StringBuilder ser = new StringBuilder(getTag()).append('~');
+        StringBuilder ser = new StringBuilder(getTag()).append(base.positiveSign);
         ser.append(generator.stringSerialize(base));
         base.appendSigned(ser, getParameterA());
-        ser.append('`');
+        ser.append(base.paddingChar);
         base.appendSigned(ser, getParameterB());
-        ser.append('`');
+        ser.append(base.paddingChar);
         base.appendSigned(ser, getParameterC());
-        ser.append('`');
+        ser.append(base.paddingChar);
         return ser.toString();
     }
 
@@ -198,11 +198,11 @@ public abstract class Distribution {
      * @return this, after setting its state
      */
     public Distribution stringDeserialize(String data, Base base) {
-        int idx = data.indexOf('~') + 1;
-        generator = Deserializer.deserialize(data.substring(idx, idx = data.indexOf('`', data.indexOf('`', idx + 1) + 1) + 1), base);
-        setParameters(base.readDoubleExact(data, idx, (idx = data.indexOf('`', idx + 1))),
-                base.readDoubleExact(data, idx + 1, (idx = data.indexOf('`', idx + 1))),
-                base.readDoubleExact(data, idx + 1, (data.indexOf('`', idx + 1))));
+        int idx = data.indexOf(base.positiveSign) + 1;
+        generator = Deserializer.deserialize(data.substring(idx, idx = data.indexOf(base.paddingChar, data.indexOf(base.paddingChar, idx + 1) + 1) + 1), base);
+        setParameters(base.readDoubleExact(data, idx, (idx = data.indexOf(base.paddingChar, idx + 1))),
+                base.readDoubleExact(data, idx + 1, (idx = data.indexOf(base.paddingChar, idx + 1))),
+                base.readDoubleExact(data, idx + 1, (data.indexOf(base.paddingChar, idx + 1))));
         return this;
     }
 

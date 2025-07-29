@@ -1903,17 +1903,17 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 */
 	public String stringSerialize(Base base) {
 		StringBuilder ser = new StringBuilder(getTag());
-		ser.append('`');
+		ser.append(base.paddingChar);
 		if (getStateCount() > 0)
 		{
 			for (int i = 0; i < getStateCount() - 1; i++)
 			{
-				base.appendSigned(ser, getSelectedState(i)).append('~');
+				base.appendSigned(ser, getSelectedState(i)).append(base.positiveSign);
 			}
 			base.appendSigned(ser, getSelectedState(getStateCount() - 1));
 		}
 
-		ser.append('`');
+		ser.append(base.paddingChar);
 
 		return ser.toString();
 	}
@@ -1941,12 +1941,12 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 */
 	public EnhancedRandom stringDeserialize(String data, Base base) {
 		if (getStateCount() > 0) {
-			int idx = data.indexOf('`');
+			int idx = data.indexOf(base.paddingChar);
 
 			for (int i = 0; i < getStateCount() - 1; i++)
-				setSelectedState(i, base.readLong(data, idx + 1, (idx = data.indexOf('~', idx + 1))));
+				setSelectedState(i, base.readLong(data, idx + 1, (idx = data.indexOf(base.positiveSign, idx + 1))));
 
-			setSelectedState(getStateCount() - 1, base.readLong(data, idx + 1, data.indexOf('`', idx + 1)));
+			setSelectedState(getStateCount() - 1, base.readLong(data, idx + 1, data.indexOf(base.paddingChar, idx + 1)));
 		}
 		return this;
 	}

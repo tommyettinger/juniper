@@ -61,7 +61,7 @@ public class SerializationTest {
                 System.out.println(s + "   " + de.stringSerialize(base));
                 de.nextLong();
                 long dl = de.nextLong();
-                Assert.assertEquals("Failure with " + s + " and radix " + base.base, rl, dl);
+                Assert.assertEquals("Failure with " + s + " and radix " + base.base + ", base contents:\n"+base+"\n", rl, dl);
             }
         }
     }

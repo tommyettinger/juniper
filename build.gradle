@@ -78,10 +78,10 @@ repositories {
     // You can uncomment mavenLocal() if you need self-built versions, but it can be a problem with GWT or other sources dependencies.
     mavenLocal()
     mavenCentral()
-    maven { url 'https://s01.oss.sonatype.org' }
+//    maven { url 'https://s01.oss.sonatype.org' }
     google()
-    maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
-    maven { url 'https://s01.oss.sonatype.org/content/repositories/snapshots/' }
+//    maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+//    maven { url 'https://s01.oss.sonatype.org/content/repositories/snapshots/' }
 //    maven { url 'https://jitpack.io' }
 }
 

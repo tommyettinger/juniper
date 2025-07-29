@@ -194,9 +194,12 @@ public final class Deserializer {
      * @return a new EnhancedRandom with the appropriate type internally, using the state from data
      */
     public static EnhancedRandom deserialize(String data, Base base) {
-        int idx = data.indexOf('`');
-        if (idx == -1)
+        int idx = data.indexOf(base.paddingChar);
+        if (idx == -1) {
+            System.out.println("BASE: " + base);
+            System.out.println("DATA: " + data);
             throw new IllegalArgumentException("String given cannot represent a valid generator.");
+        }
         String tagData = data.substring(0, idx);
         EnhancedRandom root = RANDOM_BY_TAG.get(tagData);
         if(root == null)
