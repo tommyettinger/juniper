@@ -292,10 +292,10 @@ public class ArchivalWrapper extends EnhancedRandom {
     }
 
     public StringBuilder appendSerialized(StringBuilder sb, Base base) {
-        sb.append(getTag()).append('`');
+        sb.append(getTag()).append(base.paddingChar);
         sb.append(wrapped.stringSerialize(base));
         archive.appendSerialized(sb, base);
-        return sb.append('`');
+        return sb.append(base.paddingChar);
     }
 
     public StringBuilder appendSerialized(StringBuilder sb) {
@@ -326,9 +326,9 @@ public class ArchivalWrapper extends EnhancedRandom {
      */
     @Override
     public ArchivalWrapper stringDeserialize(String data, Base base) {
-        int tick = data.indexOf('`');
-        wrapped = Deserializer.deserialize(data.substring(tick+1, (tick = data.indexOf('`', data.indexOf('`', tick+1)+1)) + 1), base);
-        archive.stringDeserialize(data.substring(tick+1, data.indexOf('`', tick+1)), base);
+        int tick = data.indexOf(base.paddingChar);
+        wrapped = Deserializer.deserialize(data.substring(tick+1, (tick = data.indexOf(base.paddingChar, data.indexOf(base.paddingChar, tick+1)+1)) + 1), base);
+        archive.stringDeserialize(data.substring(tick+1, data.indexOf(base.paddingChar, tick+1)), base);
         return this;
     }
 
