@@ -106,7 +106,7 @@ public class OC128X256LowMixRandom extends EnhancedRandom {
 
 	@Override
 	public String getTag() {
-		return "OXLR";
+		return "OXcR";
 	}
 
 	/**
@@ -358,11 +358,9 @@ public class OC128X256LowMixRandom extends EnhancedRandom {
 		stateC ^= stateB; // StateC has c;
 		stateB ^= stateC; // StateB has b;
 		stateD ^= stateB; // StateD has d;
-		long x = stateE;
-		long y = stateF;
+		stateF -= 0x8CB92BA72F3D8DD7L + BitConversion.countLeadingZeros(stateE);
 		stateE -= 0xD1B54A32D192ED03L + stateD;
-		stateF -= 0x8CB92BA72F3D8DD7L + BitConversion.countLeadingZeros(x);
-		return (x << 41 | x >>> 23) ^ y;
+		return (stateE << 41 | stateE >>> 23) ^ stateF;
 	}
 
 	/**
