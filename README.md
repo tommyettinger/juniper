@@ -277,15 +277,15 @@ just want to make life a little harder for people copying your assets.
 
 Starting in 0.6.1, just about everything that can be serialized in the library can do so with either the existing String
 serialization, or the Externalizable interface. Externalizable was chosen primarily because
-[Apache Fury](https://fury.apache.org) can use it easily without needing an actual dependency on Fury in Juniper. We
+[Apache Fory](https://fory.apache.org) can use it easily without needing an actual dependency on Fory in Juniper. We
 mark Externalizable method implementations as`GwtIncompatible` with an annotation, to prevent them from causing trouble
-with GWT. When used with Fury, you typically register any `EnhancedRandom` class or `Distribution` class you use, though
+with GWT. When used with Fory, you typically register any `EnhancedRandom` class or `Distribution` class you use, though
 generally you don't need to register `EnhancedRandom` or `Distribution` itself. In some cases you may need to register
 other classes, such as how `ArchivalWrapper` needs `LongSequence` registered. If a class has special requirements for
-Fury to serialize it, the `writeExternal()` JavaDocs will mention them. If you're writing a custom serializer, it may
+Fory to serialize it, the `writeExternal()` JavaDocs will mention them. If you're writing a custom serializer, it may
 make the most sense to just get the result of `stringSerialize()` and store that, since that won't need other classes
 to be registered. No `Distribution` types are `Externalizable`, since they wouldn't really gain anything from it; they
-do need the `EnhancedRandom` they use registered with Fury, but otherwise can just be registered themselves normally.
+do need the `EnhancedRandom` they use registered with Fory, but otherwise can just be registered themselves normally.
 
 ## How to get it?
 

@@ -6,7 +6,7 @@ buildscript {
         gradlePluginPortal()
     }
     dependencies {
-        classpath 'com.vanniktech:gradle-maven-publish-plugin:0.31.0'
+        classpath 'com.vanniktech:gradle-maven-publish-plugin:0.34.0'
     }
 }
 
@@ -25,7 +25,7 @@ mavenPublishing {
     configure(new JavaLibrary(new JavadocJar.Javadoc(), true))
 }
 
-mavenPlainJavadocJar.archiveBaseName.set(project.name)
+plainJavadocJar.archiveBaseName.set(project.name)
 
 [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
 
@@ -88,7 +88,7 @@ repositories {
 dependencies {
     api "com.github.tommyettinger:digital:$digitalVersion"
     testImplementation "com.github.tommyettinger:jdkgdxds:$jdkgdxdsVersion"
-    testImplementation "org.apache.fury:fury-core:$furyVersion"
+    testImplementation "org.apache.fory:fory-core:$foryVersion"
     testImplementation "com.badlogicgames.gdx:gdx:$gdxVersion"
     testImplementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
     testImplementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
