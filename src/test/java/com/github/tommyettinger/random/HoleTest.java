@@ -11,7 +11,7 @@ import org.junit.Test;
  * and then looking for any ints that are produced less frequently or not at all.
  */
 public class HoleTest {
-    public static final int PARTITIONS = 1 << 18;
+    public static final int PARTITIONS = 1 << 24;
     public static final int INC_PARTITIONS = PARTITIONS + 1;
     @Test
     public void testInt() {
@@ -187,10 +187,52 @@ public class HoleTest {
      * 67 values were equal to 0.75f .
      * 39 values were equal to 1.0f .
      * Seed -256:
-     * 1 values were equal to 0.0f .
-     * 59 values were equal to 0.75f .
-     * 29 values were equal to 1.0f .
-     * The total of all least-significant bits is 536877447, and should optimally be 536870912 .
+     * The least frequent...
+     * 16777216: 219
+     * 8388608: 377
+     * 15123444: 390
+     * 370663: 392
+     * 13821457: 401
+     * 3850149: 401
+     * 6718102: 402
+     * 14334296: 404
+     * 3390044: 404
+     * 14333490: 404
+     * 10751750: 405
+     * 3961122: 406
+     * 7015767: 406
+     * 10431796: 407
+     * 15975052: 408
+     * 6525445: 408
+     * 5828766: 408
+     * 12371837: 408
+     * 11051770: 409
+     * 3287828: 409
+     * And the most frequent...
+     * 8861547: 620
+     * 14470762: 620
+     * 11618587: 621
+     * 5718239: 621
+     * 12692987: 621
+     * 1784459: 621
+     * 15209521: 622
+     * 11973813: 622
+     * 10978305: 622
+     * 7402094: 622
+     * 14901032: 623
+     * 3998762: 624
+     * 1084884: 624
+     * 4529496: 625
+     * 12272132: 626
+     * 8838361: 627
+     * 7565863: 629
+     * 3541867: 631
+     * 3986368: 635
+     * 10356797: 638
+     * 2 values were equal to 0.0f .
+     * 527 values were equal to 0.75f .
+     * 219 values were equal to 1.0f .
+     * The total of all least-significant bits is 4295001216, and should optimally be 4294967296 .
      * </pre>
      * <br>
      * It sure looks like 1.0f is produced half as frequently as 0.75f. This not only doesn't make sense from a purely
@@ -204,20 +246,25 @@ public class HoleTest {
      */
     @Test
     public void testGodotFloat() {
-        final int LIMIT = 0x40000000, EXPECTED_HALF_LIMIT = LIMIT >>> 1;
+        final int CYCLES = 8;
+        final int LIMIT = 0x40000000;
+        final long EXPECTED_HALF_LIMIT = LIMIT * (long)CYCLES >>> 1;
         IntIntOrderedMap fractionFrequencies = new IntIntOrderedMap(INC_PARTITIONS);
         EnhancedRandom random = new L64X256MoremurRandom(-256L);
         int highCount = 0, lowCount = 0, midHighCount = 0;
-        int lowestBitSum = 0;
+        long lowestBitSum = 0;
         System.out.println("With the [0,1] range subdivided into " + INC_PARTITIONS + " sections...");
-        for (int i = 0; i < LIMIT; i++) {
-            float r = nextFloatGodot(random);
-            if(r == 1f) highCount++;
-            else if(r == 0f) lowCount++;
-            else if(r == 0.75f) midHighCount++;
-            lowestBitSum += BitConversion.floatToIntBits(r) & 1;
-            int pos = (int)(r * PARTITIONS);
-            fractionFrequencies.getAndIncrement(pos, 0, 1);
+        for (int o = 0; o < CYCLES; o++) {
+            for (int i = 0; i < LIMIT; i++) {
+                float r = nextFloatGodot(random);
+                if (r == 1f) highCount++;
+                else if (r == 0f) lowCount++;
+                else if (r == 0.75f) midHighCount++;
+                lowestBitSum += BitConversion.floatToIntBits(r) & 1;
+                int pos = (int) (r * PARTITIONS);
+                fractionFrequencies.getAndIncrement(pos, 0, 1);
+            }
+            System.out.println("Finished block " + (o + 1) + "/" + CYCLES);
         }
         System.out.println("The least frequent...");
         fractionFrequencies.sortByValue(IntComparators.NATURAL_COMPARATOR);
@@ -236,37 +283,76 @@ public class HoleTest {
 
     /**
      * <pre>
-     * Seed 123:
-     * 0 values were equal to 0.0f .
-     * 69 values were equal to 0.75f .
-     * 59 values were equal to 1.0f .
-     * Seed 12345:
-     * 0 values were equal to 0.0f .
-     * 59 values were equal to 0.75f .
-     * 70 values were equal to 1.0f .
      * Seed -256:
+     * The least frequent...
+     * 2097152: 397
+     * 2334003: 398
+     * 10732459: 399
+     * 14062505: 401
+     * 11354469: 401
+     * 8961084: 401
+     * 2111599: 402
+     * 6787259: 403
+     * 6135900: 403
+     * 14686654: 403
+     * 7989774: 404
+     * 5035168: 404
+     * 12450909: 405
+     * 5390441: 406
+     * 10518555: 407
+     * 116593: 407
+     * 11098519: 407
+     * 11647183: 407
+     * 2190499: 408
+     * 10413932: 408
+     * And the most frequent...
+     * 15163191: 621
+     * 3746230: 621
+     * 6019310: 621
+     * 14282548: 622
+     * 11384850: 622
+     * 11200679: 622
+     * 5357356: 623
+     * 5663667: 623
+     * 2856697: 623
+     * 6507052: 624
+     * 11384655: 625
+     * 1439488: 626
+     * 13363695: 627
+     * 13220338: 628
+     * 10011336: 629
+     * 13389968: 630
+     * 9553355: 631
+     * 2920432: 633
+     * 11310970: 633
+     * 4194304: 673
      * 0 values were equal to 0.0f .
-     * 58 values were equal to 0.75f .
-     * 55 values were equal to 1.0f .
-     * The total of all least-significant bits is 536893016, and should optimally be 536870912 .
+     * 493 values were equal to 0.75f .
+     * 467 values were equal to 1.0f .
+     * The total of all least-significant bits is 4294955415, and should optimally be 4294967296 .
      * </pre>
      */
     @Test
     public void testInclusiveFloat() {
-        final int LIMIT = 0x40000000, EXPECTED_HALF_LIMIT = LIMIT >>> 1;
+        final int CYCLES = 8;
+        final int LIMIT = 0x40000000;
+        final long EXPECTED_HALF_LIMIT = LIMIT * (long)CYCLES >>> 1;
         IntIntOrderedMap fractionFrequencies = new IntIntOrderedMap(INC_PARTITIONS);
         EnhancedRandom random = new L64X256MoremurRandom(-256L);
         int highCount = 0, lowCount = 0, midHighCount = 0;
-        int lowestBitSum = 0;
+        long lowestBitSum = 0;
         System.out.println("With the [0,1] range subdivided into " + INC_PARTITIONS + " sections...");
-        for (int i = 0; i < LIMIT; i++) {
-            float r = random.nextInclusiveFloat();
-            if(r == 1f) highCount++;
-            else if(r == 0f) lowCount++;
-            else if(r == 0.75f) midHighCount++;
-            lowestBitSum += BitConversion.floatToIntBits(r) & 1;
-            int pos = (int)(r * PARTITIONS);
-            fractionFrequencies.getAndIncrement(pos, 0, 1);
+        for (int o = 0; o < CYCLES; o++) {
+            for (int i = 0; i < LIMIT; i++) {
+                float r = random.nextInclusiveFloat();
+                if (r == 1f) highCount++;
+                else if (r == 0f) lowCount++;
+                else if (r == 0.75f) midHighCount++;
+                lowestBitSum += BitConversion.floatToIntBits(r) & 1;
+                int pos = (int) (r * PARTITIONS);
+                fractionFrequencies.getAndIncrement(pos, 0, 1);
+            }
+            System.out.println("Finished block " + (o + 1) + "/" + CYCLES);
         }
         System.out.println("The least frequent...");
         fractionFrequencies.sortByValue(IntComparators.NATURAL_COMPARATOR);
@@ -282,5 +368,4 @@ public class HoleTest {
         System.out.println(highCount + " values were equal to 1.0f .");
         System.out.println("The total of all least-significant bits is " + lowestBitSum + ", and should optimally be " + EXPECTED_HALF_LIMIT + " .");
     }
-
 }
