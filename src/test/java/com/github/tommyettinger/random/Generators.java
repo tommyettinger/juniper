@@ -90,6 +90,7 @@ public final class Generators {
         randomList.add(new I64LFSR64MoremurRandom(1, 1));
         randomList.add(new I64LFSR64MX3Random(1, 1));
         randomList.add(new RemusRandom(1, 1));
+        randomList.add(new ThrooshRandom(1, 1, 1, 1));
     }
     public static int randomCount = randomList.size();
 

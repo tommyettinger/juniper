@@ -1,0 +1,1 @@
+Lowest mode: 114.0000 has mean amount 0.0309723317  PASS 👍 for ThrooshRandom
