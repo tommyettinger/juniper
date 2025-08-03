@@ -310,7 +310,7 @@ public class ThrooshRandom extends EnhancedRandom {
 		stateC -= 0xBEA225F9EB34556DL;
 		stateB = b ^ stateC;
 		stateB = (stateB << 23 | stateB >>> 41);
-		stateA = a - b;
+		stateA = a - stateB;
 		stateA = (stateA << 38 | stateA >>> 26);
 		stateD ^= stateA;
 		return stateD;
@@ -402,19 +402,19 @@ public class ThrooshRandom extends EnhancedRandom {
 //		}
 //		random = new ThrooshRandom(1L);
 //		{
-//			long n0 = random.nextLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL\n", random.stateA, random.stateB, random.stateC);
-//			long n1 = random.nextLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL\n", random.stateA, random.stateB, random.stateC);
-//			long n2 = random.nextLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL\n", random.stateA, random.stateB, random.stateC);
-//			long n3 = random.nextLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL\n", random.stateA, random.stateB, random.stateC);
-//			long n4 = random.nextLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL\n", random.stateA, random.stateB, random.stateC);
-//			long n5 = random.nextLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL\n", random.stateA, random.stateB, random.stateC);
+//			long n0 = random.nextLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL, d: 0x%016XL\n", random.stateA, random.stateB, random.stateC, random.stateD);
+//			long n1 = random.nextLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL, d: 0x%016XL\n", random.stateA, random.stateB, random.stateC, random.stateD);
+//			long n2 = random.nextLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL, d: 0x%016XL\n", random.stateA, random.stateB, random.stateC, random.stateD);
+//			long n3 = random.nextLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL, d: 0x%016XL\n", random.stateA, random.stateB, random.stateC, random.stateD);
+//			long n4 = random.nextLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL, d: 0x%016XL\n", random.stateA, random.stateB, random.stateC, random.stateD);
+//			long n5 = random.nextLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL, d: 0x%016XL\n", random.stateA, random.stateB, random.stateC, random.stateD);
 //			System.out.println("Going back...");
-//			long p5 = random.previousLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL\n", random.stateA, random.stateB, random.stateC);
-//			long p4 = random.previousLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL\n", random.stateA, random.stateB, random.stateC);
-//			long p3 = random.previousLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL\n", random.stateA, random.stateB, random.stateC);
-//			long p2 = random.previousLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL\n", random.stateA, random.stateB, random.stateC);
-//			long p1 = random.previousLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL\n", random.stateA, random.stateB, random.stateC);
-//			long p0 = random.previousLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL\n", random.stateA, random.stateB, random.stateC);
+//			long p5 = random.previousLong();  System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL, d: 0x%016XL\n", random.stateA, random.stateB, random.stateC, random.stateD);
+//			long p4 = random.previousLong();  System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL, d: 0x%016XL\n", random.stateA, random.stateB, random.stateC, random.stateD);
+//			long p3 = random.previousLong();  System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL, d: 0x%016XL\n", random.stateA, random.stateB, random.stateC, random.stateD);
+//			long p2 = random.previousLong();  System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL, d: 0x%016XL\n", random.stateA, random.stateB, random.stateC, random.stateD);
+//			long p1 = random.previousLong();  System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL, d: 0x%016XL\n", random.stateA, random.stateB, random.stateC, random.stateD);
+//			long p0 = random.previousLong();  System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL, d: 0x%016XL\n", random.stateA, random.stateB, random.stateC, random.stateD);
 //			System.out.println(n0 == p0);
 //			System.out.println(n1 == p1);
 //			System.out.println(n2 == p2);
