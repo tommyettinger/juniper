@@ -23,12 +23,14 @@ package com.github.tommyettinger.random;
  * minimum period of 2 to the 64, and each stream should be independent of any other stream after a small number of
  * generations. The expected period is about 2 to the 310 calls to nextLong(), though this is an overly cautious
  * estimate. Even if using the old stand-by advice, that only the square root of the period can be used before a
- * generator starts to have problems, would permit an enormous 2 to the 160 calls before becoming, in some vague way,
- * "bad." That's a trillion, quintillion, quintillion numbers. With 16 million possible streams, on top of that.
+ * generator starts to have problems, would permit an enormous 2 to the 155 calls before becoming, in some vague way,
+ * "bad." That's over 45,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000 calls to {@link #nextLong()}. With
+ * 16 million possible streams, on top of that.
  * <br>
  * At least one stream passes 64TB with no anomalies, and at least 1% of all total streams pass 256MB without failures
  * or lingering anomalies. Only 1% were tested because testing 100% would take at least until the year 2026 to finish,
- * and the tests were run starting May 10, 2025.
+ * and the tests were run starting May 10, 2025. This is usually a tiny amount slower than {@link AceRandom} (about 5%
+ * lower throughput), but strangely is slightly faster than AceRandom when run on GraalVM 24.
  * <br>
  * After about 30 calls to {@link #nextLong()}, any two different streams with otherwise identical states should have no
  * correlations to each other. This avoids the issue with SplitMix64 where "gamma" receives problem values, because it
