@@ -79,6 +79,7 @@ public final class Deserializer {
         register(new RomuTrioRandom(1, 2, 3));
         register(new TricycleRandom(1, 2, 3));
         register(new SoloRandom(1, 2, 3));
+        register(new ThrashRandom(1, 2, 3));
         register(new Respite32Random(1, 2, 3));
         register(new Chill32Random(1, 2, 3));
         register(new Bear32Random(1, 2, 3, 4));

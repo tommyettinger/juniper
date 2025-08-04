@@ -21,26 +21,24 @@ package com.github.tommyettinger.random;
  * A subcycle generator with a counter, using only Add-Rotate-XOR operations.
  * The whole nextLong() method can fit on one (lengthy) line, where a, b, and c can each be any long:
  * <br>
- * {@code return a=(b=(b<<47|b>>>17)+(c+=0xD1B54A32D192ED03L))^c+(a<<23|a>>>41);}
+ * {@code return a=(b=(b<<47|b>>>17)^(c+=0xD1B54A32D192ED03L))+(a<<23|a>>>41);}
  * <br>
  * This has 192 bits of state. Period is at minimum 2 to the 64, and is always a multiple of 2 to the 64, but the
- * expected period is much, much longer. This passes 64TB of PractRand with no anomalies. This takes more generations
- * to decorrelate given initially similar starting states, but does completely decorrelate by 100 {@link #nextLong()}
- * calls or earlier. Generators like {@link AceRandom} decorrelate by maybe 40-50 calls, and generators like
- * {@link WhiskerRandom} effectively never decorrelate.
+ * expected period is much, much longer. This passes 32TB of PractRand with no anomalies, and gets one "unusual" anomaly
+ * at 64TB. Variations on this generator (with different constants) may be able to pass without anomalies.
+ * This fails ICE and IICE tests, so it doesn't decorrelate over normal spans of time to be using a generator.
  * <br>
- * On current HotSpot JVMs, this isn't as fast as AceRandom (SoloRandom gets roughly half the throughput as AceRandom),
- * and the guaranteed minimum period is the same for each. AceRandom has a longer maximum period, and its only downside
- * is it has 320 bits of state instead of 192. Both use only ARX operations. Still, SoloRandom may be useful just
- * because it can fit in one line, when the states are declared already. {@link ThrashRandom} is a slightly-weaker
- * generator statistically, based on this generator, that may be slightly faster and also fits on one line.
+ * At least according to QuickBench for C++, this is
+ * <a href="https://quick-bench.com/q/PAv1jXfDEXfBZpcgRbLRhKXCXEQ">insanely fast</a>. It is not as fast on the JVM, and
+ * generators that take advantage of instruction-level parallelism (ILP) more fully outperform this (such as
+ * {@link AceRandom} and {@link MaceRandom}).
  * <br>
- * Never tell me the odds!
+ * Pick up the pace!
  */
-public class SoloRandom extends EnhancedRandom {
+public class ThrashRandom extends EnhancedRandom {
 	@Override
 	public String getTag() {
-		return "SolR";
+		return "ThaR";
 	}
 
 	/**
@@ -57,46 +55,46 @@ public class SoloRandom extends EnhancedRandom {
 	protected long stateC;
 
 	/**
-	 * Creates a new SoloRandom with a random state.
+	 * Creates a new ThrashRandom with a random state.
 	 */
-	public SoloRandom() {
+	public ThrashRandom() {
 		stateA = EnhancedRandom.seedFromMath();
 		stateB = EnhancedRandom.seedFromMath();
 		stateC = EnhancedRandom.seedFromMath();
 	}
 
 	/**
-	 * Creates a new SoloRandom with the given seed; all {@code long} values are permitted.
+	 * Creates a new ThrashRandom with the given seed; all {@code long} values are permitted.
 	 * The seed will be passed to {@link #setSeed(long)} to attempt to adequately distribute the seed randomly.
 	 *
 	 * @param seed any {@code long} value
 	 */
-	public SoloRandom(long seed) {
+	public ThrashRandom(long seed) {
 		setSeed(seed);
 	}
 
 	/**
-	 * Creates a new SoloRandom with the given two states; all {@code long} values are permitted.
+	 * Creates a new ThrashRandom with the given two states; all {@code long} values are permitted.
 	 * These states will be used verbatim for stateA and stateB. stateC will be assigned 1.
 	 *
 	 * @param stateA any {@code long} value
 	 * @param stateB any {@code long} value
 	 */
-	public SoloRandom(long stateA, long stateB) {
+	public ThrashRandom(long stateA, long stateB) {
 		this.stateA = stateA;
 		this.stateB = stateB;
 		this.stateC = 1L;
 	}
 
 	/**
-	 * Creates a new SoloRandom with the given three states; all {@code long} values are permitted.
+	 * Creates a new ThrashRandom with the given three states; all {@code long} values are permitted.
 	 * These states will be used verbatim.
 	 *
 	 * @param stateA any {@code long} value
 	 * @param stateB any {@code long} value
 	 * @param stateC any {@code long} value
 	 */
-	public SoloRandom(long stateA, long stateB, long stateC) {
+	public ThrashRandom(long stateA, long stateB, long stateC) {
 		this.stateA = stateA;
 		this.stateB = stateB;
 		this.stateC = stateC;
@@ -242,11 +240,11 @@ public class SoloRandom extends EnhancedRandom {
 
 	@Override
 	public long nextLong () {
-		return stateA = (stateB = (stateB << 47 | stateB >>> 17) + (stateC += 0xD1B54A32D192ED03L))
-				^ stateC + (stateA << 23 | stateA >>> 41);
+		return stateA = (stateB = (stateB << 47 | stateB >>> 17) ^ (stateC += 0xD1B54A32D192ED03L))
+				+ (stateA << 23 | stateA >>> 41);
 	}
 	// variant, one-line version
-//      return a=(b=(b<<47|b>>>17)+(c+=0xD1B54A32D192ED03L))^c+(a<<23|a>>>41);
+//      return a=(b=(b<<47|b>>>17)^(c+=0xD1B54A32D192ED03L))+(a<<23|a>>>41);
 
 	@Override
 	public long previousLong () {
@@ -254,16 +252,16 @@ public class SoloRandom extends EnhancedRandom {
 		final long b = stateB;
 		final long c = stateC;
 		stateC -= 0xD1B54A32D192ED03L;
-		stateB = b - c;
+		stateB = b ^ c;
 		stateB = (stateB << 17 | stateB >>> 47);
-		stateA = (a ^ b) - c;
+		stateA = (a - b);
 		stateA = (stateA << 41 | stateA >>> 23);
 		return a;
 	}
 	@Override
 	public int next (int bits) {
-		return (int)(stateA = (stateB = (stateB << 47 | stateB >>> 17) + (stateC += 0xD1B54A32D192ED03L))
-				^ stateC + (stateA << 23 | stateA >>> 41)) >>> (32 - bits);
+		return (int)(stateA = (stateB = (stateB << 47 | stateB >>> 17) ^ (stateC += 0xD1B54A32D192ED03L))
+				 + (stateA << 23 | stateA >>> 41)) >>> (32 - bits);
 	}
 
 	/**
@@ -278,13 +276,13 @@ public class SoloRandom extends EnhancedRandom {
 	 */
 	@Override
 	public int nextInt() {
-		return (int)(stateA = (stateB = (stateB << 47 | stateB >>> 17) + (stateC += 0xD1B54A32D192ED03L))
-				^ stateC + (stateA << 23 | stateA >>> 41));
+		return (int)(stateA = (stateB = (stateB << 47 | stateB >>> 17) ^ (stateC += 0xD1B54A32D192ED03L))
+				 + (stateA << 23 | stateA >>> 41));
 	}
 
 	@Override
-	public SoloRandom copy () {
-		return new SoloRandom(stateA, stateB, stateC);
+	public ThrashRandom copy () {
+		return new ThrashRandom(stateA, stateB, stateC);
 	}
 
 	@Override
@@ -294,17 +292,17 @@ public class SoloRandom extends EnhancedRandom {
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		SoloRandom that = (SoloRandom)o;
+		ThrashRandom that = (ThrashRandom)o;
 
 		return stateA == that.stateA && stateB == that.stateB && stateC == that.stateC;
 	}
 
 	public String toString () {
-		return "SoloRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L}";
+		return "ThrashRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L}";
 	}
 
 //	public static void main(String[] args) {
-//		SoloRandom random = new SoloRandom(1L);
+//		ThrashRandom random = new ThrashRandom(1L);
 //		{
 //			int n0 = random.nextInt();
 //			int n1 = random.nextInt();
@@ -331,6 +329,7 @@ public class SoloRandom extends EnhancedRandom {
 //			System.out.println(Base.BASE16.unsigned(n4) + " vs. " + Base.BASE16.unsigned(p4));
 //			System.out.println(Base.BASE16.unsigned(n5) + " vs. " + Base.BASE16.unsigned(p5));
 //		}
+//		random = new ThrashRandom(1L);
 //		{
 //			long n0 = random.nextLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL\n", random.stateA, random.stateB, random.stateC);
 //			long n1 = random.nextLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL\n", random.stateA, random.stateB, random.stateC);
