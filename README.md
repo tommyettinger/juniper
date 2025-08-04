@@ -7,6 +7,42 @@ Java pseudo-random number generation code with minimal dependencies.
 
 [JavaDocs are hosted here](https://tommyettinger.github.io/juniper/apidocs/).
 
+## How to get it?
+
+With Gradle, the dependency (of the core module, if you have multiple) is:
+
+```
+api "com.github.tommyettinger:juniper:0.7.0"
+```
+
+In a libGDX project that has a GWT/HTML backend, the `html/build.gradle` file
+should additionally have:
+
+```
+implementation "com.github.tommyettinger:digital:0.8.1:sources"
+implementation "com.github.tommyettinger:juniper:0.7.0:sources"
+```
+
+And the `GdxDefinition.gwt.xml` file should have:
+
+```
+<inherits name="com.github.tommyettinger.digital" />
+<inherits name="com.github.tommyettinger.juniper" />
+```
+
+If you don't use Gradle, then with Maven, the dependency is:
+
+```xml
+<dependency>
+  <groupId>com.github.tommyettinger</groupId>
+  <artifactId>juniper</artifactId>
+  <version>0.7.0</version>
+</dependency>
+```
+
+There are also releases here on GitHub if you don't use any project management tool. You will need to obtain digital as
+well, of the appropriate version for the juniper release you picked.
+
 ## What is it?
 
 Juniper provides a superset of the features of `java.util.Random` with an
@@ -287,41 +323,23 @@ make the most sense to just get the result of `stringSerialize()` and store that
 to be registered. No `Distribution` types are `Externalizable`, since they wouldn't really gain anything from it; they
 do need the `EnhancedRandom` they use registered with Fory, but otherwise can just be registered themselves normally.
 
-## How to get it?
-
-With Gradle, the dependency (of the core module, if you have multiple) is:
-
+The exact serialized String produced by `stringSerialize()` changed in version 0.7.0, so saved data written by 0.6.9 or
+earlier may need some quick replacements done on it to get it up-to-date. Replace any occurrences of the backtick
+character:
 ```
-api "com.github.tommyettinger:juniper:0.6.9"
-```
-
-In a libGDX project that has a GWT/HTML backend, the `html/build.gradle` file
-should additionally have:
-
-```
-implementation "com.github.tommyettinger:digital:0.6.2:sources"
-implementation "com.github.tommyettinger:juniper:0.6.9:sources"
+`
 ```
 
-And the `GdxDefinition.gwt.xml` file should have:
-
+With the `paddingChar` from the `Base` you use, which defaults to `BASE16` and that has the `paddingChar` `$` . You also
+have to replace any occurrences of the tilde character:
 ```
-<inherits name="com.github.tommyettinger.digital" />
-<inherits name="com.github.tommyettinger.juniper" />
-```
-
-If you don't use Gradle, then with Maven, the dependency is:
-
-```xml
-<dependency>
-  <groupId>com.github.tommyettinger</groupId>
-  <artifactId>juniper</artifactId>
-  <version>0.6.9</version>
-</dependency>
+~
 ```
 
-There are also releases here on GitHub if you don't use any project management tool. You will need to obtain digital as
-well, of the appropriate version for the juniper release you picked.
+With the `positiveSign` of the same `Base` used, which again defaults to `BASE16` and that has the `positiveSign` `+` .
+
+This was required because the newly-added `Base.BASE90` uses backtick and tilde as valid digits, and its `paddingChar`
+and `positiveSign` are `$` and `#` respectively.
 
 ## License
 
