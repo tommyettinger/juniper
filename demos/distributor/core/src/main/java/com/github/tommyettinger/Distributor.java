@@ -178,10 +178,10 @@ public final class Distributor {
      */
     public static float probitF(float p) {
         if(0.0465f > p){
-            float r = (float)Math.sqrt(RoughMath.logRough(1f/(p*p)));
+            float r = (float)Math.sqrt(RoughMath.logRough(p)*-2f);
             return c3f * r + c2f + (c1f * r + c0f) / (r * (r + d1f) + d0f);
         } else if(0.9535f < p) {
-            float q = 1f - p, r = (float)Math.sqrt(RoughMath.logRough(1f/(q*q)));
+            float r = (float)Math.sqrt(RoughMath.logRough(1f - p)*-2f);
             return -c3f * r - c2f - (c1f * r + c0f) / (r * (r + d1f) + d0f);
         } else {
             float q = p - 0.5f, r = q * q;
@@ -200,10 +200,10 @@ public final class Distributor {
      */
     public static double probitD(double p) {
         if(0.0465 > p){
-            double q = p + 7.458340731200208E-155, r = Math.sqrt(Math.log(1.0/(q*q)));
+            double r = Math.sqrt(Math.log(p + 7.458340731200208E-155)*-2.0);
             return c3 * r + c2 + (c1 * r + c0) / (r * (r + d1) + d0);
         } else if(0.9535 < p) {
-            double q = 1.0 - p + 7.458340731200208E-155, r = Math.sqrt(Math.log(1.0/(q*q)));
+            double r = Math.sqrt(Math.log(1.0 - p + 7.458340731200208E-155)*-2.0);
             return -c3 * r - c2 - (c1 * r + c0) / (r * (r + d1) + d0);
         } else {
             double q = p - 0.5, r = q * q;
@@ -226,10 +226,10 @@ public final class Distributor {
         //float p = 0x1p-32f * i + 0.5f;
         // Really, the bitwise arcana is faster than a multiply-add op, somehow.
         if(1.0465f > p){
-            float q = p - 1f, r = (float)Math.sqrt(RoughMath.logRough(1f/(q*q)));
+            float r = (float)Math.sqrt(RoughMath.logRough(p - 1f)*-2f);
             return c3f * r + c2f + (c1f * r + c0f) / (r * (r + d1f) + d0f);
         } else if(1.9535f < p) {
-            float q = 2f - p, r = (float)Math.sqrt(RoughMath.logRough(1f/(q*q)));
+            float r = (float)Math.sqrt(RoughMath.logRough(2f - p)*-2f);
             return -c3f * r - c2f - (c1f * r + c0f) / (r * (r + d1f) + d0f);
         } else {
             float q = p - 1.5f, r = q * q;
@@ -252,10 +252,10 @@ public final class Distributor {
         //double p = l * 0x1p-64 + 0.5;
         // Really, the bitwise arcana is faster than a multiply-add op, somehow.
         if(1.0465 > p){
-            double q = p - 1.0 + 7.458340731200208E-155, r = Math.sqrt(Math.log(1.0/(q*q)));
+            double r = Math.sqrt(Math.log(p - 1.0 + 7.458340731200208E-155)*-2.0);
             return c3 * r + c2 + (c1 * r + c0) / (r * (r + d1) + d0);
         } else if(1.9535 < p) {
-            double q = 2.0 - p + 7.458340731200208E-155, r = Math.sqrt(Math.log(1.0/(q*q)));
+            double r = Math.sqrt(Math.log(2.0 - p + 7.458340731200208E-155)*-2.0);
             return -c3 * r - c2 - (c1 * r + c0) / (r * (r + d1) + d0);
         } else {
             double q = p - 1.5, r = q * q;
@@ -641,10 +641,10 @@ public final class Distributor {
         float p = 0x1p-32f * i + 0.5f;
 //        float p = BitConversion.intBitsToFloat((0x3FC00000 ^ i >>> 9) + (~i >>> 31));
         if(0.0465f > p){
-            float r = (float)Math.sqrt(RoughMath.logRough(1f/(p*p)));
+            float r = (float)Math.sqrt(RoughMath.logRough(p)*-2f);
             return c3f * r + c2f + (c1f * r + c0f) / (r * (r + d1f) + d0f);
         } else if(0.9535f < p) {
-            float q = 1f - p, r = (float)Math.sqrt(RoughMath.logRough(1f/(q*q)));
+            float r = (float)Math.sqrt(RoughMath.logRough(1f - p)*-2f);
             return -c3f * r - c2f - (c1f * r + c0f) / (r * (r + d1f) + d0f);
         } else {
             float q = p - 0.5f, r = q * q;
