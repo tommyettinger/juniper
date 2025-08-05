@@ -31,7 +31,7 @@ public class TeaVMBuilder {
         // For many (or most) applications, using the highest optimization won't add much to build time.
         // If your builds take too long, and runtime performance doesn't matter, you can change ADVANCED to SIMPLE .
         tool.setOptimizationLevel(TeaVMOptimizationLevel.ADVANCED);
-        tool.setObfuscated(false);
+        tool.setObfuscated(true);
         TeaBuilder.build(tool);
     }
 }
