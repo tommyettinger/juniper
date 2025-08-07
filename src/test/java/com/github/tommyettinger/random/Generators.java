@@ -81,16 +81,15 @@ public final class Generators {
         randomList.add(new Xoshiro160GrittyRandom(1, 1, 1, 1, 1));
         randomList.add(new O128X256LowMixRandom(1, 1, 1, 1, 1, 1));
         randomList.add(new OC128X256LowMixRandom(1, 1, 1, 1, 1, 1));
-        randomList.add(new ThrashRandom(1, 1, 1));
         randomList.add(new ThrushRandom(1, 1, 1, 1));
         randomList.add(new L64X64MoremurRandom(1, 1));
         randomList.add(new L64X64PcgRandom(1, 1));
         randomList.add(new LCG64LFSR64PcgRandom(1, 1));
         randomList.add(new LCG64LFSR64MoremurRandom(1, 1));
-        randomList.add(new I64LFSR64MoremurRandom(1, 1));
         randomList.add(new I64LFSR64MX3Random(1, 1));
         randomList.add(new RemusRandom(1, 1));
-        randomList.add(new ThrooshRandom(1, 1, 1, 1));
+        randomList.add(new I64LFSR64MoremurRandom(1, 1));
+        randomList.add(new I64LFSR64SpinRandom(1, 1));
     }
     public static int randomCount = randomList.size();
 
