@@ -1346,13 +1346,17 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 * A score of 9 can typically be considered "potentially problematic," and though it isn't necessarily a real
 	 * problem, there are so many other possible gammas that it should be avoided. Scores higher than 9 can be
 	 * considered more "problematic," and scores less than 9 are probably fine for SplitMix gammas.
+	 * <br>
+	 * If the given gamma is even, it is not suitable as a SplitMix gamma automatically, and the maximum (worst) rating
+	 * is returned, 32.
 	 *
 	 * @param gamma any long, though almost always an odd number, that would be added as an increment in a sequence
 	 * @return how far the given gamma is from an optimal score of 0
 	 * @see <a href="https://www.pcg-random.org/posts/bugs-in-splitmix.html">This was informed by O'Neill's blog post about SplittableRandom's gamma.</a>
 	 */
 	public static int rateGamma(long gamma) {
-		final long inverse = MathTools.modularMultiplicativeInverse(gamma |= 1L);
+		if((gamma & 1L) == 0L) return 32;
+		final long inverse = MathTools.modularMultiplicativeInverse(gamma);
 		return Math.max(Math.max(Math.max(
 					Math.abs(Long.bitCount(gamma) - 32),
 					Math.abs(Long.bitCount(gamma ^ gamma >>> 1) - 32)),
