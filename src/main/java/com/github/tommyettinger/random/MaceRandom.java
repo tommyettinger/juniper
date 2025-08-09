@@ -87,7 +87,7 @@ public class MaceRandom extends EnhancedRandom {
 	 * calling {@link #extract(long)}.
 	 * <br>
 	 * Based on Hacker's Delight (2nd edition).
-	 * @param bits the bit values to be deposited into positions denoted by mask
+	 * @param bits the up-to-24-bit values to be deposited into positions denoted by mask
 	 * @return a long starting with {@link #GOLDEN_64} where only bits in {@link #MASK} can be changed
 	 */
 	public static long deposit(long bits) {

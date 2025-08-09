@@ -1300,6 +1300,36 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	}
 
 	/**
+	 * Attempts to check the quality of a "gamma" increment for an additive sequence. This is stricter than the checks
+	 * in Java 8's SplittableRandom. The goal here is to see if the gamma is "sufficiently random" to avoid patterns
+	 * when used as an increment. Examples of gamma values that aren't random enough include {@code 1L}, {@code 3L},
+	 * {@code 0xFFFFFFFFFFFFFFFFL}, {@code 0xAAAAAAAAAAAAAAABL}, and so on. It returns the "score" for any gamma value,
+     * where the score is the maximum difference of four bit counts from an ideal of 32. The values that have their bits
+     * counted are:
+	 * <ul>
+	 *     <li>The gamma itself,</li>
+	 *     <li>The Gray code of the gamma, defined as {@code (gamma ^ (gamma >>> 1))},</li>
+	 *     <li>The {@link MathTools#modularMultiplicativeInverse(long)} of the gamma,</li>
+	 *     <li>And the Gray code of the above inverse of the gamma.</li>
+	 * </ul>
+	 * A score of 8 can typically be considered "potentially problematic," and though it isn't necessarily a real
+     * problem, there are so many other possible gammas that it should be avoided. Scores higher than 8 can be
+     * considered more "problematic," and scores less than 8 are probably fine for SplitMix gammas.
+	 *
+	 * @see <a href="https://www.pcg-random.org/posts/bugs-in-splitmix.html">This was informed by O'Neill's blog post about SplittableRandom's gamma.</a>
+	 * @param gamma any long, though almost always an odd number, that would be added as an increment in a sequence
+	 * @return how far the given gamma is from an optimal score of 0
+	 */
+	public static int rateGamma(long gamma) {
+		long inverse = MathTools.modularMultiplicativeInverse(gamma |= 1L);
+		return  Math.max(Math.max(Math.max(
+                Math.abs(Long.bitCount(gamma) - 32),
+				Math.abs(Long.bitCount(gamma ^ gamma >>> 1) - 32)),
+				Math.abs(Long.bitCount(inverse) - 32)),
+				Math.abs(Long.bitCount(inverse ^ inverse >>> 1) - 32));
+	}
+
+	/**
 	 * Given two EnhancedRandom objects that could have the same or different classes,
 	 * this returns true if they have the same class and same state, or false otherwise.
 	 * Both of the arguments should implement {@link #getSelectedState(int)}, or this
