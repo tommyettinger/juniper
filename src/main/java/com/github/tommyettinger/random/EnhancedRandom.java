@@ -47,6 +47,7 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * Gets the tag used to identify this type of EnhancedRandom, as a String. This tag should be unique,
 	 * and for uniformity purposes, all tags used in this library are 4 characters long. User-defined tags
 	 * should have a different length.
+	 *
 	 * @return a unique String identifier for this type of EnhancedRandom; usually 4 chars long.
 	 */
 	public abstract String getTag();
@@ -57,8 +58,8 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 *
 	 * @return a kind-of-uniform {@code long} value
 	 */
-	public static long seedFromMath () {
-		return (long)((Math.random() - 0.5) * 0x1p52) ^ (long)((Math.random() - 0.5) * 0x1p64);
+	public static long seedFromMath() {
+		return (long) ((Math.random() - 0.5) * 0x1p52) ^ (long) ((Math.random() - 0.5) * 0x1p64);
 	}
 
 	/**
@@ -75,7 +76,7 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 *
 	 * @param seed the initial seed
 	 */
-	public abstract void setSeed (long seed);
+	public abstract void setSeed(long seed);
 
 	/**
 	 * Gets the number of possible state variables that can be selected with
@@ -89,7 +90,7 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 *
 	 * @return the non-negative number of selections possible for state variables
 	 */
-	public int getStateCount () {
+	public int getStateCount() {
 		return 0;
 	}
 
@@ -105,7 +106,7 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * @param selection used to select which state variable to get; generally non-negative
 	 * @return the exact value of the selected state
 	 */
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		throw new UnsupportedOperationException("getSelectedState() not supported.");
 	}
 
@@ -123,7 +124,7 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * @param selection used to select which state variable to set; generally non-negative
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		setSeed(value);
 	}
 
@@ -135,7 +136,7 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 *
 	 * @param state the long value to use for each state variable
 	 */
-	public void setState (long state) {
+	public void setState(long state) {
 		for (int i = getStateCount() - 1; i >= 0; i--) {
 			setSelectedState(i, state);
 		}
@@ -152,7 +153,7 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * @param stateA the long value to use for states at index 0, 2, 4, 6...
 	 * @param stateB the long value to use for states at index 1, 3, 5, 7...
 	 */
-	public void setState (long stateA, long stateB) {
+	public void setState(long stateA, long stateB) {
 		final int c = getStateCount();
 		for (int i = 0; i < c; i += 2) {
 			setSelectedState(i, stateA);
@@ -176,7 +177,7 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * @param stateB the long value to use for states at index 1, 4, 7, 10...
 	 * @param stateC the long value to use for states at index 2, 5, 8, 11...
 	 */
-	public void setState (long stateA, long stateB, long stateC) {
+	public void setState(long stateA, long stateB, long stateC) {
 		final int c = getStateCount();
 		for (int i = 0; i < c; i += 3) {
 			setSelectedState(i, stateA);
@@ -206,7 +207,7 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * @param stateC the long value to use for states at index 2, 6, 10, 14...
 	 * @param stateD the long value to use for states at index 3, 7, 11, 15...
 	 */
-	public void setState (long stateA, long stateB, long stateC, long stateD) {
+	public void setState(long stateA, long stateB, long stateC, long stateD) {
 		final int c = getStateCount();
 		for (int i = 0; i < c; i += 4) {
 			setSelectedState(i, stateA);
@@ -240,7 +241,7 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * @param stateD the long value to use for states at index 3, 8, 13, 18...
 	 * @param stateE the long value to use for states at index 4, 9, 14, 19...
 	 */
-	public void setState (long stateA, long stateB, long stateC, long stateD, long stateE) {
+	public void setState(long stateA, long stateB, long stateC, long stateD, long stateE) {
 		final int c = getStateCount();
 		for (int i = 0; i < c; i += 5) {
 			setSelectedState(i, stateA);
@@ -278,7 +279,7 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * @param stateE the long value to use for states at index 4, 10, 16, 22...
 	 * @param stateF the long value to use for states at index 5, 11, 17, 23...
 	 */
-	public void setState (long stateA, long stateB, long stateC, long stateD, long stateE, long stateF) {
+	public void setState(long stateA, long stateB, long stateC, long stateD, long stateE, long stateF) {
 		final int c = getStateCount();
 		for (int i = 0; i < c; i += 6) {
 			setSelectedState(i, stateA);
@@ -309,7 +310,7 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 *
 	 * @param states an array or varargs of long values to use as states
 	 */
-	public void setState (long... states) {
+	public void setState(long... states) {
 		final int c = getStateCount(), sl = states.length;
 		for (int b = 0; b < sl; b++) {
 			final long curr = states[b];
@@ -344,8 +345,8 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * @return the next pseudorandom value from this random number
 	 * generator's sequence
 	 */
-	public int next (int bits) {
-		return (int)nextLong() >>> 32 - bits;
+	public int next(int bits) {
+		return (int) nextLong() >>> 32 - bits;
 	}
 
 	/**
@@ -356,7 +357,7 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * @param bytes the byte array to fill with random bytes
 	 * @throws NullPointerException if the byte array is null
 	 */
-	public void nextBytes (byte[] bytes) {
+	public void nextBytes(byte[] bytes) {
 		if (bytes != null) {
 			for (int i = 0; i < bytes.length; ) {
 				for (long r = nextLong(), n = Math.min(bytes.length - i, 8); n-- > 0; r >>>= 8) {
@@ -376,8 +377,8 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * @return the next pseudorandom, uniformly distributed {@code int}
 	 * value from this random number generator's sequence
 	 */
-	public int nextInt () {
-		return (int)nextLong();
+	public int nextInt() {
+		return (int) nextLong();
 	}
 
 	/**
@@ -405,8 +406,8 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * value between zero (inclusive) and {@code bound} (exclusive)
 	 * from this random number generator's sequence
 	 */
-	public int nextInt (int bound) {
-		return (int)(bound * (nextLong() & 0xFFFFFFFFL) >> 32) & ~(bound >> 31);
+	public int nextInt(int bound) {
+		return (int) (bound * (nextLong() & 0xFFFFFFFFL) >> 32) & ~(bound >> 31);
 	}
 
 	/**
@@ -432,8 +433,8 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * value between zero (inclusive) and {@code bound} (exclusive), treated as
 	 * unsigned, from this random number generator's sequence
 	 */
-	public int nextUnsignedInt (int bound) {
-		return (int)((bound & 0xFFFFFFFFL) * (nextLong() & 0xFFFFFFFFL) >>> 32);
+	public int nextUnsignedInt(int bound) {
+		return (int) ((bound & 0xFFFFFFFFL) * (nextLong() & 0xFFFFFFFFL) >>> 32);
 	}
 
 	/**
@@ -449,8 +450,8 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * @return a pseudorandom int between 0 (inclusive) and outerBound (exclusive)
 	 * @see #nextInt(int) Here's a note about the bias present in the bounded generation.
 	 */
-	public int nextSignedInt (int outerBound) {
-		outerBound = (int)(outerBound * (nextLong() & 0xFFFFFFFFL) >> 32);
+	public int nextSignedInt(int outerBound) {
+		outerBound = (int) (outerBound * (nextLong() & 0xFFFFFFFFL) >> 32);
 		return outerBound + (outerBound >>> 31);
 	}
 
@@ -469,8 +470,8 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * @return a pseudorandom int between innerBound (inclusive) and outerBound (exclusive)
 	 * @see #nextInt(int) Here's a note about the bias present in the bounded generation.
 	 */
-	public int nextInt (int innerBound, int outerBound) {
-		return (int)(innerBound + (nextUnsignedInt(outerBound - innerBound) & ~((long)outerBound - (long)innerBound >> 63)));
+	public int nextInt(int innerBound, int outerBound) {
+		return (int) (innerBound + (nextUnsignedInt(outerBound - innerBound) & ~((long) outerBound - (long) innerBound >> 63)));
 	}
 
 	/**
@@ -484,7 +485,7 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * @return a pseudorandom int between innerBound (inclusive) and outerBound (exclusive)
 	 * @see #nextInt(int) Here's a note about the bias present in the bounded generation.
 	 */
-	public int nextSignedInt (int innerBound, int outerBound) {
+	public int nextSignedInt(int innerBound, int outerBound) {
 		return innerBound + nextUnsignedInt(outerBound - innerBound);
 	}
 
@@ -502,7 +503,7 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * @return the next pseudorandom, uniformly distributed {@code long}
 	 * value from this random number generator's sequence
 	 */
-	public abstract long nextLong ();
+	public abstract long nextLong();
 
 	/**
 	 * Returns a pseudorandom, uniformly distributed {@code long} value
@@ -530,7 +531,7 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * from this random number generator's sequence
 	 * @see #nextInt(int) Here's a note about the bias present in the bounded generation.
 	 */
-	public long nextLong (long bound) {
+	public long nextLong(long bound) {
 		return nextLong(0L, bound);
 	}
 
@@ -553,7 +554,7 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * @return a pseudorandom long between 0 (inclusive) and outerBound (exclusive)
 	 * @see #nextInt(int) Here's a note about the bias present in the bounded generation.
 	 */
-	public long nextSignedLong (long outerBound) {
+	public long nextSignedLong(long outerBound) {
 		return nextSignedLong(0L, outerBound);
 	}
 
@@ -571,7 +572,7 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * @return a pseudorandom long between innerBound (inclusive) and outerBound (exclusive)
 	 * @see #nextInt(int) Here's a note about the bias present in the bounded generation.
 	 */
-	public long nextLong (long inner, long outer) {
+	public long nextLong(long inner, long outer) {
 		final long rand = nextLong();
 		if (inner >= outer)
 			return inner;
@@ -594,7 +595,7 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * @return a pseudorandom long between innerBound (inclusive) and outerBound (exclusive)
 	 * @see #nextInt(int) Here's a note about the bias present in the bounded generation.
 	 */
-	public long nextSignedLong (long inner, long outer) {
+	public long nextSignedLong(long inner, long outer) {
 		final long rand = nextLong();
 		if (outer < inner) {
 			long t = outer;
@@ -627,7 +628,7 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * {@code boolean} value from this random number generator's
 	 * sequence
 	 */
-	public boolean nextBoolean () {
+	public boolean nextBoolean() {
 		return nextLong() < 0L;
 	}
 
@@ -655,7 +656,7 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * value between {@code 0.0} and {@code 1.0} from this
 	 * random number generator's sequence
 	 */
-	public float nextFloat () {
+	public float nextFloat() {
 		return (nextLong() >>> 40) * 0x1p-24f;
 	}
 
@@ -667,7 +668,7 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * @param outerBound the exclusive outer bound
 	 * @return a float between 0 (inclusive) and {@code outerBound} (exclusive)
 	 */
-	public float nextFloat (float outerBound) {
+	public float nextFloat(float outerBound) {
 		return nextFloat() * outerBound;
 	}
 
@@ -680,7 +681,7 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * @param outerBound the exclusive outer bound; may be negative
 	 * @return a float between {@code innerBound} (inclusive) and {@code outerBound} (exclusive)
 	 */
-	public float nextFloat (float innerBound, float outerBound) {
+	public float nextFloat(float innerBound, float outerBound) {
 		return innerBound + nextFloat() * (outerBound - innerBound);
 	}
 
@@ -704,7 +705,7 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * value between {@code 0.0} and {@code 1.0} from this
 	 * random number generator's sequence
 	 */
-	public double nextDouble () {
+	public double nextDouble() {
 		return (nextLong() >>> 11) * 0x1.0p-53;
 	}
 
@@ -716,7 +717,7 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * @param outerBound the exclusive outer bound
 	 * @return a double between 0 (inclusive) and {@code outerBound} (exclusive)
 	 */
-	public double nextDouble (double outerBound) {
+	public double nextDouble(double outerBound) {
 		return nextDouble() * outerBound;
 	}
 
@@ -729,7 +730,7 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * @param outerBound the exclusive outer bound; may be negative
 	 * @return a double between {@code innerBound} (inclusive) and {@code outerBound} (exclusive)
 	 */
-	public double nextDouble (double innerBound, double outerBound) {
+	public double nextDouble(double innerBound, double outerBound) {
 		return innerBound + nextDouble() * (outerBound - innerBound);
 	}
 
@@ -748,7 +749,7 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 *
 	 * @return a double between 0.0, inclusive, and 1.0, inclusive
 	 */
-	public double nextInclusiveDouble () {
+	public double nextInclusiveDouble() {
 		final long bits = nextLong();
 		return BitConversion.longBitsToDouble(1022L - BitConversion.countLeadingZeros(bits) << 52 | (bits & 0xFFFFFFFFFFFFFL) + 1L) - 2.7105054312137617E-20; // 2.7105054312137617E-20 is 0x1.0000000000001p-65
 		// equivalent to
@@ -776,7 +777,7 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * @param outerBound the outer inclusive bound; may be positive or negative
 	 * @return a double between 0.0, inclusive, and {@code outerBound}, inclusive
 	 */
-	public double nextInclusiveDouble (double outerBound) {
+	public double nextInclusiveDouble(double outerBound) {
 		return nextInclusiveDouble() * outerBound;
 	}
 
@@ -789,7 +790,7 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * @param outerBound the outer inclusive bound; may be positive or negative
 	 * @return a double between {@code innerBound}, inclusive, and {@code outerBound}, inclusive
 	 */
-	public double nextInclusiveDouble (double innerBound, double outerBound) {
+	public double nextInclusiveDouble(double innerBound, double outerBound) {
 		return innerBound + nextInclusiveDouble() * (outerBound - innerBound);
 	}
 
@@ -808,9 +809,9 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 *
 	 * @return a float between 0.0, inclusive, and 1.0, inclusive
 	 */
-	public float nextInclusiveFloat () {
+	public float nextInclusiveFloat() {
 		final long bits = nextLong();
-		return BitConversion.intBitsToFloat(126 - BitConversion.countLeadingZeros(bits) << 23 | ((int)bits & 0x7FFFFF) + 1) - 2.7105058E-20f; // 2.7105058E-20f is 0x1.000002p-65f
+		return BitConversion.intBitsToFloat(126 - BitConversion.countLeadingZeros(bits) << 23 | ((int) bits & 0x7FFFFF) + 1) - 2.7105058E-20f; // 2.7105058E-20f is 0x1.000002p-65f
 		// equivalent to
 		//Float.intBitsToFloat(126 - Long.numberOfLeadingZeros(bits) << 23 | ((int)bits & 0x7FFFFF) + 1) - 0x1.000002p-65f;
 		// older
@@ -826,7 +827,7 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * @param outerBound the outer inclusive bound; may be positive or negative
 	 * @return a float between 0.0, inclusive, and {@code outerBound}, inclusive
 	 */
-	public float nextInclusiveFloat (float outerBound) {
+	public float nextInclusiveFloat(float outerBound) {
 		return nextInclusiveFloat() * outerBound;
 	}
 
@@ -839,7 +840,7 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * @param outerBound the outer inclusive bound; may be positive or negative
 	 * @return a float between {@code innerBound}, inclusive, and {@code outerBound}, inclusive
 	 */
-	public float nextInclusiveFloat (float innerBound, float outerBound) {
+	public float nextInclusiveFloat(float innerBound, float outerBound) {
 		return innerBound + nextInclusiveFloat() * (outerBound - innerBound);
 	}
 
@@ -870,7 +871,7 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 *
 	 * @return a random uniform double between 2.710505431213761E-20 and 0.9999999999999999 (both inclusive)
 	 */
-	public double nextExclusiveDouble () {
+	public double nextExclusiveDouble() {
 		final long bits = nextLong();
 		return BitConversion.longBitsToDouble(1022L - BitConversion.countLeadingZeros(bits) << 52 | (bits & 0x000FFFFFFFFFFFFFL));
 	}
@@ -889,7 +890,7 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 *
 	 * @return a random uniform double between 0 and 1 (both exclusive)
 	 */
-	public double nextExclusiveDoubleEquidistant () {
+	public double nextExclusiveDoubleEquidistant() {
 		return (nextLong(0x1FFFFFFFFFFFFFL) + 1L) * 0x1p-53;
 	}
 
@@ -902,7 +903,7 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * @param outerBound the outer exclusive bound; may be positive or negative
 	 * @return a double between 0.0, exclusive, and {@code outerBound}, exclusive
 	 */
-	public double nextExclusiveDouble (double outerBound) {
+	public double nextExclusiveDouble(double outerBound) {
 		return nextExclusiveDouble() * outerBound;
 	}
 
@@ -916,7 +917,7 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * @param outerBound the outer exclusive bound; may be positive or negative
 	 * @return a double between {@code innerBound}, exclusive, and {@code outerBound}, exclusive
 	 */
-	public double nextExclusiveDouble (double innerBound, double outerBound) {
+	public double nextExclusiveDouble(double innerBound, double outerBound) {
 		return innerBound + nextExclusiveDouble() * (outerBound - innerBound);
 	}
 
@@ -944,9 +945,10 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * {@link Xoroshiro128StarStarRandom} and {@link Xoshiro256StarStarRandom} cannot return 0L from {@link #nextLong()}
 	 * as frequently as other results, so this is not (technically) true of those. Those generators (and other LFSR-type
 	 * generators) will produce 5.421010862427522E-20 less frequently than -5.421010862427522E-20 .
+	 *
 	 * @return a random uniform double between -1 and 1 with a tiny hole around 0 (all exclusive)
 	 */
-	public double nextExclusiveSignedDouble(){
+	public double nextExclusiveSignedDouble() {
 		final long bits = nextLong();
 		return BitConversion.longBitsToDouble(1023L - BitConversion.countLeadingZeros(bits & 0x7FFFFFFFFFFFFFFFL) << 52 | (bits & 0x800FFFFFFFFFFFFFL));
 /*
@@ -979,9 +981,9 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 *
 	 * @return a random uniform float between 0 and 1 (both exclusive)
 	 */
-	public float nextExclusiveFloat () {
+	public float nextExclusiveFloat() {
 		final long bits = nextLong();
-		return BitConversion.intBitsToFloat(126 - BitConversion.countLeadingZeros(bits) << 23 | ((int)bits & 0x7FFFFF));
+		return BitConversion.intBitsToFloat(126 - BitConversion.countLeadingZeros(bits) << 23 | ((int) bits & 0x7FFFFF));
 	}
 //		return Float.intBitsToFloat(126 - Long.numberOfTrailingZeros(bits) << 23 | (int)(bits >>> 41));
 //		return Float.intBitsToFloat(126 - Long.numberOfLeadingZeros(bits) << 23 | ((int)bits & 0x7FFFFF));
@@ -1000,7 +1002,7 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 *
 	 * @return a random uniform float between 0 and 1 (both exclusive)
 	 */
-	public float nextExclusiveFloatEquidistant () {
+	public float nextExclusiveFloatEquidistant() {
 		return (nextInt(0xFFFFFF) + 1) * 0x1p-24f;
 	}
 
@@ -1013,7 +1015,7 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 * @param outerBound the outer exclusive bound; may be positive or negative
 	 * @return a float between 0.0, exclusive, and {@code outerBound}, exclusive
 	 */
-	public float nextExclusiveFloat (float outerBound) {
+	public float nextExclusiveFloat(float outerBound) {
 		return nextExclusiveFloat() * outerBound;
 	}
 
@@ -1027,7 +1029,7 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 * @param outerBound the outer exclusive bound; may be positive or negative
 	 * @return a float between {@code innerBound}, exclusive, and {@code outerBound}, exclusive
 	 */
-	public float nextExclusiveFloat (float innerBound, float outerBound) {
+	public float nextExclusiveFloat(float innerBound, float outerBound) {
 		return innerBound + nextExclusiveFloat() * (outerBound - innerBound);
 	}
 
@@ -1054,11 +1056,12 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 * {@link Xoroshiro128StarStarRandom} and {@link Xoshiro256StarStarRandom} cannot return 0L from {@link #nextLong()}
 	 * as frequently as other results, so this is not (technically) true of those. Those generators (and other LFSR-type
 	 * generators) will produce 5.421011E-20 less frequently than -5.421011E-20 .
+	 *
 	 * @return a random uniform float between -1 and 1 with a tiny hole around 0 (all exclusive)
 	 */
-	public float nextExclusiveSignedFloat(){
+	public float nextExclusiveSignedFloat() {
 		final long bits = nextLong();
-		return BitConversion.intBitsToFloat(127 - BitConversion.countLeadingZeros(bits & 0x7FFFFFFFFFFFFFFFL) << 23 | ((int)(bits>>>32) & 0x807FFFFF));
+		return BitConversion.intBitsToFloat(127 - BitConversion.countLeadingZeros(bits & 0x7FFFFFFFFFFFFFFFL) << 23 | ((int) (bits >>> 32) & 0x807FFFFF));
 //		Float.intBitsToFloat(127 - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFFFFFL) << 23 | ((int)(bits>>>32) & 0x807FFFFF));
 	}
 
@@ -1088,7 +1091,7 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 * {@code double} value with mean {@code 0.0} and standard deviation
 	 * {@code 1.0} from this random number generator's sequence
 	 */
-	public double nextGaussian () {
+	public double nextGaussian() {
 		return Distributor.normal(nextLong());
 	}
 
@@ -1098,10 +1101,9 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 * <br>
 	 * This defaults to simply returning {@code mean + stddev * nextGaussian()}.
 	 *
-	 * @param mean the mean of the Gaussian distribution to be drawn from
+	 * @param mean   the mean of the Gaussian distribution to be drawn from
 	 * @param stddev the standard deviation (square root of the variance)
-	 *        of the Gaussian distribution to be drawn from
-	 *
+	 *               of the Gaussian distribution to be drawn from
 	 * @return a Gaussian distributed {@code double} with the specified mean and standard deviation
 	 */
 	public double nextGaussian(double mean, double stddev) {
@@ -1121,7 +1123,7 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 * @param advance Number of future generations to skip over; can be negative to backtrack, 0 gets the most-recently-generated number
 	 * @return the random long generated after skipping forward or backwards by {@code advance} numbers
 	 */
-	public long skip (long advance) {
+	public long skip(long advance) {
 		throw new UnsupportedOperationException("skip() not supported.");
 	}
 
@@ -1147,7 +1149,7 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 *
 	 * @return the previous number this would have produced with {@link #nextLong()}
 	 */
-	public long previousLong () {
+	public long previousLong() {
 		return skip(-1L);
 	}
 
@@ -1171,8 +1173,8 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 *
 	 * @return the previous number this would have produced with {@link #nextInt()}
 	 */
-	public int previousInt () {
-		return (int)previousLong();
+	public int previousInt() {
+		return (int) previousLong();
 	}
 
 	/**
@@ -1183,7 +1185,7 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 *
 	 * @return a deep copy of this EnhancedRandom.
 	 */
-	public abstract EnhancedRandom copy ();
+	public abstract EnhancedRandom copy();
 
 	/**
 	 * Similar to {@link #copy()}, but fills this EnhancedRandom with the state of another EnhancedRandom, usually
@@ -1205,7 +1207,7 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 *
 	 * @param other another EnhancedRandom, typically with the same class as this one, to copy its state into this
 	 */
-	public void setWith (EnhancedRandom other) {
+	public void setWith(EnhancedRandom other) {
 		final int myCount = getStateCount(), otherCount = other.getStateCount();
 		int i = 0;
 		for (; i < myCount && i < otherCount; i++) {
@@ -1250,22 +1252,22 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 * @param d should be between 0 and 1, exclusive, but other values are tolerated
 	 * @return a normal-distributed double centered on 0.0; all results will be between -38.5 and 38.5, both inclusive
 	 */
-	public static double probit (final double d) {
+	public static double probit(final double d) {
 		if (d <= 0 || d >= 1) {
 			return Math.copySign(38.5, d - 0.5);
 		} else if (d < 0.02425) {
 			final double q = Math.sqrt(-2.0 * Math.log(d));
 			return (((((-7.784894002430293e-03 * q - 3.223964580411365e-01) * q - 2.400758277161838e+00) * q - 2.549732539343734e+00) * q + 4.374664141464968e+00) * q + 2.938163982698783e+00) / (
-					(((7.784695709041462e-03 * q + 3.224671290700398e-01) * q + 2.445134137142996e+00) * q + 3.754408661907416e+00) * q + 1.0);
+				(((7.784695709041462e-03 * q + 3.224671290700398e-01) * q + 2.445134137142996e+00) * q + 3.754408661907416e+00) * q + 1.0);
 		} else if (0.97575 < d) {
 			final double q = Math.sqrt(-2.0 * Math.log(1 - d));
 			return -(((((-7.784894002430293e-03 * q - 3.223964580411365e-01) * q - 2.400758277161838e+00) * q - 2.549732539343734e+00) * q + 4.374664141464968e+00) * q + 2.938163982698783e+00) / (
-					(((7.784695709041462e-03 * q + 3.224671290700398e-01) * q + 2.445134137142996e+00) * q + 3.754408661907416e+00) * q + 1.0);
+				(((7.784695709041462e-03 * q + 3.224671290700398e-01) * q + 2.445134137142996e+00) * q + 3.754408661907416e+00) * q + 1.0);
 		}
 		final double q = d - 0.5;
 		final double r = q * q;
 		return (((((-3.969683028665376e+01 * r + 2.209460984245205e+02) * r - 2.759285104469687e+02) * r + 1.383577518672690e+02) * r - 3.066479806614716e+01) * r + 2.506628277459239e+00) * q / (
-				((((-5.447609879822406e+01 * r + 1.615858368580409e+02) * r - 1.556989798598866e+02) * r + 6.680131188771972e+01) * r - 1.328068155288572e+01) * r + 1.0);
+			((((-5.447609879822406e+01 * r + 1.615858368580409e+02) * r - 1.556989798598866e+02) * r + 6.680131188771972e+01) * r - 1.328068155288572e+01) * r + 1.0);
 	}
 
 	/**
@@ -1283,18 +1285,47 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 * If a gamma is rejected, this multiplies it by an LCG constant, 0xD1342543DE82EF95L, adds an increasing even
 	 * number (first 2, then 4, then 6, and so on) and tries again repeatedly. It returns the first gamma that wasn't
 	 * rejected, which could be the original gamma.
+	 * <br>
+	 * This simply calls {@link #fixGamma(long, int)} with the given gamma and a threshold of 8.
 	 *
-	 * @see <a href="https://www.pcg-random.org/posts/bugs-in-splitmix.html">This was informed by O'Neill's blog post about SplittableRandom's gamma.</a>
 	 * @param gamma any long, though almost always an odd number, that would be added as an increment in a sequence
 	 * @return gamma or a modification upon it such that its bits are "sufficiently random" to be a good increment
+	 * @see <a href="https://www.pcg-random.org/posts/bugs-in-splitmix.html">This was informed by O'Neill's blog post about SplittableRandom's gamma.</a>
 	 */
 	public static long fixGamma(long gamma) {
-		long inverse = MathTools.modularMultiplicativeInverse(gamma |= 1L), add = 0L;
-		while (Math.abs(Long.bitCount(gamma) - 32) > 8
-				|| Math.abs(Long.bitCount(gamma ^ gamma >>> 1) - 32) > 8
-				|| Math.abs(Long.bitCount(inverse) - 32) > 8
-				|| Math.abs(Long.bitCount(inverse ^ inverse >>> 1) - 32) > 8) {
-			inverse = MathTools.modularMultiplicativeInverse(gamma = gamma * 0xD1342543DE82EF95L + (add += 2L));
+		return fixGamma(gamma, 8);
+	}
+
+	/**
+	 * Attempts to improve the quality of a "gamma" increment for an additive sequence. This is stricter than the checks
+	 * in Java 8's SplittableRandom. The goal here is to make sure the gamma is "sufficiently random" to avoid patterns
+	 * when used as an increment. Examples of gamma values that aren't random enough include {@code 1L}, {@code 3L},
+	 * {@code 0xFFFFFFFFFFFFFFFFL}, {@code 0xAAAAAAAAAAAAAAABL}, and so on. It rejects any gamma value where any of four
+	 * bit counts are less than {@code 32 - threshold} or greater than {@code 32 + threshold}. The values that have
+	 * their bits counted are:
+	 * <ul>
+	 *     <li>The gamma itself,</li>
+	 *     <li>The Gray code of the gamma, defined as {@code (gamma ^ (gamma >>> 1))},</li>
+	 *     <li>The {@link MathTools#modularMultiplicativeInverse(long)} of the gamma,</li>
+	 *     <li>And the Gray code of the above inverse of the gamma.</li>
+	 * </ul>
+	 * If a gamma is rejected, this multiplies it by an LCG constant, 0xD1342543DE82EF95L, adds an increasing even
+	 * number (first 2, then 4, then 6, and so on) and tries again repeatedly. It returns the first gamma that wasn't
+	 * rejected, which could be the original gamma.
+	 *
+	 * @param gamma     any long, though almost always an odd number, that would be added as an increment in a sequence
+	 * @param threshold the maximum acceptable "score" as evaluated by {@link #rateGamma(long)}
+	 * @return gamma or a modification upon it such that its bits are "sufficiently random" to be a good increment
+	 * @see <a href="https://www.pcg-random.org/posts/bugs-in-splitmix.html">This was informed by O'Neill's blog post about SplittableRandom's gamma.</a>
+	 */
+	public static long fixGamma(long gamma, int threshold) {
+		gamma |= 1L;
+		long inverse, add = 0L;
+		while (Math.abs(Long.bitCount(gamma) - 32) > threshold
+			|| Math.abs(Long.bitCount(gamma ^ gamma >>> 1) - 32) > threshold
+			|| Math.abs(Long.bitCount(inverse = MathTools.modularMultiplicativeInverse(gamma)) - 32) > threshold
+			|| Math.abs(Long.bitCount(inverse ^ inverse >>> 1) - 32) > threshold) {
+			gamma = gamma * 0xD1342543DE82EF95L + (add += 2L);
 		}
 		return gamma;
 	}
@@ -1304,29 +1335,29 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 * in Java 8's SplittableRandom. The goal here is to see if the gamma is "sufficiently random" to avoid patterns
 	 * when used as an increment. Examples of gamma values that aren't random enough include {@code 1L}, {@code 3L},
 	 * {@code 0xFFFFFFFFFFFFFFFFL}, {@code 0xAAAAAAAAAAAAAAABL}, and so on. It returns the "score" for any gamma value,
-     * where the score is the maximum difference of four bit counts from an ideal of 32. The values that have their bits
-     * counted are:
+	 * where the score is the maximum difference of four bit counts from an ideal of 32. The values that have their bits
+	 * counted are:
 	 * <ul>
 	 *     <li>The gamma itself,</li>
 	 *     <li>The Gray code of the gamma, defined as {@code (gamma ^ (gamma >>> 1))},</li>
 	 *     <li>The {@link MathTools#modularMultiplicativeInverse(long)} of the gamma,</li>
 	 *     <li>And the Gray code of the above inverse of the gamma.</li>
 	 * </ul>
-	 * A score of 8 can typically be considered "potentially problematic," and though it isn't necessarily a real
-     * problem, there are so many other possible gammas that it should be avoided. Scores higher than 8 can be
-     * considered more "problematic," and scores less than 8 are probably fine for SplitMix gammas.
+	 * A score of 9 can typically be considered "potentially problematic," and though it isn't necessarily a real
+	 * problem, there are so many other possible gammas that it should be avoided. Scores higher than 9 can be
+	 * considered more "problematic," and scores less than 9 are probably fine for SplitMix gammas.
 	 *
-	 * @see <a href="https://www.pcg-random.org/posts/bugs-in-splitmix.html">This was informed by O'Neill's blog post about SplittableRandom's gamma.</a>
 	 * @param gamma any long, though almost always an odd number, that would be added as an increment in a sequence
 	 * @return how far the given gamma is from an optimal score of 0
+	 * @see <a href="https://www.pcg-random.org/posts/bugs-in-splitmix.html">This was informed by O'Neill's blog post about SplittableRandom's gamma.</a>
 	 */
 	public static int rateGamma(long gamma) {
-		long inverse = MathTools.modularMultiplicativeInverse(gamma |= 1L);
-		return  Math.max(Math.max(Math.max(
-                Math.abs(Long.bitCount(gamma) - 32),
-				Math.abs(Long.bitCount(gamma ^ gamma >>> 1) - 32)),
+		final long inverse = MathTools.modularMultiplicativeInverse(gamma |= 1L);
+		return Math.max(Math.max(Math.max(
+					Math.abs(Long.bitCount(gamma) - 32),
+					Math.abs(Long.bitCount(gamma ^ gamma >>> 1) - 32)),
 				Math.abs(Long.bitCount(inverse) - 32)),
-				Math.abs(Long.bitCount(inverse ^ inverse >>> 1) - 32));
+			Math.abs(Long.bitCount(inverse ^ inverse >>> 1) - 32));
 	}
 
 	/**
@@ -1341,10 +1372,10 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 * @param right another EnhancedRandom to compare for equality
 	 * @return true if the two EnhancedRandom objects have the same class and state, or false otherwise
 	 */
-	public static boolean areEqual (EnhancedRandom left, EnhancedRandom right) {
+	public static boolean areEqual(EnhancedRandom left, EnhancedRandom right) {
 		if (left == right)
 			return true;
-		if(left == null || right == null)
+		if (left == null || right == null)
 			return false;
 		if (left.getClass() != right.getClass())
 			return false;
@@ -1363,7 +1394,7 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 * @param chance a float between 0.0 and 1.0; higher values are more likely to result in true
 	 * @return a boolean selected with the given {@code chance} of being true
 	 */
-	public boolean nextBoolean (float chance) {
+	public boolean nextBoolean(float chance) {
 		return nextFloat() < chance;
 	}
 
@@ -1372,7 +1403,7 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 *
 	 * @return -1 or 1, selected with approximately equal likelihood
 	 */
-	public int nextSign () {
+	public int nextSign() {
 		return 1 | nextInt() >> 31;
 	}
 
@@ -1382,7 +1413,7 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 * <p>
 	 * This is an optimized version of {@link #nextTriangular(float, float, float) nextTriangular(-1, 1, 0)}
 	 */
-	public float nextTriangular () {
+	public float nextTriangular() {
 		return nextFloat() - nextFloat();
 	}
 
@@ -1394,7 +1425,7 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 *
 	 * @param max the upper limit
 	 */
-	public float nextTriangular (float max) {
+	public float nextTriangular(float max) {
 		return (nextFloat() - nextFloat()) * max;
 	}
 
@@ -1407,7 +1438,7 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 * @param min the lower limit
 	 * @param max the upper limit
 	 */
-	public float nextTriangular (float min, float max) {
+	public float nextTriangular(float min, float max) {
 		return nextTriangular(min, max, (min + max) * 0.5f);
 	}
 
@@ -1419,11 +1450,13 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 * @param max  the upper limit
 	 * @param mode the point around which the values are more likely
 	 */
-	public float nextTriangular (float min, float max, float mode) {
+	public float nextTriangular(float min, float max, float mode) {
 		float u = nextFloat();
 		float d = max - min;
-		if (u <= (mode - min) / d) {return min + (float)Math.sqrt(u * d * (mode - min));}
-		return max - (float)Math.sqrt((1 - u) * d * (max - mode));
+		if (u <= (mode - min) / d) {
+			return min + (float) Math.sqrt(u * d * (mode - min));
+		}
+		return max - (float) Math.sqrt((1 - u) * d * (max - mode));
 	}
 
 	/**
@@ -1436,7 +1469,7 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 * @param trials     how many random numbers to acquire and compare
 	 * @return the lowest random number between innerBound (inclusive) and outerBound (exclusive) this found
 	 */
-	public int minIntOf (int innerBound, int outerBound, int trials) {
+	public int minIntOf(int innerBound, int outerBound, int trials) {
 		int v = nextSignedInt(innerBound, outerBound);
 		for (int i = 1; i < trials; i++) {
 			v = Math.min(v, nextSignedInt(innerBound, outerBound));
@@ -1454,7 +1487,7 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 * @param trials     how many random numbers to acquire and compare
 	 * @return the highest random number between innerBound (inclusive) and outerBound (exclusive) this found
 	 */
-	public int maxIntOf (int innerBound, int outerBound, int trials) {
+	public int maxIntOf(int innerBound, int outerBound, int trials) {
 		int v = nextSignedInt(innerBound, outerBound);
 		for (int i = 1; i < trials; i++) {
 			v = Math.max(v, nextSignedInt(innerBound, outerBound));
@@ -1472,7 +1505,7 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 * @param trials     how many random numbers to acquire and compare
 	 * @return the lowest random number between innerBound (inclusive) and outerBound (exclusive) this found
 	 */
-	public long minLongOf (long innerBound, long outerBound, int trials) {
+	public long minLongOf(long innerBound, long outerBound, int trials) {
 		long v = nextSignedLong(innerBound, outerBound);
 		for (int i = 1; i < trials; i++) {
 			v = Math.min(v, nextSignedLong(innerBound, outerBound));
@@ -1490,7 +1523,7 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 * @param trials     how many random numbers to acquire and compare
 	 * @return the highest random number between innerBound (inclusive) and outerBound (exclusive) this found
 	 */
-	public long maxLongOf (long innerBound, long outerBound, int trials) {
+	public long maxLongOf(long innerBound, long outerBound, int trials) {
 		long v = nextSignedLong(innerBound, outerBound);
 		for (int i = 1; i < trials; i++) {
 			v = Math.max(v, nextSignedLong(innerBound, outerBound));
@@ -1508,7 +1541,7 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 * @param trials     how many random numbers to acquire and compare
 	 * @return the lowest random number between innerBound (inclusive) and outerBound (exclusive) this found
 	 */
-	public double minDoubleOf (double innerBound, double outerBound, int trials) {
+	public double minDoubleOf(double innerBound, double outerBound, int trials) {
 		double v = nextDouble(innerBound, outerBound);
 		for (int i = 1; i < trials; i++) {
 			v = Math.min(v, nextDouble(innerBound, outerBound));
@@ -1526,7 +1559,7 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 * @param trials     how many random numbers to acquire and compare
 	 * @return the highest random number between innerBound (inclusive) and outerBound (exclusive) this found
 	 */
-	public double maxDoubleOf (double innerBound, double outerBound, int trials) {
+	public double maxDoubleOf(double innerBound, double outerBound, int trials) {
 		double v = nextDouble(innerBound, outerBound);
 		for (int i = 1; i < trials; i++) {
 			v = Math.max(v, nextDouble(innerBound, outerBound));
@@ -1544,7 +1577,7 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 * @param trials     how many random numbers to acquire and compare
 	 * @return the lowest random number between innerBound (inclusive) and outerBound (exclusive) this found
 	 */
-	public float minFloatOf (float innerBound, float outerBound, int trials) {
+	public float minFloatOf(float innerBound, float outerBound, int trials) {
 		float v = nextFloat(innerBound, outerBound);
 		for (int i = 1; i < trials; i++) {
 			v = Math.min(v, nextFloat(innerBound, outerBound));
@@ -1562,7 +1595,7 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 * @param trials     how many random numbers to acquire and compare
 	 * @return the highest random number between innerBound (inclusive) and outerBound (exclusive) this found
 	 */
-	public float maxFloatOf (float innerBound, float outerBound, int trials) {
+	public float maxFloatOf(float innerBound, float outerBound, int trials) {
 		float v = nextFloat(innerBound, outerBound);
 		for (int i = 1; i < trials; i++) {
 			v = Math.max(v, nextFloat(innerBound, outerBound));
@@ -1579,7 +1612,7 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 * @throws NullPointerException      if array is null
 	 * @throws IndexOutOfBoundsException if array is empty
 	 */
-	public <T> T randomElement (T[] array) {
+	public <T> T randomElement(T[] array) {
 		return array[nextInt(array.length)];
 	}
 
@@ -1587,11 +1620,11 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 * Gets a randomly selected item from the given List, such as an ArrayList.
 	 * If the List is empty, this throws an IndexOutOfBoundsException.
 	 *
-	 * @param list    a non-empty implementation of List, such as ArrayList
-	 * @param <T>     the type of items
+	 * @param list a non-empty implementation of List, such as ArrayList
+	 * @param <T>  the type of items
 	 * @return a randomly-selected item from list
 	 */
-	public <T> T randomElement (List<T> list) {
+	public <T> T randomElement(List<T> list) {
 		return list.get(nextInt(list.size()));
 	}
 
@@ -1600,7 +1633,7 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 *
 	 * @param items an int array; must be non-null
 	 */
-	public void shuffle (int[] items) {
+	public void shuffle(int[] items) {
 		for (int i = items.length - 1; i > 0; i--) {
 			int ii = nextInt(i + 1);
 			int temp = items[i];
@@ -1616,7 +1649,7 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 * @param offset the index of the first element of the array that can be shuffled
 	 * @param length the length of the section to shuffle
 	 */
-	public void shuffle (int[] items, int offset, int length) {
+	public void shuffle(int[] items, int offset, int length) {
 		offset = Math.min(Math.max(0, offset), items.length);
 		length = Math.min(items.length - offset, Math.max(0, length));
 		for (int i = offset + length - 1; i > offset; i--) {
@@ -1632,7 +1665,7 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 *
 	 * @param items a long array; must be non-null
 	 */
-	public void shuffle (long[] items) {
+	public void shuffle(long[] items) {
 		for (int i = items.length - 1; i > 0; i--) {
 			int ii = nextInt(i + 1);
 			long temp = items[i];
@@ -1648,7 +1681,7 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 * @param offset the index of the first element of the array that can be shuffled
 	 * @param length the length of the section to shuffle
 	 */
-	public void shuffle (long[] items, int offset, int length) {
+	public void shuffle(long[] items, int offset, int length) {
 		offset = Math.min(Math.max(0, offset), items.length);
 		length = Math.min(items.length - offset, Math.max(0, length));
 		for (int i = offset + length - 1; i > offset; i--) {
@@ -1664,7 +1697,7 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 *
 	 * @param items a float array; must be non-null
 	 */
-	public void shuffle (float[] items) {
+	public void shuffle(float[] items) {
 		for (int i = items.length - 1; i > 0; i--) {
 			int ii = nextInt(i + 1);
 			float temp = items[i];
@@ -1680,7 +1713,7 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 * @param offset the index of the first element of the array that can be shuffled
 	 * @param length the length of the section to shuffle
 	 */
-	public void shuffle (float[] items, int offset, int length) {
+	public void shuffle(float[] items, int offset, int length) {
 		offset = Math.min(Math.max(0, offset), items.length);
 		length = Math.min(items.length - offset, Math.max(0, length));
 		for (int i = offset + length - 1; i > offset; i--) {
@@ -1696,7 +1729,7 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 *
 	 * @param items a char array; must be non-null
 	 */
-	public void shuffle (char[] items) {
+	public void shuffle(char[] items) {
 		for (int i = items.length - 1; i > 0; i--) {
 			int ii = nextInt(i + 1);
 			char temp = items[i];
@@ -1712,7 +1745,7 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 * @param offset the index of the first element of the array that can be shuffled
 	 * @param length the length of the section to shuffle
 	 */
-	public void shuffle (char[] items, int offset, int length) {
+	public void shuffle(char[] items, int offset, int length) {
 		offset = Math.min(Math.max(0, offset), items.length);
 		length = Math.min(items.length - offset, Math.max(0, length));
 		for (int i = offset + length - 1; i > offset; i--) {
@@ -1728,7 +1761,7 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 *
 	 * @param items a byte array; must be non-null
 	 */
-	public void shuffle (byte[] items) {
+	public void shuffle(byte[] items) {
 		for (int i = items.length - 1; i > 0; i--) {
 			int ii = nextInt(i + 1);
 			byte temp = items[i];
@@ -1744,7 +1777,7 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 * @param offset the index of the first element of the array that can be shuffled
 	 * @param length the length of the section to shuffle
 	 */
-	public void shuffle (byte[] items, int offset, int length) {
+	public void shuffle(byte[] items, int offset, int length) {
 		offset = Math.min(Math.max(0, offset), items.length);
 		length = Math.min(items.length - offset, Math.max(0, length));
 		for (int i = offset + length - 1; i > offset; i--) {
@@ -1760,7 +1793,7 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 *
 	 * @param items a double array; must be non-null
 	 */
-	public void shuffle (double[] items) {
+	public void shuffle(double[] items) {
 		for (int i = items.length - 1; i > 0; i--) {
 			int ii = nextInt(i + 1);
 			double temp = items[i];
@@ -1776,7 +1809,7 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 * @param offset the index of the first element of the array that can be shuffled
 	 * @param length the length of the section to shuffle
 	 */
-	public void shuffle (double[] items, int offset, int length) {
+	public void shuffle(double[] items, int offset, int length) {
 		offset = Math.min(Math.max(0, offset), items.length);
 		length = Math.min(items.length - offset, Math.max(0, length));
 		for (int i = offset + length - 1; i > offset; i--) {
@@ -1792,7 +1825,7 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 *
 	 * @param items a short array; must be non-null
 	 */
-	public void shuffle (short[] items) {
+	public void shuffle(short[] items) {
 		for (int i = items.length - 1; i > 0; i--) {
 			int ii = nextInt(i + 1);
 			short temp = items[i];
@@ -1808,7 +1841,7 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 * @param offset the index of the first element of the array that can be shuffled
 	 * @param length the length of the section to shuffle
 	 */
-	public void shuffle (short[] items, int offset, int length) {
+	public void shuffle(short[] items, int offset, int length) {
 		offset = Math.min(Math.max(0, offset), items.length);
 		length = Math.min(items.length - offset, Math.max(0, length));
 		for (int i = offset + length - 1; i > offset; i--) {
@@ -1824,7 +1857,7 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 *
 	 * @param items a boolean array; must be non-null
 	 */
-	public void shuffle (boolean[] items) {
+	public void shuffle(boolean[] items) {
 		for (int i = items.length - 1; i > 0; i--) {
 			int ii = nextInt(i + 1);
 			boolean temp = items[i];
@@ -1840,7 +1873,7 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 * @param offset the index of the first element of the array that can be shuffled
 	 * @param length the length of the section to shuffle
 	 */
-	public void shuffle (boolean[] items, int offset, int length) {
+	public void shuffle(boolean[] items, int offset, int length) {
 		offset = Math.min(Math.max(0, offset), items.length);
 		length = Math.min(items.length - offset, Math.max(0, length));
 		for (int i = offset + length - 1; i > offset; i--) {
@@ -1856,7 +1889,7 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 *
 	 * @param items an array of some reference type; must be non-null but may contain null items
 	 */
-	public <T> void shuffle (T[] items) {
+	public <T> void shuffle(T[] items) {
 		for (int i = items.length - 1; i > 0; i--) {
 			int ii = nextInt(i + 1);
 			T temp = items[i];
@@ -1872,7 +1905,7 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 * @param offset the index of the first element of the array that can be shuffled
 	 * @param length the length of the section to shuffle
 	 */
-	public <T> void shuffle (T[] items, int offset, int length) {
+	public <T> void shuffle(T[] items, int offset, int length) {
 		offset = Math.min(Math.max(0, offset), items.length);
 		length = Math.min(items.length - offset, Math.max(0, length));
 		for (int i = offset + length - 1; i > offset; i--) {
@@ -1888,7 +1921,7 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 *
 	 * @param items a List of some type {@code T}; must be non-null but may contain null items
 	 */
-	public <T> void shuffle (List<T> items) {
+	public <T> void shuffle(List<T> items) {
 		for (int i = items.size() - 1; i > 0; i--) {
 			int ii = nextInt(i + 1);
 			T temp = items.get(i);
@@ -1904,7 +1937,7 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 * @param offset the index of the first element of the array that can be shuffled
 	 * @param length the length of the section to shuffle
 	 */
-	public <T> void shuffle (List<T> items, int offset, int length) {
+	public <T> void shuffle(List<T> items, int offset, int length) {
 		offset = Math.min(Math.max(0, offset), items.size());
 		length = Math.min(items.size() - offset, Math.max(0, length));
 		for (int i = offset + length - 1; i > offset; i--) {
@@ -1919,6 +1952,7 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 * Serializes the current state of this EnhancedRandom to a String that can be used by
 	 * {@link #stringDeserialize(String)} to load this state at another time. This always uses
 	 * {@link Base#BASE16} for its conversions.
+	 *
 	 * @return a String storing all data from the EnhancedRandom part of this generator
 	 */
 	public String stringSerialize() {
@@ -1928,16 +1962,15 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	/**
 	 * Serializes the current state of this EnhancedRandom to a String that can be used by
 	 * {@link #stringDeserialize(String)} to load this state at another time.
+	 *
 	 * @param base which Base to use, from the "digital" library, such as {@link Base#BASE10}
 	 * @return a String storing all data from the EnhancedRandom part of this generator
 	 */
 	public String stringSerialize(Base base) {
 		StringBuilder ser = new StringBuilder(getTag());
 		ser.append(base.paddingChar);
-		if (getStateCount() > 0)
-		{
-			for (int i = 0; i < getStateCount() - 1; i++)
-			{
+		if (getStateCount() > 0) {
+			for (int i = 0; i < getStateCount() - 1; i++) {
 				base.appendSigned(ser, getSelectedState(i)).append(base.positiveSign);
 			}
 			base.appendSigned(ser, getSelectedState(getStateCount() - 1));
@@ -1953,6 +1986,7 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 * object to match the state in the serialized data. This only works if this EnhancedRandom is the same
 	 * implementation that was serialized. Always uses {@link Base#BASE16}. Returns this EnhancedRandom, after possibly
 	 * changing its state.
+	 *
 	 * @param data a String probably produced by {@link #stringSerialize()}
 	 * @return this, after setting its state
 	 */
@@ -1965,6 +1999,7 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 * the serialization, this will attempt to set this EnhancedRandom object to match the state in the serialized
 	 * data. This only works if this EnhancedRandom is the same implementation that was serialized, and also needs
 	 * the Bases to be identical. Returns this EnhancedRandom, after possibly changing its state.
+	 *
 	 * @param data a String probably produced by {@link #stringSerialize(Base)}
 	 * @param base which Base to use, from the "digital" library, such as {@link Base#BASE10}
 	 * @return this, after setting its state
@@ -1990,12 +2025,12 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 * @param out the stream to write the object to
 	 * @throws IOException Includes any I/O exceptions that may occur
 	 * @serialData <ul>
-     * <li>int stateCount; the number of states this EnhancedRandom has</li>
-     * <li>Repeat {@code stateCount} times:
-     *     <ul>
-     *         <li>long state_n; the nth state used here.</li>
-     *     </ul>
-     * </li>
+	 * <li>int stateCount; the number of states this EnhancedRandom has</li>
+	 * <li>Repeat {@code stateCount} times:
+	 *     <ul>
+	 *         <li>long state_n; the nth state used here.</li>
+	 *     </ul>
+	 * </li>
 	 * </ul>
 	 */
 	@GwtIncompatible
@@ -2015,7 +2050,7 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 * and with the same types as were written by writeExternal.
 	 *
 	 * @param in the stream to read data from in order to restore the object
-	 * @throws IOException            if I/O errors occur
+	 * @throws IOException if I/O errors occur
 	 */
 	@GwtIncompatible
 	public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
