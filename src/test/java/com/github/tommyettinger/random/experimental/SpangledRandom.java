@@ -21,6 +21,7 @@ import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.digital.MathTools;
 import com.github.tommyettinger.random.EnhancedRandom;
 
+import java.io.IOException;
 import java.util.Arrays;
 
 /**
@@ -370,26 +371,28 @@ public class SpangledRandom extends EnhancedRandom {
 		return new SpangledRandom(stateA, stateB, keys);
 	}
 
-	@Override
-	public String stringSerialize(Base base) {
-		StringBuilder ser = new StringBuilder(getTag());
-
-		ser.append('`');
-		base.appendSigned(ser, stateA).append('~');
-		base.appendSigned(ser, stateB).append('~');
-		base.appendJoined(ser, "~", keys);
-		ser.append('`');
-
-		return ser.toString();
+	public <T extends CharSequence & Appendable> T appendSerialized(T sb, Base base) {
+		try {
+			sb.append(getTag());
+			sb.append(base.paddingChar);
+			base.appendSigned(sb, stateA).append(base.positiveSign);
+			base.appendSigned(sb, stateB).append(base.positiveSign);
+			base.appendJoined(sb, String.valueOf(base.positiveSign), keys);
+			sb.append(base.paddingChar);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+		return sb;
 	}
+
 
 	@Override
 	public SpangledRandom stringDeserialize(String data, Base base) {
-		int idx = data.indexOf('`');
+		int idx = data.indexOf(base.paddingChar);
 
-		stateA = base.readLong(data, idx + 1, (idx = data.indexOf('~', idx + 1)));
-		stateB = base.readLong(data, idx + 1, (idx = data.indexOf('~', idx + 1)));
-		keys = base.longSplit(data, "~", idx + 1, data.indexOf('`', idx + 1));
+		stateA = base.readLong(data, idx + 1, (idx = data.indexOf(base.positiveSign, idx + 1)));
+		stateB = base.readLong(data, idx + 1, (idx = data.indexOf(base.positiveSign, idx + 1)));
+		keys = base.longSplit(data, String.valueOf(base.positiveSign), idx + 1, data.indexOf(base.paddingChar, idx + 1));
 
 		return this;
 	}
