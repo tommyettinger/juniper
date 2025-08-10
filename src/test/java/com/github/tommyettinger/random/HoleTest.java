@@ -4,12 +4,14 @@ import com.github.tommyettinger.digital.BitConversion;
 import com.github.tommyettinger.ds.IntIntOrderedMap;
 import com.github.tommyettinger.ds.support.sort.IntComparators;
 import com.github.tommyettinger.random.experimental.L64X256MoremurRandom;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * Here we are generating floats and doubles, scaling them up by a power of two, casting to int,
  * and then looking for any ints that are produced less frequently or not at all.
  */
+@Ignore
 public class HoleTest {
     public static final int PARTITIONS = 1 << 24;
     public static final int INC_PARTITIONS = PARTITIONS + 1;

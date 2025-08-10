@@ -1966,23 +1966,56 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	/**
 	 * Serializes the current state of this EnhancedRandom to a String that can be used by
 	 * {@link #stringDeserialize(String)} to load this state at another time.
+	 * May use any {@link Base}; {@link Base#BASE10} and {@link Base#BASE16} are the most intuitive, but
+	 * {@link Base#SIMPLE64} and especially {@link Base#BASE90} will be more compact.
 	 *
 	 * @param base which Base to use, from the "digital" library, such as {@link Base#BASE10}
 	 * @return a String storing all data from the EnhancedRandom part of this generator
 	 */
 	public String stringSerialize(Base base) {
-		StringBuilder ser = new StringBuilder(getTag());
-		ser.append(base.paddingChar);
-		if (getStateCount() > 0) {
-			for (int i = 0; i < getStateCount() - 1; i++) {
-				base.appendSigned(ser, getSelectedState(i)).append(base.positiveSign);
+		return appendSerialized(new StringBuilder(), base).toString();
+	}
+
+	/**
+	 * Serializes the current state of this EnhancedRandom and appends it to an Appendable CharSequence (such as a
+	 * StringBuilder), which may be used by {@link #stringDeserialize(String)} to load this state at another time.
+	 * Always uses {@link Base#BASE16 base 16}.
+	 *
+	 * @param sb an Appendable CharSequence that will be modified
+	 * @return {@code sb}, for chaining
+	 * @param <T> any type that is both a CharSequence and an Appendable, such as StringBuilder, StringBuffer, or CharBuffer
+	 */
+	public <T extends CharSequence & Appendable> T appendSerialized(T sb) {
+		return appendSerialized(sb, Base.BASE16);
+	}
+
+	/**
+	 * Serializes the current state of this EnhancedRandom and appends it to an Appendable CharSequence (such as a
+	 * StringBuilder), which may be used by {@link #stringDeserialize(String)} to load this state at another time.
+	 * May use any {@link Base}; {@link Base#BASE10} and {@link Base#BASE16} are the most intuitive, but
+	 * {@link Base#SIMPLE64} and especially {@link Base#BASE90} will be more compact.
+	 *
+	 * @param sb an Appendable CharSequence that will be modified
+	 * @param base which Base to use, from the "digital" library, such as {@link Base#BASE10}
+	 * @return {@code sb}, for chaining
+	 * @param <T> any type that is both a CharSequence and an Appendable, such as StringBuilder, StringBuffer, or CharBuffer
+	 */
+	public <T extends CharSequence & Appendable> T appendSerialized(T sb, Base base) {
+		try {
+			sb.append(getTag());
+			sb.append(base.paddingChar);
+			if (getStateCount() > 0) {
+				for (int i = 0; i < getStateCount() - 1; i++) {
+					base.appendSigned(sb, getSelectedState(i)).append(base.positiveSign);
+				}
+				base.appendSigned(sb, getSelectedState(getStateCount() - 1));
 			}
-			base.appendSigned(ser, getSelectedState(getStateCount() - 1));
+
+			sb.append(base.paddingChar);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
 		}
-
-		ser.append(base.paddingChar);
-
-		return ser.toString();
+		return sb;
 	}
 
 	/**
@@ -1993,6 +2026,8 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 *
 	 * @param data a String probably produced by {@link #stringSerialize()}
 	 * @return this, after setting its state
+	 *
+	 * @see Deserializer You can deserialize a serialized EnhancedRandom String to its correct type using Deserializer.
 	 */
 	public EnhancedRandom stringDeserialize(String data) {
 		return stringDeserialize(data, Base.BASE16);
@@ -2007,6 +2042,8 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 * @param data a String probably produced by {@link #stringSerialize(Base)}
 	 * @param base which Base to use, from the "digital" library, such as {@link Base#BASE10}
 	 * @return this, after setting its state
+	 *
+	 * @see Deserializer You can deserialize a serialized EnhancedRandom String to its correct type using Deserializer.
 	 */
 	public EnhancedRandom stringDeserialize(String data, Base base) {
 		if (getStateCount() > 0) {
