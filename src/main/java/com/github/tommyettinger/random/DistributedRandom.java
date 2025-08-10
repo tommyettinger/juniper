@@ -338,7 +338,24 @@ public class DistributedRandom extends EnhancedRandom {
         return getTag() + base.paddingChar + base.signed(reduction.ordinal()) + base.positiveSign + distribution.stringSerialize(base);
     }
 
-    /**
+
+	@Override
+	public <T extends CharSequence & Appendable> T appendSerialized(T sb, Base base) {
+		try {
+			sb.append(getTag());
+			sb.append(base.paddingChar);
+			base.appendSigned(sb, reduction.ordinal());
+			sb.append(base.positiveSign);
+			// TODO: Change this to use distribution's appending method once we have one
+			sb.append(distribution.stringSerialize(base));
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+		return sb;
+	}
+
+
+	/**
      * @param data a String probably produced by {@link #stringSerialize(Base)}
      * @param base which Base to use, from the "digital" library, such as {@link Base#BASE10}
      * @return this, for chaining
