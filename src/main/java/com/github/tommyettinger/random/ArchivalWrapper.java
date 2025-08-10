@@ -291,15 +291,16 @@ public class ArchivalWrapper extends EnhancedRandom {
         wrapped.setState(states);
     }
 
-    public StringBuilder appendSerialized(StringBuilder sb, Base base) {
-        sb.append(getTag()).append(base.paddingChar);
-        sb.append(wrapped.stringSerialize(base));
-        archive.appendSerialized(sb, base);
-        return sb.append(base.paddingChar);
-    }
-
-    public StringBuilder appendSerialized(StringBuilder sb) {
-        return appendSerialized(sb, Base.BASE10);
+	public <T extends CharSequence & Appendable> T appendSerialized(T sb, Base base) {
+		try {
+			sb.append(getTag()).append(base.paddingChar);
+			sb.append(wrapped.stringSerialize(base));
+			archive.appendSerialized(sb, base);
+			sb.append(base.paddingChar);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+		return sb;
     }
 
     /**

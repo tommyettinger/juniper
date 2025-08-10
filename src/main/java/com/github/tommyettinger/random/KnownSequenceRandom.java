@@ -189,14 +189,20 @@ public class KnownSequenceRandom extends EnhancedRandom {
         this.known = known;
     }
 
-    public StringBuilder appendSerialized(StringBuilder sb, Base base) {
-        sb.append(getTag()).append(base.paddingChar);
-        base.appendSigned(sb, index);
-        sb.append(base.positiveSign);
-        known.appendSerialized(sb, base);
-        return sb.append(base.paddingChar);
-    }
-    public StringBuilder appendSerialized(StringBuilder sb) {
+	public <T extends CharSequence & Appendable> T appendSerialized(T sb, Base base) {
+		try {
+			sb.append(getTag()).append(base.paddingChar);
+			base.appendSigned(sb, index);
+			sb.append(base.positiveSign);
+			known.appendSerialized(sb, base);
+			sb.append(base.paddingChar);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+		return sb;
+	}
+
+	public <T extends CharSequence & Appendable> T appendSerialized(T sb) {
         return appendSerialized(sb, Base.BASE10);
     }
 

@@ -105,12 +105,23 @@ public class LongSequence {
         return Hasher.hash(~size, items, 0, size);
     }
 
-    public StringBuilder appendSerialized(StringBuilder sb, Base base) {
+	/**
+	 * Serializes the current state of this EnhancedRandom and appends it to an Appendable CharSequence (such as a
+	 * StringBuilder), which may be used by {@link #stringDeserialize(String)} to load this state at another time.
+	 * May use any {@link Base}; {@link Base#BASE10} and {@link Base#BASE16} are the most intuitive, but
+	 * {@link Base#SIMPLE64} and especially {@link Base#BASE90} will be more compact.
+	 *
+	 * @param sb an Appendable CharSequence that will be modified
+	 * @param base which Base to use, from the "digital" library, such as {@link Base#BASE10}
+	 * @return {@code sb}, for chaining
+	 * @param <T> any type that is both a CharSequence and an Appendable, such as StringBuilder, StringBuffer, or CharBuffer
+	 */
+	public <T extends CharSequence & Appendable> T appendSerialized(T sb, Base base) {
         if(items == null) return sb;
-        return base.appendJoined(sb, "~", items, 0, size);
+        return base.appendJoined(sb, String.valueOf(base.positiveSign), items, 0, size);
     }
 
-    public StringBuilder appendSerialized(StringBuilder sb) {
+	public <T extends CharSequence & Appendable> T appendSerialized(T sb) {
         return appendSerialized(sb, Base.BASE10);
     }
 
@@ -125,7 +136,7 @@ public class LongSequence {
     public LongSequence stringDeserialize(String data, Base base) {
         clear();
         if(data == null || data.isEmpty()) return this;
-        int amount = Base.count(data, "~", 0, data.length());
+        int amount = Base.count(data, String.valueOf(base.positiveSign), 0, data.length());
         if (amount <= 0){
             add(base.readLong(data, 0, data.length()));
             return this;
@@ -133,9 +144,9 @@ public class LongSequence {
         resize(size = amount + 1);
         int dl = 1, idx = -1, idx2;
         for (int i = 0; i < amount; i++) {
-            items[i] = base.readLong(data, idx + dl, idx = data.indexOf('~', idx + dl));
+            items[i] = base.readLong(data, idx + dl, idx = data.indexOf(base.positiveSign, idx + dl));
         }
-        if ((idx2 = data.indexOf('~', idx + dl)) < 0 || idx2 >= data.length()) {
+        if ((idx2 = data.indexOf(base.positiveSign, idx + dl)) < 0 || idx2 >= data.length()) {
             items[amount] = base.readLong(data, idx + dl, data.length());
         } else {
             items[amount] = base.readLong(data, idx + dl, idx2);
