@@ -149,7 +149,7 @@ public abstract class Distribution {
     /**
      * Serializes the current state of this Distribution to a String that can be used by
      * {@link #stringDeserialize(String)} to load this state at another time. This always uses
-     * {@link Base#BASE16} for its conversions.
+     * {@link Base#BASE16 base 16} for its conversions.
      * @return a String storing all data from the Distribution part of this generator
      */
     public String stringSerialize() {
@@ -163,15 +163,44 @@ public abstract class Distribution {
      * @return a String storing the current generator and parameters of this Distribution
      */
     public String stringSerialize(Base base) {
-        StringBuilder ser = new StringBuilder(getTag()).append(base.positiveSign);
-        ser.append(generator.stringSerialize(base));
-        base.appendSigned(ser, getParameterA());
-        ser.append(base.paddingChar);
-        base.appendSigned(ser, getParameterB());
-        ser.append(base.paddingChar);
-        base.appendSigned(ser, getParameterC());
-        ser.append(base.paddingChar);
-        return ser.toString();
+        return appendSerialized(new StringBuilder(20), base).toString();
+    }
+
+    /**
+     * Serializes the current generator and parameters of this Distribution and appends that textual form to a given
+	 * Appendable CharSequence, such as a StringBuilder, that can be used by {@link #stringDeserialize(String)} to load
+	 * this Distribution at another time. This always uses {@link Base#BASE16 base 16}.
+	 * @param sb an Appendable CharSequence that will be modified
+	 * @return {@code sb}, for chaining
+	 * @param <T> any type that is both a CharSequence and an Appendable, such as StringBuilder, StringBuffer, or CharBuffer
+     */
+    public <T extends CharSequence & Appendable> T appendSerialized(T sb) {
+		return appendSerialized(sb, Base.BASE16);
+	}
+    /**
+     * Serializes the current generator and parameters of this Distribution and appends that textual form to a given
+	 * Appendable CharSequence, such as a StringBuilder, that can be used by
+     * {@link #stringDeserialize(String)} to load this Distribution at another time.
+	 * @param sb an Appendable CharSequence that will be modified
+     * @param base which Base to use, from the "digital" library, such as {@link Base#BASE10}
+	 * @return {@code sb}, for chaining
+	 * @param <T> any type that is both a CharSequence and an Appendable, such as StringBuilder, StringBuffer, or CharBuffer
+     */
+    public <T extends CharSequence & Appendable> T appendSerialized(T sb, Base base) {
+        try {
+			sb.append(getTag());
+			sb.append(base.positiveSign);
+			sb.append(generator.stringSerialize(base));
+			base.appendSigned(sb, getParameterA());
+			sb.append(base.paddingChar);
+			base.appendSigned(sb, getParameterB());
+			sb.append(base.paddingChar);
+			base.appendSigned(sb, getParameterC());
+			sb.append(base.paddingChar);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+        return sb;
     }
 
     /**
