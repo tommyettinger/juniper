@@ -346,8 +346,7 @@ public class DistributedRandom extends EnhancedRandom {
 			sb.append(base.paddingChar);
 			base.appendSigned(sb, reduction.ordinal());
 			sb.append(base.positiveSign);
-			// TODO: Change this to use distribution's appending method once we have one
-			sb.append(distribution.stringSerialize(base));
+			distribution.appendSerialized(sb, base);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
