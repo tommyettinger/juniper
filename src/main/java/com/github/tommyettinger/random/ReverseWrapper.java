@@ -649,10 +649,23 @@ public class ReverseWrapper extends EnhancedRandom {
      */
     @Override
     public String stringSerialize(Base base) {
-        return getTag() + "`" + wrapped.stringSerialize(base) + "`";
+        return getTag() + base.paddingChar + wrapped.stringSerialize(base) + base.paddingChar;
     }
 
-    /**
+	@Override
+	public <T extends CharSequence & Appendable> T appendSerialized(T sb, Base base) {
+		try {
+			sb.append(getTag());
+			sb.append(base.paddingChar);
+			wrapped.appendSerialized(sb, base);
+			sb.append(base.paddingChar);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+		return sb;
+	}
+
+	/**
      * Given a String in the format produced by {@link #stringSerialize(Base)}, and the same {@link Base} used by
      * the serialization, this will attempt to set this EnhancedRandom object to match the state in the serialized
      * data. This only works if this EnhancedRandom is the same implementation that was serialized, and also needs
@@ -664,7 +677,7 @@ public class ReverseWrapper extends EnhancedRandom {
      */
     @Override
     public ReverseWrapper stringDeserialize(String data, Base base) {
-        setWrapped(Deserializer.deserialize(data.substring(data.indexOf('`')+1), base));
+        setWrapped(Deserializer.deserialize(data.substring(data.indexOf(base.paddingChar)+1), base));
         return this;
     }
 

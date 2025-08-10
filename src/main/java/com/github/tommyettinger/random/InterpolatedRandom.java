@@ -257,6 +257,20 @@ public class InterpolatedRandom extends EnhancedRandom {
         return getTag() + base.paddingChar + interpolator.getTag() + base.positiveSign + random.stringSerialize(base);
     }
 
+	@Override
+	public <T extends CharSequence & Appendable> T appendSerialized(T sb, Base base) {
+		try {
+			sb.append(getTag());
+			sb.append(base.paddingChar);
+			sb.append(interpolator.getTag());
+			sb.append(base.positiveSign);
+			random.appendSerialized(sb, base);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+		return sb;
+	}
+
     /**
      * @param data a String probably produced by {@link #stringSerialize(Base)}
      * @param base which Base to use, from the "digital" library, such as {@link Base#BASE10}
