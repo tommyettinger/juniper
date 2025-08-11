@@ -15,9 +15,15 @@
  *
  */
 
-package com.github.tommyettinger.random;
+package com.github.tommyettinger.random.experimental;
+
+import com.github.tommyettinger.random.AceRandom;
+import com.github.tommyettinger.random.EnhancedRandom;
+import com.github.tommyettinger.random.TraceRandom;
 
 /**
+ * DEPRECATED: Use {@link TraceRandom} instead.
+ * <br>
  * Like AceRandom with five 64-bit states but also one unchanging 24-bit stream; does not use multiplication, only add,
  * XOR, and bitwise-rotate operations (this is an ARX generator). Has a state that runs like a counter, guaranteeing a
  * minimum period of 2 to the 64, and each stream should be independent of any other stream after a small number of
@@ -39,7 +45,9 @@ package com.github.tommyettinger.random;
  * does also use quite a lot more state than SplitMix64, and those extra 320 bits of state change in their own complex
  * ways, both related and unrelated to the stream, which may be sufficient to not need a gamma of the same quality that
  * SplitMix64 appears to need to pass tests.
+ * @deprecated Use {@link TraceRandom} instead, which is nearly the same as this algorithm but avoids "bad" streams.
  */
+@Deprecated
 public class MaceRandom extends EnhancedRandom {
 	/**
 	 * A long mask with 24 bits set, all symmetrical around the middle bits, leaving 10 bits all zero at the most

@@ -31,7 +31,7 @@ package com.github.tommyettinger.random;
  * At least according to QuickBench for C++, this is
  * <a href="https://quick-bench.com/q/PAv1jXfDEXfBZpcgRbLRhKXCXEQ">insanely fast</a>. It is not as fast on the JVM, and
  * generators that take advantage of instruction-level parallelism (ILP) more fully outperform this (such as
- * {@link AceRandom} and {@link MaceRandom}).
+ * {@link AceRandom} and {@link TraceRandom}).
  * <br>
  * Pick up the pace!
  */

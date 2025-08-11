@@ -15,10 +15,7 @@
  *
  */
 
-package com.github.tommyettinger.random.experimental;
-
-import com.github.tommyettinger.random.AceRandom;
-import com.github.tommyettinger.random.EnhancedRandom;
+package com.github.tommyettinger.random;
 
 /**
  * Like AceRandom with five 64-bit states but also one unchanging 28-bit stream; does not use multiplication, only add,
@@ -41,6 +38,16 @@ import com.github.tommyettinger.random.EnhancedRandom;
  * only this uses four criteria to evaluate each gamma and rejects most attempts at a gamma until it finds one of
  * relatively-few near-perfect gamma values possible. This does also use quite a lot more state than SplitMix64, and
  * those extra 320 bits of state change in their own complex ways, both related and unrelated to the stream.
+ * <br>
+ * This replaces the older, now-removed MaceRandom class. MaceRandom is still present in juniper's test files, so if you
+ * need it for compatibility, it can be taken from there. TraceRandom is better in every way and its random number
+ * generation algorithm is identical -- only its choices of stream are different. A key difference in their APIs is that
+ * TraceRandom has you use {@link #getStream()} and {@link #setStream(long)}, instead of working with streamIdentifier
+ * in MaceRandom. Note that setStream() here can change its input if it isn't considered a "good" gamma, but any stream
+ * this uses (and so returns with getStream()) will be a "good" gamma, and so won't need changing. Also note that there
+ * are two 6-argument constructors; one takes an int for the stream and is meant to accept any int less than 2 to the
+ * 28, while the other takes a long for the stream and simply feeds it to {@link #setStream(long)} to "fix" it if it
+ * needs that (using {@link EnhancedRandom#fixGamma(long, int)} with threshold 1).
  */
 public class TraceRandom extends EnhancedRandom {
 

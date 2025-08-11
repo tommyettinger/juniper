@@ -20,7 +20,7 @@ package com.github.tommyettinger.random;
 /**
  * A tiny generator using four 64-bit states using only ARX operations (add, bitwise rotate, and XOR).
  * <a href="https://quick-bench.com/q/dYHUBBQYy7yRtt3CL9Q_EQ6p-o8">It is very fast!</a> (At least, in C++. It isn't as
- * fast as generators like {@link AceRandom} and {@link MaceRandom} on the JVM.)
+ * fast as generators like {@link AceRandom} and {@link TraceRandom} on the JVM.)
  * Passes Initial Correlation Evaluator (ICE) testing with 75 steps; passes 64TB of PractRand with no anomalies.
  * The ICE test indicates whether similar initial states decorrelate over time, and they do here, but not immediately.
  * The PractRand test suite tests for a wide array of quality issues, but only uses one initial state per run, and runs
