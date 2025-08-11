@@ -1,3 +1,8 @@
+[0.7.0]
+- Update digital dependency to 0.8.0, which requires the serialized String format to change (see README.md).
+- Added ThrashRandom, which is rather fast (not #1), passes 32TB of PractRand without anomalies, and fails ICE tests.
+- Added ThrooshRandom, which is almost as fast as ThrashRandom, passes 64TB of PractRand without anomalies, and passes ICE tests.
+
 [0.6.9]
 - Out of an abundance of caution, this downgrades libGDX (which should only be used in tests) to 1.13.1 .
 

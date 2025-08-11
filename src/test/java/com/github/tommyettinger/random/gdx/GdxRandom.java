@@ -18,7 +18,9 @@
 package com.github.tommyettinger.random.gdx;
 
 import com.badlogic.gdx.utils.*;
+import com.github.tommyettinger.digital.Base;
 
+import java.io.IOException;
 import java.lang.StringBuilder;
 import java.util.List;
 import java.util.Random;
@@ -1435,7 +1437,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	public byte randomElement (ByteArray arr) {
 		return arr.get(nextInt(arr.size));
 	}
-	
+
 	/**
 	 * Gets a randomly selected item from the given FloatArray.
 	 * If {@code arr} is empty, this throws an IndexOutOfBoundsException.
@@ -1821,19 +1823,50 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 */
 	public String stringSerialize() {
 		StringBuilder ser = new StringBuilder(getTag());
-		ser.append('`');
+		ser.append('$');
 		if (getStateCount() > 0)
 		{
 			for (int i = 0; i < getStateCount() - 1; i++)
 			{
-				ser.append(getSelectedState(i)).append('~');
+				ser.append(getSelectedState(i)).append('+');
 			}
 			ser.append(getSelectedState(getStateCount() - 1));
 		}
 
-		ser.append('`');
+		ser.append('$');
 
 		return ser.toString();
+	}
+
+	/**
+	 * Serializes the current state of this GdxRandom to a textual form that can be used by
+	 * {@link #stringDeserialize(String)} to load this state at another time, and appends that textual form
+	 * to an Appendable CharSequence, such as a StringBuilder, StringBuffer, or CharBuffer.
+	 * This method does not typically need to be extended by subclasses.
+	 * <br>
+	 * If you use Kryo or some other non-JSON format to serialize your generators,
+	 * you could get a serialized String using this method and then pass that to
+	 * your alternative serialization method; that avoids needing to implement custom
+	 * serialization logic for whatever GdxRandom you use.
+	 * @param sb an Appendable CharSequence that will be modified
+	 * @return {@code sb}, for chaining
+	 * @param <T> any type that is both a CharSequence and an Appendable, such as StringBuilder, StringBuffer, or CharBuffer
+	 */
+	public <T extends CharSequence & Appendable> T appendSerialized(T sb) {
+		try {
+			sb.append(getTag());
+			sb.append('$');
+			if (getStateCount() > 0) {
+				for (int i = 0; i < getStateCount() - 1; i++) {
+					sb.append(Long.toString(getSelectedState(i))).append('+');
+				}
+				sb.append(Long.toString(getSelectedState(getStateCount() - 1)));
+			}
+			sb.append('$');
+		} catch (IOException e) {
+			throw new GdxRuntimeException(e);
+		}
+		return sb;
 	}
 
 	/**
@@ -1855,12 +1888,12 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 */
 	public GdxRandom stringDeserialize(String data) {
 		if (getStateCount() > 0) {
-			int idx = data.indexOf('`');
+			int idx = data.indexOf('$');
 
 			for (int i = 0; i < getStateCount() - 1; i++)
-				setSelectedState(i, Long.parseLong(data.substring(idx + 1, (idx = data.indexOf('~', idx + 1)))));
+				setSelectedState(i, Long.parseLong(data.substring(idx + 1, (idx = data.indexOf('+', idx + 1)))));
 
-			setSelectedState(getStateCount() - 1, Long.parseLong(data.substring(idx + 1, data.indexOf('`', idx + 1))));
+			setSelectedState(getStateCount() - 1, Long.parseLong(data.substring(idx + 1, data.indexOf('$', idx + 1))));
 		}
 		return this;
 	}
