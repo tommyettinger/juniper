@@ -362,7 +362,7 @@ public class TraceRandom extends EnhancedRandom {
 	 * @param stateE the fifth state; can be any long
 	 */
 	public void setState (long stream, long stateA, long stateB, long stateC, long stateD, long stateE) {
-		EnhancedRandom.fixGamma(stream, 1);
+		setStream(stream);
 		this.stateA = stateA;
 		this.stateB = stateB;
 		this.stateC = stateC;
