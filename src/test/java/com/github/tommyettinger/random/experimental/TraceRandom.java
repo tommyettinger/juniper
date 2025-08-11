@@ -33,7 +33,8 @@ import com.github.tommyettinger.random.EnhancedRandom;
  * At least one stream passes 64TB with no anomalies. All total streams are virtually impossible to test in a mortal
  * lifespan, but each stream does rate as optimal (score 1, with score 0 impossible, when evaluated by
  * {@link EnhancedRandom#rateGamma(long)}). This is usually a tiny amount slower than {@link AceRandom} (about 5%
- * lower throughput), but strangely is slightly faster than AceRandom when run on GraalVM 24.
+ * lower throughput), but strangely is slightly faster than AceRandom when run on GraalVM 24. This passes Initial
+ * Correlation Evaluator tests after 26 generations or more.
  * <br>
  * After about 30 calls to {@link #nextLong()}, any two different streams with otherwise identical states should have no
  * correlations to each other. This avoids the issue with SplitMix64 where "gamma" receives problem values, because it

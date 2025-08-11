@@ -33,7 +33,7 @@ public class InitialCorrelationEvaluatorLong {
     /**
      * How many steps to run before measurement starts.
      */
-    public static int STEPS_BEFORE = 75;
+    public static int STEPS_BEFORE = 26;
     public static int STEP_LIMIT = 32;
     public static long INTERVAL_X = 2;//2;//4;//8;//16;//0xC13FA9A902A6328FL;//
     // We use 2 here because several generators use only odd numbers for stateB.
