@@ -15,118 +15,33 @@
  *
  */
 
-package com.github.tommyettinger.random;
+package com.github.tommyettinger.random.experimental;
+
+import com.github.tommyettinger.random.AceRandom;
+import com.github.tommyettinger.random.EnhancedRandom;
 
 /**
- * Like AceRandom with five 64-bit states but also one unchanging 24-bit stream; does not use multiplication, only add,
+ * Like AceRandom with five 64-bit states but also one unchanging 28-bit stream; does not use multiplication, only add,
  * XOR, and bitwise-rotate operations (this is an ARX generator). Has a state that runs like a counter, guaranteeing a
  * minimum period of 2 to the 64, and each stream should be independent of any other stream after a small number of
  * generations. The expected period is about 2 to the 310 calls to nextLong(), though this is an overly cautious
  * estimate. Even if using the old stand-by advice, that only the square root of the period can be used before a
  * generator starts to have problems, would permit an enormous 2 to the 155 calls before becoming, in some vague way,
  * "bad." That's over 45,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000 calls to {@link #nextLong()}. With
- * 16 million possible streams, on top of that.
+ * over 268 million possible streams, on top of that.
  * <br>
- * At least one stream passes 64TB with no anomalies, and at least 1% of all total streams pass 256MB without failures
- * or lingering anomalies. Only 1% were tested because testing 100% would take at least until the year 2026 to finish,
- * and the tests were run starting May 10, 2025. This is usually a tiny amount slower than {@link AceRandom} (about 5%
+ * At least one stream passes 64TB with no anomalies. All total streams are virtually impossible to test in a mortal
+ * lifespan, but each stream does rate as optimal (score 1, with score 0 impossible, when evaluated by
+ * {@link EnhancedRandom#rateGamma(long)}). This is usually a tiny amount slower than {@link AceRandom} (about 5%
  * lower throughput), but strangely is slightly faster than AceRandom when run on GraalVM 24.
  * <br>
  * After about 30 calls to {@link #nextLong()}, any two different streams with otherwise identical states should have no
- * correlations to each other. This likely does <em>not</em> fully avoid the issue of problematic "gamma values" that
- * SplitMix64 has; roughly 1/9 of all possible streams are considered low-quality by
- * {@link EnhancedRandom#rateGamma(long)}, and would be rejected by {@link EnhancedRandom#fixGamma(long, int)}. This
- * does also use quite a lot more state than SplitMix64, and those extra 320 bits of state change in their own complex
- * ways, both related and unrelated to the stream, which may be sufficient to not need a gamma of the same quality that
- * SplitMix64 appears to need to pass tests.
+ * correlations to each other. This avoids the issue with SplitMix64 where "gamma" receives problem values, because it
+ * only this uses four criteria to evaluate each gamma and rejects most attempts at a gamma until it finds one of
+ * relatively-few near-perfect gamma values possible. This does also use quite a lot more state than SplitMix64, and
+ * those extra 320 bits of state change in their own complex ways, both related and unrelated to the stream.
  */
-public class MaceRandom extends EnhancedRandom {
-	/**
-	 * A long mask with 24 bits set, all symmetrical around the middle bits, leaving 10 bits all zero at the most
-	 * significant and the least significant ends. This is used to determine which bits of {@link #GOLDEN_64} can be
-	 * changed by the stream.
-	 */
-	public static final long MASK = 0x003569CA5369AC00L;
-	/**
-	 * 2 to the 64 divided by the golden ratio. In general this is a good number to use in an additive sequence (like a
-	 * counter with a large increment), and small changes to the middle bits still tend to result in good numbers.
-	 */
-	public static final long GOLDEN_64 = 0x9E3779B97F4A7C15L;
-	/**
-	 * One of the precomputed table values needed to perform the software bit deposit and extract operations for the
-	 * specific {@link #MASK} used here.
-	 */
-	private static final long TABLE_0 = 0x0004600240602000L;
-	/**
-	 * One of the precomputed table values needed to perform the software bit deposit and extract operations for the
-	 * specific {@link #MASK} used here.
-	 */
-    private static final long TABLE_1 = 0x0030380830381C00L;
-	/**
-	 * One of the precomputed table values needed to perform the software bit deposit and extract operations for the
-	 * specific {@link #MASK} used here.
-	 */
-    private static final long TABLE_2 = 0x000F0003000F8000L;
-	/**
-	 * One of the precomputed table values needed to perform the software bit deposit and extract operations for the
-	 * specific {@link #MASK} used here.
-	 */
-    private static final long TABLE_3 = 0x0000FFC00000FF00L;
-	/**
-	 * One of the precomputed table values needed to perform the software bit deposit and extract operations for the
-	 * specific {@link #MASK} used here.
-	 */
-    private static final long TABLE_4 = 0x000000FFFF000000L;
-
-	/**
-	 * Given a long {@code bits} where the first 24 positions can have variable bits, uses {@link #MASK} to
-	 * produce a long where the least-significant 24 bits of {@code bits} have been placed into consecutively
-	 * greater set bits in {@code mask}. It finished by XORing the masked bits with {@link #GOLDEN_64}.
-	 * This method does not allocate. The parameter is usually provided by {@link #getStreamIdentifier()} or by
-	 * calling {@link #extract(long)}.
-	 * <br>
-	 * Based on Hacker's Delight (2nd edition).
-	 * @param bits the up-to-24-bit values to be deposited into positions denoted by mask
-	 * @return a long starting with {@link #GOLDEN_64} where only bits in {@link #MASK} can be changed
-	 */
-	public static long deposit(long bits) {
-		bits &= 0xFFFFFF;
-		bits = (bits & ~TABLE_4) | (bits << 16 & TABLE_4);
-		bits = (bits & ~TABLE_3) | (bits <<  8 & TABLE_3);
-		bits = (bits & ~TABLE_2) | (bits <<  4 & TABLE_2);
-		bits = (bits & ~TABLE_1) | (bits <<  2 & TABLE_1);
-		bits = (bits & ~TABLE_0) | (bits <<  1 & TABLE_0);
-		return (bits & MASK) ^ GOLDEN_64;
-	}
-	/**
-	 * Given a long {@code bits} which should be a result of {@link #getStream()}, uses {@link #MASK} (with 24 bits set
-	 * to 1) to determine which positions in {@code bits} will matter, and produces a long result of up to 24 bits, with
-	 * each successive bit corresponding to a successive position in {@link #MASK} changed from {@link #GOLDEN_64}. This
-	 * produces a "stream identifier" for a given {@link #getStream() stream}, as used by
-	 * {@link #getStreamIdentifier()} and {@link #setStreamIdentifier(int)}.
-	 * <br>
-	 * Based on Hacker's Delight (2nd edition).
-	 * @param bits the bit values that will be masked by {@code mask} and placed into the low-order bits of the result
-	 * @return a long with the highest bit that can be set equal to the {@link Long#bitCount(long)} of {@code mask}
-	 */
-	public static long extract(long bits) {
-		bits = (bits ^ GOLDEN_64) & MASK; // Clear irrelevant bits.
-		long mk = ~MASK, mask = MASK; // We will count 0's to right.
-		for (int i = 0; i < 5; i++) {
-			long mp = mk ^ mk << 1; // Parallel suffix.
-			mp ^= mp <<  2;
-			mp ^= mp <<  4;
-			mp ^= mp <<  8;
-			mp ^= mp << 16;
-			mp ^= mp << 32;
-			long mv = mp & mask; // Bits to move.
-			mask = (mask ^ mv) | (mv >>> (1 << i)); // Compress mask.
-			long t = bits & mv;
-			bits = (bits ^ t) | (t >>> (1 << i)); // Compress bits.
-			mk = mk & ~mp;
-		}
-		return bits;
-	}
+public class TraceRandom extends EnhancedRandom {
 
 	@Override
 	public String getTag() {
@@ -135,7 +50,8 @@ public class MaceRandom extends EnhancedRandom {
 
 	/**
 	 * The unchanging stream; cannot be set directly, but can be obtained directly with {@link #getStream()} or get/set
-	 * indirectly via a 24-bit int with {@link #getStreamIdentifier()} and {@link #setStreamIdentifier(int)}.
+	 * indirectly via {@link #setStream(long)}, which only changes the input if it isn't already a usable gamma (as
+	 * determined by {@link EnhancedRandom#fixGamma(long, int)} with threshold 1).
 	 */
 	protected long stream;
 	/**
@@ -161,9 +77,9 @@ public class MaceRandom extends EnhancedRandom {
 	protected long stateE;
 
 	/**
-	 * Creates a new MaceRandom with a random state.
+	 * Creates a new TraceRandom with a random state.
 	 */
-	public MaceRandom() {
+	public TraceRandom() {
 		setStreamIdentifier((int)EnhancedRandom.seedFromMath());
 		stateA = EnhancedRandom.seedFromMath();
 		stateB = EnhancedRandom.seedFromMath();
@@ -173,29 +89,53 @@ public class MaceRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Creates a new MaceRandom with the given seed; all {@code long} values are permitted.
+	 * Creates a new TraceRandom with the given seed; all {@code long} values are permitted.
 	 * The seed will be passed to {@link #setSeed(long)} to attempt to adequately distribute the seed randomly.
 	 *
 	 * @param seed any {@code long} value
 	 */
-	public MaceRandom(long seed) {
+	public TraceRandom(long seed) {
 		setSeed(seed);
 	}
 
 	/**
-	 * Creates a new MaceRandom with the given stream identifier and five states; all {@code long} values are permitted
-	 * for states, and all ints between 0 and 16777215 (or 0xFFFFFF), inclusive, are permitted for streamIdentifier.
-	 * The states will be used verbatim, and the streamIdentifier can be retrieved with {@link #getStreamIdentifier()}.
+	 * Creates a new TraceRandom with the given stream identifier and five states; all {@code long} values are permitted
+	 * for states, and all ints between 0 and 268435455 (or 0xFFFFFFF), inclusive, are permitted for streamIdentifier.
+	 * The states will be used verbatim, and the stream ({@link #getStream()}) should be used instead of the given
+	 * streamIdentifier.
 	 *
-	 * @param streamIdentifier an up-to-24-bit int (between 0 and 16777215, inclusive); higher bits are ignored
+	 * @param streamIdentifier an up-to-28-bit int (between 0 and 268435455, inclusive); higher bits are ignored
 	 * @param stateA any {@code long} value
 	 * @param stateB any {@code long} value
 	 * @param stateC any {@code long} value
 	 * @param stateD any {@code long} value
 	 * @param stateE any {@code long} value
 	 */
-	public MaceRandom(int streamIdentifier, long stateA, long stateB, long stateC, long stateD, long stateE) {
+	public TraceRandom(int streamIdentifier, long stateA, long stateB, long stateC, long stateD, long stateE) {
 		setStreamIdentifier(streamIdentifier);
+		this.stateA = stateA;
+		this.stateB = stateB;
+		this.stateC = stateC;
+		this.stateD = stateD;
+		this.stateE = stateE;
+	}
+
+	/**
+	 * Creates a new TraceRandom with the given stream identifier and five states; all {@code long} values are permitted
+	 * for states, and while all longs are permitted for stream, if it is an even number or in any way not considered a
+	 * suitable gamma value by {@link EnhancedRandom#fixGamma(long, int)} (with threshold 1), the stream will be changed
+	 * before it can be used. You can get the actual stream this uses with {@link #getStream()}. If only odd numbers
+	 * less than 536870912 are given for the stream, all possible streams will be unique.
+	 *
+	 * @param stream any odd {@code long}, but will be passed to {@link EnhancedRandom#fixGamma(long, int)} with threshold 1, so it may change
+	 * @param stateA any {@code long} value
+	 * @param stateB any {@code long} value
+	 * @param stateC any {@code long} value
+	 * @param stateD any {@code long} value
+	 * @param stateE any {@code long} value
+	 */
+	public TraceRandom(long stream, long stateA, long stateB, long stateC, long stateD, long stateE) {
+		setStream(stream);
 		this.stateA = stateA;
 		this.stateB = stateB;
 		this.stateC = stateC;
@@ -215,9 +155,9 @@ public class MaceRandom extends EnhancedRandom {
 
 	/**
 	 * Gets the state determined by {@code selection}, as-is. The value for selection should be
-	 * between 0 and 4, inclusive; if it is any other value this gets state E as if 4 was given.
+	 * between 0 and 5, inclusive; if it is any other value this gets the stream as if 0 was given.
 	 *
-	 * @param selection used to select which state variable to get; generally 0, 1, 2, 3, or 4
+	 * @param selection used to select which state variable to get; generally 0, 1, 2, 3, 4, or 5
 	 * @return the value of the selected state
 	 */
 	@Override
@@ -234,16 +174,18 @@ public class MaceRandom extends EnhancedRandom {
 			case 5:
 				return stateE;
 			default:
-				return getStreamIdentifier();
+				return stream;
 		}
 	}
 
 	/**
 	 * Sets one of the states, determined by {@code selection}, to {@code value}, as-is.
-	 * Selections 0, 1, 2, 3, and 4 refer to states A, B, C, D, and E, and if the selection is anything
-	 * else, this treats it as 4 and sets stateE.
+	 * Selections 1, 2, 3, 4, and 5 refer to states A, B, C, D, and E, while selection 0 is the stream.
+	 * If the selection is anything else, this treats it as 0 and sets the stream. If this would try to set the stream
+	 * to an even number or any lower-quality value (as determined by {@link EnhancedRandom#fixGamma(long, int)} with a
+	 * threshold of 1), it may change the stream until it has a high-quality gamma.
 	 *
-	 * @param selection used to select which state variable to set; generally 0, 1, 2, 3, or 4
+	 * @param selection used to select which state variable to set; generally 0, 1, 2, 3, 4, or 5
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
@@ -265,7 +207,7 @@ public class MaceRandom extends EnhancedRandom {
 				stateE = value;
 				break;
 			default:
-				setStreamIdentifier(value);
+				setStream(value);
 				break;
 
 		}
@@ -313,7 +255,7 @@ public class MaceRandom extends EnhancedRandom {
 		s0 = (s0 <<  3 | s0 >>> 61) ^ s1;
 		stateE += s0;
 
-		setStreamIdentifier((s0 <<  3 | s0 >>> 61) ^ (s1 << 56 | s1 >>>  8) + s0 ^ (ctr + 0xBEA225F9EB34556DL));
+		setStream((s0 <<  3 | s0 >>> 61) ^ (s1 << 56 | s1 >>>  8) + s0 ^ (ctr + 0xBEA225F9EB34556DL));
 	}
 
 	public long getStream () {
@@ -321,30 +263,24 @@ public class MaceRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Gets an up-to-24-bit long that uniquely identifies the stream this MaceRandom uses.
-	 * This identifier can be passed to {@link #setStreamIdentifier(int)} to change the stream.
-	 * @return the smaller identifier used to determine the actual stream
-	 */
-	public int getStreamIdentifier () {
-		return (int)extract(stream);
-	}
-
-	/**
-	 * Sets the stream using the low-order 24 bits of the given int.
+	 * Sets the stream using the low-order 28 bits of the given int.
 	 *
-	 * @param streamID can be any int, but only the lowest-order 24 bits matter
+	 * @param streamID can be any int, but only the lowest-order 28 bits matter
 	 */
 	public void setStreamIdentifier(int streamID) {
-		this.stream = deposit(streamID);
+		this.stream = EnhancedRandom.fixGamma((streamID & 0xFFFFFFF) << 1);
 	}
 
 	/**
-	 * Sets the stream using all mixed bits of the given long.
+	 * Sets the stream using the given long, and changing it using {@link EnhancedRandom#fixGamma(long, int)} (with
+	 * threshold 1) if it isn't already considered a good gamma value. The stream should always be an odd number; if
+	 * an even one is given, 1 will be added to make it odd. If only odd numbers between 1 and 536870912 are given, all
+	 * streams will be unique; if larger or even numbers are given, there can be duplicates.
 	 *
-	 * @param value can be any long, and will have all bits mixed into a stream identifier
+	 * @param stream any odd long; if only odd numbers less than 536870912 are given, all streams will be unique
 	 */
-	public void setStreamIdentifier(long value) {
-		this.stream = deposit((value ^ value >>> 24 ^ value >>> 48));
+	public void setStream(long stream) {
+		this.stream = EnhancedRandom.fixGamma(stream, 1);
 	}
 
 	public long getStateA () {
@@ -414,19 +350,19 @@ public class MaceRandom extends EnhancedRandom {
 
 	/**
 	 * Sets the state completely to the given six state variables.
-	 * This is the same as calling {@link #setStreamIdentifier(long)}, {@link #setStateA(long)},
+	 * This is the same as calling {@link #setStream(long)}, {@link #setStateA(long)},
 	 * {@link #setStateB(long)}, {@link #setStateC(long)}, {@link #setStateD(long)}, and {@link #setStateE(long)}
 	 * as a group.
 	 *
-	 * @param streamID an up-to-24-bit int (between 0 and 16777215, inclusive); higher bits will be mixed in, and if present the stream may not be unique
+	 * @param stream any odd long; if only odd numbers less than 536870912 are given, all streams will be unique
 	 * @param stateA the first state; can be any long
 	 * @param stateB the second state; can be any long
 	 * @param stateC the third state; can be any long
 	 * @param stateD the fourth state; can be any long
 	 * @param stateE the fifth state; can be any long
 	 */
-	public void setState (long streamID, long stateA, long stateB, long stateC, long stateD, long stateE) {
-		setStreamIdentifier(streamID);
+	public void setState (long stream, long stateA, long stateB, long stateC, long stateD, long stateE) {
+		EnhancedRandom.fixGamma(stream, 1);
 		this.stateA = stateA;
 		this.stateB = stateB;
 		this.stateC = stateC;
@@ -479,8 +415,8 @@ public class MaceRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public MaceRandom copy () {
-		return new MaceRandom(getStreamIdentifier(), stateA, stateB, stateC, stateD, stateE);
+	public TraceRandom copy () {
+		return new TraceRandom(stream, stateA, stateB, stateC, stateD, stateE);
 	}
 
 	@Override
@@ -490,13 +426,13 @@ public class MaceRandom extends EnhancedRandom {
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		MaceRandom that = (MaceRandom)o;
+		TraceRandom that = (TraceRandom)o;
 
 		return stateA == that.stateA && stateB == that.stateB && stateC == that.stateC && stateD == that.stateD &&
 				stateE == that.stateE && stream == that.stream;
 	}
 
 	public String toString () {
-		return "MaceRandom{" + "streamIdentifier=" + getStreamIdentifier() + ", stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L, stateD=" + (stateD) + "L, stateE=" + (stateE) + "L}";
+		return "TraceRandom{" + "stream=" + stream + ", stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L, stateD=" + (stateD) + "L, stateE=" + (stateE) + "L}";
 	}
 }
