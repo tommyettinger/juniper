@@ -12,15 +12,15 @@ Java pseudo-random number generation code with minimal dependencies.
 With Gradle, the dependency (of the core module, if you have multiple) is:
 
 ```
-api "com.github.tommyettinger:juniper:0.7.0"
+api "com.github.tommyettinger:juniper:0.8.0"
 ```
 
 In a libGDX project that has a GWT/HTML backend, the `html/build.gradle` file
 should additionally have:
 
 ```
-implementation "com.github.tommyettinger:digital:0.8.1:sources"
-implementation "com.github.tommyettinger:juniper:0.7.0:sources"
+implementation "com.github.tommyettinger:digital:0.9.0:sources"
+implementation "com.github.tommyettinger:juniper:0.8.0:sources"
 ```
 
 And the `GdxDefinition.gwt.xml` file should have:
@@ -36,7 +36,7 @@ If you don't use Gradle, then with Maven, the dependency is:
 <dependency>
   <groupId>com.github.tommyettinger</groupId>
   <artifactId>juniper</artifactId>
-  <version>0.7.0</version>
+  <version>0.8.0</version>
 </dependency>
 ```
 
@@ -340,6 +340,9 @@ With the `positiveSign` of the same `Base` used, which again defaults to `BASE16
 
 This was required because the newly-added `Base.BASE90` uses backtick and tilde as valid digits, and its `paddingChar`
 and `positiveSign` are `$` and `#` respectively.
+
+You can append the serialized form to a StringBuilder, StringBuffer, CharBuffer, or any other type that implements 
+both the Appendable and CharSequence interfaces. This often allocates significantly less than using `toString()` .
 
 ## License
 

@@ -1,3 +1,8 @@
+[0.8.0]
+- Update digital dependency to 0.9.0, which lets us append EnhancedRandom and Distribution to more types than StringBuilder.
+- TraceRandom is very similar to the earlier MaceRandom, but tries much harder to find a near-perfect stream.
+- MaceRandom's way of finding a suitable stream appeared to find flawed values about 1/9 of the time; MaceRandom has been moved to the tests (and out of the library part), so use TraceRandom instead. It isn't clear which, if any, streams actually were flawed, but TraceRandom has the same algorithm and only changes its way of finding streams.
+
 [0.7.0]
 - Update digital dependency to 0.8.0, which requires the serialized String format to change (see README.md).
 - Added ThrashRandom, which is rather fast (not #1), passes 32TB of PractRand without anomalies, and fails ICE tests.
