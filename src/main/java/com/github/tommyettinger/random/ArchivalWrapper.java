@@ -42,11 +42,19 @@ public class ArchivalWrapper extends EnhancedRandom {
         return "ArcW";
     }
 
+	/**
+	 * Returns {@code wrapped.mainlyGeneratesInt()}.
+	 * @return whatever {@code wrapped.mainlyGeneratesInt()} returns
+	 */
 	@Override
 	public boolean mainlyGeneratesInt() {
 		return wrapped.mainlyGeneratesInt();
 	}
 
+	/**
+	 * Returns {@code wrapped.getMinimumPeriod()}.
+	 * @return whatever {@code wrapped.getMinimumPeriod()} returns
+	 */
 	@Override
 	public BigInteger getMinimumPeriod() {
 		return wrapped.getMinimumPeriod();

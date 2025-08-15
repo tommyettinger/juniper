@@ -21,10 +21,12 @@ import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.digital.Distributor;
 import com.github.tommyettinger.digital.Interpolations;
 import com.github.tommyettinger.digital.Interpolations.Interpolator;
+import com.github.tommyettinger.random.distribution.Distribution;
 
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.math.BigInteger;
 
 /**
  * An EnhancedRandom that delegates to an {@link Interpolator} to distribute output in the same way the
@@ -35,6 +37,24 @@ public class InterpolatedRandom extends EnhancedRandom {
     public String getTag() {
         return "InrR";
     }
+
+	/**
+	 * Depends on the {@link #getRandom() random's} result.
+	 * @return whatever {@code getRandom().mainlyGeneratesInt()} returns
+	 */
+	@Override
+	public boolean mainlyGeneratesInt() {
+		return random.mainlyGeneratesInt();
+	}
+
+	/**
+	 * Depends on the {@link #getRandom() random's} result.
+	 * @return whatever {@code getRandom().getMinimumPeriod()} returns
+	 */
+	@Override
+	public BigInteger getMinimumPeriod() {
+		return random.getMinimumPeriod();
+	}
 
     protected Interpolator interpolator;
     protected EnhancedRandom random;

@@ -58,7 +58,7 @@ public class Crand64Random extends EnhancedRandom {
 	public String getTag() {
 		return "CraR";
 	}
-	
+
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
 	 * @see #getMinimumPeriod()

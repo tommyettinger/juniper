@@ -25,6 +25,7 @@ import com.github.tommyettinger.random.distribution.Distribution;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.math.BigInteger;
 
 /**
  * An EnhancedRandom that delegates to a {@link Distribution} to distribute any floats, ints, or doubles as by that
@@ -85,6 +86,24 @@ public class DistributedRandom extends EnhancedRandom {
     public String getTag() {
         return "DsrR";
     }
+
+	/**
+	 * Depends on the {@link #getDistribution() distribution's} {@link Distribution#generator generator's} result.
+	 * @return whatever {@code getDistribution().generator.mainlyGeneratesInt()} returns
+	 */
+	@Override
+	public boolean mainlyGeneratesInt() {
+		return distribution.generator.mainlyGeneratesInt();
+	}
+
+	/**
+	 * Depends on the {@link #getDistribution() distribution's} {@link Distribution#generator generator's} result.
+	 * @return whatever {@code getDistribution().generator.getMinimumPeriod()} returns
+	 */
+	@Override
+	public BigInteger getMinimumPeriod() {
+		return distribution.generator.getMinimumPeriod();
+	}
 
     protected Distribution distribution;
 
