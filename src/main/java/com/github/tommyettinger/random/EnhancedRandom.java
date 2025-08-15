@@ -26,6 +26,7 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Random;
 
@@ -51,6 +52,51 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * @return a unique String identifier for this type of EnhancedRandom; usually 4 chars long.
 	 */
 	public abstract String getTag();
+
+	/**
+	 * Returns true if this generator mainly operates via its {@link #nextInt()} method internally, which means its
+	 * {@link #nextLong()} must generate two {@code int} values instead of naturally producing one {@code long}. This
+	 * affects how the minimum period is measured for {@link #getMinimumPeriod()}. Most generators not intentionally
+	 * targeting Google Web Toolkit mainly operate via {@link #nextLong()} here, and return false. A generator that
+	 * returns true here does not necessarily use 32-bit math; a generator can use 64-bit math internally but only
+	 * produce 32 bits at a time by truncating its results.
+	 *
+	 * @return true if measurements of the period measure calls to {@link #nextInt()} instead of {@link #nextLong()}
+	 * @see #getMinimumPeriod() This is closely related to the minimum period length.
+	 */
+	public boolean mainlyGeneratesInt() {
+		return false;
+	}
+
+	/**
+	 * Gets the guaranteed lowest number of different results this can return from its main generating method, which is
+	 * normally {@link #nextLong()} unless {@link #mainlyGeneratesInt()} returns true (then it is {@link #nextInt()}).
+	 * The maximum period is not known for many generators, but the minimum is, even if it is only 1 for a generator
+	 * that can be initialized badly and return the same value every time on that cycle. If the minimum period is not
+	 * known, this should not be overridden; its default result is the constant {@link BigInteger#ONE}.
+	 * <br>
+	 * This is relevant when determining if, when two different generators are combined, their period will change. The
+	 * minimum period of two generators run simultaneously and both used fully in the result is the least common
+	 * multiple of their minimum periods. This can be computed conveniently with
+	 * {@link #lcm(BigInteger, BigInteger)} given the minimum period of two different EnhancedRandom generators.
+	 *
+	 * @return the minimum guaranteed period, or the shortest cycle length possible for the main generating method
+	 */
+	public BigInteger getMinimumPeriod() {
+		return BigInteger.ONE;
+	}
+
+	/**
+	 * Gets the least common multiple (lcm) of two BigInteger values, which here are usually returned by
+	 * {@link #getMinimumPeriod()}.
+	 *
+	 * @param a must be greater than 0; typically the result of {@link #getMinimumPeriod()}
+	 * @param b must be greater than 0; typically the result of {@link #getMinimumPeriod()}
+	 * @return the least common multiple of {@code a} and {@code b}, as a BigInteger
+	 */
+	public static BigInteger lcm(BigInteger a, BigInteger b){
+		return a.divide(a.gcd(b)).multiply(b);
+	}
 
 	/**
 	 * Uses {@link Math#random()} to hastily put together a not-especially-uniform {@code long} value,
