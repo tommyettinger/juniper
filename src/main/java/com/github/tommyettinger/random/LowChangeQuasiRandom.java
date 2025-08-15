@@ -17,6 +17,8 @@
 
 package com.github.tommyettinger.random;
 
+import java.math.BigInteger;
+
 /**
  * A quasi-random number generator that only changes one bit in its {@link #state} per call to {@link #nextLong()}, and
  * returns that changed state directly. The choice of which bit changes is determined by {@link #choice}, which itself
@@ -91,6 +93,21 @@ public class LowChangeQuasiRandom extends EnhancedRandom {
     public String getTag() {
         return "LCQR";
     }
+
+	/**
+	 * Returned by {@link #getMinimumPeriod()}.
+	 * @see #getMinimumPeriod()
+	 */
+	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
+
+	/**
+	 * 2 to the 64.
+	 * @return 2 to the 64.
+	 */
+	@Override
+	public BigInteger getMinimumPeriod() {
+		return MINIMUM_PERIOD;
+	}
 
     @Override
     public void setSeed(long seed) {

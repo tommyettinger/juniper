@@ -17,6 +17,8 @@
 
 package com.github.tommyettinger.random;
 
+import java.math.BigInteger;
+
 /**
  * A relatively-simple RNG that's similar to {@link LaserRandom} with less correlation between similar initial states,
  * but without the ability to {@link #skip(long)}. It has two {@code long} states, one of which changes with every
@@ -90,6 +92,21 @@ public class MizuchiRandom extends EnhancedRandom {
 	@Override
 	public String getTag() {
 		return "MizR";
+	}
+
+	/**
+	 * Returned by {@link #getMinimumPeriod()}.
+	 * @see #getMinimumPeriod()
+	 */
+	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
+
+	/**
+	 * 2 to the 64.
+	 * @return 2 to the 64.
+	 */
+	@Override
+	public BigInteger getMinimumPeriod() {
+		return MINIMUM_PERIOD;
 	}
 
 	/**

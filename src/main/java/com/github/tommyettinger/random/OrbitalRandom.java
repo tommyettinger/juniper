@@ -19,6 +19,8 @@ package com.github.tommyettinger.random;
 
 import com.github.tommyettinger.digital.BitConversion;
 
+import java.math.BigInteger;
+
 /**
  * A hash-on-counters RNG with a period of 2 to the 128.
  * This is closely related to {@link FlowRandom}, but gives up the
@@ -96,6 +98,21 @@ public class OrbitalRandom extends EnhancedRandom {
 	@Override
 	public String getTag() {
 		return "OrbR";
+	}
+
+	/**
+	 * Returned by {@link #getMinimumPeriod()}.
+	 * @see #getMinimumPeriod()
+	 */
+	private static final BigInteger MINIMUM_PERIOD = new BigInteger("100000000000000000000000000000000", 16);
+
+	/**
+	 * 2 to the 128.
+	 * @return 2 to the 128.
+	 */
+	@Override
+	public BigInteger getMinimumPeriod() {
+		return MINIMUM_PERIOD;
 	}
 
 	/**

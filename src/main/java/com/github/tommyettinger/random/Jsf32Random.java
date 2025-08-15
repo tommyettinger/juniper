@@ -94,6 +94,15 @@ public class Jsf32Random extends EnhancedRandom {
 	}
 
 	/**
+	 * This generator mainly generates int values.
+	 * @return true
+	 */
+	@Override
+	public boolean mainlyGeneratesInt() {
+		return true;
+	}
+
+	/**
 	 * This generator has 4 {@code int} states, so this returns 4.
 	 *
 	 * @return 4 (four)

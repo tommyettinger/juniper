@@ -63,6 +63,10 @@ public class AceRandom extends EnhancedRandom {
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
 
+	/**
+	 * 2 to the 64.
+	 * @return 2 to the 64.
+	 */
 	@Override
 	public BigInteger getMinimumPeriod() {
 		return MINIMUM_PERIOD;

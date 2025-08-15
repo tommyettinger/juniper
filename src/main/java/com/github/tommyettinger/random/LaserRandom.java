@@ -17,6 +17,7 @@
 
 package com.github.tommyettinger.random;
 
+import java.math.BigInteger;
 import java.util.Random;
 
 /**
@@ -153,6 +154,20 @@ public class LaserRandom extends EnhancedRandom {
 	@Override
 	public String getTag() {
 		return "LasR";
+	}
+
+	/**
+	 * Returned by {@link #getMinimumPeriod()}.
+	 * @see #getMinimumPeriod()
+	 */
+	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
+
+	/**
+	 * 2 to the 64.
+	 * @return 2 to the 64.
+	 */
+	public BigInteger getMinimumPeriod() {
+		return MINIMUM_PERIOD;
 	}
 
 	/**

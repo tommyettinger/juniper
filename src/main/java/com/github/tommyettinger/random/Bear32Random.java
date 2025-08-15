@@ -106,6 +106,10 @@ public class Bear32Random extends EnhancedRandom {
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("100000000000000000000000000000000", 16);
 
+	/**
+	 * 2 to the 128.
+	 * @return 2 to the 128.
+	 */
 	@Override
 	public BigInteger getMinimumPeriod() {
 		return MINIMUM_PERIOD;

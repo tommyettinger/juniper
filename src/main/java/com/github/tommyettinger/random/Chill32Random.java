@@ -115,6 +115,10 @@ public class Chill32Random extends EnhancedRandom {
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("1000000000000000000000000", 16);
 
+	/**
+	 * 2 to the 96.
+	 * @return 2 to the 96.
+	 */
 	@Override
 	public BigInteger getMinimumPeriod() {
 		return MINIMUM_PERIOD;

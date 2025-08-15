@@ -141,6 +141,10 @@ public class Choo32Random extends EnhancedRandom {
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("100000000", 16);
 
+	/**
+	 * 2 to the 32.
+	 * @return 2 to the 32.
+	 */
 	@Override
 	public BigInteger getMinimumPeriod() {
 		return MINIMUM_PERIOD;
