@@ -79,6 +79,11 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * minimum period of two generators run simultaneously and both used fully in the result is the least common
 	 * multiple of their minimum periods. This can be computed conveniently with
 	 * {@link #lcm(BigInteger, BigInteger)} given the minimum period of two different EnhancedRandom generators.
+	 * <br>
+	 * Implementations are strongly encouraged to compute this value once, if it needs computation at all, and store it
+	 * in a {@code private static final BigInteger MINIMUM_PERIOD;}, which this method simply returns. Classes are not
+	 * required to have a {@code MINIMUM_PERIOD} field or to make it accessible. Calling this method should generally
+	 * not create a new BigInteger.
 	 *
 	 * @return the minimum guaranteed period, or the shortest cycle length possible for the main generating method
 	 */

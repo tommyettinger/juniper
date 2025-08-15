@@ -5,6 +5,7 @@ import com.github.tommyettinger.digital.Base;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.math.BigInteger;
 import java.util.Random;
 
 /**
@@ -41,7 +42,17 @@ public class ArchivalWrapper extends EnhancedRandom {
         return "ArcW";
     }
 
-    /**
+	@Override
+	public boolean mainlyGeneratesInt() {
+		return wrapped.mainlyGeneratesInt();
+	}
+
+	@Override
+	public BigInteger getMinimumPeriod() {
+		return wrapped.getMinimumPeriod();
+	}
+
+	/**
      * Sets the seed of this random number generator using a single
      * {@code long} seed. This should behave exactly the same as if a new
      * object of this type was created with the constructor that takes a single
