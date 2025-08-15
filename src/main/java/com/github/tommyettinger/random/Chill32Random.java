@@ -19,6 +19,8 @@ package com.github.tommyettinger.random;
 
 import com.github.tommyettinger.digital.BitConversion;
 
+import java.math.BigInteger;
+
 /**
  * A random number generator that is optimized for performance on 32-bit machines and with Google Web Toolkit,
  * Chill32Random is a 32-bit-native generator that doesn't have any shorter subcycles (because it only has one
@@ -105,6 +107,17 @@ public class Chill32Random extends EnhancedRandom {
 	@Override
 	public String getTag() {
 		return "Ch3R";
+	}
+
+	/**
+	 * Returned by {@link #getMinimumPeriod()}.
+	 * @see #getMinimumPeriod()
+	 */
+	private static final BigInteger MINIMUM_PERIOD = new BigInteger("1000000000000000000000000", 16);
+
+	@Override
+	public BigInteger getMinimumPeriod() {
+		return MINIMUM_PERIOD;
 	}
 
 	/**

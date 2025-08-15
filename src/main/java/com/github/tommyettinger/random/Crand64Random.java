@@ -23,6 +23,8 @@
 
 package com.github.tommyettinger.random;
 
+import java.math.BigInteger;
+
 /**
  * A 256-bit "chaotic" generator that also includes an (odd-number) 64-bit stream.
  * This generator was inspired by SFC64, but has diverged significantly. Like SFC64, it uses a counter (Weyl sequence),
@@ -55,6 +57,17 @@ public class Crand64Random extends EnhancedRandom {
 	@Override
 	public String getTag() {
 		return "CraR";
+	}
+	
+	/**
+	 * Returned by {@link #getMinimumPeriod()}.
+	 * @see #getMinimumPeriod()
+	 */
+	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
+
+	@Override
+	public BigInteger getMinimumPeriod() {
+		return MINIMUM_PERIOD;
 	}
 
 	/**

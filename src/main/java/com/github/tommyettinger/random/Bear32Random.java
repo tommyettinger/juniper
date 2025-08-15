@@ -91,6 +91,10 @@ public class Bear32Random extends EnhancedRandom {
 		return "BeaR";
 	}
 
+	/**
+	 * This generator mainly generates int values.
+	 * @return true
+	 */
 	@Override
 	public boolean mainlyGeneratesInt() {
 		return true;
