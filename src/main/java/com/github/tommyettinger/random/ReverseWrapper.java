@@ -5,6 +5,7 @@ import com.github.tommyettinger.digital.Base;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Random;
 
@@ -90,6 +91,24 @@ public class ReverseWrapper extends EnhancedRandom {
     public String getTag() {
         return "RevW";
     }
+
+	/**
+	 * Returns {@code wrapped.mainlyGeneratesInt()}.
+	 * @return whatever {@code wrapped.mainlyGeneratesInt()} returns
+	 */
+	@Override
+	public boolean mainlyGeneratesInt() {
+		return wrapped.mainlyGeneratesInt();
+	}
+
+	/**
+	 * Returns {@code wrapped.getMinimumPeriod()}.
+	 * @return whatever {@code wrapped.getMinimumPeriod()} returns
+	 */
+	@Override
+	public BigInteger getMinimumPeriod() {
+		return wrapped.getMinimumPeriod();
+	}
 
     /**
      * Sets the seed of this random number generator using a single

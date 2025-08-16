@@ -19,6 +19,8 @@ package com.github.tommyettinger.random;
 
 import com.github.tommyettinger.digital.MathTools;
 
+import java.math.BigInteger;
+
 /**
  * A four-state EnhancedRandom that uses four different operations to generate each number, one operation per state.
  * It has an additive counter (Weyl sequence) that is always an odd number, and has a cycle length on its own of 2 to
@@ -55,6 +57,21 @@ public class PouchRandom extends EnhancedRandom {
 	@Override
 	public String getTag() {
 		return "PouR";
+	}
+
+	/**
+	 * Returned by {@link #getMinimumPeriod()}.
+	 * @see #getMinimumPeriod()
+	 */
+	private static final BigInteger MINIMUM_PERIOD = new BigInteger("8000000000000000", 16);
+
+	/**
+	 * 2 to the 63.
+	 * @return 2 to the 63.
+	 */
+	@Override
+	public BigInteger getMinimumPeriod() {
+		return MINIMUM_PERIOD;
 	}
 
 	/**

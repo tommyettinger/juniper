@@ -17,6 +17,8 @@
 
 package com.github.tommyettinger.random;
 
+import java.math.BigInteger;
+
 /**
  * An exact copy of <a href="https://www.pcg-random.org">PCG-Random</a>'s RXS-M-XS generator.
  * It has two {@code long} states, one of which changes with every
@@ -86,6 +88,21 @@ public class PcgRXSMXSRandom extends EnhancedRandom {
 	@Override
 	public String getTag() {
 		return "PRXR";
+	}
+
+	/**
+	 * Returned by {@link #getMinimumPeriod()}.
+	 * @see #getMinimumPeriod()
+	 */
+	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
+
+	/**
+	 * 2 to the 64.
+	 * @return 2 to the 64.
+	 */
+	@Override
+	public BigInteger getMinimumPeriod() {
+		return MINIMUM_PERIOD;
 	}
 
 	/**

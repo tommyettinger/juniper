@@ -17,6 +17,8 @@
 
 package com.github.tommyettinger.random;
 
+import java.math.BigInteger;
+
 /**
  * Like WhiskerRandom, but this has a fifth state that runs like a counter, guaranteeing a minimum period of 2 to the
  * 64.
@@ -50,6 +52,21 @@ public class PasarRandom extends EnhancedRandom {
 	@Override
 	public String getTag() {
 		return "PasR";
+	}
+
+	/**
+	 * Returned by {@link #getMinimumPeriod()}.
+	 * @see #getMinimumPeriod()
+	 */
+	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
+
+	/**
+	 * 2 to the 64.
+	 * @return 2 to the 64.
+	 */
+	@Override
+	public BigInteger getMinimumPeriod() {
+		return MINIMUM_PERIOD;
 	}
 
 	/**
