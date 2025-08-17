@@ -108,7 +108,7 @@ public class Bear32Random extends EnhancedRandom {
 
 	/**
 	 * 2 to the 128.
-	 * @return 2 to the 128.
+	 * @return 2 to the 128
 	 */
 	@Override
 	public BigInteger getMinimumPeriod() {

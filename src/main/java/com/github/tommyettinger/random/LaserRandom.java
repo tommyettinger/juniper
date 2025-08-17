@@ -164,7 +164,7 @@ public class LaserRandom extends EnhancedRandom {
 
 	/**
 	 * 2 to the 64.
-	 * @return 2 to the 64.
+	 * @return 2 to the 64
 	 */
 	public BigInteger getMinimumPeriod() {
 		return MINIMUM_PERIOD;

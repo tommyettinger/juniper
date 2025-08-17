@@ -67,7 +67,7 @@ public class PouchRandom extends EnhancedRandom {
 
 	/**
 	 * 2 to the 63.
-	 * @return 2 to the 63.
+	 * @return 2 to the 63
 	 */
 	@Override
 	public BigInteger getMinimumPeriod() {

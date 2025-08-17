@@ -17,6 +17,8 @@
 
 package com.github.tommyettinger.random;
 
+import java.math.BigInteger;
+
 /**
  * A generator with 4 {@code long} states and a guaranteed minimum period of 2 to the 64, this is structured much like
  * WhiskerRandom and is almost as fast. In each call to {@link #nextLong()}, this performs 5 different operations: add a
@@ -40,6 +42,21 @@ public class ScruffRandom extends EnhancedRandom {
 	@Override
 	public String getTag() {
 		return "ScrR";
+	}
+
+	/**
+	 * Returned by {@link #getMinimumPeriod()}.
+	 * @see #getMinimumPeriod()
+	 */
+	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
+
+	/**
+	 * 2 to the 64.
+	 * @return 2 to the 64
+	 */
+	@Override
+	public BigInteger getMinimumPeriod() {
+		return MINIMUM_PERIOD;
 	}
 
 	/**

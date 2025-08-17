@@ -17,6 +17,8 @@
 
 package com.github.tommyettinger.random;
 
+import java.math.BigInteger;
+
 /**
  * A random number generator that acts as a counterpart to {@link WhiskerRandom} by guaranteeing a slightly longer period
  * and potentially being faster in some situations because it uses no multiplication. In practice, {@link TrimRandom}
@@ -140,6 +142,20 @@ public class StrangerRandom extends EnhancedRandom {
 	@Override
 	public String getTag() {
 		return "StrR";
+	}
+	/**
+	 * Returned by {@link #getMinimumPeriod()}.
+	 * @see #getMinimumPeriod()
+	 */
+	private static final BigInteger MINIMUM_PERIOD = new BigInteger("1FFFFFFFFFFFFFFFE", 16);
+
+	/**
+	 * (2 to the 65) minus 2.
+	 * @return (2 to the 65) minus 2
+	 */
+	@Override
+	public BigInteger getMinimumPeriod() {
+		return MINIMUM_PERIOD;
 	}
 
 	/**

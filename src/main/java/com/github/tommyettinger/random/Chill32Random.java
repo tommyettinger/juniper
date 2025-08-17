@@ -117,7 +117,7 @@ public class Chill32Random extends EnhancedRandom {
 
 	/**
 	 * 2 to the 96.
-	 * @return 2 to the 96.
+	 * @return 2 to the 96
 	 */
 	@Override
 	public BigInteger getMinimumPeriod() {

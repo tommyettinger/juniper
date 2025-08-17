@@ -73,7 +73,8 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * normally {@link #nextLong()} unless {@link #mainlyGeneratesInt()} returns true (then it is {@link #nextInt()}).
 	 * The maximum period is not known for many generators, but the minimum is, even if it is only 1 for a generator
 	 * that can be initialized badly and return the same value every time on that cycle. If the minimum period is not
-	 * known, this should not be overridden; its default result is the constant {@link BigInteger#ONE}.
+	 * known, this should not be overridden; its default result is the constant {@link BigInteger#ONE}. If this is the
+	 * only JavaDoc for this method, the minimum period is not known, and is possibly 1 in the worst case.
 	 * <br>
 	 * This is relevant when determining if, when two different generators are combined, their period will change. The
 	 * minimum period of two generators run simultaneously and both used fully in the result is the least common

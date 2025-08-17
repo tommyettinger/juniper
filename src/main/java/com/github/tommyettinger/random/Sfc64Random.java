@@ -17,6 +17,8 @@
 
 package com.github.tommyettinger.random;
 
+import java.math.BigInteger;
+
 /**
  * A random number generator by Chris Doty-Humphrey, this has four {@code long} states, one of which is a counter.
  * It has a guaranteed minimum period of 2 to the 64, but an expected period that is drastically larger. Using
@@ -92,6 +94,21 @@ public class Sfc64Random extends EnhancedRandom {
 	@Override
 	public String getTag() {
 		return "SfcR";
+	}
+
+	/**
+	 * Returned by {@link #getMinimumPeriod()}.
+	 * @see #getMinimumPeriod()
+	 */
+	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
+
+	/**
+	 * 2 to the 64.
+	 * @return 2 to the 64
+	 */
+	@Override
+	public BigInteger getMinimumPeriod() {
+		return MINIMUM_PERIOD;
 	}
 
 	/**

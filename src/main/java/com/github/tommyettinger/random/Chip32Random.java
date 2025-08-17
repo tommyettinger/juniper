@@ -138,7 +138,7 @@ public class Chip32Random extends EnhancedRandom {
 
 	/**
 	 * 2 to the 32.
-	 * @return 2 to the 32.
+	 * @return 2 to the 32
 	 */
 	@Override
 	public BigInteger getMinimumPeriod() {

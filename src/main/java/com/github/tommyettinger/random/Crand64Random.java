@@ -67,7 +67,7 @@ public class Crand64Random extends EnhancedRandom {
 
 	/**
 	 * 2 to the 64.
-	 * @return 2 to the 64.
+	 * @return 2 to the 64
 	 */
 	@Override
 	public BigInteger getMinimumPeriod() {
