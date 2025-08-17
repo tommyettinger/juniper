@@ -17,6 +17,8 @@
 
 package com.github.tommyettinger.random;
 
+import java.math.BigInteger;
+
 /**
  * A random number generator that guarantees 4-dimensional equidistribution (except for the quartet with four
  * zeroes in a row, every quartet of long results is produced exactly once over the period). This particular generator
@@ -105,6 +107,21 @@ public class Xoshiro256MX3Random extends EnhancedRandom {
 	@Override
 	public String getTag() {
 		return "XMXR";
+	}
+
+	/**
+	 * Returned by {@link #getMinimumPeriod()}.
+	 * @see #getMinimumPeriod()
+	 */
+	private static final BigInteger MINIMUM_PERIOD = new BigInteger("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", 16);
+
+	/**
+	 * (2 to the 256) - 1.
+	 * @return (2 to the 256) - 1
+	 */
+	@Override
+	public BigInteger getMinimumPeriod() {
+		return MINIMUM_PERIOD;
 	}
 
 	/**
