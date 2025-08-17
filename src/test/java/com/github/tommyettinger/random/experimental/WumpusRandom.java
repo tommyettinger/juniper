@@ -233,9 +233,13 @@ public class WumpusRandom extends EnhancedRandom {
 
 	@Override
 	public long nextLong () {
-		long b = stateB;
-		long c = stateC;
-		long z = (stateA += 0xDE916ABCC965815BL + b) ^ c;
+//		long z = (stateA += 0xDE916ABCC965815BL +
+//			(stateB = (stateC << 1) ^ (stateB >> 63 & 0xB35846EEAB94A77EL)))
+//			^ (stateC = (stateC << 1) ^ (stateC >> 63 & 0xFEEDBABEDEADBEEFL));
+		final long b = stateB;
+		final long c = stateC;
+		final long z = stateA ^ c;
+		stateA += 0xDE916ABCC965815BL + b;
 		stateB = (b << 1) ^ (b >> 63 & 0xB35846EEAB94A77EL);
 		stateC = (c << 1) ^ (c >> 63 & 0xFEEDBABEDEADBEEFL);
 		return z ^ z >>> 27;
@@ -243,15 +247,23 @@ public class WumpusRandom extends EnhancedRandom {
 
 	@Override
 	public long previousLong () {
-		// TODO: How will we do this?
-		return 1L;
+		long lsb = (stateC & 1L);
+		stateC ^= (-lsb & 0xfeedbabedeadbeefL);
+		stateC = (stateC >>> 1) ^ lsb << 63;
+		lsb = (stateB & 2L);
+		stateB ^= (-lsb & 0xB35846EEAB94A77EL);
+		stateB = (stateB >>> 1 & -2L) ^ lsb << 62;
+		stateA -= 0xDE916ABCC965815BL + stateB;
+		long z = stateA ^ stateC;
+		return z ^ z >>> 27;
 	}
 
 	@Override
 	public int next (int bits) {
-		long b = stateB;
-		long c = stateC;
-		long z = (stateA += 0xDE916ABCC965815BL + b) ^ c;
+		final long b = stateB;
+		final long c = stateC;
+		final long z = stateA ^ c;
+		stateA += 0xDE916ABCC965815BL + b;
 		stateB = (b << 1) ^ (b >> 63 & 0xB35846EEAB94A77EL);
 		stateC = (c << 1) ^ (c >> 63 & 0xFEEDBABEDEADBEEFL);
 		return (int)(z ^ z >>> 27) >>> (32 - bits);
@@ -278,59 +290,61 @@ public class WumpusRandom extends EnhancedRandom {
 		return "WumpusRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L}";
 	}
 
-//	public static void main(String[] args) {
-//		EnhancedRandom random = new WumpusRandom(1L);
-//		{
-//			int n0 = random.nextInt();
-//			int n1 = random.nextInt();
-//			int n2 = random.nextInt();
-//			int n3 = random.nextInt();
-//			int n4 = random.nextInt();
-//			int n5 = random.nextInt();
-//			int p5 = random.previousInt();
-//			int p4 = random.previousInt();
-//			int p3 = random.previousInt();
-//			int p2 = random.previousInt();
-//			int p1 = random.previousInt();
-//			int p0 = random.previousInt();
-//			System.out.println(n0 == p0);
-//			System.out.println(n1 == p1);
-//			System.out.println(n2 == p2);
-//			System.out.println(n3 == p3);
-//			System.out.println(n4 == p4);
-//			System.out.println(n5 == p5);
-//			System.out.println(Base.BASE16.unsigned(n0) + " vs. " + Base.BASE16.unsigned(p0));
-//			System.out.println(Base.BASE16.unsigned(n1) + " vs. " + Base.BASE16.unsigned(p1));
-//			System.out.println(Base.BASE16.unsigned(n2) + " vs. " + Base.BASE16.unsigned(p2));
-//			System.out.println(Base.BASE16.unsigned(n3) + " vs. " + Base.BASE16.unsigned(p3));
-//			System.out.println(Base.BASE16.unsigned(n4) + " vs. " + Base.BASE16.unsigned(p4));
-//			System.out.println(Base.BASE16.unsigned(n5) + " vs. " + Base.BASE16.unsigned(p5));
-//		}
-//		{
-//			long n0 = random.nextLong();
-//			long n1 = random.nextLong();
-//			long n2 = random.nextLong();
-//			long n3 = random.nextLong();
-//			long n4 = random.nextLong();
-//			long n5 = random.nextLong();
-//			long p5 = random.previousLong();
-//			long p4 = random.previousLong();
-//			long p3 = random.previousLong();
-//			long p2 = random.previousLong();
-//			long p1 = random.previousLong();
-//			long p0 = random.previousLong();
-//			System.out.println(n0 == p0);
-//			System.out.println(n1 == p1);
-//			System.out.println(n2 == p2);
-//			System.out.println(n3 == p3);
-//			System.out.println(n4 == p4);
-//			System.out.println(n5 == p5);
-//			System.out.println(Base.BASE16.unsigned(n0) + " vs. " + Base.BASE16.unsigned(p0));
-//			System.out.println(Base.BASE16.unsigned(n1) + " vs. " + Base.BASE16.unsigned(p1));
-//			System.out.println(Base.BASE16.unsigned(n2) + " vs. " + Base.BASE16.unsigned(p2));
-//			System.out.println(Base.BASE16.unsigned(n3) + " vs. " + Base.BASE16.unsigned(p3));
-//			System.out.println(Base.BASE16.unsigned(n4) + " vs. " + Base.BASE16.unsigned(p4));
-//			System.out.println(Base.BASE16.unsigned(n5) + " vs. " + Base.BASE16.unsigned(p5));
-//		}
-//	}
+	public static void main(String[] args) {
+		{
+			EnhancedRandom random = new WumpusRandom(1L);
+			int n0 = random.nextInt();
+			int n1 = random.nextInt();
+			int n2 = random.nextInt();
+			int n3 = random.nextInt();
+			int n4 = random.nextInt();
+			int n5 = random.nextInt();
+			int p5 = random.previousInt();
+			int p4 = random.previousInt();
+			int p3 = random.previousInt();
+			int p2 = random.previousInt();
+			int p1 = random.previousInt();
+			int p0 = random.previousInt();
+			System.out.println(n0 == p0);
+			System.out.println(n1 == p1);
+			System.out.println(n2 == p2);
+			System.out.println(n3 == p3);
+			System.out.println(n4 == p4);
+			System.out.println(n5 == p5);
+			System.out.println(Base.BASE16.unsigned(n0) + " vs. " + Base.BASE16.unsigned(p0));
+			System.out.println(Base.BASE16.unsigned(n1) + " vs. " + Base.BASE16.unsigned(p1));
+			System.out.println(Base.BASE16.unsigned(n2) + " vs. " + Base.BASE16.unsigned(p2));
+			System.out.println(Base.BASE16.unsigned(n3) + " vs. " + Base.BASE16.unsigned(p3));
+			System.out.println(Base.BASE16.unsigned(n4) + " vs. " + Base.BASE16.unsigned(p4));
+			System.out.println(Base.BASE16.unsigned(n5) + " vs. " + Base.BASE16.unsigned(p5));
+		}
+		{
+			WumpusRandom random = new WumpusRandom(1L);
+			long n0 = random.nextLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL\n", random.stateA, random.stateB, random.stateC);
+			long n1 = random.nextLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL\n", random.stateA, random.stateB, random.stateC);
+			long n2 = random.nextLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL\n", random.stateA, random.stateB, random.stateC);
+			long n3 = random.nextLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL\n", random.stateA, random.stateB, random.stateC);
+			long n4 = random.nextLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL\n", random.stateA, random.stateB, random.stateC);
+			long n5 = random.nextLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL\n", random.stateA, random.stateB, random.stateC);
+			System.out.println("Going back...");
+			long p5 = random.previousLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL\n", random.stateA, random.stateB, random.stateC);
+			long p4 = random.previousLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL\n", random.stateA, random.stateB, random.stateC);
+			long p3 = random.previousLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL\n", random.stateA, random.stateB, random.stateC);
+			long p2 = random.previousLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL\n", random.stateA, random.stateB, random.stateC);
+			long p1 = random.previousLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL\n", random.stateA, random.stateB, random.stateC);
+			long p0 = random.previousLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL\n", random.stateA, random.stateB, random.stateC);
+			System.out.println(n0 == p0);
+			System.out.println(n1 == p1);
+			System.out.println(n2 == p2);
+			System.out.println(n3 == p3);
+			System.out.println(n4 == p4);
+			System.out.println(n5 == p5);
+			System.out.println(Base.BASE16.unsigned(n0) + " vs. " + Base.BASE16.unsigned(p0));
+			System.out.println(Base.BASE16.unsigned(n1) + " vs. " + Base.BASE16.unsigned(p1));
+			System.out.println(Base.BASE16.unsigned(n2) + " vs. " + Base.BASE16.unsigned(p2));
+			System.out.println(Base.BASE16.unsigned(n3) + " vs. " + Base.BASE16.unsigned(p3));
+			System.out.println(Base.BASE16.unsigned(n4) + " vs. " + Base.BASE16.unsigned(p4));
+			System.out.println(Base.BASE16.unsigned(n5) + " vs. " + Base.BASE16.unsigned(p5));
+		}
+	}
 }
