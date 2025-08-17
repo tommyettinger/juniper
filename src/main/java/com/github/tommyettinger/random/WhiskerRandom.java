@@ -17,6 +17,8 @@
 
 package com.github.tommyettinger.random;
 
+import java.math.BigInteger;
+
 /**
  * The second-fastest generator here on recent JDKs, with a huge probable period but no minimum period guarantee.
  * This generator is extremely similar to {@link FourWheelRandom}; they use the same operations except for an additional
@@ -62,6 +64,21 @@ public class WhiskerRandom extends EnhancedRandom {
 	@Override
 	public String getTag() {
 		return "WhiR";
+	}
+
+	/**
+	 * Returned by {@link #getMinimumPeriod()}.
+	 * @see #getMinimumPeriod()
+	 */
+	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
+
+	/**
+	 * 2 to the 64.
+	 * @return 2 to the 64
+	 */
+	@Override
+	public BigInteger getMinimumPeriod() {
+		return MINIMUM_PERIOD;
 	}
 
 	/**

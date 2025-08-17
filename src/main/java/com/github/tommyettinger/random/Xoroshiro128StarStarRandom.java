@@ -17,6 +17,8 @@
 
 package com.github.tommyettinger.random;
 
+import java.math.BigInteger;
+
 /**
  * A random number generator that is fairly fast and guarantees 2-dimensional equidistribution (with the exception of the
  * pair with two zeroes in a row, every pair of long results is produced exactly once over the period). It has a
@@ -94,6 +96,21 @@ public class Xoroshiro128StarStarRandom extends EnhancedRandom {
 	@Override
 	public String getTag() {
 		return "XRSR";
+	}
+
+	/**
+	 * Returned by {@link #getMinimumPeriod()}.
+	 * @see #getMinimumPeriod()
+	 */
+	private static final BigInteger MINIMUM_PERIOD = new BigInteger("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", 16);
+
+	/**
+	 * (2 to the 128) - 1.
+	 * @return (2 to the 128) - 1
+	 */
+	@Override
+	public BigInteger getMinimumPeriod() {
+		return MINIMUM_PERIOD;
 	}
 
 	/**
