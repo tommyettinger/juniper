@@ -91,6 +91,7 @@ public final class Generators {
 		randomList.add(new I64LFSR64MoremurRandom(1, 1));
 		randomList.add(new I64LFSR64SpinRandom(1, 1));
 		randomList.add(new TraceRandom(1, 1, 1, 1, 1, 1));
+		randomList.add(new WumpusRandom(1, 1, 1));
 	}
 
 	public static int randomCount = randomList.size();
