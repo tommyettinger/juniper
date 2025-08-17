@@ -17,6 +17,8 @@
 
 package com.github.tommyettinger.random;
 
+import java.math.BigInteger;
+
 /**
  * Like AceRandom with five 64-bit states but also one unchanging 28-bit stream; does not use multiplication, only add,
  * XOR, and bitwise-rotate operations (this is an ARX generator). Has a state that runs like a counter, guaranteeing a
@@ -54,6 +56,21 @@ public class TraceRandom extends EnhancedRandom {
 	@Override
 	public String getTag() {
 		return "MceR";
+	}
+
+	/**
+	 * Returned by {@link #getMinimumPeriod()}.
+	 * @see #getMinimumPeriod()
+	 */
+	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
+
+	/**
+	 * 2 to the 64.
+	 * @return 2 to the 64
+	 */
+	@Override
+	public BigInteger getMinimumPeriod() {
+		return MINIMUM_PERIOD;
 	}
 
 	/**

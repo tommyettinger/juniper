@@ -17,6 +17,8 @@
 
 package com.github.tommyettinger.random;
 
+import java.math.BigInteger;
+
 /**
  * A subcycle generator with a counter, using only Add-Rotate-XOR operations.
  * The whole nextLong() method can fit on one (lengthy) line, where a, b, and c can each be any long:
@@ -39,6 +41,21 @@ public class ThrashRandom extends EnhancedRandom {
 	@Override
 	public String getTag() {
 		return "ThaR";
+	}
+
+	/**
+	 * Returned by {@link #getMinimumPeriod()}.
+	 * @see #getMinimumPeriod()
+	 */
+	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
+
+	/**
+	 * 2 to the 64.
+	 * @return 2 to the 64
+	 */
+	@Override
+	public BigInteger getMinimumPeriod() {
+		return MINIMUM_PERIOD;
 	}
 
 	/**

@@ -21,6 +21,7 @@ import com.github.tommyettinger.digital.Distributor;
 import com.github.tommyettinger.digital.Hasher;
 import com.github.tommyettinger.digital.MathTools;
 
+import java.math.BigInteger;
 import java.util.Random;
 
 /**
@@ -79,6 +80,21 @@ public class TupleQuasiRandom extends EnhancedRandom {
 	@Override
 	public String getTag() {
 		return "TuQR";
+	}
+
+	/**
+	 * Returned by {@link #getMinimumPeriod()}.
+	 * @see #getMinimumPeriod()
+	 */
+	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
+
+	/**
+	 * 2 to the 64.
+	 * @return 2 to the 64
+	 */
+	@Override
+	public BigInteger getMinimumPeriod() {
+		return MINIMUM_PERIOD;
 	}
 
 	/**

@@ -17,6 +17,8 @@
 
 package com.github.tommyettinger.random;
 
+import java.math.BigInteger;
+
 /**
  * A random number generator that is very fast on Java 16+, has both a very large probable period and a large guaranteed
  * minimum period, and uses only add, bitwise-rotate, and XOR operations (no multiplication). This generator is not as
@@ -122,6 +124,21 @@ public class TrimRandom extends EnhancedRandom {
 	@Override
 	public String getTag() {
 		return "TrmR";
+	}
+
+	/**
+	 * Returned by {@link #getMinimumPeriod()}.
+	 * @see #getMinimumPeriod()
+	 */
+	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
+
+	/**
+	 * 2 to the 64.
+	 * @return 2 to the 64
+	 */
+	@Override
+	public BigInteger getMinimumPeriod() {
+		return MINIMUM_PERIOD;
 	}
 
 	/**
