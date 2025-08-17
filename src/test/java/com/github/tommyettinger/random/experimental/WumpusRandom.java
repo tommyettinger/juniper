@@ -22,7 +22,7 @@ import com.github.tommyettinger.random.EnhancedRandom;
 
 /**
  * A generator with a long period and one stream. Has 191 bits of state, with one state that can be any long, one state
- * that can be any long except 0, and one state that can be any even long.
+ * that can be any long except 0, and one state that can be any even long except 0.
  */
 public class WumpusRandom extends EnhancedRandom {
 	@Override
@@ -49,6 +49,7 @@ public class WumpusRandom extends EnhancedRandom {
 	public WumpusRandom() {
 		stateA = EnhancedRandom.seedFromMath();
 		stateB = EnhancedRandom.seedFromMath() & -2L;
+		if(stateB == 0) stateB = -2L;
 		stateC = EnhancedRandom.seedFromMath();
 		if(stateC == 0) stateC = 1L;
 	}
@@ -65,28 +66,31 @@ public class WumpusRandom extends EnhancedRandom {
 
 	/**
 	 * Creates a new WumpusRandom with the given two states; all {@code long} values are permitted.
-	 * The state will be used verbatim for stateA; stateB will have its lowest bit ignored. stateC will be assigned 1.
+	 * The state will be used verbatim for stateA. stateB will have its lowest bit ignored, and if 0 is given, this will
+	 * use -2 instead. stateC will be assigned 1. Usually, only non-zero even numbers are supplied for stateB.
 	 *
 	 * @param stateA any {@code long} value
-	 * @param stateB any {@code long} value, but the lowest bit will be discarded (pass this only even numbers)
+	 * @param stateB any {@code long} value, but the lowest bit will be discarded, and 0 will be changed to -2
 	 */
 	public WumpusRandom(long stateA, long stateB) {
 		this.stateA = stateA;
-		this.stateB = stateB & -2L;
+		this.stateB = stateB == 0L ? -2L : (stateB & -2L);
 		this.stateC = 1L;
 	}
 
 	/**
-	 * Creates a new WumpusRandom with the given three states; all {@code long} values are permitted.
-	 * These states will be used verbatim.
+	 * Creates a new WumpusRandom with the given three states.
+	 * The state will be used verbatim for stateA. stateB will have its lowest bit ignored, and if 0 is given, this will
+	 * use -2 instead. stateC will be used verbatim unless it is 0, in which case this will use 1 instead.
+	 * Usually, only non-zero even numbers are supplied for stateB.
 	 *
 	 * @param stateA any {@code long} value
-	 * @param stateB any {@code long} value
-	 * @param stateC any {@code long} value
+	 * @param stateB any even {@code long} value except 0
+	 * @param stateC any {@code long} value except 0
 	 */
 	public WumpusRandom(long stateA, long stateB, long stateC) {
 		this.stateA = stateA;
-		this.stateB = stateB & -2L;
+		this.stateB = stateB == 0L ? -2L : (stateB & -2L);
 		this.stateC = stateC == 0L ? 1L : stateC;
 	}
 
@@ -134,10 +138,11 @@ public class WumpusRandom extends EnhancedRandom {
 			stateA = value;
 			break;
 		case 1:
-			stateB = value;
+			stateB = value == 0L ? -2L : (value & -2L);
+
 			break;
 		case 2:
-			stateC = value;
+			stateC = value == 0L ? 1L : value;
 			break;
 		}
 	}
@@ -158,7 +163,8 @@ public class WumpusRandom extends EnhancedRandom {
 		stateA = seed;
 		seed *= 0xbea225f9eb34556dL;
 		seed ^= seed >>> 32;
-		stateB = (seed ^ 0xC6BC279692B5C323L) & -2L;
+		stateB = seed ^ 0xC6BC279692B5C323L;
+		stateB = stateB == 0L ? -2L : (stateB & -2L);
 		seed *= 0xbea225f9eb34556dL;
 		seed ^= seed >>> 29;
 		seed ^= ~0xC6BC279692B5C323L;
@@ -184,11 +190,12 @@ public class WumpusRandom extends EnhancedRandom {
 
 	/**
 	 * Sets the second part of the state. The lowest bit is ignored, so typically you will only pass this even numbers.
+	 * This cannot accept 0; if 0 is provided, it will treat it as -2.
 	 *
-	 * @param stateB can be any even long
+	 * @param stateB can be any even long except 0
 	 */
 	public void setStateB (long stateB) {
-		this.stateB = stateB & -2L;
+		this.stateB = stateB == 0L ? -2L : (stateB & -2L);
 	}
 
 	public long getStateC () {
@@ -221,21 +228,18 @@ public class WumpusRandom extends EnhancedRandom {
 	 * and {@link #setStateC(long)} as a group.
 	 *
 	 * @param stateA the first state; can be any long
-	 * @param stateB the second state; can be any even long
+	 * @param stateB the second state; can be any even long except 0
 	 * @param stateC the third state; can be any long except 0
 	 */
 	@Override
 	public void setState (long stateA, long stateB, long stateC) {
 		this.stateA = stateA;
-		this.stateB = stateB & -2L;
+		this.stateB = stateB == 0L ? -2L : stateB & -2L;
 		this.stateC = stateC == 0 ? 1L : stateC;
 	}
 
 	@Override
 	public long nextLong () {
-//		long z = (stateA += 0xDE916ABCC965815BL +
-//			(stateB = (stateC << 1) ^ (stateB >> 63 & 0xB35846EEAB94A77EL)))
-//			^ (stateC = (stateC << 1) ^ (stateC >> 63 & 0xFEEDBABEDEADBEEFL));
 		final long b = stateB;
 		final long c = stateC;
 		final long z = stateA ^ c;
