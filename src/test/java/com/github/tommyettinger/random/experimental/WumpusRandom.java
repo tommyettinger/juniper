@@ -239,7 +239,7 @@ public class WumpusRandom extends EnhancedRandom {
 		final long b = stateB;
 		final long c = stateC;
 		final long z = stateA ^ c;
-		stateA += 0xDE916ABCC965815BL + b;
+		stateA = stateA * 0xD1342543DE82EF95L + 0xDE916ABCC965815BL ^ b;
 		stateB = (b << 1) ^ (b >> 63 & 0xB35846EEAB94A77EL);
 		stateC = (c << 1) ^ (c >> 63 & 0xFEEDBABEDEADBEEFL);
 		return z ^ z >>> 27;
@@ -253,7 +253,7 @@ public class WumpusRandom extends EnhancedRandom {
 		lsb = (stateB & 2L);
 		stateB ^= (-lsb & 0xB35846EEAB94A77EL);
 		stateB = (stateB >>> 1 & -2L) ^ lsb << 62;
-		stateA -= 0xDE916ABCC965815BL + stateB;
+		stateA = ((stateA ^ stateB) - 0xDE916ABCC965815BL) * 0x572B5EE77A54E3BDL;
 		long z = stateA ^ stateC;
 		return z ^ z >>> 27;
 	}
@@ -263,7 +263,7 @@ public class WumpusRandom extends EnhancedRandom {
 		final long b = stateB;
 		final long c = stateC;
 		final long z = stateA ^ c;
-		stateA += 0xDE916ABCC965815BL + b;
+		stateA = stateA * 0xD1342543DE82EF95L + 0xDE916ABCC965815BL ^ b;
 		stateB = (b << 1) ^ (b >> 63 & 0xB35846EEAB94A77EL);
 		stateC = (c << 1) ^ (c >> 63 & 0xFEEDBABEDEADBEEFL);
 		return (int)(z ^ z >>> 27) >>> (32 - bits);
