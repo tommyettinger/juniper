@@ -19,6 +19,8 @@ package com.github.tommyettinger.random.experimental;
 
 import com.github.tommyettinger.random.EnhancedRandom;
 
+import java.math.BigInteger;
+
 /**
  * An LXM generator with the Mix step changed to a modified "StarStar" mixer.
  * This is related to L64X256MixRandom in JDK 17 and newer.
@@ -98,6 +100,21 @@ public class L64X256StarStarRandom extends EnhancedRandom {
 	@Override
 	public String getTag() {
 		return "LXSR";
+	}
+
+	/**
+	 * Returned by {@link #getMinimumPeriod()}.
+	 * @see #getMinimumPeriod()
+	 */
+	private static final BigInteger MINIMUM_PERIOD = new BigInteger("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000000000000000", 16);
+
+	/**
+	 * (2 to the 320) minus (2 to the 64).
+	 * @return (2 to the 320) minus (2 to the 64)
+	 */
+	@Override
+	public BigInteger getMinimumPeriod() {
+		return MINIMUM_PERIOD;
 	}
 
 	/**

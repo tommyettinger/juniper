@@ -19,11 +19,12 @@ package com.github.tommyettinger.random.experimental;
 
 import com.github.tommyettinger.random.EnhancedRandom;
 
+import java.math.BigInteger;
 import java.util.Random;
 
 /**
  * An LXM generator with the Mix step changed to AxHash's bulk step and the LCG step changed to an additive counter
- * (increment by 1). This is related to L64X256MixRandom in JDK 17 and newer.
+ * (increment by the result of the mix step). This is related to L64X256MixRandom in JDK 17 and newer.
  * <br>
  * Xoshiro256** was written in 2018 by David Blackman and Sebastiano Vigna. You can consult their paper for technical details:
  * <a href="https://vigna.di.unimi.it/ftp/papers/ScrambledLinear.pdf">PDF link here</a>.
@@ -48,7 +49,7 @@ public class V64X256AxRandom extends EnhancedRandom {
 	 */
 	protected long stateD;
 	/**
-	 * The fifth (LCG) state; can be any long.
+	 * The fifth (counter) state; can be any long.
 	 */
 	protected long stateE;
 
@@ -99,7 +100,22 @@ public class V64X256AxRandom extends EnhancedRandom {
 
 	@Override
 	public String getTag() {
-		return "CXUR";
+		return "VXUR";
+	}
+
+	/**
+	 * Returned by {@link #getMinimumPeriod()}.
+	 * @see #getMinimumPeriod()
+	 */
+	private static final BigInteger MINIMUM_PERIOD = new BigInteger("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000000000000000", 16);
+
+	/**
+	 * (2 to the 320) minus (2 to the 64).
+	 * @return (2 to the 320) minus (2 to the 64)
+	 */
+	@Override
+	public BigInteger getMinimumPeriod() {
+		return MINIMUM_PERIOD;
 	}
 
 	/**

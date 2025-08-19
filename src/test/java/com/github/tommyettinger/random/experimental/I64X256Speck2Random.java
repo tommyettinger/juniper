@@ -19,6 +19,8 @@ package com.github.tommyettinger.random.experimental;
 
 import com.github.tommyettinger.random.EnhancedRandom;
 
+import java.math.BigInteger;
+
 /**
  * An LXM generator with the Mix step changed to 1 round of the
  * <a href="https://en.wikipedia.org/wiki/Speck_(cipher)">Speck Cipher</a> and the LCG step changed to an additive
@@ -99,6 +101,21 @@ public class I64X256Speck2Random extends EnhancedRandom {
 	@Override
 	public String getTag() {
 		return "CXUR";
+	}
+
+	/**
+	 * Returned by {@link #getMinimumPeriod()}.
+	 * @see #getMinimumPeriod()
+	 */
+	private static final BigInteger MINIMUM_PERIOD = new BigInteger("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000000000000000", 16);
+
+	/**
+	 * (2 to the 320) minus (2 to the 64).
+	 * @return (2 to the 320) minus (2 to the 64)
+	 */
+	@Override
+	public BigInteger getMinimumPeriod() {
+		return MINIMUM_PERIOD;
 	}
 
 	/**
