@@ -20,14 +20,39 @@ package com.github.tommyettinger.random.experimental;
 import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.random.EnhancedRandom;
 
+import java.math.BigInteger;
+
 /**
  * A generator with a long period and one stream. Has 191 bits of state, with one state that can be any long, one state
  * that can be any long except 0, and one state that can be any even long except 0.
+ * <br>
+ * This has the weirdest ICE and IICE results I have seen so far. It passes IICE, then only later (after the first 4
+ * nextLong() results) do vertical line correlations appear subtly. Then some time after that, correlation suddenly pops
+ * into place, and y-values (the initial states for stateB) become totally irrelevant to the result. This hasn't
+ * happened with any other generator, and I would not be surprised if this has "useful" "negative" properties for
+ * kleptography, I say with a frown on my face. The fact that a generator can pass tests early on and suddenly restore
+ * correlation later seems really, seriously bad.
  */
 public class WumpusRandom extends EnhancedRandom {
 	@Override
 	public String getTag() {
 		return "WumR";
+	}
+
+	/**
+	 * Returned by {@link #getMinimumPeriod()}.
+	 * @see #getMinimumPeriod()
+	 */
+	private static final BigInteger MINIMUM_PERIOD = new BigInteger("7ffffffffffffffe80000000000000010000000000000000", 16);
+
+	/**
+	 * (2 to the 64) times ((2 to the 64) minus 1) times ((2 to the 63) minus 1).
+	 * This is between 2 to the 190, and 2 to the 191, and is much closer to the latter.
+	 * @return (2 to the 64) times ((2 to the 64) minus 1) times ((2 to the 63) minus 1)
+	 */
+	@Override
+	public BigInteger getMinimumPeriod() {
+		return MINIMUM_PERIOD;
 	}
 
 	/**
@@ -240,37 +265,37 @@ public class WumpusRandom extends EnhancedRandom {
 
 	@Override
 	public long nextLong () {
+		final long a = stateA;
 		final long b = stateB;
 		final long c = stateC;
-		final long z = stateA ^ c;
-		stateA = stateA * 0xD1342543DE82EF95L + 0xDE916ABCC965815BL ^ b;
+		final long z = (a ^ a >>> 27) * (b ^ 0x3C79AC492BA7B653L);
+		stateA = a * 0xD1342543DE82EF95L + 1L ^ c;
 		stateB = (b << 1) ^ (b >> 63 & 0xB35846EEAB94A77EL);
 		stateC = (c << 1) ^ (c >> 63 & 0xFEEDBABEDEADBEEFL);
-		return z ^ z >>> 27;
+		return z ^ (z << 25 | z >>> 39) ^ (z << 50 | z >>> 14);
 	}
 
 	@Override
 	public long previousLong () {
-		long lsb = (stateC & 1L);
-		stateC ^= (-lsb & 0xfeedbabedeadbeefL);
-		stateC = (stateC >>> 1) ^ lsb << 63;
-		lsb = (stateB & 2L);
-		stateB ^= (-lsb & 0xB35846EEAB94A77EL);
-		stateB = (stateB >>> 1 & -2L) ^ lsb << 62;
-		stateA = ((stateA ^ stateB) - 0xDE916ABCC965815BL) * 0x572B5EE77A54E3BDL;
-		long z = stateA ^ stateC;
-		return z ^ z >>> 27;
+		final long lsb = (stateC & 1L);
+		stateC = ((stateC ^ (-lsb & 0xFEEDBABEDEADBEEFL)) >>> 1) ^ lsb << 63;
+		final long slsb = (stateB & 2L);
+		stateB = ((stateB ^ (-slsb & 0xB35846EEAB94A77EL)) >>> 1 & -2L) ^ slsb << 62;
+		stateA = ((stateA ^ stateC) - 1L) * 0x572B5EE77A54E3BDL;
+		final long z = (stateA ^ stateA >>> 27) * (stateB ^ 0x3C79AC492BA7B653L);
+		return z ^ (z << 25 | z >>> 39) ^ (z << 50 | z >>> 14);
 	}
 
 	@Override
 	public int next (int bits) {
+		final long a = stateA;
 		final long b = stateB;
 		final long c = stateC;
-		final long z = stateA ^ c;
-		stateA = stateA * 0xD1342543DE82EF95L + 0xDE916ABCC965815BL ^ b;
+		final long z = (a ^ a >>> 27) * (b ^ 0x3C79AC492BA7B653L);
+		stateA = a * 0xD1342543DE82EF95L + 1L ^ c;
 		stateB = (b << 1) ^ (b >> 63 & 0xB35846EEAB94A77EL);
 		stateC = (c << 1) ^ (c >> 63 & 0xFEEDBABEDEADBEEFL);
-		return (int)(z ^ z >>> 27) >>> (32 - bits);
+		return (int)(z ^ (z << 25 | z >>> 39) ^ (z << 50 | z >>> 14)) >>> (32 - bits);
 	}
 
 	@Override
