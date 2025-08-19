@@ -19,6 +19,8 @@ package com.github.tommyettinger.random.experimental;
 
 import com.github.tommyettinger.random.EnhancedRandom;
 
+import java.math.BigInteger;
+
 /**
  * An LXM generator with the Mix step changed to PCG-Random's RXSMXS operation and the Xorshift generator changed to the
  * simplest 64-bit Xorshift-family generator: one that shifts left by 7 and right by 9. This is somewhat related to
@@ -79,6 +81,21 @@ public class L64X64PcgRandom extends EnhancedRandom {
 	@Override
 	public String getTag() {
 		return "LxPR";
+	}
+
+	/**
+	 * Returned by {@link #getMinimumPeriod()}.
+	 * @see #getMinimumPeriod()
+	 */
+	private static final BigInteger MINIMUM_PERIOD = new BigInteger("FFFFFFFFFFFFFFFF0000000000000000", 16);
+
+	/**
+	 * (2 to the 128) minus (2 to the 64).
+	 * @return (2 to the 128) minus (2 to the 64)
+	 */
+	@Override
+	public BigInteger getMinimumPeriod() {
+		return MINIMUM_PERIOD;
 	}
 
 	/**

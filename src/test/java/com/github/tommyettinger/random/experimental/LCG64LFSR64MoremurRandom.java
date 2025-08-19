@@ -19,6 +19,8 @@ package com.github.tommyettinger.random.experimental;
 
 import com.github.tommyettinger.random.EnhancedRandom;
 
+import java.math.BigInteger;
+
 /**
  * An LXM generator with the Mix step changed to the Moremur unary hash and the Xorshift generator changed to a
  * simple 64-bit LFSR. This is somewhat related to L64X256MixRandom in JDK 17 and newer.
@@ -82,6 +84,21 @@ public class LCG64LFSR64MoremurRandom extends EnhancedRandom {
 	@Override
 	public String getTag() {
 		return "LrUR";
+	}
+
+	/**
+	 * Returned by {@link #getMinimumPeriod()}.
+	 * @see #getMinimumPeriod()
+	 */
+	private static final BigInteger MINIMUM_PERIOD = new BigInteger("FFFFFFFFFFFFFFFF0000000000000000", 16);
+
+	/**
+	 * (2 to the 128) minus (2 to the 64).
+	 * @return (2 to the 128) minus (2 to the 64)
+	 */
+	@Override
+	public BigInteger getMinimumPeriod() {
+		return MINIMUM_PERIOD;
 	}
 
 	/**

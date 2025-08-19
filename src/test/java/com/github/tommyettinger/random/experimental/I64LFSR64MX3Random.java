@@ -19,6 +19,8 @@ package com.github.tommyettinger.random.experimental;
 
 import com.github.tommyettinger.random.EnhancedRandom;
 
+import java.math.BigInteger;
+
 /**
  * An LXM generator with the Mix step changed to the MX3 unary hash, the Xorshift generator changed to a
  * simple 64-bit LFSR, and the LCG changed to a counter-by-1. This is somewhat related to L64X256MixRandom in JDK 17
@@ -83,6 +85,21 @@ public class I64LFSR64MX3Random extends EnhancedRandom {
 	@Override
 	public String getTag() {
 		return "IrMR";
+	}
+
+	/**
+	 * Returned by {@link #getMinimumPeriod()}.
+	 * @see #getMinimumPeriod()
+	 */
+	private static final BigInteger MINIMUM_PERIOD = new BigInteger("FFFFFFFFFFFFFFFF0000000000000000", 16);
+
+	/**
+	 * (2 to the 128) minus (2 to the 64).
+	 * @return (2 to the 128) minus (2 to the 64)
+	 */
+	@Override
+	public BigInteger getMinimumPeriod() {
+		return MINIMUM_PERIOD;
 	}
 
 	/**
