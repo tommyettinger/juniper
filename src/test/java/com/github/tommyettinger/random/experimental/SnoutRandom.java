@@ -22,6 +22,8 @@ import com.github.tommyettinger.random.AceRandom;
 import com.github.tommyettinger.random.EnhancedRandom;
 import com.github.tommyettinger.random.WhiskerRandom;
 
+import java.math.BigInteger;
+
 /**
  * A four-state EnhancedRandom that uses four ARX operations (add, bitwise rotate, or XOR) to generate each number, one
  * operation per state. It has an additive counter (Weyl sequence) that will eventually become every possible long
@@ -47,6 +49,21 @@ public class SnoutRandom extends EnhancedRandom {
 	@Override
 	public String getTag() {
 		return "SntR";
+	}
+
+	/**
+	 * Returned by {@link #getMinimumPeriod()}.
+	 * @see #getMinimumPeriod()
+	 */
+	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
+
+	/**
+	 * 2 to the 64.
+	 * @return 2 to the 64
+	 */
+	@Override
+	public BigInteger getMinimumPeriod() {
+		return MINIMUM_PERIOD;
 	}
 
 	/**

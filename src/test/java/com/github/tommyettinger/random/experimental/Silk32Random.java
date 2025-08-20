@@ -4,6 +4,8 @@ import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.random.EnhancedRandom;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
+import java.math.BigInteger;
+
 /**
  * Copied in, mostly, from SquidLib's SilkRNG class. Quality is decent for a single short stream of random numbers, but
  * there are serious correlation issues when using multiple short sequences produced by similar initial states.
@@ -16,6 +18,30 @@ public class Silk32Random extends EnhancedRandom {
     public String getTag() {
         return "SilR";
     }
+
+	/**
+	 * This generator mainly generates int values.
+	 * @return true
+	 */
+	@Override
+	public boolean mainlyGeneratesInt() {
+		return true;
+	}
+
+	/**
+	 * Returned by {@link #getMinimumPeriod()}.
+	 * @see #getMinimumPeriod()
+	 */
+	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
+
+	/**
+	 * 2 to the 64.
+	 * @return 2 to the 64
+	 */
+	@Override
+	public BigInteger getMinimumPeriod() {
+		return MINIMUM_PERIOD;
+	}
 
     public int stateA, stateB;
 
