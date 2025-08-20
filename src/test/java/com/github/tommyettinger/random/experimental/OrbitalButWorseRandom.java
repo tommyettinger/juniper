@@ -21,6 +21,8 @@ import com.github.tommyettinger.digital.BitConversion;
 import com.github.tommyettinger.random.EnhancedRandom;
 import com.github.tommyettinger.random.OrbitalRandom;
 
+import java.math.BigInteger;
+
 /**
  * Exactly like {@link OrbitalRandom}, but slower and probably no more random.
  */
@@ -71,6 +73,21 @@ public class OrbitalButWorseRandom extends EnhancedRandom {
 	@Override
 	public String getTag() {
 		return "OBWR";
+	}
+
+	/**
+	 * Returned by {@link #getMinimumPeriod()}.
+	 * @see #getMinimumPeriod()
+	 */
+	private static final BigInteger MINIMUM_PERIOD = new BigInteger("100000000000000000000000000000000", 16);
+
+	/**
+	 * 2 to the 128.
+	 * @return 2 to the 128
+	 */
+	@Override
+	public BigInteger getMinimumPeriod() {
+		return MINIMUM_PERIOD;
 	}
 
 	/**

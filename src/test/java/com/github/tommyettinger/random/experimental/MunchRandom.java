@@ -21,6 +21,8 @@ import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.digital.BitConversion;
 import com.github.tommyettinger.random.EnhancedRandom;
 
+import java.math.BigInteger;
+
 /**
  * 192 bits of state. Period is 2 to the 192.
  * This uses one round of the Speck cipher, followed by Moremur to mix the result.
@@ -29,6 +31,21 @@ public class MunchRandom extends EnhancedRandom {
 	@Override
 	public String getTag() {
 		return "MunR";
+	}
+
+	/**
+	 * Returned by {@link #getMinimumPeriod()}.
+	 * @see #getMinimumPeriod()
+	 */
+	private static final BigInteger MINIMUM_PERIOD = new BigInteger("1000000000000000000000000000000000000000000000000", 16);
+
+	/**
+	 * 2 to the 192.
+	 * @return 2 to the 129
+	 */
+	@Override
+	public BigInteger getMinimumPeriod() {
+		return MINIMUM_PERIOD;
 	}
 
 	/**

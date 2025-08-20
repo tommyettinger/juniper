@@ -21,6 +21,8 @@ import com.github.tommyettinger.random.AceRandom;
 import com.github.tommyettinger.random.EnhancedRandom;
 import com.github.tommyettinger.random.TraceRandom;
 
+import java.math.BigInteger;
+
 /**
  * DEPRECATED: Use {@link TraceRandom} instead.
  * <br>
@@ -139,6 +141,21 @@ public class MaceRandom extends EnhancedRandom {
 	@Override
 	public String getTag() {
 		return "MceR";
+	}
+
+	/**
+	 * Returned by {@link #getMinimumPeriod()}.
+	 * @see #getMinimumPeriod()
+	 */
+	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
+
+	/**
+	 * 2 to the 64.
+	 * @return 2 to the 64
+	 */
+	@Override
+	public BigInteger getMinimumPeriod() {
+		return MINIMUM_PERIOD;
 	}
 
 	/**
