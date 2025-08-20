@@ -19,6 +19,8 @@ package com.github.tommyettinger.random.experimental;
 
 import com.github.tommyettinger.random.EnhancedRandom;
 
+import java.math.BigInteger;
+
 /**
  * Like TrimRandom with five 64-bit states; does not use multiplication, only add, XOR, and bitwise-rotate
  * operations. Has a state that runs like a counter, guaranteeing a minimum period of 2 to the 64.
@@ -27,6 +29,21 @@ public class LaceRandom extends EnhancedRandom {
 	@Override
 	public String getTag() {
 		return "LceR";
+	}
+
+	/**
+	 * Returned by {@link #getMinimumPeriod()}.
+	 * @see #getMinimumPeriod()
+	 */
+	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
+
+	/**
+	 * 2 to the 64.
+	 * @return 2 to the 64
+	 */
+	@Override
+	public BigInteger getMinimumPeriod() {
+		return MINIMUM_PERIOD;
 	}
 
 	/**

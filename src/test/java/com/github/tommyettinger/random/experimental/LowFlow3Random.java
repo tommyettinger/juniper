@@ -20,6 +20,8 @@ package com.github.tommyettinger.random.experimental;
 import com.github.tommyettinger.digital.BitConversion;
 import com.github.tommyettinger.random.EnhancedRandom;
 
+import java.math.BigInteger;
+
 /*
  * A hash-on-counters RNG with a period of 2 to the 64 and 2 to the 64 streams.
  * It allows arbitrary skipping within the current stream using {@link #skip(long)}, and you can get
@@ -102,7 +104,22 @@ public class LowFlow3Random extends EnhancedRandom {
 
 	@Override
 	public String getTag() {
-		return "FloR";
+		return "Fl3R";
+	}
+
+	/**
+	 * Returned by {@link #getMinimumPeriod()}.
+	 * @see #getMinimumPeriod()
+	 */
+	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
+
+	/**
+	 * 2 to the 64.
+	 * @return 2 to the 64
+	 */
+	@Override
+	public BigInteger getMinimumPeriod() {
+		return MINIMUM_PERIOD;
 	}
 
 	/**

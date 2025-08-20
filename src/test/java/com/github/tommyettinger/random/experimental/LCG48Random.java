@@ -20,6 +20,8 @@ package com.github.tommyettinger.random.experimental;
 import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.random.EnhancedRandom;
 
+import java.math.BigInteger;
+
 /**
  * This should be similar to {@link java.util.Random}, and uses the same algorithm, but is an EnhancedRandom.
  */
@@ -31,6 +33,30 @@ public class LCG48Random extends EnhancedRandom {
 	@Override
 	public String getTag() {
 		return "LCGR";
+	}
+
+	/**
+	 * This generator mainly generates int values.
+	 * @return true
+	 */
+	@Override
+	public boolean mainlyGeneratesInt() {
+		return true;
+	}
+
+	/**
+	 * Returned by {@link #getMinimumPeriod()}.
+	 * @see #getMinimumPeriod()
+	 */
+	private static final BigInteger MINIMUM_PERIOD = new BigInteger("1000000000000", 16);
+
+	/**
+	 * 2 to the 48.
+	 * @return 2 to the 48
+	 */
+	@Override
+	public BigInteger getMinimumPeriod() {
+		return MINIMUM_PERIOD;
 	}
 
 	/**
