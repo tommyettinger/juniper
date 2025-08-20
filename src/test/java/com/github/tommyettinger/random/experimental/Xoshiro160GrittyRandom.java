@@ -134,7 +134,7 @@ public class Xoshiro160GrittyRandom extends EnhancedRandom {
 	public boolean mainlyGeneratesInt() {
 		return true;
 	}
-	
+
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
 	 * @see #getMinimumPeriod()

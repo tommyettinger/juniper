@@ -68,6 +68,7 @@ public final class Deserializer {
         register(new GoldenQuasiRandom(1));
         register(new VanDerCorputQuasiRandom(1));
         register(new TupleQuasiRandom(1));
+        register(new LFSR64QuasiRandom(1));
         register(new LaserRandom(1, 2));
         register(new MizuchiRandom(1, 2));
         register(new LowChangeQuasiRandom(1, 2));
