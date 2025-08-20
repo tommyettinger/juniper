@@ -20,6 +20,7 @@ package com.github.tommyettinger.random.experimental;
 import com.badlogic.gdx.math.RandomXS128;
 import com.github.tommyettinger.random.EnhancedRandom;
 
+import java.math.BigInteger;
 import java.util.Random;
 
 /**
@@ -54,6 +55,21 @@ public class RandomXS128Random extends EnhancedRandom {
     public String getTag() {
         return "RXSR";
     }
+
+	/**
+	 * Returned by {@link #getMinimumPeriod()}.
+	 * @see #getMinimumPeriod()
+	 */
+	private static final BigInteger MINIMUM_PERIOD = new BigInteger("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", 16);
+
+	/**
+	 * (2 to the 128) minus 1.
+	 * @return (2 to the 128) minus 1
+	 */
+	@Override
+	public BigInteger getMinimumPeriod() {
+		return MINIMUM_PERIOD;
+	}
 
     @Override
     public void setSeed(long seed) {

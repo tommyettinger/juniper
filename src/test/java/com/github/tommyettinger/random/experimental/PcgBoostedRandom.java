@@ -19,6 +19,8 @@ package com.github.tommyettinger.random.experimental;
 
 import com.github.tommyettinger.random.EnhancedRandom;
 
+import java.math.BigInteger;
+
 /**
  * A modified version of PCG-Random's RXS-M-XS generator. It has two {@code long} states, one of which changes with
  * every generated value and one always-odd state which never changes (the "stream" or "increment"). This uses a linear
@@ -85,6 +87,21 @@ public class PcgBoostedRandom extends EnhancedRandom {
 	@Override
 	public String getTag() {
 		return "PBdR";
+	}
+
+	/**
+	 * Returned by {@link #getMinimumPeriod()}.
+	 * @see #getMinimumPeriod()
+	 */
+	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
+
+	/**
+	 * 2 to the 64.
+	 * @return 2 to the 64
+	 */
+	@Override
+	public BigInteger getMinimumPeriod() {
+		return MINIMUM_PERIOD;
 	}
 
 	/**

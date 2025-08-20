@@ -21,6 +21,8 @@ import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.digital.BitConversion;
 import com.github.tommyettinger.random.EnhancedRandom;
 
+import java.math.BigInteger;
+
 /**
  * A hash-on-counters type of RNG with two 64-bit states; uses {@link Long#numberOfLeadingZeros(long)} as part of what
  * ensures its long period. The hash is a mix of four bitwise rotations, a xorshift, and two 64-bit multiplications,
@@ -32,6 +34,21 @@ public class PactRandom extends EnhancedRandom {
 	@Override
 	public String getTag() {
 		return "PctR";
+	}
+
+	/**
+	 * Returned by {@link #getMinimumPeriod()}.
+	 * @see #getMinimumPeriod()
+	 */
+	private static final BigInteger MINIMUM_PERIOD = new BigInteger("100000000000000000000000000000000", 16);
+
+	/**
+	 * 2 to the 128.
+	 * @return 2 to the 128
+	 */
+	@Override
+	public BigInteger getMinimumPeriod() {
+		return MINIMUM_PERIOD;
 	}
 
 	/**
