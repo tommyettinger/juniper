@@ -19,6 +19,8 @@ package com.github.tommyettinger.random.experimental;
 
 import com.github.tommyettinger.random.EnhancedRandom;
 
+import java.math.BigInteger;
+
 /**
  * A tiny generator using four 64-bit states assigned all on one line, using only ARX operations (add, bitwise rotate,
  * and XOR). <a href="https://quick-bench.com/q/dYHUBBQYy7yRtt3CL9Q_EQ6p-o8">It is very fast!</a>
@@ -44,6 +46,21 @@ public class ThrushRandom extends EnhancedRandom {
 	@Override
 	public String getTag() {
 		return "ThuR";
+	}
+
+	/**
+	 * Returned by {@link #getMinimumPeriod()}.
+	 * @see #getMinimumPeriod()
+	 */
+	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
+
+	/**
+	 * 2 to the 64.
+	 * @return 2 to the 64
+	 */
+	@Override
+	public BigInteger getMinimumPeriod() {
+		return MINIMUM_PERIOD;
 	}
 
 	/**

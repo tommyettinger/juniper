@@ -24,7 +24,9 @@ import java.math.BigInteger;
 
 /**
  * A generator with a long period and one stream. Has 191 bits of state, with one state that can be any long, one state
- * that can be any long except 0, and one state that can be any even long except 0.
+ * that can be any long except 0, and one state that can be any even long except 0. This has a period of exactly
+ * (2 to the 64) times ((2 to the 64) minus 1) times ((2 to the 63) minus 1), as long as the states are in their allowed
+ * ranges (any long for stateA, any non-zero even long for stateB, and any non-zero long for stateC).
  * <br>
  * This has the weirdest ICE and IICE results I have seen so far. It passes IICE, then only later (after the first 4
  * nextLong() results) do vertical line correlations appear subtly. Then some time after that, correlation suddenly pops
@@ -60,11 +62,11 @@ public class WumpusRandom extends EnhancedRandom {
 	 */
 	protected long stateA;
 	/**
-	 * The second state; can be any long.
+	 * The second state; can be any non-zero even long.
 	 */
 	protected long stateB;
 	/**
-	 * The third state; can be any long.
+	 * The third state; can be any non-zero long.
 	 */
 	protected long stateC;
 

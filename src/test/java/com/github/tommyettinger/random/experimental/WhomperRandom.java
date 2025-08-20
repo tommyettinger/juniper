@@ -23,7 +23,8 @@ import java.math.BigInteger;
 
 /**
  * A generator with a long period and one stream. Has 191 bits of state, with one state that can be any long, one state
- * that can be any long except 0, and one state (really a stream) that can be any odd long.
+ * that can be any long except 0, and one state (really a stream) that can be any odd long. This has a period of exactly
+ * (2 to the 128) minus (2 to the 64) as long as stateC is non-zero and stateB is odd.
  * <br>
  * Passes ICE and IICE tests for correlation between streams.
  */

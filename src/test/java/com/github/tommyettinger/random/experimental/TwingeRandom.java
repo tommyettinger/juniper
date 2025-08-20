@@ -19,6 +19,8 @@ package com.github.tommyettinger.random.experimental;
 
 import com.github.tommyettinger.random.EnhancedRandom;
 
+import java.math.BigInteger;
+
 /**
  * A pair-of-LCGs RNG with a period of 2 to the 64 and 2 to the 64 streams.
  * <br>
@@ -75,6 +77,21 @@ public class TwingeRandom extends EnhancedRandom {
 	@Override
 	public String getTag() {
 		return "CupR";
+	}
+
+	/**
+	 * Returned by {@link #getMinimumPeriod()}.
+	 * @see #getMinimumPeriod()
+	 */
+	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
+
+	/**
+	 * 2 to the 64.
+	 * @return 2 to the 64
+	 */
+	@Override
+	public BigInteger getMinimumPeriod() {
+		return MINIMUM_PERIOD;
 	}
 
 	/**

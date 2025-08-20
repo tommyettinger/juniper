@@ -22,6 +22,8 @@ import com.github.tommyettinger.random.ChopRandom;
 import com.github.tommyettinger.random.EnhancedRandom;
 import com.github.tommyettinger.random.Xoshiro160RoadroxoRandom;
 
+import java.math.BigInteger;
+
 import static com.github.tommyettinger.digital.BitConversion.imul;
 
 /**
@@ -58,7 +60,6 @@ import static com.github.tommyettinger.digital.BitConversion.imul;
  * <br>
  * Based on <a href="https://prng.di.unimi.it/xoshiro128plusplus.c">this public-domain code</a> by Vigna and Blackman.
  */
-@SuppressWarnings("IntegerMultiplicationImplicitCastToLong")
 public class Xoshiro160GrittyRandom extends EnhancedRandom {
 
 	/**
@@ -123,6 +124,30 @@ public class Xoshiro160GrittyRandom extends EnhancedRandom {
 	@Override
 	public String getTag() {
 		return "XGrR";
+	}
+
+	/**
+	 * This generator mainly generates int values.
+	 * @return true
+	 */
+	@Override
+	public boolean mainlyGeneratesInt() {
+		return true;
+	}
+	
+	/**
+	 * Returned by {@link #getMinimumPeriod()}.
+	 * @see #getMinimumPeriod()
+	 */
+	private static final BigInteger MINIMUM_PERIOD = new BigInteger("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000", 16);
+
+	/**
+	 * (2 to the 160) minus (2 to the 32).
+	 * @return (2 to the 160) minus (2 to the 32)
+	 */
+	@Override
+	public BigInteger getMinimumPeriod() {
+		return MINIMUM_PERIOD;
 	}
 
 	/**

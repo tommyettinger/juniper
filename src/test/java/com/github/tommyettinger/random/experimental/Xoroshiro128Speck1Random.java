@@ -19,6 +19,8 @@ package com.github.tommyettinger.random.experimental;
 
 import com.github.tommyettinger.random.EnhancedRandom;
 
+import java.math.BigInteger;
+
 /**
  * Xoroshiro128** was written in 2018 by David Blackman and Sebastiano Vigna. You can consult their paper for technical details:
  * <a href="https://vigna.di.unimi.it/ftp/papers/ScrambledLinear.pdf">PDF link here</a>. This does not use the ** scrambler.
@@ -78,6 +80,21 @@ public class Xoroshiro128Speck1Random extends EnhancedRandom {
 	@Override
 	public String getTag() {
 		return "XRSR";
+	}
+
+	/**
+	 * Returned by {@link #getMinimumPeriod()}.
+	 * @see #getMinimumPeriod()
+	 */
+	private static final BigInteger MINIMUM_PERIOD = new BigInteger("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", 16);
+
+	/**
+	 * (2 to the 128) minus 1.
+	 * @return (2 to the 128) minus 1
+	 */
+	@Override
+	public BigInteger getMinimumPeriod() {
+		return MINIMUM_PERIOD;
 	}
 
 	/**

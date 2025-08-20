@@ -21,6 +21,8 @@ import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.digital.BitConversion;
 import com.github.tommyettinger.random.EnhancedRandom;
 
+import java.math.BigInteger;
+
 /**
  * 192 bits of state. Period is 2 to the 192.
  * <br>
@@ -30,6 +32,21 @@ public class TyrantRandom extends EnhancedRandom {
 	@Override
 	public String getTag() {
 		return "TyrR";
+	}
+
+	/**
+	 * Returned by {@link #getMinimumPeriod()}.
+	 * @see #getMinimumPeriod()
+	 */
+	private static final BigInteger MINIMUM_PERIOD = new BigInteger("1000000000000000000000000000000000000000000000000", 16);
+
+	/**
+	 * 2 to the 192.
+	 * @return 2 to the 192
+	 */
+	@Override
+	public BigInteger getMinimumPeriod() {
+		return MINIMUM_PERIOD;
 	}
 
 	/**
