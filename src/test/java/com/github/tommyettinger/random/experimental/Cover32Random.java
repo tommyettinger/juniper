@@ -21,6 +21,8 @@ import com.github.tommyettinger.digital.BitConversion;
 import com.github.tommyettinger.digital.MathTools;
 import com.github.tommyettinger.random.*;
 
+import java.math.BigInteger;
+
 import static com.github.tommyettinger.digital.BitConversion.imul;
 
 /**
@@ -85,6 +87,30 @@ public class Cover32Random extends EnhancedRandom {
 	@Override
 	public String getTag() {
 		return "CvrR";
+	}
+
+	/**
+	 * This generator mainly generates int values.
+	 * @return true
+	 */
+	@Override
+	public boolean mainlyGeneratesInt() {
+		return true;
+	}
+
+	/**
+	 * Returned by {@link #getMinimumPeriod()}.
+	 * @see #getMinimumPeriod()
+	 */
+	private static final BigInteger MINIMUM_PERIOD = new BigInteger("1000000000000000000000000", 16);
+
+	/**
+	 * 2 to the 96.
+	 * @return 2 to the 96
+	 */
+	@Override
+	public BigInteger getMinimumPeriod() {
+		return MINIMUM_PERIOD;
 	}
 
 	/**

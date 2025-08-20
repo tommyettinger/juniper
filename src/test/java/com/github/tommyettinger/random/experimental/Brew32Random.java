@@ -20,6 +20,8 @@ package com.github.tommyettinger.random.experimental;
 import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.random.EnhancedRandom;
 
+import java.math.BigInteger;
+
 import static com.github.tommyettinger.digital.BitConversion.imul;
 
 /**
@@ -44,7 +46,7 @@ import static com.github.tommyettinger.digital.BitConversion.imul;
  * {@link #previousLong()} and {@link #previousInt()} without using skip().
  */
 // GWT actually needs these.
-@SuppressWarnings({"PointlessBitwiseExpression", "IntegerMultiplicationImplicitCastToLong"})
+@SuppressWarnings({"PointlessBitwiseExpression"})
 public class Brew32Random extends EnhancedRandom {
 
 	/**
@@ -102,7 +104,31 @@ public class Brew32Random extends EnhancedRandom {
 
 	@Override
 	public String getTag() {
-		return "ChoR";
+		return "BrwR";
+	}
+
+	/**
+	 * This generator mainly generates int values.
+	 * @return true
+	 */
+	@Override
+	public boolean mainlyGeneratesInt() {
+		return true;
+	}
+
+	/**
+	 * Returned by {@link #getMinimumPeriod()}.
+	 * @see #getMinimumPeriod()
+	 */
+	private static final BigInteger MINIMUM_PERIOD = new BigInteger("100000000", 16);
+
+	/**
+	 * 2 to the 32.
+	 * @return 2 to the 32
+	 */
+	@Override
+	public BigInteger getMinimumPeriod() {
+		return MINIMUM_PERIOD;
 	}
 
 	/**
