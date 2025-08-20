@@ -20,6 +20,8 @@ package com.github.tommyettinger.random.experimental;
 import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.random.EnhancedRandom;
 
+import java.math.BigInteger;
+
 /**
  * 192 bits of state. Period is 2 to the 64, with 2 to the 128 possible streams.
  */
@@ -27,6 +29,21 @@ public class TerseRandom extends EnhancedRandom {
 	@Override
 	public String getTag() {
 		return "TerR";
+	}
+
+	/**
+	 * Returned by {@link #getMinimumPeriod()}.
+	 * @see #getMinimumPeriod()
+	 */
+	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
+
+	/**
+	 * 2 to the 64.
+	 * @return 2 to the 64
+	 */
+	@Override
+	public BigInteger getMinimumPeriod() {
+		return MINIMUM_PERIOD;
 	}
 
 	/**
