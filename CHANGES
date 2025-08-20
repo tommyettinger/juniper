@@ -1,3 +1,9 @@
+[0.8.1]
+- Update digital dependency to 0.9.1, which expands which types can append to `StringBuilder & Appendable` types.
+- Add `getMinimumPeriod()` to EnhancedRandom, which gets the lowest known period of a properly-initialized generator.
+- Also add `mainlyGeneratesInt()` to EnhancedRandom, to distinguish chiefly-32-bit-output generators from 64-bit-output ones. This is intended to be how `getMinimumPeriod()` is measured.
+- Add LFSR64QuasiRandom, one of many possible full-period linear feedback shift register generators, mostly as a comparison point or something to combine with another generator to elongate the minimum period.
+
 [0.8.0]
 - Update digital dependency to 0.9.0, which lets us append EnhancedRandom and Distribution to more types than StringBuilder.
 - TraceRandom is very similar to the earlier MaceRandom, but tries much harder to find a near-perfect stream.
