@@ -20,6 +20,8 @@ package com.github.tommyettinger.random.experimental;
 import com.github.tommyettinger.random.EnhancedRandom;
 import com.github.tommyettinger.random.Respite32Random;
 
+import java.math.BigInteger;
+
 /**
  * A generator with "good enough" period length but many more streams than other generators here have.
  * Has 192 bits of state. Period is 2 to the 64 for any stream, with 2 to the 128 possible streams.
@@ -43,6 +45,21 @@ public class RespectRandom extends EnhancedRandom {
 	@Override
 	public String getTag() {
 		return "ResR";
+	}
+
+	/**
+	 * Returned by {@link #getMinimumPeriod()}.
+	 * @see #getMinimumPeriod()
+	 */
+	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
+
+	/**
+	 * 2 to the 64.
+	 * @return 2 to the 64
+	 */
+	@Override
+	public BigInteger getMinimumPeriod() {
+		return MINIMUM_PERIOD;
 	}
 
 	/**
