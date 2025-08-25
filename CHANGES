@@ -1,3 +1,6 @@
+[0.8.2]
+- Update digital dependency to 0.9.2, which is a hotfix for some buggy behavior with scrambled Base objects.
+
 [0.8.1]
 - Update digital dependency to 0.9.1, which expands which types can append to `StringBuilder & Appendable` types.
 - Add `getMinimumPeriod()` to EnhancedRandom, which gets the lowest known period of a properly-initialized generator.
