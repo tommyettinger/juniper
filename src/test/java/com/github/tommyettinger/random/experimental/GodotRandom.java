@@ -335,6 +335,34 @@ public class GodotRandom extends EnhancedRandom {
 		return pcg32_random_r() >>> (32 - bits);
 	}
 
+	/**
+	 * This is just like {@link #nextFloat()}, returning a float between 0 and 1, except that it is inclusive on both
+	 * 0.0 and 1.0.
+	 *
+	 * @return a float between 0.0, inclusive, and 1.0, inclusive
+	 */
+	@Override
+	public float nextInclusiveFloat() {
+		int expOffset =  pcg32_random_r();
+		if(expOffset == 0) return 0f;
+		return Math.scalb((float) (pcg32_random_r() | 0x80000001L), -32 - Integer.numberOfLeadingZeros(expOffset));
+	}
+
+	/**
+	 * This is just like {@link #nextDouble()}, returning a double between 0 and 1, except that it is inclusive on both
+	 * 0.0 and 1.0.
+	 *
+	 * @return a double between 0.0, inclusive, and 1.0, inclusive
+	 */
+	@Override
+	public double nextInclusiveDouble() {
+		int expOffset = pcg32_random_r();
+		if(expOffset == 0) return 0.0;
+		long significand = ((long) pcg32_random_r() << 32 ^ pcg32_random_r()) | 0x8000000000000001L;
+		return Math.scalb((double) significand, -64 - Integer.numberOfLeadingZeros(expOffset));
+
+	}
+
 	@Override
 	public GodotRandom copy () {
 		return new GodotRandom(state, inc);
