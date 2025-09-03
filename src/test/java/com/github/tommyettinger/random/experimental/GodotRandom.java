@@ -30,7 +30,8 @@ public class GodotRandom extends EnhancedRandom {
 	/**
 	 * From PCG sources, copied into Godot 4.4, this is the default value for {@link #inc}.
 	 */
-	public static final long PCG_DEFAULT_INC_64 = 1442695040888963407L;
+	public static final long DEFAULT_INC  = 0x14057B7EF767814FL;
+	public static final long DEFAULT_SEED = 0xA7323897838D73DBL;
 
 	/**
 	 * PCG-Random's pcg32 XSH RR generator.
@@ -40,7 +41,8 @@ public class GodotRandom extends EnhancedRandom {
 	 */
 	public int pcg32_random_r() {
 		long old = state;
-		state = old * 6364136223846793005L + inc;
+		// 0x5851F42D4C957F2DL is 6364136223846793005L
+		state = old * 0x5851F42D4C957F2DL + inc;
 		int xs = (int)(old >>> 27 ^ old >>> 45);
 		int rot = (int) (old >>> 59);
 		return (xs >>> rot | xs << 32 - rot);
@@ -56,7 +58,7 @@ public class GodotRandom extends EnhancedRandom {
 	 */
 	public void pcg32_srandom_r(long initstate, long initseq){
 		inc = initseq << 1 | 1L;
-		state = (initstate + inc) * 6364136223846793005L + inc;;
+		state = (initstate + inc) * 0x5851F42D4C957F2DL + inc;;
 	}
 
 	/**
@@ -90,37 +92,52 @@ public class GodotRandom extends EnhancedRandom {
 	protected long inc;
 
 	/**
-	 * Creates a new GodotRandom with a random state.
+	 * The first state assigned during seeding, used to return the generator to its initial state.
+	 */
+	protected long initialState = 0L;
+
+	/**
+	 * The first increment assigned during seeding, used to keep inc the same value even though
+	 * {@link #pcg32_srandom_r(long, long)} would normally change it.
+	 */
+	protected long initialInc = 0L;
+
+	/**
+	 * Creates a new GodotRandom with a fixed state.
 	 */
 	public GodotRandom() {
-		super();
-		state = EnhancedRandom.seedFromMath();
-		inc = EnhancedRandom.seedFromMath() | 1L;
+		this(DEFAULT_SEED, DEFAULT_INC);
 	}
 
 	/**
-	 * Creates a new GodotRandom with the given seed; all {@code long} values are permitted.
-	 * The seed will be passed to {@link #setSeed(long)} to attempt to adequately distribute the seed randomly.
+	 * Creates a new GodotRandom with the given seed; all {@code long} values are permitted. The increment will be
+	 * assigned a fixed value. The seed will not be used verbatim internally, but will be stored verbatim.
 	 *
 	 * @param seed any {@code long} value
 	 */
 	public GodotRandom(long seed) {
-		super(seed);
-		setSeed(seed);
+		this(seed, DEFAULT_INC);
 	}
 
 	/**
 	 * Creates a new GodotRandom with the given two states; all {@code long} values are permitted for
-	 * stateA, and all odd-number {@code long} values are permitted for stateB. These states are not
-	 * changed as long as they are permitted values.
+	 * stateA, and all positive {@code long} values are permitted for stateB. These states are changed
+	 * significantly from {@code p_seed} and {@code p_inc}.
 	 *
-	 * @param state any {@code long} value
-	 * @param inc any {@code long} value; should be odd, otherwise this will add 1 to make it odd
+	 * @param p_seed any {@code long} value
+	 * @param p_inc any positive {@code long} value; the sign bit is ignored
 	 */
-	public GodotRandom(long state, long inc) {
-		super(state);
-		this.state = state;
-		this.inc = inc | 1L;
+	public GodotRandom(long p_seed, long p_inc) {
+		super(p_seed);
+		initialInc = p_inc;
+		initialState = p_seed;
+		pcg32_srandom_r(initialState, initialInc);
+	}
+
+	public void seed(long p_seed) {
+		initialState = p_seed;
+		pcg32_srandom_r(initialState, initialInc);
+
 	}
 
 	@Override
@@ -165,6 +182,8 @@ public class GodotRandom extends EnhancedRandom {
 	/**
 	 * Gets the state determined by {@code selection}, as-is.
 	 * Selections 0 (or any even number) and 1 (or any odd number) refer to states A and B.
+	 * <br>
+	 * This is not an API Godot provides.
 	 *
 	 * @param selection used to select which state variable to get; generally 0 or 1
 	 * @return the value of the selected state
@@ -180,6 +199,9 @@ public class GodotRandom extends EnhancedRandom {
 	/**
 	 * Sets one of the states, determined by {@code selection}, to {@code value}, as-is.
 	 * Selections 0 (or any even number) and 1 (or any odd number) refer to states A and B.
+	 * <br>
+	 * This is not an API Godot provides, and it can be used to change the increment in ways
+	 * Godot normally does not permit.
 	 *
 	 * @param selection used to select which state variable to set; generally 0 or 1
 	 * @param value     the exact value to use for the selected state, if valid
@@ -201,18 +223,7 @@ public class GodotRandom extends EnhancedRandom {
 	 */
 	@Override
 	public void setSeed (long seed) {
-		long x = (seed += 0x9E3779B97F4A7C15L);
-		x ^= x >>> 27;
-		x *= 0x3C79AC492BA7B653L;
-		x ^= x >>> 33;
-		x *= 0x1C69B3F74AC4AE35L;
-		state = x ^ x >>> 27;
-		x = (seed + 0x9E3779B97F4A7C15L);
-		x ^= x >>> 27;
-		x *= 0x3C79AC492BA7B653L;
-		x ^= x >>> 33;
-		x *= 0x1C69B3F74AC4AE35L;
-		inc = (x ^ x >>> 27) | 1L;
+		seed(seed);
 	}
 
 	/**
@@ -225,15 +236,19 @@ public class GodotRandom extends EnhancedRandom {
 
 	/**
 	 * Sets the first part of the state (the changing state).
+	 * <br>
+	 * This is not an API Godot provides, and it can be used to change the state in ways
+	 * Godot normally does not permit.
 	 *
 	 * @param state can be any long
 	 */
 	public void setState(long state) {
+		initialState = state;
 		this.state = state;
 	}
 
 	/**
-	 * Gets the second part of the state (the stream or increment).
+	 * Gets the second part of the state (the increment).
 	 * @return the second part of the state
 	 */
 	public long getInc() {
@@ -243,25 +258,31 @@ public class GodotRandom extends EnhancedRandom {
 	/**
 	 * Sets the second part of the state (the stream or increment).
 	 * This must be odd, otherwise this will add 1 to make it odd.
+	 * <br>
+	 * This is not an API Godot provides, and it can be used to change the increment in ways
+	 * Godot normally does not permit.
 	 *
 	 * @param inc can be any odd-number long; otherwise this adds 1 to make it odd
 	 */
 	public void setInc(long inc) {
-		this.inc = inc | 1L;
+		initialInc = this.inc = inc | 1L;
 	}
 
 	/**
 	 * Sets the state completely to the given three state variables.
 	 * This is the same as calling {@link #setState(long)} and {@link #setInc(long)}
 	 * as a group.
+	 * <br>
+	 * This is not an API Godot provides, and it can be used to change the increment in ways
+	 * Godot normally does not permit.
 	 *
-	 * @param stateA the first state; can be any long
-	 * @param stateB the second state; can be any odd-number long
+	 * @param state the first state; can be any long
+	 * @param inc the second state; can be any odd-number long
 	 */
 	@Override
-	public void setState (long stateA, long stateB) {
-		this.state = stateA;
-		this.inc = stateB | 1L;
+	public void setState (long state, long inc) {
+		setState(state);
+		setInc(inc);
 	}
 
 	@Override
