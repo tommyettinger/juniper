@@ -360,7 +360,46 @@ public class GodotRandom extends EnhancedRandom {
 		if(expOffset == 0) return 0.0;
 		long significand = ((long) pcg32_random_r() << 32 ^ pcg32_random_r()) | 0x8000000000000001L;
 		return Math.scalb((double) significand, -64 - Integer.numberOfLeadingZeros(expOffset));
+	}
 
+	/**
+	 * Returns the next pseudorandom, Gaussian ("normally") distributed
+	 * {@code double} value with mean {@code 0.0} and standard
+	 * deviation {@code 1.0} from this random number generator's sequence.
+	 * <p>
+	 * The general contract of {@code nextGaussian} is that one
+	 * {@code double} value, chosen from (approximately) the usual
+	 * normal distribution with mean {@code 0.0} and standard deviation
+	 * {@code 1.0}, is pseudorandomly generated and returned.
+	 *
+	 * @return the next pseudorandom, Gaussian ("normally") distributed
+	 * {@code double} value with mean {@code 0.0} and standard deviation
+	 * {@code 1.0} from this random number generator's sequence
+	 */
+	@Override
+	public double nextGaussian() {
+		return nextGaussian(0.0, 1.0);
+	}
+
+	/**
+	 * Returns the next pseudorandom, Gaussian ("normally") distributed {@code double}
+	 * value with the specified mean and standard deviation from this random number generator's sequence.
+	 * <br>
+	 * This uses the Box-Muller transform.
+	 *
+	 * @param mean   the mean of the Gaussian distribution to be drawn from
+	 * @param stddev the standard deviation (square root of the variance)
+	 *               of the Gaussian distribution to be drawn from
+	 * @return a Gaussian distributed {@code double} with the specified mean and standard deviation
+	 */
+	@Override
+	public double nextGaussian(double mean, double stddev) {
+		double temp = nextInclusiveDouble();
+		if (temp < 0.00001) {
+			temp += 0.00001;
+		}
+		return mean + stddev * (Math.cos(6.2831853071795864769252867666 * nextInclusiveDouble())
+			* Math.sqrt(-2.0 * Math.log(temp))); // Box-Muller transform.
 	}
 
 	@Override
