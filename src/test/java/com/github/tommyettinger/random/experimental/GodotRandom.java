@@ -17,6 +17,7 @@
 
 package com.github.tommyettinger.random.experimental;
 
+import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.random.EnhancedRandom;
 
 import java.math.BigInteger;
@@ -137,7 +138,16 @@ public class GodotRandom extends EnhancedRandom {
 	public void seed(long p_seed) {
 		initialState = p_seed;
 		pcg32_srandom_r(initialState, initialInc);
+	}
 
+	/**
+	 * Resets this generator to use the last values given for its {@link #getSeed() seed} and
+	 * {@link #getInitialIncrement() initialIncrement}. These can be set via the constructor, {@link #seed(long)},
+	 * {@link #setState(long)}, {@link #setInc(long)}, or {@link #setState(long, long)} methods, among potentially
+	 * others.
+	 */
+	public void reset() {
+		pcg32_srandom_r(initialState, initialInc);
 	}
 
 	@Override
@@ -215,6 +225,18 @@ public class GodotRandom extends EnhancedRandom {
 		}
 	}
 
+	public long getSeed() {
+		return initialState;
+	}
+
+	/**
+	 * Gets the initial increment value, before it was modified to get {@link #getInc() inc}. The inc is what this uses
+	 * day-to-day, and the initial increment is only used for resetting the state.
+	 * @return
+	 */
+	public long getInitialIncrement() {
+		return initialInc;
+	}
 	/**
 	 * This initializes both states of the generator to random values based on the given seed.
 	 * (2 to the 64) possible initial generator states can be produced here.
@@ -287,24 +309,30 @@ public class GodotRandom extends EnhancedRandom {
 
 	@Override
 	public long nextLong () {
-		long z = (state = state * 0x5851F42D4C957F2DL + inc);
-		z = (z ^ z >>> ((z >>> 59) + 5) ^ z >>> 40) * 0xAEF17502108EF2D9L;
-		return z ^ z >>> 43;
+		return (long) pcg32_random_r() << 32 ^ pcg32_random_r();
 	}
 
 	@Override
-	public long previousLong () {
-		long z = state;
-		state = (state - inc) * 0xC097EF87329E28A5L;
-		z = (z ^ z >>> ((z >>> 59) + 5) ^ z >>> 40) * 0xAEF17502108EF2D9L;
-		return z ^ z >>> 43;
+	public long previousLong() {
+		return previousInt() ^ (long)previousInt() << 32;
+	}
+
+	@Override
+	public int previousInt () {
+		long old = state = (state - inc) * 0xC097EF87329E28A5L;
+		int xs = (int)(old >>> 27 ^ old >>> 45);
+		int rot = (int) (old >>> 59);
+		return (xs >>> rot | xs << 32 - rot);
+	}
+
+	@Override
+	public int nextInt() {
+		return pcg32_random_r();
 	}
 
 	@Override
 	public int next (int bits) {
-		long z = (state = state * 0x5851F42D4C957F2DL + inc);
-		z = (z ^ z >>> ((z >>> 59) + 5) ^ z >>> 40) * 0xAEF17502108EF2D9L;
-		return (int)(z ^ z >>> 43) >>> (32 - bits);
+		return pcg32_random_r() >>> (32 - bits);
 	}
 
 	@Override
@@ -328,5 +356,62 @@ public class GodotRandom extends EnhancedRandom {
 
 	public String toString () {
 		return "GodotRandom{" + "stateA=" + (state) + "L, stateB=" + (inc) + "L}";
+	}
+	public static void main(String[] args) {
+		GodotRandom random = new GodotRandom(1L);
+		{
+			int n0 = random.nextInt();
+			int n1 = random.nextInt();
+			int n2 = random.nextInt();
+			int n3 = random.nextInt();
+			int n4 = random.nextInt();
+			int n5 = random.nextInt();
+			int p5 = random.previousInt();
+			int p4 = random.previousInt();
+			int p3 = random.previousInt();
+			int p2 = random.previousInt();
+			int p1 = random.previousInt();
+			int p0 = random.previousInt();
+			System.out.println(n0 == p0);
+			System.out.println(n1 == p1);
+			System.out.println(n2 == p2);
+			System.out.println(n3 == p3);
+			System.out.println(n4 == p4);
+			System.out.println(n5 == p5);
+			System.out.println(Base.BASE16.unsigned(n0) + " vs. " + Base.BASE16.unsigned(p0));
+			System.out.println(Base.BASE16.unsigned(n1) + " vs. " + Base.BASE16.unsigned(p1));
+			System.out.println(Base.BASE16.unsigned(n2) + " vs. " + Base.BASE16.unsigned(p2));
+			System.out.println(Base.BASE16.unsigned(n3) + " vs. " + Base.BASE16.unsigned(p3));
+			System.out.println(Base.BASE16.unsigned(n4) + " vs. " + Base.BASE16.unsigned(p4));
+			System.out.println(Base.BASE16.unsigned(n5) + " vs. " + Base.BASE16.unsigned(p5));
+		}
+		random = new GodotRandom(1L);
+		{
+			long n0 = random.nextLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.state, random.inc);
+			long n1 = random.nextLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.state, random.inc);
+			long n2 = random.nextLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.state, random.inc);
+			long n3 = random.nextLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.state, random.inc);
+			long n4 = random.nextLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.state, random.inc);
+			long n5 = random.nextLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.state, random.inc);
+			System.out.println("Going back...");
+			long p5 = random.previousLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.state, random.inc);
+			long p4 = random.previousLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.state, random.inc);
+			long p3 = random.previousLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.state, random.inc);
+			long p2 = random.previousLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.state, random.inc);
+			long p1 = random.previousLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.state, random.inc);
+			long p0 = random.previousLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.state, random.inc);
+			System.out.println(n0 == p0);
+			System.out.println(n1 == p1);
+			System.out.println(n2 == p2);
+			System.out.println(n3 == p3);
+			System.out.println(n4 == p4);
+			System.out.println(n5 == p5);
+			System.out.println(Base.BASE16.unsigned(n0) + " vs. " + Base.BASE16.unsigned(p0));
+			System.out.println(Base.BASE16.unsigned(n1) + " vs. " + Base.BASE16.unsigned(p1));
+			System.out.println(Base.BASE16.unsigned(n2) + " vs. " + Base.BASE16.unsigned(p2));
+			System.out.println(Base.BASE16.unsigned(n3) + " vs. " + Base.BASE16.unsigned(p3));
+			System.out.println(Base.BASE16.unsigned(n4) + " vs. " + Base.BASE16.unsigned(p4));
+			System.out.println(Base.BASE16.unsigned(n5) + " vs. " + Base.BASE16.unsigned(p5));
+		}
 	}
 }
