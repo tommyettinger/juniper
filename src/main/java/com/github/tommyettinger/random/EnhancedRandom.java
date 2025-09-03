@@ -1163,6 +1163,19 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	}
 
 	/**
+	 * Returns a non-negative {@code double} value pseudorandomly chosen from
+	 * an exponential distribution whose mean is 1.
+	 *
+	 * @return a non-negative {@code double} value pseudorandomly chosen from an
+	 *         exponential distribution with a mean of 1
+	 *
+	 * @implNote This implementation is simply {@code return -Math.log(nextExclusiveDouble());} .
+	 */
+	public double nextExponential() {
+		return -Math.log(nextExclusiveDouble());
+	}
+
+	/**
 	 * Optional; advances or rolls back the {@code EnhancedRandom}' state without actually generating each number.
 	 * Skips forward or backward a number of steps specified by advance, where a step is equal to one call to
 	 * {@link #nextLong()}, and returns the random number produced at that step. Negative numbers can be used to
