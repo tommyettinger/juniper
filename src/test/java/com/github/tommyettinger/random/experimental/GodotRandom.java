@@ -17,7 +17,8 @@
 
 package com.github.tommyettinger.random.experimental;
 
-import com.github.tommyettinger.digital.Base;
+import com.github.tommyettinger.digital.BitConversion;
+import com.github.tommyettinger.digital.TrigTools;
 import com.github.tommyettinger.random.EnhancedRandom;
 
 import java.math.BigInteger;
@@ -122,7 +123,7 @@ public class GodotRandom extends EnhancedRandom {
 
 	/**
 	 * Creates a new GodotRandom with the given two states; all {@code long} values are permitted for
-	 * stateA, and all positive {@code long} values are permitted for stateB. These states are changed
+	 * p_seed, and all positive {@code long} values are permitted for p_inc. These states are changed
 	 * significantly from {@code p_seed} and {@code p_inc}.
 	 *
 	 * @param p_seed any {@code long} value
@@ -138,6 +139,16 @@ public class GodotRandom extends EnhancedRandom {
 	public void seed(long p_seed) {
 		initialState = p_seed;
 		pcg32_srandom_r(initialState, initialInc);
+	}
+
+	/**
+	 * Calls {@link #seed(long)} with a uniform-random long, using two calls to {@link Math#random()} (via
+	 * {@link EnhancedRandom#seedFromMath()}).
+	 * <br>
+	 * Different from Godot's randomize(), which incorporates the current time and ticks elapsed.
+	 */
+	public void randomize() {
+		seed(seedFromMath());
 	}
 
 	/**
@@ -345,7 +356,7 @@ public class GodotRandom extends EnhancedRandom {
 	public float nextInclusiveFloat() {
 		int expOffset =  pcg32_random_r();
 		if(expOffset == 0) return 0f;
-		return Math.scalb((float) (pcg32_random_r() | 0x80000001L), -32 - Integer.numberOfLeadingZeros(expOffset));
+		return Math.scalb((float) (pcg32_random_r() | 0x80000001L), -32 - BitConversion.countLeadingZeros(expOffset));
 	}
 
 	/**
@@ -359,7 +370,7 @@ public class GodotRandom extends EnhancedRandom {
 		int expOffset = pcg32_random_r();
 		if(expOffset == 0) return 0.0;
 		long significand = ((long) pcg32_random_r() << 32 ^ pcg32_random_r()) | 0x8000000000000001L;
-		return Math.scalb((double) significand, -64 - Integer.numberOfLeadingZeros(expOffset));
+		return Math.scalb((double) significand, -64 - BitConversion.countLeadingZeros(expOffset));
 	}
 
 	/**
@@ -398,13 +409,16 @@ public class GodotRandom extends EnhancedRandom {
 		if (temp < 0.00001) {
 			temp += 0.00001;
 		}
-		return mean + stddev * (Math.cos(6.2831853071795864769252867666 * nextInclusiveDouble())
+		return mean + stddev * (TrigTools.cosSmootherTurns(nextInclusiveDouble())
 			* Math.sqrt(-2.0 * Math.log(temp))); // Box-Muller transform.
 	}
 
 	@Override
 	public GodotRandom copy () {
-		return new GodotRandom(state, inc);
+		GodotRandom cpy = new GodotRandom(initialState, initialInc);
+		cpy.state = this.state;
+		cpy.inc = this.inc;
+		return cpy;
 	}
 
 	@Override
@@ -422,63 +436,65 @@ public class GodotRandom extends EnhancedRandom {
 	}
 
 	public String toString () {
-		return "GodotRandom{" + "stateA=" + (state) + "L, stateB=" + (inc) + "L}";
+		return "GodotRandom{" + "initialState=" + (initialState) + "L, initialInc=" + (initialInc) +
+			"L, state=" + (state) + "L, inc=" + (inc) + "L}";
 	}
-	public static void main(String[] args) {
-		GodotRandom random = new GodotRandom(1L);
-		{
-			int n0 = random.nextInt();
-			int n1 = random.nextInt();
-			int n2 = random.nextInt();
-			int n3 = random.nextInt();
-			int n4 = random.nextInt();
-			int n5 = random.nextInt();
-			int p5 = random.previousInt();
-			int p4 = random.previousInt();
-			int p3 = random.previousInt();
-			int p2 = random.previousInt();
-			int p1 = random.previousInt();
-			int p0 = random.previousInt();
-			System.out.println(n0 == p0);
-			System.out.println(n1 == p1);
-			System.out.println(n2 == p2);
-			System.out.println(n3 == p3);
-			System.out.println(n4 == p4);
-			System.out.println(n5 == p5);
-			System.out.println(Base.BASE16.unsigned(n0) + " vs. " + Base.BASE16.unsigned(p0));
-			System.out.println(Base.BASE16.unsigned(n1) + " vs. " + Base.BASE16.unsigned(p1));
-			System.out.println(Base.BASE16.unsigned(n2) + " vs. " + Base.BASE16.unsigned(p2));
-			System.out.println(Base.BASE16.unsigned(n3) + " vs. " + Base.BASE16.unsigned(p3));
-			System.out.println(Base.BASE16.unsigned(n4) + " vs. " + Base.BASE16.unsigned(p4));
-			System.out.println(Base.BASE16.unsigned(n5) + " vs. " + Base.BASE16.unsigned(p5));
-		}
-		random = new GodotRandom(1L);
-		{
-			long n0 = random.nextLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.state, random.inc);
-			long n1 = random.nextLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.state, random.inc);
-			long n2 = random.nextLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.state, random.inc);
-			long n3 = random.nextLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.state, random.inc);
-			long n4 = random.nextLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.state, random.inc);
-			long n5 = random.nextLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.state, random.inc);
-			System.out.println("Going back...");
-			long p5 = random.previousLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.state, random.inc);
-			long p4 = random.previousLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.state, random.inc);
-			long p3 = random.previousLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.state, random.inc);
-			long p2 = random.previousLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.state, random.inc);
-			long p1 = random.previousLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.state, random.inc);
-			long p0 = random.previousLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.state, random.inc);
-			System.out.println(n0 == p0);
-			System.out.println(n1 == p1);
-			System.out.println(n2 == p2);
-			System.out.println(n3 == p3);
-			System.out.println(n4 == p4);
-			System.out.println(n5 == p5);
-			System.out.println(Base.BASE16.unsigned(n0) + " vs. " + Base.BASE16.unsigned(p0));
-			System.out.println(Base.BASE16.unsigned(n1) + " vs. " + Base.BASE16.unsigned(p1));
-			System.out.println(Base.BASE16.unsigned(n2) + " vs. " + Base.BASE16.unsigned(p2));
-			System.out.println(Base.BASE16.unsigned(n3) + " vs. " + Base.BASE16.unsigned(p3));
-			System.out.println(Base.BASE16.unsigned(n4) + " vs. " + Base.BASE16.unsigned(p4));
-			System.out.println(Base.BASE16.unsigned(n5) + " vs. " + Base.BASE16.unsigned(p5));
-		}
-	}
+
+//	public static void main(String[] args) {
+//		GodotRandom random = new GodotRandom(1L);
+//		{
+//			int n0 = random.nextInt();
+//			int n1 = random.nextInt();
+//			int n2 = random.nextInt();
+//			int n3 = random.nextInt();
+//			int n4 = random.nextInt();
+//			int n5 = random.nextInt();
+//			int p5 = random.previousInt();
+//			int p4 = random.previousInt();
+//			int p3 = random.previousInt();
+//			int p2 = random.previousInt();
+//			int p1 = random.previousInt();
+//			int p0 = random.previousInt();
+//			System.out.println(n0 == p0);
+//			System.out.println(n1 == p1);
+//			System.out.println(n2 == p2);
+//			System.out.println(n3 == p3);
+//			System.out.println(n4 == p4);
+//			System.out.println(n5 == p5);
+//			System.out.println(Base.BASE16.unsigned(n0) + " vs. " + Base.BASE16.unsigned(p0));
+//			System.out.println(Base.BASE16.unsigned(n1) + " vs. " + Base.BASE16.unsigned(p1));
+//			System.out.println(Base.BASE16.unsigned(n2) + " vs. " + Base.BASE16.unsigned(p2));
+//			System.out.println(Base.BASE16.unsigned(n3) + " vs. " + Base.BASE16.unsigned(p3));
+//			System.out.println(Base.BASE16.unsigned(n4) + " vs. " + Base.BASE16.unsigned(p4));
+//			System.out.println(Base.BASE16.unsigned(n5) + " vs. " + Base.BASE16.unsigned(p5));
+//		}
+//		random = new GodotRandom(1L);
+//		{
+//			long n0 = random.nextLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.state, random.inc);
+//			long n1 = random.nextLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.state, random.inc);
+//			long n2 = random.nextLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.state, random.inc);
+//			long n3 = random.nextLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.state, random.inc);
+//			long n4 = random.nextLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.state, random.inc);
+//			long n5 = random.nextLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.state, random.inc);
+//			System.out.println("Going back...");
+//			long p5 = random.previousLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.state, random.inc);
+//			long p4 = random.previousLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.state, random.inc);
+//			long p3 = random.previousLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.state, random.inc);
+//			long p2 = random.previousLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.state, random.inc);
+//			long p1 = random.previousLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.state, random.inc);
+//			long p0 = random.previousLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.state, random.inc);
+//			System.out.println(n0 == p0);
+//			System.out.println(n1 == p1);
+//			System.out.println(n2 == p2);
+//			System.out.println(n3 == p3);
+//			System.out.println(n4 == p4);
+//			System.out.println(n5 == p5);
+//			System.out.println(Base.BASE16.unsigned(n0) + " vs. " + Base.BASE16.unsigned(p0));
+//			System.out.println(Base.BASE16.unsigned(n1) + " vs. " + Base.BASE16.unsigned(p1));
+//			System.out.println(Base.BASE16.unsigned(n2) + " vs. " + Base.BASE16.unsigned(p2));
+//			System.out.println(Base.BASE16.unsigned(n3) + " vs. " + Base.BASE16.unsigned(p3));
+//			System.out.println(Base.BASE16.unsigned(n4) + " vs. " + Base.BASE16.unsigned(p4));
+//			System.out.println(Base.BASE16.unsigned(n5) + " vs. " + Base.BASE16.unsigned(p5));
+//		}
+//	}
 }
