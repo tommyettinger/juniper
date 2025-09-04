@@ -34,6 +34,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.github.tommyettinger.digital.BitConversion;
+import com.github.tommyettinger.random.experimental.GodotRandom;
 
 import java.util.Arrays;
 
@@ -43,8 +44,8 @@ import java.util.Arrays;
 public class BitVisualizer extends ApplicationAdapter {
     private static final int BITS = 18;
     private static final int COUNT = 1 << BITS;
-    private int mode = 0;
-    private final int modes = 8;
+    private int mode = 4;
+    private final int modes = 9;
     private SpriteBatch batch;
     private ImmediateModeRenderer20 renderer;
     private InputAdapter input;
@@ -55,7 +56,7 @@ public class BitVisualizer extends ApplicationAdapter {
     private final double[] dAmounts = new double[512];
     private long seed = 123456789L;
     private long startTime;
-    private final EnhancedRandom random = new AceRandom(seed);
+    private final EnhancedRandom random = new GodotRandom(seed);
 
     private final float black = Color.BLACK.toFloatBits();
     private final float blue = Color.BLUE.toFloatBits();
@@ -118,6 +119,8 @@ public class BitVisualizer extends ApplicationAdapter {
             case 6: bitsNextInclusiveDouble();
                 break;
             case 7: bitsNextExclusiveDoubleNew();
+                break;
+            case 8: bitsSeedFromMath();
                 break;
         }
         batch.setProjectionMatrix(camera.combined);
@@ -386,6 +389,41 @@ public class BitVisualizer extends ApplicationAdapter {
                 " " + random.getTag() + ", bits of nextExclusiveDoubleNew() at " + Gdx.graphics.getFramesPerSecond() + " FPS");
         for (int i = 0; i < COUNT; i++) {
             long bits = Double.doubleToLongBits(nextExclusiveDoubleNew(random));
+            for (int j = 0, jj = 504; j < 64; j++, jj -= 8) {
+                if (1L == (bits >>> j & 1L))
+                    amounts[jj] = amounts[jj + 1] = amounts[jj + 2] = amounts[jj + 3]
+                            = amounts[jj + 4] = amounts[jj + 5] = ++amounts[jj + 6];
+            }
+        }
+        for (int i = 0; i < 512; i++) {
+            if ((i & 7) == 3) {
+                for (int j = 9 + (amounts[i] >> BITS - 8); j > 0; j--) {
+                    if(amounts[i] < (1 << BITS - 8)) continue;
+                    renderer.color(black);
+                    renderer.vertex(i, j, 0);
+                }
+            } else {
+                for (int j = (amounts[i] >> BITS - 8); j > 0; j--) {
+                    renderer.color(blue);
+                    renderer.vertex(i, j, 0);
+                }
+            }
+        }
+        for (int i = 0; i < 10; i++) {
+            for (int j = 512; j >= 8; j -= 32) {
+                renderer.color(red);
+                renderer.vertex(i, j, 0);
+            }
+        }
+        renderer.end();
+    }
+
+    private void bitsSeedFromMath() {
+        renderer.begin(camera.combined, GL20.GL_POINTS);
+        Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
+                " " + random.getTag() + ", bits of bitsSeedFromMath() at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+        for (int i = 0; i < COUNT; i++) {
+            long bits = EnhancedRandom.seedFromMath();
             for (int j = 0, jj = 504; j < 64; j++, jj -= 8) {
                 if (1L == (bits >>> j & 1L))
                     amounts[jj] = amounts[jj + 1] = amounts[jj + 2] = amounts[jj + 3]
