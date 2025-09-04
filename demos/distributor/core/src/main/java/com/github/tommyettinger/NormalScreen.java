@@ -23,7 +23,7 @@ public class NormalScreen extends ScreenAdapter {
     private SpriteBatch batch;
     private ImmediateModeRenderer20 renderer;
     private final long[] amounts = new long[512];
-    private long iterations = 0L;
+    private double iterations = 0.0;
     private BitmapFont font;
     private ScreenViewport viewport;
 
@@ -87,7 +87,7 @@ public class NormalScreen extends ScreenAdapter {
             Arrays.fill(amounts, 0);
             iterations = 0;
         }
-        iterations += 1;
+        iterations++;
         dist.setParameters(a, b, c);
         for (int i = 0; i < 0x10000; i++) {
             int m = (int) (dist.nextDouble() * 128 + 256);
@@ -102,7 +102,7 @@ public class NormalScreen extends ScreenAdapter {
             renderer.color(color);
             renderer.vertex(x, 0, 0);
             renderer.color(color);
-            renderer.vertex(x, (amounts[x] / iterations), 0);
+            renderer.vertex(x, (float) (amounts[x] / iterations), 0);
         }
         for (int j = 8; j < 520; j += 32) {
             renderer.color(-0x1.7677e8p125F); // CW Bright Red

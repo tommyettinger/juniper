@@ -31,7 +31,6 @@ import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
 import com.badlogic.gdx.scenes.scene2d.utils.UIUtils;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.github.tommyettinger.digital.BitConversion;
 import com.github.tommyettinger.random.experimental.GodotRandom;
@@ -52,10 +51,10 @@ public class BitVisualizer extends ApplicationAdapter {
     private BitmapFont font;
     private ScreenViewport viewport;
     private Camera camera;
-    private final int[] amounts = new int[512];
-    private final double[] dAmounts = new double[512];
+    private final long[] amounts = new long[512];
+//    private final double[] amounts = new double[512];
     private long seed = 123456789L;
-    private long startTime;
+    private double iterations = 0L;
 	private int generator = 0;
     private EnhancedRandom[] generators = {new GodotRandom(seed), new AceRandom(seed), new GoldenQuasiRandom(seed), new LFSR64QuasiRandom(seed)};
     private EnhancedRandom random = generators[generator];
@@ -68,7 +67,6 @@ public class BitVisualizer extends ApplicationAdapter {
 
     @Override
     public void create() {
-        startTime = TimeUtils.millis();
         batch = new SpriteBatch();
         font = new BitmapFont(Gdx.files.internal("Cozette-standard.fnt"));
         font.setColor(Color.BLACK);
@@ -77,6 +75,7 @@ public class BitVisualizer extends ApplicationAdapter {
         camera = viewport.getCamera();
         renderer = new ImmediateModeRenderer20(COUNT<<3, false, true, 0);
         Arrays.fill(amounts, 0);
+		iterations = 0.0;
         input = new InputAdapter() {
             @Override
             public boolean keyDown(int keycode) {
@@ -84,19 +83,24 @@ public class BitVisualizer extends ApplicationAdapter {
                     mode = (mode + (UIUtils.shift() ? modes - 1 : 1)) % modes;
                     if(!UIUtils.ctrl())
                         System.out.println("Changed to mode " + mode);
-                    return true;
+					Arrays.fill(amounts, 0);
+					iterations = 0.0;
+					return true;
                 } else if (keycode == Input.Keys.MINUS || keycode == Input.Keys.BACKSPACE) {
 					mode = (mode + modes - 1) % modes;
 					if (!UIUtils.ctrl())
 						System.out.println("Changed to mode " + mode);
+					Arrays.fill(amounts, 0);
+					iterations = 0.0;
 					return true;
 				}else if (keycode == Input.Keys.G) {
 					generator = (generator + (UIUtils.shift() ? generators.length - 1 : 1)) % generators.length;
 					random = generators[generator];
 					if(!UIUtils.ctrl())
 						System.out.println("Changed to generator " + random);
+					Arrays.fill(amounts, 0);
+					iterations = 0.0;
 					return true;
-
 				} else if (keycode == Input.Keys.Q || keycode == Input.Keys.ESCAPE)
                     Gdx.app.exit();
 
@@ -110,8 +114,7 @@ public class BitVisualizer extends ApplicationAdapter {
     public void render() {
         ScreenUtils.clear(1f, 1f, 1f, 1f);
         camera.update();
-        Arrays.fill(amounts, 0);
-        Arrays.fill(dAmounts, 0.0);
+		iterations += 1 << BITS - 8;
         switch (mode) {
             case 0: bitsNextFloat();
                 break;
@@ -161,13 +164,13 @@ public class BitVisualizer extends ApplicationAdapter {
         }
         for (int i = 0; i < 512; i++) {
             if ((i & 7) == 3) {
-                for (int j = 9 + (amounts[i] >> BITS - 8); j > 0; j--) {
+                for (int j = 9 + (int) (amounts[i] / iterations); j > 0; j--) {
                     if(amounts[i] < (1 << BITS - 8)) continue;
                     renderer.color(black);
                     renderer.vertex(i, j, 0);
                 }
             } else {
-                for (int j = (amounts[i] >> BITS - 8); j > 0; j--) {
+                for (int j = (int) (amounts[i] / iterations); j > 0; j--) {
                     renderer.color(blue);
                     renderer.vertex(i, j, 0);
                 }
@@ -196,13 +199,13 @@ public class BitVisualizer extends ApplicationAdapter {
         }
         for (int i = 0; i < 512; i++) {
             if ((i & 7) == 3) {
-                for (int j = 9 + (amounts[i] >> BITS - 8); j > 0; j--) {
+                for (int j = 9 + (int) (amounts[i] / iterations); j > 0; j--) {
                     if(amounts[i] < (1 << BITS - 8)) continue;
                     renderer.color(black);
                     renderer.vertex(i, j, 0);
                 }
             } else {
-                for (int j = (amounts[i] >> BITS - 8); j > 0; j--) {
+                for (int j = (int) (amounts[i] / iterations); j > 0; j--) {
                     renderer.color(blue);
                     renderer.vertex(i, j, 0);
                 }
@@ -231,13 +234,13 @@ public class BitVisualizer extends ApplicationAdapter {
         }
         for (int i = 0; i < 512; i++) {
             if ((i & 7) == 3) {
-                for (int j = 9 + (amounts[i] >> BITS - 8); j > 0; j--) {
+                for (int j = 9 + (int) (amounts[i] / iterations); j > 0; j--) {
                     if(amounts[i] < (1 << BITS - 8)) continue;
                     renderer.color(black);
                     renderer.vertex(i, j, 0);
                 }
             } else {
-                for (int j = (amounts[i] >> BITS - 8); j > 0; j--) {
+                for (int j = (int) (amounts[i] / iterations); j > 0; j--) {
                     renderer.color(blue);
                     renderer.vertex(i, j, 0);
                 }
@@ -266,13 +269,13 @@ public class BitVisualizer extends ApplicationAdapter {
         }
         for (int i = 0; i < 512; i++) {
             if ((i & 7) == 3) {
-                for (int j = 9 + (amounts[i] >> BITS - 8); j > 0; j--) {
+                for (int j = 9 + (int) (amounts[i] / iterations); j > 0; j--) {
                     if(amounts[i] < (1 << BITS - 8)) continue;
                     renderer.color(black);
                     renderer.vertex(i, j, 0);
                 }
             } else {
-                for (int j = (amounts[i] >> BITS - 8); j > 0; j--) {
+                for (int j = (int) (amounts[i] / iterations); j > 0; j--) {
                     renderer.color(blue);
                     renderer.vertex(i, j, 0);
                 }
@@ -301,13 +304,13 @@ public class BitVisualizer extends ApplicationAdapter {
         }
         for (int i = 0; i < 512; i++) {
             if ((i & 7) == 3) {
-                for (int j = 9 + (amounts[i] >> BITS - 8); j > 0; j--) {
+                for (int j = 9 + (int) (amounts[i] / iterations); j > 0; j--) {
                     if(amounts[i] < (1 << BITS - 8)) continue;
                     renderer.color(black);
                     renderer.vertex(i, j, 0);
                 }
             } else {
-                for (int j = (amounts[i] >> BITS - 8); j > 0; j--) {
+                for (int j = (int) (amounts[i] / iterations); j > 0; j--) {
                     renderer.color(blue);
                     renderer.vertex(i, j, 0);
                 }
@@ -336,13 +339,13 @@ public class BitVisualizer extends ApplicationAdapter {
         }
         for (int i = 0; i < 512; i++) {
             if ((i & 7) == 3) {
-                for (int j = 9 + (amounts[i] >> BITS - 8); j > 0; j--) {
+                for (int j = 9 + (int) (amounts[i] / iterations); j > 0; j--) {
                     if(amounts[i] < (1 << BITS - 8)) continue;
                     renderer.color(black);
                     renderer.vertex(i, j, 0);
                 }
             } else {
-                for (int j = (amounts[i] >> BITS - 8); j > 0; j--) {
+                for (int j = (int) (amounts[i] / iterations); j > 0; j--) {
                     renderer.color(blue);
                     renderer.vertex(i, j, 0);
                 }
@@ -371,13 +374,13 @@ public class BitVisualizer extends ApplicationAdapter {
         }
         for (int i = 0; i < 512; i++) {
             if ((i & 7) == 3) {
-                for (int j = 9 + (amounts[i] >> BITS - 8); j > 0; j--) {
+                for (int j = 9 + (int) (amounts[i] / iterations); j > 0; j--) {
                     if(amounts[i] < (1 << BITS - 8)) continue;
                     renderer.color(black);
                     renderer.vertex(i, j, 0);
                 }
             } else {
-                for (int j = (amounts[i] >> BITS - 8); j > 0; j--) {
+                for (int j = (int) (amounts[i] / iterations); j > 0; j--) {
                     renderer.color(blue);
                     renderer.vertex(i, j, 0);
                 }
@@ -406,13 +409,13 @@ public class BitVisualizer extends ApplicationAdapter {
         }
         for (int i = 0; i < 512; i++) {
             if ((i & 7) == 3) {
-                for (int j = 9 + (amounts[i] >> BITS - 8); j > 0; j--) {
+                for (int j = 9 + (int) (amounts[i] / iterations); j > 0; j--) {
                     if(amounts[i] < (1 << BITS - 8)) continue;
                     renderer.color(black);
                     renderer.vertex(i, j, 0);
                 }
             } else {
-                for (int j = (amounts[i] >> BITS - 8); j > 0; j--) {
+                for (int j = (int) (amounts[i] / iterations); j > 0; j--) {
                     renderer.color(blue);
                     renderer.vertex(i, j, 0);
                 }
@@ -441,13 +444,13 @@ public class BitVisualizer extends ApplicationAdapter {
         }
         for (int i = 0; i < 512; i++) {
             if ((i & 7) == 3) {
-                for (int j = 9 + (amounts[i] >> BITS - 8); j > 0; j--) {
+                for (int j = 9 + (int) (amounts[i] / iterations); j > 0; j--) {
                     if(amounts[i] < (1 << BITS - 8)) continue;
                     renderer.color(black);
                     renderer.vertex(i, j, 0);
                 }
             } else {
-                for (int j = (amounts[i] >> BITS - 8); j > 0; j--) {
+                for (int j = (int) (amounts[i] / iterations); j > 0; j--) {
                     renderer.color(blue);
                     renderer.vertex(i, j, 0);
                 }
