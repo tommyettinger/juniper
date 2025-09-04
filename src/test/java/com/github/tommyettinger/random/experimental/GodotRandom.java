@@ -17,7 +17,6 @@
 
 package com.github.tommyettinger.random.experimental;
 
-import com.github.tommyettinger.digital.BitConversion;
 import com.github.tommyettinger.digital.TrigTools;
 import com.github.tommyettinger.random.EnhancedRandom;
 
