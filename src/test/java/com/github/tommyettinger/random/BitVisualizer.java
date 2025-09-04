@@ -56,7 +56,9 @@ public class BitVisualizer extends ApplicationAdapter {
     private final double[] dAmounts = new double[512];
     private long seed = 123456789L;
     private long startTime;
-    private final EnhancedRandom random = new GodotRandom(seed);
+	private int generator = 0;
+    private EnhancedRandom[] generators = {new GodotRandom(seed), new AceRandom(seed), new GoldenQuasiRandom(seed), new LFSR64QuasiRandom(seed)};
+    private EnhancedRandom random = generators[generator];
 
     private final float black = Color.BLACK.toFloatBits();
     private final float blue = Color.BLUE.toFloatBits();
@@ -79,16 +81,23 @@ public class BitVisualizer extends ApplicationAdapter {
             @Override
             public boolean keyDown(int keycode) {
                 if (keycode == Input.Keys.SPACE || keycode == Input.Keys.ENTER || keycode == Input.Keys.EQUALS) {
-                    mode = (mode + 1) % modes;
+                    mode = (mode + (UIUtils.shift() ? modes - 1 : 1)) % modes;
                     if(!UIUtils.ctrl())
                         System.out.println("Changed to mode " + mode);
                     return true;
                 } else if (keycode == Input.Keys.MINUS || keycode == Input.Keys.BACKSPACE) {
-                    mode = (mode + modes - 1) % modes;
-                    if(!UIUtils.ctrl())
-                        System.out.println("Changed to mode " + mode);
-                    return true;
-                } else if (keycode == Input.Keys.Q || keycode == Input.Keys.ESCAPE)
+					mode = (mode + modes - 1) % modes;
+					if (!UIUtils.ctrl())
+						System.out.println("Changed to mode " + mode);
+					return true;
+				}else if (keycode == Input.Keys.G) {
+					generator = (generator + (UIUtils.shift() ? generators.length - 1 : 1)) % generators.length;
+					random = generators[generator];
+					if(!UIUtils.ctrl())
+						System.out.println("Changed to generator " + random);
+					return true;
+
+				} else if (keycode == Input.Keys.Q || keycode == Input.Keys.ESCAPE)
                     Gdx.app.exit();
 
                 return false;

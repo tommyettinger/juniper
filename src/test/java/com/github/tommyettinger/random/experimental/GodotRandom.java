@@ -356,7 +356,7 @@ public class GodotRandom extends EnhancedRandom {
 	public float nextInclusiveFloat() {
 		int expOffset =  pcg32_random_r();
 		if(expOffset == 0) return 0f;
-		return Math.scalb((float) (pcg32_random_r() | 0x80000001L), -32 - BitConversion.countLeadingZeros(expOffset));
+		return -Math.scalb((float) (pcg32_random_r() | 0xFFFFFFFF80000001L), -32 - Integer.numberOfLeadingZeros(expOffset));
 	}
 
 	/**
@@ -370,7 +370,7 @@ public class GodotRandom extends EnhancedRandom {
 		int expOffset = pcg32_random_r();
 		if(expOffset == 0) return 0.0;
 		long significand = ((long) pcg32_random_r() << 32 ^ pcg32_random_r()) | 0x8000000000000001L;
-		return Math.scalb((double) significand, -64 - BitConversion.countLeadingZeros(expOffset));
+		return -Math.scalb((double) significand, -64 - Integer.numberOfLeadingZeros(expOffset));
 	}
 
 	/**
