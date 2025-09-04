@@ -55,6 +55,7 @@ public class BitVisualizer extends ApplicationAdapter {
 //    private final double[] amounts = new double[512];
     private long seed = 123456789L;
     private double iterations = 0L;
+    private double average = 0L;
 	private int generator = 0;
     private EnhancedRandom[] generators = {new GodotRandom(seed), new AceRandom(seed), new GoldenQuasiRandom(seed), new LFSR64QuasiRandom(seed)};
     private EnhancedRandom random = generators[generator];
@@ -76,6 +77,7 @@ public class BitVisualizer extends ApplicationAdapter {
         renderer = new ImmediateModeRenderer20(COUNT<<3, false, true, 0);
         Arrays.fill(amounts, 0);
 		iterations = 0.0;
+		average = 0.0;
         input = new InputAdapter() {
             @Override
             public boolean keyDown(int keycode) {
@@ -85,6 +87,7 @@ public class BitVisualizer extends ApplicationAdapter {
                         System.out.println("Changed to mode " + mode);
 					Arrays.fill(amounts, 0);
 					iterations = 0.0;
+					average = 0.0;
 					return true;
                 } else if (keycode == Input.Keys.MINUS || keycode == Input.Keys.BACKSPACE) {
 					mode = (mode + modes - 1) % modes;
@@ -92,6 +95,7 @@ public class BitVisualizer extends ApplicationAdapter {
 						System.out.println("Changed to mode " + mode);
 					Arrays.fill(amounts, 0);
 					iterations = 0.0;
+					average = 0.0;
 					return true;
 				}else if (keycode == Input.Keys.G) {
 					generator = (generator + (UIUtils.shift() ? generators.length - 1 : 1)) % generators.length;
@@ -100,6 +104,7 @@ public class BitVisualizer extends ApplicationAdapter {
 						System.out.println("Changed to generator " + random);
 					Arrays.fill(amounts, 0);
 					iterations = 0.0;
+					average = 0.0;
 					return true;
 				} else if (keycode == Input.Keys.Q || keycode == Input.Keys.ESCAPE)
                     Gdx.app.exit();
@@ -137,8 +142,8 @@ public class BitVisualizer extends ApplicationAdapter {
         }
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        font.draw(batch, String.format("Mode %d at %d FPS",
-                        mode, Gdx.graphics.getFramesPerSecond()),
+        font.draw(batch, String.format("Mode %d at %d FPS, average is %8.7f",
+                        mode, Gdx.graphics.getFramesPerSecond(), average / (iterations / (1 << BITS - 8))),
                 64, 518, 256+128, Align.center, true);
         batch.end();
     }
@@ -154,14 +159,18 @@ public class BitVisualizer extends ApplicationAdapter {
         renderer.begin(camera.combined, GL20.GL_POINTS);
         Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
                 " " + random.getTag() + ", bits of nextFloat() at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+		double total = 0.0;
         for (int i = 0; i < COUNT; i++) {
-            int bits = Float.floatToIntBits(random.nextFloat());
+			float f = random.nextFloat();
+			total += f;
+            int bits = Float.floatToIntBits(f);
             for (int j = 0, jj = 504 - 128; j < 32; j++, jj -= 8) {
                 if (1 == (bits >>> j & 1))
                     amounts[jj] = amounts[jj + 1] = amounts[jj + 2] = amounts[jj + 3]
                             = amounts[jj + 4] = amounts[jj + 5] = ++amounts[jj + 6];
             }
         }
+		average += total / COUNT;
         for (int i = 0; i < 512; i++) {
             if ((i & 7) == 3) {
                 for (int j = 9 + (int) (amounts[i] / iterations); j > 0; j--) {
@@ -189,14 +198,18 @@ public class BitVisualizer extends ApplicationAdapter {
         renderer.begin(camera.combined, GL20.GL_POINTS);
         Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
                 " " + random.getTag() + ", bits of nextDouble() at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+		double total = 0.0;
         for (int i = 0; i < COUNT; i++) {
-            long bits = Double.doubleToLongBits(random.nextDouble());
-            for (int j = 0, jj = 504; j < 64; j++, jj -= 8) {
+			double f = random.nextDouble();
+			total += f;
+			long bits = Double.doubleToLongBits(f);
+			for (int j = 0, jj = 504; j < 64; j++, jj -= 8) {
                 if (1L == (bits >>> j & 1L))
                     amounts[jj] = amounts[jj + 1] = amounts[jj + 2] = amounts[jj + 3]
                             = amounts[jj + 4] = amounts[jj + 5] = ++amounts[jj + 6];
             }
         }
+		average += total / COUNT;
         for (int i = 0; i < 512; i++) {
             if ((i & 7) == 3) {
                 for (int j = 9 + (int) (amounts[i] / iterations); j > 0; j--) {
@@ -224,14 +237,18 @@ public class BitVisualizer extends ApplicationAdapter {
         renderer.begin(camera.combined, GL20.GL_POINTS);
         Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
                 " " + random.getTag() + ", bits of nextExclusiveFloat() at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+		double total = 0.0;
         for (int i = 0; i < COUNT; i++) {
-            int bits = Float.floatToIntBits(random.nextExclusiveFloat());
+			float f = random.nextExclusiveFloat();
+			total += f;
+			int bits = Float.floatToIntBits(f);
             for (int j = 0, jj = 504 - 128; j < 32; j++, jj -= 8) {
                 if (1 == (bits >>> j & 1))
                     amounts[jj] = amounts[jj + 1] = amounts[jj + 2] = amounts[jj + 3]
                             = amounts[jj + 4] = amounts[jj + 5] = ++amounts[jj + 6];
             }
         }
+		average += total / COUNT;
         for (int i = 0; i < 512; i++) {
             if ((i & 7) == 3) {
                 for (int j = 9 + (int) (amounts[i] / iterations); j > 0; j--) {
@@ -259,14 +276,18 @@ public class BitVisualizer extends ApplicationAdapter {
         renderer.begin(camera.combined, GL20.GL_POINTS);
         Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
                 " " + random.getTag() + ", bits of nextExclusiveDouble() at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+		double total = 0.0;
         for (int i = 0; i < COUNT; i++) {
-            long bits = Double.doubleToLongBits(random.nextExclusiveDouble());
+			double f = random.nextExclusiveDouble();
+			total += f;
+			long bits = Double.doubleToLongBits(f);
             for (int j = 0, jj = 504; j < 64; j++, jj -= 8) {
                 if (1L == (bits >>> j & 1L))
                     amounts[jj] = amounts[jj + 1] = amounts[jj + 2] = amounts[jj + 3]
                             = amounts[jj + 4] = amounts[jj + 5] = ++amounts[jj + 6];
             }
         }
+		average += total / COUNT;
         for (int i = 0; i < 512; i++) {
             if ((i & 7) == 3) {
                 for (int j = 9 + (int) (amounts[i] / iterations); j > 0; j--) {
@@ -294,14 +315,18 @@ public class BitVisualizer extends ApplicationAdapter {
         renderer.begin(camera.combined, GL20.GL_POINTS);
         Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
                 " " + random.getTag() + ", bits of nextInclusiveFloat() at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+		double total = 0.0;
         for (int i = 0; i < COUNT; i++) {
-            int bits = Float.floatToIntBits(random.nextInclusiveFloat());
+			float f = random.nextInclusiveFloat();
+			total += f;
+			int bits = Float.floatToIntBits(f);
             for (int j = 0, jj = 504 - 128; j < 32; j++, jj -= 8) {
                 if (1 == (bits >>> j & 1))
                     amounts[jj] = amounts[jj + 1] = amounts[jj + 2] = amounts[jj + 3]
                             = amounts[jj + 4] = amounts[jj + 5] = ++amounts[jj + 6];
             }
         }
+		average += total / COUNT;
         for (int i = 0; i < 512; i++) {
             if ((i & 7) == 3) {
                 for (int j = 9 + (int) (amounts[i] / iterations); j > 0; j--) {
@@ -329,14 +354,18 @@ public class BitVisualizer extends ApplicationAdapter {
         renderer.begin(camera.combined, GL20.GL_POINTS);
         Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
                 " " + random.getTag() + ", bits of nextInclusiveDouble() at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+		double total = 0.0;
         for (int i = 0; i < COUNT; i++) {
-            long bits = Double.doubleToLongBits(random.nextInclusiveDouble());
+			double f = random.nextInclusiveDouble();
+			total += f;
+			long bits = Double.doubleToLongBits(f);
             for (int j = 0, jj = 504; j < 64; j++, jj -= 8) {
                 if (1L == (bits >>> j & 1L))
                     amounts[jj] = amounts[jj + 1] = amounts[jj + 2] = amounts[jj + 3]
                             = amounts[jj + 4] = amounts[jj + 5] = ++amounts[jj + 6];
             }
         }
+		average += total / COUNT;
         for (int i = 0; i < 512; i++) {
             if ((i & 7) == 3) {
                 for (int j = 9 + (int) (amounts[i] / iterations); j > 0; j--) {
@@ -364,14 +393,18 @@ public class BitVisualizer extends ApplicationAdapter {
         renderer.begin(camera.combined, GL20.GL_POINTS);
         Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
                 " " + random.getTag() + ", bits of nextExclusiveFloatNew() at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+		double total = 0.0;
         for (int i = 0; i < COUNT; i++) {
-            int bits = Float.floatToIntBits(nextExclusiveFloatNew(random));
+			float f = nextExclusiveFloatNew(random);
+			total += f;
+			int bits = Float.floatToIntBits(f);
             for (int j = 0, jj = 504 - 128; j < 32; j++, jj -= 8) {
                 if (1 == (bits >>> j & 1))
                     amounts[jj] = amounts[jj + 1] = amounts[jj + 2] = amounts[jj + 3]
                             = amounts[jj + 4] = amounts[jj + 5] = ++amounts[jj + 6];
             }
         }
+		average += total / COUNT;
         for (int i = 0; i < 512; i++) {
             if ((i & 7) == 3) {
                 for (int j = 9 + (int) (amounts[i] / iterations); j > 0; j--) {
@@ -399,14 +432,18 @@ public class BitVisualizer extends ApplicationAdapter {
         renderer.begin(camera.combined, GL20.GL_POINTS);
         Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
                 " " + random.getTag() + ", bits of nextExclusiveDoubleNew() at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+		double total = 0.0;
         for (int i = 0; i < COUNT; i++) {
-            long bits = Double.doubleToLongBits(nextExclusiveDoubleNew(random));
+			double f = nextExclusiveDoubleNew(random);
+			total += f;
+			long bits = Double.doubleToLongBits(f);
             for (int j = 0, jj = 504; j < 64; j++, jj -= 8) {
                 if (1L == (bits >>> j & 1L))
                     amounts[jj] = amounts[jj + 1] = amounts[jj + 2] = amounts[jj + 3]
                             = amounts[jj + 4] = amounts[jj + 5] = ++amounts[jj + 6];
             }
         }
+		average += total / COUNT;
         for (int i = 0; i < 512; i++) {
             if ((i & 7) == 3) {
                 for (int j = 9 + (int) (amounts[i] / iterations); j > 0; j--) {
@@ -442,6 +479,7 @@ public class BitVisualizer extends ApplicationAdapter {
                             = amounts[jj + 4] = amounts[jj + 5] = ++amounts[jj + 6];
             }
         }
+		average = 0.5;
         for (int i = 0; i < 512; i++) {
             if ((i & 7) == 3) {
                 for (int j = 9 + (int) (amounts[i] / iterations); j > 0; j--) {
