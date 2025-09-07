@@ -25,6 +25,11 @@ import java.math.BigInteger;
 /**
  * Meant to replicate Godot's random number generator API and its behavior as well as we can on the JVM (without access
  * to unsigned integers).
+ * <br>
+ * Somewhat notably, this fails ICE and IICE tests, despite those being purely tests of the underlying PCG32 XSG RR
+ * generator... Even with them using the recommended/required seeding routine used for the two states. This is unusual
+ * because the ICE and IICE tests normally test by setting the two or more states directly to arithmetically-similar
+ * initial states, but in this case that isn't a requirement for correlation to be detected.
  */
 public class GodotRandom extends EnhancedRandom {
 
@@ -229,9 +234,9 @@ public class GodotRandom extends EnhancedRandom {
 	@Override
 	public void setSelectedState (int selection, long value) {
 		if ((selection & 1) == 1) {
-			inc = value | 1L;
+			setInc(value);
 		} else {
-			state = value;
+			setState(value);
 		}
 	}
 
@@ -275,8 +280,7 @@ public class GodotRandom extends EnhancedRandom {
 	 * @param state can be any long
 	 */
 	public void setState(long state) {
-		initialState = state;
-		this.state = state;
+		setState(state, initialInc);
 	}
 
 	/**
@@ -289,15 +293,15 @@ public class GodotRandom extends EnhancedRandom {
 
 	/**
 	 * Sets the second part of the state (the stream or increment).
-	 * This must be odd, otherwise this will add 1 to make it odd.
+	 * This should be positive, because the sign bit is discarded. Negative inputs will not be guaranteed to be unique.
 	 * <br>
 	 * This is not an API Godot provides, and it can be used to change the increment in ways
 	 * Godot normally does not permit.
 	 *
-	 * @param inc can be any odd-number long; otherwise this adds 1 to make it odd
+	 * @param inc can be any positive long; this will be multiplied by 2 and 1 added to get the actual increment
 	 */
 	public void setInc(long inc) {
-		initialInc = this.inc = inc | 1L;
+		setState(initialState, inc);
 	}
 
 	/**
@@ -309,22 +313,23 @@ public class GodotRandom extends EnhancedRandom {
 	 * Godot normally does not permit.
 	 *
 	 * @param state the first state; can be any long
-	 * @param inc the second state; can be any odd-number long
+	 * @param inc the second state; can be any positive long
 	 */
 	@Override
 	public void setState (long state, long inc) {
-		setState(state);
-		setInc(inc);
+		initialInc = inc;
+		initialState = state;
+		pcg32_srandom_r(initialState, initialInc);
 	}
 
 	@Override
 	public long nextLong () {
-		return (long) pcg32_random_r() << 32 ^ pcg32_random_r();
+		return (long) pcg32_random_r() << 32 | (pcg32_random_r() & 0xFFFFFFFFL);
 	}
 
 	@Override
 	public long previousLong() {
-		return previousInt() ^ (long)previousInt() << 32;
+		return (previousInt() & 0xFFFFFFFFL) | (long)previousInt() << 32;
 	}
 
 	@Override
@@ -355,7 +360,7 @@ public class GodotRandom extends EnhancedRandom {
 	public float nextInclusiveFloat() {
 		int expOffset = pcg32_random_r();
 		if(expOffset == 0) return 0f;
-		return Math.scalb(0x1p32f + (float) (pcg32_random_r() | 0xFFFFFFFF80000001L), -32 - Integer.numberOfLeadingZeros(expOffset));
+		return Math.scalb(0x1p31f - (pcg32_random_r() | 0xFFFFFFFF80000001L), -32 - Integer.numberOfLeadingZeros(expOffset));
 	}
 
 	/**
@@ -368,8 +373,8 @@ public class GodotRandom extends EnhancedRandom {
 	public double nextInclusiveDouble() {
 		int expOffset = pcg32_random_r();
 		if(expOffset == 0) return 0.0;
-		long significand = ((long) pcg32_random_r() << 32 ^ pcg32_random_r()) | 0x8000000000000001L;
-		return Math.scalb(0x1p64 + (double) significand, -64 - Integer.numberOfLeadingZeros(expOffset));
+		long significand = ((long) pcg32_random_r() << 32 | (pcg32_random_r() & 0xFFFFFFFFL)) | 0x8000000000000001L;
+		return Math.scalb(0x1p63 - significand, -64 - Integer.numberOfLeadingZeros(expOffset));
 	}
 
 	/**
