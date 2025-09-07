@@ -205,8 +205,8 @@ public class MorbRandom extends EnhancedRandom {
 		stateA += 0x9E3779B97F4A7C15L;
 		stateB += (x + (x >>> 1)) >>> 63;
 		x = (x ^ (x << 23 | x >>> 64 - 23) ^ (x << 47 | x >>> 64 - 47) ^ y) * 0xF1357AEA2E62A9C5L;
-		x = (x ^ (x << 25 | x >>> 64 - 25) ^ (x << 50 | x >>> 64 - 50) ^ y);
-		return x;
+		x = (x ^ (x << 27 | x >>> 64 - 27) ^ (x << 53 | x >>> 64 - 53)) * 0xF1357AEA2E62A9C5L ^ y;
+		return (x ^ x >>> 29);
 	}
 
 	@Override
@@ -215,8 +215,8 @@ public class MorbRandom extends EnhancedRandom {
 		stateB -= (stateA + (stateA >>> 1)) >>> 63;
 		long x = stateA, y = stateB;
 		x = (x ^ (x << 23 | x >>> 64 - 23) ^ (x << 47 | x >>> 64 - 47) ^ y) * 0xF1357AEA2E62A9C5L;
-		x = (x ^ (x << 25 | x >>> 64 - 25) ^ (x << 50 | x >>> 64 - 50) ^ y);
-		return x;
+		x = (x ^ (x << 27 | x >>> 64 - 27) ^ (x << 53 | x >>> 64 - 53)) * 0xF1357AEA2E62A9C5L ^ y;
+		return (x ^ x >>> 29);
 	}
 
 	@Override
@@ -225,8 +225,8 @@ public class MorbRandom extends EnhancedRandom {
 		stateA += 0x9E3779B97F4A7C15L;
 		stateB += (x + (x >>> 1)) >>> 63;
 		x = (x ^ (x << 23 | x >>> 64 - 23) ^ (x << 47 | x >>> 64 - 47) ^ y) * 0xF1357AEA2E62A9C5L;
-		x = (x ^ (x << 25 | x >>> 64 - 25) ^ (x << 50 | x >>> 64 - 50) ^ y);
-		return (int)x >>> (32 - bits);
+		x = (x ^ (x << 27 | x >>> 64 - 27) ^ (x << 53 | x >>> 64 - 53)) * 0xF1357AEA2E62A9C5L ^ y;
+		return (int)(x ^ x >>> 29) >>> (32 - bits);
 	}
 
 
