@@ -26,10 +26,10 @@ import java.math.BigInteger;
  * counter by 0 or 1. This has a period of exactly 2 to th 128 and all values are allowed for both states.
  * It has one stream.
  * <br>
- * Has passed 64TB of PractRand without anomalies. This is 1D equidistributed, exactly.
+ * Has passed 64TB of PractRand without anomalies. This fails ICE and IICE tests. This is 1D equidistributed, exactly.
  * <br>
  * This is related to {@link com.github.tommyettinger.random.OrbitalRandom} in some ways, but uses lighter
- * mixing and still passes tests.
+ * mixing and still passes PractRand.
  * <br>
  * Morbillions sold!
  */

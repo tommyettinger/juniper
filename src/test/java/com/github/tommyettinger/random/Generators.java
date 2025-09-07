@@ -94,6 +94,7 @@ public final class Generators {
 		randomList.add(new WumpusRandom(1, 1, 1));
 		randomList.add(new WhomperRandom(1, 1, 1));
 		randomList.add(new GodotRandom(1, 1));
+		randomList.add(new MorbRandom(1, 1));
 	}
 
 	public static int randomCount = randomList.size();
