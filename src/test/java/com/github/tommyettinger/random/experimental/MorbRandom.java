@@ -26,7 +26,7 @@ import java.math.BigInteger;
  * counter by 0 or 1. This has a period of exactly 2 to th 128 and all values are allowed for both states.
  * It has one stream.
  * <br>
- * Has passed 64TB of PractRand without anomalies. This fails ICE and IICE tests. This is 1D equidistributed, exactly.
+ * Has passed 64TB of PractRand without anomalies. This passes ICE and IICE tests. This is 1D equidistributed, exactly.
  * <br>
  * This is related to {@link com.github.tommyettinger.random.OrbitalRandom} in some ways, but uses lighter
  * mixing and still passes PractRand.
@@ -205,7 +205,7 @@ public class MorbRandom extends EnhancedRandom {
 		stateA += 0x9E3779B97F4A7C15L;
 		stateB += (x + (x >>> 1)) >>> 63;
 		x = (x ^ (x << 23 | x >>> 64 - 23) ^ (x << 47 | x >>> 64 - 47) ^ y) * 0xF1357AEA2E62A9C5L;
-		x = (x ^ (x << 27 | x >>> 64 - 27) ^ (x << 53 | x >>> 64 - 53)) * 0xF1357AEA2E62A9C5L ^ y;
+		x = (x ^ (x << 27 | x >>> 64 - 27) ^ (x << 53 | x >>> 64 - 53) ^ y) * 0xF1357AEA2E62A9C5L;
 		return (x ^ x >>> 29);
 	}
 
@@ -215,7 +215,7 @@ public class MorbRandom extends EnhancedRandom {
 		stateB -= (stateA + (stateA >>> 1)) >>> 63;
 		long x = stateA, y = stateB;
 		x = (x ^ (x << 23 | x >>> 64 - 23) ^ (x << 47 | x >>> 64 - 47) ^ y) * 0xF1357AEA2E62A9C5L;
-		x = (x ^ (x << 27 | x >>> 64 - 27) ^ (x << 53 | x >>> 64 - 53)) * 0xF1357AEA2E62A9C5L ^ y;
+		x = (x ^ (x << 27 | x >>> 64 - 27) ^ (x << 53 | x >>> 64 - 53) ^ y) * 0xF1357AEA2E62A9C5L;
 		return (x ^ x >>> 29);
 	}
 
@@ -225,7 +225,7 @@ public class MorbRandom extends EnhancedRandom {
 		stateA += 0x9E3779B97F4A7C15L;
 		stateB += (x + (x >>> 1)) >>> 63;
 		x = (x ^ (x << 23 | x >>> 64 - 23) ^ (x << 47 | x >>> 64 - 47) ^ y) * 0xF1357AEA2E62A9C5L;
-		x = (x ^ (x << 27 | x >>> 64 - 27) ^ (x << 53 | x >>> 64 - 53)) * 0xF1357AEA2E62A9C5L ^ y;
+		x = (x ^ (x << 27 | x >>> 64 - 27) ^ (x << 53 | x >>> 64 - 53) ^ y) * 0xF1357AEA2E62A9C5L;
 		return (int)(x ^ x >>> 29) >>> (32 - bits);
 	}
 
