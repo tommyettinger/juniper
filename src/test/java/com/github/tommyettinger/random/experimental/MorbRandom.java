@@ -206,9 +206,9 @@ public class MorbRandom extends EnhancedRandom {
 		stateA += 0x9E3779B97F4A7C15L;
 //		stateB += BitConversion.countLeadingZeros(x);
 		stateB += (x + (x >>> 1)) >>> 63;
-		x = (x ^ x >>> 27 ^ y) * 0x3C79AC492BA7B653L + y;
-		x = (x ^ (x << 25 | x >>> 64 - 25) ^ (x << 50 | x >>> 64 - 50)) * 0x1C69B3F74AC4AE35L;
-		return (x ^ x >>> 27);
+		x = (x ^ (x << 25 | x >>> 64 - 25) ^ (x << 50 | x >>> 64 - 50) ^ y) * 0xF1357AEA2E62A9C5L + y;
+		x = (x ^ (x << 19 | x >>> 64 - 19) ^ (x << 28 | x >>> 64 - 28));
+		return (x ^ (x << 23 | x >>> 64 - 23) ^ (x << 47 | x >>> 64 - 47));
 	}
 
 	@Override
@@ -216,9 +216,9 @@ public class MorbRandom extends EnhancedRandom {
 		stateA -= 0x9E3779B97F4A7C15L;
 		stateB -= (stateA + (stateA >>> 1)) >>> 63;
 		long x = stateA, y = stateB;
-		x = (x ^ x >>> 27 ^ y) * 0x3C79AC492BA7B653L + y;
-		x = (x ^ (x << 25 | x >>> 64 - 25) ^ (x << 50 | x >>> 64 - 50)) * 0x1C69B3F74AC4AE35L;
-		return (x ^ x >>> 27);
+		x = (x ^ (x << 25 | x >>> 64 - 25) ^ (x << 50 | x >>> 64 - 50) ^ y) * 0xF1357AEA2E62A9C5L + y;
+		x = (x ^ (x << 19 | x >>> 64 - 19) ^ (x << 28 | x >>> 64 - 28));
+		return (x ^ (x << 23 | x >>> 64 - 23) ^ (x << 47 | x >>> 64 - 47));
 	}
 
 	@Override
@@ -226,9 +226,9 @@ public class MorbRandom extends EnhancedRandom {
 		long x = stateA, y = stateB;
 		stateA += 0x9E3779B97F4A7C15L;
 		stateB += (x + (x >>> 1)) >>> 63;
-		x = (x ^ x >>> 27 ^ y) * 0x3C79AC492BA7B653L + y;
-		x = (x ^ (x << 25 | x >>> 64 - 25) ^ (x << 50 | x >>> 64 - 50)) * 0x1C69B3F74AC4AE35L;
-		return (int)(x ^ x >>> 27) >>> (32 - bits);
+		x = (x ^ (x << 25 | x >>> 64 - 25) ^ (x << 50 | x >>> 64 - 50) ^ y) * 0xF1357AEA2E62A9C5L + y;
+		x = (x ^ (x << 19 | x >>> 64 - 19) ^ (x << 28 | x >>> 64 - 28));
+		return (int)(x ^ (x << 23 | x >>> 64 - 23) ^ (x << 47 | x >>> 64 - 47)) >>> (32 - bits);
 	}
 
 
