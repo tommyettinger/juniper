@@ -220,7 +220,7 @@ public class MorbitalRandom extends EnhancedRandom {
 		stateA += 0xD1B54A32D192ED03L;
 		stateB += 0x8CB92BA72F3D8DD7L + BitConversion.countLeadingZeros(x);
 		y = (y ^ (x << 37 | x >>> 27)) * 0x3C79AC492BA7B653L;
-		y = (y ^ y >>> 33) * 0x1C69B3F74AC4AE35L;
+		y = (y ^ y >>> 33) * 0xF1357AEA2E62A9C5L;
 		return y ^ y >>> 27;
 	}
 
@@ -229,7 +229,7 @@ public class MorbitalRandom extends EnhancedRandom {
 		final long x = stateA -= 0xD1B54A32D192ED03L;
 		long y = stateB -= 0x8CB92BA72F3D8DD7L + BitConversion.countLeadingZeros(x);
 		y = (y ^ (x << 37 | x >>> 27)) * 0x3C79AC492BA7B653L;
-		y = (y ^ y >>> 33) * 0x1C69B3F74AC4AE35L;
+		y = (y ^ y >>> 33) * 0xF1357AEA2E62A9C5L;
 		return y ^ y >>> 27;
 	}
 
@@ -240,7 +240,7 @@ public class MorbitalRandom extends EnhancedRandom {
 		stateA += 0xD1B54A32D192ED03L;
 		stateB += 0x8CB92BA72F3D8DD7L + BitConversion.countLeadingZeros(x);
 		y = (y ^ (x << 37 | x >>> 27)) * 0x3C79AC492BA7B653L;
-		y = (y ^ y >>> 33) * 0x1C69B3F74AC4AE35L;
+		y = (y ^ y >>> 33) * 0xF1357AEA2E62A9C5L;
 		return (int)(y ^ y >>> 27) >>> (32 - bits);
 	}
 

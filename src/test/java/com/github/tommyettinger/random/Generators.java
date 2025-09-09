@@ -96,6 +96,7 @@ public final class Generators {
 		randomList.add(new GodotRandom(1, 1));
 		randomList.add(new MorbRandom(1, 1));
 		randomList.add(new GodotEditRandom(1, 1));
+		randomList.add(new MorbitalRandom(1, 1));
 	}
 
 	public static int randomCount = randomList.size();
