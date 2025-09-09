@@ -1,0 +1,515 @@
+/*
+ * Copyright (c) 2022-2023 See AUTHORS file.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+package com.github.tommyettinger.random.experimental;
+
+import com.github.tommyettinger.digital.TrigTools;
+import com.github.tommyettinger.random.EnhancedRandom;
+
+import java.math.BigInteger;
+
+/**
+ * Meant to replicate Godot's random number generator API and its behavior as well as we can on the JVM (without access
+ * to unsigned integers), except for the seeding code, which appears flawed in the original PCG32 XSG RR algorithm.
+ * To make sure to <em>equidistribute</em> the shade I throw, Xoroshiro and Xoshiro generators have a similar (worse)
+ * flaw when multiple generators have their states initialized to arithmetically similar initial values.
+ * <br>
+ * This has had its seeding code modified so it can pass ICE and IICE tests.
+ */
+public class GodotEditRandom extends EnhancedRandom {
+
+	/**
+	 * From PCG sources, copied into Godot 4.4, this is the default value for {@link #inc}.
+	 */
+	public static final long DEFAULT_INC  = 0x14057B7EF767814FL;
+	public static final long DEFAULT_SEED = 0xA7323897838D73DBL;
+
+	/**
+	 * PCG-Random's pcg32 XSH RR generator.
+	 * Produces a single 32-bit int output using 64-bit math, and advances the {@link #state} once.
+	 *
+	 * @return any int, with equal likelihood
+	 */
+	public int pcg32_random_r() {
+		long old = state;
+		// 0x5851F42D4C957F2DL is 6364136223846793005L
+		state = old * 0x5851F42D4C957F2DL + inc;
+		int xs = (int)(old >>> 27 ^ old >>> 45);
+		int rot = (int) (old >>> 59);
+		return (xs >>> rot | xs << 32 - rot);
+	}
+
+	/**
+	 * A different seeding routine from PCG32 XSH RR. Does not use either parameter verbatim.
+	 * <br>
+	 * Changed significantly from what Godot uses.
+	 *
+	 * @param initstate used in full to determine {@link #state}
+	 * @param initseq used (in full except for the sign bit, which is ignored) to determine {@link #inc}
+	 */
+	public void pcg32_srandom_r(long initstate, long initseq){
+		// Guarantees the lowest bit will be set, which is the goal for an LCG increment.
+		// This is invertible for positive initseq values only.
+		// 0xD1342543DE82EF96L is from "Computationally Easy, Spectrally Good Multipliers for
+		// Congruential Pseudorandom Number Generators" [Steele, Vigna 2021], with 1 added to make it even, because we
+		// want to ensure the low bit is 1 here when we add 0x9E3779B97F4A7C15L, which is 2 to the 64 divided by the
+		// golden ratio, rounded down to an odd number.
+		inc = initseq * 0xD1342543DE82EF96L + 0x9E3779B97F4A7C15L;
+		// This advances the state in the same way that pcg32_random_r() does...
+		state = initstate * 0x5851F42D4C957F2DL + inc;
+		// And this performs an invertible change on state, XOR-Rotate-XOR-Rotate, using the low 6 bits of inc
+		// as one of the rotation amounts (which is always an odd number), and a different rotation (left by 22) for
+		// the other rotation amount.
+		final int low = (int)inc;
+		state ^= (state << low | state >>> 64 - low) ^ (state << 22 | state >>> 42);
+	}
+
+	/**
+	 * PCG-Random's pcg32 XSH RR unbiased random uint32_t generator. Java doesn't have unsigned types, so if
+	 * {@code bound} is negative, this will treat it as unsigned, and this might return unexpected results.
+	 * <br>
+	 * Source from <a href="https://github.com/imneme/pcg-c-basic/blob/master/pcg_basic.c">pcg-c-basic</a>.
+	 *
+	 * @param bound any int except 0 to be used as the unsigned exclusive bound
+	 * @return any int between 0 (inclusive) and bound (exclusive and treated as unsigned)
+	 */
+	public int pcg32_boundedrand_r(int bound) {
+		long uBound = bound & 0xFFFFFFFFL,
+			// We use a "naive scheme" because we don't have uint types in Java.
+			threshold = (0x100000000L - uBound) % uBound;
+		for (;;) {
+			long r = pcg32_random_r() & 0xFFFFFFFFL;
+			if (r >= threshold)
+				return (int)(r % uBound);
+		}
+
+	}
+
+	/**
+	 * The first state, also called the changing state; can be any long.
+	 */
+	protected long state;
+	/**
+	 * The second (unchanging) state value, also called the increment; can be any odd-number long.
+	 */
+	protected long inc;
+
+	/**
+	 * The first state assigned during seeding, used to return the generator to its initial state.
+	 */
+	protected long initialState = 0L;
+
+	/**
+	 * The first increment assigned during seeding, used to keep inc the same value even though
+	 * {@link #pcg32_srandom_r(long, long)} would normally change it.
+	 */
+	protected long initialInc = 0L;
+
+	/**
+	 * Creates a new GodotEditRandom with a fixed state.
+	 */
+	public GodotEditRandom() {
+		this(DEFAULT_SEED, DEFAULT_INC);
+	}
+
+	/**
+	 * Creates a new GodotEditRandom with the given seed; all {@code long} values are permitted. The increment will be
+	 * assigned a fixed value. The seed will not be used verbatim internally, but will be stored verbatim.
+	 *
+	 * @param seed any {@code long} value
+	 */
+	public GodotEditRandom(long seed) {
+		this(seed, DEFAULT_INC);
+	}
+
+	/**
+	 * Creates a new GodotEditRandom with the given two states; all {@code long} values are permitted for
+	 * p_seed, and all positive {@code long} values are permitted for p_inc. These states are changed
+	 * significantly from {@code p_seed} and {@code p_inc}.
+	 *
+	 * @param p_seed any {@code long} value
+	 * @param p_inc any positive {@code long} value; the sign bit is ignored
+	 */
+	public GodotEditRandom(long p_seed, long p_inc) {
+		super(p_seed);
+		initialInc = p_inc;
+		initialState = p_seed;
+		pcg32_srandom_r(initialState, initialInc);
+	}
+
+	public void seed(long p_seed) {
+		initialState = p_seed;
+		pcg32_srandom_r(initialState, initialInc);
+	}
+
+	/**
+	 * Calls {@link #seed(long)} with a uniform-random long, using two calls to {@link Math#random()} (via
+	 * {@link EnhancedRandom#seedFromMath()}).
+	 * <br>
+	 * Different from Godot's randomize(), which incorporates the current time and ticks elapsed.
+	 */
+	public void randomize() {
+		seed(seedFromMath());
+	}
+
+	/**
+	 * Resets this generator to use the last values given for its {@link #getSeed() seed} and
+	 * {@link #getInitialIncrement() initialIncrement}. These can be set via the constructor, {@link #seed(long)},
+	 * {@link #setState(long)}, {@link #setInc(long)}, or {@link #setState(long, long)} methods, among potentially
+	 * others.
+	 */
+	public void reset() {
+		pcg32_srandom_r(initialState, initialInc);
+	}
+
+	@Override
+	public String getTag() {
+		return "GdtR";
+	}
+
+	/**
+	 * This generator mainly generates int values, though it internally uses 64-bit math.
+	 * @return true
+	 */
+	@Override
+	public boolean mainlyGeneratesInt() {
+		return true;
+	}
+
+	/**
+	 * Returned by {@link #getMinimumPeriod()}.
+	 * @see #getMinimumPeriod()
+	 */
+	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
+
+	/**
+	 * 2 to the 64.
+	 * @return 2 to the 64
+	 */
+	@Override
+	public BigInteger getMinimumPeriod() {
+		return MINIMUM_PERIOD;
+	}
+
+	/**
+	 * This generator has 2 {@code long} states, so this returns 2.
+	 *
+	 * @return 2 (two)
+	 */
+	@Override
+	public int getStateCount () {
+		return 2;
+	}
+
+	/**
+	 * Gets the state determined by {@code selection}, as-is.
+	 * Selections 0 (or any even number) and 1 (or any odd number) refer to states A and B.
+	 * <br>
+	 * This is not an API Godot provides.
+	 *
+	 * @param selection used to select which state variable to get; generally 0 or 1
+	 * @return the value of the selected state
+	 */
+	@Override
+	public long getSelectedState (int selection) {
+		if ((selection & 1) == 1) {
+			return inc;
+		}
+		return state;
+	}
+
+	/**
+	 * Sets one of the states, determined by {@code selection}, to {@code value}, as-is.
+	 * Selections 0 (or any even number) and 1 (or any odd number) refer to states A and B.
+	 * <br>
+	 * This is not an API Godot provides, and it can be used to change the increment in ways
+	 * Godot normally does not permit.
+	 *
+	 * @param selection used to select which state variable to set; generally 0 or 1
+	 * @param value     the exact value to use for the selected state, if valid
+	 */
+	@Override
+	public void setSelectedState (int selection, long value) {
+		if ((selection & 1) == 1) {
+			setInc(value);
+		} else {
+			setState(value);
+		}
+	}
+
+	public long getSeed() {
+		return initialState;
+	}
+
+	/**
+	 * Gets the initial increment value, before it was modified to get {@link #getInc() inc}. The inc is what this uses
+	 * day-to-day, and the initial increment is only used for resetting the state.
+	 * @return
+	 */
+	public long getInitialIncrement() {
+		return initialInc;
+	}
+	/**
+	 * This initializes both states of the generator to random values based on the given seed.
+	 * (2 to the 64) possible initial generator states can be produced here.
+	 *
+	 * @param seed the initial seed; may be any long
+	 */
+	@Override
+	public void setSeed (long seed) {
+		seed(seed);
+	}
+
+	/**
+	 * Gets the first part of the state.
+	 * @return the first part of the state
+	 */
+	public long getState() {
+		return state;
+	}
+
+	/**
+	 * Sets the first part of the state (the changing state).
+	 * <br>
+	 * This is not an API Godot provides, and it can be used to change the state in ways
+	 * Godot normally does not permit.
+	 *
+	 * @param state can be any long
+	 */
+	public void setState(long state) {
+		setState(state, initialInc);
+	}
+
+	/**
+	 * Gets the second part of the state (the increment).
+	 * @return the second part of the state
+	 */
+	public long getInc() {
+		return inc;
+	}
+
+	/**
+	 * Sets the second part of the state (the stream or increment).
+	 * This should be positive, because the sign bit is discarded. Negative inputs will not be guaranteed to be unique.
+	 * <br>
+	 * This is not an API Godot provides, and it can be used to change the increment in ways
+	 * Godot normally does not permit.
+	 *
+	 * @param inc can be any positive long; this will be multiplied by 2 and 1 added to get the actual increment
+	 */
+	public void setInc(long inc) {
+		setState(initialState, inc);
+	}
+
+	/**
+	 * Sets the state completely to the given three state variables.
+	 * This is the same as calling {@link #setState(long)} and {@link #setInc(long)}
+	 * as a group.
+	 * <br>
+	 * This is not an API Godot provides, and it can be used to change the increment in ways
+	 * Godot normally does not permit.
+	 *
+	 * @param state the first state; can be any long
+	 * @param inc the second state; can be any positive long
+	 */
+	@Override
+	public void setState (long state, long inc) {
+		initialInc = inc;
+		initialState = state;
+		pcg32_srandom_r(initialState, initialInc);
+	}
+
+	@Override
+	public long nextLong () {
+		return (long) pcg32_random_r() << 32 | (pcg32_random_r() & 0xFFFFFFFFL);
+	}
+
+	@Override
+	public long previousLong() {
+		return (previousInt() & 0xFFFFFFFFL) | (long)previousInt() << 32;
+	}
+
+	@Override
+	public int previousInt () {
+		long old = state = (state - inc) * 0xC097EF87329E28A5L;
+		int xs = (int)(old >>> 27 ^ old >>> 45);
+		int rot = (int) (old >>> 59);
+		return (xs >>> rot | xs << 32 - rot);
+	}
+
+	@Override
+	public int nextInt() {
+		return pcg32_random_r();
+	}
+
+	@Override
+	public int next (int bits) {
+		return pcg32_random_r() >>> (32 - bits);
+	}
+
+	/**
+	 * This is just like {@link #nextFloat()}, returning a float between 0 and 1, except that it is inclusive on both
+	 * 0.0 and 1.0.
+	 *
+	 * @return a float between 0.0, inclusive, and 1.0, inclusive
+	 */
+	@Override
+	public float nextInclusiveFloat() {
+		int expOffset = pcg32_random_r();
+		if(expOffset == 0) return 0f;
+		return Math.scalb(0x1p31f - (pcg32_random_r() | 0xFFFFFFFF80000001L), -32 - Integer.numberOfLeadingZeros(expOffset));
+	}
+
+	/**
+	 * This is just like {@link #nextDouble()}, returning a double between 0 and 1, except that it is inclusive on both
+	 * 0.0 and 1.0.
+	 *
+	 * @return a double between 0.0, inclusive, and 1.0, inclusive
+	 */
+	@Override
+	public double nextInclusiveDouble() {
+		int expOffset = pcg32_random_r();
+		if(expOffset == 0) return 0.0;
+		long significand = ((long) pcg32_random_r() << 32 | (pcg32_random_r() & 0xFFFFFFFFL)) | 0x8000000000000001L;
+		return Math.scalb(0x1p63 - significand, -64 - Integer.numberOfLeadingZeros(expOffset));
+	}
+
+	/**
+	 * Returns the next pseudorandom, Gaussian ("normally") distributed
+	 * {@code double} value with mean {@code 0.0} and standard
+	 * deviation {@code 1.0} from this random number generator's sequence.
+	 * <p>
+	 * The general contract of {@code nextGaussian} is that one
+	 * {@code double} value, chosen from (approximately) the usual
+	 * normal distribution with mean {@code 0.0} and standard deviation
+	 * {@code 1.0}, is pseudorandomly generated and returned.
+	 *
+	 * @return the next pseudorandom, Gaussian ("normally") distributed
+	 * {@code double} value with mean {@code 0.0} and standard deviation
+	 * {@code 1.0} from this random number generator's sequence
+	 */
+	@Override
+	public double nextGaussian() {
+		return nextGaussian(0.0, 1.0);
+	}
+
+	/**
+	 * Returns the next pseudorandom, Gaussian ("normally") distributed {@code double}
+	 * value with the specified mean and standard deviation from this random number generator's sequence.
+	 * <br>
+	 * This uses the Box-Muller transform.
+	 *
+	 * @param mean   the mean of the Gaussian distribution to be drawn from
+	 * @param stddev the standard deviation (square root of the variance)
+	 *               of the Gaussian distribution to be drawn from
+	 * @return a Gaussian distributed {@code double} with the specified mean and standard deviation
+	 */
+	@Override
+	public double nextGaussian(double mean, double stddev) {
+		double temp = nextInclusiveDouble();
+		if (temp < 0.00001) {
+			temp += 0.00001;
+		}
+		return mean + stddev * (TrigTools.cosSmootherTurns(nextInclusiveDouble())
+			* Math.sqrt(-2.0 * Math.log(temp))); // Box-Muller transform.
+	}
+
+	@Override
+	public GodotEditRandom copy () {
+		GodotEditRandom cpy = new GodotEditRandom(initialState, initialInc);
+		cpy.state = this.state;
+		cpy.inc = this.inc;
+		return cpy;
+	}
+
+	@Override
+	public boolean equals (Object o) {
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
+
+		GodotEditRandom that = (GodotEditRandom)o;
+
+		if (state != that.state)
+			return false;
+		return inc == that.inc;
+	}
+
+	public String toString () {
+		return "GodotEditRandom{" + "initialState=" + (initialState) + "L, initialInc=" + (initialInc) +
+			"L, state=" + (state) + "L, inc=" + (inc) + "L}";
+	}
+
+//	public static void main(String[] args) {
+//		GodotEditRandom random = new GodotEditRandom(1L);
+//		{
+//			int n0 = random.nextInt();
+//			int n1 = random.nextInt();
+//			int n2 = random.nextInt();
+//			int n3 = random.nextInt();
+//			int n4 = random.nextInt();
+//			int n5 = random.nextInt();
+//			int p5 = random.previousInt();
+//			int p4 = random.previousInt();
+//			int p3 = random.previousInt();
+//			int p2 = random.previousInt();
+//			int p1 = random.previousInt();
+//			int p0 = random.previousInt();
+//			System.out.println(n0 == p0);
+//			System.out.println(n1 == p1);
+//			System.out.println(n2 == p2);
+//			System.out.println(n3 == p3);
+//			System.out.println(n4 == p4);
+//			System.out.println(n5 == p5);
+//			System.out.println(Base.BASE16.unsigned(n0) + " vs. " + Base.BASE16.unsigned(p0));
+//			System.out.println(Base.BASE16.unsigned(n1) + " vs. " + Base.BASE16.unsigned(p1));
+//			System.out.println(Base.BASE16.unsigned(n2) + " vs. " + Base.BASE16.unsigned(p2));
+//			System.out.println(Base.BASE16.unsigned(n3) + " vs. " + Base.BASE16.unsigned(p3));
+//			System.out.println(Base.BASE16.unsigned(n4) + " vs. " + Base.BASE16.unsigned(p4));
+//			System.out.println(Base.BASE16.unsigned(n5) + " vs. " + Base.BASE16.unsigned(p5));
+//		}
+//		random = new GodotEditRandom(1L);
+//		{
+//			long n0 = random.nextLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.state, random.inc);
+//			long n1 = random.nextLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.state, random.inc);
+//			long n2 = random.nextLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.state, random.inc);
+//			long n3 = random.nextLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.state, random.inc);
+//			long n4 = random.nextLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.state, random.inc);
+//			long n5 = random.nextLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.state, random.inc);
+//			System.out.println("Going back...");
+//			long p5 = random.previousLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.state, random.inc);
+//			long p4 = random.previousLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.state, random.inc);
+//			long p3 = random.previousLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.state, random.inc);
+//			long p2 = random.previousLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.state, random.inc);
+//			long p1 = random.previousLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.state, random.inc);
+//			long p0 = random.previousLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.state, random.inc);
+//			System.out.println(n0 == p0);
+//			System.out.println(n1 == p1);
+//			System.out.println(n2 == p2);
+//			System.out.println(n3 == p3);
+//			System.out.println(n4 == p4);
+//			System.out.println(n5 == p5);
+//			System.out.println(Base.BASE16.unsigned(n0) + " vs. " + Base.BASE16.unsigned(p0));
+//			System.out.println(Base.BASE16.unsigned(n1) + " vs. " + Base.BASE16.unsigned(p1));
+//			System.out.println(Base.BASE16.unsigned(n2) + " vs. " + Base.BASE16.unsigned(p2));
+//			System.out.println(Base.BASE16.unsigned(n3) + " vs. " + Base.BASE16.unsigned(p3));
+//			System.out.println(Base.BASE16.unsigned(n4) + " vs. " + Base.BASE16.unsigned(p4));
+//			System.out.println(Base.BASE16.unsigned(n5) + " vs. " + Base.BASE16.unsigned(p5));
+//		}
+//	}
+}
