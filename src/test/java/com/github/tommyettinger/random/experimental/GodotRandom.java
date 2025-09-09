@@ -65,10 +65,21 @@ public class GodotRandom extends EnhancedRandom {
 	public void pcg32_srandom_r(long initstate, long initseq){
 		inc = initseq << 1 | 1L;
 		state = (initstate + inc) * 0x5851F42D4C957F2DL + inc;
+	}
 
-		// Not part of the original method!
-		final int low = (int)inc;
-		state ^= (state << low | state >>> 64 - low) ^ (state << 22 | state >>> 42);
+	/**
+	 * Wraps {@link #pcg32_srandom_r(long, long)} to change {@code initialState} in a non-trivial way that incorporates the
+	 * low 5 bits of {@code initialSeq} and also mixes the given {@code initialState} bits around.
+	 *
+	 * @param initialState used in full to determine {@link #state}
+	 * @param initialSeq used (in full except for the sign bit, which is ignored) to determine {@link #inc}
+	 */
+	public void seedWrapper(long initialState, long initialSeq){
+		final int low = ((int)initialSeq & 31) + 5;
+		pcg32_srandom_r(initialState
+			^ (initialState << low | initialState >>> 64 - low)
+			^ (initialState << 42 | initialState >>> 22),
+			initialSeq);
 	}
 
 	/**
@@ -141,12 +152,12 @@ public class GodotRandom extends EnhancedRandom {
 		super(p_seed);
 		initialInc = p_inc;
 		initialState = p_seed;
-		pcg32_srandom_r(initialState, initialInc);
+		seedWrapper(initialState, initialInc);
 	}
 
 	public void seed(long p_seed) {
 		initialState = p_seed;
-		pcg32_srandom_r(initialState, initialInc);
+		seedWrapper(initialState, initialInc);
 	}
 
 	/**
@@ -166,7 +177,7 @@ public class GodotRandom extends EnhancedRandom {
 	 * others.
 	 */
 	public void reset() {
-		pcg32_srandom_r(initialState, initialInc);
+		seedWrapper(initialState, initialInc);
 	}
 
 	@Override
@@ -323,7 +334,7 @@ public class GodotRandom extends EnhancedRandom {
 	public void setState (long state, long inc) {
 		initialInc = inc;
 		initialState = state;
-		pcg32_srandom_r(initialState, initialInc);
+		seedWrapper(initialState, initialInc);
 	}
 
 	@Override
