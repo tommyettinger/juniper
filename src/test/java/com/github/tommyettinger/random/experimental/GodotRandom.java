@@ -75,11 +75,12 @@ public class GodotRandom extends EnhancedRandom {
 	 * @param initialSeq used (in full except for the sign bit, which is ignored) to determine {@link #inc}
 	 */
 	public void seedWrapper(long initialState, long initialSeq){
-		final int low = ((int)initialSeq & 31) + 5;
-		pcg32_srandom_r(initialState
-			^ (initialState << low | initialState >>> 64 - low)
-			^ (initialState << 42 | initialState >>> 22),
-			initialSeq);
+//		final int low = ((int)initialSeq & 31) + 5;
+//		pcg32_srandom_r(initialState
+//			^ (initialState << low | initialState >>> 64 - low)
+//			^ (initialState << 42 | initialState >>> 22),
+//			initialSeq);
+		pcg32_srandom_r(initialState * (initialSeq * 2L + 0x9E3779B97F4A7C15L), initialSeq * 0xBEA225F9EB34556DL);
 	}
 
 	/**
