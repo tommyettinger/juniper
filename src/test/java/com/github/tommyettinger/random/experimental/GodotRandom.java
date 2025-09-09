@@ -64,7 +64,11 @@ public class GodotRandom extends EnhancedRandom {
 	 */
 	public void pcg32_srandom_r(long initstate, long initseq){
 		inc = initseq << 1 | 1L;
-		state = (initstate + inc) * 0x5851F42D4C957F2DL + inc;;
+		state = (initstate + inc) * 0x5851F42D4C957F2DL + inc;
+
+		// Not part of the original method!
+		final int low = (int)inc;
+		state ^= (state << low | state >>> 64 - low) ^ (state << 22 | state >>> 42);
 	}
 
 	/**
