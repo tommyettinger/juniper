@@ -68,22 +68,6 @@ public class GodotRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Wraps {@link #pcg32_srandom_r(long, long)} to change {@code initialState} in a non-trivial way that incorporates the
-	 * low 5 bits of {@code initialSeq} and also mixes the given {@code initialState} bits around.
-	 *
-	 * @param initialState used in full to determine {@link #state}
-	 * @param initialSeq used (in full except for the sign bit, which is ignored) to determine {@link #inc}
-	 */
-	public void seedWrapper(long initialState, long initialSeq){
-//		final int low = ((int)initialSeq & 31) + 5;
-//		pcg32_srandom_r(initialState
-//			^ (initialState << low | initialState >>> 64 - low)
-//			^ (initialState << 42 | initialState >>> 22),
-//			initialSeq);
-		pcg32_srandom_r(initialState * (initialSeq * 2L + 0x9E3779B97F4A7C15L), initialSeq * 0xBEA225F9EB34556DL);
-	}
-
-	/**
 	 * PCG-Random's pcg32 XSH RR unbiased random uint32_t generator. Java doesn't have unsigned types, so if
 	 * {@code bound} is negative, this will treat it as unsigned, and this might return unexpected results.
 	 * <br>
@@ -153,12 +137,12 @@ public class GodotRandom extends EnhancedRandom {
 		super(p_seed);
 		initialInc = p_inc;
 		initialState = p_seed;
-		seedWrapper(initialState, initialInc);
+		pcg32_srandom_r(initialState, initialInc);
 	}
 
 	public void seed(long p_seed) {
 		initialState = p_seed;
-		seedWrapper(initialState, initialInc);
+		pcg32_srandom_r(initialState, initialInc);
 	}
 
 	/**
@@ -178,7 +162,7 @@ public class GodotRandom extends EnhancedRandom {
 	 * others.
 	 */
 	public void reset() {
-		seedWrapper(initialState, initialInc);
+		pcg32_srandom_r(initialState, initialInc);
 	}
 
 	@Override
@@ -335,7 +319,7 @@ public class GodotRandom extends EnhancedRandom {
 	public void setState (long state, long inc) {
 		initialInc = inc;
 		initialState = state;
-		seedWrapper(initialState, initialInc);
+		pcg32_srandom_r(initialState, initialInc);
 	}
 
 	@Override
@@ -364,6 +348,46 @@ public class GodotRandom extends EnhancedRandom {
 	@Override
 	public int next (int bits) {
 		return pcg32_random_r() >>> (32 - bits);
+	}
+
+	/**
+	 * Returns a pseudorandom, uniformly distributed {@code int} value
+	 * between 0 (inclusive) and the specified value (exclusive), drawn from
+	 * this random number generator's sequence.  The general contract of
+	 * {@code nextInt} is that one {@code int} value in the specified range
+	 * is pseudorandomly generated and returned.  All {@code bound} possible
+	 * {@code int} values are produced with (approximately) equal
+	 * probability.
+	 * <br>
+	 * This method clamps bound to be at least 0; it never returns a negative int.
+	 * <br>
+	 * This method should be less biased than the default, but may step multiple times
+	 * through the generator.
+	 *
+	 * @param bound the upper bound (exclusive). If negative or 0, this always returns 0.
+	 * @return the next pseudorandom, uniformly distributed {@code int}
+	 * value between zero (inclusive) and {@code bound} (exclusive)
+	 * from this random number generator's sequence
+	 */
+	@Override
+	public int nextInt(int bound) {
+		return pcg32_boundedrand_r(bound) & ~(bound >> 31);
+	}
+
+	@Override
+	public int nextSignedInt(int outerBound) {
+		final int sign = outerBound >> 31;
+		return pcg32_boundedrand_r(outerBound + sign ^ sign) + sign ^ sign;
+	}
+
+	@Override
+	public int nextUnsignedInt(int bound) {
+		return pcg32_boundedrand_r(bound);
+	}
+
+	@Override
+	public boolean nextBoolean() {
+		return pcg32_random_r() < 0;
 	}
 
 	/**

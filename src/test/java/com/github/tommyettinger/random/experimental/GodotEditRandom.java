@@ -66,7 +66,7 @@ public class GodotEditRandom extends EnhancedRandom {
 		// This is invertible for positive initseq values only.
 		// 0xD1342543DE82EF96L is from "Computationally Easy, Spectrally Good Multipliers for
 		// Congruential Pseudorandom Number Generators" [Steele, Vigna 2021], with 1 added to make it even, because we
-		// want to ensure the low bit is 1 here when we add 0x9E3779B97F4A7C15L, which is 2 to the 64 divided by the
+		// want to ensure the low bit is 0 before adding. 0x9E3779B97F4A7C15L is 2 to the 64 divided by the
 		// golden ratio, rounded down to an odd number.
 		inc = initseq * 0xD1342543DE82EF96L + 0x9E3779B97F4A7C15L;
 		// This advances the state in the same way that pcg32_random_r() does...
@@ -359,6 +359,46 @@ public class GodotEditRandom extends EnhancedRandom {
 	@Override
 	public int next (int bits) {
 		return pcg32_random_r() >>> (32 - bits);
+	}
+
+	/**
+	 * Returns a pseudorandom, uniformly distributed {@code int} value
+	 * between 0 (inclusive) and the specified value (exclusive), drawn from
+	 * this random number generator's sequence.  The general contract of
+	 * {@code nextInt} is that one {@code int} value in the specified range
+	 * is pseudorandomly generated and returned.  All {@code bound} possible
+	 * {@code int} values are produced with (approximately) equal
+	 * probability.
+	 * <br>
+	 * This method clamps bound to be at least 0; it never returns a negative int.
+	 * <br>
+	 * This method should be less biased than the default, but may step multiple times
+	 * through the generator.
+	 *
+	 * @param bound the upper bound (exclusive). If negative or 0, this always returns 0.
+	 * @return the next pseudorandom, uniformly distributed {@code int}
+	 * value between zero (inclusive) and {@code bound} (exclusive)
+	 * from this random number generator's sequence
+	 */
+	@Override
+	public int nextInt(int bound) {
+		return pcg32_boundedrand_r(bound) & ~(bound >> 31);
+	}
+
+	@Override
+	public int nextSignedInt(int outerBound) {
+		final int sign = outerBound >> 31;
+		return pcg32_boundedrand_r(outerBound + sign ^ sign) + sign ^ sign;
+	}
+
+	@Override
+	public int nextUnsignedInt(int bound) {
+		return pcg32_boundedrand_r(bound);
+	}
+
+	@Override
+	public boolean nextBoolean() {
+		return pcg32_random_r() < 0;
 	}
 
 	/**
