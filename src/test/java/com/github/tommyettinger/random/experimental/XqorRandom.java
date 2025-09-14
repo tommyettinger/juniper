@@ -137,13 +137,13 @@ public class XqorRandom extends EnhancedRandom {
 	@Override
 	public long nextLong () {
 		long x = ++state;
-		x ^= x * x | 7L;
+		x ^= x * x | 0x55555555L;
 		x = (x << 32 | x >>> 32);
-		x ^= x * x | 7L;
+		x ^= x * x | 0x7L;
 		x = (x << 32 | x >>> 32);
-		x ^= x * x | 7L;
+		x ^= x * x | 0x55555555L;
 		x = (x << 32 | x >>> 32);
-		x ^= x * x | 7L;
+		x ^= x * x | 0x7L;
 		return x ^ x >>> 31;
 	}
 
@@ -161,39 +161,39 @@ public class XqorRandom extends EnhancedRandom {
 	@Override
 	public long skip (long advance) {
 		long x = (state += advance);
-		x ^= x * x | 7L;
+		x ^= x * x | 0x55555555L;
 		x = (x << 32 | x >>> 32);
-		x ^= x * x | 7L;
+		x ^= x * x | 0x7L;
 		x = (x << 32 | x >>> 32);
-		x ^= x * x | 7L;
+		x ^= x * x | 0x55555555L;
 		x = (x << 32 | x >>> 32);
-		x ^= x * x | 7L;
+		x ^= x * x | 0x7L;
 		return x ^ x >>> 31;
 	}
 
 	@Override
 	public long previousLong () {
 		long x = state--;
-		x ^= x * x | 7L;
+		x ^= x * x | 0x55555555L;
 		x = (x << 32 | x >>> 32);
-		x ^= x * x | 7L;
+		x ^= x * x | 0x7L;
 		x = (x << 32 | x >>> 32);
-		x ^= x * x | 7L;
+		x ^= x * x | 0x55555555L;
 		x = (x << 32 | x >>> 32);
-		x ^= x * x | 7L;
+		x ^= x * x | 0x7L;
 		return x ^ x >>> 31;
 	}
 
 	@Override
 	public int next (int bits) {
 		long x = ++state;
-		x ^= x * x | 7L;
+		x ^= x * x | 0x55555555L;
 		x = (x << 32 | x >>> 32);
-		x ^= x * x | 7L;
+		x ^= x * x | 0x7L;
 		x = (x << 32 | x >>> 32);
-		x ^= x * x | 7L;
+		x ^= x * x | 0x55555555L;
 		x = (x << 32 | x >>> 32);
-		x ^= x * x | 7L;
+		x ^= x * x | 0x7L;
 		return (int)(x ^ x >>> 31) >>> (32 - bits);
 	}
 
