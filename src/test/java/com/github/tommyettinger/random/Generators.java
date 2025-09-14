@@ -100,7 +100,8 @@ public final class Generators {
 		randomList.add(new GodotRandom(1, 1));
 		randomList.add(new GodotDirectRandom(1, 1));
 		randomList.add(new Mx3Random(1));
-		randomList.add(new XqorRandom(1));
+		randomList.add(new Xqo4Xs4Random(1));
+		randomList.add(new Xqo4R3Random(1));
 	}
 
 	public static int randomCount = randomList.size();

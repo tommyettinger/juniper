@@ -24,7 +24,7 @@ import java.math.BigInteger;
 /**
  * Uses the bijective Xor-Square-Or operation along with half-and-half bitwise Rotations.
  */
-public class XqorRandom extends EnhancedRandom {
+public class Xqo4R3Random extends EnhancedRandom {
 
 	/**
 	 * The only state variable; can be any {@code long}.
@@ -34,7 +34,7 @@ public class XqorRandom extends EnhancedRandom {
 	/**
 	 * Creates a new XqorRandom with a random state.
 	 */
-	public XqorRandom() {
+	public Xqo4R3Random() {
 		this(EnhancedRandom.seedFromMath());
 	}
 
@@ -43,14 +43,14 @@ public class XqorRandom extends EnhancedRandom {
 	 *
 	 * @param state any {@code long} value
 	 */
-	public XqorRandom(long state) {
+	public Xqo4R3Random(long state) {
 		super(state);
 		this.state = state;
 	}
 
 	@Override
 	public String getTag() {
-		return "Mx3R";
+		return "R43R";
 	}
 
 	/**
@@ -138,11 +138,11 @@ public class XqorRandom extends EnhancedRandom {
 	public long nextLong () {
 		long x = (++state);
 		x ^= x * x | 1L;
-		x ^= x >>> 31;
+		x = (x << 32 | x >>> 32);
 		x ^= x * x | 1L;
-		x ^= x >>> 31;
+		x = (x << 32 | x >>> 32);
 		x ^= x * x | 1L;
-		x ^= x >>> 31;
+		x = (x << 32 | x >>> 32);
 		x ^= x * x | 1L;
 		return x ^ x >>> 31;
 	}
@@ -162,11 +162,11 @@ public class XqorRandom extends EnhancedRandom {
 	public long skip (long advance) {
 		long x = (state += advance);
 		x ^= x * x | 1L;
-		x ^= x >>> 31;
+		x = (x << 32 | x >>> 32);
 		x ^= x * x | 1L;
-		x ^= x >>> 31;
+		x = (x << 32 | x >>> 32);
 		x ^= x * x | 1L;
-		x ^= x >>> 31;
+		x = (x << 32 | x >>> 32);
 		x ^= x * x | 1L;
 		return x ^ x >>> 31;
 	}
@@ -175,11 +175,11 @@ public class XqorRandom extends EnhancedRandom {
 	public long previousLong () {
 		long x = (state--);
 		x ^= x * x | 1L;
-		x ^= x >>> 31;
+		x = (x << 32 | x >>> 32);
 		x ^= x * x | 1L;
-		x ^= x >>> 31;
+		x = (x << 32 | x >>> 32);
 		x ^= x * x | 1L;
-		x ^= x >>> 31;
+		x = (x << 32 | x >>> 32);
 		x ^= x * x | 1L;
 		return x ^ x >>> 31;
 	}
@@ -188,18 +188,18 @@ public class XqorRandom extends EnhancedRandom {
 	public int next (int bits) {
 		long x = (++state);
 		x ^= x * x | 1L;
-		x ^= x >>> 31;
+		x = (x << 32 | x >>> 32);
 		x ^= x * x | 1L;
-		x ^= x >>> 31;
+		x = (x << 32 | x >>> 32);
 		x ^= x * x | 1L;
-		x ^= x >>> 31;
+		x = (x << 32 | x >>> 32);
 		x ^= x * x | 1L;
 		return (int)(x ^ x >>> 31) >>> (32 - bits);
 	}
 
 	@Override
-	public XqorRandom copy () {
-		return new XqorRandom(state);
+	public Xqo4R3Random copy () {
+		return new Xqo4R3Random(state);
 	}
 
 	@Override
@@ -209,7 +209,7 @@ public class XqorRandom extends EnhancedRandom {
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		XqorRandom that = (XqorRandom)o;
+		Xqo4R3Random that = (Xqo4R3Random)o;
 
 		return state == that.state;
 	}
