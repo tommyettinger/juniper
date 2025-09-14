@@ -1,0 +1,1 @@
+[Immediate] Lowest mode: 116.0000 has mean amount 0.0310982465  PASS 👍 for XqorRandom

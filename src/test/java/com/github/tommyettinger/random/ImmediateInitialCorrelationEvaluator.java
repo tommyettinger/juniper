@@ -27,6 +27,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static com.github.tommyettinger.random.InitialCorrelationEvaluator.INTERVAL_X;
+import static com.github.tommyettinger.random.InitialCorrelationEvaluator.INTERVAL_Y;
+
 /**
  * Like {@link InitialCorrelationEvaluator}, but only checks the first four generations, discarding none.
  * This means this essentially isn't evaluating generators as traditional sequential random number generators,
@@ -39,8 +42,6 @@ import java.util.List;
  * generator is.
  */
 public class ImmediateInitialCorrelationEvaluator {
-    public static long INTERVAL_X = 1;//2;//4;//8;//16;//0xC13FA9A902A6328FL;//
-    public static long INTERVAL_Y = 1;//2;//4;//8;//16;//0x91E10DA5C79E7B1DL;//
     public static int DROPPED_STEPS = 4;
     public double steps = 0;
     public int mode = 0;
