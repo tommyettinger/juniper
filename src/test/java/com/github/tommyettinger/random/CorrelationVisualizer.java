@@ -140,12 +140,14 @@ public class CorrelationVisualizer extends ApplicationAdapter {
      */
     public static long interleaveBits(long x, long y)
     {
-        x |= y << 32;
-        x =    ((x & 0x00000000ffff0000L) <<16) | ((x >>>16) & 0x00000000ffff0000L) | (x & 0xffff00000000ffffL);
-        x =    ((x & 0x0000ff000000ff00L) << 8) | ((x >>> 8) & 0x0000ff000000ff00L) | (x & 0xff0000ffff0000ffL);
-        x =    ((x & 0x00f000f000f000f0L) << 4) | ((x >>> 4) & 0x00f000f000f000f0L) | (x & 0xf00ff00ff00ff00fL);
-        x =    ((x & 0x0c0c0c0c0c0c0c0cL) << 2) | ((x >>> 2) & 0x0c0c0c0c0c0c0c0cL) | (x & 0xc3c3c3c3c3c3c3c3L);
-        return ((x & 0x2222222222222222L) << 1) | ((x >>> 1) & 0x2222222222222222L) | (x & 0x9999999999999999L);
+//		return (x & 0xFFFFFFFFL) | (y << 32);
+		return x * 0xC13FA9A902A6328FL + y * 0x91E10DA5C79E7B1DL; // R2 sequence
+//        x |= y << 32;
+//        x =    ((x & 0x00000000ffff0000L) <<16) | ((x >>>16) & 0x00000000ffff0000L) | (x & 0xffff00000000ffffL);
+//        x =    ((x & 0x0000ff000000ff00L) << 8) | ((x >>> 8) & 0x0000ff000000ff00L) | (x & 0xff0000ffff0000ffL);
+//        x =    ((x & 0x00f000f000f000f0L) << 4) | ((x >>> 4) & 0x00f000f000f000f0L) | (x & 0xf00ff00ff00ff00fL);
+//        x =    ((x & 0x0c0c0c0c0c0c0c0cL) << 2) | ((x >>> 2) & 0x0c0c0c0c0c0c0c0cL) | (x & 0xc3c3c3c3c3c3c3c3L);
+//        return ((x & 0x2222222222222222L) << 1) | ((x >>> 1) & 0x2222222222222222L) | (x & 0x9999999999999999L);
     }
 
     @Override
