@@ -136,7 +136,7 @@ public class Xqo2R1Random extends EnhancedRandom {
 
 	@Override
 	public long nextLong () {
-		long x = (state += 0x9E3779B97F4A7C15L);
+		long x = (state += 7777777777777777777L);
 		x ^= x * x | 1L;
 		x = (x << 32 | x >>> 32);
 		x ^= x * x | 1L;
@@ -156,7 +156,7 @@ public class Xqo2R1Random extends EnhancedRandom {
 	 */
 	@Override
 	public long skip (long advance) {
-		long x = (state += advance * 0x9E3779B97F4A7C15L);
+		long x = (state += advance * 7777777777777777777L);
 		x ^= x * x | 1L;
 		x = (x << 32 | x >>> 32);
 		x ^= x * x | 1L;
@@ -166,7 +166,7 @@ public class Xqo2R1Random extends EnhancedRandom {
 	@Override
 	public long previousLong () {
 		long x = state;
-		state -= 0x9E3779B97F4A7C15L;
+		state -= 7777777777777777777L;
 		x ^= x * x | 1L;
 		x = (x << 32 | x >>> 32);
 		x ^= x * x | 1L;
@@ -175,7 +175,7 @@ public class Xqo2R1Random extends EnhancedRandom {
 
 	@Override
 	public int next (int bits) {
-		long x = (state += 0x9E3779B97F4A7C15L);
+		long x = (state += 7777777777777777777L);
 		x ^= x * x | 1L;
 		x = (x << 32 | x >>> 32);
 		x ^= x * x | 1L;
