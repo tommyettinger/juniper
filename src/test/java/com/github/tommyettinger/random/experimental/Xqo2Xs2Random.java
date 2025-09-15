@@ -24,7 +24,7 @@ import java.math.BigInteger;
 /**
  * Uses the bijective Xor-Square-Or operation along with right xorshifts.
  */
-public class Xqo4Xs4Random extends EnhancedRandom {
+public class Xqo2Xs2Random extends EnhancedRandom {
 
 	/**
 	 * The only state variable; can be any {@code long}.
@@ -32,25 +32,25 @@ public class Xqo4Xs4Random extends EnhancedRandom {
 	public long state;
 
 	/**
-	 * Creates a new Xqo4Xs4Random with a random state.
+	 * Creates a new Xqo2Xs2Random with a random state.
 	 */
-	public Xqo4Xs4Random() {
+	public Xqo2Xs2Random() {
 		this(EnhancedRandom.seedFromMath());
 	}
 
 	/**
-	 * Creates a new Xqo4Xs4Random with the given state; all {@code long} values are permitted.
+	 * Creates a new Xqo2Xs2Random with the given state; all {@code long} values are permitted.
 	 *
 	 * @param state any {@code long} value
 	 */
-	public Xqo4Xs4Random(long state) {
+	public Xqo2Xs2Random(long state) {
 		super(state);
 		this.state = state;
 	}
 
 	@Override
 	public String getTag() {
-		return "X44R";
+		return "X22R";
 	}
 
 	/**
@@ -140,10 +140,6 @@ public class Xqo4Xs4Random extends EnhancedRandom {
 		x ^= x * x | 1L;
 		x ^= x >>> 31;
 		x ^= x * x | 1L;
-		x ^= x >>> 31;
-		x ^= x * x | 1L;
-		x ^= x >>> 31;
-		x ^= x * x | 1L;
 		return x ^ x >>> 31;
 	}
 
@@ -164,10 +160,6 @@ public class Xqo4Xs4Random extends EnhancedRandom {
 		x ^= x * x | 1L;
 		x ^= x >>> 31;
 		x ^= x * x | 1L;
-		x ^= x >>> 31;
-		x ^= x * x | 1L;
-		x ^= x >>> 31;
-		x ^= x * x | 1L;
 		return x ^ x >>> 31;
 	}
 
@@ -175,10 +167,6 @@ public class Xqo4Xs4Random extends EnhancedRandom {
 	public long previousLong () {
 		long x = state;
 		state -= 7777777777777777777L;
-		x ^= x * x | 1L;
-		x ^= x >>> 31;
-		x ^= x * x | 1L;
-		x ^= x >>> 31;
 		x ^= x * x | 1L;
 		x ^= x >>> 31;
 		x ^= x * x | 1L;
@@ -191,16 +179,12 @@ public class Xqo4Xs4Random extends EnhancedRandom {
 		x ^= x * x | 1L;
 		x ^= x >>> 31;
 		x ^= x * x | 1L;
-		x ^= x >>> 31;
-		x ^= x * x | 1L;
-		x ^= x >>> 31;
-		x ^= x * x | 1L;
 		return (int)(x ^ x >>> 31) >>> (32 - bits);
 	}
 
 	@Override
-	public Xqo4Xs4Random copy () {
-		return new Xqo4Xs4Random(state);
+	public Xqo2Xs2Random copy () {
+		return new Xqo2Xs2Random(state);
 	}
 
 	@Override
@@ -210,13 +194,13 @@ public class Xqo4Xs4Random extends EnhancedRandom {
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		Xqo4Xs4Random that = (Xqo4Xs4Random)o;
+		Xqo2Xs2Random that = (Xqo2Xs2Random)o;
 
 		return state == that.state;
 	}
 
 	@Override
 	public String toString () {
-		return "Xqo4Xs4Random{state=" + (state) + "L}";
+		return "Xqo2Xs2Random{state=" + (state) + "L}";
 	}
 }

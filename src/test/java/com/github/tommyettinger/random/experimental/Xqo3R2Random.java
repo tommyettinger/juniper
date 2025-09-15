@@ -32,14 +32,14 @@ public class Xqo3R2Random extends EnhancedRandom {
 	public long state;
 
 	/**
-	 * Creates a new XqorRandom with a random state.
+	 * Creates a new Xqo3R2Random with a random state.
 	 */
 	public Xqo3R2Random() {
 		this(EnhancedRandom.seedFromMath());
 	}
 
 	/**
-	 * Creates a new XqorRandom with the given state; all {@code long} values are permitted.
+	 * Creates a new Xqo3R2Random with the given state; all {@code long} values are permitted.
 	 *
 	 * @param state any {@code long} value
 	 */
@@ -209,6 +209,6 @@ public class Xqo3R2Random extends EnhancedRandom {
 
 	@Override
 	public String toString () {
-		return "XqorRandom{state=" + (state) + "L}";
+		return "Xqo3R2Random{state=" + (state) + "L}";
 	}
 }
