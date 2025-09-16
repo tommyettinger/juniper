@@ -15,16 +15,14 @@
  *
  */
 
-package com.github.tommyettinger.random.experimental;
-
-import com.github.tommyettinger.random.AceRandom;
-import com.github.tommyettinger.random.EnhancedRandom;
-import com.github.tommyettinger.random.TraceRandom;
+package com.github.tommyettinger.random;
 
 import java.math.BigInteger;
 
 /**
- * DEPRECATED: Use {@link TraceRandom} instead.
+ * DEPRECATED: Use {@link TraceRandom} instead. TraceRandom only differs from MaceRandom in how it selects streams.
+ * Note that this is not deserializable out-of-the-box by {@link Deserializer}, unless you call
+ * {@link #registerWithDeserializer()} on this class.
  * <br>
  * Like AceRandom with five 64-bit states but also one unchanging 24-bit stream; does not use multiplication, only add,
  * XOR, and bitwise-rotate operations (this is an ARX generator). Has a state that runs like a counter, guaranteeing a
@@ -43,7 +41,8 @@ import java.math.BigInteger;
  * After about 30 calls to {@link #nextLong()}, any two different streams with otherwise identical states should have no
  * correlations to each other. This likely does <em>not</em> fully avoid the issue of problematic "gamma values" that
  * SplitMix64 has; roughly 1/9 of all possible streams are considered low-quality by
- * {@link EnhancedRandom#rateGamma(long)}, and would be rejected by {@link EnhancedRandom#fixGamma(long, int)}. This
+ * {@link EnhancedRandom#rateGamma(long)}, and would be rejected by {@link EnhancedRandom#fixGamma(long, int)} with a
+ * threshold value of 8. This
  * does also use quite a lot more state than SplitMix64, and those extra 320 bits of state change in their own complex
  * ways, both related and unrelated to the stream, which may be sufficient to not need a gamma of the same quality that
  * SplitMix64 appears to need to pass tests.
@@ -51,6 +50,12 @@ import java.math.BigInteger;
  */
 @Deprecated
 public class MaceRandom extends EnhancedRandom {
+
+	public static void registerWithDeserializer() {
+		Deserializer.register(new MaceRandom(1, 2, 3, 4, 5, 6));
+	}
+
+
 	/**
 	 * A long mask with 24 bits set, all symmetrical around the middle bits, leaving 10 bits all zero at the most
 	 * significant and the least significant ends. This is used to determine which bits of {@link #GOLDEN_64} can be
@@ -71,22 +76,22 @@ public class MaceRandom extends EnhancedRandom {
 	 * One of the precomputed table values needed to perform the software bit deposit and extract operations for the
 	 * specific {@link #MASK} used here.
 	 */
-    private static final long TABLE_1 = 0x0030380830381C00L;
+	private static final long TABLE_1 = 0x0030380830381C00L;
 	/**
 	 * One of the precomputed table values needed to perform the software bit deposit and extract operations for the
 	 * specific {@link #MASK} used here.
 	 */
-    private static final long TABLE_2 = 0x000F0003000F8000L;
+	private static final long TABLE_2 = 0x000F0003000F8000L;
 	/**
 	 * One of the precomputed table values needed to perform the software bit deposit and extract operations for the
 	 * specific {@link #MASK} used here.
 	 */
-    private static final long TABLE_3 = 0x0000FFC00000FF00L;
+	private static final long TABLE_3 = 0x0000FFC00000FF00L;
 	/**
 	 * One of the precomputed table values needed to perform the software bit deposit and extract operations for the
 	 * specific {@link #MASK} used here.
 	 */
-    private static final long TABLE_4 = 0x000000FFFF000000L;
+	private static final long TABLE_4 = 0x000000FFFF000000L;
 
 	/**
 	 * Given a long {@code bits} where the first 24 positions can have variable bits, uses {@link #MASK} to
@@ -518,7 +523,7 @@ public class MaceRandom extends EnhancedRandom {
 		MaceRandom that = (MaceRandom)o;
 
 		return stateA == that.stateA && stateB == that.stateB && stateC == that.stateC && stateD == that.stateD &&
-				stateE == that.stateE && stream == that.stream;
+			stateE == that.stateE && stream == that.stream;
 	}
 
 	public String toString () {
