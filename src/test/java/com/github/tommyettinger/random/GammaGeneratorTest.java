@@ -264,6 +264,10 @@ package com.github.tommyettinger.random;
  * -5540867293011826475L or 0xB31AE28DC47328D5L rating: 5
  * -5108051815923496877L or 0xB91C8DEFE1974853L rating: 7
  *  7245336045094978991L or 0x648C9ABEDE3845AFL rating: 2
+ *
+ * -------------------------------------------------------
+ * Total rating  : 1444
+ * Average rating: 5.6406250000
  * </pre>
  * The "best" constants here are 0x8D6123C98B3C46AFL , 0x6B137E454F625781L , and 0x86931DECB68EC12FL , scoring 1.
  * The "worst" is 0xD1A46B3CBE274D83L , the only constant that scores 13.
@@ -529,8 +533,14 @@ public class GammaGeneratorTest {
 			0x648c9abede3845afL,
 		};
 
+		int totalRating = 0;
 		for(long c : constants){
-			System.out.printf("%20dL or 0x%016XL rating: %d\n", c, c, EnhancedRandom.rateGamma(c));
+			int rating = EnhancedRandom.rateGamma(c);
+			System.out.printf("%20dL or 0x%016XL rating: %d\n", c, c, rating);
+			totalRating += rating;
 		}
+		System.out.printf("\n-------------------------------------------------------\n" +
+			"Total rating  : %d\n" +
+			"Average rating: %2.10f\n", totalRating, totalRating / 256.0);
 	}
 }
