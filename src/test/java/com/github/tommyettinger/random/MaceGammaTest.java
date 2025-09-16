@@ -2,6 +2,7 @@ package com.github.tommyettinger.random;
 
 import com.github.tommyettinger.random.experimental.MaceRandom;
 
+@Deprecated
 public class MaceGammaTest {
     /**
      * Threshold 8:

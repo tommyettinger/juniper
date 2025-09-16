@@ -136,12 +136,22 @@ public class Xqo2R1Random extends EnhancedRandom {
 
 	@Override
 	public long nextLong () {
-		long x = (state += 7777777777777777777L);
+		long x = (state -= 987654321987654321L);
 		x ^= x * x | 1L;
 		x = (x << 32 | x >>> 32);
 		x ^= x * x | 1L;
 		return x ^ x >>> 31;
 	}
+	/*
+	// Horn Hash, because a horn fits on a ram, and this hash can fit in (a person's) memory.
+	static inline uint64_t hornHash(uint64_t state) {
+		// just hit keys 9 to 1 on the num row twice!
+		uint64_t x = state * 987654321987654321UL;
+		x ^= x * x | 1UL; x = (x << 32 | x >> 32); // 1 round, can repeat if desired
+		x ^= x * x | 1UL; x ^= x >> 31; // last part of finisher is different from the round line
+		return x;
+	}
+	 */
 
 	/**
 	 * Skips the state forward or backwards by the given {@code advance}, then returns the result of {@link #nextLong()}
@@ -156,7 +166,7 @@ public class Xqo2R1Random extends EnhancedRandom {
 	 */
 	@Override
 	public long skip (long advance) {
-		long x = (state += advance * 7777777777777777777L);
+		long x = (state -= advance * 987654321987654321L);
 		x ^= x * x | 1L;
 		x = (x << 32 | x >>> 32);
 		x ^= x * x | 1L;
@@ -166,7 +176,7 @@ public class Xqo2R1Random extends EnhancedRandom {
 	@Override
 	public long previousLong () {
 		long x = state;
-		state -= 7777777777777777777L;
+		state += 987654321987654321L;
 		x ^= x * x | 1L;
 		x = (x << 32 | x >>> 32);
 		x ^= x * x | 1L;
@@ -175,7 +185,7 @@ public class Xqo2R1Random extends EnhancedRandom {
 
 	@Override
 	public int next (int bits) {
-		long x = (state += 7777777777777777777L);
+		long x = (state -= 987654321987654321L);
 		x ^= x * x | 1L;
 		x = (x << 32 | x >>> 32);
 		x ^= x * x | 1L;
