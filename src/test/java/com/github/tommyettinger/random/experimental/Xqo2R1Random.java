@@ -23,6 +23,7 @@ import java.math.BigInteger;
 
 /**
  * Uses the bijective Xor-Square-Or operation along with half-and-half bitwise Rotations.
+ * This variant is stripped down too far; it fails Gap tests in PractRand right away.
  */
 public class Xqo2R1Random extends EnhancedRandom {
 
@@ -142,16 +143,6 @@ public class Xqo2R1Random extends EnhancedRandom {
 		x ^= x * x | 1L;
 		return x ^ x >>> 31;
 	}
-	/*
-	// Horn Hash, because a horn fits on a ram, and this hash can fit in (a person's) memory.
-	static inline uint64_t hornHash(uint64_t state) {
-		// just hit keys 9 to 1 on the num row twice!
-		uint64_t x = state * 987654321987654321UL;
-		x ^= x * x | 1UL; x = (x << 32 | x >> 32); // 1 round, can repeat if desired
-		x ^= x * x | 1UL; x ^= x >> 31; // last part of finisher is different from the round line
-		return x;
-	}
-	 */
 
 	/**
 	 * Skips the state forward or backwards by the given {@code advance}, then returns the result of {@link #nextLong()}

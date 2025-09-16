@@ -1,3 +1,6 @@
+[0.8.3]
+- [BREAKING] TraceRandom.setStreamIdentifier() incorrectly behaved differently from TraceRandom.setStream(). Now both use the strict threshold of 1, instead of how setStreamIdentifier() previously used 8 while setStream() used 1.
+
 [0.8.2]
 - Update digital dependency to 0.9.2, which is a hotfix for some buggy behavior with scrambled Base objects.
 

@@ -21,8 +21,23 @@ import com.github.tommyettinger.random.EnhancedRandom;
 
 import java.math.BigInteger;
 
+// C++ version (?)
+	/*
+	// Horn Hash, because a horn fits on a ram, and this hash can fit in (a person's) memory.
+	static inline uint64_t hornHash(uint64_t state) {
+		// just hit keys 9 to 1 on the num row twice! a memorable constant.
+		uint64_t x = state * 987654321987654321UL;
+		x ^= x * x | 1UL; x = (x << 32 | x >> 32); // round 1
+		x ^= x * x | 1UL; x = (x << 32 | x >> 32); // round 2, can repeat if desired
+		x ^= x * x | 1UL; x ^= x >> 31; // last part of the finisher is different from the round lines
+		return x;
+	}
+	 */
+
+
 /**
  * Uses the bijective Xor-Square-Or operation along with half-and-half bitwise Rotations.
+ * This version passes at least early PractRand testing (256GB with no anomalies), with later results unknown.
  */
 public class Xqo3R2Random extends EnhancedRandom {
 

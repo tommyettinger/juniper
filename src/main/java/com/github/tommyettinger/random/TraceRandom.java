@@ -288,12 +288,14 @@ public class TraceRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Sets the stream using the low-order 28 bits of the given int.
+	 * Sets the stream using the low-order 28 bits of the given int, changing it using
+	 * {@link EnhancedRandom#fixGamma(long, int)} (with threshold 1) if it isn't already considered a good gamma value
+	 * (which it never will be initially). All streams this can produce given up-to-28-bit inputs will be unique.
 	 *
 	 * @param streamID can be any int, but only the lowest-order 28 bits matter
 	 */
 	public void setStreamIdentifier(int streamID) {
-		this.stream = EnhancedRandom.fixGamma((streamID & 0xFFFFFFF) << 1);
+		this.stream = EnhancedRandom.fixGamma((streamID & 0xFFFFFFF) << 1, 1);
 	}
 
 	/**
