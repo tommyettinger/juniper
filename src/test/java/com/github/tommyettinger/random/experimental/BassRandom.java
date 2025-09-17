@@ -24,9 +24,9 @@ import java.math.BigInteger;
 /**
  * Like AceRandom, has five 64-bit states; does not use multiplication, only add, XOR, and bitwise-rotate
  * operations. Has a state that runs like a counter, so this has a minimum period of 2 to the 64.
- * However, this does not implement {@link #previousLong()}. Not being able to create a reversed state transition may be
- * a sign that this has statistical problems, though they haven't been detected so far. {@link LaceRandom} has the same
- * operations used (though it swaps an XOR operation for an addition), but uses them differently, and is reversible.
+ * <br>
+ * This one hasn't been tested with PractRand yet! Use at your own risk. It is very fast in C++ tests, but who knows if
+ * that transfers at all to Java...
  */
 public class BassRandom extends EnhancedRandom {
 	@Override
@@ -50,8 +50,7 @@ public class BassRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * The first state; can be any long. The first call to {@link #nextLong()} will return this verbatim, if no other
-	 * methods have been called.
+	 * The first state; can be any long.
 	 */
 	protected long stateA;
 	/**
@@ -305,12 +304,22 @@ public class BassRandom extends EnhancedRandom {
 		final long fc = stateC;
 		final long fd = stateD;
 		final long fe = stateE;
-		stateA = fb ^ fd;
-		stateB = fe ^ fc;
-		stateC = fa + fb;
-		stateD = (fc << 52 | fc >>> 12);
-		stateE = fe + 0x9E3779B97F4A7C15L;
-		return fa;
+		stateA = fa + 0x9E3779B97F4A7C15L;
+		stateB = fc ^ fd;
+		stateC = fc + fe;
+		stateD = (fb << 52 | fb >>> 12);
+		stateE = fe ^ fa;
+		return fb;
+	}
+
+	@Override
+	public long previousLong() {
+		final long fd = stateD;
+		stateA -= 0x9E3779B97F4A7C15L;
+		stateE ^= stateA;
+		stateC -= stateE;
+		stateD = stateB ^ stateC;
+		return stateB = (fd >>> 52 | fd << 12);
 	}
 
 	@Override
@@ -320,12 +329,12 @@ public class BassRandom extends EnhancedRandom {
 		final long fc = stateC;
 		final long fd = stateD;
 		final long fe = stateE;
-		stateA = fb ^ fd;
-		stateB = fe ^ fc;
-		stateC = fa + fb;
-		stateD = (fc << 52 | fc >>> 12);
-		stateE = fe + 0x9E3779B97F4A7C15L;
-		return (int) (fa) >>> (32 - bits);
+		stateA = fa + 0x9E3779B97F4A7C15L;
+		stateB = fc ^ fd;
+		stateC = fc + fe;
+		stateD = (fb << 52 | fb >>> 12);
+		stateE = fe ^ fa;
+		return (int) (fb) >>> (32 - bits);
 	}
 
 	@Override
@@ -350,31 +359,31 @@ public class BassRandom extends EnhancedRandom {
 		return "BassRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L, stateD=" + (stateD) + "L, stateE=" + (stateE) + "L}";
 	}
 
-//	public static void main(String[] args) {
-//		BassRandom random = new BassRandom(1L);
-//		long n0 = random.nextLong();
-//		long n1 = random.nextLong();
-//		long n2 = random.nextLong();
-//		long n3 = random.nextLong();
-//		long n4 = random.nextLong();
-//		long n5 = random.nextLong();
-//		long p5 = random.previousLong();
-//		long p4 = random.previousLong();
-//		long p3 = random.previousLong();
-//		long p2 = random.previousLong();
-//		long p1 = random.previousLong();
-//		long p0 = random.previousLong();
-//		System.out.println(n0 == p0);
-//		System.out.println(n1 == p1);
-//		System.out.println(n2 == p2);
-//		System.out.println(n3 == p3);
-//		System.out.println(n4 == p4);
-//		System.out.println(n5 == p5);
-//		System.out.println(n0 + " vs. " + p0);
-//		System.out.println(n1 + " vs. " + p1);
-//		System.out.println(n2 + " vs. " + p2);
-//		System.out.println(n3 + " vs. " + p3);
-//		System.out.println(n4 + " vs. " + p4);
-//		System.out.println(n5 + " vs. " + p5);
-//	}
+	public static void main(String[] args) {
+		BassRandom random = new BassRandom(1L);
+		long n0 = random.nextLong();
+		long n1 = random.nextLong();
+		long n2 = random.nextLong();
+		long n3 = random.nextLong();
+		long n4 = random.nextLong();
+		long n5 = random.nextLong();
+		long p5 = random.previousLong();
+		long p4 = random.previousLong();
+		long p3 = random.previousLong();
+		long p2 = random.previousLong();
+		long p1 = random.previousLong();
+		long p0 = random.previousLong();
+		System.out.println(n0 == p0);
+		System.out.println(n1 == p1);
+		System.out.println(n2 == p2);
+		System.out.println(n3 == p3);
+		System.out.println(n4 == p4);
+		System.out.println(n5 == p5);
+		System.out.println(n0 + " vs. " + p0);
+		System.out.println(n1 + " vs. " + p1);
+		System.out.println(n2 + " vs. " + p2);
+		System.out.println(n3 + " vs. " + p3);
+		System.out.println(n4 + " vs. " + p4);
+		System.out.println(n5 + " vs. " + p5);
+	}
 }
