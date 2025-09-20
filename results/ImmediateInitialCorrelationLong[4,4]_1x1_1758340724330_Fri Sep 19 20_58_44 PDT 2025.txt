@@ -1,0 +1,1 @@
+[Immediate] Lowest mode: 117.0000 has mean amount 0.0310915112  PASS 👍 for HornRandom

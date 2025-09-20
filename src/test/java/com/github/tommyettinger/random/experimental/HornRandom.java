@@ -25,11 +25,14 @@ import java.math.BigInteger;
  * A tiny hash-on-counter generator that has been designed specifically to use only constants that a human can remember.
  * Uses two bijective Xor-Square-Or operations along with a bitwise rotation and a xor-shift. Allows all states, and
  * will eventually produce every 64-bit output from {@link #nextLong()} (it is 1D-equidistributed exactly). This
- * generator passes 64TB of PractRand testing with no anomalies.
+ * generator passes 64TB of PractRand testing with no anomalies. It also passes Initial Correlation Evaluator (ICE)
+ * tests, including Immediate Initial Correlation Evaluator (IICE) tests, which mostly means the unary hash function
+ * used is high-quality when given sufficiently-different inputs. The large odd-number counter used here guarantees all
+ * inputs to the hash will be quite different when used as a PRNG.
  * <br>
  * The constants used here are {@code 5555555555555555555L} for the counter increment (nineteen decimal digits, all of
- * them {@code 5}), bitwise OR with 7, and bitwise unsigned right shifts by 27 (with a left shift by -27 to make a
- * bitwise rotation).
+ * them {@code 5}; if you try using twenty repetitions of {@code 5}, that won't fit in a {@code long}), bitwise OR with
+ * 7, and bitwise unsigned right shifts by 27 (with a left shift by -27 to make one a bitwise rotation).
  * <br>
  * The most complicated operation here is xor-square-or, which unlike most math involving multiplying
  * a number by itself, is possible to invert (it is bijective), which is a critical property to ensure equidistribution.
@@ -44,7 +47,7 @@ import java.math.BigInteger;
  * is also the reason why a bitwise rotation is used directly instead of a more-typical xor-shift in the third line;
  * xor-shift requires two operations (a XOR and an unsigned right shift), while in theory a bitwise rotation can be only
  * one operation. It isn't a single operation in Compiler Explorer's output (for whatever reason, Clang performs a left
- * and a right shift and bitwise ORs them, which may be better for vectors), but it might be in the JVM's output.
+ * and a right shift and bitwise ORs them, which may be faster for AVX vectors), but it might be in the JVM's output.
  * <br>
  * This generator is strongly inspired by the design (and memorability) of the
  * <a href="https://arxiv.org/abs/2004.06278">Squares generator</a>, but unlike Squares, this generator is
