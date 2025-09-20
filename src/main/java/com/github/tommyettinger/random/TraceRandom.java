@@ -55,7 +55,7 @@ public class TraceRandom extends EnhancedRandom {
 
 	@Override
 	public String getTag() {
-		return "MceR";
+		return "TrcR";
 	}
 
 	/**
