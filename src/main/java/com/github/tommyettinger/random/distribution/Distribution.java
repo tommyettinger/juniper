@@ -20,12 +20,8 @@ package com.github.tommyettinger.random.distribution;
 import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.random.Deserializer;
 import com.github.tommyettinger.random.EnhancedRandom;
-import com.github.tommyettinger.random.GwtIncompatible;
 
-import java.io.Externalizable;
 import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 
 /**
  * The parent (abstract) class for all distributions. This has up to three parameters (just called A, B, and C), which

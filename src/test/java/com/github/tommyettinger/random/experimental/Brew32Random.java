@@ -22,8 +22,6 @@ import com.github.tommyettinger.random.EnhancedRandom;
 
 import java.math.BigInteger;
 
-import static com.github.tommyettinger.digital.BitConversion.imul;
-
 /**
  * A random number generator that is optimized for performance on 32-bit machines and with Google Web Toolkit.
  * This uses only add, subtract, (variable) bitwise-rotate, and XOR operations in its state transition, but also

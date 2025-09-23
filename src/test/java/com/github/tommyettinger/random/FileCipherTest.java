@@ -27,10 +27,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.github.tommyettinger.random.cipher.SpeckCipher;
 import com.github.tommyettinger.random.experimental.SpeckEncryptedFileHandle;
-
-import java.nio.ByteBuffer;
 
 import static com.badlogic.gdx.Input.Keys.*;
 

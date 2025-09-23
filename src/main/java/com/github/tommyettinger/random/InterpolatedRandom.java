@@ -21,7 +21,6 @@ import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.digital.Distributor;
 import com.github.tommyettinger.digital.Interpolations;
 import com.github.tommyettinger.digital.Interpolations.Interpolator;
-import com.github.tommyettinger.random.distribution.Distribution;
 
 import java.io.IOException;
 import java.io.ObjectInput;

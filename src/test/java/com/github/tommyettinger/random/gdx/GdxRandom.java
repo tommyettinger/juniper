@@ -18,7 +18,6 @@
 package com.github.tommyettinger.random.gdx;
 
 import com.badlogic.gdx.utils.*;
-import com.github.tommyettinger.digital.Base;
 
 import java.io.IOException;
 import java.lang.StringBuilder;

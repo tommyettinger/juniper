@@ -12,10 +12,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.github.tommyettinger.digital.TrigTools;
 import com.github.tommyettinger.random.EnhancedRandom;
-
-import java.util.Arrays;
 
 public class CornerScreen extends ScreenAdapter {
     private EnhancedRandom random;

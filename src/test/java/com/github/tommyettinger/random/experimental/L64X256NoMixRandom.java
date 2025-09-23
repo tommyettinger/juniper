@@ -18,7 +18,6 @@
 package com.github.tommyettinger.random.experimental;
 
 import com.github.tommyettinger.random.EnhancedRandom;
-import com.github.tommyettinger.random.Xoshiro256StarStarRandom;
 
 import java.math.BigInteger;
 

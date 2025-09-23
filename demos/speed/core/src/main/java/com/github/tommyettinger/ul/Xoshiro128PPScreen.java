@@ -14,7 +14,6 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.github.tommyettinger.SpeedDemo;
 import com.github.tommyettinger.digital.Stringf;
 import com.github.tommyettinger.random.Xoshiro128PlusPlusRandom;
-import com.github.tommyettinger.random.Xoshiro128PlusPlusRandom;
 
 import java.util.Arrays;
 

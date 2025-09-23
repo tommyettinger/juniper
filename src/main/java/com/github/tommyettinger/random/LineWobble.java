@@ -19,7 +19,6 @@ package com.github.tommyettinger.random;
 
 import com.github.tommyettinger.digital.BitConversion;
 import com.github.tommyettinger.digital.MathTools;
-import com.github.tommyettinger.digital.TrigTools;
 
 import static com.github.tommyettinger.digital.BitConversion.imul;
 import static com.github.tommyettinger.digital.TrigTools.*;

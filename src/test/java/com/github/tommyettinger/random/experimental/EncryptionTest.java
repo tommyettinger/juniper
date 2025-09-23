@@ -5,7 +5,6 @@ import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.random.AceRandom;
 import com.github.tommyettinger.random.DistinctRandom;
 import com.github.tommyettinger.random.EnhancedRandom;
-import com.github.tommyettinger.random.Xoshiro128PlusPlusRandom;
 import com.github.tommyettinger.random.cipher.SpeckCipher;
 import org.junit.Assert;
 import org.junit.Test;
@@ -154,16 +153,16 @@ public class EncryptionTest {
         long k1 = 12, k2 = 34, k3 = 56, k4 = 78, iv1 = 1234567890987654321L, iv2 = -98765432123456789L;
         long[] plainLong = new long[]{0, 1, 1, 2, 3, 5, 8, 13, 21, 34};
         byte[] plainByte = new byte[]{
-                0, 0, 0, 0, 0, 0, 0, 0,  
-                0, 0, 0, 0, 0, 0, 0, 1,  
-                0, 0, 0, 0, 0, 0, 0, 1,  
-                0, 0, 0, 0, 0, 0, 0, 2,  
-                0, 0, 0, 0, 0, 0, 0, 3,  
-                0, 0, 0, 0, 0, 0, 0, 5,  
-                0, 0, 0, 0, 0, 0, 0, 8,  
-                0, 0, 0, 0, 0, 0, 0, 13, 
-                0, 0, 0, 0, 0, 0, 0, 21, 
-                0, 0, 0, 0, 0, 0, 0, 34, 
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 1,
+                0, 0, 0, 0, 0, 0, 0, 1,
+                0, 0, 0, 0, 0, 0, 0, 2,
+                0, 0, 0, 0, 0, 0, 0, 3,
+                0, 0, 0, 0, 0, 0, 0, 5,
+                0, 0, 0, 0, 0, 0, 0, 8,
+                0, 0, 0, 0, 0, 0, 0, 13,
+                0, 0, 0, 0, 0, 0, 0, 21,
+                0, 0, 0, 0, 0, 0, 0, 34,
         };
         long[] cipherLong = new long[plainLong.length + 1 & -2];
         byte[] cipherByte = new byte[plainByte.length + 15 & -16];

@@ -17,9 +17,7 @@
 
 package com.github.tommyettinger.random.experimental;
 
-import com.github.tommyettinger.random.AceRandom;
 import com.github.tommyettinger.random.EnhancedRandom;
-import com.github.tommyettinger.random.WhiskerRandom;
 
 import java.math.BigInteger;
 

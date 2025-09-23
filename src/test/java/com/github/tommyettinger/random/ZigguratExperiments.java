@@ -1,6 +1,5 @@
 package com.github.tommyettinger.random;
 
-import com.github.tommyettinger.digital.BitConversion;
 import com.github.tommyettinger.digital.Distributor;
 import com.github.tommyettinger.digital.Hasher;
 import com.github.tommyettinger.digital.MathTools;

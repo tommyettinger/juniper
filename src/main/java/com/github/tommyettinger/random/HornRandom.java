@@ -15,9 +15,7 @@
  *
  */
 
-package com.github.tommyettinger.random.experimental;
-
-import com.github.tommyettinger.random.EnhancedRandom;
+package com.github.tommyettinger.random;
 
 import java.math.BigInteger;
 
@@ -56,6 +54,10 @@ import java.math.BigInteger;
  * {@code 1L} or {@code 5L}, and you can run any odd long through {@link EnhancedRandom#fixGamma(long, int)} with a
  * threshold as low as 1 to find a "better" increment/key/gamma/stream constant. {@code 5555555555555555555L} works if
  * the threshold is 3 or higher, and won't be changed in that case.
+ * <br>
+ * You can use a very similar algorithm as a stateless hash function with
+ * {@link com.github.tommyettinger.digital.Hasher#randomizeH(long)}. There are sometimes advantages to using a stateless
+ * function, such as in massively-parallel contexts, that individual random number generator objects can't beat.
  * <br>
  * The name comes from how a horn fits on a ram, and this generator should fit in a person's random-access memory.
  */

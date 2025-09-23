@@ -20,7 +20,6 @@ package com.github.tommyettinger.random.experimental;
 import com.github.tommyettinger.random.EnhancedRandom;
 
 import java.math.BigInteger;
-import java.util.Random;
 
 /**
  * An LXM generator with the Mix step changed to the Moremur unary hash, the Xorshift generator changed to a
