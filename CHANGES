@@ -1,5 +1,7 @@
 [0.8.3]
 - [BREAKING] TraceRandom.setStreamIdentifier() incorrectly behaved differently from TraceRandom.setStream(). Now both use the strict threshold of 1, instead of how setStreamIdentifier() previously used 8 while setStream() used 1.
+- MaceRandom is back in the core of the project, but deprecated now. It isn't registered unless you opt in.
+- HornRandom is new, as a hash-on-counter generator that needs rather few operations to pass tests. It still needs benchmarking to know how fast it is in Java, but in C++ at least, it's quite fast.
 
 [0.8.2]
 - Update digital dependency to 0.9.2, which is a hotfix for some buggy behavior with scrambled Base objects.
