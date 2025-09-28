@@ -18,9 +18,8 @@
 package com.github.tommyettinger.random.experimental;
 
 import com.github.tommyettinger.digital.Base;
+import com.github.tommyettinger.function.LongLongToLongBiFunction;
 import com.github.tommyettinger.random.*;
-
-import java.util.function.LongBinaryOperator;
 
 public class Configurable4Random extends EnhancedRandom {
 
@@ -201,7 +200,7 @@ public class Configurable4Random extends EnhancedRandom {
 		this.state[3] = stateD;
 	}
 
-	private static final LongBinaryOperator[] OPS = {
+	private static final LongLongToLongBiFunction[] OPS = {
 			(a, b) -> a + b,
 			(a, b) -> a * 0xF1357AEA2E62A9C5L,
 			(a, b) -> (a << 41 | a >>> 23),
