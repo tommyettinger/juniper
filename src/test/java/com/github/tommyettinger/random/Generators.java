@@ -106,6 +106,7 @@ public final class Generators {
 		randomList.add(new Xqo2R1Random(1));
 		randomList.add(new Xqo2Xs2Random(1));
 		randomList.add(new HornRandom(1));
+		randomList.add(new Amp4RotateRandom(1));
 	}
 
 	public static int randomCount = randomList.size();
