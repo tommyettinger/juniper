@@ -1,0 +1,1 @@
+[Immediate] Lowest mode: 118.0000 has mean amount 0.0311996936  PASS 👍 for Amp2RotateRandom
