@@ -22,9 +22,11 @@ import com.github.tommyettinger.random.EnhancedRandom;
 import java.math.BigInteger;
 
 /**
- * Uses the bijective And-Multiply-Plus operation along with half-and-half bitwise Rotations.
+ * Uses the bijective And-Multiply-Plus operation along with xor-shifts.
+ * <br>
+ * This one doesn't pass ICE/IICE tests.
  */
-public class Amp2RotateRandom extends EnhancedRandom {
+public class Amp1XsRandom extends EnhancedRandom {
 
 	/**
 	 * The only state variable; can be any {@code long}.
@@ -32,25 +34,25 @@ public class Amp2RotateRandom extends EnhancedRandom {
 	public long state;
 
 	/**
-	 * Creates a new Amp2RotateRandom with a random state.
+	 * Creates a new Amp1XsRandom with a random state.
 	 */
-	public Amp2RotateRandom() {
+	public Amp1XsRandom() {
 		this(EnhancedRandom.seedFromMath());
 	}
 
 	/**
-	 * Creates a new Amp2RotateRandom with the given state; all {@code long} values are permitted.
+	 * Creates a new Amp1XsRandom with the given state; all {@code long} values are permitted.
 	 *
 	 * @param state any {@code long} value
 	 */
-	public Amp2RotateRandom(long state) {
+	public Amp1XsRandom(long state) {
 		super(state);
 		this.state = state;
 	}
 
 	@Override
 	public String getTag() {
-		return "A2RR";
+		return "A1XR";
 	}
 
 	/**
@@ -137,8 +139,7 @@ public class Amp2RotateRandom extends EnhancedRandom {
 	@Override
 	public long nextLong () {
 		long x = (state -= 987654321987654321L);
-		x = x * x + x + (x & 1L);
-		x = (x << 32 | x >>> 32);
+		x ^= x >>> 30;
 		x = x * x + x + (x & 1L);
 		return x ^ x >>> 31;
 	}
@@ -157,8 +158,7 @@ public class Amp2RotateRandom extends EnhancedRandom {
 	@Override
 	public long skip (long advance) {
 		long x = (state -= advance * 987654321987654321L);
-		x = x * x + x + (x & 1L);
-		x = (x << 32 | x >>> 32);
+		x ^= x >>> 30;
 		x = x * x + x + (x & 1L);
 		return x ^ x >>> 31;
 	}
@@ -167,8 +167,7 @@ public class Amp2RotateRandom extends EnhancedRandom {
 	public long previousLong () {
 		long x = state;
 		state += 987654321987654321L;
-		x = x * x + x + (x & 1L);
-		x = (x << 32 | x >>> 32);
+		x ^= x >>> 30;
 		x = x * x + x + (x & 1L);
 		return x ^ x >>> 31;
 	}
@@ -176,15 +175,14 @@ public class Amp2RotateRandom extends EnhancedRandom {
 	@Override
 	public int next (int bits) {
 		long x = (state -= 987654321987654321L);
-		x = x * x + x + (x & 1L);
-		x = (x << 32 | x >>> 32);
+		x ^= x >>> 30;
 		x = x * x + x + (x & 1L);
 		return (int)(x ^ x >>> 31) >>> (32 - bits);
 	}
 
 	@Override
-	public Amp2RotateRandom copy () {
-		return new Amp2RotateRandom(state);
+	public Amp1XsRandom copy () {
+		return new Amp1XsRandom(state);
 	}
 
 	@Override
@@ -194,13 +192,13 @@ public class Amp2RotateRandom extends EnhancedRandom {
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		Amp2RotateRandom that = (Amp2RotateRandom)o;
+		Amp1XsRandom that = (Amp1XsRandom)o;
 
 		return state == that.state;
 	}
 
 	@Override
 	public String toString () {
-		return "Amp2RotateRandom{state=" + (state) + "L}";
+		return "Amp1XsRandom{state=" + (state) + "L}";
 	}
 }

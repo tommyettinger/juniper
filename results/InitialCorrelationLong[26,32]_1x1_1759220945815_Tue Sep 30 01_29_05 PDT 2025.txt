@@ -1,0 +1,1 @@
+Lowest mode: 55.00000 has mean amount 0.0228307247  FAIL 💀 for Amp1XsRandom
