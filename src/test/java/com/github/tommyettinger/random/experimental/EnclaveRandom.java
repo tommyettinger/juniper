@@ -30,7 +30,7 @@ import java.math.BigInteger;
  * rotation in between them, and finishes with a xor-shift right. It uses two variables, x and y, where y is always
  * {@code x | 1} when used. This is 1-dimensionally equidistributed, with a different order of results for every
  * different gamma, but each result is still produces exactly once by {@link #nextLong()} over its period of 2 to the
- * 64.
+ * 64. This passes Initial Correlation Evaluation tests and Immediate Initial Correlation Evaluation tests.
  */
 public class EnclaveRandom extends EnhancedRandom {
 
@@ -60,6 +60,20 @@ public class EnclaveRandom extends EnhancedRandom {
 		super(state);
 		this.state = state;
 		this.gamma = fixGamma(state, 1);
+	}
+
+	/**
+	 * Creates a new EnclaveRandom with the given state and gamma; all {@code long} values are permitted for state,
+	 * and while all odd {@code long} values for gamma can be given, most will not be used verbatim. This passes the
+	 * given gamma to {@link EnhancedRandom#fixGamma(long, int)} with a threshold of 1.
+	 *
+	 * @param state any {@code long} value
+	 * @param gamma the base {@code long} value, which should be odd, to try first
+	 */
+	public EnclaveRandom(long state, long gamma) {
+		super(state);
+		this.state = state;
+		this.gamma = fixGamma(gamma, 1);
 	}
 
 	@Override
@@ -238,7 +252,7 @@ public class EnclaveRandom extends EnhancedRandom {
 
 	@Override
 	public EnclaveRandom copy () {
-		return new EnclaveRandom(state);
+		return new EnclaveRandom(state, gamma);
 	}
 
 	@Override
