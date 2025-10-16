@@ -90,12 +90,12 @@ public class NormalAlternateScreen extends ScreenAdapter {
         }
         else if(Gdx.input.isKeyJustPressed(Input.Keys.J))
         {
-            mode = (mode + 10) % 11;
+            mode = (mode + 13) % 14;
             return;
         }
         else if(Gdx.input.isKeyJustPressed(Input.Keys.K))
         {
-            mode = (mode + 1) % 11;
+            mode = (mode + 1) % 14;
             return;
         }
         else if(Gdx.input.isKeyJustPressed(Input.Keys.SLASH))
@@ -147,7 +147,7 @@ public class NormalAlternateScreen extends ScreenAdapter {
                 break;
             case 2:
                 for (int i = 0; i < RUNS; i++) {
-                    int m = (int) ((dist.getMu() + dist.getSigma() * EnhancedRandom.probit(dist.generator.nextExclusiveDouble()))
+                    int m = (int) ((dist.getMu() + dist.getSigma() * popSolo())
                             * 128 + 256);
                     if (m >= 0 && m < 512)
                         amounts[m]++;
@@ -230,12 +230,36 @@ public class NormalAlternateScreen extends ScreenAdapter {
             case 10:
                 for (int i = 0; i < RUNS; i++) {
                     int m = (int) ((dist.getMu() + dist.getSigma() *
-                            huhWha())
+                            Distributor.probitL(dist.generator.nextLong()))
                             * 128 + 256);
                     if (m >= 0 && m < 512)
                         amounts[m]++;
                 }
                 break;
+			case 11:
+				for (int i = 0; i < RUNS; i++) {
+					int m = (int) ((dist.getMu() + dist.getSigma() * EnhancedRandom.probit(dist.generator.nextExclusiveDouble()))
+						* 128 + 256);
+					if (m >= 0 && m < 512)
+						amounts[m]++;
+				}
+				break;
+			case 12:
+				for (int i = 0; i < RUNS; i++) {
+					int m = (int) ((dist.getMu() + dist.getSigma() * Distributor.normalF(dist.generator.nextInt()))
+						* 128 + 256);
+					if (m >= 0 && m < 512)
+						amounts[m]++;
+				}
+				break;
+			case 13:
+				for (int i = 0; i < RUNS; i++) {
+					int m = (int) ((dist.getMu() + dist.getSigma() * Distributor.probitI(dist.generator.nextInt()))
+						* 128 + 256);
+					if (m >= 0 && m < 512)
+						amounts[m]++;
+				}
+				break;
         }
         renderer.begin(camera.combined, GL20.GL_LINES);
         for (int x = 0; x < 512; x++) {
@@ -436,7 +460,7 @@ public class NormalAlternateScreen extends ScreenAdapter {
      * exactly one long from the generator's sequence (using {@link EnhancedRandom#nextLong()}).
      * This makes it different from code like java.util.Random's nextGaussian()
      * method, which can (rarely) fetch a higher number of random doubles.
-     * <p>
+	/**
      * This can't produce as extreme results in extremely-rare cases as methods
      * like Box-Muller and Marsaglia Polar can. All possible results are between
      * {@code -7.929080009460449} and {@code 7.929080009460449}, inclusive.
@@ -450,22 +474,22 @@ public class NormalAlternateScreen extends ScreenAdapter {
      * {@code double} value with mean {@code 0.0} and standard deviation
      * {@code 1.0} from this random number generator's sequence
      */
-    public double popSolo () {
-        //// here, we want to only request one long from this EnhancedRandom.
-        //// because the bitCount() doesn't really care about the numerical value of its argument, only its Hamming weight,
-        //// we use the random long un-scrambled, and get the bit count of that.
-        //// for the later steps, we multiply the random long by a specific constant and get the difference of its halves.
-        //// 0xC6AC29E4C6AC29E5L is... OK, it's complicated. It needs to have almost-identical upper and lower halves, but
-        //// for reasons I don't currently understand, if the upper and lower halves are equal, then the min and max results
-        //// of the Gaussian aren't equally distant from 0. By using an upper half that is exactly 1 less than the lower
-        //// half, we get bounds of -7.929080009460449 to 7.929080009460449, returned when the RNG gives 0 and -1 resp.
-        //// because it only needs one floating-point operation, it is quite fast on a CPU.
-        //// this winds up being a very smooth Gaussian, as Marc B. Reynolds had it with two random longs.
+    public float popSolo () {
         long u = dist.generator.nextLong();
         final long c = Long.bitCount(u) - 32L << 32;
         u *= 0xC6AC29E4C6AC29E5L;
-        return 0x1.fb760cp-35 * (c + (u & 0xFFFFFFFFL) - (u >>> 32));
+        return 0x1.fb760cp-35f * (c + (u & 0xFFFFFFFFL) - (u >>> 32));
     }
+	//// here, we want to only request one long from this EnhancedRandom.
+	//// because the bitCount() doesn't really care about the numerical value of its argument, only its Hamming weight,
+	//// we use the random long un-scrambled, and get the bit count of that.
+	//// for the later steps, we multiply the random long by a specific constant and get the difference of its halves.
+	//// 0xC6AC29E4C6AC29E5L is... OK, it's complicated. It needs to have almost-identical upper and lower halves, but
+	//// for reasons I don't currently understand, if the upper and lower halves are equal, then the min and max results
+	//// of the Gaussian aren't equally distant from 0. By using an upper half that is exactly 1 less than the lower
+	//// half, we get bounds of -7.929080009460449 to 7.929080009460449, returned when the RNG gives 0 and -1 resp.
+	//// because it only needs one floating-point operation, it is quite fast on a CPU.
+	//// this winds up being a very smooth Gaussian, as Marc B. Reynolds had it with two random longs.
 
     public double marsagliaPolar() {
         double v1, v2, s;
