@@ -75,13 +75,10 @@ jar {
 }
 
 repositories {
-    // You can uncomment mavenLocal() if you need self-built versions, but it can be a problem with GWT or other sources dependencies.
     mavenLocal()
     mavenCentral()
-//    maven { url 'https://s01.oss.sonatype.org' }
     google()
-//    maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
-//    maven { url 'https://s01.oss.sonatype.org/content/repositories/snapshots/' }
+    maven { url 'https://central.sonatype.com/repository/maven-snapshots/' }
 //    maven { url 'https://jitpack.io' }
 }
 
@@ -89,8 +86,8 @@ dependencies {
     api "com.github.tommyettinger:digital:$digitalVersion"
     testImplementation "com.github.tommyettinger:jdkgdxds:$jdkgdxdsVersion"
     testImplementation "org.apache.fory:fory-core:$foryVersion"
-	//noinspection GDXOutdatedVersionGradleGroovy
-	testImplementation "com.badlogicgames.gdx:gdx:$gdxVersion"
+    //noinspection GDXOutdatedVersionGradleGroovy
+    testImplementation "com.badlogicgames.gdx:gdx:$gdxVersion"
     testImplementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
     testImplementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
     testImplementation "junit:junit:4.13.2"
