@@ -49,13 +49,15 @@ public class DistributorDemo extends Game {
                 new ArcsineScreen(this), new BinomialScreen(this), new ZipfianScreen(this),
                 new TriangularScreen(this), new KnobScreen(this),
 
-                new GdxSinScreen(this), new MathSinScreen(this), new DigitalSinScreen(this), new DigitalSinSmoothScreen(this),
-                new DigitalSinSmootherScreen(this), 
+//                new GdxSinScreen(this), new MathSinScreen(this), new DigitalSinScreen(this), new DigitalSinSmoothScreen(this),
+//                new DigitalSinSmootherScreen(this),
+//
+//                new GdxCosScreen(this), new MathCosScreen(this), new DigitalCosScreen(this), new DigitalCosSmoothScreen(this),
+//                new DigitalCosSmootherScreen(this),
 
-                new GdxCosScreen(this), new MathCosScreen(this), new DigitalCosScreen(this), new DigitalCosSmoothScreen(this),
-                new DigitalCosSmootherScreen(this), 
+			alternateNormal
         };
-        screenIndex = 0;
+        screenIndex = screens.length - 1;
         setScreen(screens[screenIndex]);
     }
     public void nextScreen(){

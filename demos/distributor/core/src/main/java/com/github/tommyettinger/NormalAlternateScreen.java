@@ -90,12 +90,12 @@ public class NormalAlternateScreen extends ScreenAdapter {
         }
         else if(Gdx.input.isKeyJustPressed(Input.Keys.J))
         {
-            mode = (mode + 13) % 14;
+            mode = (mode + 14) % 15;
             return;
         }
         else if(Gdx.input.isKeyJustPressed(Input.Keys.K))
         {
-            mode = (mode + 1) % 14;
+            mode = (mode + 1) % 15;
             return;
         }
         else if(Gdx.input.isKeyJustPressed(Input.Keys.SLASH))
@@ -128,6 +128,10 @@ public class NormalAlternateScreen extends ScreenAdapter {
         }
         iterations += SMOOTHNESS;
         dist.setParameters(a, b, c);
+		double mu = dist.getMu();
+		double sigma = dist.getSigma();
+		float fMu = (float) dist.getMu();
+		float fSigma = (float) dist.getSigma();
         switch (mode) {
             case 0:
                 for (int i = 0; i < RUNS; i++) {
@@ -139,7 +143,7 @@ public class NormalAlternateScreen extends ScreenAdapter {
                 break;
             case 1:
                 for (int i = 0; i < RUNS; i++) {
-                    int m = (int) ((dist.getMu() + dist.getSigma() * pop())
+                    int m = (int) ((mu + sigma * pop())
                             * 128 + 256);
                     if (m >= 0 && m < 512)
                         amounts[m]++;
@@ -147,23 +151,23 @@ public class NormalAlternateScreen extends ScreenAdapter {
                 break;
             case 2:
                 for (int i = 0; i < RUNS; i++) {
-                    int m = (int) ((dist.getMu() + dist.getSigma() * popSolo())
+                    int m = (int) ((fMu + fSigma * popSolo())
                             * 128 + 256);
                     if (m >= 0 && m < 512)
                         amounts[m]++;
                 }
                 break;
             case 3:
-                for (int i = 0; i < RUNS; i++) {
-                    int m = (int) (simons(dist.generator.nextExclusiveDouble(), dist.getMu(), dist.getSigma())
-                            * 128 + 256);
-                    if (m >= 0 && m < 512)
-                        amounts[m]++;
-                }
-                break;
+				for (int i = 0; i < RUNS; i++) {
+					int m = (int) ((fMu + fSigma * popRounder())
+						* 128 + 256);
+					if (m >= 0 && m < 512)
+						amounts[m]++;
+				}
+				break;
             case 4:
                 for (int i = 0; i < RUNS; i++) {
-                    int m = (int) ((dist.getMu() + dist.getSigma() * winitzki(dist.generator.nextExclusiveDouble()))
+                    int m = (int) ((mu + sigma * winitzki(dist.generator.nextExclusiveDouble()))
                             * 128 + 256);
                     if (m >= 0 && m < 512)
                         amounts[m]++;
@@ -171,7 +175,7 @@ public class NormalAlternateScreen extends ScreenAdapter {
                 break;
             case 5:
                 for (int i = 0; i < RUNS; i++) {
-                    int m = (int) ((dist.getMu() + dist.getSigma() * marsagliaPolar())
+                    int m = (int) ((mu + sigma * marsagliaPolar())
                             * 128 + 256);
                     if (m >= 0 && m < 512)
                         amounts[m]++;
@@ -179,7 +183,7 @@ public class NormalAlternateScreen extends ScreenAdapter {
                 break;
             case 6:
                 for (int i = 0; i < RUNS; i++) {
-                    int m = (int) ((dist.getMu() + dist.getSigma() * Distributor.normal(dist.generator.nextLong()))
+                    int m = (int) ((mu + sigma * Distributor.normal(dist.generator.nextLong()))
                             * 128 + 256);
                     if (m >= 0 && m < 512)
                         amounts[m]++;
@@ -187,7 +191,7 @@ public class NormalAlternateScreen extends ScreenAdapter {
                 break;
             case 7: // "hrandom," one possible solution
                 for (int i = 0; i < RUNS; i++) {
-                    int m = (int) ((dist.getMu() + dist.getSigma() *
+                    int m = (int) ((mu + sigma *
                             ((Long.bitCount(dist.generator.nextLong()) - 32. + dist.generator.nextDouble() - dist.generator.nextDouble()) / 66.0))
                             * 128 + 256);
                     if (m >= 0 && m < 512)
@@ -196,7 +200,7 @@ public class NormalAlternateScreen extends ScreenAdapter {
                 break;
             case 8:
                 for (int i = 0; i < RUNS; i++) {
-                    int m = (int) ((dist.getMu() + dist.getSigma() *
+                    int m = (int) ((mu + sigma *
                             (dist.generator.nextExclusiveSignedDouble() * (4.0 - 11.0 / 3.0 * c)
                                     + c * (1.0 / 3.0) * (
                                             dist.generator.nextExclusiveSignedDouble() +
@@ -218,7 +222,7 @@ public class NormalAlternateScreen extends ScreenAdapter {
                 break;
             case 9:
                 for (int i = 0; i < RUNS; i++) {
-                    int m = (int) ((dist.getMu() + dist.getSigma() *
+                    int m = (int) ((mu + sigma *
                             (dist.generator.nextExclusiveSignedDouble() * (1.0 - c)
                                     + c * Distributor.normal(dist.generator.nextLong())
                             ))
@@ -229,7 +233,7 @@ public class NormalAlternateScreen extends ScreenAdapter {
                 break;
             case 10:
                 for (int i = 0; i < RUNS; i++) {
-                    int m = (int) ((dist.getMu() + dist.getSigma() *
+                    int m = (int) ((mu + sigma *
                             Distributor.probitL(dist.generator.nextLong()))
                             * 128 + 256);
                     if (m >= 0 && m < 512)
@@ -238,7 +242,7 @@ public class NormalAlternateScreen extends ScreenAdapter {
                 break;
 			case 11:
 				for (int i = 0; i < RUNS; i++) {
-					int m = (int) ((dist.getMu() + dist.getSigma() * EnhancedRandom.probit(dist.generator.nextExclusiveDouble()))
+					int m = (int) ((mu + sigma * EnhancedRandom.probit(dist.generator.nextExclusiveDouble()))
 						* 128 + 256);
 					if (m >= 0 && m < 512)
 						amounts[m]++;
@@ -246,7 +250,7 @@ public class NormalAlternateScreen extends ScreenAdapter {
 				break;
 			case 12:
 				for (int i = 0; i < RUNS; i++) {
-					int m = (int) ((dist.getMu() + dist.getSigma() * Distributor.normalF(dist.generator.nextInt()))
+					int m = (int) ((fMu + fSigma * Distributor.normalF(dist.generator.nextInt()))
 						* 128 + 256);
 					if (m >= 0 && m < 512)
 						amounts[m]++;
@@ -254,13 +258,22 @@ public class NormalAlternateScreen extends ScreenAdapter {
 				break;
 			case 13:
 				for (int i = 0; i < RUNS; i++) {
-					int m = (int) ((dist.getMu() + dist.getSigma() * Distributor.probitI(dist.generator.nextInt()))
+					int m = (int) ((fMu + fSigma * Distributor.probitI(dist.generator.nextInt()))
 						* 128 + 256);
 					if (m >= 0 && m < 512)
 						amounts[m]++;
 				}
 				break;
-        }
+			case 14:
+				for (int i = 0; i < RUNS; i++) {
+					int m = (int) (simons(dist.generator.nextExclusiveDouble(), dist.getMu(), dist.getSigma())
+						* 128 + 256);
+					if (m >= 0 && m < 512)
+						amounts[m]++;
+				}
+				break;
+
+		}
         renderer.begin(camera.combined, GL20.GL_LINES);
         for (int x = 0; x < 512; x++) {
             float color = (x & 63) == 0
@@ -463,22 +476,48 @@ public class NormalAlternateScreen extends ScreenAdapter {
 	/**
      * This can't produce as extreme results in extremely-rare cases as methods
      * like Box-Muller and Marsaglia Polar can. All possible results are between
-     * {@code -7.929080009460449} and {@code 7.929080009460449}, inclusive.
+     * {@code -7.92908} and {@code 7.92908}, inclusive. This method isn't as
+	 * accurate to the normal distribution; the center has a pointed top rather
+	 * than a rounded one.
      * <p>
      * <a href="https://marc-b-reynolds.github.io/distribution/2021/03/18/CheapGaussianApprox.html">Credit
      * to Marc B. Reynolds</a> for coming up with this clever fusion of the
      * already-bell-curved bit count and a triangular distribution to smooth
      * it out. Using one random long instead of two is the contribution here.
+	 * Using n * n + n is another contribution; it's slightly faster.
      *
      * @return the next pseudorandom, approximately Gaussian ("normally") distributed
      * {@code double} value with mean {@code 0.0} and standard deviation
      * {@code 1.0} from this random number generator's sequence
      */
     public float popSolo () {
-        long u = dist.generator.nextLong();
-        final long c = Long.bitCount(u) - 32L << 32;
-        u *= 0xC6AC29E4C6AC29E5L;
+        final long n = dist.generator.nextLong();
+        final long c = Long.bitCount(n) - 32L << 32;
+		final long u = n * n + n;
         return 0x1.fb760cp-35f * (c + (u & 0xFFFFFFFFL) - (u >>> 32));
+    }
+
+	/**
+     * This can't produce as extreme results in extremely-rare cases as methods
+     * like Box-Muller and Marsaglia Polar can. All possible results are between
+     * {@code -7.92908} and {@code 7.92908}, inclusive.This method is fairly
+	 * accurate to the normal distribution; the center has a rounded top.
+     * <p>
+     * <a href="https://marc-b-reynolds.github.io/distribution/2021/03/18/CheapGaussianApprox.html">Credit
+     * to Marc B. Reynolds</a> for coming up with this clever fusion of the
+     * already-bell-curved bit count and a triangular distribution to smooth
+     * it out. Using one random long instead of two is the contribution here.
+	 * Using n * n + n is another contribution; it's slightly faster.
+     *
+     * @return the next pseudorandom, approximately Gaussian ("normally") distributed
+     * {@code double} value with mean {@code 0.0} and standard deviation
+     * {@code 1.0} from this random number generator's sequence
+     */
+    public float popRounder () {
+        final long n = dist.generator.nextLong();
+        final long c = Long.bitCount(n) - 32L << 16;
+		final long u = n * n + n;
+        return 0x1.fb760cp-19f * (c + (short)(u) - (u >> 48) - (short)(u >> 32) - (short)(u >> 16));
     }
 	//// here, we want to only request one long from this EnhancedRandom.
 	//// because the bitCount() doesn't really care about the numerical value of its argument, only its Hamming weight,
