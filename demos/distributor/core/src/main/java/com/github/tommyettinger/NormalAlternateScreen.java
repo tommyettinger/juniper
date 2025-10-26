@@ -221,15 +221,12 @@ public class NormalAlternateScreen extends ScreenAdapter {
                 }
                 break;
             case 9:
-                for (int i = 0; i < RUNS; i++) {
-                    int m = (int) ((mu + sigma *
-                            (dist.generator.nextExclusiveSignedDouble() * (1.0 - c)
-                                    + c * Distributor.normal(dist.generator.nextLong())
-                            ))
-                            * 128 + 256);
-                    if (m >= 0 && m < 512)
-                        amounts[m]++;
-                }
+				for (int i = 0; i < RUNS; i++) {
+					int m = (int) (simons(dist.generator.nextExclusiveDouble(), dist.getMu(), dist.getSigma())
+						* 128 + 256);
+					if (m >= 0 && m < 512)
+						amounts[m]++;
+				}
                 break;
             case 10:
                 for (int i = 0; i < RUNS; i++) {
@@ -266,7 +263,7 @@ public class NormalAlternateScreen extends ScreenAdapter {
 				break;
 			case 14:
 				for (int i = 0; i < RUNS; i++) {
-					int m = (int) (simons(dist.generator.nextExclusiveDouble(), dist.getMu(), dist.getSigma())
+					int m = (int) ((fMu + fSigma * com.github.tommyettinger.Distributor.normalF(dist.generator.nextInt()))
 						* 128 + 256);
 					if (m >= 0 && m < 512)
 						amounts[m]++;
@@ -500,7 +497,7 @@ public class NormalAlternateScreen extends ScreenAdapter {
 	/**
      * This can't produce as extreme results in extremely-rare cases as methods
      * like Box-Muller and Marsaglia Polar can. All possible results are between
-     * {@code -7.92908} and {@code 7.92908}, inclusive.This method is fairly
+     * {@code -7.92908} and {@code 7.92908}, inclusive. This method is fairly
 	 * accurate to the normal distribution; the center has a rounded top.
      * <p>
      * <a href="https://marc-b-reynolds.github.io/distribution/2021/03/18/CheapGaussianApprox.html">Credit
