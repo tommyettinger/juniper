@@ -1,6 +1,5 @@
 package com.github.tommyettinger;
 
-import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.digital.BitConversion;
 import com.github.tommyettinger.digital.MathTools;
 import com.github.tommyettinger.digital.RoughMath;
@@ -38,9 +37,9 @@ import static com.github.tommyettinger.digital.RoughMath.logRough;
  * though they used an algorithm that approximated the normal distribution very poorly. They are currently aliases for
  * {@link #probitL(long)} and {@link #probitI(int)}.
  */
-public final class Distributor {
+public final class Distributor2 {
 
-	private Distributor() {}
+	private Distributor2() {}
 	private static final int    ZIG_TABLE_ITEMS = 256;
 	private static final double R               = 3.65415288536100716461;
 	private static final double INV_R           = 1.0 / R;

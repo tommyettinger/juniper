@@ -263,7 +263,7 @@ public class NormalAlternateScreen extends ScreenAdapter {
 				break;
 			case 14:
 				for (int i = 0; i < RUNS; i++) {
-					int m = (int) ((fMu + fSigma * com.github.tommyettinger.Distributor.normalF(dist.generator.nextInt()))
+					int m = (int) ((fMu + fSigma * Distributor2.normalF(dist.generator.nextInt()))
 						* 128 + 256);
 					if (m >= 0 && m < 512)
 						amounts[m]++;
