@@ -21,7 +21,7 @@ import java.util.Arrays;
 
 import static com.github.tommyettinger.DistributorDemo.*;
 
-public class ZigguratLinnormalComparisonScreen extends ScreenAdapter {
+public class ZigguratRoughComparisonScreen extends ScreenAdapter {
     private NormalDistribution dist;
     private SpriteBatch batch;
     private ImmediateModeRenderer20 renderer;
@@ -54,7 +54,7 @@ public class ZigguratLinnormalComparisonScreen extends ScreenAdapter {
     }
     private final DistributorDemo mainGame;
 
-    public ZigguratLinnormalComparisonScreen(DistributorDemo main){
+    public ZigguratRoughComparisonScreen(DistributorDemo main){
         mainGame = main;
     }
 
@@ -115,7 +115,7 @@ public class ZigguratLinnormalComparisonScreen extends ScreenAdapter {
             for (int i = 0; i < RUNS; i++) {
                 int m = (int) ((dist.getMu() + dist.getSigma() *
 //                    Borg.probitHighPrecision(dist.generator.nextExclusiveDouble())
-                        Distributor.normal(dist.generator.nextLong())
+                        Distributor.normalF(dist.generator.nextLong())
 //                        com.github.tommyettinger.Distributor.probitF(dist.generator.nextExclusiveFloat())
 //                        Distributor.linearNormalF(dist.generator.nextInt())
                 )
@@ -166,7 +166,7 @@ public class ZigguratLinnormalComparisonScreen extends ScreenAdapter {
             renderer.color(color);
             renderer.vertex(x, 0, 0);
             renderer.color(color);
-            renderer.vertex(x, (h = amounts[x] / iterations), 0);
+            renderer.vertex(x, (h = amounts[x] / (float)iterations), 0);
             maxHeight = Math.max(maxHeight, h);
         }
         for (int j = 8; j < 520; j += 32) {
@@ -176,11 +176,13 @@ public class ZigguratLinnormalComparisonScreen extends ScreenAdapter {
             renderer.vertex(10, j, 0);
         }
         double gauss = 0.0, mu = dist.getMu(), sigma = dist.getSigma(),
-                scale = maxHeight;
+                scale =
+//					maxHeight; // for the highest amount
+					amounts[(int)((mu * 128 + 256)) & 511] / (double)iterations; // for the amount at mu
         for (int x = 0; x < 512; x++) {
             double xx = (x - 255.5) / 128.0;
             renderer.color(-0x1.7677e8p125F); // CW Bright Red
-            renderer.vertex(x-1, (float) gauss, 0);
+            renderer.vertex(x-1, (int) gauss, 0);
             renderer.color(-0x1.7677e8p125F); // CW Bright Red
             gauss = scale * Math.exp(-0.5 * ((xx - mu) * (xx - mu) / (sigma * sigma)));
             renderer.vertex(x, (int) gauss, 0);
@@ -189,7 +191,7 @@ public class ZigguratLinnormalComparisonScreen extends ScreenAdapter {
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        font.draw(batch, Stringf.format("ZigguratBorgComparisonScreen with A=%.3f, B=%.3f; C=%.3f; median=%.3f at %d FPS; %s with %d off-graph",
+        font.draw(batch, Stringf.format("ZigguratRoughComparisonScreen with A=%.3f, B=%.3f; C=%.3f; median=%.3f at %d FPS; %s with %d off-graph",
                 a, b, c, dist.getMedian(), Gdx.graphics.getFramesPerSecond(),
                         ((System.currentTimeMillis() >>> 13 & 1) == 0) ? "ZIG" : "ROU", offGraph),
                 64, 522, 256+128, Align.center, true);
