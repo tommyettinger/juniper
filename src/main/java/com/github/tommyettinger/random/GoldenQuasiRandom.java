@@ -240,8 +240,6 @@ public class GoldenQuasiRandom extends EnhancedRandom {
 		/* 5.421010862427522E-20 is 0x1p-64 */
 		return Distributor.probitD((state += 0x9E3779B97F4A7C15L) * 5.421010862427522E-20 + 0.5);
 	}
-//		return Ziggurat.normal(state += 0x9E3779B97F4A7C15L); // has severe problems when getting tuples of Gaussians
-
 
 	@Override
 	public float nextGaussianFloat() {

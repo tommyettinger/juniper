@@ -17,6 +17,8 @@
 
 package com.github.tommyettinger.random;
 
+import com.github.tommyettinger.digital.Distributor;
+
 import java.math.BigInteger;
 
 /**
@@ -128,7 +130,18 @@ public class LowChangeQuasiRandom extends EnhancedRandom {
         return s;
     }
 
-    @Override
+	@Override
+	public double nextGaussian() {
+		return Distributor.probitL(nextLong());
+	}
+
+	@Override
+	public float nextGaussianFloat() {
+		/* 5.421011E-20f is 0x1p-64f */
+		return Distributor.probitF(nextLong() * 5.421011E-20f + 0.5f);
+	}
+
+	@Override
     public LowChangeQuasiRandom copy() {
         return new LowChangeQuasiRandom(state, choice);
     }

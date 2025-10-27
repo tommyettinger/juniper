@@ -17,6 +17,8 @@
 
 package com.github.tommyettinger.random;
 
+import com.github.tommyettinger.digital.Distributor;
+
 import java.math.BigInteger;
 
 /**
@@ -153,6 +155,17 @@ public class LFSR64QuasiRandom extends EnhancedRandom {
 		final long lsb = (state & 1L);
 		state = ((state ^ (-lsb & 0xfeedbabedeadbeefL)) >>> 1) ^ lsb << 63;
 		return result;
+	}
+
+	@Override
+	public double nextGaussian() {
+		return Distributor.probitL(nextLong());
+	}
+
+	@Override
+	public float nextGaussianFloat() {
+		/* 5.421011E-20f is 0x1p-64f */
+		return Distributor.probitF(nextLong() * 5.421011E-20f + 0.5f);
 	}
 
 	@Override
