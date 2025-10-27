@@ -236,14 +236,23 @@ public class DistributedRandom extends EnhancedRandom {
 
     /**
      * This runs {@link Distributor#probitD(double)} on a distributed double this produces.
-     * @return a "Gaussian-ized" result of {@link #nextDouble()}
+     * @return a "Gaussian-ized" result of {@link #nextExclusiveDouble()}}
      */
     @Override
     public double nextGaussian() {
         return Distributor.probitD(nextExclusiveDouble());
     }
 
-    /**
+	/**
+	 * This runs {@link Distributor#probitF(float)} on a distributed float this produces.
+	 * @return a "Gaussian-ized" result of {@link #nextExclusiveFloat()}}
+	 */
+	@Override
+	public float nextGaussianFloat() {
+		return Distributor.probitF(nextExclusiveFloat());
+	}
+
+	/**
      * This does not use the optimizations from {@link EnhancedRandom#nextExclusiveDouble()}, because those aren't
      * reasonable when distributed.
      * @return a pseudo-random double between 0.0, exclusive, and 1.0, exclusive

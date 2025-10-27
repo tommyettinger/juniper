@@ -172,6 +172,16 @@ public class InterpolatedRandom extends EnhancedRandom {
         return Distributor.probitD(nextDouble());
     }
 
+
+    /**
+     * This runs {@link Distributor#probitF(float)} on a distributed float this produces.
+     * @return a "Gaussian-ized" result of {@link #nextFloat()}
+     */
+    @Override
+    public float nextGaussianFloat() {
+        return Distributor.probitF(nextFloat());
+    }
+
     /**
      * @return a pseudo-random double between 0.0, exclusive, and 1.0, exclusive
      */

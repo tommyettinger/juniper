@@ -241,6 +241,12 @@ public class VanDerCorputQuasiRandom extends EnhancedRandom {
 	}
 
 	@Override
+	public float nextGaussianFloat() {
+		/* 5.421011E-20f is 0x1p-64f */
+		return Distributor.probitF(Long.reverse(++state) * 5.421011E-20f + 0.5f);
+	}
+
+	@Override
 	public VanDerCorputQuasiRandom copy () {
 		return new VanDerCorputQuasiRandom(state);
 	}

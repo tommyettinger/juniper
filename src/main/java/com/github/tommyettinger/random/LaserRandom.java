@@ -833,6 +833,28 @@ public class LaserRandom extends EnhancedRandom {
 	}
 
 	/**
+	 * Returns the next pseudorandom, Gaussian ("normally") distributed
+	 * {@code float} value with mean {@code 0.0} and standard
+	 * deviation {@code 1.0} from this random number generator's sequence.
+	 * <p>
+	 * The implementation here was ported from code by
+	 * <a href="https://marc-b-reynolds.github.io/distribution/2021/03/18/CheapGaussianApprox.html">Marc B. Reynolds</a>
+	 * and modified to only require one call to {@link #nextLong()}.
+	 *
+	 * @return the next pseudorandom, Gaussian ("normally") distributed
+	 * {@code float} value with mean {@code 0.0} and standard deviation
+	 * {@code 1.0} from this random number generator's sequence
+	 */
+	@Override
+	public float nextGaussianFloat() {
+		final long x = nextLong();
+		final long c = Long.bitCount(x) - 32L << 16;
+		final long u = x * x + x; /* Note, this is always even, but it is unlikely to matter. */
+		return 0x1.fb760cp-19f * (c + (short)(u) - (u >> 48) - (short)(u >> 32) - (short)(u >> 16));
+
+	}
+
+	/**
 	 * Advances or rolls back the {@code LaserRandom}' state without actually generating each number. Skips forward
 	 * or backward a number of steps specified by advance, where a step is equal to one call to {@link #nextLong()},
 	 * and returns the random number produced at that step. Negative numbers can be used to step backward, or 0 can be

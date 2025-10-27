@@ -247,6 +247,19 @@ public class TupleQuasiRandom extends EnhancedRandom {
 				* MathTools.GOLDEN_LONGS[(int)(state & MASK)]) * 5.421010862427522E-20 + 0.5);
 	}
 
+	/**
+	 * This runs {@link Distributor#probitF(float)} on a distributed float this produces.
+	 * @return a "Gaussian-ized" result of {@link #nextExclusiveFloat()}
+	 */
+	@Override
+	public float nextGaussianFloat() {
+		/* 5.9604645E-8f is 0x1p-24f, 2.980232E-8f is 0x1.FFFFFEp-26f */
+		return Distributor.probitF(
+			((((state += 0x9E3779B97F4A7C15L) >>> shift)
+			* MathTools.GOLDEN_LONGS[(int)(state & MASK)]) >>> 40) * 5.9604645E-8f + 2.980232E-8f
+		);
+	}
+
 	@Override
 	public TupleQuasiRandom copy () {
 		return new TupleQuasiRandom(state);
