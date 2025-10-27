@@ -12,6 +12,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.UIUtils;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.github.tommyettinger.digital.Distributor;
+import com.github.tommyettinger.digital.RoughMath;
 import com.github.tommyettinger.random.GoldenQuasiRandom;
 import com.github.tommyettinger.random.distribution.NormalDistribution;
 
@@ -34,8 +36,6 @@ public class ZigguratLinnormalComparisonScreen extends ScreenAdapter {
     private static final int SMOOTHNESS = 4;
     private static final int RUNS = 0x10000 * SMOOTHNESS;
     private int offGraph = 0;
-
-    private static final double ROOTPI2 = Math.sqrt(Math.PI * 2.0);
 
     @Override
     public void show() {
@@ -111,10 +111,11 @@ public class ZigguratLinnormalComparisonScreen extends ScreenAdapter {
             } else offGraph++;
         }
         if((System.currentTimeMillis() >>> 13 & 1) == 0) {
+			// Prints ZIG
             for (int i = 0; i < RUNS; i++) {
                 int m = (int) ((dist.getMu() + dist.getSigma() *
 //                    Borg.probitHighPrecision(dist.generator.nextExclusiveDouble())
-                        com.github.tommyettinger.Distributor.normal(dist.generator.nextLong())
+                        Distributor.normal(dist.generator.nextLong())
 //                        com.github.tommyettinger.Distributor.probitF(dist.generator.nextExclusiveFloat())
 //                        Distributor.linearNormalF(dist.generator.nextInt())
                 )
@@ -138,12 +139,13 @@ public class ZigguratLinnormalComparisonScreen extends ScreenAdapter {
 //                } else offGraph++;
 //            }
         } else {
+			// Prints ROU
             for (int i = 0; i < RUNS; i++) {
                 int m = (int) ((dist.getMu() + dist.getSigma() *
 //                    Borg.probitHighPrecision(dist.generator.nextExclusiveDouble())
-                        com.github.tommyettinger.Distributor.probitF(dist.generator.nextExclusiveFloat())
-//                        com.github.tommyettinger.Distributor.normalF(dist.generator.nextInt())
-//                        Linnormal.linearNormal(dist.generator.nextLong())// | 0x7FC0000000000000L)
+					RoughMath.normalRough(dist.generator.nextLong())
+//				      Distributor.normalF(dist.generator.nextLong())
+//                    Linnormal.linearNormal(dist.generator.nextLong())// | 0x7FC0000000000000L)
                 )
                         * 128 + 256);
                 if (m >= 0 && m < 512)
@@ -181,7 +183,7 @@ public class ZigguratLinnormalComparisonScreen extends ScreenAdapter {
             renderer.vertex(x-1, (float) gauss, 0);
             renderer.color(-0x1.7677e8p125F); // CW Bright Red
             gauss = scale * Math.exp(-0.5 * ((xx - mu) * (xx - mu) / (sigma * sigma)));
-            renderer.vertex(x, (float) gauss, 0);
+            renderer.vertex(x, (int) gauss, 0);
         }
         renderer.end();
 
@@ -189,7 +191,7 @@ public class ZigguratLinnormalComparisonScreen extends ScreenAdapter {
         batch.begin();
         font.draw(batch, Stringf.format("ZigguratBorgComparisonScreen with A=%.3f, B=%.3f; C=%.3f; median=%.3f at %d FPS; %s with %d off-graph",
                 a, b, c, dist.getMedian(), Gdx.graphics.getFramesPerSecond(),
-                        ((System.currentTimeMillis() >>> 13 & 1) == 0) ? "ZIG" : "LIN", offGraph),
+                        ((System.currentTimeMillis() >>> 13 & 1) == 0) ? "ZIG" : "ROU", offGraph),
                 64, 522, 256+128, Align.center, true);
         font.draw(batch, "Lower parameters A/B/C by holding a, b, or c;\nhold Shift and A/B/C to raise.", 64, 500-6, 256+128, Align.center, true);
         font.draw(batch,

@@ -57,7 +57,8 @@ public class DistributorDemo extends Game {
 
 			alternateNormal
         };
-        screenIndex = screens.length - 1;
+        screenIndex = 0;
+//        screenIndex = screens.length - 1;
         setScreen(screens[screenIndex]);
     }
     public void nextScreen(){
