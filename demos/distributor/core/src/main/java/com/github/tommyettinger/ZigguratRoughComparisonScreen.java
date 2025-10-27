@@ -115,7 +115,7 @@ public class ZigguratRoughComparisonScreen extends ScreenAdapter {
             for (int i = 0; i < RUNS; i++) {
                 int m = (int) ((dist.getMu() + dist.getSigma() *
 //                    Borg.probitHighPrecision(dist.generator.nextExclusiveDouble())
-                        Distributor.normalF(dist.generator.nextLong())
+                        Distributor.normal(dist.generator.nextLong())
 //                        com.github.tommyettinger.Distributor.probitF(dist.generator.nextExclusiveFloat())
 //                        Distributor.linearNormalF(dist.generator.nextInt())
                 )

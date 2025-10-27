@@ -21,6 +21,7 @@ import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.digital.BitConversion;
 import com.github.tommyettinger.digital.Distributor;
 import com.github.tommyettinger.digital.MathTools;
+import com.github.tommyettinger.digital.RoughMath;
 
 import java.io.Externalizable;
 import java.io.IOException;
@@ -1160,6 +1161,52 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 */
 	public double nextGaussian(double mean, double stddev) {
 		return mean + stddev * nextGaussian();
+	}
+
+	/**
+	 * Returns the next pseudorandom, Gaussian ("normally") distributed
+	 * {@code float} value with mean {@code 0.0} and standard
+	 * deviation {@code 1.0} from this random number generator's sequence.
+	 * <p>
+	 * The general contract of {@code nextGaussianFloat} is that one
+	 * {@code float} value, chosen from (approximately) the usual
+	 * normal distribution with mean {@code 0.0} and standard deviation
+	 * {@code 1.0}, is pseudorandomly generated and returned.
+	 * <p>
+	 * This uses {@link RoughMath#normalRough(long)}, which actually appears to
+	 * approximate the normal distribution better than
+	 * {@link Distributor#normalF(long)}, though not quite as well as
+	 * {@link Distributor#normal(long)} (which is used by {@link #nextGaussian()}).
+	 * Like nextGaussian(), this requests exactly one long from the
+	 * generator's sequence (using {@link #nextLong()}). This makes it different
+	 * from code like java.util.Random's nextGaussian() method, which can (rarely)
+	 * fetch an arbitrarily higher number of random doubles.
+	 * <p>
+	 * The implementation here was ported from code by
+	 * <a href="https://marc-b-reynolds.github.io/distribution/2021/03/18/CheapGaussianApprox.html">Marc B. Reynolds</a>
+	 * and modified to only require one call to {@link #nextLong()}.
+	 *
+	 * @return the next pseudorandom, Gaussian ("normally") distributed
+	 * {@code float} value with mean {@code 0.0} and standard deviation
+	 * {@code 1.0} from this random number generator's sequence
+	 */
+	public float nextGaussianFloat() {
+		return RoughMath.normalRough(nextLong());
+	}
+
+	/**
+	 * Returns the next pseudorandom, Gaussian ("normally") distributed {@code float}
+	 * value with the specified mean and standard deviation from this random number generator's sequence.
+	 * <br>
+	 * This defaults to simply returning {@code mean + stddev * nextGaussianFloat()}.
+	 *
+	 * @param mean   the mean of the Gaussian distribution to be drawn from
+	 * @param stddev the standard deviation (square root of the variance)
+	 *               of the Gaussian distribution to be drawn from
+	 * @return a Gaussian distributed {@code float} with the specified mean and standard deviation
+	 */
+	public float nextGaussianFloat(float mean, float stddev) {
+		return mean + stddev * nextGaussianFloat();
 	}
 
 	/**
