@@ -24,6 +24,8 @@ package com.github.tommyettinger.random;
 import com.github.tommyettinger.digital.Distributor;
 
 /**
+ * The only method here delegates to {@link Distributor#normal(long)}. This class is here for backwards compatibility.
+ * <br>
  * An implementation of the Ziggurat method for generating normal-distributed random values. The Ziggurat method is not
  * an approximation, but is faster than some simple approximations while having higher statistical quality. This is not
  * an ideal implementation; it cannot produce as wide of an output range when compared to normal-distributing methods
@@ -47,7 +49,11 @@ import com.github.tommyettinger.digital.Distributor;
  *      Doornik, Jurgen A (2005):
  *      "An improved ziggurat method to generate normal random samples."
  *      University of Oxford: 77.
+ * @see Distributor Distributor is full of ways to generate normal-distributed variates.
+ * @see com.github.tommyettinger.digital.RoughMath#normalRough(long) RoughMath also has ways to generate normal-distributed floats.
+ * @deprecated {@link Distributor#normal(long)} should be used instead in the cases where this might be used.
  */
+@Deprecated
 public final class Ziggurat {
     /**
      * Should never be constructed.
@@ -69,7 +75,9 @@ public final class Ziggurat {
      *
      * @param state a long that should be sufficiently random; quasi-random longs may not be enough
      * @return a normal-distributed double with mean (mu) 0.0 and standard deviation (sigma) 1.0
+	 * @deprecated Use {@link Distributor#normal(long)} instead of this, which would just call it indirectly.
      */
+	@Deprecated
     public static double normal(long state) {
         return Distributor.normal(state);
     }
