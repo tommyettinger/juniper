@@ -86,7 +86,6 @@ dependencies {
     api "com.github.tommyettinger:digital:$digitalVersion"
     testImplementation "com.github.tommyettinger:jdkgdxds:$jdkgdxdsVersion"
     testImplementation "org.apache.fory:fory-core:$foryVersion"
-    //noinspection GDXOutdatedVersionGradleGroovy
     testImplementation "com.badlogicgames.gdx:gdx:$gdxVersion"
     testImplementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
     testImplementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
