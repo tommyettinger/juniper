@@ -1,3 +1,8 @@
+[0.8.5]
+- The dependency on digital has been updated to 0.9.5. This adds features to RoughMath and Distributor, but doesn't change any existing code.
+- EnhancedRandom.nextGaussianFloat() is new, and calls `RoughMath.normalRough(long)` by default. RoughMath's version seems to approximate the normal distribution more closely than the float-based Ziggurat algorithm in `Distributor.normalF(int)` or even the new one in `Distributor.normalF(long)`.
+- LCG64Random is new, and comes with warnings **not** to use it if you want a high-quality generator! It is mostly meant for seeing where patterns in the low-order bits can affect other algorithms adversely.
+
 [0.8.4]
 - The dependency on digital has been updated to 0.9.4. This has no changes other than removing an import that couldn't succeed on RoboVM.
 
