@@ -27,12 +27,12 @@ import java.math.BigInteger;
  */
 public class LCG48Random extends EnhancedRandom {
 	/**
-	 * Returns the String {@code "LCGR"}, which is the tag here.
-	 * @return the String {@code "LCGR"}
+	 * Returns the String {@code "L48R"}, which is the tag here.
+	 * @return the String {@code "L48R"}
 	 */
 	@Override
 	public String getTag() {
-		return "LCGR";
+		return "L48R";
 	}
 
 	/**
