@@ -26,6 +26,7 @@ import java.math.BigInteger;
 /**
  * Uses the full-period Square-Or-Minus operation as its state transition, and only does a little mixing after that.
  */
+@SuppressWarnings("ShiftOutOfRange")
 public class QomStage1Random extends EnhancedRandom {
 
 	/**
@@ -138,23 +139,23 @@ public class QomStage1Random extends EnhancedRandom {
 
 	@Override
 	public long nextLong () {
-		long x = state -= state * state | 1111111111111111111L;
-		return x ^ (x << 25 | x >> 39) ^ (x << 50 | x >> 14);
+		final long x = (state -= state * state | 1111111111111111111L); /* nineteen 1 digits, as decimal */
+		return x ^ (x << 25 | x >>> -25) ^ (x << 50 | x >>> -50);
 	}
 
 	private static final MathTools.LongToLongFunction inverseQom = MathTools.invertUpwardFunction(x -> x - (x * x | 1111111111111111111L));
 
 	@Override
 	public long previousLong () {
-		long x = state;
+		final long x = state;
 		state = inverseQom.applyAsLong(state);
-		return x ^ (x << 25 | x >> 39) ^ (x << 50 | x >> 14);
+		return x ^ (x << 25 | x >>> -25) ^ (x << 50 | x >>> -50);
 	}
 
 	@Override
 	public int next (int bits) {
-		long x = state -= state * state | 1111111111111111111L;
-		return (int)(x ^ (x << 25 | x >> 39) ^ (x << 50 | x >> 14)) >>> (32 - bits);
+		final long x = (state -= state * state | 1111111111111111111L);  /* nineteen 1 digits, as decimal */
+		return (int)(x ^ (x << 25 | x >>> -25) ^ (x << 50 | x >>> -50)) >>> (32 - bits);
 	}
 
 	@Override
