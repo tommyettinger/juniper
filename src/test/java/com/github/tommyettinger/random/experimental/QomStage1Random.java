@@ -138,23 +138,22 @@ public class QomStage1Random extends EnhancedRandom {
 
 	@Override
 	public long nextLong () {
-		long x = state;
-		state -= x * x | 0xB1D00F;
+		long x = state -= state * state | 1111111111111111111L;
 		return x ^ (x << 25 | x >> 39) ^ (x << 50 | x >> 14);
 	}
 
-	private static final MathTools.LongToLongFunction inverseQom = MathTools.invertUpwardFunction(x -> x - (x * x | 0xB1D00F));
+	private static final MathTools.LongToLongFunction inverseQom = MathTools.invertUpwardFunction(x -> x - (x * x | 1111111111111111111L));
 
 	@Override
 	public long previousLong () {
-		long x = state = inverseQom.applyAsLong(state);
+		long x = state;
+		state = inverseQom.applyAsLong(state);
 		return x ^ (x << 25 | x >> 39) ^ (x << 50 | x >> 14);
 	}
 
 	@Override
 	public int next (int bits) {
-		long x = state;
-		state -= x * x | 0xB1D00F;
+		long x = state -= state * state | 1111111111111111111L;
 		return (int)(x ^ (x << 25 | x >> 39) ^ (x << 50 | x >> 14)) >>> (32 - bits);
 	}
 

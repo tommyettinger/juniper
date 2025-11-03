@@ -113,6 +113,7 @@ public final class Generators {
 		randomList.add(new Amp2XsRandom(1));
 		randomList.add(new EnclaveRandom(1, 1));
 		randomList.add(new LCG64Random(1));
+		randomList.add(new QomStage1Random(1));
 	}
 
 	public static int randomCount = randomList.size();
