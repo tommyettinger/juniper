@@ -139,7 +139,8 @@ public class QomStage1Random extends EnhancedRandom {
 
 	@Override
 	public long nextLong () {
-		final long x = (state -= state * state | 1111111111111111111L); /* nineteen 1 digits, as decimal */
+		long x = (state -= state * state | 1111111111111111111L); /* nineteen 1 digits, as decimal */
+		x = (x ^ x >>> 28) * 5555555555555555555L;
 		return x ^ (x << 25 | x >>> -25) ^ (x << 50 | x >>> -50);
 	}
 
@@ -147,14 +148,16 @@ public class QomStage1Random extends EnhancedRandom {
 
 	@Override
 	public long previousLong () {
-		final long x = state;
+		long x = state;
 		state = inverseQom.applyAsLong(state);
+		x = (x ^ x >>> 28) * 5555555555555555555L;
 		return x ^ (x << 25 | x >>> -25) ^ (x << 50 | x >>> -50);
 	}
 
 	@Override
 	public int next (int bits) {
-		final long x = (state -= state * state | 1111111111111111111L);  /* nineteen 1 digits, as decimal */
+		long x = (state -= state * state | 1111111111111111111L);  /* nineteen 1 digits, as decimal */
+		x = (x ^ x >>> 28) * 5555555555555555555L;
 		return (int)(x ^ (x << 25 | x >>> -25) ^ (x << 50 | x >>> -50)) >>> (32 - bits);
 	}
 
