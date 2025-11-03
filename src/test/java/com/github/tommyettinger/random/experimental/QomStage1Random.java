@@ -17,6 +17,7 @@
 
 package com.github.tommyettinger.random.experimental;
 
+import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.digital.MathTools;
 import com.github.tommyettinger.random.EnhancedRandom;
 
@@ -138,11 +139,11 @@ public class QomStage1Random extends EnhancedRandom {
 	@Override
 	public long nextLong () {
 		long x = state;
-		state -= x * x | 7;
+		state -= x * x | 0xB1D00F;
 		return x ^ (x << 25 | x >> 39) ^ (x << 50 | x >> 14);
 	}
 
-	private static final MathTools.LongToLongFunction inverseQom = MathTools.invertUpwardFunction(x -> x - (x * x | 7));
+	private static final MathTools.LongToLongFunction inverseQom = MathTools.invertUpwardFunction(x -> x - (x * x | 0xB1D00F));
 
 	@Override
 	public long previousLong () {
@@ -153,7 +154,7 @@ public class QomStage1Random extends EnhancedRandom {
 	@Override
 	public int next (int bits) {
 		long x = state;
-		state -= x * x | 7;
+		state -= x * x | 0xB1D00F;
 		return (int)(x ^ (x << 25 | x >> 39) ^ (x << 50 | x >> 14)) >>> (32 - bits);
 	}
 
@@ -177,5 +178,63 @@ public class QomStage1Random extends EnhancedRandom {
 	@Override
 	public String toString () {
 		return "QomStage1Random{state=" + (state) + "L}";
+	}
+
+	public static void main(String[] args) {
+		QomStage1Random random = new QomStage1Random(1L);
+		{
+			int n0 = random.nextInt();
+			int n1 = random.nextInt();
+			int n2 = random.nextInt();
+			int n3 = random.nextInt();
+			int n4 = random.nextInt();
+			int n5 = random.nextInt();
+			int p5 = random.previousInt();
+			int p4 = random.previousInt();
+			int p3 = random.previousInt();
+			int p2 = random.previousInt();
+			int p1 = random.previousInt();
+			int p0 = random.previousInt();
+			System.out.println(n0 == p0);
+			System.out.println(n1 == p1);
+			System.out.println(n2 == p2);
+			System.out.println(n3 == p3);
+			System.out.println(n4 == p4);
+			System.out.println(n5 == p5);
+			System.out.println(Base.BASE16.unsigned(n0) + " vs. " + Base.BASE16.unsigned(p0));
+			System.out.println(Base.BASE16.unsigned(n1) + " vs. " + Base.BASE16.unsigned(p1));
+			System.out.println(Base.BASE16.unsigned(n2) + " vs. " + Base.BASE16.unsigned(p2));
+			System.out.println(Base.BASE16.unsigned(n3) + " vs. " + Base.BASE16.unsigned(p3));
+			System.out.println(Base.BASE16.unsigned(n4) + " vs. " + Base.BASE16.unsigned(p4));
+			System.out.println(Base.BASE16.unsigned(n5) + " vs. " + Base.BASE16.unsigned(p5));
+		}
+		random = new QomStage1Random(1L);
+		{
+			long n0 = random.nextLong(); System.out.printf("state: 0x%016XL\n", random.state);
+			long n1 = random.nextLong(); System.out.printf("state: 0x%016XL\n", random.state);
+			long n2 = random.nextLong(); System.out.printf("state: 0x%016XL\n", random.state);
+			long n3 = random.nextLong(); System.out.printf("state: 0x%016XL\n", random.state);
+			long n4 = random.nextLong(); System.out.printf("state: 0x%016XL\n", random.state);
+			long n5 = random.nextLong(); System.out.printf("state: 0x%016XL\n", random.state);
+			System.out.println("Going back...");
+			long p5 = random.previousLong(); System.out.printf("state: 0x%016XL\n", random.state);
+			long p4 = random.previousLong(); System.out.printf("state: 0x%016XL\n", random.state);
+			long p3 = random.previousLong(); System.out.printf("state: 0x%016XL\n", random.state);
+			long p2 = random.previousLong(); System.out.printf("state: 0x%016XL\n", random.state);
+			long p1 = random.previousLong(); System.out.printf("state: 0x%016XL\n", random.state);
+			long p0 = random.previousLong(); System.out.printf("state: 0x%016XL\n", random.state);
+			System.out.println(n0 == p0);
+			System.out.println(n1 == p1);
+			System.out.println(n2 == p2);
+			System.out.println(n3 == p3);
+			System.out.println(n4 == p4);
+			System.out.println(n5 == p5);
+			System.out.println(Base.BASE16.unsigned(n0) + " vs. " + Base.BASE16.unsigned(p0));
+			System.out.println(Base.BASE16.unsigned(n1) + " vs. " + Base.BASE16.unsigned(p1));
+			System.out.println(Base.BASE16.unsigned(n2) + " vs. " + Base.BASE16.unsigned(p2));
+			System.out.println(Base.BASE16.unsigned(n3) + " vs. " + Base.BASE16.unsigned(p3));
+			System.out.println(Base.BASE16.unsigned(n4) + " vs. " + Base.BASE16.unsigned(p4));
+			System.out.println(Base.BASE16.unsigned(n5) + " vs. " + Base.BASE16.unsigned(p5));
+		}
 	}
 }
