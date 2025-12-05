@@ -2,11 +2,11 @@ buildscript {
     repositories {
         mavenLocal()
         mavenCentral()
-        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        maven { url = "https://oss.sonatype.org/content/repositories/snapshots/" }
         gradlePluginPortal()
     }
     dependencies {
-        classpath 'com.vanniktech:gradle-maven-publish-plugin:0.34.0'
+        classpath 'com.vanniktech:gradle-maven-publish-plugin:0.35.0'
     }
 }
 
@@ -15,8 +15,8 @@ apply plugin: 'com.vanniktech.maven.publish'
 apply plugin: 'idea'
 
 def projectName = 'juniper'
-group 'com.github.tommyettinger'
-version "$VERSION_NAME"
+group = 'com.github.tommyettinger'
+version = "$VERSION_NAME"
 
 import com.vanniktech.maven.publish.JavaLibrary
 import com.vanniktech.maven.publish.JavadocJar
@@ -44,16 +44,16 @@ if (JavaVersion.current().isJava8Compatible()) {
 }
 
 compileJava {
-    sourceCompatibility = 8
-    targetCompatibility = 8
+    sourceCompatibility = "8"
+    targetCompatibility = "8"
     if (JavaVersion.current().isJava9Compatible()) {
         options.release.set(8)
     }
 }
 
 compileTestJava {
-    sourceCompatibility = 8
-    targetCompatibility = 8
+    sourceCompatibility = "8"
+    targetCompatibility = "8"
     if (JavaVersion.current().isJava9Compatible()) {
         options.release.set(8)
     }
@@ -67,7 +67,7 @@ idea.module.excludeDirs += [file("docs/")]
 javadoc.destinationDir = file('docs/apidocs')
 
 jar {
-    duplicatesStrategy DuplicatesStrategy.EXCLUDE
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     archiveBaseName.set(projectName)
     manifest {
         attributes 'Implementation-Title': projectName, 'Implementation-Version': archiveVersion
@@ -78,8 +78,8 @@ repositories {
     mavenLocal()
     mavenCentral()
     google()
-    maven { url 'https://central.sonatype.com/repository/maven-snapshots/' }
-//    maven { url 'https://jitpack.io' }
+    maven { url = 'https://central.sonatype.com/repository/maven-snapshots/' }
+//    maven { url = 'https://jitpack.io' }
 }
 
 dependencies {
