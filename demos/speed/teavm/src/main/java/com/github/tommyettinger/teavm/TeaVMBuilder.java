@@ -28,7 +28,7 @@ public class TeaVMBuilder {
 		TeaVMTool tool = new TeaVMTool();
 
 		// WASM is drastically faster for any RNGs that use `long` math.
-		tool.setTargetType(TeaVMTargetType.WEBASSEMBLY_GC);
+		tool.setTargetType(TeaVMTargetType.WEBASSEMBLY);
 		tool.setMainClass(TeaVMLauncher.class.getName());
 		// For many (or most) applications, using the highest optimization won't add much to build time.
 		// If your builds take too long, and runtime performance doesn't matter, you can change ADVANCED to SIMPLE .

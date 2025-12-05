@@ -66,7 +66,7 @@ clean.delete += [file("war")]
 //// anything can be built into that output directory, so the rest of the build can use it.
 tasks.named("compileJava").get().dependsOn("clean")
 
-//// You should always be running the dist task (which could be folded into the "other" group), not the build task.
+//// You should always use the dist task (which could be folded into the "other" group), not the build task.
 tasks.register('dist') {
 	dependsOn(["build"])
 	doLast {
@@ -119,6 +119,10 @@ tasks.register("distZip", Zip) {
 	destinationDirectory.set(file("build"))
 }
 
+//// The superDev task, which may be grouped under "gwt", allows updating your sources in your editor and
+//// seeing your changes as soon as you refresh in the browser. In the current form of development mode,
+//// this depends on dist, which may change in the future, and also pops up a Swing form (by GWT itself)
+//// to handle serving the local files and updating when you save changes in your editor.
 tasks.register('superDev') {
 	dependsOn("dist", "gwtDevMode")
 	group("gwt")
