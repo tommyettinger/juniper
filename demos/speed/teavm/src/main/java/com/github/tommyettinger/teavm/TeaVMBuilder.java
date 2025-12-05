@@ -24,8 +24,9 @@ public class TeaVMBuilder {
 		// Register any classes or packages that require reflection here:
 		// TeaReflectionSupplier.addReflectionClass("com.github.tommyettinger.reflect");
 
-		TeaBuilder.config(teaBuildConfiguration);
-		TeaVMTool tool = new TeaVMTool();
+//		TeaBuilder.config(teaBuildConfiguration);
+//		TeaVMTool tool = new TeaVMTool();
+		TeaVMTool tool = TeaBuilder.config(teaBuildConfiguration);
 
 		// WASM is drastically faster for any RNGs that use `long` math.
 		tool.setTargetType(TeaVMTargetType.WEBASSEMBLY_GC);
