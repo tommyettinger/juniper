@@ -1,25 +1,25 @@
 apply plugin: 'application'
 
 sourceSets.main.resources.srcDirs += [ rootProject.file('assets').path ]
-mainClassName = 'com.github.tommyettinger.lwjgl3.Lwjgl3Launcher'
+application.mainClass = 'com.github.tommyettinger.lwjgl3.Lwjgl3Launcher'
 eclipse.project.name = appName + '-lwjgl3'
 
-java.sourceCompatibility = 11
+java.sourceCompatibility = "11"
 compileJava {
-	sourceCompatibility = 11
-	targetCompatibility = 11
+	sourceCompatibility = "11"
+	targetCompatibility = "11"
 	if (JavaVersion.current().isJava9Compatible()) {
 		options.release.set(11)
 	}
 }
 
 if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_11)) {
-		compileTestJava.sourceCompatibility = 11
-		compileTestJava.targetCompatibility = 11
+		compileTestJava.sourceCompatibility = "11"
+		compileTestJava.targetCompatibility = "11"
 		compileTestJava.options.release.set(11)
 } else if (JavaVersion.current().isJava9Compatible()) {
-	compileTestJava.sourceCompatibility = 11
-	compileTestJava.targetCompatibility = 11
+	compileTestJava.sourceCompatibility = "11"
+	compileTestJava.targetCompatibility = "11"
 	compileTestJava.options.release.set(11)
 //	apply plugin: 'idea'
 //	idea.module.excludeDirs += [file("src/test/java/com/github/tommyettinger/random/")]
@@ -39,7 +39,7 @@ import org.gradle.internal.os.OperatingSystem
 run {
 	workingDir = rootProject.file('assets').path
 	setIgnoreExitValue(true)
-	
+
 	if (OperatingSystem.current() == OperatingSystem.MAC_OS) {
 		// Required to run LWJGL3 Java apps on MacOS
 		jvmArgs += "-XstartOnFirstThread"
@@ -50,7 +50,7 @@ jar {
 // sets the name of the .jar file this produces to the name of the game or app.
 	archiveBaseName.set(appName)
 // the duplicatesStrategy will matter starting in Gradle 7.0; this setting works.
-	duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 	dependsOn configurations.runtimeClasspath
 	from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
 // these "exclude" lines remove some unnecessary duplicate files in the output JAR.
@@ -60,7 +60,7 @@ jar {
 	}
 // setting the manifest makes the JAR runnable.
 	manifest {
-		attributes 'Main-Class': project.mainClassName
+		attributes 'Main-Class': application.mainClass, 'Enable-Native-Access': 'ALL-UNNAMED'
 	}
 // this last step may help on some OSes that need extra instruction to make runnable JARs.
 	doLast {
