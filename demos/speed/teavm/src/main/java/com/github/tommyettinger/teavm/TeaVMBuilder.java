@@ -36,7 +36,6 @@ public class TeaVMBuilder {
 		// Register any classes or packages that require reflection here:
 		// TeaReflectionSupplier.addReflectionClass("com.github.tommyettinger.reflect");
 
-
 		// JavaScript is the default target type for TeaVM, and it works better during debugging.
 //		teaBuildConfiguration.targetType = TeaVMTargetType.JAVASCRIPT;
 		// You can choose to use the WebAssembly (WASM) GC target instead, which tends to perform better, but isn't
