@@ -1,0 +1,1 @@
+Lowest mode: 78.00000 has mean amount 0.0242597684  FAIL 💀 for HoofRandom
