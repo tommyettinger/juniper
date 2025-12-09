@@ -118,8 +118,9 @@ public class InitialCorrelationEvaluator {
 //                new OrbitalButWorseRandom(1, 1), new OrbitRXSMXSRandom(1, 1), new OrbitalRandom(1, 1),
 //                new DistinctRandom(1));
 
-        List<EnhancedRandom> rs =
-                Generators.randomList.subList(Generators.randomCount - 1, Generators.randomCount);
+		List<EnhancedRandom> rs =
+			Generators.randomList;
+//                Generators.randomList.subList(Generators.randomCount - 1, Generators.randomCount);
 //        List<EnhancedRandom> rs = ObjectList.with(
 //                new I64LFSR64MX3Random(1, 1)
 //        );
