@@ -116,6 +116,7 @@ public final class Generators {
 		randomList.add(new QomStage1Random(1));
 		randomList.add(new QomStage0Random(1));
 		randomList.add(new HoofRandom(1, 1));
+		randomList.add(new Hoof2Random(1, 1));
 	}
 
 	public static int randomCount = randomList.size();
