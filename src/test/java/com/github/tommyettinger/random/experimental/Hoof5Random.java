@@ -37,7 +37,7 @@ import java.math.BigInteger;
  * involved and a few constants, uses only relatively "memorable" numbers, so this could be pulled up in an interview or
  * some similar memory-based situation.
  */
-public class Hoof4Random extends EnhancedRandom {
+public class Hoof5Random extends EnhancedRandom {
 
 	/**
 	 * The first (LFSR) state; can be any long except 0.
@@ -49,33 +49,33 @@ public class Hoof4Random extends EnhancedRandom {
 	protected long stateB;
 
 	/**
-	 * Creates a new Hoof4Random with a random state.
+	 * Creates a new Hoof3Random with a random state.
 	 */
-	public Hoof4Random() {
+	public Hoof5Random() {
 		super();
 		stateA = EnhancedRandom.seedFromMath();
 		stateB = EnhancedRandom.seedFromMath();
 	}
 
 	/**
-	 * Creates a new Hoof4Random with the given seed; all {@code long} values are permitted.
+	 * Creates a new Hoof3Random with the given seed; all {@code long} values are permitted.
 	 * The seed will be passed to {@link #setSeed(long)} to attempt to adequately distribute the seed randomly.
 	 *
 	 * @param seed any {@code long} value
 	 */
-	public Hoof4Random(long seed) {
+	public Hoof5Random(long seed) {
 		super(seed);
 		setSeed(seed);
 	}
 
 	/**
-	 * Creates a new Hoof4Random with the given two states; all {@code long} values are permitted except 0 for
+	 * Creates a new Hoof3Random with the given two states; all {@code long} values are permitted except 0 for
 	 * stateA. If stateA is given as 0, {@code 0x9E3779B97F4A7C15L} (or {@code -7046029254386353131L}) is used instead.
 	 *
 	 * @param stateA any {@code long} value except 0
 	 * @param stateB any {@code long} value
 	 */
-	public Hoof4Random(long stateA, long stateB) {
+	public Hoof5Random(long stateA, long stateB) {
 		super(stateA);
 		this.stateA = stateA;
 		this.stateB = stateB;
@@ -83,7 +83,7 @@ public class Hoof4Random extends EnhancedRandom {
 
 	@Override
 	public String getTag() {
-		return "Hf4R";
+		return "Hf5R";
 	}
 
 	/**
@@ -204,10 +204,9 @@ public class Hoof4Random extends EnhancedRandom {
 
 	@Override
 	public long nextLong () {
-		long z = (stateA ^ stateB);
-		stateA += 5555555555555555555L + BitConversion.countLeadingZeros(stateB);
-		stateB += 7777777777777777777L;
-		z ^= z >>> 28;
+		long z = (stateA ^ (stateB << 36 | stateB >>> 28));
+		stateA += 3333333333333333333L + BitConversion.countLeadingZeros(stateB);
+		stateB += 5555555555555555555L;
 		z ^= z * z | 29L;
 		z ^= z >>> 30;
 		z ^= z * z | 31L;
@@ -217,10 +216,9 @@ public class Hoof4Random extends EnhancedRandom {
 
 	@Override
 	public int next (int bits) {
-		long z = (stateA ^ stateB);
-		stateA += 5555555555555555555L + BitConversion.countLeadingZeros(stateB);
-		stateB += 7777777777777777777L;
-		z ^= z >>> 28;
+		long z = (stateA ^ (stateB << 36 | stateB >>> 28));
+		stateA += 3333333333333333333L + BitConversion.countLeadingZeros(stateB);
+		stateB += 5555555555555555555L;
 		z ^= z * z | 29L;
 		z ^= z >>> 30;
 		z ^= z * z | 31L;
@@ -230,10 +228,9 @@ public class Hoof4Random extends EnhancedRandom {
 
 	@Override
 	public long previousLong () {
-		stateB -= 7777777777777777777L;
-		stateA -= 5555555555555555555L + BitConversion.countLeadingZeros(stateB);
-		long z = stateA ^ stateB;
-		z ^= z >>> 28;
+		stateB -= 5555555555555555555L;
+		stateA -= 3333333333333333333L + BitConversion.countLeadingZeros(stateB);
+		long z = stateA ^ (stateB << 36 | stateB >>> 28);
 		z ^= z * z | 29L;
 		z ^= z >>> 30;
 		z ^= z * z | 31L;
@@ -248,9 +245,8 @@ public class Hoof4Random extends EnhancedRandom {
 	 * @return the result of what nextLong() would return if it was called at the state this jumped to
 	 */
 	public long leap() {
-		long z = (stateA ^ stateB);
-		stateB += 7777777777777777777L;
-		z ^= z >>> 28;
+		long z = (stateA ^ (stateB << 36 | stateB >>> 28));
+		stateB += 5555555555555555555L;
 		z ^= z * z | 29L;
 		z ^= z >>> 30;
 		z ^= z * z | 31L;
@@ -259,8 +255,8 @@ public class Hoof4Random extends EnhancedRandom {
 	}
 
 	@Override
-	public Hoof4Random copy () {
-		return new Hoof4Random(stateA, stateB);
+	public Hoof5Random copy () {
+		return new Hoof5Random(stateA, stateB);
 	}
 
 	@Override
@@ -270,7 +266,7 @@ public class Hoof4Random extends EnhancedRandom {
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		Hoof4Random that = (Hoof4Random)o;
+		Hoof5Random that = (Hoof5Random)o;
 
 		if (stateA != that.stateA)
 			return false;
@@ -278,11 +274,11 @@ public class Hoof4Random extends EnhancedRandom {
 	}
 
 	public String toString () {
-		return "Hoof4Random{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L}";
+		return "Hoof3Random{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L}";
 	}
 
 	public static void main(String[] args) {
-		Hoof4Random random = new Hoof4Random(1L);
+		Hoof5Random random = new Hoof5Random(1L);
 		{
 			int n0 = random.nextInt();
 			int n1 = random.nextInt();
@@ -309,7 +305,7 @@ public class Hoof4Random extends EnhancedRandom {
 			System.out.println(Base.BASE16.unsigned(n4) + " vs. " + Base.BASE16.unsigned(p4));
 			System.out.println(Base.BASE16.unsigned(n5) + " vs. " + Base.BASE16.unsigned(p5));
 		}
-		random = new Hoof4Random(1L);
+		random = new Hoof5Random(1L);
 		{
 			long n0 = random.nextLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL\n", random.stateA, random.stateB);
 			long n1 = random.nextLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL\n", random.stateA, random.stateB);

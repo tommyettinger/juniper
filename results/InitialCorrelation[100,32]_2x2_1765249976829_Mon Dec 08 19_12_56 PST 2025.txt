@@ -1,0 +1,1 @@
+Lowest mode: 115.0000 has mean amount 0.0311401039  PASS 👍 for Hoof5Random

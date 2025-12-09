@@ -119,6 +119,7 @@ public final class Generators {
 		randomList.add(new Hoof2Random(1, 1));
 		randomList.add(new Hoof3Random(1, 1));
 		randomList.add(new Hoof4Random(1, 1));
+		randomList.add(new Hoof5Random(1, 1));
 	}
 
 	public static int randomCount = randomList.size();
