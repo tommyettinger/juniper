@@ -1,0 +1,1 @@
+[Immediate] Lowest mode: 116.0000 has mean amount 0.0310911536  PASS 👍 for Hoof3Random
