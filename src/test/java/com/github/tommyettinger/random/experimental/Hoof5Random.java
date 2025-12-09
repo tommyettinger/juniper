@@ -25,22 +25,20 @@ import java.math.BigInteger;
 
 /**
  * Like {@link com.github.tommyettinger.random.HornRandom}, and similarly ram-themed, but with a longer period by using
- * a simple LFSR as part of its state update, and a simpler mixing step.
+ * an OrbitRandom-style dependent counter as part of its state update.
  * <br>
- * The 64-bit LFSR was found by <a href="https://github.com/hayguen/mlpolygen">mlpolygen</a>.
  * The xor-square-or constant can be any int where the last 3 bits are 0b101 (which they are here) or 0b111.
  * The additive increment 5555555555555555555L (nineteen 5's, as decimal) was chosen because it's memorable but has a
- * fittingly-random-seeming bit distribution.
- * <br>
- * This is largely an excuse to use the hex constant {@code 0xfeedbabedeadbeefL} in production, since it is somehow made
- * of real words and is also still a full-period LFSR polynomial. This also, assuming you can remember the operations
- * involved and a few constants, uses only relatively "memorable" numbers, so this could be pulled up in an interview or
- * some similar memory-based situation.
+ * fittingly-random-seeming bit distribution; the same is true of 3333333333333333333L (nineteen 3's). All right-shifts
+ * and xor-square-or constants are increments of the previous one used, starting at 28. This includes the right-shift as
+ * part of a bitwise rotation.
+ * Assuming you can remember the operations involved and a few constants, this uses only relatively "memorable" numbers,
+ * so this could be pulled up in an interview or some similar memory-based situation.
  */
 public class Hoof5Random extends EnhancedRandom {
 
 	/**
-	 * The first (LFSR) state; can be any long except 0.
+	 * The first (dependent counter) state; can be any long.
 	 */
 	protected long stateA;
 	/**
@@ -49,7 +47,7 @@ public class Hoof5Random extends EnhancedRandom {
 	protected long stateB;
 
 	/**
-	 * Creates a new Hoof3Random with a random state.
+	 * Creates a new Hoof5Random with a random state.
 	 */
 	public Hoof5Random() {
 		super();
@@ -58,7 +56,7 @@ public class Hoof5Random extends EnhancedRandom {
 	}
 
 	/**
-	 * Creates a new Hoof3Random with the given seed; all {@code long} values are permitted.
+	 * Creates a new Hoof5Random with the given seed; all {@code long} values are permitted.
 	 * The seed will be passed to {@link #setSeed(long)} to attempt to adequately distribute the seed randomly.
 	 *
 	 * @param seed any {@code long} value
@@ -69,10 +67,9 @@ public class Hoof5Random extends EnhancedRandom {
 	}
 
 	/**
-	 * Creates a new Hoof3Random with the given two states; all {@code long} values are permitted except 0 for
-	 * stateA. If stateA is given as 0, {@code 0x9E3779B97F4A7C15L} (or {@code -7046029254386353131L}) is used instead.
+	 * Creates a new Hoof5Random with the given two states; all {@code long} values are permitted.
 	 *
-	 * @param stateA any {@code long} value except 0
+	 * @param stateA any {@code long} value
 	 * @param stateB any {@code long} value
 	 */
 	public Hoof5Random(long stateA, long stateB) {
@@ -151,15 +148,13 @@ public class Hoof5Random extends EnhancedRandom {
 	 */
 	@Override
 	public void setSeed (long seed) {
-		long x = (seed + 0x9E3779B97F4A7C15L);
-		x ^= x >>> 32;
-		x *= 0xBEA225F9EB34556DL;
-		x ^= x >>> 29;
-		stateA = x;
-		x *= 0xBEA225F9EB34556DL;
-		x ^= x >>> 32;
-		x *= 0xBEA225F9EB34556DL;
-		stateB = x ^ x >>> 29;
+		long z = (seed ^ 3333333333333333333L) * 5555555555555555555L;
+		z ^= z * z | 29L;
+		z ^= z >>> 30;
+		stateA = (z ^ 3333333333333333333L) * 5555555555555555555L;
+		z ^= z * z | 31L;
+		z ^= z >>> 32;
+		stateB = (z ^ 3333333333333333333L) * 5555555555555555555L;
 	}
 
 	public long getStateA () {
@@ -167,9 +162,9 @@ public class Hoof5Random extends EnhancedRandom {
 	}
 
 	/**
-	 * Sets the first (LFSR) part of the state.
+	 * Sets the first (dependent counter) part of the state.
 	 *
-	 * @param stateA can be any long except 0
+	 * @param stateA can be any long
 	 */
 	public void setStateA (long stateA) {
 		this.stateA = stateA;
@@ -274,7 +269,7 @@ public class Hoof5Random extends EnhancedRandom {
 	}
 
 	public String toString () {
-		return "Hoof3Random{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L}";
+		return "Hoof5Random{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L}";
 	}
 
 	public static void main(String[] args) {
