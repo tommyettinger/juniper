@@ -30,8 +30,7 @@ import java.math.BigInteger;
  * The xor-square-or constant can be any int where the last 3 bits are 0b101 (which they are here) or 0b111.
  * The additive increment 555555555 (nine 5's, as decimal) was chosen because it's memorable but has a
  * fittingly-random-seeming bit distribution; the same is true of 333333333 (nine 3's). All right-shifts
- * and xor-square-or constants are increments of the previous one used, starting at 12. This includes the right-shift as
- * part of a bitwise rotation.
+ * and xor-square-or constants are 15. This includes the right-shift as part of a bitwise rotation.
  * <br>
  * Assuming you can remember the operations involved and a few constants, this uses only relatively "memorable" numbers,
  * so this could be pulled up in an interview or some similar memory-based situation.
@@ -206,13 +205,13 @@ public class Hoofsy32Random extends EnhancedRandom {
 
 	@Override
 	public int nextInt() {
-		int z = (stateA ^ (stateB << 20 | stateB >>> 12));
+		int z = (stateA ^ (stateB << 17 | stateB >>> 15));
 		stateA = stateA + 333333333 + BitConversion.countLeadingZeros(stateB) | 0;
 		stateB = stateB + 555555555 | 0;
-		z ^= BitConversion.imul(z, z) | 13;
-		z ^= z >>> 14;
-		z ^= BitConversion.imul(z, z) | 31;
-		z ^= z >>> 16;
+		z ^= BitConversion.imul(z, z) | 15;
+		z ^= z >>> 15;
+		z ^= BitConversion.imul(z, z) | 15;
+		z ^= z >>> 15;
 		return z;
 
 	}
@@ -221,24 +220,24 @@ public class Hoofsy32Random extends EnhancedRandom {
 	public int previousInt() {
 		stateB = stateB - 555555555 | 0;
 		stateA = stateA - 333333333 - BitConversion.countLeadingZeros(stateB) | 0;
-		int z = (stateA ^ (stateB << 20 | stateB >>> 12));
-		z ^= BitConversion.imul(z, z) | 13;
-		z ^= z >>> 14;
-		z ^= BitConversion.imul(z, z) | 31;
-		z ^= z >>> 16;
+		int z = (stateA ^ (stateB << 17 | stateB >>> 15));
+		z ^= BitConversion.imul(z, z) | 15;
+		z ^= z >>> 15;
+		z ^= BitConversion.imul(z, z) | 15;
+		z ^= z >>> 15;
 		return z;
 
 	}
 
 	@Override
 	public int next (int bits) {
-		int z = (stateA ^ (stateB << 20 | stateB >>> 12));
+		int z = (stateA ^ (stateB << 17 | stateB >>> 15));
 		stateA = stateA + 333333333 + BitConversion.countLeadingZeros(stateB) | 0;
 		stateB = stateB + 555555555 | 0;
-		z ^= BitConversion.imul(z, z) | 13;
-		z ^= z >>> 14;
-		z ^= BitConversion.imul(z, z) | 31;
-		z ^= z >>> 16;
+		z ^= BitConversion.imul(z, z) | 15;
+		z ^= z >>> 15;
+		z ^= BitConversion.imul(z, z) | 15;
+		z ^= z >>> 15;
 		return z >>> 32 - bits;
 	}
 
@@ -254,19 +253,19 @@ public class Hoofsy32Random extends EnhancedRandom {
 	 * @return the result of what nextLong() would return if it was called at the state this jumped to
 	 */
 	public long leap() {
-		int hi = (stateA ^ (stateB << 20 | stateB >>> 12));
+		int hi = (stateA ^ (stateB << 17 | stateB >>> 15));
 		stateB = stateB + 555555555 | 0;
-		hi ^= BitConversion.imul(hi, hi) | 13;
+		hi ^= BitConversion.imul(hi, hi) | 15;
 		hi ^= hi >>> 14;
-		hi ^= BitConversion.imul(hi, hi) | 31;
+		hi ^= BitConversion.imul(hi, hi) | 15;
 		hi ^= hi >>> 16;
 
-		int lo = (stateA ^ (stateB << 20 | stateB >>> 12));
+		int lo = (stateA ^ (stateB << 17 | stateB >>> 15));
 		stateA = stateA + 333333333 + BitConversion.countLeadingZeros(stateB) | 0;
 		stateB = stateB + 555555555 | 0;
-		lo ^= BitConversion.imul(lo, lo) | 13;
+		lo ^= BitConversion.imul(lo, lo) | 15;
 		lo ^= lo >>> 14;
-		lo ^= BitConversion.imul(lo, lo) | 31;
+		lo ^= BitConversion.imul(lo, lo) | 15;
 		lo ^= lo >>> 16;
 
 		return (long)hi << 32 ^ lo;

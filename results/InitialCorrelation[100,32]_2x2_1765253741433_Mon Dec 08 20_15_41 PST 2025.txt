@@ -1,0 +1,1 @@
+Lowest mode: 117.0000 has mean amount 0.0310816168  PASS 👍 for Hoofsy32Random
