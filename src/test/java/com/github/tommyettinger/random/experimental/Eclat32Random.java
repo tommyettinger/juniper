@@ -19,7 +19,6 @@ package com.github.tommyettinger.random.experimental;
 
 import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.digital.BitConversion;
-import com.github.tommyettinger.digital.MathTools;
 import com.github.tommyettinger.random.EnhancedRandom;
 
 import java.math.BigInteger;
@@ -28,13 +27,26 @@ import java.math.BigInteger;
  * Like {@link com.github.tommyettinger.random.HornRandom}, but using 32-bit math for its
  * {@link #next(int)}, {@link #nextInt()}, and {@link #previousInt()} methods, and meant to be portable to JS.
  * <br>
+ * This generator natively generates 32-bit results, and has two 32-bit states. It has the maximum period for a
+ * generator with its state size, at (2 to the 64) exactly. All int values are valid for both stateA and stateB.
+ * <br>
+ * This does not pass immediate correlation tests convincingly, but it gets surprisingly close. Avoiding correlation
+ * between initial states wasn't a design goal here; having a full period was much more important, and adding some extra
+ * steps to the processing would likely get this to pass correlation tests but would slow it down. It passes at least
+ * 2 TB of PractRand with no anomalies.
+ * <br>
  * This uses three "big constants," which each follow a pattern: nine 7's in a row (as a decimal number), nine 5's in a
  * row, and nine 3's in a row. It uses 3 rotation constants, which each end in '5': 15, 5, and 25. Other than that and
  * the specific operations this uses, there are no "messy" constants to remember, and the bulk of the algorithm is just
  * 4 lines of code for {@link #nextInt()}.
  * <br>
+ * This is meant to be portable to JS by using its {@code Math.imul()} and {@code Math.clz32()} functions. The order in
+ * which the arithmetic runs matters; executing imul() last ensures that its output will be a 32-bit integer, and that
+ * if either input was outside 32-bit int bounds, it would be corrected before use. Any modifications to the states for
+ * producing an output use bitwise math, so they won't exceed int bounds, either, on JS.
+ * <br>
  * "Éclat" is French for "flash (of light)" and this is meant to operate "in a flash" (with minimal extra processing on
- * its state transition).
+ * its state transition). The "Ec" is also a nod to ECMAScript.
  */
 @SuppressWarnings({"ShiftOutOfRange", "PointlessBitwiseExpression"})
 public class Eclat32Random extends EnhancedRandom {
@@ -108,6 +120,15 @@ public class Eclat32Random extends EnhancedRandom {
 	@Override
 	public int getStateCount () {
 		return 2;
+	}
+
+	/**
+	 * Eclat32Random mainly generates int values.
+	 * @return true
+	 */
+	@Override
+	public boolean mainlyGeneratesInt() {
+		return true;
 	}
 
 	/**
@@ -213,9 +234,10 @@ public class Eclat32Random extends EnhancedRandom {
 
 	@Override
 	public int previousInt() {
-		// TODO: calculate these inverses beforehand.
-		stateB = BitConversion.imul(stateB, MathTools.modularMultiplicativeInverse(333333333)) - 555555555 | 0;
-		stateA = BitConversion.imul(stateA, MathTools.modularMultiplicativeInverse(777777777)) - BitConversion.countLeadingZeros(stateB) | 0;
+		/* -1627151875 is modularMultiplicativeInverse(333333333)*/
+		stateB = BitConversion.imul(stateB, -1627151875) - 555555555 | 0;
+		/* -83784047 is modularMultiplicativeInverse(777777777)*/
+		stateA = BitConversion.imul(stateA, -83784047) - BitConversion.countLeadingZeros(stateB) | 0;
 		int z = (stateA ^ (stateB << 15 | stateB >>> -15));
 		return z ^ (z << 5 | z >>> -5) ^ (z << 25 | z >>> -25);
 	}

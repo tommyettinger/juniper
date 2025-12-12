@@ -1,0 +1,1 @@
+[Immediate] Lowest mode: 102.0000 has mean amount 0.0238105058  FAIL 💀 for Eclat32Random
