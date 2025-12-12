@@ -17,7 +17,6 @@
 
 package com.github.tommyettinger.random.experimental;
 
-import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.digital.BitConversion;
 import com.github.tommyettinger.random.EnhancedRandom;
 
@@ -274,6 +273,116 @@ public class Eclat32Random extends EnhancedRandom {
 	}
 
 	@Override
+	public int nextInt (int bound) {
+		return (int)(bound * (nextInt() & 0xFFFFFFFFL) >> 32) & ~(bound >> 31);
+	}
+
+	@Override
+	public int nextSignedInt (int outerBound) {
+		outerBound = (int)(outerBound * (nextInt() & 0xFFFFFFFFL) >> 32);
+		return outerBound + (outerBound >>> 31);
+	}
+
+	@Override
+	public int nextUnsignedInt(int bound) {
+		return (int)((bound & 0xFFFFFFFFL) * (nextInt() & 0xFFFFFFFFL) >>> 32);
+	}
+
+	@Override
+	public void nextBytes (byte[] bytes) {
+		if (bytes != null) {
+			for (int i = 0; i < bytes.length; ) {
+				int r = nextInt();
+				for (int n = Math.min(bytes.length - i, 4); n-- > 0; r >>>= 8) {
+					bytes[i++] = (byte) r;
+				}
+			}
+		}
+	}
+
+	@Override
+	public int nextInt(int innerBound, int outerBound) {
+		return (int)(innerBound + ((((outerBound - innerBound) & 0xFFFFFFFFL) * (nextInt() & 0xFFFFFFFFL) >>> 32) & ~((long)outerBound - (long)innerBound >> 63)));
+	}
+
+	@Override
+	public int nextSignedInt(int innerBound, int outerBound) {
+		return innerBound + (int)(((outerBound - innerBound) & 0xFFFFFFFFL) * (nextInt() & 0xFFFFFFFFL) >>> 32);
+	}
+
+	@Override
+	public long nextLong(long bound) {
+		final long randLow = nextInt();
+		final long randHigh = nextInt();
+		if (1 >= bound)
+			return 0;
+		final long boundLow = bound & 0xFFFFFFFFL;
+		final long boundHigh = (bound >>> 32);
+		return (randHigh * boundLow >>> 32) + (randLow * boundHigh >>> 32) + randHigh * boundHigh;
+	}
+
+	@Override
+	public long nextSignedLong(long outer) {
+		long inner;
+		if (outer < 0) {
+			long t = outer;
+			outer = 1L;
+			inner = t + 1L;
+		} else {
+			inner = 0L;
+		}
+		final long bound = outer - inner;
+		final long randLow = nextInt();
+		final long randHigh = nextInt();
+		final long boundLow = bound & 0xFFFFFFFFL;
+		final long boundHigh = (bound >>> 32);
+		return inner + (randHigh * boundLow >>> 32) + (randLow * boundHigh >>> 32) + randHigh * boundHigh;
+	}
+
+	@Override
+	public long nextLong (long inner, long outer) {
+		final long randLow = nextInt();
+		final long randHigh = nextInt();
+		if (inner >= outer)
+			return inner;
+		final long bound = outer - inner;
+		final long boundLow = bound & 0xFFFFFFFFL;
+		final long boundHigh = (bound >>> 32);
+		return inner + (randHigh * boundLow >>> 32) + (randLow * boundHigh >>> 32) + randHigh * boundHigh;
+	}
+
+	@Override
+	public long nextSignedLong (long inner, long outer) {
+		if (outer < inner) {
+			long t = outer;
+			outer = inner + 1L;
+			inner = t + 1L;
+		}
+		final long bound = outer - inner;
+		final long randLow = nextInt() & 0xFFFFFFFFL;
+		final long randHigh = nextInt() & 0xFFFFFFFFL;
+		final long boundLow = bound & 0xFFFFFFFFL;
+		final long boundHigh = (bound >>> 32);
+		return inner + (randHigh * boundLow >>> 32) + (randLow * boundHigh >>> 32) + randHigh * boundHigh;
+	}
+
+	@Override
+	public boolean nextBoolean ()
+	{
+		return nextInt() < 0;
+	}
+
+	@Override
+	public float nextFloat () {
+		return (nextInt() >>> 8) * 0x1p-24f;
+	}
+
+	@Override
+	public float nextInclusiveFloat () {
+		return (0x1000001L * (nextInt() & 0xFFFFFFFFL) >> 32) * 0x1p-24f;
+	}
+
+	@Override
 	public Eclat32Random copy () {
 		return new Eclat32Random(stateA, stateB);
 	}
@@ -296,61 +405,61 @@ public class Eclat32Random extends EnhancedRandom {
 		return "Eclat32Random{" + "stateA=" + (stateA) + ", stateB=" + (stateB) + "}";
 	}
 
-	public static void main(String[] args) {
-		Eclat32Random random = new Eclat32Random(1L);
-		{
-			int n0 = random.nextInt();
-			int n1 = random.nextInt();
-			int n2 = random.nextInt();
-			int n3 = random.nextInt();
-			int n4 = random.nextInt();
-			int n5 = random.nextInt();
-			int p5 = random.previousInt();
-			int p4 = random.previousInt();
-			int p3 = random.previousInt();
-			int p2 = random.previousInt();
-			int p1 = random.previousInt();
-			int p0 = random.previousInt();
-			System.out.println(n0 == p0);
-			System.out.println(n1 == p1);
-			System.out.println(n2 == p2);
-			System.out.println(n3 == p3);
-			System.out.println(n4 == p4);
-			System.out.println(n5 == p5);
-			System.out.println(Base.BASE16.unsigned(n0) + " vs. " + Base.BASE16.unsigned(p0));
-			System.out.println(Base.BASE16.unsigned(n1) + " vs. " + Base.BASE16.unsigned(p1));
-			System.out.println(Base.BASE16.unsigned(n2) + " vs. " + Base.BASE16.unsigned(p2));
-			System.out.println(Base.BASE16.unsigned(n3) + " vs. " + Base.BASE16.unsigned(p3));
-			System.out.println(Base.BASE16.unsigned(n4) + " vs. " + Base.BASE16.unsigned(p4));
-			System.out.println(Base.BASE16.unsigned(n5) + " vs. " + Base.BASE16.unsigned(p5));
-		}
-		random = new Eclat32Random(1L);
-		{
-			long n0 = random.nextLong(); System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
-			long n1 = random.nextLong(); System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
-			long n2 = random.nextLong(); System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
-			long n3 = random.nextLong(); System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
-			long n4 = random.nextLong(); System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
-			long n5 = random.nextLong(); System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
-			System.out.println("Going back...");
-			long p5 = random.previousLong(); System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
-			long p4 = random.previousLong(); System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
-			long p3 = random.previousLong(); System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
-			long p2 = random.previousLong(); System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
-			long p1 = random.previousLong(); System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
-			long p0 = random.previousLong(); System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
-			System.out.println(n0 == p0);
-			System.out.println(n1 == p1);
-			System.out.println(n2 == p2);
-			System.out.println(n3 == p3);
-			System.out.println(n4 == p4);
-			System.out.println(n5 == p5);
-			System.out.println(Base.BASE16.unsigned(n0) + " vs. " + Base.BASE16.unsigned(p0));
-			System.out.println(Base.BASE16.unsigned(n1) + " vs. " + Base.BASE16.unsigned(p1));
-			System.out.println(Base.BASE16.unsigned(n2) + " vs. " + Base.BASE16.unsigned(p2));
-			System.out.println(Base.BASE16.unsigned(n3) + " vs. " + Base.BASE16.unsigned(p3));
-			System.out.println(Base.BASE16.unsigned(n4) + " vs. " + Base.BASE16.unsigned(p4));
-			System.out.println(Base.BASE16.unsigned(n5) + " vs. " + Base.BASE16.unsigned(p5));
-		}
-	}
+//	public static void main(String[] args) {
+//		Eclat32Random random = new Eclat32Random(1L);
+//		{
+//			int n0 = random.nextInt();
+//			int n1 = random.nextInt();
+//			int n2 = random.nextInt();
+//			int n3 = random.nextInt();
+//			int n4 = random.nextInt();
+//			int n5 = random.nextInt();
+//			int p5 = random.previousInt();
+//			int p4 = random.previousInt();
+//			int p3 = random.previousInt();
+//			int p2 = random.previousInt();
+//			int p1 = random.previousInt();
+//			int p0 = random.previousInt();
+//			System.out.println(n0 == p0);
+//			System.out.println(n1 == p1);
+//			System.out.println(n2 == p2);
+//			System.out.println(n3 == p3);
+//			System.out.println(n4 == p4);
+//			System.out.println(n5 == p5);
+//			System.out.println(Base.BASE16.unsigned(n0) + " vs. " + Base.BASE16.unsigned(p0));
+//			System.out.println(Base.BASE16.unsigned(n1) + " vs. " + Base.BASE16.unsigned(p1));
+//			System.out.println(Base.BASE16.unsigned(n2) + " vs. " + Base.BASE16.unsigned(p2));
+//			System.out.println(Base.BASE16.unsigned(n3) + " vs. " + Base.BASE16.unsigned(p3));
+//			System.out.println(Base.BASE16.unsigned(n4) + " vs. " + Base.BASE16.unsigned(p4));
+//			System.out.println(Base.BASE16.unsigned(n5) + " vs. " + Base.BASE16.unsigned(p5));
+//		}
+//		random = new Eclat32Random(1L);
+//		{
+//			long n0 = random.nextLong(); System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
+//			long n1 = random.nextLong(); System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
+//			long n2 = random.nextLong(); System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
+//			long n3 = random.nextLong(); System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
+//			long n4 = random.nextLong(); System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
+//			long n5 = random.nextLong(); System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
+//			System.out.println("Going back...");
+//			long p5 = random.previousLong(); System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
+//			long p4 = random.previousLong(); System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
+//			long p3 = random.previousLong(); System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
+//			long p2 = random.previousLong(); System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
+//			long p1 = random.previousLong(); System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
+//			long p0 = random.previousLong(); System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
+//			System.out.println(n0 == p0);
+//			System.out.println(n1 == p1);
+//			System.out.println(n2 == p2);
+//			System.out.println(n3 == p3);
+//			System.out.println(n4 == p4);
+//			System.out.println(n5 == p5);
+//			System.out.println(Base.BASE16.unsigned(n0) + " vs. " + Base.BASE16.unsigned(p0));
+//			System.out.println(Base.BASE16.unsigned(n1) + " vs. " + Base.BASE16.unsigned(p1));
+//			System.out.println(Base.BASE16.unsigned(n2) + " vs. " + Base.BASE16.unsigned(p2));
+//			System.out.println(Base.BASE16.unsigned(n3) + " vs. " + Base.BASE16.unsigned(p3));
+//			System.out.println(Base.BASE16.unsigned(n4) + " vs. " + Base.BASE16.unsigned(p4));
+//			System.out.println(Base.BASE16.unsigned(n5) + " vs. " + Base.BASE16.unsigned(p5));
+//		}
+//	}
 }
