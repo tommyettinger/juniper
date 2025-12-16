@@ -29,10 +29,8 @@ import java.math.BigInteger;
  * This generator natively generates 32-bit results, and has two 32-bit states. It has the maximum period for a
  * generator with its state size, at (2 to the 64) exactly. All int values are valid for both stateA and stateB.
  * <br>
- * This does not pass immediate correlation tests convincingly, but it gets surprisingly close. Avoiding correlation
- * between initial states wasn't a design goal here; having a full period was much more important, and adding some extra
- * steps to the processing would likely get this to pass correlation tests but would slow it down. It passes at least
- * 16 TB of PractRand with no anomalies.
+ * This passes initial correlation tests (ICE), including immediate initial correlation (IICE). This also passes at
+ * least 16 TB of PractRand with no anomalies.
  * <br>
  * This uses four "big constants," which each follow a pattern: nine 9's in a row (as a decimal number), nine 7's in a
  * row, nine 5's in a row, and nine 3's in a row. It uses 3 shifts: 12 and -12 (as a rotation), and 23 (as an unsigned

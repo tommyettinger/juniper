@@ -122,6 +122,7 @@ public final class Generators {
 		randomList.add(new Hoof5Random(1, 1));
 		randomList.add(new Hoofsy32Random(1, 1));
 		randomList.add(new Eclat32Random(1, 1));
+		randomList.add(new Lamb32Random(1, 1));
 	}
 
 	public static int randomCount = randomList.size();
