@@ -17,7 +17,6 @@
 
 package com.github.tommyettinger.random.experimental;
 
-import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.digital.BitConversion;
 import com.github.tommyettinger.random.EnhancedRandom;
 
@@ -315,14 +314,14 @@ public class Hoofsy32Random extends EnhancedRandom {
 			System.out.println(n3 == p3);
 			System.out.println(n4 == p4);
 			System.out.println(n5 == p5);
-			System.out.println(Base.BASE16.unsigned(n0) + " vs. " + Base.BASE16.unsigned(p0));
-			System.out.println(Base.BASE16.unsigned(n1) + " vs. " + Base.BASE16.unsigned(p1));
-			System.out.println(Base.BASE16.unsigned(n2) + " vs. " + Base.BASE16.unsigned(p2));
-			System.out.println(Base.BASE16.unsigned(n3) + " vs. " + Base.BASE16.unsigned(p3));
-			System.out.println(Base.BASE16.unsigned(n4) + " vs. " + Base.BASE16.unsigned(p4));
-			System.out.println(Base.BASE16.unsigned(n5) + " vs. " + Base.BASE16.unsigned(p5));
+			System.out.printf("%08X vs. %08X\n", p0, n0);
+			System.out.printf("%08X vs. %08X\n", p1, n1);
+			System.out.printf("%08X vs. %08X\n", p2, n2);
+			System.out.printf("%08X vs. %08X\n", p3, n3);
+			System.out.printf("%08X vs. %08X\n", p4, n4);
+			System.out.printf("%08X vs. %08X\n", p5, n5);
 		}
-		random = new Hoofsy32Random(1L);
+		random.setSeed(1L);
 		{
 			long n0 = random.nextLong(); System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
 			long n1 = random.nextLong(); System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
@@ -343,12 +342,12 @@ public class Hoofsy32Random extends EnhancedRandom {
 			System.out.println(n3 == p3);
 			System.out.println(n4 == p4);
 			System.out.println(n5 == p5);
-			System.out.println(Base.BASE16.unsigned(n0) + " vs. " + Base.BASE16.unsigned(p0));
-			System.out.println(Base.BASE16.unsigned(n1) + " vs. " + Base.BASE16.unsigned(p1));
-			System.out.println(Base.BASE16.unsigned(n2) + " vs. " + Base.BASE16.unsigned(p2));
-			System.out.println(Base.BASE16.unsigned(n3) + " vs. " + Base.BASE16.unsigned(p3));
-			System.out.println(Base.BASE16.unsigned(n4) + " vs. " + Base.BASE16.unsigned(p4));
-			System.out.println(Base.BASE16.unsigned(n5) + " vs. " + Base.BASE16.unsigned(p5));
+			System.out.printf("%016X vs. %016X\n", p0, n0);
+			System.out.printf("%016X vs. %016X\n", p1, n1);
+			System.out.printf("%016X vs. %016X\n", p2, n2);
+			System.out.printf("%016X vs. %016X\n", p3, n3);
+			System.out.printf("%016X vs. %016X\n", p4, n4);
+			System.out.printf("%016X vs. %016X\n", p5, n5);
 		}
 	}
 }
