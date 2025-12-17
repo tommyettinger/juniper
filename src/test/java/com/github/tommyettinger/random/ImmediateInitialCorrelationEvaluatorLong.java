@@ -40,6 +40,7 @@ import static com.github.tommyettinger.random.InitialCorrelationEvaluator.INTERV
  */
 public class ImmediateInitialCorrelationEvaluatorLong {
     public static int DROPPED_STEPS = 4;
+    public static int STEP_LIMIT = 4;
     public double steps = 0;
     public int mode = 0;
     public double amount = 0;
@@ -171,7 +172,7 @@ public class ImmediateInitialCorrelationEvaluatorLong {
                 }
             }
             ImmediateInitialCorrelationEvaluatorLong evaluator = new ImmediateInitialCorrelationEvaluatorLong();
-            double result = evaluator.run(g, DROPPED_STEPS, 4);
+            double result = evaluator.run(g, DROPPED_STEPS, STEP_LIMIT);
             System.out.println("Lowest mode: "
                     + Base.BASE10.decimal(evaluator.actualMode, 8)
                     + " has mean amount " + Base.BASE10.decimal(evaluator.actualAmount, 12)

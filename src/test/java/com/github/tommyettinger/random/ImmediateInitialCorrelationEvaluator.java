@@ -24,8 +24,7 @@ import java.io.File;
 import java.util.Date;
 import java.util.List;
 
-import static com.github.tommyettinger.random.InitialCorrelationEvaluator.INTERVAL_X;
-import static com.github.tommyettinger.random.InitialCorrelationEvaluator.INTERVAL_Y;
+import static com.github.tommyettinger.random.InitialCorrelationEvaluator.*;
 
 /**
  * Like {@link InitialCorrelationEvaluator}, but only checks the first four generations, discarding none.
@@ -40,6 +39,7 @@ import static com.github.tommyettinger.random.InitialCorrelationEvaluator.INTERV
  */
 public class ImmediateInitialCorrelationEvaluator {
     public static int DROPPED_STEPS = 4;
+    public static int STEP_LIMIT = 4;
     public double steps = 0;
     public int mode = 0;
     public double amount = 0;
@@ -171,7 +171,7 @@ public class ImmediateInitialCorrelationEvaluator {
                 }
             }
             ImmediateInitialCorrelationEvaluator evaluator = new ImmediateInitialCorrelationEvaluator();
-            double result = evaluator.run(g, DROPPED_STEPS, 4);
+            double result = evaluator.run(g, DROPPED_STEPS, STEP_LIMIT);
             System.out.println("Lowest mode: "
                     + Base.BASE10.decimal(evaluator.actualMode, 8)
                     + " has mean amount " + Base.BASE10.decimal(evaluator.actualAmount, 12)
