@@ -259,31 +259,30 @@ public class Lambeau32Random extends EnhancedRandom {
 
 	@Override
 	public int nextInt() {
-		int z = BitConversion.imul(stateA ^ (stateB << 12 | stateB >>> -12) ^ (stateC << 21 | stateC >>> -21), 111111111);
-		stateA = BitConversion.imul(stateA ^ 333333333, 555555555);
-		stateB = BitConversion.imul(stateB + BitConversion.countLeadingZeros(stateA), 777777777);
-		stateC = BitConversion.imul(stateC + BitConversion.countLeadingZeros(stateB), 999999999);
+		int z = BitConversion.imul(stateA ^ (stateB << 12 | stateB >>> -12) ^ (stateC << 21 | stateC >>> -21), 999999999);
+		stateC = ~(BitConversion.countLeadingZeros(stateA & stateB) + stateC);
+		stateB = BitConversion.imul(BitConversion.countLeadingZeros(stateA) + stateB, 777777777);
+		stateA = BitConversion.imul(stateA, 555555555) ^ 333333333;
 		return z ^ z >>> 23;
 	}
 
 	@Override
 	public int previousInt() {
-		/* 889271807 is modularMultiplicativeInverse(999999999) */
-		stateC = BitConversion.imul(stateC, 889271807) - BitConversion.countLeadingZeros(stateB) | 0;
+		/* -976291125 is modularMultiplicativeInverse(555555555) */
+		stateA = BitConversion.imul(stateA ^ 333333333, -976291125);
 		/* -83784047 is modularMultiplicativeInverse(777777777) */
 		stateB = BitConversion.imul(stateB, -83784047) - BitConversion.countLeadingZeros(stateA) | 0;
-		/* -976291125 is modularMultiplicativeInverse(555555555) */
-		stateA = BitConversion.imul(stateA, -976291125) ^ 333333333;
-		int z = BitConversion.imul(stateA ^ (stateB << 12 | stateB >>> -12) ^ (stateC << 21 | stateC >>> -21), 111111111);
+		stateC = ~(stateC + BitConversion.countLeadingZeros(stateB & stateA));
+		int z = BitConversion.imul(stateA ^ (stateB << 12 | stateB >>> -12) ^ (stateC << 21 | stateC >>> -21), 999999999);
 		return z ^ z >>> 23;
 	}
 
 	@Override
 	public int next (int bits) {
-		int z = BitConversion.imul(stateA ^ (stateB << 12 | stateB >>> -12) ^ (stateC << 21 | stateC >>> -21), 111111111);
-		stateA = BitConversion.imul(stateA ^ 333333333, 555555555);
-		stateB = BitConversion.imul(stateB + BitConversion.countLeadingZeros(stateA), 777777777);
-		stateC = BitConversion.imul(stateC + BitConversion.countLeadingZeros(stateB), 999999999);
+		int z = BitConversion.imul(stateA ^ (stateB << 12 | stateB >>> -12) ^ (stateC << 21 | stateC >>> -21), 999999999);
+		stateC = ~(BitConversion.countLeadingZeros(stateA & stateB) + stateC);
+		stateB = BitConversion.imul(BitConversion.countLeadingZeros(stateA) + stateB, 777777777);
+		stateA = BitConversion.imul(stateA, 555555555) ^ 333333333;
 		return (z ^ z >>> 23) >>> -bits;
 	}
 
@@ -299,15 +298,15 @@ public class Lambeau32Random extends EnhancedRandom {
 	 * @return the result of what nextLong() would return if it was called at the state this jumped to
 	 */
 	public long leap() {
-		int hi = BitConversion.imul(stateA ^ (stateB << 12 | stateB >>> -12) ^ (stateC << 21 | stateC >>> -21), 111111111);
-		stateA = BitConversion.imul(stateA ^ 333333333, 555555555);
-		stateB = BitConversion.imul(stateB + BitConversion.countLeadingZeros(stateA), 777777777);
+		int hi = BitConversion.imul(stateA ^ (stateB << 12 | stateB >>> -12) ^ (stateC << 21 | stateC >>> -21), 999999999);
+		stateB = BitConversion.imul(BitConversion.countLeadingZeros(stateA) + stateB, 777777777);
+		stateA = BitConversion.imul(stateA, 555555555) ^ 333333333;
 		hi ^= hi >>> 23;
 
-		int lo = BitConversion.imul(stateA ^ (stateB << 12 | stateB >>> -12) ^ (stateC << 21 | stateC >>> -21), 111111111);
-		stateA = BitConversion.imul(stateA ^ 333333333, 555555555);
-		stateB = BitConversion.imul(stateB + BitConversion.countLeadingZeros(stateA), 777777777);
-		stateC = BitConversion.imul(stateC + BitConversion.countLeadingZeros(stateB), 999999999);
+		int lo = BitConversion.imul(stateA ^ (stateB << 12 | stateB >>> -12) ^ (stateC << 21 | stateC >>> -21), 999999999);
+		stateC = ~(BitConversion.countLeadingZeros(stateA & stateB) + stateC);
+		stateB = BitConversion.imul(BitConversion.countLeadingZeros(stateA) + stateB, 777777777);
+		stateA = BitConversion.imul(stateA, 555555555) ^ 333333333;
 		lo ^= lo >>> 23;
 		return (long) hi << 32 ^ lo;
 	}
@@ -448,18 +447,19 @@ public class Lambeau32Random extends EnhancedRandom {
 	public static void main(String[] args) {
 		Lambeau32Random random = new Lambeau32Random(1L);
 		{
-			int n0 = random.nextInt();
-			int n1 = random.nextInt();
-			int n2 = random.nextInt();
-			int n3 = random.nextInt();
-			int n4 = random.nextInt();
-			int n5 = random.nextInt();
-			int p5 = random.previousInt();
-			int p4 = random.previousInt();
-			int p3 = random.previousInt();
-			int p2 = random.previousInt();
-			int p1 = random.previousInt();
-			int p0 = random.previousInt();
+			int n0 = random.nextInt(); System.out.printf("a: 0x%08X, b: 0x%08X, c: 0x%08X\n", random.stateA, random.stateB, random.stateC);
+			int n1 = random.nextInt(); System.out.printf("a: 0x%08X, b: 0x%08X, c: 0x%08X\n", random.stateA, random.stateB, random.stateC);
+			int n2 = random.nextInt(); System.out.printf("a: 0x%08X, b: 0x%08X, c: 0x%08X\n", random.stateA, random.stateB, random.stateC);
+			int n3 = random.nextInt(); System.out.printf("a: 0x%08X, b: 0x%08X, c: 0x%08X\n", random.stateA, random.stateB, random.stateC);
+			int n4 = random.nextInt(); System.out.printf("a: 0x%08X, b: 0x%08X, c: 0x%08X\n", random.stateA, random.stateB, random.stateC);
+			int n5 = random.nextInt(); System.out.printf("a: 0x%08X, b: 0x%08X, c: 0x%08X\n", random.stateA, random.stateB, random.stateC);
+			System.out.println("Going back...");
+			int p5 = random.previousInt(); System.out.printf("a: 0x%08X, b: 0x%08X, c: 0x%08X\n", random.stateA, random.stateB, random.stateC);
+			int p4 = random.previousInt(); System.out.printf("a: 0x%08X, b: 0x%08X, c: 0x%08X\n", random.stateA, random.stateB, random.stateC);
+			int p3 = random.previousInt(); System.out.printf("a: 0x%08X, b: 0x%08X, c: 0x%08X\n", random.stateA, random.stateB, random.stateC);
+			int p2 = random.previousInt(); System.out.printf("a: 0x%08X, b: 0x%08X, c: 0x%08X\n", random.stateA, random.stateB, random.stateC);
+			int p1 = random.previousInt(); System.out.printf("a: 0x%08X, b: 0x%08X, c: 0x%08X\n", random.stateA, random.stateB, random.stateC);
+			int p0 = random.previousInt(); System.out.printf("a: 0x%08X, b: 0x%08X, c: 0x%08X\n", random.stateA, random.stateB, random.stateC);
 			System.out.println(n0 == p0);
 			System.out.println(n1 == p1);
 			System.out.println(n2 == p2);
