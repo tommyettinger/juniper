@@ -30,15 +30,17 @@ import java.math.BigInteger;
  * This generator natively generates 32-bit results, and has three 32-bit states. It has the maximum period for a
  * generator with its state size, at (2 to the 96) exactly. All int values are valid for each state.
  * <br>
- * This uses five "big constants," which each follow a pattern: nine 9's in a row (as a decimal number), nine 7's in a
- * row, nine 5's in a row, nine 3's in a row, and nine 1's in a row. It uses 5 shifts: 12 and -12 (as a rotation), 21
+ * This uses four "big constants," which each follow a pattern: nine 9's in a row (as a decimal number), nine 7's in a
+ * row, nine 5's in a row, and nine 3's in a row. It uses 5 shifts: 12 and -12 (as a rotation), 21
  * and -21 (as another rotation), and 23 (as an unsigned right shift at the end). Other than that and the specific
  * operations this uses, there are no "messy" constants to remember, and the bulk of the algorithm is just 5 lines of
  * code for {@link #nextInt()}.
  * <br>
  * This passes initial correlation tests (ICE tests, which drop 100 results and check for correlation on the next 32
- * results of many similarly-seeded generators) as well as immediate initial correlation tests (IICE tests, which only
- * drop 4 results and check for correlation on the next 4 results of the same group of many generators)..
+ * results of many similarly-seeded generators). It also passes immediate initial correlation tests (IICE tests, which
+ * only drop 4 results and check for correlation on the next 4 results of the same group of many generators). This is
+ * very close to an augmentation of Lamb32Random, which passes at least 32TB of PractRand with no anomalies, so it is
+ * reasonable to think this can pass that much, too.
  * <br>
  * This is meant to be portable to JS by using its {@code Math.imul()} and {@code Math.clz32()} functions. The order in
  * which the arithmetic runs matters; executing imul() last ensures that its output will be a 32-bit integer, and that

@@ -1,0 +1,1 @@
+[Immediate] Lowest mode: 119.0000 has mean amount 0.0303630232  PASS 👍 for Lambeau32Random
