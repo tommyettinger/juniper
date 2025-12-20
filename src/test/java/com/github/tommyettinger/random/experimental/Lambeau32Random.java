@@ -31,16 +31,15 @@ import java.math.BigInteger;
  * generator with its state size, at (2 to the 96) exactly. All int values are valid for each state.
  * <br>
  * This uses four "big constants," which each follow a pattern: nine 9's in a row (as a decimal number), nine 7's in a
- * row, nine 5's in a row, and nine 3's in a row. It uses 5 shifts: 12 and -12 (as a rotation), 21
- * and -21 (as another rotation), and 23 (as an unsigned right shift at the end). Other than that and the specific
+ * row, nine 5's in a row, and nine 3's in a row. It uses 5 shifts: 10 and -10 (as a rotation), 13 and -13 (as another
+ * rotation), and 23 (10 + 13, as an unsigned right shift at the end). Other than that and the specific
  * operations this uses, there are no "messy" constants to remember, and the bulk of the algorithm is just 5 lines of
  * code for {@link #nextInt()}.
  * <br>
  * This passes initial correlation tests (ICE tests, which drop 100 results and check for correlation on the next 32
  * results of many similarly-seeded generators). It also passes immediate initial correlation tests (IICE tests, which
- * only drop 4 results and check for correlation on the next 4 results of the same group of many generators). This is
- * very close to an augmentation of Lamb32Random, which passes at least 32TB of PractRand with no anomalies, so it is
- * reasonable to think this can pass that much, too.
+ * only drop 4 results and check for correlation on the next 4 results of the same group of many generators). This
+ * passes 64TB of PractRand with no anomalies.
  * <br>
  * This is meant to be portable to JS by using its {@code Math.imul()} and {@code Math.clz32()} functions. The order in
  * which the arithmetic runs matters; executing imul() last ensures that its output will be a 32-bit integer, and that
@@ -261,7 +260,7 @@ public class Lambeau32Random extends EnhancedRandom {
 
 	@Override
 	public int nextInt() {
-		int z = BitConversion.imul(stateA ^ (stateB << 12 | stateB >>> -12) ^ (stateC << 21 | stateC >>> -21), 999999999);
+		int z = BitConversion.imul(stateA ^ (stateB << 10 | stateB >>> -10) ^ (stateC << 13 | stateC >>> -13), 999999999);
 		stateC = ~(BitConversion.countLeadingZeros(stateA & stateB) + stateC);
 		stateB = BitConversion.imul(BitConversion.countLeadingZeros(stateA) + stateB, 777777777);
 		stateA = BitConversion.imul(stateA, 555555555) ^ 333333333;
@@ -275,13 +274,13 @@ public class Lambeau32Random extends EnhancedRandom {
 		/* -83784047 is modularMultiplicativeInverse(777777777) */
 		stateB = BitConversion.imul(stateB, -83784047) - BitConversion.countLeadingZeros(stateA) | 0;
 		stateC = ~(stateC + BitConversion.countLeadingZeros(stateB & stateA));
-		int z = BitConversion.imul(stateA ^ (stateB << 12 | stateB >>> -12) ^ (stateC << 21 | stateC >>> -21), 999999999);
+		int z = BitConversion.imul(stateA ^ (stateB << 10 | stateB >>> -10) ^ (stateC << 13 | stateC >>> -13), 999999999);
 		return z ^ z >>> 23;
 	}
 
 	@Override
 	public int next (int bits) {
-		int z = BitConversion.imul(stateA ^ (stateB << 12 | stateB >>> -12) ^ (stateC << 21 | stateC >>> -21), 999999999);
+		int z = BitConversion.imul(stateA ^ (stateB << 10 | stateB >>> -10) ^ (stateC << 13 | stateC >>> -13), 999999999);
 		stateC = ~(BitConversion.countLeadingZeros(stateA & stateB) + stateC);
 		stateB = BitConversion.imul(BitConversion.countLeadingZeros(stateA) + stateB, 777777777);
 		stateA = BitConversion.imul(stateA, 555555555) ^ 333333333;
@@ -300,12 +299,12 @@ public class Lambeau32Random extends EnhancedRandom {
 	 * @return the result of what nextLong() would return if it was called at the state this jumped to
 	 */
 	public long leap() {
-		int hi = BitConversion.imul(stateA ^ (stateB << 12 | stateB >>> -12) ^ (stateC << 21 | stateC >>> -21), 999999999);
+		int hi = BitConversion.imul(stateA ^ (stateB << 10 | stateB >>> -10) ^ (stateC << 13 | stateC >>> -13), 999999999);
 		stateB = BitConversion.imul(BitConversion.countLeadingZeros(stateA) + stateB, 777777777);
 		stateA = BitConversion.imul(stateA, 555555555) ^ 333333333;
 		hi ^= hi >>> 23;
 
-		int lo = BitConversion.imul(stateA ^ (stateB << 12 | stateB >>> -12) ^ (stateC << 21 | stateC >>> -21), 999999999);
+		int lo = BitConversion.imul(stateA ^ (stateB << 10 | stateB >>> -10) ^ (stateC << 13 | stateC >>> -13), 999999999);
 		stateC = ~(BitConversion.countLeadingZeros(stateA & stateB) + stateC);
 		stateB = BitConversion.imul(BitConversion.countLeadingZeros(stateA) + stateB, 777777777);
 		stateA = BitConversion.imul(stateA, 555555555) ^ 333333333;
