@@ -25,17 +25,25 @@ import java.math.BigInteger;
 /**
  * Like {@link com.github.tommyettinger.random.HornRandom}, but using 32-bit math for its
  * {@link #next(int)}, {@link #nextInt()}, and {@link #previousInt()} methods, and meant to be portable to JS.
+ * Also like HornRandom, it is meant to fit in a human's memory, avoiding complex constants.
  * <br>
  * This generator natively generates 32-bit results, and has two 32-bit states. It has the maximum period for a
  * generator with its state size, at (2 to the 64) exactly. All int values are valid for both stateA and stateB.
  * <br>
- * This passes initial correlation tests (ICE), including immediate initial correlation (IICE). This also passes at
- * least 16 TB of PractRand with no anomalies.
+ * This passes initial correlation tests (ICE), including immediate initial correlation (IICE). This also passes 64 TB
+ * of PractRand with no anomalies.
  * <br>
  * This uses four "big constants," which each follow a pattern: nine 9's in a row (as a decimal number), nine 7's in a
  * row, nine 5's in a row, and nine 3's in a row. It uses 3 shifts: 12 and -12 (as a rotation), and 23 (as an unsigned
  * right shift at the end). Other than that and the specific operations this uses, there are no "messy" constants to
  * remember, and the bulk of the algorithm is just 4 lines of code for {@link #nextInt()}.
+ * <br>
+ * This is built around a 32-bit XLCG (Xor-Linear Congruential Generator) for its stateB, and its stateA updates
+ * dependent on stateB's leading zeros. Because adding the leading zeros for every 32-bit value in stateB's cycle
+ * produces an odd sum, every time stateB cycles, stateA effectively adds an odd number, making it act like a counter
+ * with an odd increment that updates slowly. This is shaken up by stateA multiplying
+ * {@code (stateA + countLeadingZeros(stateB)) * 777777777}, which it turns out doesn't need to be any kind of
+ * multiplier other than odd. (An LCG or XLCG would require the low 3 bits of the multiplier to be a specific pattern.)
  * <br>
  * This is meant to be portable to JS by using its {@code Math.imul()} and {@code Math.clz32()} functions. The order in
  * which the arithmetic runs matters; executing imul() last ensures that its output will be a 32-bit integer, and that
@@ -50,7 +58,7 @@ public class Lamb32Random extends EnhancedRandom {
 	 */
 	protected int stateA;
 	/**
-	 * The second (counter) state; can be any long.
+	 * The second (XLCG) state; can be any long.
 	 */
 	protected int stateB;
 
@@ -191,7 +199,7 @@ public class Lamb32Random extends EnhancedRandom {
 	}
 
 	/**
-	 * Sets the second (counter) part of the state.
+	 * Sets the second (XLCG) part of the state.
 	 *
 	 * @param stateB can be any int
 	 */
@@ -230,7 +238,7 @@ public class Lamb32Random extends EnhancedRandom {
 	public int previousInt() {
 		/* -976291125 is modularMultiplicativeInverse(555555555) */
 		stateB = BitConversion.imul(stateB ^ 333333333, -976291125);
-		/* -83784047 is modularMultiplicativeInverse(777777777)*/
+		/* -83784047 is modularMultiplicativeInverse(777777777) */
 		stateA = BitConversion.imul(stateA, -83784047) - BitConversion.countLeadingZeros(stateB) | 0;
 		int z = BitConversion.imul(stateA ^ (stateB << 12 | stateB >>> -12), 999999999);
 		return z ^ z >>> 23;
@@ -398,63 +406,5 @@ public class Lamb32Random extends EnhancedRandom {
 
 	public String toString () {
 		return "Lamb32Random{" + "stateA=" + (stateA) + ", stateB=" + (stateB) + "}";
-	}
-
-	public static void main(String[] args) {
-		Lamb32Random random = new Lamb32Random(1L);
-		{
-			int n0 = random.nextInt();
-			int n1 = random.nextInt();
-			int n2 = random.nextInt();
-			int n3 = random.nextInt();
-			int n4 = random.nextInt();
-			int n5 = random.nextInt();
-			int p5 = random.previousInt();
-			int p4 = random.previousInt();
-			int p3 = random.previousInt();
-			int p2 = random.previousInt();
-			int p1 = random.previousInt();
-			int p0 = random.previousInt();
-			System.out.println(n0 == p0);
-			System.out.println(n1 == p1);
-			System.out.println(n2 == p2);
-			System.out.println(n3 == p3);
-			System.out.println(n4 == p4);
-			System.out.println(n5 == p5);
-			System.out.printf("%08X vs. %08X\n", p0, n0);
-			System.out.printf("%08X vs. %08X\n", p1, n1);
-			System.out.printf("%08X vs. %08X\n", p2, n2);
-			System.out.printf("%08X vs. %08X\n", p3, n3);
-			System.out.printf("%08X vs. %08X\n", p4, n4);
-			System.out.printf("%08X vs. %08X\n", p5, n5);
-		}
-		random.setSeed(1L);
-		{
-			long n0 = random.nextLong(); System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
-			long n1 = random.nextLong(); System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
-			long n2 = random.nextLong(); System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
-			long n3 = random.nextLong(); System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
-			long n4 = random.nextLong(); System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
-			long n5 = random.nextLong(); System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
-			System.out.println("Going back...");
-			long p5 = random.previousLong(); System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
-			long p4 = random.previousLong(); System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
-			long p3 = random.previousLong(); System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
-			long p2 = random.previousLong(); System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
-			long p1 = random.previousLong(); System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
-			long p0 = random.previousLong(); System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
-			System.out.println(n0 == p0);
-			System.out.println(n1 == p1);
-			System.out.println(n2 == p2);
-			System.out.println(n3 == p3);
-			System.out.println(n4 == p4);
-			System.out.println(n5 == p5);
-			System.out.printf("%016X vs. %016X\n", p0, n0);
-			System.out.printf("%016X vs. %016X\n", p1, n1);
-			System.out.printf("%016X vs. %016X\n", p2, n2);
-			System.out.printf("%016X vs. %016X\n", p3, n3);
-			System.out.printf("%016X vs. %016X\n", p4, n4);
-			System.out.printf("%016X vs. %016X\n", p5, n5);
-		}
 	}
 }
