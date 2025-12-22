@@ -54,9 +54,7 @@ dependencies {
 	implementation "com.badlogicgames.gdx:gdx:$gdxVersion:sources"
 	implementation "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion"
 	implementation "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion:sources"
-//	implementation "com.github.tommyettinger:gdx-backend-gwt:1.1210.1"
-//	implementation "com.github.tommyettinger:gdx-backend-gwt:1.1210.1:sources"
-	implementation "com.google.jsinterop:jsinterop-annotations:2.0.2:sources"
+	implementation "com.google.jsinterop:jsinterop-annotations:2.1.0:sources"
 
 	implementation "com.github.tommyettinger:digital:$digitalVersion:sources"
 	implementation "com.github.tommyettinger:juniper:$juniperVersion:sources"
@@ -119,7 +117,7 @@ tasks.register("distZip", Zip) {
 	dependsOn("dist")
 	//// This uses the output of the dist task, which removes the superdev button from index.html .
 	from(outputPath)
-	archiveVersion = projectVersion
+	archiveVersion = "0.0.1"
 	archiveBaseName.set("${appName}-dist")
 	//// The result will be in html/build/ with a name containing "-dist".
 	destinationDirectory.set(file("build"))
