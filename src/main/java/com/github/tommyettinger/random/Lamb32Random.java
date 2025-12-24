@@ -312,8 +312,8 @@ public class Lamb32Random extends EnhancedRandom {
 
 	@Override
 	public long nextLong(long bound) {
-		final long randLow = nextInt();
-		final long randHigh = nextInt();
+		final long randLow = nextInt() & 0xFFFFFFFFL;
+		final long randHigh = nextInt() & 0xFFFFFFFFL;
 		if (1 >= bound)
 			return 0;
 		final long boundLow = bound & 0xFFFFFFFFL;
@@ -332,8 +332,8 @@ public class Lamb32Random extends EnhancedRandom {
 			inner = 0L;
 		}
 		final long bound = outer - inner;
-		final long randLow = nextInt();
-		final long randHigh = nextInt();
+		final long randLow = nextInt() & 0xFFFFFFFFL;
+		final long randHigh = nextInt() & 0xFFFFFFFFL;
 		final long boundLow = bound & 0xFFFFFFFFL;
 		final long boundHigh = (bound >>> 32);
 		return inner + (randHigh * boundLow >>> 32) + (randLow * boundHigh >>> 32) + randHigh * boundHigh;
@@ -341,8 +341,8 @@ public class Lamb32Random extends EnhancedRandom {
 
 	@Override
 	public long nextLong (long inner, long outer) {
-		final long randLow = nextInt();
-		final long randHigh = nextInt();
+		final long randLow = nextInt() & 0xFFFFFFFFL;
+		final long randHigh = nextInt() & 0xFFFFFFFFL;
 		if (inner >= outer)
 			return inner;
 		final long bound = outer - inner;
