@@ -14,7 +14,7 @@ apply plugin: "war"
 // This next line can be changed if you want to, for instance, always build into the
 // docs/ folder of a Git repo, which can be set to automatically publish on GitHub Pages.
 // This is relative to the html/ folder.
-var outputPath = "build/dist/${appName}"
+var outputPath = "build/dist/${appName}-gwt"
 
 gwt {
 	gwtVersion = "$gwtFrameworkVersion" // Should match the version used for building the GWT backend. See gradle.properties.
