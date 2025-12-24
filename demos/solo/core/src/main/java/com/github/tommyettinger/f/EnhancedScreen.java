@@ -1,4 +1,4 @@
-package com.github.tommyettinger.l;
+package com.github.tommyettinger.f;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -11,14 +11,14 @@ import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.github.tommyettinger.SpeedDemo;
+import com.github.tommyettinger.SoloDemo;
 import com.github.tommyettinger.digital.Stringf;
-import com.github.tommyettinger.random.AceRandom;
+import com.github.tommyettinger.random.EnhancedRandom;
 
 import java.util.Arrays;
 
-public class AceScreen extends ScreenAdapter {
-    private AceRandom random;
+public class EnhancedScreen extends ScreenAdapter {
+    private EnhancedRandom random;
     private SpriteBatch batch;
     private ImmediateModeRenderer20 renderer;
     private final long[] amounts = new long[512];
@@ -30,16 +30,16 @@ public class AceScreen extends ScreenAdapter {
     @Override
     public void show() {
         font = mainGame.font;
-        random = new AceRandom();
+        random = mainGame.random;
         batch = mainGame.batch;
         viewport = new ScreenViewport();
         renderer = new ImmediateModeRenderer20(512 * 3, false, true, 0);
         Arrays.fill(amounts, 0);
         iterations = 0;
     }
-    private final SpeedDemo mainGame;
+    private final SoloDemo mainGame;
 
-    public AceScreen(SpeedDemo main){
+    public EnhancedScreen(SoloDemo main){
         mainGame = main;
     }
 
@@ -75,8 +75,8 @@ public class AceScreen extends ScreenAdapter {
             iterations = 0;
         }
         iterations += 1;
-        for (int i = 0; i < SpeedDemo.STEPS; i++) {
-            int m = (int) (random.nextLong(512L));
+        for (int i = 0; i < SoloDemo.STEPS; i++) {
+            int m = (int) (random.nextFloat() * 512);
             if(m >= 0 && m < 512)
                 amounts[m]++;
         }
@@ -100,7 +100,7 @@ public class AceScreen extends ScreenAdapter {
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        font.draw(batch, Stringf.format("nextLong() using %s at %d FPS", random.getTag(), Gdx.graphics.getFramesPerSecond()),
+        font.draw(batch, Stringf.format("nextFloat() using %s at %d FPS", random.getTag(), Gdx.graphics.getFramesPerSecond()),
                 64, 522, 256+128, Align.center, true);
         batch.end();
 

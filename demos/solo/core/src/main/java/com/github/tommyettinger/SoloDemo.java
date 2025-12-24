@@ -8,6 +8,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Clipboard;
+import com.github.tommyettinger.random.AceRandom;
+import com.github.tommyettinger.random.Deserializer;
+import com.github.tommyettinger.random.EnhancedRandom;
 
 /**
  */
@@ -21,6 +24,7 @@ public class SoloDemo extends Game {
     public BitmapFont font;
     public SpriteBatch batch;
 	public Clipboard clipboard;
+	public EnhancedRandom random;
 
 	public SoloDemo(Clipboard clippy){
 		this.clipboard = clippy;
@@ -28,17 +32,25 @@ public class SoloDemo extends Game {
 
     @Override
     public void create() {
-        Gdx.app.setLogLevel(Application.LOG_ERROR);
+		if(this.clipboard.hasContents()) {
+			EnhancedRandom r = Deserializer.get(this.clipboard.getContents());
+			if(r == null) random = Deserializer.get("AceR");
+			else random = r;
+		} else {
+			random = Deserializer.get("AceR");
+		}
+
+		Gdx.app.setLogLevel(Application.LOG_ERROR);
         font = new BitmapFont(Gdx.files.internal("Cozette.fnt"));
         font.setColor(Color.BLACK);
         batch = new SpriteBatch();
         screens = new Screen[]{
-                new com.github.tommyettinger.f.AceScreen(this),
-                new com.github.tommyettinger.ef.AceScreen(this),
-                new com.github.tommyettinger.d.AceScreen(this),
-                new com.github.tommyettinger.i.AceScreen(this),
-                new com.github.tommyettinger.l.AceScreen(this),
-                new com.github.tommyettinger.ul.AceScreen(this),
+                new com.github.tommyettinger.f.EnhancedScreen(this),
+                new com.github.tommyettinger.ef.EnhancedScreen(this),
+                new com.github.tommyettinger.d.EnhancedScreen(this),
+                new com.github.tommyettinger.i.EnhancedScreen(this),
+                new com.github.tommyettinger.l.EnhancedScreen(this),
+                new com.github.tommyettinger.ul.EnhancedScreen(this),
         };
         screenIndex = 0;
         setScreen(screens[screenIndex]);
