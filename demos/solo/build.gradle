@@ -1,0 +1,36 @@
+buildscript {
+	repositories {
+		mavenLocal()
+		mavenCentral()
+		google()
+		gradlePluginPortal()
+	}
+	dependencies {
+	}
+}
+
+allprojects {
+	apply plugin: 'eclipse'
+	apply plugin: 'idea'
+}
+
+configure(subprojects) {
+	apply plugin: 'java-library'
+	java.sourceCompatibility = 11
+	compileJava {
+		options.incremental = true
+	}
+}
+
+subprojects {
+	version = '0.0.1'
+	ext.appName = 'solo'
+	repositories {
+		mavenCentral()
+		maven { url = 'https://jitpack.io' }
+		maven { url = 'https://teavm.org/maven/repository/' }
+		mavenLocal()
+	}
+}
+
+eclipse.project.name = 'solo' + '-parent'
