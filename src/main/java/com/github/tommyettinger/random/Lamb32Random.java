@@ -15,10 +15,9 @@
  *
  */
 
-package com.github.tommyettinger.random.experimental;
+package com.github.tommyettinger.random;
 
 import com.github.tommyettinger.digital.BitConversion;
-import com.github.tommyettinger.random.EnhancedRandom;
 
 import java.math.BigInteger;
 
@@ -173,12 +172,10 @@ public class Lamb32Random extends EnhancedRandom {
 	 */
 	@Override
 	public void setSeed (long seed) {
-		stateA = (int)(seed >>> 32);
-		stateB = (int)seed;
-		int a = nextInt();
-		int b = nextInt();
-		stateA = a;
-		stateB = b;
+		stateA = BitConversion.imul((int)(seed >>> 32), 555555555) ^ 333333333;
+		stateB = BitConversion.imul((int)seed, 555555555) ^ 333333333;
+		stateA ^= (stateA << 17 | stateA >>> 15) ^ (stateA << 8 | stateA >>> 24);
+		stateB ^= (stateB << 14 | stateB >>> 18) ^ (stateB << 5 | stateB >>> 27);
 	}
 
 	public long getStateA () {
