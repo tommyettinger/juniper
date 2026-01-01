@@ -1,3 +1,7 @@
+[0.8.6]
+- The dependency on digital has been updated to 0.9.9. This focuses mainly on BitConversion, but also improves TrigTools.
+- Lamb32Random is new; it is meant for GWT usage but is also, like HornRandom, meant to be more memorable to a human. (Horn fits in RAM, Lamb fits on what could be a RAM.)
+
 [0.8.5]
 - The dependency on digital has been updated to 0.9.5. This adds features to RoughMath and Distributor, but doesn't change any existing code.
 - EnhancedRandom.nextGaussianFloat() is new, and calls `RoughMath.normalRough(long)` by default. RoughMath's version seems to approximate the normal distribution more closely than the float-based Ziggurat algorithm in `Distributor.normalF(int)` or even the new one in `Distributor.normalF(long)`.
