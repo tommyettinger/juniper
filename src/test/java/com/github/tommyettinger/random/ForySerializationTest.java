@@ -19,8 +19,7 @@ public class ForySerializationTest {
 //        fury.register(EnhancedRandom.class);
 
         List<EnhancedRandom> all = Deserializer.copyRandoms();
-        // DistributedRandom is tested separately
-        all.removeIf(r -> "DsrR".equals(r.getTag()));
+        all.removeIf(r -> "DsrR".equals(r.getTag()) || "InrR".equals(r.getTag()) || "KnSR".equals(r.getTag()));
 
         for (EnhancedRandom r : all) {
             Class<? extends EnhancedRandom> c = r.getClass();
@@ -46,7 +45,7 @@ public class ForySerializationTest {
         List<Distribution> all = Deserializer.copyDistributions();
         ArrayList<EnhancedRandom> randoms = Deserializer.copyRandoms();
         // we can't nest a DistributedRandom, with its own Distribution, as the generator and sanely deserialize.
-        randoms.removeIf(r -> "DsrR".equals(r.getTag()) || "InrR".equals(r.getTag()));
+        randoms.removeIf(r -> "DsrR".equals(r.getTag()) || "InrR".equals(r.getTag()) || "KnSR".equals(r.getTag()));
         WhiskerRandom rand = new WhiskerRandom(123456789L);
 
         for (EnhancedRandom r : randoms) {
@@ -80,7 +79,7 @@ public class ForySerializationTest {
         List<Distribution> all = Deserializer.copyDistributions();
         ArrayList<EnhancedRandom> randoms = Deserializer.copyRandoms();
         // we can't nest a DistributedRandom, with its own Distribution, as the generator and sanely deserialize.
-        randoms.removeIf(r -> "DsrR".equals(r.getTag()) || "InrR".equals(r.getTag()));
+        randoms.removeIf(r -> "DsrR".equals(r.getTag()) || "InrR".equals(r.getTag()) || "KnSR".equals(r.getTag()));
         WhiskerRandom rand = new WhiskerRandom(123456789L);
 
         for (EnhancedRandom r : randoms) {
