@@ -33,6 +33,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.github.tommyettinger.digital.BitConversion;
+import com.github.tommyettinger.random.experimental.BadXS32Random;
 import com.github.tommyettinger.random.experimental.GodotRandom;
 
 import java.util.Arrays;
@@ -194,7 +195,7 @@ public class BitVisualizer extends ApplicationAdapter {
     private double iterations = 0L;
     private double average = 0L;
 	private int generator = 0;
-    private EnhancedRandom[] generators = {new GodotRandom(seed), new AceRandom(seed), new GoldenQuasiRandom(seed), new LFSR64QuasiRandom(seed)};
+    private final EnhancedRandom[] generators = {new BadXS32Random(seed), new GodotRandom(seed), new AceRandom(seed), new GoldenQuasiRandom(seed), new LFSR64QuasiRandom(seed)};
     private EnhancedRandom random = generators[generator];
 
     private final float black = Color.BLACK.toFloatBits();
