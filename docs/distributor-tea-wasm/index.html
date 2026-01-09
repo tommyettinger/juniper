@@ -25,10 +25,10 @@
         </div>
         <script>
             async function start() {
-                main()
+                let teavm = await TeaVM.wasmGC.load("app.wasm"); teavm.exports.main([]);
             }
             window.addEventListener("load", start);
         </script>
-        <script type="text/javascript" charset="utf-8" src="app.js"></script>
+        <script type="text/javascript" charset="utf-8" src="wasm-gc-runtime.min.js"></script>
     </body>
 </html>

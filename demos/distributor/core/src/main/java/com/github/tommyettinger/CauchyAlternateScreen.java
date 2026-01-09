@@ -49,12 +49,12 @@ public class CauchyAlternateScreen extends ScreenAdapter {
 
     @Override
     public void render(float delta) {
-        if(Gdx.input.isKeyJustPressed(Input.Keys.LEFT_BRACKET))
+        if(Gdx.input.isKeyJustPressed(Input.Keys.LEFT_BRACKET) || Gdx.input.isKeyJustPressed(Input.Keys.LEFT))
         {
             mainGame.previousScreen();
             return;
         }
-        else if(Gdx.input.isKeyJustPressed(Input.Keys.RIGHT_BRACKET))
+        else if(Gdx.input.isKeyJustPressed(Input.Keys.RIGHT_BRACKET) || Gdx.input.isKeyJustPressed(Input.Keys.RIGHT))
         {
             mainGame.nextScreen();
             return;
