@@ -32,6 +32,7 @@ public class SoloDemo extends Game {
 
     @Override
     public void create() {
+		Deserializer.register(new RandomRandom(1));
 		if(this.clipboard.hasContents()) {
 			EnhancedRandom r = Deserializer.get(this.clipboard.getContents());
 			if(r == null) random = Deserializer.get("AceR");

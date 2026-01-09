@@ -36,8 +36,8 @@ public class TeaVMBuilder {
 		// Register any classes or packages that require reflection here:
 		// TeaReflectionSupplier.addReflectionClass("com.github.tommyettinger.reflect");
 
-//		teaBuildConfiguration.targetType = TeaVMTargetType.JAVASCRIPT;
-		teaBuildConfiguration.targetType = TeaVMTargetType.WEBASSEMBLY_GC;
+		teaBuildConfiguration.targetType = TeaVMTargetType.JAVASCRIPT;
+//		teaBuildConfiguration.targetType = TeaVMTargetType.WEBASSEMBLY_GC;
 
 		TeaBuilder.config(teaBuildConfiguration);
 		TeaVMTool tool = new TeaVMTool();
@@ -53,7 +53,7 @@ public class TeaVMBuilder {
 		// If targetType is set to JAVASCRIPT, you can use the following lines to debug JVM languages from the browser,
 		// setting breakpoints in Java code and stopping in the appropriate place in generated JavaScript code.
 		// These settings don't quite work currently if generating WebAssembly. They may in a future release.
-		if(DEBUG && tool.getTargetType() == TeaVMTargetType.JAVASCRIPT) {
+		if(DEBUG && teaBuildConfiguration.targetType == TeaVMTargetType.JAVASCRIPT) {
 			tool.setDebugInformationGenerated(true);
 			tool.setSourceMapsFileGenerated(true);
 			tool.setSourceFilePolicy(TeaVMSourceFilePolicy.COPY);
