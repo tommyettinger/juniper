@@ -92,12 +92,14 @@ public class BadXS32Random extends EnhancedRandom {
 
 	@Override
 	public float nextFloat() {
-		return (nextInt() & 0x7FFFFFFF) / (float) 0x7FFFFFFF;
+//		return (nextInt() & 0x7FFFFFFF) / (float) 0x7FFFFFFF; // LLM-generated, can produce 1f, breaking contract
+		return (nextInt() & 0xFFFFFF) * 0x1p-24f; // human-written, won't produce 1f
 	}
 
 	@Override
 	public double nextDouble() {
-		return (nextInt() & 0x7FFFFFFF) / (double) 0x7FFFFFFF;
+//		return (nextInt() & 0x7FFFFFFF) / (double) 0x7FFFFFFF; // LLM-generated, can produce 1.0, breaking contract
+		return (nextInt() + 0x1p31) * 0x1p-32; // human-written, won't produce 1.0
 	}
 
 	@Override
