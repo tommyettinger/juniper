@@ -491,6 +491,29 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	}
 
 	/**
+	 * Processes a given int {@code rand}, which should be random and is typically produced by {@link #nextInt()}, and
+	 * an int {@code bound}, which is treated as unsigned, to return an int between 0 and bound (exclusive, unsigned).
+	 * If {@code bound} is 0 or 1, this returns 0 regardless of {@code rand}.
+	 * <br>
+	 * Intended for use by implementations that target JS-based platforms in the browser. This is expected to be
+	 * somewhat slower on non-browser-based platforms relative to the way {@link #nextUnsignedInt(int)} uses by default
+	 * there.
+	 *
+	 * @param rand a random int, typically produced by {@link #nextInt()}
+	 * @param bound the unsigned upper bound
+	 * @return an int between 0 (inclusive) and bound (exclusive, unsigned)
+	 */
+	@SuppressWarnings("PointlessBitwiseExpression")
+	public static int processUnsignedInt32(int rand, int bound) {
+		final int randLow = rand & 0xFFFF;
+		final int boundLow = bound & 0xFFFF;
+		final int randHigh = (rand >>> 16);
+		final int boundHigh = (bound >>> 16);
+		return (randHigh * boundLow >>> 16) + (randLow * boundHigh >>> 16) + randHigh * boundHigh | 0;
+
+	}
+
+	/**
 	 * Returns a pseudorandom, uniformly distributed {@code int} value between an
 	 * inner bound of 0 (inclusive) and the specified {@code outerBound} (exclusive).
 	 * This is meant for cases where the outer bound may be negative, especially if

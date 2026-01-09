@@ -110,4 +110,23 @@ public class RangedTest {
             }
         }
     }
+
+	/**
+	 * The int-based bounded-int generator works fine.
+	 */
+	@Test
+	public void testProcessUnsigned32(){
+		for (int bound : new int[]{2, 3, 5, 16, 31, 65, 255, 3421, 33421, 333421, 0x8000001, 0x7FFFFFFF}) {
+			System.out.println("Testing bound: " + bound);
+			for (int i = 0x80000000; i <= 0; i++) {
+				int p = EnhancedRandom.processUnsignedInt32(i, bound);
+				Assert.assertTrue(p < bound && p >= 0);
+			}
+			//noinspection OverflowingLoopIndex
+			for (int i = 1; i >= 0; i++) {
+				int p = EnhancedRandom.processUnsignedInt32(i, bound);
+				Assert.assertTrue(p < bound && p >= 0);
+			}
+		}
+	}
 }
