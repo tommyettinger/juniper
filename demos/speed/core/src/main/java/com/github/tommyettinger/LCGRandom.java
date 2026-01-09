@@ -44,7 +44,7 @@ package com.github.tommyettinger;
  * <br>
  * This emulated version of Random is not serializable.
  */
-public class Random {
+public class LCGRandom {
 
   private static final double multiplierHi = 0x5de;
   private static final double multiplierLo = 0xece66d;
@@ -109,7 +109,7 @@ public class Random {
    *
    * @see #setSeed
    */
-  public Random() {
+  public LCGRandom() {
     double seed = uniqueSeed++ + Math.random() * (System.currentTimeMillis() & 0xFFFFFFFFFFFFFL);
     int hi = (int) Math.floor(seed * twoToTheMinus24) & 0xffffff;
     int lo = (int) (seed - (hi * twoToThe24));
@@ -124,7 +124,7 @@ public class Random {
    *          number generator.
    * @see #setSeed
    */
-  public Random(long seed) {
+  public LCGRandom(long seed) {
     setSeed(seed);
   }
 
@@ -271,8 +271,8 @@ public class Random {
    *
    * @param seed the seed that alters the state of the random number generator.
    * @see #next
-   * @see #Random()
-   * @see #Random(long)
+   * @see #LCGRandom()
+   * @see #LCGRandom(long)
    */
   public synchronized void setSeed(long seed) {
     setSeed(((int) (seed >> 24) & 0xffffff) ^ 0x5de, (int) (seed & 0xffffff) ^ 0xece66d);

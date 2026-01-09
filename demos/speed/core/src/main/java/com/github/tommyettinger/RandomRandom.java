@@ -19,6 +19,8 @@ package com.github.tommyettinger;
 
 import com.github.tommyettinger.random.EnhancedRandom;
 
+import java.util.Random;
+
 /**
  * An EnhancedRandom that simply wraps a {@link Random} instance.
  */
@@ -31,6 +33,10 @@ public class RandomRandom extends EnhancedRandom {
 
     public RandomRandom(long seed) {
         setSeed(seed);
+    }
+
+    public RandomRandom(Random other) {
+        base = other;
     }
 
     @Override
@@ -88,7 +94,7 @@ public class RandomRandom extends EnhancedRandom {
 
     @Override
     public long getSelectedState(int selection) {
-        return base.getSeed();
+        throw new RuntimeException("getSelectedState(int) is Not Yet Implemented.");
     }
 
     @Override
@@ -103,6 +109,6 @@ public class RandomRandom extends EnhancedRandom {
 
     @Override
     public EnhancedRandom copy() {
-        return new RandomRandom(base.getSeed());
+        return new RandomRandom(base);
     }
 }
