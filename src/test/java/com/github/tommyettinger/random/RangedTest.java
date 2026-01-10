@@ -112,21 +112,63 @@ public class RangedTest {
     }
 
 	/**
-	 * The int-based bounded-int generator works fine.
+	 * The int-based bounded-int generator doesn't return the exact same results as before...
+	 * <br>
+	 * Testing bound: 2
+	 * Bound 2 had 0 mismatched results, totaling 0 off.
+	 * Testing bound: 3
+	 * Bound 3 had 65535 mismatched results, totaling 65535 off.
+	 * Testing bound: 5
+	 * Bound 5 had 131070 mismatched results, totaling 131070 off.
+	 * Testing bound: 16
+	 * Bound 16 had 0 mismatched results, totaling 0 off.
+	 * Testing bound: 31
+	 * Bound 31 had 983025 mismatched results, totaling 983025 off.
+	 * Testing bound: 42
+	 * Bound 42 had 1310700 mismatched results, totaling 1310700 off.
+	 * Testing bound: 65
+	 * Bound 65 had 2097120 mismatched results, totaling 2097120 off.
+	 * Testing bound: 255
+	 * Bound 255 had 8322945 mismatched results, totaling 8322945 off.
+	 * Testing bound: 3421
+	 * Bound 3421 had 112064850 mismatched results, totaling 112064850 off.
+	 * Testing bound: 33421
+	 * Bound 33421 had 1095089850 mismatched results, totaling 1095089850 off.
+	 * Testing bound: 333421
+	 * Bound 333421 had 2328415896 mismatched results, totaling 2335536330 off.
+	 * Testing bound: 134217729
+	 * Bound 134217729 had 2080374784 mismatched results, totaling 2080374784 off.
+	 * Testing bound: 2147483647
+	 * Bound 2147483647 had 3757981697 mismatched results, totaling 4294836225 off.
 	 */
 	@Test
 	public void testProcessUnsigned32(){
-		for (int bound : new int[]{2, 3, 5, 16, 31, 65, 255, 3421, 33421, 333421, 0x8000001, 0x7FFFFFFF}) {
+		for (int bound : new int[]{2, 3, 5, 16, 31, 42, 65, 255, 3421, 33421, 333421, 0x8000001, 0x7FFFFFFF}) {
 			System.out.println("Testing bound: " + bound);
+			long discrepancies = 0;
+			long totalOff = 0L;
 			for (int i = 0x80000000; i <= 0; i++) {
 				int p = EnhancedRandom.processUnsignedInt32(i, bound);
 				Assert.assertTrue(p < bound && p >= 0);
+				int u = (int) ((bound & 0xFFFFFFFFL) * (i & 0xFFFFFFFFL) >>> 32);
+				if(u != p) {
+					++discrepancies;
+					totalOff += Math.abs(u - p);
+				}
+//				Assert.assertEquals(u, p);
 			}
 			//noinspection OverflowingLoopIndex
 			for (int i = 1; i >= 0; i++) {
 				int p = EnhancedRandom.processUnsignedInt32(i, bound);
 				Assert.assertTrue(p < bound && p >= 0);
+				int u = (int) ((bound & 0xFFFFFFFFL) * (i & 0xFFFFFFFFL) >>> 32);
+				if(u != p) {
+					++discrepancies;
+					totalOff += Math.abs(u - p);
+				}
+//				Assert.assertEquals(u, p);
 			}
+			System.out.println("Bound " + bound + " had " + discrepancies + " mismatched results, totaling " + totalOff + " off.");
 		}
 	}
 }
