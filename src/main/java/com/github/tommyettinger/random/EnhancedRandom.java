@@ -497,7 +497,7 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * <br>
 	 * Intended for use by implementations that target JS-based platforms in the browser. This is expected to be
 	 * somewhat slower on non-browser-based platforms relative to the way {@link #nextUnsignedInt(int)} uses by default
-	 * there.
+	 * there. This produces very slightly lower results on average than {@link #nextUnsignedInt(int)}.
 	 *
 	 * @param rand a random int, typically produced by {@link #nextInt()}
 	 * @param bound the unsigned upper bound
@@ -509,13 +509,8 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 		final int boundLow = bound & 0xFFFF;
 		final int randHigh = (rand >>> 16);
 		final int boundHigh = (bound >>> 16);
-//		return (randHigh * boundLow >>> 16) + (randLow * boundHigh >>> 16) + randHigh * boundHigh | 0;
-		final int lolo = randLow * boundLow;
-		final int lohi = randLow * boundHigh;
-		final int hilo = randHigh * boundLow;
-		final int hihi = randHigh * boundHigh;
-		return (hilo >>> 16) + (lohi >>> 16) + hihi + ((lolo >>> 16) + (hilo & 0xFFFF) + (lohi & 0xFFFF) >>> 16) | 0;
-
+		return (randHigh * boundLow >>> 16) + (randLow * boundHigh >>> 16) + randHigh * boundHigh | 0;
+		// see RangedTest for an alternative with identical results to nextUnsignedInt().
 	}
 
 	/**

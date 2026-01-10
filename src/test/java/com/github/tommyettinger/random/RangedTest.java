@@ -111,6 +111,32 @@ public class RangedTest {
         }
     }
 
+	public static int processUnsignedInt32Biased(int rand, int bound) {
+		final int randLow = rand & 0xFFFF;
+		final int boundLow = bound & 0xFFFF;
+		final int randHigh = (rand >>> 16);
+		final int boundHigh = (bound >>> 16);
+		return (randHigh * boundLow >>> 16) + (randLow * boundHigh >>> 16) + randHigh * boundHigh;
+	}
+
+	public static int processUnsignedInt32Unbiased(int rand, int bound) {
+		final int randLow = rand & 0xFFFF;
+		final int boundLow = bound & 0xFFFF;
+		final int randHigh = (rand >>> 16);
+		final int boundHigh = (bound >>> 16);
+//		return (randHigh * boundLow >>> 16) + (randLow * boundHigh >>> 16) + randHigh * boundHigh | 0;
+		final int lolo = randLow * boundLow;
+		final int lohi = randLow * boundHigh;
+		final int hilo = randHigh * boundLow;
+		final int hihi = randHigh * boundHigh;
+		return (hilo >>> 16) + (lohi >>> 16) + hihi + ((lolo >>> 16) + (hilo & 0xFFFF) + (lohi & 0xFFFF) >>> 16);
+	}
+
+	public static int processSignedInt32Biased(int rand, int bound) {
+		final int boundSign = bound >> 31;
+		return processUnsignedInt32Unbiased(rand, bound + boundSign ^ boundSign) + boundSign ^ boundSign;
+	}
+
 	/**
 	 * The int-based bounded-int generator now returns the same results, but uses a little more math.
 	 * The math is, at least, SIMD-friendly...
@@ -163,7 +189,7 @@ public class RangedTest {
 			long totalOff = 0L;
 			double averageP = 0, averageU = 0;
 			for (int i = 0x80000000; i < 0; i++) {
-				int p = EnhancedRandom.processUnsignedInt32(i, bound);
+				int p = processUnsignedInt32Unbiased(i, bound);
 				averageP += p;
 				Assert.assertTrue(p < bound && p >= 0);
 				int u = (int) ((bound & 0xFFFFFFFFL) * (i & 0xFFFFFFFFL) >>> 32);
@@ -176,7 +202,7 @@ public class RangedTest {
 			}
 			//noinspection OverflowingLoopIndex
 			for (int i = 0; i >= 0; i++) {
-				int p = EnhancedRandom.processUnsignedInt32(i, bound);
+				int p = processUnsignedInt32Unbiased(i, bound);
 				averageP += p;
 				Assert.assertTrue(p < bound && p >= 0);
 				int u = (int) ((bound & 0xFFFFFFFFL) * (i & 0xFFFFFFFFL) >>> 32);
@@ -189,6 +215,89 @@ public class RangedTest {
 			}
 			System.out.printf("Bound %08X had %09X mismatched results, totaling %09X off.\n", bound, discrepancies, totalOff);
 			System.out.printf("Average p was %10.10f, average u was %10.10f, should be %10.10f .\n", averageP * 0x1p-32, averageU * 0x1p-32, (bound - 1) * 0.5f);
+		}
+	}
+
+	/**
+	 * Testing bound: -3
+	 * Bound FFFFFFFD had 000000000 mismatched results, totaling 000000000 off.
+	 * Average p was -0.9999999998, average u was -0.9999999998, should be -1.0000000000 .
+	 * Testing bound: 2
+	 * Bound 00000002 had 000000000 mismatched results, totaling 000000000 off.
+	 * Average p was 0.5000000000, average u was 0.5000000000, should be 0.5000000000 .
+	 * Testing bound: 5
+	 * Bound 00000005 had 000000000 mismatched results, totaling 000000000 off.
+	 * Average p was 1.9999999995, average u was 1.9999999995, should be 2.0000000000 .
+	 * Testing bound: -16
+	 * Bound FFFFFFF0 had 00000000F mismatched results, totaling 00000000F off.
+	 * Average p was -7.5000000000, average u was -7.4999999965, should be -7.5000000000 .
+	 * Testing bound: 31
+	 * Bound 0000001F had 000000000 mismatched results, totaling 000000000 off.
+	 * Average p was 14.9999999965, average u was 14.9999999965, should be 15.0000000000 .
+	 * Testing bound: -42
+	 * Bound FFFFFFD6 had 000000001 mismatched results, totaling 000000001 off.
+	 * Average p was -20.4999999953, average u was -20.4999999951, should be -20.5000000000 .
+	 * Testing bound: 65
+	 * Bound 00000041 had 000000000 mismatched results, totaling 000000000 off.
+	 * Average p was 31.9999999925, average u was 31.9999999925, should be 32.0000000000 .
+	 * Testing bound: -255
+	 * Bound FFFFFF01 had 000000000 mismatched results, totaling 000000000 off.
+	 * Average p was -126.9999999704, average u was -126.9999999704, should be -127.0000000000 .
+	 * Testing bound: 3421
+	 * Bound 00000D5D had 000000000 mismatched results, totaling 000000000 off.
+	 * Average p was 1709.9999996019, average u was 1709.9999996019, should be 1710.0000000000 .
+	 * Testing bound: -33421
+	 * Bound FFFF7D73 had 000000000 mismatched results, totaling 000000000 off.
+	 * Average p was -16709.9999961094, average u was -16709.9999961094, should be -16710.0000000000 .
+	 * Testing bound: 333421
+	 * Bound 0005166D had 000000000 mismatched results, totaling 000000000 off.
+	 * Average p was 166709.9999611848, average u was 166709.9999611848, should be 166710.0000000000 .
+	 * Testing bound: -134217729
+	 * Bound F7FFFFFF had 000000000 mismatched results, totaling 000000000 off.
+	 * Average p was -67108863.9843751500, average u was -67108863.9843751500, should be -67108864.0000000000 .
+	 * Testing bound: 2147483647
+	 * Bound 7FFFFFFF had 000000000 mismatched results, totaling 000000000 off.
+	 * Average p was 1073741822.7500031000, average u was 1073741822.7500031000, should be 1073741824.0000000000 .
+	 * Testing bound: -2147483648
+	 * Bound 80000000 had 07FFFFFFF mismatched results, totaling 07FFFFFFF off.
+	 * Average p was -1073741823.5000029000, average u was -1073741823.0000029000, should be -1073741824.0000000000 .
+	 */
+	@Test
+	public void testProcessSigned32(){
+		for (int bound : new int[]{-3, 2, 5, -16, 31, -42, 65, -255, 3421, -33421, 333421, -0x8000001, 0x7FFFFFFF, 0x80000000}) {
+			System.out.println("Testing bound: " + bound);
+			long discrepancies = 0;
+			long totalOff = 0L;
+			double averageP = 0, averageU = 0;
+			for (int i = 0x80000000; i < 0; i++) {
+				int p = processSignedInt32Biased(i, bound);
+				averageP += p;
+				Assert.assertTrue("p " + p + " was invalid with input " + i + "!", (p < bound && p >= 0) || (p > bound && p <= 0));
+				int u = (int) ((bound) * (i & 0xFFFFFFFFL) >> 32);
+				u += u >>> 31;
+				averageU += u;
+				if(u != p) {
+					++discrepancies;
+					totalOff += Math.abs(u - p);
+				}
+//				Assert.assertEquals(u, p);
+			}
+			//noinspection OverflowingLoopIndex
+			for (int i = 0; i >= 0; i++) {
+				int p = processSignedInt32Biased(i, bound);
+				averageP += p;
+				Assert.assertTrue("p " + p + " was invalid with input " + i + "!", (p < bound && p >= 0) || (p > bound && p <= 0));
+				int u = (int) ((bound) * (i & 0xFFFFFFFFL) >> 32);
+				u += u >>> 31;
+				averageU += u;
+				if(u != p) {
+					++discrepancies;
+					totalOff += Math.abs(u - p);
+				}
+//				Assert.assertEquals(u, p);
+			}
+			System.out.printf("Bound %08X had %09X mismatched results, totaling %09X off.\n", bound, discrepancies, totalOff);
+			System.out.printf("Average p was %10.10f, average u was %10.10f, should be %10.10f .\n", averageP * 0x1p-32, averageU * 0x1p-32, (bound - (bound >> 31 | 1)) * 0.5f);
 		}
 	}
 }
