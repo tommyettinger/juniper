@@ -509,7 +509,12 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 		final int boundLow = bound & 0xFFFF;
 		final int randHigh = (rand >>> 16);
 		final int boundHigh = (bound >>> 16);
-		return (randHigh * boundLow >>> 16) + (randLow * boundHigh >>> 16) + randHigh * boundHigh | 0;
+//		return (randHigh * boundLow >>> 16) + (randLow * boundHigh >>> 16) + randHigh * boundHigh | 0;
+		final int lolo = randLow * boundLow;
+		final int lohi = randLow * boundHigh;
+		final int hilo = randHigh * boundLow;
+		final int hihi = randHigh * boundHigh;
+		return (hilo >>> 16) + (lohi >>> 16) + hihi + ((lolo >>> 16) + (hilo & 0xFFFF) + (lohi & 0xFFFF) >>> 16) | 0;
 
 	}
 

@@ -112,47 +112,48 @@ public class RangedTest {
     }
 
 	/**
-	 * The int-based bounded-int generator doesn't return the exact same results as before...
+	 * The int-based bounded-int generator now returns the same results, but uses a little more math.
+	 * The math is, at least, SIMD-friendly...
 	 * <br>
 	 * Testing bound: 2
 	 * Bound 00000002 had 000000000 mismatched results, totaling 000000000 off.
 	 * Average p was 0.5000000000, average u was 0.5000000000, should be 0.5000000000 .
 	 * Testing bound: 3
-	 * Bound 00000003 had 00000FFFF mismatched results, totaling 00000FFFF off.
-	 * Average p was 0.9999847412, average u was 0.9999999998, should be 1.0000000000 .
+	 * Bound 00000003 had 000000000 mismatched results, totaling 000000000 off.
+	 * Average p was 0.9999999998, average u was 0.9999999998, should be 1.0000000000 .
 	 * Testing bound: 5
-	 * Bound 00000005 had 00001FFFE mismatched results, totaling 00001FFFE off.
-	 * Average p was 1.9999694824, average u was 1.9999999995, should be 2.0000000000 .
+	 * Bound 00000005 had 000000000 mismatched results, totaling 000000000 off.
+	 * Average p was 1.9999999995, average u was 1.9999999995, should be 2.0000000000 .
 	 * Testing bound: 16
 	 * Bound 00000010 had 000000000 mismatched results, totaling 000000000 off.
 	 * Average p was 7.5000000000, average u was 7.5000000000, should be 7.5000000000 .
 	 * Testing bound: 31
-	 * Bound 0000001F had 0000EFFF1 mismatched results, totaling 0000EFFF1 off.
-	 * Average p was 14.9997711182, average u was 14.9999999965, should be 15.0000000000 .
+	 * Bound 0000001F had 000000000 mismatched results, totaling 000000000 off.
+	 * Average p was 14.9999999965, average u was 14.9999999965, should be 15.0000000000 .
 	 * Testing bound: 42
-	 * Bound 0000002A had 00013FFEC mismatched results, totaling 00013FFEC off.
-	 * Average p was 20.4996948242, average u was 20.4999999953, should be 20.5000000000 .
+	 * Bound 0000002A had 000000000 mismatched results, totaling 000000000 off.
+	 * Average p was 20.4999999953, average u was 20.4999999953, should be 20.5000000000 .
 	 * Testing bound: 65
-	 * Bound 00000041 had 0001FFFE0 mismatched results, totaling 0001FFFE0 off.
-	 * Average p was 31.9995117188, average u was 31.9999999925, should be 32.0000000000 .
+	 * Bound 00000041 had 000000000 mismatched results, totaling 000000000 off.
+	 * Average p was 31.9999999925, average u was 31.9999999925, should be 32.0000000000 .
 	 * Testing bound: 255
-	 * Bound 000000FF had 0007EFF81 mismatched results, totaling 0007EFF81 off.
-	 * Average p was 126.9980621338, average u was 126.9999999704, should be 127.0000000000 .
+	 * Bound 000000FF had 000000000 mismatched results, totaling 000000000 off.
+	 * Average p was 126.9999999704, average u was 126.9999999704, should be 127.0000000000 .
 	 * Testing bound: 3421
-	 * Bound 00000D5D had 006ADF952 mismatched results, totaling 006ADF952 off.
-	 * Average p was 1709.9739074707, average u was 1709.9999996019, should be 1710.0000000000 .
+	 * Bound 00000D5D had 000000000 mismatched results, totaling 000000000 off.
+	 * Average p was 1709.9999996019, average u was 1709.9999996019, should be 1710.0000000000 .
 	 * Testing bound: 33421
-	 * Bound 0000828D had 04145BEBA mismatched results, totaling 04145BEBA off.
-	 * Average p was 16709.7450256348, average u was 16709.9999961094, should be 16710.0000000000 .
+	 * Bound 0000828D had 000000000 mismatched results, totaling 000000000 off.
+	 * Average p was 16709.9999961094, average u was 16709.9999961094, should be 16710.0000000000 .
 	 * Testing bound: 333421
-	 * Bound 0005166D had 08AC8CE98 mismatched results, totaling 08B3574CA off.
-	 * Average p was 166709.4561767578, average u was 166709.9999611848, should be 166710.0000000000 .
+	 * Bound 0005166D had 000000000 mismatched results, totaling 000000000 off.
+	 * Average p was 166709.9999611848, average u was 166709.9999611848, should be 166710.0000000000 .
 	 * Testing bound: 134217729
-	 * Bound 08000001 had 07C000000 mismatched results, totaling 07C000000 off.
-	 * Average p was 67108863.5000001900, average u was 67108863.9843751500, should be 67108864.0000000000 .
+	 * Bound 08000001 had 000000000 mismatched results, totaling 000000000 off.
+	 * Average p was 67108863.9843751500, average u was 67108863.9843751500, should be 67108864.0000000000 .
 	 * Testing bound: 2147483647
-	 * Bound 7FFFFFFF had 0DFFE4001 mismatched results, totaling 0FFFE0001 off.
-	 * Average p was 1073741821.7500184000, average u was 1073741822.7500031000, should be 1073741824.0000000000 .
+	 * Bound 7FFFFFFF had 000000000 mismatched results, totaling 000000000 off.
+	 * Average p was 1073741822.7500031000, average u was 1073741822.7500031000, should be 1073741824.0000000000 .
 	 */
 	@Test
 	public void testProcessUnsigned32(){
