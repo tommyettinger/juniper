@@ -115,31 +115,44 @@ public class RangedTest {
 	 * The int-based bounded-int generator doesn't return the exact same results as before...
 	 * <br>
 	 * Testing bound: 2
-	 * Bound 2 had 0 mismatched results, totaling 0 off.
+	 * Bound 00000002 had 000000000 mismatched results, totaling 000000000 off.
+	 * Average p was 0.5000000000, average u was 0.5000000000, should be 0.5000000000 .
 	 * Testing bound: 3
-	 * Bound 3 had 65535 mismatched results, totaling 65535 off.
+	 * Bound 00000003 had 00000FFFF mismatched results, totaling 00000FFFF off.
+	 * Average p was 0.9999847412, average u was 0.9999999998, should be 1.0000000000 .
 	 * Testing bound: 5
-	 * Bound 5 had 131070 mismatched results, totaling 131070 off.
+	 * Bound 00000005 had 00001FFFE mismatched results, totaling 00001FFFE off.
+	 * Average p was 1.9999694824, average u was 1.9999999995, should be 2.0000000000 .
 	 * Testing bound: 16
-	 * Bound 16 had 0 mismatched results, totaling 0 off.
+	 * Bound 00000010 had 000000000 mismatched results, totaling 000000000 off.
+	 * Average p was 7.5000000000, average u was 7.5000000000, should be 7.5000000000 .
 	 * Testing bound: 31
-	 * Bound 31 had 983025 mismatched results, totaling 983025 off.
+	 * Bound 0000001F had 0000EFFF1 mismatched results, totaling 0000EFFF1 off.
+	 * Average p was 14.9997711182, average u was 14.9999999965, should be 15.0000000000 .
 	 * Testing bound: 42
-	 * Bound 42 had 1310700 mismatched results, totaling 1310700 off.
+	 * Bound 0000002A had 00013FFEC mismatched results, totaling 00013FFEC off.
+	 * Average p was 20.4996948242, average u was 20.4999999953, should be 20.5000000000 .
 	 * Testing bound: 65
-	 * Bound 65 had 2097120 mismatched results, totaling 2097120 off.
+	 * Bound 00000041 had 0001FFFE0 mismatched results, totaling 0001FFFE0 off.
+	 * Average p was 31.9995117188, average u was 31.9999999925, should be 32.0000000000 .
 	 * Testing bound: 255
-	 * Bound 255 had 8322945 mismatched results, totaling 8322945 off.
+	 * Bound 000000FF had 0007EFF81 mismatched results, totaling 0007EFF81 off.
+	 * Average p was 126.9980621338, average u was 126.9999999704, should be 127.0000000000 .
 	 * Testing bound: 3421
-	 * Bound 3421 had 112064850 mismatched results, totaling 112064850 off.
+	 * Bound 00000D5D had 006ADF952 mismatched results, totaling 006ADF952 off.
+	 * Average p was 1709.9739074707, average u was 1709.9999996019, should be 1710.0000000000 .
 	 * Testing bound: 33421
-	 * Bound 33421 had 1095089850 mismatched results, totaling 1095089850 off.
+	 * Bound 0000828D had 04145BEBA mismatched results, totaling 04145BEBA off.
+	 * Average p was 16709.7450256348, average u was 16709.9999961094, should be 16710.0000000000 .
 	 * Testing bound: 333421
-	 * Bound 333421 had 2328415896 mismatched results, totaling 2335536330 off.
+	 * Bound 0005166D had 08AC8CE98 mismatched results, totaling 08B3574CA off.
+	 * Average p was 166709.4561767578, average u was 166709.9999611848, should be 166710.0000000000 .
 	 * Testing bound: 134217729
-	 * Bound 134217729 had 2080374784 mismatched results, totaling 2080374784 off.
+	 * Bound 08000001 had 07C000000 mismatched results, totaling 07C000000 off.
+	 * Average p was 67108863.5000001900, average u was 67108863.9843751500, should be 67108864.0000000000 .
 	 * Testing bound: 2147483647
-	 * Bound 2147483647 had 3757981697 mismatched results, totaling 4294836225 off.
+	 * Bound 7FFFFFFF had 0DFFE4001 mismatched results, totaling 0FFFE0001 off.
+	 * Average p was 1073741821.7500184000, average u was 1073741822.7500031000, should be 1073741824.0000000000 .
 	 */
 	@Test
 	public void testProcessUnsigned32(){
@@ -147,10 +160,13 @@ public class RangedTest {
 			System.out.println("Testing bound: " + bound);
 			long discrepancies = 0;
 			long totalOff = 0L;
-			for (int i = 0x80000000; i <= 0; i++) {
+			double averageP = 0, averageU = 0;
+			for (int i = 0x80000000; i < 0; i++) {
 				int p = EnhancedRandom.processUnsignedInt32(i, bound);
+				averageP += p;
 				Assert.assertTrue(p < bound && p >= 0);
 				int u = (int) ((bound & 0xFFFFFFFFL) * (i & 0xFFFFFFFFL) >>> 32);
+				averageU += u;
 				if(u != p) {
 					++discrepancies;
 					totalOff += Math.abs(u - p);
@@ -158,17 +174,20 @@ public class RangedTest {
 //				Assert.assertEquals(u, p);
 			}
 			//noinspection OverflowingLoopIndex
-			for (int i = 1; i >= 0; i++) {
+			for (int i = 0; i >= 0; i++) {
 				int p = EnhancedRandom.processUnsignedInt32(i, bound);
+				averageP += p;
 				Assert.assertTrue(p < bound && p >= 0);
 				int u = (int) ((bound & 0xFFFFFFFFL) * (i & 0xFFFFFFFFL) >>> 32);
+				averageU += u;
 				if(u != p) {
 					++discrepancies;
 					totalOff += Math.abs(u - p);
 				}
 //				Assert.assertEquals(u, p);
 			}
-			System.out.println("Bound " + bound + " had " + discrepancies + " mismatched results, totaling " + totalOff + " off.");
+			System.out.printf("Bound %08X had %09X mismatched results, totaling %09X off.\n", bound, discrepancies, totalOff);
+			System.out.printf("Average p was %10.10f, average u was %10.10f, should be %10.10f .\n", averageP * 0x1p-32, averageU * 0x1p-32, (bound - 1) * 0.5f);
 		}
 	}
 }
