@@ -497,7 +497,9 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * <br>
 	 * Intended for use by implementations that target JS-based platforms in the browser. This is expected to be
 	 * somewhat slower on non-browser-based platforms relative to the way {@link #nextUnsignedInt(int)} uses by default
-	 * there. This produces very slightly lower results on average than {@link #nextUnsignedInt(int)}.
+	 * there. In a browser using JS (not WASM), avoiding math on {@code long} values can be much faster, and this does
+	 * not use long math, while {@link #nextUnsignedInt(int)} does.
+	 * This produces very slightly different results on average than {@link #nextUnsignedInt(int)}.
 	 *
 	 * @param rand a random int, typically produced by {@link #nextInt()}
 	 * @param bound the unsigned upper bound
@@ -511,6 +513,27 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 		final int boundHigh = (bound >>> 16);
 		return (randHigh * boundLow >>> 16) + (randLow * boundHigh >>> 16) + randHigh * boundHigh | 0;
 		// see RangedTest for an alternative with identical results to nextUnsignedInt().
+	}
+	/**
+	 * Processes a given int {@code rand}, which should be random and is typically produced by {@link #nextInt()}, and
+	 * an int {@code bound}, which is treated as signed, to return an int between 0 (inclusive, inner) and bound
+	 * (exclusive, outer). If {@code bound} is -1, 0, or 1, this returns 0 regardless of {@code rand}.
+	 * <br>
+	 * Intended for use by implementations that target JS-based platforms in the browser. This is expected to be
+	 * somewhat slower on non-browser-based platforms relative to the way {@link #nextSignedInt(int)} uses by default
+	 * there. In a browser using JS (not WASM), avoiding math on {@code long} values can be much faster, and this does
+	 * not use long math, while {@link #nextSignedInt(int)} does.
+	 * This produces very slightly different results on average than {@link #nextSignedInt(int)}.
+	 *
+	 * @param rand a random int, typically produced by {@link #nextInt()}
+	 * @param bound the signed outer bound
+	 * @return an int between 0 (inclusive, inner) and bound (exclusive, outer)
+	 */
+	public static int processSignedInt32(int rand, int bound) {
+		final int boundSign = bound >> 31;
+		// The `+ boundSign ^ boundSign` flips the sign if bound is negative.
+		return processUnsignedInt32(rand, bound + boundSign ^ boundSign) + boundSign ^ boundSign;
+		// see RangedTest for an alternative to processUnsignedInt32(), with less bias.
 	}
 
 	/**
