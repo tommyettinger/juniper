@@ -17,42 +17,28 @@
 
 package com.github.tommyettinger.random;
 
-import com.github.tommyettinger.digital.Base;
-import com.github.tommyettinger.digital.BitConversion;
-import com.github.tommyettinger.digital.Distributor;
-import com.github.tommyettinger.digital.MathTools;
-import com.github.tommyettinger.digital.RoughMath;
+import com.github.tommyettinger.digital.*;
 
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
-import java.math.BigInteger;
 import java.util.List;
 import java.util.Random;
 
 /**
- * A superset of the functionality in {@link java.util.Random}, meant for random number generators
- * that would be too bare-bones with just Random's methods.
+ * A specialized subclass of {@link EnhancedRandom} meant for generators that use 32-bit math and natively operate on
+ * {@code int} results instead of {@code long} results.
  */
-public abstract class EnhancedRandom extends Random implements Externalizable {
+public abstract class Enhanced32Random extends EnhancedRandom implements Externalizable {
 
-	public EnhancedRandom() {
+	public Enhanced32Random() {
 		super();
 	}
 
-	public EnhancedRandom(long seed) {
+	public Enhanced32Random(long seed) {
 		super(seed);
 	}
-
-	/**
-	 * Gets the tag used to identify this type of EnhancedRandom, as a String. This tag should be unique,
-	 * and for uniformity purposes, all tags used in this library are 4 characters long. User-defined tags
-	 * should have a different length.
-	 *
-	 * @return a unique String identifier for this type of EnhancedRandom; usually 4 chars long.
-	 */
-	public abstract String getTag();
 
 	/**
 	 * Returns true if this generator mainly operates via its {@link #nextInt()} method internally, which means its
@@ -61,316 +47,14 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * targeting Google Web Toolkit mainly operate via {@link #nextLong()} here, and return false. A generator that
 	 * returns true here does not necessarily use 32-bit math; a generator can use 64-bit math internally but only
 	 * produce 32 bits at a time by truncating its results.
+	 * <br>
+	 * In Enhanced32Random, this returns {@code true} by default.
 	 *
 	 * @return true if measurements of the period measure calls to {@link #nextInt()} instead of {@link #nextLong()}
 	 * @see #getMinimumPeriod() This is closely related to the minimum period length.
 	 */
 	public boolean mainlyGeneratesInt() {
-		return false;
-	}
-
-	/**
-	 * Gets the guaranteed lowest number of different results this can return from its main generating method, which is
-	 * normally {@link #nextLong()} unless {@link #mainlyGeneratesInt()} returns true (then it is {@link #nextInt()}).
-	 * The maximum period is not known for many generators, but the minimum is, even if it is only 1 for a generator
-	 * that can be initialized badly and return the same value every time on that cycle. If the minimum period is not
-	 * known, this should not be overridden; its default result is the constant {@link BigInteger#ONE}. If this is the
-	 * only JavaDoc for this method, the minimum period is not known, and is possibly 1 in the worst case.
-	 * <br>
-	 * This is relevant when determining if, when two different generators are combined, their period will change. The
-	 * minimum period of two generators run simultaneously and both used fully in the result is the least common
-	 * multiple of their minimum periods. This can be computed conveniently with
-	 * {@link #lcm(BigInteger, BigInteger)} given the minimum period of two different EnhancedRandom generators.
-	 * <br>
-	 * Implementations are strongly encouraged to compute this value once, if it needs computation at all, and store it
-	 * in a {@code private static final BigInteger MINIMUM_PERIOD;}, which this method simply returns. Classes are not
-	 * required to have a {@code MINIMUM_PERIOD} field or to make it accessible. Calling this method should generally
-	 * not create a new BigInteger.
-	 *
-	 * @return the minimum guaranteed period, or the shortest cycle length possible for the main generating method
-	 */
-	public BigInteger getMinimumPeriod() {
-		return BigInteger.ONE;
-	}
-
-	/**
-	 * Gets the least common multiple (lcm) of two BigInteger values, which here are usually returned by
-	 * {@link #getMinimumPeriod()}.
-	 *
-	 * @param a must be greater than 0; typically the result of {@link #getMinimumPeriod()}
-	 * @param b must be greater than 0; typically the result of {@link #getMinimumPeriod()}
-	 * @return the least common multiple of {@code a} and {@code b}, as a BigInteger
-	 */
-	public static BigInteger lcm(BigInteger a, BigInteger b){
-		return a.divide(a.gcd(b)).multiply(b);
-	}
-
-	/**
-	 * Uses {@link Math#random()} to hastily put together a not-especially-uniform {@code long} value,
-	 * meant only to produce a seed when no seed was specified (the "I don't care" seed).
-	 *
-	 * @return a kind-of-uniform {@code long} value
-	 */
-	public static long seedFromMath() {
-		return (long) ((Math.random() - 0.5) * 0x1p52) ^ (long) ((Math.random() - 0.5) * 0x1p64);
-	}
-
-	/**
-	 * Sets the seed of this random number generator using a single
-	 * {@code long} seed. This should behave exactly the same as if a new
-	 * object of this type was created with the constructor that takes a single
-	 * {@code long} value. This does not necessarily assign the state
-	 * variable(s) of the implementation with the exact contents of seed, so
-	 * {@link #getSelectedState(int)} should not be expected to return
-	 * {@code seed} after this, though it may. If this implementation has more
-	 * than one {@code long} of state, then the expectation is that none of
-	 * those state variables will be exactly equal to {@code seed} (almost all
-	 * the time).
-	 *
-	 * @param seed the initial seed
-	 */
-	public abstract void setSeed(long seed);
-
-	/**
-	 * Gets the number of possible state variables that can be selected with
-	 * {@link #getSelectedState(int)} or {@link #setSelectedState(int, long)}.
-	 * This defaults to returning 0, making no state variable available for
-	 * reading or writing. An implementation that has only one {@code long}
-	 * state, like {@link DistinctRandom} generator, should return {@code 1}. A
-	 * generator that permits setting two different {@code long} values, like
-	 * {@link LaserRandom}, should return {@code 2}. Much larger values are
-	 * possible for types like the Mersenne Twister or some CMWC generators.
-	 *
-	 * @return the non-negative number of selections possible for state variables
-	 */
-	public int getStateCount() {
-		return 0;
-	}
-
-	/**
-	 * Gets a selected state value from this EnhancedRandom. The number of possible selections
-	 * is up to the implementing class, and is accessible via {@link #getStateCount()}, but
-	 * negative values for {@code selection} are typically not tolerated. This should return
-	 * the exact value of the selected state, assuming it is implemented. The default
-	 * implementation throws an UnsupportedOperationException, and implementors only have to
-	 * allow reading the state if they choose to implement this differently. If this method
-	 * is intended to be used, {@link #getStateCount()} must also be implemented.
-	 *
-	 * @param selection used to select which state variable to get; generally non-negative
-	 * @return the exact value of the selected state
-	 */
-	public long getSelectedState(int selection) {
-		throw new UnsupportedOperationException("getSelectedState() not supported.");
-	}
-
-	/**
-	 * Sets a selected state value to the given long {@code value}. The number of possible
-	 * selections is up to the implementing class, but negative values for {@code selection}
-	 * are typically not tolerated. Implementors are permitted to change {@code value} if it
-	 * is not valid, but they should not alter it if it is valid. The public implementation
-	 * calls {@link #setSeed(long)} with {@code value}, which doesn't need changing if the
-	 * generator has one state that is set verbatim by setSeed(). Otherwise, this method
-	 * should be implemented when {@link #getSelectedState(int)} is and the state is allowed
-	 * to be set by users. Having accurate ways to get and set the full state of a random
-	 * number generator makes it much easier to serialize and deserialize that class.
-	 *
-	 * @param selection used to select which state variable to set; generally non-negative
-	 * @param value     the exact value to use for the selected state, if valid
-	 */
-	public void setSelectedState(int selection, long value) {
-		setSeed(value);
-	}
-
-	/**
-	 * Sets each state variable to the given {@code state}. If {@link #getStateCount()} is
-	 * 1, then this should set the whole state to the given value using
-	 * {@link #setSelectedState(int, long)}. If getStateCount() is more than 1, then all
-	 * states will be set in the same way (using setSelectedState(), all to {@code state}).
-	 *
-	 * @param state the long value to use for each state variable
-	 */
-	public void setState(long state) {
-		for (int i = getStateCount() - 1; i >= 0; i--) {
-			setSelectedState(i, state);
-		}
-	}
-
-	/**
-	 * Sets each state variable to either {@code stateA} or {@code stateB}, alternating.
-	 * This uses {@link #setSelectedState(int, long)} to set the values. If there is one
-	 * state variable ({@link #getStateCount()} is 1), then this only sets that state
-	 * variable to stateA. If there are two state variables, the first is set to stateA,
-	 * and the second to stateB. If there are more, it reuses stateA, then stateB, then
-	 * stateA, and so on until all variables are set.
-	 *
-	 * @param stateA the long value to use for states at index 0, 2, 4, 6...
-	 * @param stateB the long value to use for states at index 1, 3, 5, 7...
-	 */
-	public void setState(long stateA, long stateB) {
-		final int c = getStateCount();
-		for (int i = 0; i < c; i += 2) {
-			setSelectedState(i, stateA);
-		}
-		for (int i = 1; i < c; i += 2) {
-			setSelectedState(i, stateB);
-		}
-	}
-
-	/**
-	 * Sets each state variable to {@code stateA}, {@code stateB}, or {@code stateC},
-	 * alternating. This uses {@link #setSelectedState(int, long)} to set the values.
-	 * If there is one state variable ({@link #getStateCount()} is 1), then this only
-	 * sets that state variable to stateA. If there are two state variables, the first
-	 * is set to stateA, and the second to stateB. With three state variables, the
-	 * first is set to stateA, the second to stateB, and the third to stateC. If there
-	 * are more, it reuses stateA, then stateB, then stateC, then stateA, and so on
-	 * until all variables are set.
-	 *
-	 * @param stateA the long value to use for states at index 0, 3, 6, 9...
-	 * @param stateB the long value to use for states at index 1, 4, 7, 10...
-	 * @param stateC the long value to use for states at index 2, 5, 8, 11...
-	 */
-	public void setState(long stateA, long stateB, long stateC) {
-		final int c = getStateCount();
-		for (int i = 0; i < c; i += 3) {
-			setSelectedState(i, stateA);
-		}
-		for (int i = 1; i < c; i += 3) {
-			setSelectedState(i, stateB);
-		}
-		for (int i = 2; i < c; i += 3) {
-			setSelectedState(i, stateC);
-		}
-	}
-
-	/**
-	 * Sets each state variable to {@code stateA}, {@code stateB}, {@code stateC}, or
-	 * {@code stateD}, alternating. This uses {@link #setSelectedState(int, long)} to
-	 * set the values. If there is one state variable ({@link #getStateCount()} is 1),
-	 * then this only sets that state variable to stateA. If there are two state
-	 * variables, the first is set to stateA, and the second to stateB. With three
-	 * state variables, the first is set to stateA, the second to stateB, and the third
-	 * to stateC. With four state variables, the first is set to stateA, the second to
-	 * stateB, the third to stateC, and the fourth to stateD. If there are more, it
-	 * reuses stateA, then stateB, then stateC, then stateD, then stateA, and so on
-	 * until all variables are set.
-	 *
-	 * @param stateA the long value to use for states at index 0, 4, 8, 12...
-	 * @param stateB the long value to use for states at index 1, 5, 9, 13...
-	 * @param stateC the long value to use for states at index 2, 6, 10, 14...
-	 * @param stateD the long value to use for states at index 3, 7, 11, 15...
-	 */
-	public void setState(long stateA, long stateB, long stateC, long stateD) {
-		final int c = getStateCount();
-		for (int i = 0; i < c; i += 4) {
-			setSelectedState(i, stateA);
-		}
-		for (int i = 1; i < c; i += 4) {
-			setSelectedState(i, stateB);
-		}
-		for (int i = 2; i < c; i += 4) {
-			setSelectedState(i, stateC);
-		}
-		for (int i = 3; i < c; i += 4) {
-			setSelectedState(i, stateD);
-		}
-	}
-
-	/**
-	 * Sets each state variable to {@code stateA}, {@code stateB}, {@code stateC},
-	 * {@code stateD}, or {@code stateE}, alternating. This uses {@link #setSelectedState(int, long)} to
-	 * set the values. If there is one state variable ({@link #getStateCount()} is 1),
-	 * then this only sets that state variable to stateA. If there are two state
-	 * variables, the first is set to stateA, and the second to stateB. With three
-	 * state variables, the first is set to stateA, the second to stateB, and the third
-	 * to stateC. With four state variables, the first is set to stateA, the second to
-	 * stateB, the third to stateC, and the fourth to stateD. If there are more, it
-	 * reuses stateA, then stateB, then stateC, then stateD, then stateE, then stateA, and so on
-	 * until all variables are set.
-	 *
-	 * @param stateA the long value to use for states at index 0, 5, 10, 15...
-	 * @param stateB the long value to use for states at index 1, 6, 11, 16...
-	 * @param stateC the long value to use for states at index 2, 7, 12, 17...
-	 * @param stateD the long value to use for states at index 3, 8, 13, 18...
-	 * @param stateE the long value to use for states at index 4, 9, 14, 19...
-	 */
-	public void setState(long stateA, long stateB, long stateC, long stateD, long stateE) {
-		final int c = getStateCount();
-		for (int i = 0; i < c; i += 5) {
-			setSelectedState(i, stateA);
-		}
-		for (int i = 1; i < c; i += 5) {
-			setSelectedState(i, stateB);
-		}
-		for (int i = 2; i < c; i += 5) {
-			setSelectedState(i, stateC);
-		}
-		for (int i = 3; i < c; i += 5) {
-			setSelectedState(i, stateD);
-		}
-		for (int i = 4; i < c; i += 5) {
-			setSelectedState(i, stateE);
-		}
-	}
-
-	/**
-	 * Sets each state variable to {@code stateA}, {@code stateB}, {@code stateC},
-	 * {@code stateD}, or {@code stateE}, alternating. This uses {@link #setSelectedState(int, long)} to
-	 * set the values. If there is one state variable ({@link #getStateCount()} is 1),
-	 * then this only sets that state variable to stateA. If there are two state
-	 * variables, the first is set to stateA, and the second to stateB. With three
-	 * state variables, the first is set to stateA, the second to stateB, and the third
-	 * to stateC. With four state variables, the first is set to stateA, the second to
-	 * stateB, the third to stateC, and the fourth to stateD. If there are more, it
-	 * reuses stateA, then stateB, then stateC, then stateD, then stateE, then stateF, then stateA, and so on
-	 * until all variables are set.
-	 *
-	 * @param stateA the long value to use for states at index 0,  6, 12, 18...
-	 * @param stateB the long value to use for states at index 1,  7, 13, 19...
-	 * @param stateC the long value to use for states at index 2,  8, 14, 20...
-	 * @param stateD the long value to use for states at index 3,  9, 15, 21...
-	 * @param stateE the long value to use for states at index 4, 10, 16, 22...
-	 * @param stateF the long value to use for states at index 5, 11, 17, 23...
-	 */
-	public void setState(long stateA, long stateB, long stateC, long stateD, long stateE, long stateF) {
-		final int c = getStateCount();
-		for (int i = 0; i < c; i += 6) {
-			setSelectedState(i, stateA);
-		}
-		for (int i = 1; i < c; i += 6) {
-			setSelectedState(i, stateB);
-		}
-		for (int i = 2; i < c; i += 6) {
-			setSelectedState(i, stateC);
-		}
-		for (int i = 3; i < c; i += 6) {
-			setSelectedState(i, stateD);
-		}
-		for (int i = 4; i < c; i += 6) {
-			setSelectedState(i, stateE);
-		}
-		for (int i = 5; i < c; i += 6) {
-			setSelectedState(i, stateF);
-		}
-	}
-
-	/**
-	 * Sets all state variables to alternating values chosen from {@code states}. If states is empty,
-	 * then this does nothing, and leaves the current generator unchanged. This works for
-	 * generators with any {@link #getStateCount()}, but may allocate an array if states is
-	 * used as a varargs (you can pass an existing array without needing to allocate). This
-	 * uses {@link #setSelectedState(int, long)} to change the states.
-	 *
-	 * @param states an array or varargs of long values to use as states
-	 */
-	public void setState(long... states) {
-		final int c = getStateCount(), sl = states.length;
-		for (int b = 0; b < sl; b++) {
-			final long curr = states[b];
-			for (int i = b; i < c; i += sl) {
-				setSelectedState(i, curr);
-			}
-		}
+		return true;
 	}
 
 	/**
@@ -399,7 +83,7 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * generator's sequence
 	 */
 	public int next(int bits) {
-		return (int) nextLong() >>> 32 - bits;
+		return nextInt() >>> 32 - bits;
 	}
 
 	/**
@@ -412,8 +96,8 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 */
 	public void nextBytes(byte[] bytes) {
 		if (bytes != null) {
-			for (int i = 0; i < bytes.length; ) {
-				for (long r = nextLong(), n = Math.min(bytes.length - i, 8); n-- > 0; r >>>= 8) {
+			for (int i = 0, len = bytes.length; i < len; ) {
+				for (int r = nextInt(), n = Math.min(len - i, 4); n-- > 0; r >>>= 8) {
 					bytes[i++] = (byte) r;
 				}
 			}
@@ -426,12 +110,16 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * contract of {@code nextInt} is that one {@code int} value is
 	 * pseudorandomly generated and returned. All 2<sup>32</sup> possible
 	 * {@code int} values are produced with (approximately) equal probability.
+	 * <br>
+	 * In Enhanced32Random, this throws an UnsupportedOperationException because
+	 * the concrete subclass must implement this.
 	 *
 	 * @return the next pseudorandom, uniformly distributed {@code int}
 	 * value from this random number generator's sequence
 	 */
 	public int nextInt() {
-		return (int) nextLong();
+
+		throw new UnsupportedOperationException("nextInt() must be implemented by any Enhanced32Random.");
 	}
 
 	/**
@@ -460,7 +148,7 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * from this random number generator's sequence
 	 */
 	public int nextInt(int bound) {
-		return (int) (bound * (nextLong() & 0xFFFFFFFFL) >> 32) & ~(bound >> 31);
+		return EnhancedRandom.processSignedInt32(nextInt(), bound) & ~(bound >> 31);
 	}
 
 	/**
@@ -487,53 +175,7 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * unsigned, from this random number generator's sequence
 	 */
 	public int nextUnsignedInt(int bound) {
-		return (int) ((bound & 0xFFFFFFFFL) * (nextLong() & 0xFFFFFFFFL) >>> 32);
-	}
-
-	/**
-	 * Processes a given int {@code rand}, which should be random and is typically produced by {@link #nextInt()}, and
-	 * an int {@code bound}, which is treated as unsigned, to return an int between 0 and bound (exclusive, unsigned).
-	 * If {@code bound} is 0 or 1, this returns 0 regardless of {@code rand}.
-	 * <br>
-	 * Intended for use by implementations that target JS-based platforms in the browser. This is expected to be
-	 * somewhat slower on non-browser-based platforms relative to the way {@link #nextUnsignedInt(int)} uses by default
-	 * there. In a browser using JS (not WASM), avoiding math on {@code long} values can be much faster, and this does
-	 * not use long math, while {@link #nextUnsignedInt(int)} does.
-	 * This produces very slightly different results on average than {@link #nextUnsignedInt(int)}.
-	 *
-	 * @param rand a random int, typically produced by {@link #nextInt()}
-	 * @param bound the unsigned upper bound
-	 * @return an int between 0 (inclusive) and bound (exclusive, unsigned)
-	 */
-	@SuppressWarnings("PointlessBitwiseExpression")
-	public static int processUnsignedInt32(int rand, int bound) {
-		final int randLow = rand & 0xFFFF;
-		final int boundLow = bound & 0xFFFF;
-		final int randHigh = (rand >>> 16);
-		final int boundHigh = (bound >>> 16);
-		return (randHigh * boundLow >>> 16) + (randLow * boundHigh >>> 16) + randHigh * boundHigh | 0;
-		// see RangedTest for an alternative with identical results to nextUnsignedInt().
-	}
-	/**
-	 * Processes a given int {@code rand}, which should be random and is typically produced by {@link #nextInt()}, and
-	 * an int {@code bound}, which is treated as signed, to return an int between 0 (inclusive, inner) and bound
-	 * (exclusive, outer). If {@code bound} is -1, 0, or 1, this returns 0 regardless of {@code rand}.
-	 * <br>
-	 * Intended for use by implementations that target JS-based platforms in the browser. This is expected to be
-	 * somewhat slower on non-browser-based platforms relative to the way {@link #nextSignedInt(int)} uses by default
-	 * there. In a browser using JS (not WASM), avoiding math on {@code long} values can be much faster, and this does
-	 * not use long math, while {@link #nextSignedInt(int)} does.
-	 * This produces very slightly different results on average than {@link #nextSignedInt(int)}.
-	 *
-	 * @param rand a random int, typically produced by {@link #nextInt()}
-	 * @param bound the signed outer bound
-	 * @return an int between 0 (inclusive, inner) and bound (exclusive, outer)
-	 */
-	public static int processSignedInt32(int rand, int bound) {
-		final int boundSign = bound >> 31;
-		// The `+ boundSign ^ boundSign` flips the sign if bound is negative.
-		return processUnsignedInt32(rand, bound + boundSign ^ boundSign) + boundSign ^ boundSign;
-		// see RangedTest for an alternative to processUnsignedInt32(), with less bias.
+		return EnhancedRandom.processUnsignedInt32(nextInt(), bound);
 	}
 
 	/**
@@ -550,8 +192,7 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * @see #nextInt(int) Here's a note about the bias present in the bounded generation.
 	 */
 	public int nextSignedInt(int outerBound) {
-		outerBound = (int) (outerBound * (nextLong() & 0xFFFFFFFFL) >> 32);
-		return outerBound + (outerBound >>> 31);
+		return processSignedInt32(nextInt(), outerBound);
 	}
 
 	/**
@@ -603,7 +244,9 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * @return the next pseudorandom, uniformly distributed {@code long}
 	 * value from this random number generator's sequence
 	 */
-	public abstract long nextLong();
+	public long nextLong(){
+		return (long) nextInt() << 32 ^ nextInt();
+	}
 
 	/**
 	 * Returns a pseudorandom, uniformly distributed {@code long} value
@@ -673,13 +316,12 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * @see #nextInt(int) Here's a note about the bias present in the bounded generation.
 	 */
 	public long nextLong(long inner, long outer) {
-		final long rand = nextLong();
+		final long randLow = nextInt() & 0xFFFFFFFFL;
+		final long randHigh = nextInt() & 0xFFFFFFFFL;
 		if (inner >= outer)
 			return inner;
 		final long bound = outer - inner;
-		final long randLow = rand & 0xFFFFFFFFL;
 		final long boundLow = bound & 0xFFFFFFFFL;
-		final long randHigh = (rand >>> 32);
 		final long boundHigh = (bound >>> 32);
 		return inner + (randHigh * boundLow >>> 32) + (randLow * boundHigh >>> 32) + randHigh * boundHigh;
 	}
@@ -696,16 +338,15 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * @see #nextInt(int) Here's a note about the bias present in the bounded generation.
 	 */
 	public long nextSignedLong(long inner, long outer) {
-		final long rand = nextLong();
+		final long randLow = nextInt() & 0xFFFFFFFFL;
+		final long randHigh = nextInt() & 0xFFFFFFFFL;
 		if (outer < inner) {
 			long t = outer;
 			outer = inner + 1L;
 			inner = t + 1L;
 		}
 		final long bound = outer - inner;
-		final long randLow = rand & 0xFFFFFFFFL;
 		final long boundLow = bound & 0xFFFFFFFFL;
-		final long randHigh = (rand >>> 32);
 		final long boundHigh = (bound >>> 32);
 		return inner + (randHigh * boundLow >>> 32) + (randLow * boundHigh >>> 32) + randHigh * boundHigh;
 	}
@@ -718,8 +359,8 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * values {@code true} and {@code false} are produced with
 	 * (approximately) equal probability.
 	 * <br>
-	 * The public implementation simply returns a sign check on {@link #nextLong()},
-	 * returning true if the generated long is negative. This is typically the safest
+	 * The public implementation simply returns a sign check on {@link #nextInt()},
+	 * returning true if the generated int is negative. This is typically the safest
 	 * way to implement this method; many types of generators have less statistical
 	 * quality on their lowest bit, so just returning based on the lowest bit isn't
 	 * always a good idea.
@@ -729,7 +370,7 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * sequence
 	 */
 	public boolean nextBoolean() {
-		return nextLong() < 0L;
+		return nextInt() < 0L;
 	}
 
 	/**
@@ -1340,11 +981,11 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 * Creates a new EnhancedRandom with identical states to this one, so if the same EnhancedRandom methods are
 	 * called on this object and its copy (in the same order), the same outputs will be produced. This is not
 	 * guaranteed to copy the inherited state of any parent class, so if you call methods that are
-	 * only implemented by a superclass (like {@link java.util.Random}) and not this one, the results may differ.
+	 * only implemented by a superclass (like {@link Random}) and not this one, the results may differ.
 	 *
 	 * @return a deep copy of this EnhancedRandom.
 	 */
-	public abstract EnhancedRandom copy();
+	public abstract Enhanced32Random copy();
 
 	/**
 	 * Similar to {@link #copy()}, but fills this EnhancedRandom with the state of another EnhancedRandom, usually
@@ -1366,7 +1007,7 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 *
 	 * @param other another EnhancedRandom, typically with the same class as this one, to copy its state into this
 	 */
-	public void setWith(EnhancedRandom other) {
+	public void setWith(Enhanced32Random other) {
 		final int myCount = getStateCount(), otherCount = other.getStateCount();
 		int i = 0;
 		for (; i < myCount && i < otherCount; i++) {
@@ -1380,7 +1021,7 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	/**
 	 * A way of taking a double in the (0.0, 1.0) range and mapping it to a Gaussian or normal distribution, so high
 	 * inputs correspond to high outputs, and similarly for the low range. This is centered on 0.0 and its standard
-	 * deviation seems to be 1.0 (the same as {@link java.util.Random#nextGaussian()}). If this is given an input of 0.0
+	 * deviation seems to be 1.0 (the same as {@link Random#nextGaussian()}). If this is given an input of 0.0
 	 * or less, it returns -38.5, which is slightly less than the result when given {@link Double#MIN_VALUE}. If it is
 	 * given an input of 1.0 or more, it returns 38.5, which is significantly larger than the result when given the
 	 * largest double less than 1.0 (this value is further from 1.0 than {@link Double#MIN_VALUE} is from 0.0). If
@@ -1399,7 +1040,7 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 * {@code 8.209536145151493}, and will only produce results of at least {@code -8.209536145151493} if 0.0 is
 	 * excluded from the inputs (if 0.0 is an input, the result is {@code -38.5}). A chief advantage of using this with
 	 * a random number generator is that it only requires one random double to obtain one Gaussian value;
-	 * {@link java.util.Random#nextGaussian()} generates at least two random doubles for each two Gaussian values, but
+	 * {@link Random#nextGaussian()} generates at least two random doubles for each two Gaussian values, but
 	 * may rarely require much more random generation. Note that this method isn't used by default for
 	 * {@link #nextGaussian()}, because it uses a very different approximation that is faster but less precise.
 	 * <br>
@@ -1535,7 +1176,7 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 * @param right another EnhancedRandom to compare for equality
 	 * @return true if the two EnhancedRandom objects have the same class and state, or false otherwise
 	 */
-	public static boolean areEqual(EnhancedRandom left, EnhancedRandom right) {
+	public static boolean areEqual(Enhanced32Random left, Enhanced32Random right) {
 		if (left == right)
 			return true;
 		if (left == null || right == null)
@@ -2188,7 +1829,7 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 *
 	 * @see Deserializer You can deserialize a serialized EnhancedRandom String to its correct type using Deserializer.
 	 */
-	public EnhancedRandom stringDeserialize(String data) {
+	public Enhanced32Random stringDeserialize(String data) {
 		return stringDeserialize(data, Base.BASE16);
 	}
 
@@ -2204,7 +1845,7 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 *
 	 * @see Deserializer You can deserialize a serialized EnhancedRandom String to its correct type using Deserializer.
 	 */
-	public EnhancedRandom stringDeserialize(String data, Base base) {
+	public Enhanced32Random stringDeserialize(String data, Base base) {
 		if (getStateCount() > 0) {
 			int idx = data.indexOf(base.paddingChar);
 
