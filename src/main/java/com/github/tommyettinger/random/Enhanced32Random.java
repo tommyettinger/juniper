@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022-2023 See AUTHORS file.
+ * Copyright (c) 2022-2026 See AUTHORS file.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,12 +17,10 @@
 
 package com.github.tommyettinger.random;
 
-import com.github.tommyettinger.digital.*;
+import com.github.tommyettinger.digital.BitConversion;
+import com.github.tommyettinger.digital.Distributor;
+import com.github.tommyettinger.digital.MathTools;
 
-import java.io.Externalizable;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.util.List;
 import java.util.Random;
 
@@ -30,7 +28,7 @@ import java.util.Random;
  * A specialized subclass of {@link EnhancedRandom} meant for generators that use 32-bit math and natively operate on
  * {@code int} results instead of {@code long} results.
  */
-public abstract class Enhanced32Random extends EnhancedRandom implements Externalizable {
+public abstract class Enhanced32Random extends EnhancedRandom {
 
 	public Enhanced32Random() {
 		super();
@@ -398,7 +396,7 @@ public abstract class Enhanced32Random extends EnhancedRandom implements Externa
 	 * random number generator's sequence
 	 */
 	public float nextFloat() {
-		return (nextLong() >>> 40) * 0x1p-24f;
+		return (nextInt() >>> 8) * 0x1p-24f;
 	}
 
 	/**
@@ -613,8 +611,7 @@ public abstract class Enhanced32Random extends EnhancedRandom implements Externa
 	 * @return a random uniform double between 2.710505431213761E-20 and 0.9999999999999999 (both inclusive)
 	 */
 	public double nextExclusiveDouble() {
-		final long bits = nextLong();
-		return BitConversion.longBitsToDouble(1022L - BitConversion.countLeadingZeros(bits) << 52 | (bits & 0x000FFFFFFFFFFFFFL));
+		return MathTools.exclusiveDouble(nextInt(), nextInt());
 	}
 
 	/**
@@ -692,14 +689,7 @@ public abstract class Enhanced32Random extends EnhancedRandom implements Externa
 	public double nextExclusiveSignedDouble() {
 		final long bits = nextLong();
 		return BitConversion.longBitsToDouble(1023L - BitConversion.countLeadingZeros(bits & 0x7FFFFFFFFFFFFFFFL) << 52 | (bits & 0x800FFFFFFFFFFFFFL));
-/*
-Double.longBitsToDouble(1022L - Long.numberOfTrailingZeros(bits) << 52 | ((bits << 32 | bits >>> 32) & 0x800FFFFFFFFFFFFFL));
-Double.longBitsToDouble(1022L - Long.numberOfLeadingZeros(bits) << 52 | ((bits << 52 | bits >>> 12) & 0x800FFFFFFFFFFFFFL));
-Double.longBitsToDouble(1022L - Long.numberOfLeadingZeros(bits) << 52 | ((bits << 63 | bits >>> 1) & 0x800FFFFFFFFFFFFFL));
-Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFFFFFL) << 52 | (bits & 0x800FFFFFFFFFFFFFL));
- */
 	}
-//		return BitConversion.longBitsToDouble(1022L - BitConversion.countLeadingZeros(bits) << 52 | ((bits << 52 | bits >>> 12) & 0x800FFFFFFFFFFFFFL));
 
 	/**
 	 * Gets a random float between 0.0 and 1.0, exclusive at both ends. This method is also more uniform than
@@ -714,20 +704,15 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 * <br>
 	 * The implementation may have different performance characteristics than {@link #nextFloat()},
 	 * because this doesn't perform any floating-point multiplication or division, and instead assembles bits
-	 * obtained by one call to {@link #nextLong()}. This uses {@link BitConversion#intBitsToFloat(int)} and
+	 * obtained by two calls to {@link #nextInt()}. This uses {@link BitConversion#intBitsToFloat(int)} and
 	 * {@link BitConversion#countLeadingZeros(long)}, both of which typically have optimized intrinsics on HotSpot,
-	 * and this is branchless and loopless, unlike the original algorithm by Allen Downey. When compared with
-	 * {@link #nextExclusiveFloatEquidistant()}, this method performs better on at least HotSpot JVMs. On GraalVM 17,
-	 * this is over twice as fast as nextExclusiveFloatEquidistant().
+	 * and this is branchless and loopless, unlike the original algorithm by Allen Downey.
 	 *
 	 * @return a random uniform float between 0 and 1 (both exclusive)
 	 */
 	public float nextExclusiveFloat() {
-		final long bits = nextLong();
-		return BitConversion.intBitsToFloat(126 - BitConversion.countLeadingZeros(bits) << 23 | ((int) bits & 0x7FFFFF));
+		return BitConversion.intBitsToFloat(126 - BitConversion.countLeadingZeros(nextInt()) << 23 | (nextInt() >>> 9));
 	}
-//		return Float.intBitsToFloat(126 - Long.numberOfTrailingZeros(bits) << 23 | (int)(bits >>> 41));
-//		return Float.intBitsToFloat(126 - Long.numberOfLeadingZeros(bits) << 23 | ((int)bits & 0x7FFFFF));
 
 	/**
 	 * Gets a random float between 0.0 and 1.0, exclusive at both ends. This can return float
@@ -787,22 +772,12 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 * potentially important for some uses), this has approximately the same likelihood of producing a "1" bit for any
 	 * positions in the mantissa, and also equal odds for the sign bit.
 	 * <br>
-	 * Some useful properties here are that this produces a negative result exactly as often as the underlying generator
-	 * produces a negative result with {@link #nextLong()}, and the least-significant bits that the underlying generator
-	 * produces with {@link #nextLong()} are also the least-significant in magnitude here. This could be used with
-	 * lower-quality randomness, like a linear congruential generator, and the flaws those have with their low-order
-	 * bits would barely affect floating-point results here. This generator also produces results that are symmetrical
-	 * around 0.0, with every possible positive number having a possible negative number of equal magnitude, if the
-	 * underlying generator is at least 1-dimensionally equidistributed. Note that generators such as
-	 * {@link Xoroshiro128StarStarRandom} and {@link Xoshiro256StarStarRandom} cannot return 0L from {@link #nextLong()}
-	 * as frequently as other results, so this is not (technically) true of those. Those generators (and other LFSR-type
-	 * generators) will produce 5.421011E-20 less frequently than -5.421011E-20 .
+	 * This calls {@link #nextInt()} twice.
 	 *
 	 * @return a random uniform float between -1 and 1 with a tiny hole around 0 (all exclusive)
 	 */
 	public float nextExclusiveSignedFloat() {
-		final long bits = nextLong();
-		return BitConversion.intBitsToFloat(127 - BitConversion.countLeadingZeros(bits & 0x7FFFFFFFFFFFFFFFL) << 23 | ((int) (bits >>> 32) & 0x807FFFFF));
+		return BitConversion.intBitsToFloat(126 - BitConversion.countLeadingZeros(nextInt()) << 23 | (nextInt() & 0x807FFFFF));
 //		Float.intBitsToFloat(127 - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFFFFFL) << 23 | ((int)(bits>>>32) & 0x807FFFFF));
 	}
 
@@ -861,25 +836,19 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 * normal distribution with mean {@code 0.0} and standard deviation
 	 * {@code 1.0}, is pseudorandomly generated and returned.
 	 * <p>
-	 * This uses {@link RoughMath#normalRough(long)}, which actually appears to
-	 * approximate the normal distribution better than
-	 * {@link Distributor#normalF(long)}, though not quite as well as
-	 * {@link Distributor#normal(long)} (which is used by {@link #nextGaussian()}).
-	 * Like nextGaussian(), this requests exactly one long from the
-	 * generator's sequence (using {@link #nextLong()}). This makes it different
+	 * This uses {@link Distributor#probitI(int)}.
+	 * Unlike nextGaussian(), this requests exactly one int from the
+	 * generator's sequence (using {@link #nextInt()}). This also makes it different
 	 * from code like java.util.Random's nextGaussian() method, which can (rarely)
 	 * fetch an arbitrarily higher number of random doubles.
-	 * <p>
-	 * The implementation here was ported from code by
-	 * <a href="https://marc-b-reynolds.github.io/distribution/2021/03/18/CheapGaussianApprox.html">Marc B. Reynolds</a>
-	 * and modified to only require one call to {@link #nextLong()}.
+
 	 *
 	 * @return the next pseudorandom, Gaussian ("normally") distributed
 	 * {@code float} value with mean {@code 0.0} and standard deviation
 	 * {@code 1.0} from this random number generator's sequence
 	 */
 	public float nextGaussianFloat() {
-		return RoughMath.normalRough(nextLong());
+		return Distributor.probitI(nextInt());
 	}
 
 	/**
@@ -908,288 +877,6 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 */
 	public double nextExponential() {
 		return -Math.log(nextExclusiveDouble());
-	}
-
-	/**
-	 * Optional; advances or rolls back the {@code EnhancedRandom}' state without actually generating each number.
-	 * Skips forward or backward a number of steps specified by advance, where a step is equal to one call to
-	 * {@link #nextLong()}, and returns the random number produced at that step. Negative numbers can be used to
-	 * step backward, or 0 can be given to get the most-recently-generated long from {@link #nextLong()}.
-	 *
-	 * <p>The public implementation throws an UnsupportedOperationException. Many types of random
-	 * number generator do not have an efficient way of skipping arbitrarily through the state sequence,
-	 * and those types should not implement this method differently.
-	 *
-	 * @param advance Number of future generations to skip over; can be negative to backtrack, 0 gets the most-recently-generated number
-	 * @return the random long generated after skipping forward or backwards by {@code advance} numbers
-	 */
-	public long skip(long advance) {
-		throw new UnsupportedOperationException("skip() not supported.");
-	}
-
-	/**
-	 * Optional; moves the state to its previous value and returns the previous long that would have been produced by
-	 * {@link #nextLong()}. This can be equivalent to calling {@link #skip(long)} with -1L, but not always; many
-	 * generators can't efficiently skip long distances, but can step back by one value.
-	 * <br>
-	 * Generators that natively generate {@code int} results typically produce {@code long} values by generating an int
-	 * for the high 32 bits and an int for the low 32 bits. When producing the previous long, the order the high and low
-	 * bits are generated, such as by {@link #previousInt()}, should be reversed. Generators that natively produce
-	 * {@code long} values usually don't need to implement {@link #previousInt()}, but those that produce {@code int}
-	 * usually should implement it, and may optionally call previousInt() twice in this method.
-	 * <br>
-	 * If you know how to implement the reverse of a particular random number generator, it is recommended you do so
-	 * here, rather than rely on skip(). This isn't always easy, but should always be possible for any decent PRNG (some
-	 * historical PRNGs, such as the Middle-Square PRNG, cannot be reversed at all). If a generator cannot be reversed
-	 * because multiple initial states can transition to the same subsequent state, it is known to have statistical
-	 * problems that are not necessarily present in a generator that matches one initial state to one subsequent state.
-	 * <br>
-	 * The public implementation calls {@link #skip(long)} with -1L, and if skip() has not been implemented
-	 * differently, then it will throw an UnsupportedOperationException.
-	 *
-	 * @return the previous number this would have produced with {@link #nextLong()}
-	 */
-	public long previousLong() {
-		return skip(-1L);
-	}
-
-	/**
-	 * Optional; moves the state to its previous value and returns the previous int that would have been produced by
-	 * {@link #nextInt()}. This can be equivalent to calling {@link #previousLong()} and casting to int, but not always;
-	 * generators that natively generate {@code int} results typically move the state once in nextInt() and twice in
-	 * nextLong(), and should move the state back once here.
-	 * <br>
-	 * If {@link #nextInt()} is implemented using a call to {@link #nextLong()}, the implementation in this class is
-	 * almost always sufficient and correct. If nextInt() changes state differently from nextLong(), then this should be
-	 * implemented, if feasible, and {@link #previousLong()} can be implemented using this method.
-	 * If you know how to implement the reverse of a particular random number generator, it is recommended you do so
-	 * here, rather than rely on skip(). This isn't always easy, but should always be possible for any decent PRNG (some
-	 * historical PRNGs, such as the Middle-Square PRNG, cannot be reversed at all). If a generator cannot be reversed
-	 * because multiple initial states can transition to the same subsequent state, it is known to have statistical
-	 * problems that are not necessarily present in a generator that matches one initial state to one subsequent state.
-	 * <br>
-	 * The public implementation calls {@link #previousLong()} and casts it to int, and if previousLong() and skip()
-	 * have not been implemented differently, then it will throw an UnsupportedOperationException.
-	 *
-	 * @return the previous number this would have produced with {@link #nextInt()}
-	 */
-	public int previousInt() {
-		return (int) previousLong();
-	}
-
-	/**
-	 * Creates a new EnhancedRandom with identical states to this one, so if the same EnhancedRandom methods are
-	 * called on this object and its copy (in the same order), the same outputs will be produced. This is not
-	 * guaranteed to copy the inherited state of any parent class, so if you call methods that are
-	 * only implemented by a superclass (like {@link Random}) and not this one, the results may differ.
-	 *
-	 * @return a deep copy of this EnhancedRandom.
-	 */
-	public abstract Enhanced32Random copy();
-
-	/**
-	 * Similar to {@link #copy()}, but fills this EnhancedRandom with the state of another EnhancedRandom, usually
-	 * (but not necessarily) one of the same type. If this class has the same {@link #getStateCount()} as other's
-	 * class, then this method copies the full state of other into this object. Otherwise, if this class has a
-	 * larger state count than other's class, then all of other's state is copied into the same selections in this
-	 * object, and the rest of this object's state is filled with {@code -1L} using
-	 * {@link #setSelectedState(int, long)}. If this class has a smaller state count than other's class, then only
-	 * part of other's state is copied, and this method stops when all of this object's states have been assigned.
-	 * <br>
-	 * If this class has restrictions on its state, they will be respected by the public implementation of this
-	 * method as long as {@link #setSelectedState(int, long)} behaves correctly for those restrictions. Note that
-	 * this method will public to throwing an UnsupportedOperationException unless {@link #getSelectedState(int)}
-	 * is implemented by other so its state can be accessed. This may also behave badly if
-	 * {@link #setSelectedState(int, long)} isn't implemented (it may be fine for some cases where the state count
-	 * is 1, but don't count on it). If other's class doesn't implement {@link #getStateCount()}, then this method
-	 * sets the entire state of this object to -1L; if this class doesn't implement getStateCount(), then this
-	 * method does nothing.
-	 *
-	 * @param other another EnhancedRandom, typically with the same class as this one, to copy its state into this
-	 */
-	public void setWith(Enhanced32Random other) {
-		final int myCount = getStateCount(), otherCount = other.getStateCount();
-		int i = 0;
-		for (; i < myCount && i < otherCount; i++) {
-			setSelectedState(i, other.getSelectedState(i));
-		}
-		for (; i < myCount; i++) {
-			setSelectedState(i, -1L);
-		}
-	}
-
-	/**
-	 * A way of taking a double in the (0.0, 1.0) range and mapping it to a Gaussian or normal distribution, so high
-	 * inputs correspond to high outputs, and similarly for the low range. This is centered on 0.0 and its standard
-	 * deviation seems to be 1.0 (the same as {@link Random#nextGaussian()}). If this is given an input of 0.0
-	 * or less, it returns -38.5, which is slightly less than the result when given {@link Double#MIN_VALUE}. If it is
-	 * given an input of 1.0 or more, it returns 38.5, which is significantly larger than the result when given the
-	 * largest double less than 1.0 (this value is further from 1.0 than {@link Double#MIN_VALUE} is from 0.0). If
-	 * given {@link Double#NaN}, it returns whatever {@link Math#copySign(double, double)} returns for the arguments
-	 * {@code 38.5, Double.NaN}, which is implementation-dependent. It uses an algorithm by Peter John Acklam, as
-	 * implemented by Sherali Karimov.
-	 * <a href="https://web.archive.org/web/20150910002142/http://home.online.no/~pjacklam/notes/invnorm/impl/karimov/StatUtil.java">Original source</a>.
-	 * <a href="https://web.archive.org/web/20151030215612/http://home.online.no/~pjacklam/notes/invnorm/">Information on the algorithm</a>.
-	 * <a href="https://en.wikipedia.org/wiki/Probit_function">Wikipedia's page on the probit function</a> may help, but
-	 * is more likely to just be confusing.
-	 * <br>
-	 * Acklam's algorithm and Karimov's implementation are both quite fast. This appears faster than generating
-	 * Gaussian-distributed numbers using either the Box-Muller Transform or Marsaglia's Polar Method, though it isn't
-	 * as precise and can't produce as extreme min and max results in the extreme cases they should appear. If given
-	 * a typical uniform random {@code double} that's exclusive on 1.0, it won't produce a result higher than
-	 * {@code 8.209536145151493}, and will only produce results of at least {@code -8.209536145151493} if 0.0 is
-	 * excluded from the inputs (if 0.0 is an input, the result is {@code -38.5}). A chief advantage of using this with
-	 * a random number generator is that it only requires one random double to obtain one Gaussian value;
-	 * {@link Random#nextGaussian()} generates at least two random doubles for each two Gaussian values, but
-	 * may rarely require much more random generation. Note that this method isn't used by default for
-	 * {@link #nextGaussian()}, because it uses a very different approximation that is faster but less precise.
-	 * <br>
-	 * This can be used both as an optimization for generating Gaussian random values, and as a way of generating
-	 * Gaussian values that match a pattern present in the inputs (which you could have by using a sub-random sequence
-	 * as the input, such as those produced by a van der Corput, Halton, Sobol or R2 sequence). Most methods of generating
-	 * Gaussian values (e.g. Box-Muller and Marsaglia polar) do not have any way to preserve a particular pattern.
-	 *
-	 * @param d should be between 0 and 1, exclusive, but other values are tolerated
-	 * @return a normal-distributed double centered on 0.0; all results will be between -38.5 and 38.5, both inclusive
-	 */
-	public static double probit(final double d) {
-		if (d <= 0 || d >= 1) {
-			return Math.copySign(38.5, d - 0.5);
-		} else if (d < 0.02425) {
-			final double q = Math.sqrt(-2.0 * Math.log(d));
-			return (((((-7.784894002430293e-03 * q - 3.223964580411365e-01) * q - 2.400758277161838e+00) * q - 2.549732539343734e+00) * q + 4.374664141464968e+00) * q + 2.938163982698783e+00) / (
-				(((7.784695709041462e-03 * q + 3.224671290700398e-01) * q + 2.445134137142996e+00) * q + 3.754408661907416e+00) * q + 1.0);
-		} else if (0.97575 < d) {
-			final double q = Math.sqrt(-2.0 * Math.log(1 - d));
-			return -(((((-7.784894002430293e-03 * q - 3.223964580411365e-01) * q - 2.400758277161838e+00) * q - 2.549732539343734e+00) * q + 4.374664141464968e+00) * q + 2.938163982698783e+00) / (
-				(((7.784695709041462e-03 * q + 3.224671290700398e-01) * q + 2.445134137142996e+00) * q + 3.754408661907416e+00) * q + 1.0);
-		}
-		final double q = d - 0.5;
-		final double r = q * q;
-		return (((((-3.969683028665376e+01 * r + 2.209460984245205e+02) * r - 2.759285104469687e+02) * r + 1.383577518672690e+02) * r - 3.066479806614716e+01) * r + 2.506628277459239e+00) * q / (
-			((((-5.447609879822406e+01 * r + 1.615858368580409e+02) * r - 1.556989798598866e+02) * r + 6.680131188771972e+01) * r - 1.328068155288572e+01) * r + 1.0);
-	}
-
-	/**
-	 * Attempts to improve the quality of a "gamma" increment for an additive sequence. This is stricter than the checks
-	 * in Java 8's SplittableRandom. The goal here is to make sure the gamma is "sufficiently random" to avoid patterns
-	 * when used as an increment. Examples of gamma values that aren't random enough include {@code 1L}, {@code 3L},
-	 * {@code 0xFFFFFFFFFFFFFFFFL}, {@code 0xAAAAAAAAAAAAAAABL}, and so on. It rejects any gamma value where any of four
-	 * bit counts are less than 24 or greater than 40. The values that have their bits counted are:
-	 * <ul>
-	 *     <li>The gamma itself,</li>
-	 *     <li>The Gray code of the gamma, defined as {@code (gamma ^ (gamma >>> 1))},</li>
-	 *     <li>The {@link MathTools#modularMultiplicativeInverse(long)} of the gamma,</li>
-	 *     <li>And the Gray code of the above inverse of the gamma.</li>
-	 * </ul>
-	 * If a gamma is rejected, this multiplies it by an LCG constant, 0xD1342543DE82EF95L, adds an increasing even
-	 * number (first 2, then 4, then 6, and so on) and tries again repeatedly. It returns the first gamma that wasn't
-	 * rejected, which could be the original gamma.
-	 * <br>
-	 * This simply calls {@link #fixGamma(long, int)} with the given gamma and a threshold of 8.
-	 *
-	 * @param gamma any long, though almost always an odd number, that would be added as an increment in a sequence
-	 * @return gamma or a modification upon it such that its bits are "sufficiently random" to be a good increment
-	 * @see <a href="https://www.pcg-random.org/posts/bugs-in-splitmix.html">This was informed by O'Neill's blog post about SplittableRandom's gamma.</a>
-	 */
-	public static long fixGamma(long gamma) {
-		return fixGamma(gamma, 8);
-	}
-
-	/**
-	 * Attempts to improve the quality of a "gamma" increment for an additive sequence. This is stricter than the checks
-	 * in Java 8's SplittableRandom. The goal here is to make sure the gamma is "sufficiently random" to avoid patterns
-	 * when used as an increment. Examples of gamma values that aren't random enough include {@code 1L}, {@code 3L},
-	 * {@code 0xFFFFFFFFFFFFFFFFL}, {@code 0xAAAAAAAAAAAAAAABL}, and so on. It rejects any gamma value where any of four
-	 * bit counts are less than {@code 32 - threshold} or greater than {@code 32 + threshold}. The values that have
-	 * their bits counted are:
-	 * <ul>
-	 *     <li>The gamma itself,</li>
-	 *     <li>The Gray code of the gamma, defined as {@code (gamma ^ (gamma >>> 1))},</li>
-	 *     <li>The {@link MathTools#modularMultiplicativeInverse(long)} of the gamma,</li>
-	 *     <li>And the Gray code of the above inverse of the gamma.</li>
-	 * </ul>
-	 * If a gamma is rejected, this multiplies it by an LCG constant, 0xD1342543DE82EF95L, adds an increasing even
-	 * number (first 2, then 4, then 6, and so on) and tries again repeatedly. It returns the first gamma that wasn't
-	 * rejected, which could be the original gamma.
-	 *
-	 * @param gamma     any long, though almost always an odd number, that would be added as an increment in a sequence
-	 * @param threshold the maximum acceptable "score" as evaluated by {@link #rateGamma(long)}
-	 * @return gamma or a modification upon it such that its bits are "sufficiently random" to be a good increment
-	 * @see <a href="https://www.pcg-random.org/posts/bugs-in-splitmix.html">This was informed by O'Neill's blog post about SplittableRandom's gamma.</a>
-	 */
-	public static long fixGamma(long gamma, int threshold) {
-		gamma |= 1L;
-		long inverse, add = 0L;
-		while (Math.abs(Long.bitCount(gamma) - 32) > threshold
-			|| Math.abs(Long.bitCount(gamma ^ gamma >>> 1) - 32) > threshold
-			|| Math.abs(Long.bitCount(inverse = MathTools.modularMultiplicativeInverse(gamma)) - 32) > threshold
-			|| Math.abs(Long.bitCount(inverse ^ inverse >>> 1) - 32) > threshold) {
-			gamma = gamma * 0xD1342543DE82EF95L + (add += 2L);
-		}
-		return gamma;
-	}
-
-	/**
-	 * Attempts to check the quality of a "gamma" increment for an additive sequence. This is stricter than the checks
-	 * in Java 8's SplittableRandom. The goal here is to see if the gamma is "sufficiently random" to avoid patterns
-	 * when used as an increment. Examples of gamma values that aren't random enough include {@code 1L}, {@code 3L},
-	 * {@code 0xFFFFFFFFFFFFFFFFL}, {@code 0xAAAAAAAAAAAAAAABL}, and so on. It returns the "score" for any gamma value,
-	 * where the score is the maximum difference of four bit counts from an ideal of 32. The values that have their bits
-	 * counted are:
-	 * <ul>
-	 *     <li>The gamma itself,</li>
-	 *     <li>The Gray code of the gamma, defined as {@code (gamma ^ (gamma >>> 1))},</li>
-	 *     <li>The {@link MathTools#modularMultiplicativeInverse(long)} of the gamma,</li>
-	 *     <li>And the Gray code of the above inverse of the gamma.</li>
-	 * </ul>
-	 * A score of 9 can typically be considered "potentially problematic," and though it isn't necessarily a real
-	 * problem, there are so many other possible gammas that it should be avoided. Scores higher than 9 can be
-	 * considered more "problematic," and scores less than 9 are probably fine for SplitMix gammas.
-	 * <br>
-	 * If the given gamma is even, it is not suitable as a SplitMix gamma automatically, and the maximum (worst) rating
-	 * is returned, 32.
-	 *
-	 * @param gamma any long, though almost always an odd number, that would be added as an increment in a sequence
-	 * @return how far the given gamma is from an optimal score of 0
-	 * @see <a href="https://www.pcg-random.org/posts/bugs-in-splitmix.html">This was informed by O'Neill's blog post about SplittableRandom's gamma.</a>
-	 */
-	public static int rateGamma(long gamma) {
-		if((gamma & 1L) == 0L) return 32;
-		final long inverse = MathTools.modularMultiplicativeInverse(gamma);
-		return Math.max(Math.max(Math.max(
-					Math.abs(Long.bitCount(gamma) - 32),
-					Math.abs(Long.bitCount(gamma ^ gamma >>> 1) - 32)),
-				Math.abs(Long.bitCount(inverse) - 32)),
-			Math.abs(Long.bitCount(inverse ^ inverse >>> 1) - 32));
-	}
-
-	/**
-	 * Given two EnhancedRandom objects that could have the same or different classes,
-	 * this returns true if they have the same class and same state, or false otherwise.
-	 * Both of the arguments should implement {@link #getSelectedState(int)}, or this
-	 * will throw an UnsupportedOperationException. This can be useful for comparing
-	 * EnhancedRandom classes that do not implement equals(), for whatever reason.
-	 * This returns true if both arguments are null, but false if only one is null.
-	 *
-	 * @param left  an EnhancedRandom to compare for equality
-	 * @param right another EnhancedRandom to compare for equality
-	 * @return true if the two EnhancedRandom objects have the same class and state, or false otherwise
-	 */
-	public static boolean areEqual(Enhanced32Random left, Enhanced32Random right) {
-		if (left == right)
-			return true;
-		if (left == null || right == null)
-			return false;
-		if (left.getClass() != right.getClass())
-			return false;
-
-		final int count = left.getStateCount();
-		for (int i = 0; i < count; i++) {
-			if (left.getSelectedState(i) != right.getSelectedState(i))
-				return false;
-		}
-		return true;
 	}
 
 	/**
@@ -1749,155 +1436,6 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 			T temp = items.get(i);
 			items.set(i, items.get(ii));
 			items.set(ii, temp);
-		}
-	}
-
-	/**
-	 * Serializes the current state of this EnhancedRandom to a String that can be used by
-	 * {@link #stringDeserialize(String)} to load this state at another time. This always uses
-	 * {@link Base#BASE16} for its conversions.
-	 *
-	 * @return a String storing all data from the EnhancedRandom part of this generator
-	 */
-	public String stringSerialize() {
-		return stringSerialize(Base.BASE16);
-	}
-
-	/**
-	 * Serializes the current state of this EnhancedRandom to a String that can be used by
-	 * {@link #stringDeserialize(String)} to load this state at another time.
-	 * May use any {@link Base}; {@link Base#BASE10} and {@link Base#BASE16} are the most intuitive, but
-	 * {@link Base#SIMPLE64} and especially {@link Base#BASE90} will be more compact.
-	 *
-	 * @param base which Base to use, from the "digital" library, such as {@link Base#BASE10}
-	 * @return a String storing all data from the EnhancedRandom part of this generator
-	 */
-	public String stringSerialize(Base base) {
-		return appendSerialized(new StringBuilder(), base).toString();
-	}
-
-	/**
-	 * Serializes the current state of this EnhancedRandom and appends it to an Appendable CharSequence (such as a
-	 * StringBuilder), which may be used by {@link #stringDeserialize(String)} to load this state at another time.
-	 * Always uses {@link Base#BASE16 base 16}.
-	 *
-	 * @param sb an Appendable CharSequence that will be modified
-	 * @return {@code sb}, for chaining
-	 * @param <T> any type that is both a CharSequence and an Appendable, such as StringBuilder, StringBuffer, or CharBuffer
-	 */
-	public <T extends CharSequence & Appendable> T appendSerialized(T sb) {
-		return appendSerialized(sb, Base.BASE16);
-	}
-
-	/**
-	 * Serializes the current state of this EnhancedRandom and appends it to an Appendable CharSequence (such as a
-	 * StringBuilder), which may be used by {@link #stringDeserialize(String)} to load this state at another time.
-	 * May use any {@link Base}; {@link Base#BASE10} and {@link Base#BASE16} are the most intuitive, but
-	 * {@link Base#SIMPLE64} and especially {@link Base#BASE90} will be more compact.
-	 *
-	 * @param sb an Appendable CharSequence that will be modified
-	 * @param base which Base to use, from the "digital" library, such as {@link Base#BASE10}
-	 * @return {@code sb}, for chaining
-	 * @param <T> any type that is both a CharSequence and an Appendable, such as StringBuilder, StringBuffer, or CharBuffer
-	 */
-	public <T extends CharSequence & Appendable> T appendSerialized(T sb, Base base) {
-		try {
-			sb.append(getTag());
-			sb.append(base.paddingChar);
-			if (getStateCount() > 0) {
-				for (int i = 0; i < getStateCount() - 1; i++) {
-					base.appendSigned(sb, getSelectedState(i)).append(base.positiveSign);
-				}
-				base.appendSigned(sb, getSelectedState(getStateCount() - 1));
-			}
-
-			sb.append(base.paddingChar);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-		return sb;
-	}
-
-	/**
-	 * Given a String in the format produced by {@link #stringSerialize()}, this will attempt to set this EnhancedRandom
-	 * object to match the state in the serialized data. This only works if this EnhancedRandom is the same
-	 * implementation that was serialized. Always uses {@link Base#BASE16}. Returns this EnhancedRandom, after possibly
-	 * changing its state.
-	 *
-	 * @param data a String probably produced by {@link #stringSerialize()}
-	 * @return this, after setting its state
-	 *
-	 * @see Deserializer You can deserialize a serialized EnhancedRandom String to its correct type using Deserializer.
-	 */
-	public Enhanced32Random stringDeserialize(String data) {
-		return stringDeserialize(data, Base.BASE16);
-	}
-
-	/**
-	 * Given a String in the format produced by {@link #stringSerialize(Base)}, and the same {@link Base} used by
-	 * the serialization, this will attempt to set this EnhancedRandom object to match the state in the serialized
-	 * data. This only works if this EnhancedRandom is the same implementation that was serialized, and also needs
-	 * the Bases to be identical. Returns this EnhancedRandom, after possibly changing its state.
-	 *
-	 * @param data a String probably produced by {@link #stringSerialize(Base)}
-	 * @param base which Base to use, from the "digital" library, such as {@link Base#BASE10}
-	 * @return this, after setting its state
-	 *
-	 * @see Deserializer You can deserialize a serialized EnhancedRandom String to its correct type using Deserializer.
-	 */
-	public Enhanced32Random stringDeserialize(String data, Base base) {
-		if (getStateCount() > 0) {
-			int idx = data.indexOf(base.paddingChar);
-
-			for (int i = 0; i < getStateCount() - 1; i++)
-				setSelectedState(i, base.readLong(data, idx + 1, (idx = data.indexOf(base.positiveSign, idx + 1))));
-
-			setSelectedState(getStateCount() - 1, base.readLong(data, idx + 1, data.indexOf(base.paddingChar, idx + 1)));
-		}
-		return this;
-	}
-
-	/**
-	 * The object implements the writeExternal method to save its contents
-	 * by calling the methods of DataOutput for its primitive values or
-	 * calling the writeObject method of ObjectOutput for objects, strings,
-	 * and arrays.
-	 *
-	 * @param out the stream to write the object to
-	 * @throws IOException Includes any I/O exceptions that may occur
-	 * @serialData <ul>
-	 * <li>int stateCount; the number of states this EnhancedRandom has</li>
-	 * <li>Repeat {@code stateCount} times:
-	 *     <ul>
-	 *         <li>long state_n; the nth state used here.</li>
-	 *     </ul>
-	 * </li>
-	 * </ul>
-	 */
-	@GwtIncompatible
-	public void writeExternal(ObjectOutput out) throws IOException {
-		final int states = getStateCount();
-		out.writeInt(states);
-		for (int i = 0; i < states; i++) {
-			out.writeLong(getSelectedState(i));
-		}
-	}
-
-	/**
-	 * The object implements the readExternal method to restore its
-	 * contents by calling the methods of DataInput for primitive
-	 * types and readObject for objects, strings and arrays.  The
-	 * readExternal method must read the values in the same sequence
-	 * and with the same types as were written by writeExternal.
-	 *
-	 * @param in the stream to read data from in order to restore the object
-	 * @throws IOException if I/O errors occur
-	 */
-	@GwtIncompatible
-	public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-		final int states = in.readInt();
-		for (int i = 0; i < states; i++) {
-			setSelectedState(i, in.readLong());
 		}
 	}
 }
