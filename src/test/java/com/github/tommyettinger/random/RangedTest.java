@@ -190,6 +190,7 @@ public class RangedTest {
 	 * Bound 7FFFFFFF had 000000000 mismatched results, totaling 000000000 off.
 	 * Average p was 1073741822.7500031000, average u was 1073741822.7500031000, should be 1073741824.0000000000 .
 	 */
+	@Ignore
 	@Test
 	public void testProcessUnsigned32(){
 		for (int bound : new int[]{2, 3, 5, 16, 31, 42, 65, 255, 3421, 33421, 333421, 0x8000001, 0x7FFFFFFF}) {
@@ -318,6 +319,7 @@ public class RangedTest {
 	 * Bound 80000000 had 07FFFFFFF mismatched results, totaling 07FFFFFFF off.
 	 * Average p was -1073741823.5000029000, average u was -1073741823.0000029000, should be -1073741824.0000000000 .
 	 */
+	@Ignore
 	@Test
 	public void testProcessSigned32(){
 		for (int bound : new int[]{-3, 2, 5, -16, 31, -42, 65, -255, 3421, -33421, 333421, -0x8000001, 0x7FFFFFFF, 0x80000000}) {

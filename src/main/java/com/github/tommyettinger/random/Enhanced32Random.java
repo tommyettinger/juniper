@@ -535,28 +535,12 @@ public abstract class Enhanced32Random extends EnhancedRandom {
 
 	/**
 	 * This is just like {@link #nextFloat()}, returning a float between 0 and 1, except that it is inclusive on both
-	 * 0.0 and 1.0. It returns 1.0 rarely, 0.000000000000000005421010862427522% of the time if there is no bias in the
-	 * generator, but it can happen.
-	 * <br>
-	 * This method does not return purely-equidistant floats, because there the resolution of possible floats it can
-	 * generate is higher as it approaches 0.0 . The smallest non-zero float this can return is 2.7105064E-20
-	 * (0x1.000006p-65 in hex), and the largest non-one float this can return is 0.99999994f (0x1.fffffep-1 in hex).
-	 * This uses nearly identical code to {@link #nextExclusiveFloat()}, but does some really unusual operations on both
-	 * the bits and the float value to be able to produce 0.0f and 1.0f . This retains the exclusive version's quality
-	 * of having approximately uniform distributions for every mantissa bit, unlike most ways of generating random
-	 * floating-point numbers.
+	 * 0.0 and 1.0.
 	 *
 	 * @return a float between 0.0, inclusive, and 1.0, inclusive
 	 */
-	public float nextInclusiveFloat() {
-		final long bits = nextLong();
-		return BitConversion.intBitsToFloat(126 - BitConversion.countLeadingZeros(bits) << 23 | ((int) bits & 0x7FFFFF) + 1) - 2.7105058E-20f; // 2.7105058E-20f is 0x1.000002p-65f
-		// equivalent to
-		//Float.intBitsToFloat(126 - Long.numberOfLeadingZeros(bits) << 23 | ((int)bits & 0x7FFFFF) + 1) - 0x1.000002p-65f;
-		// older
-//		Float.intBitsToFloat(126 - Long.numberOfLeadingZeros(bits) << 23 | ((int)bits & 0x7FFFFF)) + 0x1p-22f - 0x1p-22f;
-		// oldest
-//		return (int)(0x1000001L * (nextLong() & 0xFFFFFFFFL) >> 32) * 0x1p-24f;
+	public float nextInclusiveFloat () {
+		return EnhancedRandom.processSignedInt32(nextInt(), 0x1000001) * 5.9604645E-8f; // 5.9604645E-8f is 0x1p-24f
 	}
 
 	/**

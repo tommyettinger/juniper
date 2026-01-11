@@ -45,7 +45,7 @@ package com.github.tommyettinger.random;
  * <br>
  * This is called ChopRandom because it operates on half the bits as {@link TrimRandom} while otherwise being similar.
  */
-public class ChopRandom extends EnhancedRandom {
+public class ChopRandom extends Enhanced32Random {
 
 	/**
 	 * The first state; can be any int.
@@ -207,66 +207,66 @@ public class ChopRandom extends EnhancedRandom {
 		stateD = (int)(x ^ x >>> 27);
 	}
 
-	public long getStateA () {
+	public int getStateA () {
 		return stateA;
 	}
 
 	/**
-	 * Sets the first part of the state by casting the parameter to an int.
+	 * Sets the first part of the state to the given int.
 	 *
-	 * @param stateA can be any long, but will be cast to an int before use
+	 * @param stateA can be any int
 	 */
-	public void setStateA (long stateA) {
-		this.stateA = (int)stateA;
+	public void setStateA (int stateA) {
+		this.stateA = stateA;
 	}
 
-	public long getStateB () {
+	public int getStateB () {
 		return stateB;
 	}
 
 	/**
-	 * Sets the second part of the state by casting the parameter to an int.
+	 * Sets the second part of the state to the given int.
 	 *
-	 * @param stateB can be any long, but will be cast to an int before use
+	 * @param stateB can be any int
 	 */
-	public void setStateB (long stateB) {
-		this.stateB = (int)stateB;
+	public void setStateB (int stateB) {
+		this.stateB = stateB;
 	}
 
-	public long getStateC () {
+	public int getStateC () {
 		return stateC;
 	}
 
 	/**
-	 * Sets the third part of the state by casting the parameter to an int.
+	 * Sets the third part of the state to the given int.
 	 * Note that if you call {@link #nextInt()} immediately after this,
 	 * it will return the given {@code stateC} (cast to int) as-is, so you
 	 * may want to call some random generation methods (such as nextInt()) and discard
 	 * the results after setting the state.
 	 *
-	 * @param stateC can be any long, but will be cast to an int before use
+	 * @param stateC can be any int
 	 */
-	public void setStateC (long stateC) {
-		this.stateC = (int)stateC;
+	public void setStateC (int stateC) {
+		this.stateC = stateC;
 	}
 
-	public long getStateD () {
+	public int getStateD () {
 		return stateD;
 	}
 
 	/**
-	 * Sets the fourth part of the state by casting the parameter to an int.
+	 * Sets the fourth part of the state to the given int.
 	 *
-	 * @param stateD can be any long, but will be cast to an int before use
+	 * @param stateD can be any int
 	 */
-	public void setStateD (long stateD) {
-		this.stateD = (int)stateD;
+	public void setStateD (int stateD) {
+		this.stateD = stateD;
 	}
 
 	/**
 	 * Sets the state completely to the given four state variables, casting each to an int.
-	 * This is the same as calling {@link #setStateA(long)}, {@link #setStateB(long)},
-	 * {@link #setStateC(long)}, and {@link #setStateD(long)} as a group. You may want
+	 * This is the same as calling {@link #setStateA(int)}, {@link #setStateB(int)},
+	 * {@link #setStateC(int)}, and {@link #setStateD(int)} as a group. You may want
 	 * to call {@link #nextInt()} a few times after setting the states like this, unless
 	 * the value for stateC (in particular) is already adequately random; the first call
 	 * to {@link #nextInt()}, if it is made immediately after calling this, will return {@code stateC} as-is.
@@ -282,6 +282,13 @@ public class ChopRandom extends EnhancedRandom {
 		this.stateB = (int)stateB;
 		this.stateC = (int)stateC;
 		this.stateD = (int)stateD;
+	}
+
+	public void setState (int stateA, int stateB, int stateC, int stateD) {
+		this.stateA = stateA;
+		this.stateB = stateB;
+		this.stateC = stateC;
+		this.stateD = stateD;
 	}
 
 	@Override
@@ -360,85 +367,6 @@ public class ChopRandom extends EnhancedRandom {
 		stateC = fa ^ fb + fc;
 		stateD = fd + 0xADB5B165;
 		return fc;
-	}
-
-	@Override
-	public int nextInt (int bound) {
-		return (int)(bound * (nextInt() & 0xFFFFFFFFL) >> 32) & ~(bound >> 31);
-	}
-
-	@Override
-	public int nextSignedInt (int outerBound) {
-		outerBound = (int)(outerBound * (nextInt() & 0xFFFFFFFFL) >> 32);
-		return outerBound + (outerBound >>> 31);
-	}
-
-	@Override
-	public int nextSignedInt(int innerBound, int outerBound) {
-		return innerBound + (int)(((outerBound - innerBound) & 0xFFFFFFFFL) * (nextInt() & 0xFFFFFFFFL) >>> 32);
-	}
-
-	@Override
-	public int nextInt(int innerBound, int outerBound) {
-		return (int)(innerBound + ((((outerBound - innerBound) & 0xFFFFFFFFL) * (nextInt() & 0xFFFFFFFFL) >>> 32) & ~((long)outerBound - (long)innerBound >> 63)));
-	}
-
-	@Override
-	public int nextUnsignedInt(int bound) {
-		return (int)((bound & 0xFFFFFFFFL) * (nextInt() & 0xFFFFFFFFL) >>> 32);
-	}
-
-	@Override
-	public void nextBytes (byte[] bytes) {
-		if(bytes != null) {
-			for (int i = 0; i < bytes.length; ) {
-				for (int r = nextInt(), n = Math.min(bytes.length - i, 4); n-- > 0; r >>>= 8) {
-					bytes[i++] = (byte)r;
-				}
-			}
-		}
-	}
-
-	@Override
-	public long nextLong (long inner, long outer) {
-		final long randLow = nextInt() & 0xFFFFFFFFL;
-		final long randHigh = nextInt() & 0xFFFFFFFFL;
-		if (inner >= outer)
-			return inner;
-		final long bound = outer - inner;
-		final long boundLow = bound & 0xFFFFFFFFL;
-		final long boundHigh = (bound >>> 32);
-		return inner + (randHigh * boundLow >>> 32) + (randLow * boundHigh >>> 32) + randHigh * boundHigh;
-	}
-
-	@Override
-	public long nextSignedLong (long inner, long outer) {
-		if (outer < inner) {
-			long t = outer;
-			outer = inner + 1L;
-			inner = t + 1L;
-		}
-		final long bound = outer - inner;
-		final long randLow = nextInt() & 0xFFFFFFFFL;
-		final long randHigh = nextInt() & 0xFFFFFFFFL;
-		final long boundLow = bound & 0xFFFFFFFFL;
-		final long boundHigh = (bound >>> 32);
-		return inner + (randHigh * boundLow >>> 32) + (randLow * boundHigh >>> 32) + randHigh * boundHigh;
-	}
-
-	@Override
-	public boolean nextBoolean () {
-		return nextInt() < 0;
-	}
-
-	@Override
-	public float nextFloat () {
-		return (nextInt() >>> 8) * 0x1p-24f;
-	}
-
-	@Override
-	public float nextInclusiveFloat () {
-		return (0x1000001L * (nextInt() & 0xFFFFFFFFL) >> 32) * 0x1p-24f;
 	}
 
 	@Override
