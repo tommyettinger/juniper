@@ -17,7 +17,7 @@
 
 package com.github.tommyettinger.random;
 
-public class ChopRandom extends EnhancedRandom {
+public class ChopRandom extends Enhanced32Random {
 
     /**
      * The first state; can be any int.
@@ -165,77 +165,98 @@ public class ChopRandom extends EnhancedRandom {
         stateD = (int)(x ^ x >>> 27);
     }
 
-    public long getStateA() {
-        return stateA;
-    }
+	public int getStateA () {
+		return stateA;
+	}
 
-    /**
-     * Sets the first part of the state by casting the parameter to an int.
-     * @param stateA can be any long, but will be cast to an int before use
-     */
-    public void setStateA(long stateA) {
-        this.stateA = (int)stateA;
-    }
+	/**
+	 * Sets the first part of the state to the given int.
+	 *
+	 * @param stateA can be any int
+	 */
+	public void setStateA (int stateA) {
+		this.stateA = stateA;
+	}
 
-    public long getStateB() {
-        return stateB;
-    }
+	public int getStateB () {
+		return stateB;
+	}
 
-    /**
-     * Sets the second part of the state by casting the parameter to an int.
-     * @param stateB can be any long, but will be cast to an int before use
-     */
-    public void setStateB(long stateB) {
-        this.stateB = (int)stateB;
-    }
+	/**
+	 * Sets the second part of the state to the given int.
+	 *
+	 * @param stateB can be any int
+	 */
+	public void setStateB (int stateB) {
+		this.stateB = stateB;
+	}
 
-    public long getStateC() {
-        return stateC;
-    }
+	public int getStateC () {
+		return stateC;
+	}
 
-    /**
-     * Sets the third part of the state by casting the parameter to an int.
-     * Note that if you call {@link #nextInt()} immediately after this,
-     * it will return the given {@code stateC} (cast to int) as-is, so you
-     * may want to call some random generation methods (such as nextInt()) and discard
-     * the results after setting the state.
-     * @param stateC can be any long, but will be cast to an int before use
-     */
-    public void setStateC(long stateC) {
-        this.stateC = (int)stateC;
-    }
+	/**
+	 * Sets the third part of the state to the given int.
+	 * Note that if you call {@link #nextInt()} immediately after this,
+	 * it will return the given {@code stateC} (cast to int) as-is, so you
+	 * may want to call some random generation methods (such as nextInt()) and discard
+	 * the results after setting the state.
+	 *
+	 * @param stateC can be any int
+	 */
+	public void setStateC (int stateC) {
+		this.stateC = stateC;
+	}
 
-    public long getStateD() {
-        return stateD;
-    }
+	public int getStateD () {
+		return stateD;
+	}
 
-    /**
-     * Sets the fourth part of the state by casting the parameter to an int.
-     * @param stateD can be any long, but will be cast to an int before use
-     */
-    public void setStateD(long stateD) {
-        this.stateD = (int)stateD;
-    }
+	/**
+	 * Sets the fourth part of the state to the given int.
+	 *
+	 * @param stateD can be any int
+	 */
+	public void setStateD (int stateD) {
+		this.stateD = stateD;
+	}
 
-    /**
-     * Sets the state completely to the given four state variables, casting each to an int.
-     * This is the same as calling {@link #setStateA(long)}, {@link #setStateB(long)},
-     * {@link #setStateC(long)}, and {@link #setStateD(long)} as a group. You may want
-     * to call {@link #nextInt()} a few times after setting the states like this, unless
-     * the value for stateC (in particular) is already adequately random; the first call
-     * to {@link #nextInt()}, if it is made immediately after calling this, will return {@code stateC} as-is.
-     * @param stateA the first state; can be any long, but will be cast to an int before use
-     * @param stateB the second state; can be any long, but will be cast to an int before use
-     * @param stateC the third state; can be any long, but will be cast to an int before use
-     * @param stateD the fourth state; can be any long, but will be cast to an int before use
-     */
-    @Override
-    public void setState(long stateA, long stateB, long stateC, long stateD) {
-        this.stateA = (int)stateA;
-        this.stateB = (int)stateB;
-        this.stateC = (int)stateC;
-        this.stateD = (int)stateD;
-    }
+	/**
+	 * Sets the state completely to the given four state variables, casting each to an int.
+	 * This is the same as calling {@link #setStateA(int)}, {@link #setStateB(int)},
+	 * {@link #setStateC(int)}, and {@link #setStateD(int)} as a group. You may want
+	 * to call {@link #nextInt()} a few times after setting the states like this, unless
+	 * the value for stateC (in particular) is already adequately random; the first call
+	 * to {@link #nextInt()}, if it is made immediately after calling this, will return {@code stateC} as-is.
+	 *
+	 * @param stateA the first state; can be any long, but will be cast to an int before use
+	 * @param stateB the second state; can be any long, but will be cast to an int before use
+	 * @param stateC the third state; can be any long, but will be cast to an int before use
+	 * @param stateD the fourth state; can be any long, but will be cast to an int before use
+	 */
+	@Override
+	public void setState (long stateA, long stateB, long stateC, long stateD) {
+		this.stateA = (int)stateA;
+		this.stateB = (int)stateB;
+		this.stateC = (int)stateC;
+		this.stateD = (int)stateD;
+	}
+
+	/**
+	 * Like the superclass method {@link #setState(long, long, long, long)}, but takes four int values instead of long.
+	 * This can avoid creating longs on JS-targeting platforms, which tends to be quite slow.
+	 *
+	 * @param stateA the first state; can be any int
+	 * @param stateB the second state; can be any int
+	 * @param stateC the third state; can be any int
+	 * @param stateD the fourth state; can be any int
+	 */
+	public void setState (int stateA, int stateB, int stateC, int stateD) {
+		this.stateA = stateA;
+		this.stateB = stateB;
+		this.stateC = stateC;
+		this.stateD = stateD;
+	}
 
     @Override
     public long nextLong() {
@@ -307,312 +328,6 @@ public class ChopRandom extends EnhancedRandom {
         stateC = fa ^ fb + fc;
         stateD = fd + 0xADB5B165 | 0;
         return fc;
-    }
-
-    @Override
-    public int nextInt (int bound) {
-        final int fa = stateA;
-        final int fb = stateB;
-        final int fc = stateC;
-        final int fd = stateD;
-        final int sa = fb ^ fc; stateA = (sa << 26 | sa >>>  6);
-        final int sb = fc ^ fd; stateB = (sb << 11 | sb >>> 21);
-        stateC = fa ^ fb + fc;
-        stateD = fd + 0xADB5B165 | 0;
-        return (int)(bound * (fc & 0xFFFFFFFFL) >> 32) & ~(bound >> 31);
-    }
-
-    @Override
-    public int nextSignedInt (int outerBound) {
-        final int fa = stateA;
-        final int fb = stateB;
-        final int fc = stateC;
-        final int fd = stateD;
-        final int sa = fb ^ fc; stateA = (sa << 26 | sa >>>  6);
-        final int sb = fc ^ fd; stateB = (sb << 11 | sb >>> 21);
-        stateC = fa ^ fb + fc;
-        stateD = fd + 0xADB5B165 | 0;
-        outerBound = (int)(outerBound * (fc & 0xFFFFFFFFL) >> 32);
-        return outerBound + (outerBound >>> 31) | 0;
-    }
-
-    @Override
-    public int nextInt (int inner, int outer) {
-        int fa = stateA;
-        int fb = stateB;
-        int fc = stateC;
-        int fd = stateD;
-        int ga = fb ^ fc;
-        stateA = (ga << 26 | ga >>> 6);
-        int gb = fc ^ fd;
-        stateB = (gb << 11 | gb >>> 21);
-        stateC = fa ^ fb + fc;
-        stateD = fd + 0xADB5B165 | 0;
-        if(inner >= outer) return inner;
-        return (int)(inner + (
-                ((outer - inner & 0xFFFFFFFFL) * (fc & 0xFFFFFFFFL) >>> 32)
-                        & ~((long)outer - (long)inner >> 63)));
-    }
-
-    @Override
-    public int nextSignedInt (int innerBound, int outerBound) {
-        int fa = stateA;
-        int fb = stateB;
-        int fc = stateC;
-        int fd = stateD;
-        int ga = fb ^ fc;
-        stateA = (ga << 26 | ga >>> 6);
-        int gb = fc ^ fd;
-        stateB = (gb << 11 | gb >>> 21);
-        stateC = fa ^ fb + fc;
-        stateD = fd + 0xADB5B165 | 0;
-        if(innerBound >= outerBound) return innerBound;
-        return (int)(innerBound +
-                ((outerBound - innerBound & 0xFFFFFFFFL) * (fc & 0xFFFFFFFFL) >>> 32));
-    }
-
-    @Override
-    public int nextUnsignedInt(int bound) {
-        final int fa = stateA;
-        final int fb = stateB;
-        final int fc = stateC;
-        final int fd = stateD;
-        final int sa = fb ^ fc; stateA = (sa << 26 | sa >>>  6);
-        final int sb = fc ^ fd; stateB = (sb << 11 | sb >>> 21);
-        stateC = fa ^ fb + fc;
-        stateD = fd + 0xADB5B165 | 0;
-        return (int)((bound & 0xFFFFFFFFL) * (fc & 0xFFFFFFFFL) >>> 32);
-    }
-
-    @Override
-    public void nextBytes (byte[] bytes) {
-        if (bytes != null) {
-            for (int i = 0; i < bytes.length; ) {
-                final int fa = stateA;
-                final int fb = stateB;
-                int fc = stateC;
-                final int fd = stateD;
-                final int sa = fb ^ fc;
-                stateA = (sa << 26 | sa >>> 6);
-                final int sb = fc ^ fd;
-                stateB = (sb << 11 | sb >>> 21);
-                stateC = fa ^ fb + fc;
-                stateD = fd + 0xADB5B165 | 0;
-                for (int n = Math.min(bytes.length - i, 4); n-- > 0; fc >>>= 8) {
-                    bytes[i++] = (byte) fc;
-                }
-            }
-        }
-    }
-
-    @Override
-    public long nextLong (long outer) {
-        int fa = stateA;
-        int fb = stateB;
-        int fc = stateC;
-        int fd = stateD;
-        int ga = fb ^ fc;
-        ga = (ga << 26 | ga >>> 6);
-        int gb = fc ^ fd;
-        gb = (gb << 11 | gb >>> 21);
-        int gc = fa ^ fb + fc;
-        int gd = fd + 0xADB5B165;
-        fa = gb ^ gc;
-        stateA = (fa << 26 | fa >>> 6);
-        fb = gc ^ gd;
-        stateB = (fb << 11 | fb >>> 21);
-        stateC = ga ^ gb + gc;
-        stateD = fd + 0x5B6B62CA | 0;
-        if(1 >= outer) return 0;
-        final long randLow = fc & 0xFFFFFFFFL;
-        final long randHigh = gc & 0xFFFFFFFFL;
-        final long boundLow = outer & 0xFFFFFFFFL;
-        final long boundHigh = (outer >>> 32);
-        return (randHigh * boundLow >>> 32) + (randLow * boundHigh >>> 32) + randHigh * boundHigh;
-    }
-
-    @Override
-    public long nextLong (long inner, long outer) {
-        int fa = stateA;
-        int fb = stateB;
-        int fc = stateC;
-        int fd = stateD;
-        int ga = fb ^ fc;
-        ga = (ga << 26 | ga >>> 6);
-        int gb = fc ^ fd;
-        gb = (gb << 11 | gb >>> 21);
-        int gc = fa ^ fb + fc;
-        int gd = fd + 0xADB5B165;
-        fa = gb ^ gc;
-        stateA = (fa << 26 | fa >>> 6);
-        fb = gc ^ gd;
-        stateB = (fb << 11 | fb >>> 21);
-        stateC = ga ^ gb + gc;
-        stateD = fd + 0x5B6B62CA | 0;
-        if(inner >= outer) return inner;
-        final long randLow = fc & 0xFFFFFFFFL;
-        final long randHigh = gc & 0xFFFFFFFFL;
-        final long bound = outer - inner;
-        final long boundLow = bound & 0xFFFFFFFFL;
-        final long boundHigh = (bound >>> 32);
-        return inner + (randHigh * boundLow >>> 32) + (randLow * boundHigh >>> 32) + randHigh * boundHigh;
-    }
-
-    @Override
-    public long nextSignedLong (long outer) {
-        long inner;
-        if(outer < 0) {
-            inner = outer + 1L;
-            outer = 1L;
-        }
-        else {
-            inner = 0L;
-        }
-        final long bound = outer - inner;
-        int fa = stateA;
-        int fb = stateB;
-        int fc = stateC;
-        int fd = stateD;
-        int ga = fb ^ fc;
-        ga = (ga << 26 | ga >>> 6);
-        int gb = fc ^ fd;
-        gb = (gb << 11 | gb >>> 21);
-        int gc = fa ^ fb + fc;
-        int gd = fd + 0xADB5B165;
-        fa = gb ^ gc;
-        stateA = (fa << 26 | fa >>> 6);
-        fb = gc ^ gd;
-        stateB = (fb << 11 | fb >>> 21);
-        stateC = ga ^ gb + gc;
-        stateD = fd + 0x5B6B62CA | 0;
-        final long randLow = fc & 0xFFFFFFFFL;
-        final long randHigh = gc & 0xFFFFFFFFL;
-        final long boundLow = bound & 0xFFFFFFFFL;
-        final long boundHigh = (bound >>> 32);
-        return inner + (randHigh * boundLow >>> 32) + (randLow * boundHigh >>> 32) + randHigh * boundHigh;
-    }
-
-    @Override
-    public long nextSignedLong (long inner, long outer) {
-        if(outer < inner) {
-            long t = outer;
-            outer = inner + 1L;
-            inner = t + 1L;
-        }
-        final long bound = outer - inner;
-        int fa = stateA;
-        int fb = stateB;
-        int fc = stateC;
-        int fd = stateD;
-        int ga = fb ^ fc;
-        ga = (ga << 26 | ga >>> 6);
-        int gb = fc ^ fd;
-        gb = (gb << 11 | gb >>> 21);
-        int gc = fa ^ fb + fc;
-        int gd = fd + 0xADB5B165;
-        fa = gb ^ gc;
-        stateA = (fa << 26 | fa >>> 6);
-        fb = gc ^ gd;
-        stateB = (fb << 11 | fb >>> 21);
-        stateC = ga ^ gb + gc;
-        stateD = fd + 0x5B6B62CA | 0;
-        final long randLow = fc & 0xFFFFFFFFL;
-        final long randHigh = gc & 0xFFFFFFFFL;
-        final long boundLow = bound & 0xFFFFFFFFL;
-        final long boundHigh = (bound >>> 32);
-        return inner + (randHigh * boundLow >>> 32) + (randLow * boundHigh >>> 32) + randHigh * boundHigh;
-    }
-
-    @Override
-    public boolean nextBoolean () {
-        final int fa = stateA;
-        final int fb = stateB;
-        final int fc = stateC;
-        final int fd = stateD;
-        final int sa = fb ^ fc; stateA = (sa << 26 | sa >>>  6);
-        final int sb = fc ^ fd; stateB = (sb << 11 | sb >>> 21);
-        stateC = fa ^ fb + fc;
-        stateD = fd + 0xADB5B165 | 0;
-        return fc < 0;
-    }
-
-    @Override
-    public float nextFloat () {
-        final int fa = stateA;
-        final int fb = stateB;
-        final int fc = stateC;
-        final int fd = stateD;
-        final int sa = fb ^ fc; stateA = (sa << 26 | sa >>>  6);
-        final int sb = fc ^ fd; stateB = (sb << 11 | sb >>> 21);
-        stateC = fa ^ fb + fc;
-        stateD = fd + 0xADB5B165 | 0;
-        return (fc >>> 8) * 0x1p-24f;
-    }
-
-    @Override
-    public float nextFloat (float outerBound) {
-        final int fa = stateA;
-        final int fb = stateB;
-        final int fc = stateC;
-        final int fd = stateD;
-        final int sa = fb ^ fc; stateA = (sa << 26 | sa >>>  6);
-        final int sb = fc ^ fd; stateB = (sb << 11 | sb >>> 21);
-        stateC = fa ^ fb + fc;
-        stateD = fd + 0xADB5B165 | 0;
-        return (fc >>> 8) * 0x1p-24f * outerBound;
-
-    }
-
-    @Override
-    public float nextFloat (float innerBound, float outerBound) {
-        final int fa = stateA;
-        final int fb = stateB;
-        final int fc = stateC;
-        final int fd = stateD;
-        final int sa = fb ^ fc; stateA = (sa << 26 | sa >>>  6);
-        final int sb = fc ^ fd; stateB = (sb << 11 | sb >>> 21);
-        stateC = fa ^ fb + fc;
-        stateD = fd + 0xADB5B165 | 0;
-        return innerBound + (fc >>> 8) * 0x1p-24f * (outerBound - innerBound);
-    }
-
-    @Override
-    public float nextInclusiveFloat () {
-        final int fa = stateA;
-        final int fb = stateB;
-        final int fc = stateC;
-        final int fd = stateD;
-        final int sa = fb ^ fc; stateA = (sa << 26 | sa >>>  6);
-        final int sb = fc ^ fd; stateB = (sb << 11 | sb >>> 21);
-        stateC = fa ^ fb + fc;
-        stateD = fd + 0xADB5B165 | 0;
-        return (0x1000001L * (fc & 0xFFFFFFFFL) >> 32) * 0x1p-24f;
-    }
-
-    @Override
-    public float nextInclusiveFloat (float outerBound) {
-        final int fa = stateA;
-        final int fb = stateB;
-        final int fc = stateC;
-        final int fd = stateD;
-        final int sa = fb ^ fc; stateA = (sa << 26 | sa >>>  6);
-        final int sb = fc ^ fd; stateB = (sb << 11 | sb >>> 21);
-        stateC = fa ^ fb + fc;
-        stateD = fd + 0xADB5B165 | 0;
-        return (0x1000001L * (fc & 0xFFFFFFFFL) >> 32) * 0x1p-24f * outerBound;
-    }
-
-    @Override
-    public float nextInclusiveFloat (float innerBound, float outerBound) {
-        final int fa = stateA;
-        final int fb = stateB;
-        final int fc = stateC;
-        final int fd = stateD;
-        final int sa = fb ^ fc; stateA = (sa << 26 | sa >>>  6);
-        final int sb = fc ^ fd; stateB = (sb << 11 | sb >>> 21);
-        stateC = fa ^ fb + fc;
-        stateD = fd + 0xADB5B165 | 0;
-        return innerBound + (0x1000001L * (fc & 0xFFFFFFFFL) >> 32) * 0x1p-24f * (outerBound - innerBound);
     }
 
     @Override
