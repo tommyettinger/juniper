@@ -50,14 +50,14 @@ import java.math.BigInteger;
  * producing an output use bitwise math, so they won't exceed int bounds, either, on JS.
  */
 @SuppressWarnings({"ShiftOutOfRange", "PointlessBitwiseExpression"})
-public class Lamb32Random extends EnhancedRandom {
+public class Lamb32Random extends Enhanced32Random {
 
 	/**
-	 * The first (dependent counter) state; can be any int except 0.
+	 * The first (dependent counter) state; can be any int.
 	 */
 	protected int stateA;
 	/**
-	 * The second (XLCG) state; can be any long.
+	 * The second (XLCG) state; can be any int.
 	 */
 	protected int stateB;
 
@@ -178,7 +178,7 @@ public class Lamb32Random extends EnhancedRandom {
 		stateB ^= (stateB << 14 | stateB >>> 18) ^ (stateB << 5 | stateB >>> 27);
 	}
 
-	public long getStateA () {
+	public int getStateA () {
 		return stateA;
 	}
 
@@ -187,11 +187,11 @@ public class Lamb32Random extends EnhancedRandom {
 	 *
 	 * @param stateA can be any int
 	 */
-	public void setStateA (long stateA) {
-		this.stateA = (int)stateA;
+	public void setStateA (int stateA) {
+		this.stateA = stateA;
 	}
 
-	public long getStateB () {
+	public int getStateB () {
 		return stateB;
 	}
 
@@ -200,13 +200,13 @@ public class Lamb32Random extends EnhancedRandom {
 	 *
 	 * @param stateB can be any int
 	 */
-	public void setStateB (long stateB) {
-		this.stateB = (int)stateB;
+	public void setStateB (int stateB) {
+		this.stateB = stateB;
 	}
 
 	/**
 	 * Sets the state completely to the given two state variables.
-	 * This is the same as calling {@link #setStateA(long)} and {@link #setStateB(long)},
+	 * This is the same as calling {@link #setStateA(int)} and {@link #setStateB(int)},
 	 * as a group.
 	 *
 	 * @param stateA the first state; can be any int
@@ -216,6 +216,18 @@ public class Lamb32Random extends EnhancedRandom {
 	public void setState (long stateA, long stateB) {
 		this.stateA = (int)stateA;
 		this.stateB = (int)stateB;
+	}
+
+	/**
+	 * Like the superclass method {@link #setState(long, long)}, but takes two int values instead of long.
+	 * This can avoid creating longs on JS-targeting platforms, which tends to be quite slow.
+	 *
+	 * @param stateA the first state; can be any int
+	 * @param stateB the second state; can be any int
+	 */
+	public void setState (int stateA, int stateB) {
+		this.stateA = stateA;
+		this.stateB = stateB;
 	}
 
 	@Override
@@ -270,116 +282,6 @@ public class Lamb32Random extends EnhancedRandom {
 		stateB = BitConversion.imul(stateB, 555555555) ^ 333333333;
 		lo ^= lo >>> 23;
 		return (long) hi << 32 ^ lo;
-	}
-
-	@Override
-	public int nextInt (int bound) {
-		return (int)(bound * (nextInt() & 0xFFFFFFFFL) >> 32) & ~(bound >> 31);
-	}
-
-	@Override
-	public int nextSignedInt (int outerBound) {
-		outerBound = (int)(outerBound * (nextInt() & 0xFFFFFFFFL) >> 32);
-		return outerBound + (outerBound >>> 31);
-	}
-
-	@Override
-	public int nextUnsignedInt(int bound) {
-		return (int)((bound & 0xFFFFFFFFL) * (nextInt() & 0xFFFFFFFFL) >>> 32);
-	}
-
-	@Override
-	public void nextBytes (byte[] bytes) {
-		if (bytes != null) {
-			for (int i = 0; i < bytes.length; ) {
-				int r = nextInt();
-				for (int n = Math.min(bytes.length - i, 4); n-- > 0; r >>>= 8) {
-					bytes[i++] = (byte) r;
-				}
-			}
-		}
-	}
-
-	@Override
-	public int nextInt(int innerBound, int outerBound) {
-		return (int)(innerBound + ((((outerBound - innerBound) & 0xFFFFFFFFL) * (nextInt() & 0xFFFFFFFFL) >>> 32) & ~((long)outerBound - (long)innerBound >> 63)));
-	}
-
-	@Override
-	public int nextSignedInt(int innerBound, int outerBound) {
-		return innerBound + (int)(((outerBound - innerBound) & 0xFFFFFFFFL) * (nextInt() & 0xFFFFFFFFL) >>> 32);
-	}
-
-	@Override
-	public long nextLong(long bound) {
-		final long randLow = nextInt() & 0xFFFFFFFFL;
-		final long randHigh = nextInt() & 0xFFFFFFFFL;
-		if (1 >= bound)
-			return 0;
-		final long boundLow = bound & 0xFFFFFFFFL;
-		final long boundHigh = (bound >>> 32);
-		return (randHigh * boundLow >>> 32) + (randLow * boundHigh >>> 32) + randHigh * boundHigh;
-	}
-
-	@Override
-	public long nextSignedLong(long outer) {
-		long inner;
-		if (outer < 0) {
-			long t = outer;
-			outer = 1L;
-			inner = t + 1L;
-		} else {
-			inner = 0L;
-		}
-		final long bound = outer - inner;
-		final long randLow = nextInt() & 0xFFFFFFFFL;
-		final long randHigh = nextInt() & 0xFFFFFFFFL;
-		final long boundLow = bound & 0xFFFFFFFFL;
-		final long boundHigh = (bound >>> 32);
-		return inner + (randHigh * boundLow >>> 32) + (randLow * boundHigh >>> 32) + randHigh * boundHigh;
-	}
-
-	@Override
-	public long nextLong (long inner, long outer) {
-		final long randLow = nextInt() & 0xFFFFFFFFL;
-		final long randHigh = nextInt() & 0xFFFFFFFFL;
-		if (inner >= outer)
-			return inner;
-		final long bound = outer - inner;
-		final long boundLow = bound & 0xFFFFFFFFL;
-		final long boundHigh = (bound >>> 32);
-		return inner + (randHigh * boundLow >>> 32) + (randLow * boundHigh >>> 32) + randHigh * boundHigh;
-	}
-
-	@Override
-	public long nextSignedLong (long inner, long outer) {
-		if (outer < inner) {
-			long t = outer;
-			outer = inner + 1L;
-			inner = t + 1L;
-		}
-		final long bound = outer - inner;
-		final long randLow = nextInt() & 0xFFFFFFFFL;
-		final long randHigh = nextInt() & 0xFFFFFFFFL;
-		final long boundLow = bound & 0xFFFFFFFFL;
-		final long boundHigh = (bound >>> 32);
-		return inner + (randHigh * boundLow >>> 32) + (randLow * boundHigh >>> 32) + randHigh * boundHigh;
-	}
-
-	@Override
-	public boolean nextBoolean ()
-	{
-		return nextInt() < 0;
-	}
-
-	@Override
-	public float nextFloat () {
-		return (nextInt() >>> 8) * 0x1p-24f;
-	}
-
-	@Override
-	public float nextInclusiveFloat () {
-		return (0x1000001L * (nextInt() & 0xFFFFFFFFL) >> 32) * 0x1p-24f;
 	}
 
 	@Override
