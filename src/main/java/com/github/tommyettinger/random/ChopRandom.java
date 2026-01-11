@@ -284,6 +284,15 @@ public class ChopRandom extends Enhanced32Random {
 		this.stateD = (int)stateD;
 	}
 
+	/**
+	 * Like the superclass method {@link #setState(long, long, long, long)}, but takes four int values instead of long.
+	 * This can avoid creating longs on JS-targeting platforms, which tends to be quite slow.
+	 *
+	 * @param stateA the first state; can be any int
+	 * @param stateB the second state; can be any int
+	 * @param stateC the third state; can be any int
+	 * @param stateD the fourth state; can be any int
+	 */
 	public void setState (int stateA, int stateB, int stateC, int stateD) {
 		this.stateA = stateA;
 		this.stateB = stateB;
