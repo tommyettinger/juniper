@@ -7,6 +7,41 @@ import org.junit.Test;
 import java.util.ArrayList;
 
 public class RangedTest {
+	public static int processUnsignedInt32Biased(int rand, int bound) {
+		final int randLow = rand & 0xFFFF;
+		final int boundLow = bound & 0xFFFF;
+		final int randHigh = (rand >>> 16);
+		final int boundHigh = (bound >>> 16);
+		return (randHigh * boundLow >>> 16) + (randLow * boundHigh >>> 16) + randHigh * boundHigh;
+	}
+
+	public static int processUnsignedInt32Unbiased(int rand, int bound) {
+		final int randLow = rand & 0xFFFF;
+		final int boundLow = bound & 0xFFFF;
+		final int randHigh = (rand >>> 16);
+		final int boundHigh = (bound >>> 16);
+//		return (randHigh * boundLow >>> 16) + (randLow * boundHigh >>> 16) + randHigh * boundHigh | 0;
+		final int lolo = randLow * boundLow;
+		final int lohi = randLow * boundHigh;
+		final int hilo = randHigh * boundLow;
+		final int hihi = randHigh * boundHigh;
+		return (hilo >>> 16) + (lohi >>> 16) + hihi + ((lolo >>> 16) + (hilo & 0xFFFF) + (lohi & 0xFFFF) >>> 16);
+	}
+
+	public static int processSignedInt32Biased(int rand, int bound) {
+		final int boundSign = bound >> 31;
+		return processUnsignedInt32Biased(rand, bound + boundSign ^ boundSign) + boundSign ^ boundSign;
+	}
+
+	public static int processInt32Old(int rand, int innerBound, int outerBound){
+		return (int) (innerBound + (processUnsignedInt32Unbiased(rand, outerBound - innerBound) & ~((long) outerBound - (long) innerBound >> 63)));
+	}
+
+	public static int processInt32(int rand, int innerBound, int outerBound){
+		final int check = innerBound ^ Math.max(innerBound, outerBound);
+		return (innerBound + (processUnsignedInt32Unbiased(rand, outerBound - innerBound) & (check | -check) >> 31));
+	}
+
     @Ignore // comment this out if you want to run this; it can take a little while
     @Test
     public void testIntRange() {
@@ -110,32 +145,6 @@ public class RangedTest {
             }
         }
     }
-
-	public static int processUnsignedInt32Biased(int rand, int bound) {
-		final int randLow = rand & 0xFFFF;
-		final int boundLow = bound & 0xFFFF;
-		final int randHigh = (rand >>> 16);
-		final int boundHigh = (bound >>> 16);
-		return (randHigh * boundLow >>> 16) + (randLow * boundHigh >>> 16) + randHigh * boundHigh;
-	}
-
-	public static int processUnsignedInt32Unbiased(int rand, int bound) {
-		final int randLow = rand & 0xFFFF;
-		final int boundLow = bound & 0xFFFF;
-		final int randHigh = (rand >>> 16);
-		final int boundHigh = (bound >>> 16);
-//		return (randHigh * boundLow >>> 16) + (randLow * boundHigh >>> 16) + randHigh * boundHigh | 0;
-		final int lolo = randLow * boundLow;
-		final int lohi = randLow * boundHigh;
-		final int hilo = randHigh * boundLow;
-		final int hihi = randHigh * boundHigh;
-		return (hilo >>> 16) + (lohi >>> 16) + hihi + ((lolo >>> 16) + (hilo & 0xFFFF) + (lohi & 0xFFFF) >>> 16);
-	}
-
-	public static int processSignedInt32Biased(int rand, int bound) {
-		final int boundSign = bound >> 31;
-		return processUnsignedInt32Biased(rand, bound + boundSign ^ boundSign) + boundSign ^ boundSign;
-	}
 
 	/**
 	 * The int-based bounded-int generator now returns the same results, but uses a little more math.
@@ -346,5 +355,28 @@ public class RangedTest {
 			System.out.printf("Bound %08X had %08X mismatched results, totaling %016X off.\n", bound, discrepancies, totalOff);
 			System.out.printf("Average p was %10.10f, average u was %10.10f, should be %10.10f .\n", averageP * 0x1p-32, averageU * 0x1p-32, (bound - (bound >> 31 | 1)) * 0.5f);
 		}
+	}
+
+	/**
+	 * The two processInt32 methods are equivalent.
+	 */
+	@Ignore
+	@Test
+	public void testInt32() {
+		AceRandom lower = new AceRandom(1L), upper = new AceRandom(222222222L);
+		for (int i = 0x80000000; i < 0; i++) {
+			int lo = lower.nextInt(), up = upper.nextInt();
+			int o = processInt32Old(i, lo, up);
+			int n = processInt32(i, lo, up);
+			Assert.assertEquals("Error with rand=" + i + " lo=" + lo + " up=" + up, o, n);
+		}
+		//noinspection OverflowingLoopIndex
+		for (int i = 0; i >= 0; i++) {
+			int lo = lower.nextInt(), up = upper.nextInt();
+			int o = processInt32Old(i, lo, up);
+			int n = processInt32(i, lo, up);
+			Assert.assertEquals("Error with rand=" + i + "lo=" + lo + " up=" + up, o, n);
+		}
+
 	}
 }
