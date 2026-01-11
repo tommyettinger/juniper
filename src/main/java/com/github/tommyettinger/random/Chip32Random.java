@@ -147,6 +147,14 @@ public class Chip32Random extends Enhanced32Random {
 	}
 
 	/**
+	 * This generator mainly generates int values.
+	 * @return true
+	 */
+	@Override
+	public boolean mainlyGeneratesInt() {
+		return true;
+	}
+	/**
 	 * Gets the state determined by {@code selection}, as-is. The value for selection should be
 	 * between 0 and 3, inclusive; if it is any other value this gets state D as if 3 was given.
 	 *

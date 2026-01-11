@@ -52,7 +52,7 @@ import java.math.BigInteger;
  * <br>
  * The name comes from how some of the operations here are difficult to classify.
  */
-public class Taxon32Random extends EnhancedRandom {
+public class Taxon32Random extends Enhanced32Random {
     /**
      * The first state; can be any int.
      */
@@ -177,45 +177,57 @@ public class Taxon32Random extends EnhancedRandom {
         stateB = (int) (seed >>> 32);
     }
 
-    public long getStateA() {
-        return stateA;
-    }
+	public int getStateA () {
+		return stateA;
+	}
 
-    /**
-     * Sets the first part of the state by casting the parameter to an int.
-     *
-     * @param stateA can be any long, but will be cast to an int before use
-     */
-    public void setStateA(long stateA) {
-        this.stateA = (int) stateA;
-    }
+	/**
+	 * Sets the first (dependent counter) part of the state.
+	 *
+	 * @param stateA can be any int
+	 */
+	public void setStateA (int stateA) {
+		this.stateA = stateA;
+	}
 
-    public long getStateB() {
-        return stateB;
-    }
+	public int getStateB () {
+		return stateB;
+	}
 
-    /**
-     * Sets the second part of the state by casting the parameter to an int.
-     *
-     * @param stateB can be any long, but will be cast to an int before use
-     */
-    public void setStateB(long stateB) {
-        this.stateB = (int) stateB;
-    }
+	/**
+	 * Sets the second (XLCG) part of the state.
+	 *
+	 * @param stateB can be any int
+	 */
+	public void setStateB (int stateB) {
+		this.stateB = stateB;
+	}
 
-    /**
-     * Sets the state completely to the given state variables, casting each to an int.
-     * This is the same as calling {@link #setStateA(long)} and {@link #setStateB(long)}
-     * as a group.
-     *
-     * @param stateA the first state; can be any long, but will be cast to an int before use
-     * @param stateB the second state; can be any long, but will be cast to an int before use
-     */
-    @Override
-    public void setState(long stateA, long stateB) {
-        this.stateA = (int) stateA;
-        this.stateB = (int) stateB;
-    }
+	/**
+	 * Sets the state completely to the given two state variables.
+	 * This is the same as calling {@link #setStateA(int)} and {@link #setStateB(int)},
+	 * as a group.
+	 *
+	 * @param stateA the first state; can be any int
+	 * @param stateB the second state; can be any int
+	 */
+	@Override
+	public void setState (long stateA, long stateB) {
+		this.stateA = (int)stateA;
+		this.stateB = (int)stateB;
+	}
+
+	/**
+	 * Like the superclass method {@link #setState(long, long)}, but takes two int values instead of long.
+	 * This can avoid creating longs on JS-targeting platforms, which tends to be quite slow.
+	 *
+	 * @param stateA the first state; can be any int
+	 * @param stateB the second state; can be any int
+	 */
+	public void setState (int stateA, int stateB) {
+		this.stateA = stateA;
+		this.stateB = stateB;
+	}
 
     @Override
     public long nextLong() {
@@ -270,70 +282,6 @@ public class Taxon32Random extends EnhancedRandom {
         y += (x << y | x >>> 32 - y);
         y = (y ^ y >>> 22 ^ y << 5) * 0xB45ED;
         return y ^ y >>> 21;
-    }
-
-    @Override
-    public int nextInt(int bound) {
-        return (int) (bound * (nextInt() & 0xFFFFFFFFL) >> 32) & ~(bound >> 31);
-    }
-
-    @Override
-    public int nextSignedInt(int outerBound) {
-        outerBound = (int) (outerBound * (nextInt() & 0xFFFFFFFFL) >> 32);
-        return outerBound + (outerBound >>> 31);
-    }
-
-    @Override
-    public void nextBytes(byte[] bytes) {
-        if(bytes != null) {
-            for (int i = 0; i < bytes.length; ) {
-                for (int r = nextInt(), n = Math.min(bytes.length - i, 4); n-- > 0; r >>>= 8) {
-                    bytes[i++] = (byte) r;
-                }
-            }
-        }
-    }
-
-    @Override
-    public long nextLong(long inner, long outer) {
-        final long randLow = nextInt() & 0xFFFFFFFFL;
-        final long randHigh = nextInt() & 0xFFFFFFFFL;
-        if (inner >= outer)
-            return inner;
-        final long bound = outer - inner;
-        final long boundLow = bound & 0xFFFFFFFFL;
-        final long boundHigh = (bound >>> 32);
-        return inner + (randHigh * boundLow >>> 32) + (randLow * boundHigh >>> 32) + randHigh * boundHigh;
-    }
-
-    @Override
-    public long nextSignedLong(long inner, long outer) {
-        if (outer < inner) {
-            long t = outer;
-            outer = inner + 1L;
-            inner = t + 1L;
-        }
-        final long bound = outer - inner;
-        final long randLow = nextInt() & 0xFFFFFFFFL;
-        final long randHigh = nextInt() & 0xFFFFFFFFL;
-        final long boundLow = bound & 0xFFFFFFFFL;
-        final long boundHigh = (bound >>> 32);
-        return inner + (randHigh * boundLow >>> 32) + (randLow * boundHigh >>> 32) + randHigh * boundHigh;
-    }
-
-    @Override
-    public boolean nextBoolean() {
-        return nextInt() < 0;
-    }
-
-    @Override
-    public float nextFloat() {
-        return (nextInt() >>> 8) * 0x1p-24f;
-    }
-
-    @Override
-    public float nextInclusiveFloat() {
-        return (0x1000001L * (nextInt() & 0xFFFFFFFFL) >> 32) * 0x1p-24f;
     }
 
     @Override
