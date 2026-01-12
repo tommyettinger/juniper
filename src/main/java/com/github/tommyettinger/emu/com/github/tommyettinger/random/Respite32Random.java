@@ -313,7 +313,7 @@ public class Respite32Random extends Enhanced32Random {
 		this.@com.github.tommyettinger.random.Respite32Random::stateC = this.@com.github.tommyettinger.random.Respite32Random::stateC + (0x7FEB352D ^ Math.clz32(a&b)) | 0;
 		return a;
 	}-*/;
-	
+
 	@Override
 	public Respite32Random copy () {
 		return new Respite32Random(stateA, stateB, stateC);
