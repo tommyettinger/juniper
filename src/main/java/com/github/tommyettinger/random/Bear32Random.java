@@ -32,8 +32,7 @@ import java.math.BigInteger;
  * correlated states, or any of {@link DistinctRandom}/{@link FlowRandom}/{@link Xoshiro256MX3Random}, which avoid
  * detectable correlation from the start.
  */
-@SuppressWarnings("SuspiciousNameCombination")
-public class Bear32Random extends EnhancedRandom {
+public class Bear32Random extends Enhanced32Random {
 	/**
 	 * The first state; can be any int.
 	 */
@@ -75,7 +74,7 @@ public class Bear32Random extends EnhancedRandom {
 	 *
 	 * @param stateA any {@code int} value
 	 * @param stateB any {@code int} value
-	 * @param stateC any {@code int} value; will be returned exactly on the first call to {@link #nextInt()}
+	 * @param stateC any {@code int} value
 	 * @param stateD any {@code int} value
 	 */
 	public Bear32Random(int stateA, int stateB, int stateC, int stateD) {
@@ -174,9 +173,7 @@ public class Bear32Random extends EnhancedRandom {
 
 	/**
 	 * This initializes all 4 states of the generator to random values based on the given seed.
-	 * (2 to the 64) possible initial generator states can be produced here, all with a different
-	 * first value returned by {@link #nextLong()} (because {@code stateC} is guaranteed to be
-	 * different for every different {@code seed}).
+	 * (2 to the 64) possible initial generator states can be produced here.
 	 *
 	 * @param seed the initial seed; may be any long
 	 */
@@ -198,62 +195,62 @@ public class Bear32Random extends EnhancedRandom {
 		stateD = d ^ d >>> 15;
 	}
 
-	public long getStateA () {
+	public int getStateA () {
 		return stateA;
 	}
 
 	/**
-	 * Sets the first part of the state by casting the parameter to an int.
+	 * Sets the first part of the state to the given int.
 	 *
-	 * @param stateA can be any long, but will be cast to an int before use
+	 * @param stateA can be any int
 	 */
-	public void setStateA (long stateA) {
-		this.stateA = (int)stateA;
+	public void setStateA (int stateA) {
+		this.stateA = stateA;
 	}
 
-	public long getStateB () {
+	public int getStateB () {
 		return stateB;
 	}
 
 	/**
-	 * Sets the second part of the state by casting the parameter to an int.
+	 * Sets the second part of the state to the given int.
 	 *
-	 * @param stateB can be any long, but will be cast to an int before use
+	 * @param stateB can be any int
 	 */
-	public void setStateB (long stateB) {
-		this.stateB = (int)stateB;
+	public void setStateB (int stateB) {
+		this.stateB = stateB;
 	}
 
-	public long getStateC () {
+	public int getStateC () {
 		return stateC;
 	}
 
 	/**
-	 * Sets the third part of the state by casting the parameter to an int.
+	 * Sets the third part of the state to the given int.
 	 *
-	 * @param stateC can be any long, but will be cast to an int before use
+	 * @param stateC can be any int
 	 */
-	public void setStateC (long stateC) {
-		this.stateC = (int)stateC;
+	public void setStateC (int stateC) {
+		this.stateC = stateC;
 	}
 
-	public long getStateD () {
+	public int getStateD () {
 		return stateD;
 	}
 
 	/**
-	 * Sets the fourth part of the state by casting the parameter to an int.
+	 * Sets the fourth part of the state to the given int.
 	 *
-	 * @param stateD can be any long, but will be cast to an int before use
+	 * @param stateD can be any int
 	 */
-	public void setStateD (long stateD) {
-		this.stateD = (int)stateD;
+	public void setStateD (int stateD) {
+		this.stateD = stateD;
 	}
 
 	/**
 	 * Sets the state completely to the given four state variables, casting each to an int.
-	 * This is the same as calling {@link #setStateA(long)}, {@link #setStateB(long)},
-	 * {@link #setStateC(long)}, and {@link #setStateD(long)} as a group.
+	 * This is the same as calling {@link #setStateA(int)}, {@link #setStateB(int)},
+	 * {@link #setStateC(int)}, and {@link #setStateD(int)} as a group.
 	 *
 	 * @param stateA the first state; can be any long, but will be cast to an int before use
 	 * @param stateB the second state; can be any long, but will be cast to an int before use
@@ -268,169 +265,121 @@ public class Bear32Random extends EnhancedRandom {
 		this.stateD = (int)stateD;
 	}
 
+	/**
+	 * Like the superclass method {@link #setState(long, long, long, long)}, but takes four int values instead of long.
+	 * This can avoid creating longs on JS-targeting platforms, which tends to be quite slow.
+	 *
+	 * @param stateA the first state; can be any int
+	 * @param stateB the second state; can be any int
+	 * @param stateC the third state; can be any int
+	 * @param stateD the fourth state; can be any int
+	 */
+	public void setState (int stateA, int stateB, int stateC, int stateD) {
+		this.stateA = stateA;
+		this.stateB = stateB;
+		this.stateC = stateC;
+		this.stateD = stateD;
+	}
+
 	@Override
 	public long nextLong () {
-		int x, y, z, w;
-		x = (stateA += 0x9E3779B9);
-		y = (stateB += (x ^ Integer.numberOfLeadingZeros(x)));
-		z = (stateC += (y ^ Integer.numberOfLeadingZeros(x &= y)));
-		w = (stateD += (z ^ Integer.numberOfLeadingZeros(x &= z)));
-		x = (w + (x << 13 | x >>> 19)) * 0x2C1B3C6D;
-		x = (x ^ x >>> 12) * 0x297A2D39;
-		x ^= x >>> 15;
-		int hi = x;
-		x = (stateA += 0x9E3779B9);
-		y = (stateB += (x ^ Integer.numberOfLeadingZeros(x)));
-		z = (stateC += (y ^ Integer.numberOfLeadingZeros(x &= y)));
-		w = (stateD += (z ^ Integer.numberOfLeadingZeros(x &= z)));
-		x = (w + (x << 13 | x >>> 19)) * 0x2C1B3C6D;
-		x = (x ^ x >>> 12) * 0x297A2D39;
-		x ^= x >>> 15;
-		int lo = x;
+		int a, b, c, d;
+		a = (stateA += 0x9E3779B9);
+		b = (stateB += (a ^ Integer.numberOfLeadingZeros(a)));
+		c = (stateC += (b ^ Integer.numberOfLeadingZeros(a &= b)));
+		d = (stateD += (c ^ Integer.numberOfLeadingZeros(a &= c)));
+		a = (d + (a << 13 | a >>> 19)) * 0x2C1B3C6D;
+		a = (a ^ a >>> 12) * 0x297A2D39;
+		a ^= a >>> 15;
+		int hi = a;
+		a = (stateA += 0x9E3779B9);
+		b = (stateB += (a ^ Integer.numberOfLeadingZeros(a)));
+		c = (stateC += (b ^ Integer.numberOfLeadingZeros(a &= b)));
+		d = (stateD += (c ^ Integer.numberOfLeadingZeros(a &= c)));
+		a = (d + (a << 13 | a >>> 19)) * 0x2C1B3C6D;
+		a = (a ^ a >>> 12) * 0x297A2D39;
+		a ^= a >>> 15;
+		int lo = a;
 		return (long)(hi) << 32 | (lo & 0xFFFFFFFFL);
 		// These could be used instead of the above two lines:
-//		int lo = x ^ (hi << 16 | hi >>> 16);
-//		return (long)(hi ^ (x << 13 | x >>> 19)) << 32 | (lo & 0xFFFFFFFFL);
+//		int lo = a ^ (hi << 16 | hi >>> 16);
+//		return (long)(hi ^ (a << 13 | a >>> 19)) << 32 | (lo & 0xFFFFFFFFL);
 		// This would make long outputs random and decorrelated from the very start, but not int outputs.
 	}
 
 	@Override
 	public int next (int bits) {
-		int x, y, z, w;
-		x = (stateA += 0x9E3779B9);
-		y = (stateB += (x ^ Integer.numberOfLeadingZeros(x)));
-		z = (stateC += (y ^ Integer.numberOfLeadingZeros(x &= y)));
-		w = (stateD += (z ^ Integer.numberOfLeadingZeros(x &= z)));
-		x = (w + (x << 13 | x >>> 19)) * 0x2C1B3C6D;
-		x = (x ^ x >>> 12) * 0x297A2D39;
-		x ^= x >>> 15;
-		return (x) >>> (32 - bits);
+		int a, b, c, d;
+		a = (stateA += 0x9E3779B9);
+		b = (stateB += (a ^ Integer.numberOfLeadingZeros(a)));
+		c = (stateC += (b ^ Integer.numberOfLeadingZeros(a &= b)));
+		d = (stateD += (c ^ Integer.numberOfLeadingZeros(a &= c)));
+		a = (d + (a << 13 | a >>> 19)) * 0x2C1B3C6D;
+		a = (a ^ a >>> 12) * 0x297A2D39;
+		a ^= a >>> 15;
+		return a >>> (32 - bits);
 	}
 
 	@Override
 	public int nextInt () {
-		int x, y, z, w;
-		x = (stateA += 0x9E3779B9);
-		y = (stateB += (x ^ Integer.numberOfLeadingZeros(x)));
-		z = (stateC += (y ^ Integer.numberOfLeadingZeros(x &= y)));
-		w = (stateD += (z ^ Integer.numberOfLeadingZeros(x &= z)));
-		x = (w + (x << 13 | x >>> 19)) * 0x2C1B3C6D;
-		x = (x ^ x >>> 12) * 0x297A2D39;
-		x ^= x >>> 15;
-		return x;
+		int a, b, c, d;
+		a = (stateA += 0x9E3779B9);
+		b = (stateB += (a ^ Integer.numberOfLeadingZeros(a)));
+		c = (stateC += (b ^ Integer.numberOfLeadingZeros(a &= b)));
+		d = (stateD += (c ^ Integer.numberOfLeadingZeros(a &= c)));
+		a = (d + (a << 13 | a >>> 19)) * 0x2C1B3C6D;
+		a = (a ^ a >>> 12) * 0x297A2D39;
+		a ^= a >>> 15;
+		return a;
 	}
 
 	@Override
 	public long previousLong() {
-		int x, y, z, w, m;
-		x = stateA;
-		y = stateB;
-		z = stateC;
-		w = stateD;
-		m = x & y & z;
-		m = (w + (m << 13 | m >>> 19)) * 0x2C1B3C6D;
+		int a, b, c, d, m;
+		a = stateA;
+		b = stateB;
+		c = stateC;
+		d = stateD;
+		m = a & b & c;
+		m = (d + (m << 13 | m >>> 19)) * 0x2C1B3C6D;
 		m = (m ^ m >>> 12) * 0x297A2D39;
 		m ^= m >>> 15;
 		int lo = m;
-		stateA = x - 0x9E3779B9;
-		stateB = y - (x ^ Integer.numberOfLeadingZeros(x));
-		stateC = z - (y ^ Integer.numberOfLeadingZeros(x &= y));
-		stateD = w - (z ^ Integer.numberOfLeadingZeros(x & z));
-		x = stateA;
-		y = stateB;
-		z = stateC;
-		w = stateD;
-		m = x & y & z;
-		m = (w + (m << 13 | m >>> 19)) * 0x2C1B3C6D;
+		stateA = a - 0x9E3779B9;
+		stateB = b - (a ^ Integer.numberOfLeadingZeros(a));
+		stateC = c - (b ^ Integer.numberOfLeadingZeros(a &= b));
+		stateD = d - (c ^ Integer.numberOfLeadingZeros(a & c));
+		a = stateA;
+		b = stateB;
+		c = stateC;
+		d = stateD;
+		m = a & b & c;
+		m = (d + (m << 13 | m >>> 19)) * 0x2C1B3C6D;
 		m = (m ^ m >>> 12) * 0x297A2D39;
 		m ^= m >>> 15;
 		int hi = m;
-		stateA = x - 0x9E3779B9;
-		stateB = y - (x ^ Integer.numberOfLeadingZeros(x));
-		stateC = z - (y ^ Integer.numberOfLeadingZeros(x &= y));
-		stateD = w - (z ^ Integer.numberOfLeadingZeros(x & z));
+		stateA = a - 0x9E3779B9;
+		stateB = b - (a ^ Integer.numberOfLeadingZeros(a));
+		stateC = c - (b ^ Integer.numberOfLeadingZeros(a &= b));
+		stateD = d - (c ^ Integer.numberOfLeadingZeros(a & c));
 		return (long)(hi) << 32 | (lo & 0xFFFFFFFFL);
 	}
 
 	public int previousInt() {
-		int x, y, z, w, m;
-		x = stateA;
-		y = stateB;
-		z = stateC;
-		w = stateD;
-		m = x & y & z;
-		m = (w + (m << 13 | m >>> 19)) * 0x2C1B3C6D;
+		int a, b, c, d, m;
+		a = stateA;
+		b = stateB;
+		c = stateC;
+		d = stateD;
+		m = a & b & c;
+		m = (d + (m << 13 | m >>> 19)) * 0x2C1B3C6D;
 		m = (m ^ m >>> 12) * 0x297A2D39;
 		m ^= m >>> 15;
-		stateA = x - 0x9E3779B9;
-		stateB = y - (x ^ Integer.numberOfLeadingZeros(x));
-		stateC = z - (y ^ Integer.numberOfLeadingZeros(x &= y));
-		stateD = w - (z ^ Integer.numberOfLeadingZeros(x & z));
+		stateA = a - 0x9E3779B9;
+		stateB = b - (a ^ Integer.numberOfLeadingZeros(a));
+		stateC = c - (b ^ Integer.numberOfLeadingZeros(a &= b));
+		stateD = d - (c ^ Integer.numberOfLeadingZeros(a & c));
 		return m;
-	}
-
-	@Override
-	public int nextInt (int bound) {
-		return (int)(bound * (nextInt() & 0xFFFFFFFFL) >> 32) & ~(bound >> 31);
-	}
-
-	@Override
-	public int nextSignedInt (int outerBound) {
-		outerBound = (int)(outerBound * (nextInt() & 0xFFFFFFFFL) >> 32);
-		return outerBound + (outerBound >>> 31);
-	}
-
-	@Override
-	public void nextBytes (byte[] bytes) {
-		if (bytes != null) {
-			for (int i = 0; i < bytes.length; ) {
-				for (int r = nextInt(), n = Math.min(bytes.length - i, 4); n-- > 0; r >>>= 8) {
-					bytes[i++] = (byte) r;
-				}
-			}
-		}
-	}
-
-	@Override
-	public long nextLong (long inner, long outer) {
-		final long randLow = nextInt() & 0xFFFFFFFFL;
-		final long randHigh = nextInt() & 0xFFFFFFFFL;
-		if (inner >= outer)
-			return inner;
-		final long bound = outer - inner;
-		final long boundLow = bound & 0xFFFFFFFFL;
-		final long boundHigh = (bound >>> 32);
-		return inner + (randHigh * boundLow >>> 32) + (randLow * boundHigh >>> 32) + randHigh * boundHigh;
-	}
-
-	@Override
-	public long nextSignedLong (long inner, long outer) {
-		if (outer < inner) {
-			long t = outer;
-			outer = inner + 1L;
-			inner = t + 1L;
-		}
-		final long bound = outer - inner;
-		final long randLow = nextInt() & 0xFFFFFFFFL;
-		final long randHigh = nextInt() & 0xFFFFFFFFL;
-		final long boundLow = bound & 0xFFFFFFFFL;
-		final long boundHigh = (bound >>> 32);
-		return inner + (randHigh * boundLow >>> 32) + (randLow * boundHigh >>> 32) + randHigh * boundHigh;
-	}
-
-	@Override
-	public boolean nextBoolean () {
-		return nextInt() < 0;
-	}
-
-	@Override
-	public float nextFloat () {
-		return (nextInt() >>> 8) * 0x1p-24f;
-	}
-
-	@Override
-	public float nextInclusiveFloat () {
-		return (0x1000001L * (nextInt() & 0xFFFFFFFFL) >> 32) * 0x1p-24f;
 	}
 
 	@Override
