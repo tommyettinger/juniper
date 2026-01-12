@@ -48,7 +48,7 @@ import java.math.BigInteger;
  * <br>
  * Based on <a href="https://prng.di.unimi.it/xoshiro128plusplus.c">this public-domain code</a> by Vigna and Blackman.
  */
-public class Xoshiro128PlusPlusRandom extends EnhancedRandom {
+public class Xoshiro128PlusPlusRandom extends Enhanced32Random {
 
 	/**
 	 * The first state; can be any int.
@@ -216,46 +216,46 @@ public class Xoshiro128PlusPlusRandom extends EnhancedRandom {
 		stateD = (int)(x >>> 32);
 	}
 
-	public long getStateA () {
+	public int getStateA () {
 		return stateA;
 	}
 
 	/**
-	 * Sets the first part of the state by casting the parameter to an int.
+	 * Sets the first part of the state to the given int.
 	 *
-	 * @param stateA can be any long, but will be cast to an int before use
+	 * @param stateA can be any int
 	 */
-	public void setStateA (long stateA) {
-		this.stateA = (int)stateA;
+	public void setStateA (int stateA) {
+		this.stateA = stateA;
 	}
 
-	public long getStateB () {
+	public int getStateB () {
 		return stateB;
 	}
 
 	/**
-	 * Sets the second part of the state by casting the parameter to an int.
+	 * Sets the second part of the state to the given int.
 	 *
-	 * @param stateB can be any long, but will be cast to an int before use
+	 * @param stateB can be any int
 	 */
-	public void setStateB (long stateB) {
-		this.stateB = (int)stateB;
+	public void setStateB (int stateB) {
+		this.stateB = stateB;
 	}
 
-	public long getStateC () {
+	public int getStateC () {
 		return stateC;
 	}
 
 	/**
-	 * Sets the third part of the state by casting the parameter to an int.
+	 * Sets the third part of the state to the given int.
 	 *
-	 * @param stateC can be any long, but will be cast to an int before use
+	 * @param stateC can be any int
 	 */
-	public void setStateC (long stateC) {
-		this.stateC = (int)stateC;
+	public void setStateC (int stateC) {
+		this.stateC = stateC;
 	}
 
-	public long getStateD () {
+	public int getStateD () {
 		return stateD;
 	}
 
@@ -266,14 +266,14 @@ public class Xoshiro128PlusPlusRandom extends EnhancedRandom {
 	 *
 	 * @param stateD can be any long, but will be cast to an int before use
 	 */
-	public void setStateD (long stateD) {
-		this.stateD = (stateA|stateB|stateC|(int)stateD) == 0 ? 1 : (int)stateD;
+	public void setStateD (int stateD) {
+		this.stateD = (stateA|stateB|stateC|stateD) == 0 ? 1 : stateD;
 	}
 
 	/**
 	 * Sets the state completely to the given four state variables, casting each to an int.
-	 * This is the same as calling {@link #setStateA(long)}, {@link #setStateB(long)},
-	 * {@link #setStateC(long)}, and {@link #setStateD(long)} as a group.
+	 * This is the same as calling {@link #setStateA(int)}, {@link #setStateB(int)},
+	 * {@link #setStateC(int)}, and {@link #setStateD(int)} as a group.
 	 * If all four states would be 0 as a result of this call, it instead sets
 	 * the fourth part of the state to 1.
 	 *
@@ -290,6 +290,22 @@ public class Xoshiro128PlusPlusRandom extends EnhancedRandom {
 		this.stateD = ((int)stateA|(int)stateB|(int)stateC|(int)stateD) == 0 ? 1 : (int)stateD;
 	}
 
+	/**
+	 * Like the superclass method {@link #setState(long, long, long, long)}, but takes four int values instead of long.
+	 * This can avoid creating longs on JS-targeting platforms, which tends to be quite slow.
+	 *
+	 * @param stateA the first state; can be any int
+	 * @param stateB the second state; can be any int
+	 * @param stateC the third state; can be any int
+	 * @param stateD the fourth state; can be any int
+	 */
+	public void setState (int stateA, int stateB, int stateC, int stateD) {
+		this.stateA = stateA;
+		this.stateB = stateB;
+		this.stateC = stateC;
+		this.stateD = (stateA|stateB|stateC|stateD) == 0 ? 1 : stateD;
+	}
+
 	@Override
 	public long nextLong () {
 		int h = (stateA + stateD);
@@ -303,7 +319,7 @@ public class Xoshiro128PlusPlusRandom extends EnhancedRandom {
 		stateA ^= stateD;
 		stateC ^= t;
 		stateD = (stateD << 11 | stateD >>> 21);
-		return (long) h << 32 ^ (l & 0xFFFFFFFFL);
+		return (long) h << 32 | (l & 0xFFFFFFFFL);
 	}
 
 	@Override
@@ -368,72 +384,6 @@ public class Xoshiro128PlusPlusRandom extends EnhancedRandom {
 		stateC ^= t;
 		stateD = (stateD << 11 | stateD >>> 21);
 		return result;
-	}
-
-	@Override
-	public int nextInt (int bound) {
-		return (int)(bound * (nextInt() & 0xFFFFFFFFL) >> 32) & ~(bound >> 31);
-	}
-
-	@Override
-	public int nextSignedInt (int outerBound) {
-		outerBound = (int)(outerBound * (nextInt() & 0xFFFFFFFFL) >> 32);
-		return outerBound + (outerBound >>> 31);
-	}
-
-	@Override
-	public void nextBytes (byte[] bytes) {
-		if (bytes != null) {
-			for (int i = 0; i < bytes.length; ) {
-				for (int r = nextInt(), n = Math.min(bytes.length - i, 4); n-- > 0; r >>>= 8) {
-					bytes[i++] = (byte) r;
-				}
-			}
-		}
-	}
-
-	@Override
-	public long nextLong (long inner, long outer) {
-		final long rand = nextLong();
-		if (inner >= outer)
-			return inner;
-		final long randLow = rand & 0xFFFFFFFFL;
-		final long randHigh = rand >>> 32;
-		final long bound = outer - inner;
-		final long boundLow = bound & 0xFFFFFFFFL;
-		final long boundHigh = (bound >>> 32);
-		return inner + (randHigh * boundLow >>> 32) + (randLow * boundHigh >>> 32) + randHigh * boundHigh;
-	}
-
-	@Override
-	public long nextSignedLong (long inner, long outer) {
-		if (outer < inner) {
-			long t = outer;
-			outer = inner + 1L;
-			inner = t + 1L;
-		}
-		final long bound = outer - inner;
-		final long rand = nextLong();
-		final long randLow = rand & 0xFFFFFFFFL;
-		final long randHigh = rand >>> 32;
-		final long boundLow = bound & 0xFFFFFFFFL;
-		final long boundHigh = (bound >>> 32);
-		return inner + (randHigh * boundLow >>> 32) + (randLow * boundHigh >>> 32) + randHigh * boundHigh;
-	}
-
-	@Override
-	public boolean nextBoolean () {
-		return nextInt() < 0;
-	}
-
-	@Override
-	public float nextFloat () {
-		return (nextInt() >>> 8) * 0x1p-24f;
-	}
-
-	@Override
-	public float nextInclusiveFloat () {
-		return (0x1000001L * (nextInt() & 0xFFFFFFFFL) >> 32) * 0x1p-24f;
 	}
 
 	@Override
@@ -513,7 +463,7 @@ public class Xoshiro128PlusPlusRandom extends EnhancedRandom {
 		s3 = (s3 << 7 | s3 >>> 25) + s0;
 		s1 = s2 - s1;
 		s1 = (s1 << 13 | s1 >>> 19) + s2;
-		return (long) s3 << 32 ^ (s1 & 0xFFFFFFFFL);
+		return (long) s3 << 32 | (s1 & 0xFFFFFFFFL);
 	}
 
 	@Override
