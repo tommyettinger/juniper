@@ -397,7 +397,7 @@ public class Xoshiro128PlusPlusRandom extends Enhanced32Random {
 	 * substreams of this generator's sequence, each with a period of {@code Math.pow(2, 64)}.
 	 * @return the result of what nextLong() would return if it was called at the state this jumped to
 	 */
-	public long leap()
+	public int leap()
 	{
 		int s0 = 0;
 		int s1 = 0;
@@ -461,9 +461,7 @@ public class Xoshiro128PlusPlusRandom extends Enhanced32Random {
 
 		s3 = s0 + s3;
 		s3 = (s3 << 7 | s3 >>> 25) + s0;
-		s1 = s2 - s1;
-		s1 = (s1 << 13 | s1 >>> 19) + s2;
-		return (long) s3 << 32 | (s1 & 0xFFFFFFFFL);
+		return s3;
 	}
 
 	@Override
