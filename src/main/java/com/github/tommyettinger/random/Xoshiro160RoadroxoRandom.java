@@ -63,7 +63,7 @@ import static com.github.tommyettinger.digital.BitConversion.imul;
  * Based on <a href="https://prng.di.unimi.it/xoshiro128plusplus.c">this public-domain code</a> by Vigna and Blackman.
  */
 @SuppressWarnings("IntegerMultiplicationImplicitCastToLong")
-public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
+public class Xoshiro160RoadroxoRandom extends Enhanced32Random {
 
 	/**
 	 * The first state; can be any int.
@@ -268,80 +268,80 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 		stateE = seed ^ seed >>> 16;
 	}
 
-	public long getStateA () {
+	public int getStateA () {
 		return stateA;
 	}
 
 	/**
-	 * Sets the first part of the state by casting the parameter to an int.
+	 * Sets the first part of the state to the given int.
 	 *
-	 * @param stateA can be any long, but will be cast to an int before use
+	 * @param stateA can be any int
 	 */
-	public void setStateA (long stateA) {
-		this.stateA = (int)stateA;
+	public void setStateA (int stateA) {
+		this.stateA = stateA;
 		if((this.stateA|this.stateB|this.stateC|this.stateD) == 0) this.stateD = 1;
 	}
 
-	public long getStateB () {
+	public int getStateB () {
 		return stateB;
 	}
 
 	/**
-	 * Sets the second part of the state by casting the parameter to an int.
+	 * Sets the second part of the state to the given int.
 	 *
-	 * @param stateB can be any long, but will be cast to an int before use
+	 * @param stateB can be any int
 	 */
-	public void setStateB (long stateB) {
-		this.stateB = (int)stateB;
+	public void setStateB (int stateB) {
+		this.stateB = stateB;
 		if((this.stateA|this.stateB|this.stateC|this.stateD) == 0) this.stateD = 1;
 	}
 
-	public long getStateC () {
+	public int getStateC () {
 		return stateC;
 	}
 
 	/**
-	 * Sets the third part of the state by casting the parameter to an int.
+	 * Sets the third part of the state to the given int.
 	 *
-	 * @param stateC can be any long, but will be cast to an int before use
+	 * @param stateC can be any int
 	 */
-	public void setStateC (long stateC) {
-		this.stateC = (int)stateC;
+	public void setStateC (int stateC) {
+		this.stateC = stateC;
 		if((this.stateA|this.stateB|this.stateC|this.stateD) == 0) this.stateD = 1;
 	}
 
-	public long getStateD () {
+	public int getStateD () {
 		return stateD;
 	}
 
 	/**
-	 * Sets the fourth part of the state by casting the parameter to an int.
+	 * Sets the fourth part of the state to the given int.
 	 * If all four states would be 0 as a result of this call, it instead sets
 	 * the fourth part of the state to 1.
 	 *
-	 * @param stateD can be any long, but will be cast to an int before use
+	 * @param stateD can be any int
 	 */
-	public void setStateD (long stateD) {
-		this.stateD = (stateA|stateB|stateC|(int)stateD) == 0 ? 1 : (int)stateD;
+	public void setStateD (int stateD) {
+		this.stateD = (stateA|stateB|stateC| stateD) == 0 ? 1 : stateD;
 	}
 
-	public long getStateE () {
+	public int getStateE () {
 		return stateE;
 	}
 
 	/**
 	 * Sets the fifth part of the state by casting the parameter to an int.
 	 *
-	 * @param stateE can be any long, but will be cast to an int before use
+	 * @param stateE can be any int
 	 */
-	public void setStateE (long stateE) {
-		this.stateE = (int)stateE;
+	public void setStateE (int stateE) {
+		this.stateE = stateE;
 	}
 
 	/**
 	 * Sets the state completely to the given five state variables, casting each to an int.
-	 * This is the same as calling {@link #setStateA(long)}, {@link #setStateB(long)},
-	 * {@link #setStateC(long)}, {@link #setStateD(long)}, and {@link #setStateE(long)} as a group.
+	 * This is the same as calling {@link #setStateA(int)}, {@link #setStateB(int)},
+	 * {@link #setStateC(int)}, {@link #setStateD(int)}, and {@link #setStateE(int)} as a group.
 	 * If the first four states would all be 0 as a result of this call, it instead sets
 	 * the fourth part of the state to 1.
 	 *
@@ -358,6 +358,26 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 		this.stateC = (int)stateC;
 		this.stateD = ((int)stateA|(int)stateB|(int)stateC|(int)stateD) == 0 ? 1 : (int)stateD;
 		this.stateE = (int)stateE;
+	}
+
+	/**
+	 * Like the superclass method {@link #setState(long, long, long, long, long)}, but takes five int values instead of
+	 * long. This can avoid creating longs on JS-targeting platforms, which tends to be quite slow.
+	 * If the first four states would all be 0 as a result of this call, it instead sets
+	 * the fourth part of the state to 1.
+	 *
+	 * @param stateA the first state; can be any int
+	 * @param stateB the second state; can be any int
+	 * @param stateC the third state; can be any int
+	 * @param stateD the fourth state; can be any int
+	 * @param stateE the fifth state; can be any int
+	 */
+	public void setState (int stateA, int stateB, int stateC, int stateD, int stateE) {
+		this.stateA = stateA;
+		this.stateB = stateB;
+		this.stateC = stateC;
+		this.stateD = (stateA|stateB|stateC|stateD) == 0 ? 1 : stateD;
+		this.stateE = stateE;
 	}
 
 	@Override
@@ -434,233 +454,6 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 		stateC ^= t;
 		stateD = (stateD << 11 | stateD >>> 21);
 		return res;
-	}
-
-
-	@Override
-	public int nextInt (int bound) {
-		final int res = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
-		final int t = stateB << 9;
-		stateE += 0xC3564E95 ^ stateD;
-		stateC ^= stateA;
-		stateD ^= stateB;
-		stateB ^= stateC;
-		stateA ^= stateD;
-		stateC ^= t;
-		stateD = (stateD << 11 | stateD >>> 21);
-		return (int)(bound * (res & 0xFFFFFFFFL) >> 32) & ~(bound >> 31);
-	}
-
-	@Override
-	public int nextSignedInt (int outerBound) {
-		final int res = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
-		final int t = stateB << 9;
-		stateE += 0xC3564E95 ^ stateD;
-		stateC ^= stateA;
-		stateD ^= stateB;
-		stateB ^= stateC;
-		stateA ^= stateD;
-		stateC ^= t;
-		stateD = (stateD << 11 | stateD >>> 21);
-		outerBound = (int)(outerBound * (res & 0xFFFFFFFFL) >> 32);
-		return outerBound + (outerBound >>> 31);
-	}
-
-	@Override
-	public int nextUnsignedInt(int bound) {
-		final int res = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
-		final int t = stateB << 9;
-		stateE += 0xC3564E95 ^ stateD;
-		stateC ^= stateA;
-		stateD ^= stateB;
-		stateB ^= stateC;
-		stateA ^= stateD;
-		stateC ^= t;
-		stateD = (stateD << 11 | stateD >>> 21);
-		return (int)((bound & 0xFFFFFFFFL) * (res & 0xFFFFFFFFL) >>> 32);
-	}
-
-	@Override
-	public void nextBytes (byte[] bytes) {
-		if (bytes != null) {
-			for (int i = 0; i < bytes.length; ) {
-				int r = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
-				final int t = stateB << 9;
-				stateE += 0xC3564E95 ^ stateD;
-				stateC ^= stateA;
-				stateD ^= stateB;
-				stateB ^= stateC;
-				stateA ^= stateD;
-				stateC ^= t;
-				stateD = (stateD << 11 | stateD >>> 21);
-				for (int n = Math.min(bytes.length - i, 4); n-- > 0; r >>>= 8) {
-					bytes[i++] = (byte) r;
-				}
-			}
-		}
-	}
-
-	@Override
-	public int nextInt(int innerBound, int outerBound) {
-		final int res = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
-		final int t = stateB << 9;
-		stateE += 0xC3564E95 ^ stateD;
-		stateC ^= stateA;
-		stateD ^= stateB;
-		stateB ^= stateC;
-		stateA ^= stateD;
-		stateC ^= t;
-		stateD = (stateD << 11 | stateD >>> 21);
-		return (int)(innerBound + ((((outerBound - innerBound) & 0xFFFFFFFFL) * (res & 0xFFFFFFFFL) >>> 32) & ~((long)outerBound - (long)innerBound >> 63)));
-	}
-
-	@Override
-	public int nextSignedInt(int innerBound, int outerBound) {
-		final int res = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
-		final int t = stateB << 9;
-		stateE += 0xC3564E95 ^ stateD;
-		stateC ^= stateA;
-		stateD ^= stateB;
-		stateB ^= stateC;
-		stateA ^= stateD;
-		stateC ^= t;
-		stateD = (stateD << 11 | stateD >>> 21);
-		return innerBound + (int)(((outerBound - innerBound) & 0xFFFFFFFFL) * (res & 0xFFFFFFFFL) >>> 32);
-	}
-
-	@Override
-	public long nextLong(long bound) {
-		final long randHi = ((stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB) & 0xFFFFFFFFL;
-		final long randLo = ((stateC << 19 | stateC >>> 13) ^ (stateE << 7 | stateE >>> 25) + stateD) & 0xFFFFFFFFL;
-		int t = stateB << 9;
-		stateE += 0xC3564E95 ^ stateD;
-		stateC ^= stateA;
-		stateD ^= stateB;
-		stateB ^= stateC;
-		stateA ^= stateD;
-		stateC ^= t;
-		stateD = (stateD << 11 | stateD >>> 21);
-
-		if (1 >= bound)
-			return 0;
-		final long boundLow = bound & 0xFFFFFFFFL;
-		final long boundHigh = (bound >>> 32);
-		return (randHi * boundLow >>> 32) + (randLo * boundHigh >>> 32) + randHi * boundHigh;
-	}
-
-	@Override
-	public long nextSignedLong(long outer) {
-		long inner;
-		if (outer < 0) {
-			long t = outer;
-			outer = 1L;
-			inner = t + 1L;
-		} else {
-			inner = 0L;
-		}
-		final long bound = outer - inner;
-		final long randHi = ((stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB) & 0xFFFFFFFFL;
-		final long randLo = ((stateC << 19 | stateC >>> 13) ^ (stateE << 7 | stateE >>> 25) + stateD) & 0xFFFFFFFFL;
-		int t = stateB << 9;
-		stateE += 0xC3564E95 ^ stateD;
-		stateC ^= stateA;
-		stateD ^= stateB;
-		stateB ^= stateC;
-		stateA ^= stateD;
-		stateC ^= t;
-		stateD = (stateD << 11 | stateD >>> 21);
-
-		final long boundLow = bound & 0xFFFFFFFFL;
-		final long boundHigh = (bound >>> 32);
-		return inner + (randHi * boundLow >>> 32) + (randLo * boundHigh >>> 32) + randHi * boundHigh;
-	}
-
-	@Override
-	public long nextLong (long inner, long outer) {
-		final long randHi = ((stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB) & 0xFFFFFFFFL;
-		final long randLo = ((stateC << 19 | stateC >>> 13) ^ (stateE << 7 | stateE >>> 25) + stateD) & 0xFFFFFFFFL;
-		int t = stateB << 9;
-		stateE += 0xC3564E95 ^ stateD;
-		stateC ^= stateA;
-		stateD ^= stateB;
-		stateB ^= stateC;
-		stateA ^= stateD;
-		stateC ^= t;
-		stateD = (stateD << 11 | stateD >>> 21);
-
-		if (inner >= outer)
-			return inner;
-		final long bound = outer - inner;
-		final long boundLow = bound & 0xFFFFFFFFL;
-		final long boundHigh = (bound >>> 32);
-		return inner + (randHi * boundLow >>> 32) + (randLo * boundHigh >>> 32) + randHi * boundHigh;
-	}
-
-	@Override
-	public long nextSignedLong (long inner, long outer) {
-		if (outer < inner) {
-			long t = outer;
-			outer = inner + 1L;
-			inner = t + 1L;
-		}
-		final long bound = outer - inner;
-		final long randHi = ((stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB) & 0xFFFFFFFFL;
-		final long randLo = ((stateC << 19 | stateC >>> 13) ^ (stateE << 7 | stateE >>> 25) + stateD) & 0xFFFFFFFFL;
-		int t = stateB << 9;
-		stateE += 0xC3564E95 ^ stateD;
-		stateC ^= stateA;
-		stateD ^= stateB;
-		stateB ^= stateC;
-		stateA ^= stateD;
-		stateC ^= t;
-		stateD = (stateD << 11 | stateD >>> 21);
-
-		final long boundLow = bound & 0xFFFFFFFFL;
-		final long boundHigh = (bound >>> 32);
-		return inner + (randHi * boundLow >>> 32) + (randLo * boundHigh >>> 32) + randHi * boundHigh;
-	}
-
-	@Override
-	public boolean nextBoolean ()
-	{
-		final int res = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
-		final int t = stateB << 9;
-		stateE += 0xC3564E95 ^ stateD;
-		stateC ^= stateA;
-		stateD ^= stateB;
-		stateB ^= stateC;
-		stateA ^= stateD;
-		stateC ^= t;
-		stateD = (stateD << 11 | stateD >>> 21);
-		return res < 0;
-	}
-
-	@Override
-	public float nextFloat () {
-		final int res = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
-		final int t = stateB << 9;
-		stateE += 0xC3564E95 ^ stateD;
-		stateC ^= stateA;
-		stateD ^= stateB;
-		stateB ^= stateC;
-		stateA ^= stateD;
-		stateC ^= t;
-		stateD = (stateD << 11 | stateD >>> 21);
-		return (res >>> 8) * 0x1p-24f;
-	}
-
-	@Override
-	public float nextInclusiveFloat () {
-		final int res = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
-		final int t = stateB << 9;
-		stateE += 0xC3564E95 ^ stateD;
-		stateC ^= stateA;
-		stateD ^= stateB;
-		stateB ^= stateC;
-		stateA ^= stateD;
-		stateC ^= t;
-		stateD = (stateD << 11 | stateD >>> 21);
-		return (0x1000001L * (res & 0xFFFFFFFFL) >> 32) * 0x1p-24f;
 	}
 
 	@Override
