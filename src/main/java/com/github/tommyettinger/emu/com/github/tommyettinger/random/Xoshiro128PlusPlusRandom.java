@@ -370,6 +370,73 @@ public class Xoshiro128PlusPlusRandom extends Enhanced32Random {
 		return new Xoshiro128PlusPlusRandom(stateA, stateB, stateC, stateD);
 	}
 
+	public int leap()
+	{
+		int s0 = 0;
+		int s1 = 0;
+		int s2 = 0;
+		int s3 = 0;
+
+		for(int b = 0; b < 32; b++) {
+			if ((0x8764000b & 1 << b) != 0) {
+				s0 ^= stateA;
+				s1 ^= stateB;
+				s2 ^= stateC;
+				s3 ^= stateD;
+			}
+			nextInt();
+		}
+
+		for(int b = 0; b < 32; b++) {
+			if ((0xf542d2d3 & 1 << b) != 0) {
+				s0 ^= stateA;
+				s1 ^= stateB;
+				s2 ^= stateC;
+				s3 ^= stateD;
+			}
+			nextInt();
+		}
+
+		for(int b = 0; b < 32; b++) {
+			if ((0x6fa035c3 & 1 << b) != 0) {
+				s0 ^= stateA;
+				s1 ^= stateB;
+				s2 ^= stateC;
+				s3 ^= stateD;
+			}
+			nextInt();
+		}
+
+		for(int b = 0; b < 32; b++) {
+			if ((0x77f2db5b & 1 << b) != 0) {
+				s0 ^= stateA;
+				s1 ^= stateB;
+				s2 ^= stateC;
+				s3 ^= stateD;
+			}
+			nextInt();
+		}
+
+		stateA = s0;
+		stateB = s1;
+		stateC = s2;
+		stateD = s3;
+
+		s3 = (s3 << 21 | s3 >>> 11); // s3 has d ^ b
+		s0 ^= s3; // s0 has a
+		s2 ^= s1; // s2 has b ^ b << 9
+		s2 ^= s2 << 9;
+		s2 ^= s2 << 18; // s2 has b
+		s1 ^= s0; // s1 has b ^ c
+		s2 ^= s1; // s2 has c
+		s1 ^= s2; // s1 has b
+		s3 ^= s1; // s3 has d
+
+		s3 = s0 + s3;
+		s3 = (s3 << 7 | s3 >>> 25) + s0 | 0;
+		return s3;
+	}
+
 	@Override
 	public boolean equals (Object o) {
 		if (this == o)
