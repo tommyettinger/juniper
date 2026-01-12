@@ -17,6 +17,8 @@
 
 package com.github.tommyettinger.random;
 
+import java.math.BigInteger;
+
 import static com.github.tommyettinger.digital.BitConversion.imul;
 
 /**
@@ -87,6 +89,30 @@ public class Xoshiro160RoadroxoRandom extends EnhancedRandom {
 	@Override
 	public String getTag() {
 		return "XRAR";
+	}
+
+	/**
+	 * This generator mainly generates int values.
+	 * @return true
+	 */
+	@Override
+	public boolean mainlyGeneratesInt() {
+		return true;
+	}
+
+	/**
+	 * Returned by {@link #getMinimumPeriod()}.
+	 * @see #getMinimumPeriod()
+	 */
+	private static final BigInteger MINIMUM_PERIOD = new BigInteger("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000", 16);
+
+	/**
+	 * (2 to the 160) - (2 to the 64).
+	 * @return (2 to the 160) - (2 to the 64)
+	 */
+	@Override
+	public BigInteger getMinimumPeriod() {
+		return MINIMUM_PERIOD;
 	}
 
 	/**

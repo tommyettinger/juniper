@@ -17,6 +17,8 @@
 
 package com.github.tommyettinger.random;
 
+import java.math.BigInteger;
+
 import static com.github.tommyettinger.digital.BitConversion.imul;
 
 /**
@@ -118,6 +120,21 @@ public class Chip32Random extends Enhanced32Random {
 	@Override
 	public String getTag() {
 		return "ChiR";
+	}
+
+	/**
+	 * Returned by {@link #getMinimumPeriod()}.
+	 * @see #getMinimumPeriod()
+	 */
+	private static final BigInteger MINIMUM_PERIOD = new BigInteger("100000000", 16);
+
+	/**
+	 * 2 to the 32.
+	 * @return 2 to the 32
+	 */
+	@Override
+	public BigInteger getMinimumPeriod() {
+		return MINIMUM_PERIOD;
 	}
 
 	/**

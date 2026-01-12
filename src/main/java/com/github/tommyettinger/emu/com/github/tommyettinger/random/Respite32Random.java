@@ -17,6 +17,8 @@
 
 package com.github.tommyettinger.random;
 
+import java.math.BigInteger;
+
 /**
  * A random number generator that is optimized for performance on 32-bit machines and with Google Web Toolkit,
  * Respite32Random is (currently) the only 32-bit-native generator here that doesn't have any shorter subcycles (because
@@ -80,9 +82,34 @@ public class Respite32Random extends EnhancedRandom {
 		this.stateC = stateC;
 	}
 
+
 	@Override
 	public String getTag() {
 		return "Re3R";
+	}
+
+	/**
+	 * This generator mainly generates int values.
+	 * @return true
+	 */
+	@Override
+	public boolean mainlyGeneratesInt() {
+		return true;
+	}
+
+	/**
+	 * Returned by {@link #getMinimumPeriod()}.
+	 * @see #getMinimumPeriod()
+	 */
+	private static final BigInteger MINIMUM_PERIOD = new BigInteger("1000000000000000000000000", 16);
+
+	/**
+	 * 2 to the 96.
+	 * @return 2 to the 96
+	 */
+	@Override
+	public BigInteger getMinimumPeriod() {
+		return MINIMUM_PERIOD;
 	}
 
 	/**
