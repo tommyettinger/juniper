@@ -466,7 +466,7 @@ public class Xoshiro128PlusPlusRandom extends Enhanced32Random {
 	 * substreams of this generator's sequence, each with a period of {@code Math.pow(2, 64)}.
 	 * @return the result of what nextLong() would return if it was called at the state this jumped to
 	 */
-	public int leap()
+	public long leap()
 	{
 		int s0 = 0;
 		int s1 = 0;
@@ -480,7 +480,13 @@ public class Xoshiro128PlusPlusRandom extends Enhanced32Random {
 				s2 ^= stateC;
 				s3 ^= stateD;
 			}
-			nextInt();
+			int t = stateB << 9;
+			stateC ^= stateA;
+			stateD ^= stateB;
+			stateB ^= stateC;
+			stateA ^= stateD;
+			stateC ^= t;
+			stateD = (stateD << 11 | stateD >>> 21);
 		}
 
 		for(int b = 0; b < 32; b++) {
@@ -490,7 +496,13 @@ public class Xoshiro128PlusPlusRandom extends Enhanced32Random {
 				s2 ^= stateC;
 				s3 ^= stateD;
 			}
-			nextInt();
+			int t = stateB << 9;
+			stateC ^= stateA;
+			stateD ^= stateB;
+			stateB ^= stateC;
+			stateA ^= stateD;
+			stateC ^= t;
+			stateD = (stateD << 11 | stateD >>> 21);
 		}
 
 		for(int b = 0; b < 32; b++) {
@@ -500,7 +512,13 @@ public class Xoshiro128PlusPlusRandom extends Enhanced32Random {
 				s2 ^= stateC;
 				s3 ^= stateD;
 			}
-			nextInt();
+			int t = stateB << 9;
+			stateC ^= stateA;
+			stateD ^= stateB;
+			stateB ^= stateC;
+			stateA ^= stateD;
+			stateC ^= t;
+			stateD = (stateD << 11 | stateD >>> 21);
 		}
 
 		for(int b = 0; b < 32; b++) {
@@ -510,7 +528,13 @@ public class Xoshiro128PlusPlusRandom extends Enhanced32Random {
 				s2 ^= stateC;
 				s3 ^= stateD;
 			}
-			nextInt();
+			int t = stateB << 9;
+			stateC ^= stateA;
+			stateD ^= stateB;
+			stateB ^= stateC;
+			stateA ^= stateD;
+			stateC ^= t;
+			stateD = (stateD << 11 | stateD >>> 21);
 		}
 
 		stateA = s0;
@@ -530,7 +554,9 @@ public class Xoshiro128PlusPlusRandom extends Enhanced32Random {
 
 		s3 = s0 + s3;
 		s3 = (s3 << 7 | s3 >>> 25) + s0;
-		return s3;
+		s1 = s2 - s1;
+		s1 = (s1 << 13 | s1 >>> 19) + s2;
+		return (long) s3 << 32 | (s1 & 0xFFFFFFFFL);
 	}
 
 	@Override
