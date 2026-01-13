@@ -110,12 +110,12 @@ public class Xoshiro128PlusPlusRandom extends Enhanced32Random {
 	}
 
 	/**
-	 * This generator mainly generates int values.
-	 * @return true
+	 * This generator is almost as fast at generating {@code long} values as it is {@code int} values.
+	 * @return false
 	 */
 	@Override
 	public boolean mainlyGeneratesInt() {
-		return true;
+		return false;
 	}
 
 	/**

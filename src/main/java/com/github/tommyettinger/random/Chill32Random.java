@@ -18,6 +18,7 @@
 package com.github.tommyettinger.random;
 
 import com.github.tommyettinger.digital.BitConversion;
+import com.github.tommyettinger.digital.MathTools;
 
 import java.math.BigInteger;
 
@@ -344,6 +345,61 @@ public class Chill32Random extends Enhanced32Random {
 		y = (y << 19 | y >>> 13) ^ (x = (x <<  5 | x >>> 27) + y ^ z) + (x << 29 | x >>>  3);
 		x = (x << 17 | x >>> 15) ^ (y = (y << 11 | y >>> 21) + x ^ z) + (y << 23 | y >>>  9);
 		return x;
+	}
+
+	@Override
+	public long nextLong(long inner, long outer) {
+		int x = (stateA = stateA + 0xD192ED03 ^ 0xBEA225FA);
+		int y = (stateB = stateB + BitConversion.countLeadingZeros(x) ^ 0xA62B82F6);
+		int z = (stateC = stateC + BitConversion.countLeadingZeros(x & y) ^ 0x9E3779BA);
+		y = (y <<  3 | y >>> 29) ^ (x = (x << 24 | x >>>  8) + y ^ z) + (x <<  7 | x >>> 25);
+		x = (x << 14 | x >>> 18) ^ (y = (y << 29 | y >>>  3) + x ^ z) + (y << 11 | y >>> 21);
+		y = (y << 19 | y >>> 13) ^ (x = (x <<  5 | x >>> 27) + y ^ z) + (x << 29 | x >>>  3);
+		x = (x << 17 | x >>> 15) ^ (y = (y << 11 | y >>> 21) + x ^ z) + (y << 23 | y >>>  9);
+
+		if (inner >= outer)
+			return inner;
+		final long bound = outer - inner;
+		final long randLow = x & 0xFFFFFFFFL;
+		final long randHigh = y & 0xFFFFFFFFL;
+		final long boundLow = bound & 0xFFFFFFFFL;
+		final long boundHigh = (bound >>> 32);
+		return inner + (randHigh * boundLow >>> 32) + (randLow * boundHigh >>> 32) + randHigh * boundHigh;
+	}
+
+	@Override
+	public long nextSignedLong(long inner, long outer) {
+		int x = (stateA = stateA + 0xD192ED03 ^ 0xBEA225FA);
+		int y = (stateB = stateB + BitConversion.countLeadingZeros(x) ^ 0xA62B82F6);
+		int z = (stateC = stateC + BitConversion.countLeadingZeros(x & y) ^ 0x9E3779BA);
+		y = (y <<  3 | y >>> 29) ^ (x = (x << 24 | x >>>  8) + y ^ z) + (x <<  7 | x >>> 25);
+		x = (x << 14 | x >>> 18) ^ (y = (y << 29 | y >>>  3) + x ^ z) + (y << 11 | y >>> 21);
+		y = (y << 19 | y >>> 13) ^ (x = (x <<  5 | x >>> 27) + y ^ z) + (x << 29 | x >>>  3);
+		x = (x << 17 | x >>> 15) ^ (y = (y << 11 | y >>> 21) + x ^ z) + (y << 23 | y >>>  9);
+
+		if (outer < inner) {
+			long tmp = outer;
+			outer = inner + 1L;
+			inner = tmp + 1L;
+		}
+		final long bound = outer - inner;
+		final long randLow = x & 0xFFFFFFFFL;
+		final long randHigh = y & 0xFFFFFFFFL;
+		final long boundLow = bound & 0xFFFFFFFFL;
+		final long boundHigh = (bound >>> 32);
+		return inner + (randHigh * boundLow >>> 32) + (randLow * boundHigh >>> 32) + randHigh * boundHigh;
+	}
+
+	@Override
+	public double nextExclusiveDouble() {
+		int x = (stateA = stateA + 0xD192ED03 ^ 0xBEA225FA);
+		int y = (stateB = stateB + BitConversion.countLeadingZeros(x) ^ 0xA62B82F6);
+		int z = (stateC = stateC + BitConversion.countLeadingZeros(x & y) ^ 0x9E3779BA);
+		y = (y <<  3 | y >>> 29) ^ (x = (x << 24 | x >>>  8) + y ^ z) + (x <<  7 | x >>> 25);
+		x = (x << 14 | x >>> 18) ^ (y = (y << 29 | y >>>  3) + x ^ z) + (y << 11 | y >>> 21);
+		y = (y << 19 | y >>> 13) ^ (x = (x <<  5 | x >>> 27) + y ^ z) + (x << 29 | x >>>  3);
+		x = (x << 17 | x >>> 15) ^ (y = (y << 11 | y >>> 21) + x ^ z) + (y << 23 | y >>>  9);
+		return MathTools.exclusiveDouble(x, y);
 	}
 
 	@Override
