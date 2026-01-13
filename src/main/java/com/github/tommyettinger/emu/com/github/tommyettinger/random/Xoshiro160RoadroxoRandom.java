@@ -17,6 +17,8 @@
 
 package com.github.tommyettinger.random;
 
+import com.github.tommyettinger.digital.MathTools;
+
 import java.math.BigInteger;
 
 import static com.github.tommyettinger.digital.BitConversion.imul;
@@ -91,13 +93,9 @@ public class Xoshiro160RoadroxoRandom extends Enhanced32Random {
 		return "XRAR";
 	}
 
-	/**
-	 * This generator mainly generates int values.
-	 * @return true
-	 */
 	@Override
 	public boolean mainlyGeneratesInt() {
-		return true;
+		return false;
 	}
 
 	/**
@@ -416,6 +414,70 @@ public class Xoshiro160RoadroxoRandom extends Enhanced32Random {
 		stateC ^= t;
 		stateD = (stateD << 11 | stateD >>> 21);
 		return res;
+	}
+
+	@Override
+	public long nextLong(long inner, long outer) {
+		final int h = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
+		final int l = (stateC << 19 | stateC >>> 13) ^ (stateE << 7 | stateE >>> 25) + stateD;
+		int t = stateB << 9;
+		stateE = stateE + (0xC3564E95 ^ stateD) | 0;
+		stateC ^= stateA;
+		stateD ^= stateB;
+		stateB ^= stateC;
+		stateA ^= stateD;
+		stateC ^= t;
+		stateD = (stateD << 11 | stateD >>> 21);
+
+		if (inner >= outer)
+			return inner;
+		final long bound = outer - inner;
+		final long randLow = l & 0xFFFFFFFFL;
+		final long randHigh = h & 0xFFFFFFFFL;
+		final long boundLow = bound & 0xFFFFFFFFL;
+		final long boundHigh = (bound >>> 32);
+		return inner + (randHigh * boundLow >>> 32) + (randLow * boundHigh >>> 32) + randHigh * boundHigh;
+	}
+
+	@Override
+	public long nextSignedLong(long inner, long outer) {
+		final int h = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
+		final int l = (stateC << 19 | stateC >>> 13) ^ (stateE << 7 | stateE >>> 25) + stateD;
+		int t = stateB << 9;
+		stateE = stateE + (0xC3564E95 ^ stateD) | 0;
+		stateC ^= stateA;
+		stateD ^= stateB;
+		stateB ^= stateC;
+		stateA ^= stateD;
+		stateC ^= t;
+		stateD = (stateD << 11 | stateD >>> 21);
+
+		if (outer < inner) {
+			long tmp = outer;
+			outer = inner + 1L;
+			inner = tmp + 1L;
+		}
+		final long bound = outer - inner;
+		final long randLow = l & 0xFFFFFFFFL;
+		final long randHigh = h & 0xFFFFFFFFL;
+		final long boundLow = bound & 0xFFFFFFFFL;
+		final long boundHigh = (bound >>> 32);
+		return inner + (randHigh * boundLow >>> 32) + (randLow * boundHigh >>> 32) + randHigh * boundHigh;
+	}
+
+	@Override
+	public double nextExclusiveDouble() {
+		final int h = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
+		final int l = (stateC << 19 | stateC >>> 13) ^ (stateE << 7 | stateE >>> 25) + stateD;
+		int t = stateB << 9;
+		stateE = stateE + (0xC3564E95 ^ stateD) | 0;
+		stateC ^= stateA;
+		stateD ^= stateB;
+		stateB ^= stateC;
+		stateA ^= stateD;
+		stateC ^= t;
+		stateD = (stateD << 11 | stateD >>> 21);
+		return MathTools.exclusiveDouble(h, l);
 	}
 
 	@Override
