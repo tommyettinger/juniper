@@ -435,7 +435,7 @@ public class Xoshiro128PlusPlusRandom extends Enhanced32Random {
 		return new Xoshiro128PlusPlusRandom(stateA, stateB, stateC, stateD);
 	}
 
-	public int leap()
+	public long leap()
 	{
 		int s0 = 0;
 		int s1 = 0;
@@ -449,7 +449,13 @@ public class Xoshiro128PlusPlusRandom extends Enhanced32Random {
 				s2 ^= stateC;
 				s3 ^= stateD;
 			}
-			nextInt();
+			int t = stateB << 9;
+			stateC ^= stateA;
+			stateD ^= stateB;
+			stateB ^= stateC;
+			stateA ^= stateD;
+			stateC ^= t;
+			stateD = (stateD << 11 | stateD >>> 21);
 		}
 
 		for(int b = 0; b < 32; b++) {
@@ -459,7 +465,13 @@ public class Xoshiro128PlusPlusRandom extends Enhanced32Random {
 				s2 ^= stateC;
 				s3 ^= stateD;
 			}
-			nextInt();
+			int t = stateB << 9;
+			stateC ^= stateA;
+			stateD ^= stateB;
+			stateB ^= stateC;
+			stateA ^= stateD;
+			stateC ^= t;
+			stateD = (stateD << 11 | stateD >>> 21);
 		}
 
 		for(int b = 0; b < 32; b++) {
@@ -469,7 +481,13 @@ public class Xoshiro128PlusPlusRandom extends Enhanced32Random {
 				s2 ^= stateC;
 				s3 ^= stateD;
 			}
-			nextInt();
+			int t = stateB << 9;
+			stateC ^= stateA;
+			stateD ^= stateB;
+			stateB ^= stateC;
+			stateA ^= stateD;
+			stateC ^= t;
+			stateD = (stateD << 11 | stateD >>> 21);
 		}
 
 		for(int b = 0; b < 32; b++) {
@@ -479,7 +497,13 @@ public class Xoshiro128PlusPlusRandom extends Enhanced32Random {
 				s2 ^= stateC;
 				s3 ^= stateD;
 			}
-			nextInt();
+			int t = stateB << 9;
+			stateC ^= stateA;
+			stateD ^= stateB;
+			stateB ^= stateC;
+			stateA ^= stateD;
+			stateC ^= t;
+			stateD = (stateD << 11 | stateD >>> 21);
 		}
 
 		stateA = s0;
@@ -498,8 +522,10 @@ public class Xoshiro128PlusPlusRandom extends Enhanced32Random {
 		s3 ^= s1; // s3 has d
 
 		s3 = s0 + s3;
-		s3 = (s3 << 7 | s3 >>> 25) + s0 | 0;
-		return s3;
+		s3 = (s3 << 7 | s3 >>> 25) + s0;
+		s1 = s2 - s1;
+		s1 = (s1 << 13 | s1 >>> 19) + s2;
+		return (long) s3 << 32 | (s1 & LOW_MASK);
 	}
 
 	@Override

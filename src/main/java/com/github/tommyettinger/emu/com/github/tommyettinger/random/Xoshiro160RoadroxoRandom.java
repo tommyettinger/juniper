@@ -29,6 +29,7 @@ import static com.github.tommyettinger.digital.BitConversion.imul;
  */
 public class Xoshiro160RoadroxoRandom extends Enhanced32Random {
 
+	private static final long LOW_MASK = 0xFFFFFFFFL;
 	/**
 	 * The first state; can be any int.
 	 */
@@ -432,9 +433,9 @@ public class Xoshiro160RoadroxoRandom extends Enhanced32Random {
 		if (inner >= outer)
 			return inner;
 		final long bound = outer - inner;
-		final long randLow = l & 0xFFFFFFFFL;
-		final long randHigh = h & 0xFFFFFFFFL;
-		final long boundLow = bound & 0xFFFFFFFFL;
+		final long randLow = l & LOW_MASK;
+		final long randHigh = h & LOW_MASK;
+		final long boundLow = bound & LOW_MASK;
 		final long boundHigh = (bound >>> 32);
 		return inner + (randHigh * boundLow >>> 32) + (randLow * boundHigh >>> 32) + randHigh * boundHigh;
 	}
@@ -458,9 +459,9 @@ public class Xoshiro160RoadroxoRandom extends Enhanced32Random {
 			inner = tmp + 1L;
 		}
 		final long bound = outer - inner;
-		final long randLow = l & 0xFFFFFFFFL;
-		final long randHigh = h & 0xFFFFFFFFL;
-		final long boundLow = bound & 0xFFFFFFFFL;
+		final long randLow = l & LOW_MASK;
+		final long randHigh = h & LOW_MASK;
+		final long boundLow = bound & LOW_MASK;
 		final long boundHigh = (bound >>> 32);
 		return inner + (randHigh * boundLow >>> 32) + (randLow * boundHigh >>> 32) + randHigh * boundHigh;
 	}
@@ -487,17 +488,15 @@ public class Xoshiro160RoadroxoRandom extends Enhanced32Random {
 
 	/**
 	 * Jumps extremely far in the generator's sequence, to a state that would normally only be reached by calling
-	 * {@link #nextInt()} at least {@code Math.pow(2, 64)} times sequentially. "At least" here means a non-zero 32-bit
+	 * {@link #nextLong()} at least {@code Math.pow(2, 64)} times sequentially. "At least" here means a non-zero 32-bit
 	 * unsigned integer multiple of {@code Math.pow(2, 64)}, because this only changes states A, B, C, and D -- stateE
 	 * doesn't change, even though normally calling nextInt() 2 to the 64 times would change stateE by an unpredictable
 	 * amount. This can be used to create over 18 quintillion distinct substreams of this generator's sequence, each
 	 * with a period of at least {@code Math.pow(2, 64)}.
-	 * <br>
-	 * Note that this returns an {@code int}, unlike most leap() functions in other classes here.
 	 *
-	 * @return the result of what nextInt() would return if it was called at the state this jumped to
+	 * @return the result of what nextLong() would return if it was called at the state this jumped to
 	 */
-	public int leap()
+	public long leap()
 	{
 		int s0 = 0;
 		int s1 = 0;
@@ -511,7 +510,15 @@ public class Xoshiro160RoadroxoRandom extends Enhanced32Random {
 				s2 ^= stateC;
 				s3 ^= stateD;
 			}
-			nextInt();
+			final int t = stateB << 9;
+			stateE = stateE + (0xC3564E95 ^ stateD) | 0;
+			stateC ^= stateA;
+			stateD ^= stateB;
+			stateB ^= stateC;
+			stateA ^= stateD;
+			stateC ^= t;
+			stateD = (stateD << 11 | stateD >>> 21);
+
 		}
 
 		for(int b = 0; b < 32; b++) {
@@ -521,7 +528,14 @@ public class Xoshiro160RoadroxoRandom extends Enhanced32Random {
 				s2 ^= stateC;
 				s3 ^= stateD;
 			}
-			nextInt();
+			final int t = stateB << 9;
+			stateE = stateE + (0xC3564E95 ^ stateD) | 0;
+			stateC ^= stateA;
+			stateD ^= stateB;
+			stateB ^= stateC;
+			stateA ^= stateD;
+			stateC ^= t;
+			stateD = (stateD << 11 | stateD >>> 21);
 		}
 
 		for(int b = 0; b < 32; b++) {
@@ -531,7 +545,14 @@ public class Xoshiro160RoadroxoRandom extends Enhanced32Random {
 				s2 ^= stateC;
 				s3 ^= stateD;
 			}
-			nextInt();
+			final int t = stateB << 9;
+			stateE = stateE + (0xC3564E95 ^ stateD) | 0;
+			stateC ^= stateA;
+			stateD ^= stateB;
+			stateB ^= stateC;
+			stateA ^= stateD;
+			stateC ^= t;
+			stateD = (stateD << 11 | stateD >>> 21);
 		}
 
 		for(int b = 0; b < 32; b++) {
@@ -541,7 +562,14 @@ public class Xoshiro160RoadroxoRandom extends Enhanced32Random {
 				s2 ^= stateC;
 				s3 ^= stateD;
 			}
-			nextInt();
+			final int t = stateB << 9;
+			stateE = stateE + (0xC3564E95 ^ stateD) | 0;
+			stateC ^= stateA;
+			stateD ^= stateB;
+			stateB ^= stateC;
+			stateA ^= stateD;
+			stateC ^= t;
+			stateD = (stateD << 11 | stateD >>> 21);
 		}
 
 		stateA = s0;
@@ -549,7 +577,19 @@ public class Xoshiro160RoadroxoRandom extends Enhanced32Random {
 		stateC = s2;
 		stateD = s3;
 
-		return  (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
+		s3 = (s3 << 21 | s3 >>> 11); // s3 has d ^ b
+		s0 ^= s3; // s0 has a
+		s2 ^= s1; // s2 has b ^ b << 9
+		s2 ^= s2 << 9;
+		s2 ^= s2 << 18; // s2 has b
+		s1 ^= s0; // s1 has b ^ c
+		s2 ^= s1; // s2 has c
+		s1 ^= s2; // s1 has b
+		s3 ^= s1; // s3 has d
+		int s4 = stateE - (0xC3564E95 ^ s3);
+
+		return (long)((s4 << 23 | s4 >>> 9) ^ (s0 << 14 | s0 >>> 18) + s1) << 32 ^
+			((s2 << 19 | s2 >>> 13) ^ (s4 << 7 | s4 >>> 25) + s3);
 	}
 
 	@Override
