@@ -410,7 +410,6 @@ public class Xoshiro128PlusPlusRandom extends Enhanced32Random {
 		final long boundLow = bound & 0xFFFFFFFFL;
 		final long boundHigh = (bound >>> 32);
 		return inner + (randHigh * boundLow >>> 32) + (randLow * boundHigh >>> 32) + randHigh * boundHigh;
-
 	}
 
 	@Override
