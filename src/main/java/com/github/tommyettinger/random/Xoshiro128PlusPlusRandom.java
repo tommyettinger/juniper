@@ -17,6 +17,8 @@
 
 package com.github.tommyettinger.random;
 
+import com.github.tommyettinger.digital.MathTools;
+
 import java.math.BigInteger;
 
 /**
@@ -384,6 +386,74 @@ public class Xoshiro128PlusPlusRandom extends Enhanced32Random {
 		stateC ^= t;
 		stateD = (stateD << 11 | stateD >>> 21);
 		return result;
+	}
+
+	@Override
+	public long nextLong(long inner, long outer) {
+		int h = (stateA + stateD);
+		h = (h << 7 | h >>> 25) + stateA;
+		int l = stateC - stateB;
+		l = (l << 13 | l >>> 19) + stateC;
+		int t = stateB << 9;
+		stateC ^= stateA;
+		stateD ^= stateB;
+		stateB ^= stateC;
+		stateA ^= stateD;
+		stateC ^= t;
+		stateD = (stateD << 11 | stateD >>> 21);
+
+		if (inner >= outer)
+			return inner;
+		final long bound = outer - inner;
+		final long randLow = l & 0xFFFFFFFFL;
+		final long randHigh = h & 0xFFFFFFFFL;
+		final long boundLow = bound & 0xFFFFFFFFL;
+		final long boundHigh = (bound >>> 32);
+		return inner + (randHigh * boundLow >>> 32) + (randLow * boundHigh >>> 32) + randHigh * boundHigh;
+
+	}
+
+	@Override
+	public long nextSignedLong(long inner, long outer) {
+		int h = (stateA + stateD);
+		h = (h << 7 | h >>> 25) + stateA;
+		int l = stateC - stateB;
+		l = (l << 13 | l >>> 19) + stateC;
+		int t = stateB << 9;
+		stateC ^= stateA;
+		stateD ^= stateB;
+		stateB ^= stateC;
+		stateA ^= stateD;
+		stateC ^= t;
+		stateD = (stateD << 11 | stateD >>> 21);
+
+		if (outer < inner) {
+			long tmp = outer;
+			outer = inner + 1L;
+			inner = tmp + 1L;
+		}
+		final long bound = outer - inner;
+		final long randLow = l & 0xFFFFFFFFL;
+		final long randHigh = h & 0xFFFFFFFFL;
+		final long boundLow = bound & 0xFFFFFFFFL;
+		final long boundHigh = (bound >>> 32);
+		return inner + (randHigh * boundLow >>> 32) + (randLow * boundHigh >>> 32) + randHigh * boundHigh;
+	}
+
+	@Override
+	public double nextExclusiveDouble() {
+		int h = (stateA + stateD);
+		h = (h << 7 | h >>> 25) + stateA;
+		int l = stateC - stateB;
+		l = (l << 13 | l >>> 19) + stateC;
+		int t = stateB << 9;
+		stateC ^= stateA;
+		stateD ^= stateB;
+		stateB ^= stateC;
+		stateA ^= stateD;
+		stateC ^= t;
+		stateD = (stateD << 11 | stateD >>> 21);
+		return MathTools.exclusiveDouble(h, l);
 	}
 
 	@Override
