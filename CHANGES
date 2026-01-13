@@ -1,3 +1,9 @@
+[0.9.0]
+- [BREAKING] The leap() methods in Xoshiro128PlusPlusRandom and Xoshiro160RoadroxoRandom now return long and behave similarly to each other, both differently from before.
+- [SEED BREAKING] Generators that now extend Enhanced32Random may return slightly different results from nextInt(int), nextSignedInt(int), nextUnsignedInt(int), nextInclusiveFloat(), nextExclusiveDouble(), and methods that call these. Any given result is expected to be on average less than 1/100 of a percent different from before.
+- Enhanced32Random is new, and is an abstract class that extends EnhancedRandom with some methods implemented already and meant for generators that work best using 32-bit int math.
+- All stable 32-bit generators now extend Enhanced32Random, including: Bear32Random, Chill32Random, Chip32Random, Choo32Random, ChopRandom, Jsf32Random, Lamb32Random, Respite32Random, Taxon32Random, Xoshiro128PlusPlusRandom, and Xoshiro160RoadroxoRandom. They should be faster when using GWT or TeaVM to target JavaScript as a platform. They may be somewhat slower when targeting WASM in the browser, but that was already much faster than targeting JavaScript.
+
 [0.8.6]
 - The dependency on digital has been updated to 0.9.9. This focuses mainly on BitConversion, but also improves TrigTools.
 - Lamb32Random is new; it is meant for GWT usage but is also, like HornRandom, meant to be more memorable to a human. (Horn fits in RAM, Lamb fits on what could be a RAM.)
