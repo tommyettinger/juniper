@@ -17,13 +17,14 @@ public class DistributorDemo extends Game {
     public Screen alternateCauchy, alternateArcsine, alternateNormal, alternateTriangular, corner;
     private int screenIndex;
     public static double a = 1.0, b = 1.0, c = 1.0;
-    public EnhancedRandom[] randoms = new EnhancedRandom[]{new Respite32Random(), new Jsf32Random(), new ChopRandom(),
-            new RandomRandom(), new WhiskerRandom(), new AceRandom(), new PouchRandom(), new ScruffRandom(),
-            new MizuchiRandom(), new Xoshiro128PlusPlusRandom(), new LaserRandom(), new FlowRandom(), new TrimRandom(),
-            new DistinctRandom(),
-            new GoldenQuasiRandom(), new VanDerCorputQuasiRandom(), new LowChangeQuasiRandom(), new TupleQuasiRandom(0),
-    };
-    public int randomIndex = 2;
+    public EnhancedRandom[] randoms = new EnhancedRandom[]{
+		new Respite32Random(), new Jsf32Random(), new Lamb32Random(), new ChopRandom(),
+		new RandomRandom(), new WhiskerRandom(), new AceRandom(), new PouchRandom(), new ScruffRandom(),
+		new MizuchiRandom(), new Xoshiro128PlusPlusRandom(), new Xoshiro160RoadroxoRandom(),
+		new LaserRandom(), new FlowRandom(), new TrimRandom(), new DistinctRandom(),
+		new GoldenQuasiRandom(), new VanDerCorputQuasiRandom(), new LowChangeQuasiRandom(), new TupleQuasiRandom(),
+	};
+    public int randomIndex = 3;
     public EnhancedRandom random = randoms[randomIndex];
     public BitmapFont font;
     public SpriteBatch batch;
@@ -39,15 +40,16 @@ public class DistributorDemo extends Game {
         alternateTriangular = new TriangleVariantsScreen(this);
         corner = new CornerScreen(this);
         screens = new Screen[]{
-//                new KumaraswamySmoothScreen(this),
-                new ZigguratRoughComparisonScreen(this),
-                new KumaraswamyScreen(this), new BetaScreen(this), new LumpScreen(this),
-                new NormalScreen(this), new RaisedNormalScreen(this), new ProductNormalScreen(this),
-                new CauchyScreen(this), new LogCauchyScreen(this), new ErlangScreen(this),
-                new ExponentialScreen(this), new ParetoScreen(this), new PowerScreen(this),
-                new ChiScreen(this), new ChiSquareScreen(this), new StudentsTScreen(this),
-                new ArcsineScreen(this), new BinomialScreen(this), new ZipfianScreen(this),
-                new TriangularScreen(this), new KnobScreen(this),
+			new ZigguratRoughComparisonScreen(this),
+			new KumaraswamyScreen(this),
+			/* new KumaraswamySmoothScreen(this), */
+			new BetaScreen(this), new LumpScreen(this),
+			new NormalScreen(this), new RaisedNormalScreen(this), new ProductNormalScreen(this),
+			new CauchyScreen(this), new LogCauchyScreen(this), new ErlangScreen(this),
+			new ExponentialScreen(this), new ParetoScreen(this), new PowerScreen(this),
+			new ChiScreen(this), new ChiSquareScreen(this), new StudentsTScreen(this),
+			new ArcsineScreen(this), new BinomialScreen(this), new ZipfianScreen(this),
+			new TriangularScreen(this), new KnobScreen(this),
 
 //                new GdxSinScreen(this), new MathSinScreen(this), new DigitalSinScreen(this), new DigitalSinSmoothScreen(this),
 //                new DigitalSinSmootherScreen(this),
@@ -56,7 +58,7 @@ public class DistributorDemo extends Game {
 //                new DigitalCosSmootherScreen(this),
 
 			alternateNormal
-        };
+		};
         screenIndex = 0;
 //        screenIndex = screens.length - 1;
         setScreen(screens[screenIndex]);
@@ -75,7 +77,7 @@ public class DistributorDemo extends Game {
         super.render();
         if(Gdx.input.isKeyPressed(Input.Keys.COMMA)){
             batch.begin();
-            font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS using " + random.getClass(), 0,
+            font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS using " + random.getTag(), 0,
                     Gdx.graphics.getBackBufferHeight() * 0.5f, Gdx.graphics.getBackBufferWidth(), Align.center, false);
             batch.end();
         }
