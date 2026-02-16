@@ -82,4 +82,21 @@ public class DeckWrapper extends EnhancedRandom {
 			buffer[ii] = temp;
 		}
 	}
+
+	public static void main(String[] args) {
+		DeckWrapper dw = new DeckWrapper(123L);
+		for (int y = 0; y < 10; y++) {
+			int[] found = new int[16];
+			for (int i = 0; i < 16; i++) {
+				int res = (int)(dw.nextLong() >>> 60);
+				System.out.printf("%02d ", res);
+				found[res]++;
+			}
+			boolean success = true;
+			for (int i = 0; i < 16; i++) {
+				if(found[i] != 1) success = false;
+			}
+			System.out.println(success);
+		}
+	}
 }
