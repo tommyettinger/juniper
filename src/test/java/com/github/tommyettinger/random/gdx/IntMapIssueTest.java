@@ -205,7 +205,7 @@ public class IntMapIssueTest {
 		Assert.assertEquals(-2, map.size); // THIS IS NOT WHAT IT SHOULD ACTUALLY BE
 	}
 
-	@Test(expected = RuntimeException.class)
+	@Test
 	public void testJdkgdxdsManual() {
 		com.github.tommyettinger.ds.IntObjectMap<Integer> map = new com.github.tommyettinger.ds.IntObjectMap<>(5, 0.8f);
 		map.put(1, 1);
@@ -217,17 +217,17 @@ public class IntMapIssueTest {
 
 		IntObjectMap.EntryIterator<Integer> it = map.entrySet().iterator();
 		int ctr = 0;
-		while (it.hasNext && ctr < 4) {
-			IntObjectMap.EntryIterator<Integer> it2 = map.entrySet().iterator();
-			if(it2.hasNext()) it2.next();
-			IntObjectMap.Entry<Integer> item = it.next();
-			map.remove(item.key);
-			it.remove();
+		while (it.hasNext() && ctr < 4) {
+			Iterator<IntObjectMap.Entry<Integer>> it2 = map.entrySet().iterator();
+			if(it2.hasNext()) {
+				it2.next();
+				it2.remove();
+			}
 			ctr++;
 		}
 
 		System.out.println("size = " + map.size());
-		Assert.assertEquals(-2, map.size());
+		Assert.assertEquals(2, map.size());
 	}
 
 	@Test
@@ -242,21 +242,21 @@ public class IntMapIssueTest {
 
 		IntObjectMap.EntryIterator<Integer> it = new IntObjectMap.Entries<>(map).iterator();
 		int ctr = 0;
-		while (it.hasNext && ctr < 4) {
-			IntObjectMap.EntryIterator<Integer> it2 = new IntObjectMap.Entries<>(map).iterator();
-			if(it2.hasNext()) it2.next();
-			IntObjectMap.Entry<Integer> item = it.next();
-			map.remove(item.key);
-			it.remove();
+		while (it.hasNext() && ctr < 4) {
+			Iterator<IntObjectMap.Entry<Integer>> it2 = map.entrySet().iterator();
+			if(it2.hasNext()) {
+				it2.next();
+				it2.remove();
+			}
 			ctr++;
 		}
 
 		System.out.println("size = " + map.size());
-		Assert.assertEquals(-2, map.size()); // THIS IS NOT WHAT IT SHOULD ACTUALLY BE
+		Assert.assertEquals(2, map.size());
 	}
 
 	@Test(expected = RuntimeException.class)
-	public void testJdkManual() {
+	public void testJdkFailFast() {
 		HashMap<Integer, Integer> map = new HashMap<>(5, 0.8f);
 		map.put(1, 1);
 		map.put(2, 2);
@@ -273,6 +273,31 @@ public class IntMapIssueTest {
 			Map.Entry<Integer, Integer> item = it.next();
 			map.remove(item.getKey());
 			it.remove();
+			ctr++;
+		}
+
+		System.out.println("size = " + map.size());
+		Assert.assertEquals(2, map.size());
+	}
+
+	@Test
+	public void testJdkNormal() {
+		HashMap<Integer, Integer> map = new HashMap<>(5, 0.8f);
+		map.put(1, 1);
+		map.put(2, 2);
+		map.put(3, 3);
+		map.put(4, 4);
+		map.put(5, 5);
+		map.put(6, 6);
+
+		Iterator<Map.Entry<Integer, Integer>> it = map.entrySet().iterator();
+		int ctr = 0;
+		while (it.hasNext() && ctr < 4) {
+			Iterator<Map.Entry<Integer, Integer>> it2 = map.entrySet().iterator();
+			if(it2.hasNext()) {
+				it2.next();
+				it2.remove();
+			}
 			ctr++;
 		}
 
