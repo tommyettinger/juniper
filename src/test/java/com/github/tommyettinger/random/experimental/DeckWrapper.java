@@ -64,6 +64,11 @@ public class DeckWrapper extends EnhancedRandom {
 	}
 
 	@Override
+	public int next(int bits) {
+		return (int) (nextLong() >>> 64 - bits);
+	}
+
+	@Override
 	public int nextInt() {
 		return (int) (nextLong() >>> 32);
 	}
@@ -71,7 +76,12 @@ public class DeckWrapper extends EnhancedRandom {
 	@Override
 	public int nextInt(int bound) {
 		return (int) (bound * (nextLong() >>> 32) >> 32) & ~(bound >> 31);
+	}
 
+	@Override
+	public int nextSignedInt(int outerBound) {
+		outerBound = (int) (outerBound * (nextLong() >>> 32) >> 32);
+		return outerBound + (outerBound >>> 31);
 	}
 
 	@Override
@@ -113,11 +123,48 @@ public class DeckWrapper extends EnhancedRandom {
 			}
 			System.out.println(success);
 		}
+
 		System.out.println("nextInt(16)");
 		for (int y = 0; y < 10; y++) {
 			int[] found = new int[16];
 			for (int i = 0; i < 16; i++) {
 				int res = dw.nextInt(16);
+				System.out.printf("%02d ", res);
+				found[res]++;
+			}
+			boolean success = true;
+			for (int i = 0; i < 16; i++) {
+				if (found[i] != 1) {
+					success = false;
+					break;
+				}
+			}
+			System.out.println(success);
+		}
+
+		System.out.println("nextSignedInt(16)");
+		for (int y = 0; y < 10; y++) {
+			int[] found = new int[16];
+			for (int i = 0; i < 16; i++) {
+				int res = dw.nextSignedInt(16);
+				System.out.printf("%02d ", res);
+				found[res]++;
+			}
+			boolean success = true;
+			for (int i = 0; i < 16; i++) {
+				if (found[i] != 1) {
+					success = false;
+					break;
+				}
+			}
+			System.out.println(success);
+		}
+
+		System.out.println("next(4)");
+		for (int y = 0; y < 10; y++) {
+			int[] found = new int[16];
+			for (int i = 0; i < 16; i++) {
+				int res = dw.next(4);
 				System.out.printf("%02d ", res);
 				found[res]++;
 			}
