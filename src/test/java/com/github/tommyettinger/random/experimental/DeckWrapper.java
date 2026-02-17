@@ -290,7 +290,83 @@ public class DeckWrapper extends EnhancedRandom {
 			allClear &= success;
 		}
 
-		System.out.println("nextInclusiveFloat(Math.nextDown(16f)");
+		System.out.println("nextSignedLong(16)");
+		for (int y = 0; y < 10; y++) {
+			int[] found = new int[16];
+			for (int i = 0; i < 16; i++) {
+				int res = (int)dw.nextSignedLong(16);
+				System.out.printf("%02d ", res);
+				found[res]++;
+			}
+			boolean success = true;
+			for (int i = 0; i < 16; i++) {
+				if (found[i] != 1) {
+					success = false;
+					break;
+				}
+			}
+			System.out.println(success);
+			allClear &= success;
+		}
+
+		System.out.println("nextSignedLong(0, 16)");
+		for (int y = 0; y < 10; y++) {
+			int[] found = new int[16];
+			for (int i = 0; i < 16; i++) {
+				int res = (int)dw.nextSignedLong(0, 16);
+				System.out.printf("%02d ", res);
+				found[res]++;
+			}
+			boolean success = true;
+			for (int i = 0; i < 16; i++) {
+				if (found[i] != 1) {
+					success = false;
+					break;
+				}
+			}
+			System.out.println(success);
+			allClear &= success;
+		}
+
+		System.out.println("nextFloat(16f)");
+		for (int y = 0; y < 10; y++) {
+			int[] found = new int[16];
+			for (int i = 0; i < 16; i++) {
+				int res = (int)dw.nextFloat(16f);
+				System.out.printf("%02d ", res);
+				found[res]++;
+			}
+			boolean success = true;
+			for (int i = 0; i < 16; i++) {
+				if (found[i] != 1) {
+					success = false;
+					break;
+				}
+			}
+			System.out.println(success);
+			allClear &= success;
+		}
+
+		System.out.println("nextDouble(16.0)");
+		for (int y = 0; y < 10; y++) {
+			int[] found = new int[16];
+			for (int i = 0; i < 16; i++) {
+				int res = (int)dw.nextDouble(16.0);
+				System.out.printf("%02d ", res);
+				found[res]++;
+			}
+			boolean success = true;
+			for (int i = 0; i < 16; i++) {
+				if (found[i] != 1) {
+					success = false;
+					break;
+				}
+			}
+			System.out.println(success);
+			allClear &= success;
+		}
+
+		System.out.println("nextInclusiveFloat(Math.nextDown(16f))");
 		for (int y = 0; y < 10; y++) {
 			int[] found = new int[16];
 			for (int i = 0; i < 16; i++) {
@@ -309,7 +385,7 @@ public class DeckWrapper extends EnhancedRandom {
 			allClear &= success;
 		}
 
-		System.out.println("nextInclusiveDouble(Math.nextDown(16.0)");
+		System.out.println("nextInclusiveDouble(Math.nextDown(16.0))");
 		for (int y = 0; y < 10; y++) {
 			int[] found = new int[16];
 			for (int i = 0; i < 16; i++) {
