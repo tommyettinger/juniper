@@ -126,6 +126,21 @@ public class DeckWrapper extends EnhancedRandom {
 	}
 
 	@Override
+	public double nextExclusiveSignedDouble() {
+		final long bits = nextLong();
+		/* 1.1102230246251565E-16 is 0x1p-53, 5.551115123125782E-17 is 0x1.fffffffffffffp-55 */
+		return (bits >> 10) * 1.1102230246251565E-16 + Math.copySign(5.551115123125782E-17, bits);
+
+	}
+
+	@Override
+	public float nextExclusiveSignedFloat() {
+		final long bits = nextLong();
+		/* 5.9604645E-8f is 0x1p-24f, 2.980232E-8f is 0x1.FFFFFEp-26f */
+		return (bits >> 39) * 5.9604645E-8f + Math.copySign(2.980232E-8f, bits);
+	}
+
+	@Override
 	public EnhancedRandom copy() {
 		return new DeckWrapper(this);
 	}
@@ -401,6 +416,44 @@ public class DeckWrapper extends EnhancedRandom {
 			int[] found = new int[16];
 			for (int i = 0; i < 16; i++) {
 				int res = (int)dw.nextExclusiveDouble(16.0);
+				System.out.printf("%02d ", res);
+				found[res]++;
+			}
+			boolean success = true;
+			for (int i = 0; i < 16; i++) {
+				if (found[i] != 1) {
+					success = false;
+					break;
+				}
+			}
+			System.out.println(success);
+			allClear &= success;
+		}
+
+		System.out.println("dw.nextExclusiveSignedFloat() * 8f + 8f");
+		for (int y = 0; y < 10; y++) {
+			int[] found = new int[16];
+			for (int i = 0; i < 16; i++) {
+				int res = (int)(dw.nextExclusiveSignedFloat() * 8f + 8f);
+				System.out.printf("%02d ", res);
+				found[res]++;
+			}
+			boolean success = true;
+			for (int i = 0; i < 16; i++) {
+				if (found[i] != 1) {
+					success = false;
+					break;
+				}
+			}
+			System.out.println(success);
+			allClear &= success;
+		}
+
+		System.out.println("dw.nextExclusiveSignedDouble() * 8.0 + 8.0");
+		for (int y = 0; y < 10; y++) {
+			int[] found = new int[16];
+			for (int i = 0; i < 16; i++) {
+				int res = (int)(dw.nextExclusiveSignedDouble() * 8.0 + 8.0);
 				System.out.printf("%02d ", res);
 				found[res]++;
 			}
