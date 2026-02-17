@@ -1,5 +1,6 @@
 package com.github.tommyettinger.random.experimental;
 
+import com.github.tommyettinger.digital.Distributor;
 import com.github.tommyettinger.random.AceRandom;
 import com.github.tommyettinger.random.EnhancedRandom;
 
@@ -138,6 +139,16 @@ public class DeckWrapper extends EnhancedRandom {
 		final long bits = nextLong();
 		/* 5.9604645E-8f is 0x1p-24f, 2.980232E-8f is 0x1.FFFFFEp-26f */
 		return (bits >> 39) * 5.9604645E-8f + Math.copySign(2.980232E-8f, bits);
+	}
+
+	@Override
+	public double nextGaussian() {
+		return Distributor.probitL(nextLong() ^ 0x8000000000000000L);
+	}
+
+	@Override
+	public float nextGaussianFloat() {
+		return Distributor.probitI((int) (nextLong() >>> 32) ^ 0x80000000);
 	}
 
 	@Override
@@ -521,6 +532,35 @@ public class DeckWrapper extends EnhancedRandom {
 					break;
 				}
 			}
+			System.out.println(success);
+			allClear &= success;
+		}
+
+		System.out.println("nextGaussian()");
+		for (int y = 0; y < 10; y++) {
+			int[] found = new int[2];
+			for (int i = 0; i < 16; i++) {
+				double res = dw.nextGaussian();
+				System.out.printf("%+02.6f ", res);
+				if(res < 0) found[0]++;
+				else found[1]++;
+			}
+			boolean success = found[0] == found[1];
+			System.out.println(success);
+			allClear &= success;
+		}
+
+
+		System.out.println("nextGaussianFloat()");
+		for (int y = 0; y < 10; y++) {
+			int[] found = new int[2];
+			for (int i = 0; i < 16; i++) {
+				double res = dw.nextGaussianFloat();
+				System.out.printf("%+02.6f ", res);
+				if(res < 0) found[0]++;
+				else found[1]++;
+			}
+			boolean success = found[0] == found[1];
 			System.out.println(success);
 			allClear &= success;
 		}
