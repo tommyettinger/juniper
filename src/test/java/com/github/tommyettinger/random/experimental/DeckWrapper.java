@@ -85,6 +85,20 @@ public class DeckWrapper extends EnhancedRandom {
 	}
 
 	@Override
+	public void nextBytes(byte[] bytes) {
+		if (bytes != null) {
+			for (int i = 0; i < bytes.length; ) {
+				bytes[i++] = (byte) (nextLong() >>> 56);
+			}
+		}
+	}
+
+	@Override
+	public int nextUnsignedInt(int bound) {
+		return (int) ((bound & 0xFFFFFFFFL) * (nextLong() >>> 32) >>> 32);
+	}
+
+	@Override
 	public EnhancedRandom copy() {
 		return new DeckWrapper(this);
 	}
@@ -106,6 +120,8 @@ public class DeckWrapper extends EnhancedRandom {
 
 	public static void main(String[] args) {
 		DeckWrapper dw = new DeckWrapper(123L);
+
+		boolean allClear = true;
 		System.out.println("nextLong(), upper 4 bits");
 		for (int y = 0; y < 10; y++) {
 			int[] found = new int[16];
@@ -122,6 +138,7 @@ public class DeckWrapper extends EnhancedRandom {
 				}
 			}
 			System.out.println(success);
+			allClear &= success;
 		}
 
 		System.out.println("nextInt(16)");
@@ -140,6 +157,7 @@ public class DeckWrapper extends EnhancedRandom {
 				}
 			}
 			System.out.println(success);
+			allClear &= success;
 		}
 
 		System.out.println("nextSignedInt(16)");
@@ -158,6 +176,26 @@ public class DeckWrapper extends EnhancedRandom {
 				}
 			}
 			System.out.println(success);
+			allClear &= success;
+		}
+
+		System.out.println("nextUnsignedInt(16)");
+		for (int y = 0; y < 10; y++) {
+			int[] found = new int[16];
+			for (int i = 0; i < 16; i++) {
+				int res = dw.nextUnsignedInt(16);
+				System.out.printf("%02d ", res);
+				found[res]++;
+			}
+			boolean success = true;
+			for (int i = 0; i < 16; i++) {
+				if (found[i] != 1) {
+					success = false;
+					break;
+				}
+			}
+			System.out.println(success);
+			allClear &= success;
 		}
 
 		System.out.println("next(4)");
@@ -176,6 +214,9 @@ public class DeckWrapper extends EnhancedRandom {
 				}
 			}
 			System.out.println(success);
+			allClear &= success;
 		}
+
+		System.out.println("\nAll clear? " + allClear);
 	}
 }
