@@ -99,6 +99,22 @@ public class DeckWrapper extends EnhancedRandom {
 	}
 
 	@Override
+	public float nextInclusiveFloat() {
+		return (int)(0x1000001L * (nextLong() >>> 32) >> 32) * 0x1p-24f;
+	}
+
+	@Override
+	public double nextInclusiveDouble() {
+		final long rand = nextLong();
+		final long bound = 0x20000000000001L;
+		final long randLow = rand & 0xFFFFFFFFL;
+		final long randHigh = (rand >>> 32);
+		final long boundHigh = (bound >>> 32);
+		return ((randLow * boundHigh >>> 32) + randHigh * boundHigh) * 0x1p-53;
+
+	}
+
+	@Override
 	public EnhancedRandom copy() {
 		return new DeckWrapper(this);
 	}
@@ -260,6 +276,44 @@ public class DeckWrapper extends EnhancedRandom {
 			int[] found = new int[16];
 			for (int i = 0; i < 16; i++) {
 				int res = (int)dw.nextLong(0, 16);
+				System.out.printf("%02d ", res);
+				found[res]++;
+			}
+			boolean success = true;
+			for (int i = 0; i < 16; i++) {
+				if (found[i] != 1) {
+					success = false;
+					break;
+				}
+			}
+			System.out.println(success);
+			allClear &= success;
+		}
+
+		System.out.println("nextInclusiveFloat(Math.nextDown(16f)");
+		for (int y = 0; y < 10; y++) {
+			int[] found = new int[16];
+			for (int i = 0; i < 16; i++) {
+				int res = (int)dw.nextInclusiveFloat(Math.nextDown(16f));
+				System.out.printf("%02d ", res);
+				found[res]++;
+			}
+			boolean success = true;
+			for (int i = 0; i < 16; i++) {
+				if (found[i] != 1) {
+					success = false;
+					break;
+				}
+			}
+			System.out.println(success);
+			allClear &= success;
+		}
+
+		System.out.println("nextInclusiveDouble(Math.nextDown(16.0)");
+		for (int y = 0; y < 10; y++) {
+			int[] found = new int[16];
+			for (int i = 0; i < 16; i++) {
+				int res = (int)dw.nextInclusiveDouble(Math.nextDown(16.0));
 				System.out.printf("%02d ", res);
 				found[res]++;
 			}
