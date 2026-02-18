@@ -1,6 +1,5 @@
 package com.github.tommyettinger.random;
 
-import com.github.tommyettinger.random.experimental.DeckWrapper;
 import org.junit.Assert;
 import org.junit.Test;
 

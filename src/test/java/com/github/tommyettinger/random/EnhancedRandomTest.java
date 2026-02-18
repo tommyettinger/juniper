@@ -1184,6 +1184,24 @@ public class EnhancedRandomTest {
 	}
 
 	@Test
+	public void testDeckWrapper() {
+		DistinctRandom random = new DistinctRandom(123);
+		DeckWrapper deck = new DeckWrapper(random);
+		long output0 = deck.nextLong();
+		int output1 = deck.nextInt(100);
+		float output2 = deck.nextExclusiveFloat();
+
+		String[] alphabet = ArrayTools.stringSpan(24);
+		deck.setSeed(12345);
+		deck.shuffle(alphabet);
+//		System.out.println(String.join(", ", alphabet));
+		String[] alphabet2 = ArrayTools.stringSpan(24);
+		deck.setSeed(12345);
+		deck.shuffle(alphabet2);
+		Assert.assertEquals(String.join(", ", alphabet), String.join(", ", alphabet2));
+	}
+
+	@Test
 	public void testReverseWrapper() {
 		AceRandom random = new AceRandom(123);
 		long output0 = random.nextLong();

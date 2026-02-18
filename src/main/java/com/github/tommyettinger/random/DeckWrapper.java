@@ -1,9 +1,8 @@
-package com.github.tommyettinger.random.experimental;
+package com.github.tommyettinger.random;
 
 import com.github.tommyettinger.digital.Distributor;
-import com.github.tommyettinger.random.AceRandom;
-import com.github.tommyettinger.random.EnhancedRandom;
 
+import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Arrays;
 
@@ -360,6 +359,14 @@ public class DeckWrapper extends EnhancedRandom {
 		this.index = index;
 	}
 
+	public EnhancedRandom getWrapped() {
+		return wrapped;
+	}
+
+	public void setWrapped(EnhancedRandom wrapped) {
+		this.wrapped = wrapped;
+	}
+
 	/**
 	 * Gets a long result by index from the "deck" of 16 long results this shuffles. This does not modify the deck or
 	 * the index this normally uses. This can also be used, in limited cases, to get a previously-returned long even if
@@ -396,7 +403,7 @@ public class DeckWrapper extends EnhancedRandom {
 
 	/**
 	 * Sets the next result this will return from {@link #nextLong()}.
-	 * 
+	 *
 	 * @param value the next result this should return from {@link #nextLong()}
 	 */
 	public void setNextResult(long value) {
