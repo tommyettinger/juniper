@@ -4,6 +4,7 @@ import com.github.tommyettinger.digital.Distributor;
 import com.github.tommyettinger.random.AceRandom;
 import com.github.tommyettinger.random.EnhancedRandom;
 
+import java.math.BigInteger;
 import java.util.Arrays;
 
 public class DeckWrapper extends EnhancedRandom {
@@ -155,6 +156,38 @@ public class DeckWrapper extends EnhancedRandom {
 	@Override
 	public EnhancedRandom copy() {
 		return new DeckWrapper(this);
+	}
+
+	@Override
+	public boolean mainlyGeneratesInt() {
+		return false;
+	}
+
+	@Override
+	public BigInteger getMinimumPeriod() {
+		return wrapped.getMinimumPeriod();
+	}
+
+	@Override
+	public int getStateCount() {
+		return wrapped.getStateCount();
+	}
+
+	@Override
+	public long getSelectedState(int selection) {
+		return wrapped.getSelectedState(selection);
+	}
+
+	/**
+	 * Sets one of the wrapped generator's states. This does not update the current "deck" of 16 generated longs this
+	 * uses, so you may want to call {@link #refill()} after you're done setting states.
+	 *
+	 * @param selection used to select which state variable to set; generally non-negative
+	 * @param value     the exact value to use for the selected state, if valid
+	 */
+	@Override
+	public void setSelectedState(int selection, long value) {
+		wrapped.setSelectedState(selection, value);
 	}
 
 	public void refill() {
