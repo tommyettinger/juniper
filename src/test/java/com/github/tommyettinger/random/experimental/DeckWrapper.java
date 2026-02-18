@@ -128,17 +128,18 @@ public class DeckWrapper extends EnhancedRandom {
 
 	@Override
 	public double nextExclusiveSignedDouble() {
-		final long bits = nextLong();
-		/* 1.1102230246251565E-16 is 0x1p-53, 5.551115123125782E-17 is 0x1.fffffffffffffp-55 */
-		return (bits >> 10) * 1.1102230246251565E-16 + Math.copySign(5.551115123125782E-17, bits);
-
+		final long bits = nextLong() ^ 0x8000000000000000L;
+		final long sign = bits >> 63;
+		/* 1.1102230246251565E-16 is 0x1p-53, 2.7755575615628914E-17 is 0x1p-55 */
+		return ((bits >> 10) - sign) * 1.1102230246251565E-16 + (sign | 1L) * 2.7755575615628914E-17;
 	}
 
 	@Override
 	public float nextExclusiveSignedFloat() {
-		final long bits = nextLong();
-		/* 5.9604645E-8f is 0x1p-24f, 2.980232E-8f is 0x1.FFFFFEp-26f */
-		return (bits >> 39) * 5.9604645E-8f + Math.copySign(2.980232E-8f, bits);
+		final long bits = nextLong() ^ 0x8000000000000000L;
+		final long sign = bits >> 63;
+		/* 5.9604645E-8f is 0x1p-24f, 1.4901161E-8f is 0x1p-26f */
+		return ((bits >> 39) - sign) * 5.9604645E-8f + (sign | 1L) * 1.4901161E-8f;
 	}
 
 	@Override
