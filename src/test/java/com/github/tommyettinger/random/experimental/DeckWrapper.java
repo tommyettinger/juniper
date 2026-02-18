@@ -381,6 +381,28 @@ public class DeckWrapper extends EnhancedRandom {
 		return buffer[index & 15];
 	}
 
+	/**
+	 * Sets a result in the "deck" of 16 long results this shuffles. If {@code index} is less than {@link #getIndex()},
+	 * both using only the bottom 4 bits (so index is usually 0 to 15 inclusive), the result will effectively be ignored
+	 * because it will be setting a previous result. That can be read back using {@link #previewAt(int)}, but that's all
+	 * it can do. Otherwise, it will set the next or later result in the deck.
+	 *
+	 * @param index technically any int, but only the low 4 bits are used, so usually between 0 and 15, inclusive
+	 * @param value the long to return in the deck at the given position
+	 */
+	public void setResultAt(int index, long value) {
+		buffer[index & 15] = value;
+	}
+
+	/**
+	 * Sets the next result this will return from {@link #nextLong()}.
+	 * 
+	 * @param value the next result this should return from {@link #nextLong()}
+	 */
+	public void setNextResult(long value) {
+		buffer[index & 15] = value;
+	}
+
 	public void refill() {
 		long rand = 0, temp;
 		for (int i = 0; i < 16; i++) {
