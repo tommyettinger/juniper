@@ -341,6 +341,46 @@ public class DeckWrapper extends EnhancedRandom {
 		index = 0;
 	}
 
+	/**
+	 * Gets the current index into the "deck" of 16 long results this shuffles.
+	 *
+	 * @return technically any int, but only the low 4 bits are used
+	 */
+	public int getIndex() {
+		return index;
+	}
+
+	/**
+	 * Sets the current index into the "deck" of 16 long results this shuffles. Only the low 4 bits are used, so this
+	 * is typically an int from 0 to 15, inclusive.
+	 *
+	 * @param index any int; only the low 4 bits are used, so this is typically an int from 0 to 15
+	 */
+	public void setIndex(int index) {
+		this.index = index;
+	}
+
+	/**
+	 * Gets a long result by index from the "deck" of 16 long results this shuffles. This does not modify the deck or
+	 * the index this normally uses. This can also be used, in limited cases, to get a previously-returned long even if
+	 * it was consumed by another method, but that won't work if the "deck" was already shuffled after it was returned.
+	 *
+	 * @param index technically any int, but only the low 4 bits are used, so usually between 0 and 15, inclusive
+	 * @return the long in the "deck" of future results at the given index.
+	 */
+	public long previewAt(int index) {
+		return buffer[index & 15];
+	}
+
+	/**
+	 * Previews the next result this will return, without changing the current index or the "deck" of long results.
+	 *
+	 * @return the next long result this will return via {@link #nextLong()}
+	 */
+	public long preview() {
+		return buffer[index & 15];
+	}
+
 	public void refill() {
 		long rand = 0, temp;
 		for (int i = 0; i < 16; i++) {
