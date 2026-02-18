@@ -742,14 +742,6 @@ public class ReverseWrapper extends EnhancedRandom {
      *
      * @param out the stream to write the object to
      * @throws IOException Includes any I/O exceptions that may occur
-     * @serialData <ul>
-     * <li>int stateCount; the number of states this EnhancedRandom has</li>
-     * <li>Repeat {@code stateCount} times:
-     *     <ul>
-     *         <li>long state_n; the nth state used here.</li>
-     *     </ul>
-     * </li>
-     * </ul>
      */
     @GwtIncompatible
     public void writeExternal(ObjectOutput out) throws IOException {

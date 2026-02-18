@@ -2,8 +2,11 @@ package com.github.tommyettinger.random;
 
 import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.digital.Distributor;
+import com.github.tommyettinger.digital.Hasher;
 
 import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import java.math.BigInteger;
 import java.util.Arrays;
 
@@ -426,6 +429,30 @@ public class DeckWrapper extends EnhancedRandom {
 		}
 	}
 
+	@Override
+	public final boolean equals(Object o) {
+		if (!(o instanceof DeckWrapper)) return false;
+
+		DeckWrapper that = (DeckWrapper) o;
+		return index == that.index && wrapped.equals(that.wrapped) && Arrays.equals(buffer, that.buffer);
+	}
+
+	@Override
+	public int hashCode() {
+		int result = wrapped.hashCode();
+		result = 31 * result + index;
+		result = 31 * result + Hasher.decarabia.hashBulk(buffer);
+		return result;
+	}
+
+	@Override
+	public String toString() {
+		return "DeckWrapper{" +
+			"wrapped=" + wrapped +
+			", index=" + index +
+			'}';
+	}
+
 	/**
 	 * Serializes the current state of this EnhancedRandom to a String that can be used by
 	 * {@link #stringDeserialize(String)} to load this state at another time.
@@ -482,6 +509,36 @@ public class DeckWrapper extends EnhancedRandom {
 		System.arraycopy(longs,
 			0, buffer, 0, 16);
 		return this;
+	}
+
+	/**
+	 * Needs the type of {@link #wrapped} registered.
+	 *
+	 * @param in the stream to read data from in order to restore the object
+	 * @throws IOException if I/O errors occur
+	 */
+	@GwtIncompatible
+	public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+		wrapped = (EnhancedRandom) in.readObject();
+		index = in.readInt();
+		for (int i = 0; i < 16; i++) {
+			buffer[i] = in.readLong();
+		}
+	}
+
+	/**
+	 * Needs the type of {@link #wrapped} registered.
+	 *
+	 * @param out the stream to write the object to
+	 * @throws IOException Includes any I/O exceptions that may occur
+	 */
+	@GwtIncompatible
+	public void writeExternal(ObjectOutput out) throws IOException {
+		out.writeObject(wrapped);
+		out.writeInt(index);
+		for (int i = 0; i < 16; i++) {
+			out.writeLong(buffer[i]);
+		}
 	}
 
 }
