@@ -112,6 +112,7 @@ public final class Deserializer {
 		register(new TraceRandom(1, 2, 3, 4, 5, 6));
 		register(new KnownSequenceRandom(LongSequence.with(1337L, 42L, 23L, 666L)));
 
+		register(new DeckWrapper(1));
 		register(new ReverseWrapper(1));
 		register(new ArchivalWrapper(new DistinctRandom(1)));
 

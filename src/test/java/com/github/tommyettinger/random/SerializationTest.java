@@ -96,6 +96,33 @@ public class SerializationTest {
         }
     }
     @Test
+    public void testDeckWrapper() {
+        DeckWrapper random = new DeckWrapper(new DistinctRandom(123));
+        String randomSer = random.stringSerialize();
+        long output0 = random.nextLong();
+        int output1 = random.nextInt(100);
+        float output2 = random.nextExclusiveFloat();
+		DeckWrapper random2 = new DeckWrapper(new DistinctRandom(123));
+        String randomSer2 = random2.stringSerialize();
+		long duplicate0 = random2.nextLong();
+		int duplicate1 = random2.nextInt(100);
+		float duplicate2 = random2.nextExclusiveFloat();
+        Assert.assertEquals(output0, duplicate0);
+        Assert.assertEquals(output1, duplicate1);
+        Assert.assertEquals(output2, duplicate2, Float.MIN_NORMAL);
+        random.stringDeserialize(randomSer);
+        random2.stringDeserialize(randomSer2);
+        output0 = random.nextLong();
+        output1 = random.nextInt(100);
+        output2 = random.nextExclusiveFloat();
+		duplicate0 = random2.nextLong();
+        duplicate1 = random2.nextInt(100);
+		duplicate2 = random2.nextExclusiveFloat();
+        Assert.assertEquals(output0, duplicate0);
+        Assert.assertEquals(output1, duplicate1);
+        Assert.assertEquals(output2, duplicate2, Float.MIN_NORMAL);
+    }
+    @Test
     public void testReverseWrapper() {
         AceRandom random = new AceRandom(123);
         String randomSer = random.stringSerialize();

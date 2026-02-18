@@ -1,5 +1,6 @@
 package com.github.tommyettinger.random;
 
+import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.digital.Distributor;
 
 import java.io.IOException;
@@ -424,4 +425,63 @@ public class DeckWrapper extends EnhancedRandom {
 			buffer[ii] = temp;
 		}
 	}
+
+	/**
+	 * Serializes the current state of this EnhancedRandom to a String that can be used by
+	 * {@link #stringDeserialize(String)} to load this state at another time.
+	 *
+	 * @param base which Base to use, from the "digital" library, such as {@link Base#BASE10}
+	 * @return a String storing all data from the EnhancedRandom part of this generator
+	 */
+	@Override
+	public String stringSerialize(Base base) {
+		String ser = wrapped.stringSerialize(base);
+		return getTag()
+			+ base.paddingChar + base.signed(ser.length())
+			+ base.paddingChar + ser + base.signed(index)
+			+ base.paddingChar + base.join(String.valueOf(base.positiveSign), buffer)
+			+ base.paddingChar;
+	}
+
+	@Override
+	public <T extends CharSequence & Appendable> T appendSerialized(T sb, Base base) {
+		try {
+			sb.append(getTag());
+			sb.append(base.paddingChar);
+			String ser = wrapped.stringSerialize(base);
+			base.appendSigned(sb, ser.length());
+			sb.append(base.paddingChar);
+			sb.append(ser);
+			base.appendSigned(sb, index);
+			sb.append(base.paddingChar);
+			base.appendJoined(sb, String.valueOf(base.positiveSign), buffer);
+			sb.append(base.paddingChar);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+		return sb;
+	}
+
+	/**
+	 * Given a String in the format produced by {@link #stringSerialize(Base)}, and the same {@link Base} used by
+	 * the serialization, this will attempt to set this EnhancedRandom object to match the state in the serialized
+	 * data. This only works if this EnhancedRandom is the same implementation that was serialized, and also needs
+	 * the Bases to be identical. Returns this EnhancedRandom, after possibly changing its state.
+	 *
+	 * @param data a String probably produced by {@link #stringSerialize(Base)}
+	 * @param base which Base to use, from the "digital" library, such as {@link Base#BASE10}
+	 * @return this, after setting its state
+	 */
+	@Override
+	public DeckWrapper stringDeserialize(String data, Base base) {
+		int start = data.indexOf(base.paddingChar)+1;
+		int len = base.readInt(data, start, start = data.indexOf(base.paddingChar, start));
+		setWrapped(Deserializer.deserialize(data.substring(start + 1, start += len), base));
+		index = base.readInt(data, start + 1, start = data.indexOf(base.paddingChar, start + 1));
+		long[] longs = base.longSplit(data, String.valueOf(base.positiveSign), start + 1, data.indexOf(base.paddingChar, start+1));
+		System.arraycopy(longs,
+			0, buffer, 0, 16);
+		return this;
+	}
+
 }
