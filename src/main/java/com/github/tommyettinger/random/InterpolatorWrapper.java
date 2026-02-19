@@ -32,10 +32,10 @@ import java.math.BigInteger;
  * An EnhancedRandom wrapper that delegates to an {@link Interpolator} to distribute output in the same way the
  * Interpolator does from the 0 to 1 range, but for any requested range.
  */
-public class InterpolatedRandom extends EnhancedRandom {
+public class InterpolatorWrapper extends EnhancedRandom {
     @Override
     public String getTag() {
-        return "InrR";
+        return "InrW";
     }
 
 	/**
@@ -59,56 +59,71 @@ public class InterpolatedRandom extends EnhancedRandom {
     protected Interpolator interpolator;
     protected EnhancedRandom random;
 
-    public InterpolatedRandom() {
+    public InterpolatorWrapper() {
         interpolator = Interpolations.linear;
         random = new AceRandom();
     }
 
-    public InterpolatedRandom(long seed) {
+    public InterpolatorWrapper(long seed) {
         interpolator = Interpolations.linear;
         random = new AceRandom(seed);
     }
 
     /**
-     * Creates an InterpolatedRandom that uses a direct reference to the given EnhancedRandom. You can copy the
+     * Creates an InterpolatorWrapper that uses a direct reference to the given EnhancedRandom. You can copy the
      * EnhancedRandom if you want it to change independently of the original EnhancedRandom, using
      * {@link EnhancedRandom#copy()}.
      * @param random referenced directly; if you don't want this, use a {@link EnhancedRandom#copy()}
      */
-    public InterpolatedRandom(EnhancedRandom random) {
+    public InterpolatorWrapper(EnhancedRandom random) {
         if(random == null) this.random = new AceRandom();
         interpolator = Interpolations.linear;
     }
 
-    public InterpolatedRandom(long stateA, long stateB, long stateC, long stateD) {
+    public InterpolatorWrapper(long stateA, long stateB) {
+        interpolator = Interpolations.linear;
+        random = new AceRandom(stateA, stateB);
+    }
+
+    public InterpolatorWrapper(long stateA, long stateB, long stateC) {
+        interpolator = Interpolations.linear;
+        random = new AceRandom(stateA, stateB, stateC);
+    }
+
+    public InterpolatorWrapper(long stateA, long stateB, long stateC, long stateD) {
         interpolator = Interpolations.linear;
         random = new AceRandom(stateA, stateB, stateC, stateD);
     }
 
-    public InterpolatedRandom(Interpolator interpolator) {
+    public InterpolatorWrapper(long stateA, long stateB, long stateC, long stateD, long stateE) {
+        interpolator = Interpolations.linear;
+        random = new AceRandom(stateA, stateB, stateC, stateD, stateE);
+    }
+
+    public InterpolatorWrapper(Interpolator interpolator) {
         this.interpolator = interpolator;
         random = new AceRandom();
     }
 
-    public InterpolatedRandom(Interpolator interpolator, long seed) {
+    public InterpolatorWrapper(Interpolator interpolator, long seed) {
         this.interpolator = interpolator;
         random = new AceRandom(seed);
     }
 
     /**
-     * Creates a DistributedRandom that follows the given Interpolator (copied), limiting its results using the given
+     * Creates a InterpolatorWrapper that follows the given Interpolator (copied), limiting its results using the given
      * ReductionMode, and uses a direct reference to the given EnhancedRandom. You can copy the EnhancedRandom if you
      * want it to change independently of the original EnhancedRandom, using {@link EnhancedRandom#copy()}.
      * @param interpolator a Interpolator that will be copied; the copy's generator will be reassigned.
      * @param random referenced directly; if you don't want this, use a {@link EnhancedRandom#copy()}
      */
-    public InterpolatedRandom(Interpolator interpolator, EnhancedRandom random) {
+    public InterpolatorWrapper(Interpolator interpolator, EnhancedRandom random) {
         this.interpolator = interpolator;
         if(random != null) this.random = random;
         else this.random = new AceRandom();
     }
 
-    public InterpolatedRandom(Interpolator interpolator, long stateA, long stateB, long stateC, long stateD) {
+    public InterpolatorWrapper(Interpolator interpolator, long stateA, long stateB, long stateC, long stateD) {
         this.interpolator = interpolator;
         this.random = new AceRandom(stateA, stateB, stateC, stateD);
     }
@@ -220,8 +235,8 @@ public class InterpolatedRandom extends EnhancedRandom {
     }
 
     @Override
-    public InterpolatedRandom copy() {
-        return new InterpolatedRandom(interpolator, random.copy());
+    public InterpolatorWrapper copy() {
+        return new InterpolatorWrapper(interpolator, random.copy());
     }
 
     @Override
@@ -323,7 +338,7 @@ public class InterpolatedRandom extends EnhancedRandom {
      * @return this, for chaining
      */
     @Override
-    public InterpolatedRandom stringDeserialize(String data, Base base) {
+    public InterpolatorWrapper stringDeserialize(String data, Base base) {
         int idx = data.indexOf(base.paddingChar);
         interpolator = Interpolations.get(data.substring(idx + 1, (idx = data.indexOf(base.positiveSign, idx + 1))));
         random = Deserializer.deserialize(data.substring(idx + 1), base);
@@ -361,7 +376,7 @@ public class InterpolatedRandom extends EnhancedRandom {
 
     @Override
     public String toString() {
-        return "DistributedRandom{" +
+        return "InterpolatorWrapper{" +
                 "interpolator=" + interpolator +
                 ", random=" + random +
                 '}';

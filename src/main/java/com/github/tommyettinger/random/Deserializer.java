@@ -151,7 +151,7 @@ public final class Deserializer {
 		register(new ZipfianDistribution(random, 2L, 0.5, 1.0 + 0.5 * MathTools.ROOT2_D)); // precalculated zeta
 
 		register(new DistributionWrapper(1, 2, 3, 4));
-		register(new InterpolatedRandom(Interpolations.smooth, 1, 2, 3, 4));
+		register(new InterpolatorWrapper(Interpolations.smooth, 1, 2, 3, 4));
 	}
 
 	/**

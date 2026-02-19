@@ -54,7 +54,6 @@ public class RangedTest {
             for (EnhancedRandom r : randoms) {
                 if(r.getTag().equals("KnSR")
                         || r.getTag().equals("LCQR")
-                        || r.getTag().equals("InrR")
                 ) continue;
                 r.setSeed(12345L);
                 int[] buckets = new int[limit];
@@ -87,7 +86,6 @@ public class RangedTest {
             for (EnhancedRandom r : randoms) {
                 if(r.getTag().equals("KnSR")
                         || r.getTag().equals("LCQR")
-                        || r.getTag().equals("InrR")
                         || r.getTag().equals("VCQR")
                 ) continue;
                 r.setSeed(12345L);
