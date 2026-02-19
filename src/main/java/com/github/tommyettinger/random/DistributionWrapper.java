@@ -29,10 +29,10 @@ import java.io.ObjectOutput;
 import java.math.BigInteger;
 
 /**
- * An EnhancedRandom that delegates to a {@link Distribution} to distribute any floats, ints, or doubles as by that
- * distribution.
+ * An EnhancedRandom wrapper that delegates to a {@link Distribution} to distribute any floats, ints, or doubles as by
+ * that distribution.
  */
-public class DistributedRandom extends EnhancedRandom {
+public class DistributionWrapper extends EnhancedRandom {
     /**
      * One of two possible modes this can use to limit the range of a Distribution. {@code FRACTION} simply gets the
      * fractional part of a distribution by subtracting the floor from a result. {@code CLAMP} uses
@@ -85,7 +85,7 @@ public class DistributedRandom extends EnhancedRandom {
     private static final ReductionMode[] MODES = ReductionMode.values();
     @Override
     public String getTag() {
-        return "DsrR";
+        return "DsrW";
     }
 
 	/**
@@ -110,18 +110,18 @@ public class DistributedRandom extends EnhancedRandom {
 
     protected ReductionMode reduction;
 
-    public DistributedRandom() {
+    public DistributionWrapper() {
         distribution = new ContinuousUniformDistribution(0.0, 1.0);
         reduction = ReductionMode.FRACTION;
     }
 
-    public DistributedRandom(long seed) {
+    public DistributionWrapper(long seed) {
         distribution = new ContinuousUniformDistribution(new AceRandom(seed), 0.0, 1.0);
         reduction = ReductionMode.FRACTION;
     }
 
     /**
-     * Creates a DistributedRandom that follows a ContinuousUniformDistribution, limiting its results using
+     * Creates a DistributionWrapper that follows a ContinuousUniformDistribution, limiting its results using
      * {@link ReductionMode#FRACTION}, and uses a direct reference to the given EnhancedRandom. You can copy the
      * EnhancedRandom if you want it to change independently of the original EnhancedRandom, using
      * {@link EnhancedRandom#copy()}. This is probably not very useful on its own, since you will probably want to
@@ -129,24 +129,24 @@ public class DistributedRandom extends EnhancedRandom {
      * that was assigned here.
      * @param random referenced directly; if you don't want this, use a {@link EnhancedRandom#copy()}
      */
-    public DistributedRandom(EnhancedRandom random) {
+    public DistributionWrapper(EnhancedRandom random) {
         if(random == null) random = new AceRandom();
         distribution = new ContinuousUniformDistribution(random, 0.0, 1.0);
         reduction = ReductionMode.FRACTION;
     }
 
-    public DistributedRandom(long stateA, long stateB, long stateC, long stateD) {
+    public DistributionWrapper(long stateA, long stateB, long stateC, long stateD) {
         distribution = new ContinuousUniformDistribution(new AceRandom(stateA, stateB, stateC, stateD), 0.0, 1.0);
         reduction = ReductionMode.FRACTION;
     }
 
-    public DistributedRandom(Distribution distribution, ReductionMode reductionMode) {
+    public DistributionWrapper(Distribution distribution, ReductionMode reductionMode) {
         this.distribution = distribution.copy();
         if(reductionMode != null) reduction = reductionMode;
         else reduction = ReductionMode.FRACTION;
     }
 
-    public DistributedRandom(Distribution distribution, ReductionMode reductionMode, long seed) {
+    public DistributionWrapper(Distribution distribution, ReductionMode reductionMode, long seed) {
         this.distribution = distribution.copy();
         this.distribution.generator.setSeed(seed);
         if(reductionMode != null) reduction = reductionMode;
@@ -154,21 +154,21 @@ public class DistributedRandom extends EnhancedRandom {
     }
 
     /**
-     * Creates a DistributedRandom that follows the given Distribution (copied), limiting its results using the given
+     * Creates a DistributionWrapper that follows the given Distribution (copied), limiting its results using the given
      * ReductionMode, and uses a direct reference to the given EnhancedRandom. You can copy the EnhancedRandom if you
      * want it to change independently of the original EnhancedRandom, using {@link EnhancedRandom#copy()}.
      * @param distribution a Distribution that will be copied; the copy's generator will be reassigned.
      * @param reductionMode how to reduce values outside the 0 to 1 range, as an enum constant
      * @param random referenced directly; if you don't want this, use a {@link EnhancedRandom#copy()}
      */
-    public DistributedRandom(Distribution distribution, ReductionMode reductionMode, EnhancedRandom random) {
+    public DistributionWrapper(Distribution distribution, ReductionMode reductionMode, EnhancedRandom random) {
         this.distribution = distribution.copy();
         if(random != null) this.distribution.generator = random;
         if(reductionMode != null) reduction = reductionMode;
         else reduction = ReductionMode.FRACTION;
     }
 
-    public DistributedRandom(Distribution distribution, ReductionMode reductionMode, long stateA, long stateB, long stateC, long stateD) {
+    public DistributionWrapper(Distribution distribution, ReductionMode reductionMode, long stateA, long stateB, long stateC, long stateD) {
         this.distribution = distribution.copy();
         this.distribution.generator = new AceRandom(stateA, stateB, stateC, stateD);
         if(reductionMode != null) reduction = reductionMode;
@@ -292,8 +292,8 @@ public class DistributedRandom extends EnhancedRandom {
     }
 
     @Override
-    public DistributedRandom copy() {
-        return new DistributedRandom(distribution, reduction);
+    public DistributionWrapper copy() {
+        return new DistributionWrapper(distribution, reduction);
     }
 
     @Override
@@ -393,7 +393,7 @@ public class DistributedRandom extends EnhancedRandom {
      * @return this, for chaining
      */
     @Override
-    public DistributedRandom stringDeserialize(String data, Base base) {
+    public DistributionWrapper stringDeserialize(String data, Base base) {
         int idx = data.indexOf(base.paddingChar);
         setReduction(MODES[base.readInt(data, idx + 1, (idx = data.indexOf(base.positiveSign, idx + 1)))]);
         distribution = Deserializer.deserializeDistribution(data.substring(idx + 1), base);
@@ -401,7 +401,7 @@ public class DistributedRandom extends EnhancedRandom {
     }
 
     /**
-     * Needs the type of {@link #distribution} registered.
+     * Needs the type of {@link #distribution} registered and its {@link Distribution#generator}'s type.
      *
      * @param out the stream to write the object to
      * @throws IOException Includes any I/O exceptions that may occur
@@ -430,7 +430,7 @@ public class DistributedRandom extends EnhancedRandom {
 
     @Override
     public String toString() {
-        return "DistributedRandom{" +
+        return "DistributionWrapper{" +
                 "distribution=" + distribution +
                 ", reduction=" + reduction +
                 '}';

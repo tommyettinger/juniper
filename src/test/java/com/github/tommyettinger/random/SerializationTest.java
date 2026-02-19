@@ -78,7 +78,7 @@ public class SerializationTest {
 		List<Distribution> all = Deserializer.copyDistributions();
 		ArrayList<EnhancedRandom> randoms = Deserializer.copyRandoms();
 		// we can't nest a DistributedRandom, with its own Distribution, as the generator and sanely deserialize.
-		randoms.removeIf(r -> "DsrR".equals(r.getTag()) || "InrR".equals(r.getTag()) || "KnSR".equals(r.getTag()));
+		randoms.removeIf(r -> "InrR".equals(r.getTag()) || "KnSR".equals(r.getTag()));
 		WhiskerRandom rand = new WhiskerRandom(123456789L);
 		Base base = Base.BASE10;
 		//Base.scrambledBase(new LaserRandom(123456789L));

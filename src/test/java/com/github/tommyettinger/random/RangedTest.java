@@ -54,7 +54,6 @@ public class RangedTest {
             for (EnhancedRandom r : randoms) {
                 if(r.getTag().equals("KnSR")
                         || r.getTag().equals("LCQR")
-                        || r.getTag().equals("DsrR")
                         || r.getTag().equals("InrR")
                 ) continue;
                 r.setSeed(12345L);
@@ -88,7 +87,6 @@ public class RangedTest {
             for (EnhancedRandom r : randoms) {
                 if(r.getTag().equals("KnSR")
                         || r.getTag().equals("LCQR")
-                        || r.getTag().equals("DsrR")
                         || r.getTag().equals("InrR")
                         || r.getTag().equals("VCQR")
                 ) continue;

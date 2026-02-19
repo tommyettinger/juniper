@@ -19,7 +19,7 @@ public class ForySerializationTest {
 //        fury.register(EnhancedRandom.class);
 
 		List<EnhancedRandom> all = Deserializer.copyRandoms();
-		all.removeIf(r -> "DsrR".equals(r.getTag()) || "InrR".equals(r.getTag()) || "KnSR".equals(r.getTag()));
+		all.removeIf(r -> "InrR".equals(r.getTag()) || "KnSR".equals(r.getTag()));
 
 		for (EnhancedRandom r : all) {
 			Class<? extends EnhancedRandom> c = r.getClass();
@@ -45,7 +45,7 @@ public class ForySerializationTest {
 		List<Distribution> all = Deserializer.copyDistributions();
 		ArrayList<EnhancedRandom> randoms = Deserializer.copyRandoms();
 		// we can't nest a DistributedRandom, with its own Distribution, as the generator and sanely deserialize.
-		randoms.removeIf(r -> "DsrR".equals(r.getTag()) || "InrR".equals(r.getTag()) || "KnSR".equals(r.getTag()));
+		randoms.removeIf(r -> "InrR".equals(r.getTag()) || "KnSR".equals(r.getTag()));
 		WhiskerRandom rand = new WhiskerRandom(123456789L);
 
 		for (EnhancedRandom r : randoms) {
@@ -75,11 +75,11 @@ public class ForySerializationTest {
 	public void testRoundTripDistributedRandom() {
 		LoggerFactory.disableLogging();
 		Fory fory = Fory.builder().withLanguage(Language.JAVA).build();
-		fory.register(DistributedRandom.class);
+		fory.register(DistributionWrapper.class);
 		List<Distribution> all = Deserializer.copyDistributions();
 		ArrayList<EnhancedRandom> randoms = Deserializer.copyRandoms();
 		// we can't nest a DistributedRandom, with its own Distribution, as the generator and sanely deserialize.
-		randoms.removeIf(r -> "DsrR".equals(r.getTag()) || "InrR".equals(r.getTag()) || "KnSR".equals(r.getTag()));
+		randoms.removeIf(r -> "InrR".equals(r.getTag()) || "KnSR".equals(r.getTag()));
 		WhiskerRandom rand = new WhiskerRandom(123456789L);
 
 		for (EnhancedRandom r : randoms) {
@@ -94,11 +94,11 @@ public class ForySerializationTest {
 		for(Distribution r : all) {
 			EnhancedRandom er = rand.randomElement(randoms).copy();
 			er.setSeed(rand.nextLong());
-			DistributedRandom dr = new DistributedRandom(r, DistributedRandom.ReductionMode.FRACTION, er);
+			DistributionWrapper dr = new DistributionWrapper(r, DistributionWrapper.ReductionMode.FRACTION, er);
 			byte[] s = fory.serializeJavaObject(dr);
 			dr.nextDouble();
 			double rl = dr.nextDouble();
-			DistributedRandom de = fory.deserializeJavaObject(s, DistributedRandom.class);
+			DistributionWrapper de = fory.deserializeJavaObject(s, DistributionWrapper.class);
 			de.nextDouble();
 			double dl = de.nextDouble();
 			System.out.println(dr.stringSerialize() + "   " + de.stringSerialize());
