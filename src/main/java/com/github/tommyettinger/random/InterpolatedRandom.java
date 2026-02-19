@@ -235,6 +235,18 @@ public class InterpolatedRandom extends EnhancedRandom {
     public void setState(long stateA, long stateB, long stateC, long stateD) {
         random.setState(stateA, stateB, stateC, stateD);
     }
+    @Override
+    public void setState(long stateA, long stateB, long stateC, long stateD, long stateE) {
+        random.setState(stateA, stateB, stateC, stateD, stateE);
+    }
+    @Override
+    public void setState(long stateA, long stateB, long stateC, long stateD, long stateE, long stateF) {
+        random.setState(stateA, stateB, stateC, stateD, stateE, stateF);
+    }
+    @Override
+    public void setState(long... state) {
+        random.setState(state);
+    }
 
     @Override
     public int getStateCount() {

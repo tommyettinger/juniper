@@ -319,6 +319,18 @@ public class DistributedRandom extends EnhancedRandom {
     public void setState(long stateA, long stateB, long stateC, long stateD) {
         distribution.generator.setState(stateA, stateB, stateC, stateD);
     }
+    @Override
+    public void setState(long stateA, long stateB, long stateC, long stateD, long stateE) {
+        distribution.generator.setState(stateA, stateB, stateC, stateD, stateE);
+    }
+    @Override
+    public void setState(long stateA, long stateB, long stateC, long stateD, long stateE, long stateF) {
+        distribution.generator.setState(stateA, stateB, stateC, stateD, stateE, stateF);
+    }
+    @Override
+    public void setState(long... state) {
+        distribution.generator.setState(state);
+    }
 
     @Override
     public int getStateCount() {

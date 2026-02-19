@@ -296,6 +296,29 @@ public class ArchivalWrapper extends EnhancedRandom {
         wrapped.setState(stateA, stateB, stateC, stateD, stateE);
     }
 
+	/**
+	 * Sets each state variable to {@code stateA}, {@code stateB}, {@code stateC},
+	 * {@code stateD}, or {@code stateE}, alternating. This uses {@link #setSelectedState(int, long)} to
+	 * set the values. If there is one state variable ({@link #getStateCount()} is 1),
+	 * then this only sets that state variable to stateA. If there are two state
+	 * variables, the first is set to stateA, and the second to stateB. With three
+	 * state variables, the first is set to stateA, the second to stateB, and the third
+	 * to stateC. With four state variables, the first is set to stateA, the second to
+	 * stateB, the third to stateC, and the fourth to stateD. If there are more, it
+	 * reuses stateA, then stateB, then stateC, then stateD, then stateE, then stateF, then stateA, and so on
+	 * until all variables are set.
+	 *
+	 * @param stateA the long value to use for states at index 0,  6, 12, 18...
+	 * @param stateB the long value to use for states at index 1,  7, 13, 19...
+	 * @param stateC the long value to use for states at index 2,  8, 14, 20...
+	 * @param stateD the long value to use for states at index 3,  9, 15, 21...
+	 * @param stateE the long value to use for states at index 4, 10, 16, 22...
+	 * @param stateF the long value to use for states at index 5, 11, 17, 23...
+	 */
+	public void setState(long stateA, long stateB, long stateC, long stateD, long stateE, long stateF) {
+		wrapped.setState(stateA, stateB, stateC, stateD, stateE, stateF);
+	}
+
     /**
      * Sets all state variables to alternating values chosen from {@code states}. If states is empty,
      * then this does nothing, and leaves the current generator unchanged. This works for
