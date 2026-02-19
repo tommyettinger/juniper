@@ -18,6 +18,7 @@
 package com.github.tommyettinger.random;
 
 import com.github.tommyettinger.digital.Base;
+import com.github.tommyettinger.digital.BitConversion;
 import com.github.tommyettinger.digital.Distributor;
 import com.github.tommyettinger.digital.Interpolations;
 import com.github.tommyettinger.digital.Interpolations.Interpolator;
@@ -28,7 +29,7 @@ import java.io.ObjectOutput;
 import java.math.BigInteger;
 
 /**
- * An EnhancedRandom that delegates to an {@link Interpolator} to distribute output in the same way the
+ * An EnhancedRandom wrapper that delegates to an {@link Interpolator} to distribute output in the same way the
  * Interpolator does from the 0 to 1 range, but for any requested range.
  */
 public class InterpolatedRandom extends EnhancedRandom {
@@ -129,16 +130,19 @@ public class InterpolatedRandom extends EnhancedRandom {
 
     @Override
     public float nextFloat() {
-        return (float) nextDouble();
+        return interpolator.apply(random.nextFloat());
     }
 
-    @Override
+	@Override
+	public float nextFloat(float innerBound, float outerBound) {
+		return interpolator.apply(innerBound, outerBound, random.nextFloat());
+	}
+
+	@Override
     public void nextBytes(byte[] bytes) {
         if (bytes != null) {
             for (int i = 0; i < bytes.length; ) {
-                for (int n = Math.min(bytes.length - i, 8); n-- > 0; ) {
-                    bytes[i++] = (byte) (256 * nextDouble());
-                }
+				bytes[i++] = (byte) (256 * nextFloat());
             }
         }
     }
@@ -160,7 +164,7 @@ public class InterpolatedRandom extends EnhancedRandom {
 
     @Override
     public boolean nextBoolean() {
-        return nextDouble() < 0.5f;
+        return nextFloat() < 0.5f;
     }
 
     /**
@@ -171,7 +175,6 @@ public class InterpolatedRandom extends EnhancedRandom {
     public double nextGaussian() {
         return Distributor.probitD(nextDouble());
     }
-
 
     /**
      * This runs {@link Distributor#probitF(float)} on a distributed float this produces.
@@ -195,7 +198,8 @@ public class InterpolatedRandom extends EnhancedRandom {
      */
     @Override
     public double nextExclusiveSignedDouble() {
-        return Math.copySign(interpolator.apply(random.nextExclusiveFloat()), Long.bitCount(random.getSelectedState(0) * 0x9E3779B97F4A7C15L) << 31);
+		final double raw = (interpolator.apply(random.nextFloat()) - 0.5) * 1.9999999999999998;
+        return raw + (BitConversion.doubleToHighIntBits(raw) >> 31 | 1) * 0x1p-55;
     }
 
     /**
@@ -211,7 +215,8 @@ public class InterpolatedRandom extends EnhancedRandom {
      */
     @Override
     public float nextExclusiveSignedFloat() {
-        return Math.copySign(interpolator.apply(random.nextExclusiveFloat()), Long.bitCount(random.getSelectedState(0) * 0x9E3779B97F4A7C15L) << 31);
+		final float raw = (interpolator.apply(random.nextFloat()) - 0.5f) * 1.9999999f;
+        return raw + (BitConversion.floatToIntBits(raw) >> 31 | 1) * 0x1p-26f;
     }
 
     @Override
