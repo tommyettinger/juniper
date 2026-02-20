@@ -402,30 +402,28 @@ public class ArchivalWrapper extends EnhancedRandom {
     }
 
     /**
-     * Needs {@link LongSequence} registered, as well as the type of {@link #wrapped} registered.
+     * Needs {@link LongSequence} registered, as well as the type of {@link #wrapped} registered
+	 * with {@link Deserializer}.
      *
      * @param out the stream to write the object to
      * @throws IOException Includes any I/O exceptions that may occur
      */
     @GwtIncompatible
     public void writeExternal(ObjectOutput out) throws IOException {
-        out.writeObject(wrapped);
+        out.writeUTF(wrapped.stringSerialize(Base.BASE90));
         out.writeObject(archive == LongSequence.NO_OP ? null : archive);
     }
 
     /**
-     * The object implements the readExternal method to restore its
-     * contents by calling the methods of DataInput for primitive
-     * types and readObject for objects, strings and arrays.  The
-     * readExternal method must read the values in the same sequence
-     * and with the same types as were written by writeExternal.
+	 * Needs {@link LongSequence} registered, as well as the type of {@link #wrapped} registered
+	 * with {@link Deserializer}.
      *
      * @param in the stream to read data from in order to restore the object
      * @throws IOException if I/O errors occur
      */
     @GwtIncompatible
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        wrapped = (EnhancedRandom) in.readObject();
+        wrapped = Deserializer.deserialize(in.readUTF(), Base.BASE90);
         Object ar = in.readObject();
         if(ar == null)
             archive = LongSequence.NO_OP;

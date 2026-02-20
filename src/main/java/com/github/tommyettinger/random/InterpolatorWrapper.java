@@ -355,7 +355,7 @@ public class InterpolatorWrapper extends EnhancedRandom {
     @GwtIncompatible
     public void writeExternal(ObjectOutput out) throws IOException {
         out.writeUTF(interpolator.getTag());
-        out.writeObject(random);
+        out.writeUTF(random.stringSerialize(Base.BASE90));
     }
 
     /**
@@ -369,9 +369,9 @@ public class InterpolatorWrapper extends EnhancedRandom {
      * @throws IOException if I/O errors occur
      */
     @GwtIncompatible
-    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+    public void readExternal(ObjectInput in) throws IOException {
         interpolator = Interpolations.get(in.readUTF());
-        random = (EnhancedRandom) in.readObject();
+        random = Deserializer.deserialize(in.readUTF(), Base.BASE90);
     }
 
     @Override

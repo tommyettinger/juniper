@@ -401,7 +401,8 @@ public class DistributionWrapper extends EnhancedRandom {
     }
 
     /**
-     * Needs the type of {@link #distribution} registered and its {@link Distribution#generator}'s type.
+     * Needs the type of {@link #distribution} and its {@link Distribution#generator}'s type
+	 * registered with {@link Deserializer}.
      *
      * @param out the stream to write the object to
      * @throws IOException Includes any I/O exceptions that may occur
@@ -409,23 +410,20 @@ public class DistributionWrapper extends EnhancedRandom {
     @GwtIncompatible
     public void writeExternal(ObjectOutput out) throws IOException {
         out.writeInt(reduction.ordinal());
-        out.writeObject(distribution);
+        out.writeUTF(distribution.stringSerialize(Base.BASE90));
     }
 
     /**
-     * The object implements the readExternal method to restore its
-     * contents by calling the methods of DataInput for primitive
-     * types and readObject for objects, strings and arrays.  The
-     * readExternal method must read the values in the same sequence
-     * and with the same types as were written by writeExternal.
+	 * Needs the type of {@link #distribution} and its {@link Distribution#generator}'s type
+	 * registered with {@link Deserializer}.
      *
      * @param in the stream to read data from in order to restore the object
      * @throws IOException if I/O errors occur
      */
     @GwtIncompatible
-    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+    public void readExternal(ObjectInput in) throws IOException {
         reduction = MODES[in.readInt()];
-        distribution = (Distribution) in.readObject();
+        distribution = Deserializer.deserializeDistribution(in.readUTF(), Base.BASE90);
     }
 
     @Override
