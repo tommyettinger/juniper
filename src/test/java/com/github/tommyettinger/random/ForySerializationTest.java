@@ -165,10 +165,6 @@ public class ForySerializationTest {
 		Assert.assertEquals(output2, duplicate2, Float.MIN_NORMAL);
 		random = fory.deserializeJavaObject(randomSer, CompositeWrapper.class);
 		random2 = fory.deserializeJavaObject(randomSer2, CompositeWrapper.class);
-
-		System.out.println(random);
-		System.out.println(random2);
-
 		output0 = random.nextLong();
 		output1 = random.nextInt(100);
 		output2 = random.nextExclusiveFloat();
