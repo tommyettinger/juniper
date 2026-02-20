@@ -194,25 +194,26 @@ public class CompositeWrapper extends EnhancedRandom {
 	}
 
 	/**
-	 * Needs the classes of {@link #getRandomA()} and {@link #getRandomB()} to both be Externalizable and readable.
+	 * Needs the classes of {@link #getRandomA()} and {@link #getRandomB()} to both be registered with
+	 * {@link Deserializer}.
 	 * @param in the stream to read data from in order to restore the object
 	 * @throws IOException if there's an input failure
-	 * @throws ClassNotFoundException if either class of {@link #getRandomA()} or {@link #getRandomB()} isn't found
 	 */
 	@GwtIncompatible
-	public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-		randomA.readExternal(in);
-		randomB.readExternal(in);
+	public void readExternal(ObjectInput in) throws IOException {
+		randomA = Deserializer.deserialize(in.readUTF(), Base.BASE90);
+		randomB = Deserializer.deserialize(in.readUTF(), Base.BASE90);
 	}
 
 	/**
-	 * Needs the classes of {@link #getRandomA()} and {@link #getRandomB()} to both be Externalizable and writable.
+	 * Needs the classes of {@link #getRandomA()} and {@link #getRandomB()} to both be registered with
+	 * {@link Deserializer}.
 	 * @param out the stream to write the object to
 	 * @throws IOException if there's an output failure
 	 */
 	@GwtIncompatible
 	public void writeExternal(ObjectOutput out) throws IOException {
-		randomA.writeExternal(out);
-		randomB.writeExternal(out);
+		out.writeUTF(randomA.stringSerialize(Base.BASE90));
+		out.writeUTF(randomB.stringSerialize(Base.BASE90));
 	}
 }
