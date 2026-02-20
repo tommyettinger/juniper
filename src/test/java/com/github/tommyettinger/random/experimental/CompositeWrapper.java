@@ -8,27 +8,98 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.math.BigInteger;
 
+/**
+ * A wrapper around two EnhancedRandom instances, usually with different algorithms, that runs both generators to
+ * produce any output and XORs their outputs to get a result for any "core" methods used to implement the rest. This is
+ * mostly useful to extend the period of a generator such as {@link Xoshiro256StarStarRandom}, which already has a very
+ * long period, by using it as a composite with another generator such as {@link OrbitalRandom}. These two are examples
+ * because they each have guaranteed period lengths, and those periods share no common denominator (they are relatively
+ * coprime). That makes their composite have a period equal to the product of their two periods, which is just less than
+ * 2 to the 384.
+ * <br>
+ * There isn't as much point in using two generators with the same algorithm, because the period will be the same, nor
+ * any two generators with the same {@link #getMinimumPeriod()}. As a rule of thumb, you should typically choose a
+ * generator with a period that is a power of two for one generator, and a generator with an odd number for a period for
+ * the other. {@link DistinctRandom} and {@link OrbitalRandom} have single periods that are powers of two, and all
+ * LFSR-type generators, including {@link LFSR64QuasiRandom} but also {@link Xoroshiro128StarStarRandom},
+ * {@link Xoshiro256StarStarRandom}, and other xoroshiro/xoshiro generators, have odd-number periods. Generators that
+ * incorporate a counter often guarantee a minimum period that is a multiple of a power of two, such as
+ * {@link FlowRandom}, {@link AceRandom} and {@link TraceRandom}. Combining an {@link AceRandom} with a
+ * {@link Xoshiro256StarStarRandom} is guaranteed a longer period than Xoshiro256StarStarRandom on its own, since
+ * AceRandom has a period that is a multiple of (2 to the 64) and that shares no common factor with
+ * Xoshiro256StarStarRandom's period, which is (2 to the 256) minus 1. It's theoretically possible that AceRandom has
+ * only one cycle, which would have a period of (2 to the 320), but it's statistically incredibly unlikely. It's more
+ * useful to measure the guaranteed minimum period, and in that respect, a composite of AceRandom with
+ * Xoshiro256StarStarRandom has the same minimum period as a composite of DistinctRandom with Xoshiro256StarStarRandom.
+ * <br>
+ * When it comes to equidistribution, using an exactly-1D-equidistributed generator such as DistinctRandom or
+ * OrbitalRandom as a composite with a generator with no common factors in its period should guarantee the resulting
+ * composite is also exactly-1D-equidistributed. Any higher dimensionality of equidistribution won't be feasible here
+ * while still extending the period length.
+ */
 public class CompositeWrapper extends EnhancedRandom {
 	protected EnhancedRandom randomA, randomB;
 
+	/**
+	 * Creates a randomly-seeded composite of an {@link OrbitalRandom} and {@link Xoshiro256StarStarRandom}, with a
+	 * guaranteed period of (2 to the 384) minus (2 to the 128).
+	 */
 	public CompositeWrapper() {
 		super();
 		randomA = new OrbitalRandom();
 		randomB = new Xoshiro256StarStarRandom();
 	}
 
+	/**
+	 * Creates a seeded composite of an {@link OrbitalRandom} and {@link Xoshiro256StarStarRandom}, with a
+	 * guaranteed period of (2 to the 384) minus (2 to the 128). The given {@code seed} is passed to the constructor
+	 * of each generator.
+	 *
+	 * @param seed passed to the constructor of each generator
+	 */
 	public CompositeWrapper(long seed) {
 		super(seed);
 		randomA = new OrbitalRandom(seed);
 		randomB = new Xoshiro256StarStarRandom(seed);
 	}
 
+	/**
+	 * Creates a seeded composite of an {@link OrbitalRandom} and {@link Xoshiro256StarStarRandom}, with a
+	 * guaranteed period of (2 to the 384) minus (2 to the 128). The first two states go to the OrbitalRandom
+	 * constructor, and the last four states go to the Xoshiro256StarStarRandom constructor.
+	 *
+	 * @param stateA first state for the OrbitalRandom
+	 * @param stateB second state for the OrbitalRandom
+	 * @param stateC first state for the Xoshiro256StarStarRandom
+	 * @param stateD second state for the Xoshiro256StarStarRandom
+	 * @param stateE third state for the Xoshiro256StarStarRandom
+	 * @param stateF fourth state for the Xoshiro256StarStarRandom
+	 */
+	public CompositeWrapper(long stateA, long stateB, long stateC, long stateD, long stateE, long stateF) {
+		super(stateA);
+		randomA = new OrbitalRandom(stateA, stateB);
+		randomB = new Xoshiro256StarStarRandom(stateC, stateD, stateE, stateF);
+	}
+
+	/**
+	 * Creates a composite of the two given generators, if non-null. If {@code a} is null, this creates a
+	 * randomly-seeded OrbitalRandom in its place, and if {@code b} is null, this creates a randomly-seeded
+	 * Xoshiro256StarStarRandom in its place.
+	 *
+	 * @param a any EnhancedRandom; null will be replaced with a random OrbitalRandom
+	 * @param b any EnhancedRandom; null will be replaced with a random Xoshiro256StarStarRandom
+	 */
 	public CompositeWrapper(EnhancedRandom a, EnhancedRandom b) {
 		super();
 		randomA = a == null ? new OrbitalRandom() : a;
 		randomB = b == null ? new Xoshiro256StarStarRandom() : b;
 	}
 
+	/**
+	 * The minimum period of a composite of two generators is the {@link #lcm(BigInteger, BigInteger)} of their
+	 * getMinimumPeriod() results.
+	 * @return the least common multiple of {@code getRandomA().getMinimumPeriod()} and {@code getRandomB().getMinimumPeriod()}
+	 */
 	@Override
 	public BigInteger getMinimumPeriod() {
 		return EnhancedRandom.lcm(randomA.getMinimumPeriod(), randomB.getMinimumPeriod());
@@ -55,7 +126,8 @@ public class CompositeWrapper extends EnhancedRandom {
 	public void setSelectedState(int selection, long value) {
 		if (selection < randomA.getStateCount())
 			randomA.setSelectedState(selection, value);
-		else randomB.setSelectedState(selection - randomA.getStateCount(), value);
+		else
+			randomB.setSelectedState(selection - randomA.getStateCount(), value);
 	}
 
 	@Override
