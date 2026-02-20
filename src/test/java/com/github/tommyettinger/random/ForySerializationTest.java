@@ -1,6 +1,7 @@
 package com.github.tommyettinger.random;
 
 import com.github.tommyettinger.random.distribution.Distribution;
+import com.github.tommyettinger.random.experimental.CompositeWrapper;
 import org.apache.fory.Fory;
 import org.apache.fory.config.Language;
 import org.apache.fory.logging.LoggerFactory;
@@ -129,6 +130,45 @@ public class ForySerializationTest {
 		Assert.assertEquals(output2, duplicate2, Float.MIN_NORMAL);
 		random = fory.deserializeJavaObject(randomSer, DeckWrapper.class);
 		random2 = fory.deserializeJavaObject(randomSer2, DeckWrapper.class);
+		output0 = random.nextLong();
+		output1 = random.nextInt(100);
+		output2 = random.nextExclusiveFloat();
+		duplicate0 = random2.nextLong();
+		duplicate1 = random2.nextInt(100);
+		duplicate2 = random2.nextExclusiveFloat();
+		Assert.assertEquals(output0, duplicate0);
+		Assert.assertEquals(output1, duplicate1);
+		Assert.assertEquals(output2, duplicate2, Float.MIN_NORMAL);
+	}
+
+	@Test
+	public void testCompositeWrapper() {
+		LoggerFactory.disableLogging();
+		Fory fory = Fory.builder().withLanguage(Language.JAVA).build();
+		fory.register(EnhancedRandom.class);
+		fory.register(CompositeWrapper.class);
+		fory.register(DistinctRandom.class);
+		fory.register(LFSR64QuasiRandom.class);
+
+		CompositeWrapper random = new CompositeWrapper(new DistinctRandom(123), new LFSR64QuasiRandom(456));
+		byte[] randomSer = fory.serializeJavaObject(random);
+		long output0 = random.nextLong();
+		int output1 = random.nextInt(100);
+		float output2 = random.nextExclusiveFloat();
+		CompositeWrapper random2 = new CompositeWrapper(new DistinctRandom(123), new LFSR64QuasiRandom(456));
+		byte[] randomSer2 = fory.serializeJavaObject(random2);
+		long duplicate0 = random2.nextLong();
+		int duplicate1 = random2.nextInt(100);
+		float duplicate2 = random2.nextExclusiveFloat();
+		Assert.assertEquals(output0, duplicate0);
+		Assert.assertEquals(output1, duplicate1);
+		Assert.assertEquals(output2, duplicate2, Float.MIN_NORMAL);
+		random = fory.deserializeJavaObject(randomSer, CompositeWrapper.class);
+		random2 = fory.deserializeJavaObject(randomSer2, CompositeWrapper.class);
+
+		System.out.println(random);
+		System.out.println(random2);
+
 		output0 = random.nextLong();
 		output1 = random.nextInt(100);
 		output2 = random.nextExclusiveFloat();

@@ -4,6 +4,8 @@ import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.random.*;
 
 import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import java.math.BigInteger;
 
 public class CompositeWrapper extends EnhancedRandom {
@@ -189,5 +191,28 @@ public class CompositeWrapper extends EnhancedRandom {
 		len = base.readInt(data, start + 1, start = data.indexOf(base.paddingChar, start + 1));
 		setRandomB(Deserializer.deserialize(data.substring(start + 1, start + len), base));
 		return this;
+	}
+
+	/**
+	 * Needs the classes of {@link #getRandomA()} and {@link #getRandomB()} to both be Externalizable and readable.
+	 * @param in the stream to read data from in order to restore the object
+	 * @throws IOException if there's an input failure
+	 * @throws ClassNotFoundException if either class of {@link #getRandomA()} or {@link #getRandomB()} isn't found
+	 */
+	@GwtIncompatible
+	public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+		randomA.readExternal(in);
+		randomB.readExternal(in);
+	}
+
+	/**
+	 * Needs the classes of {@link #getRandomA()} and {@link #getRandomB()} to both be Externalizable and writable.
+	 * @param out the stream to write the object to
+	 * @throws IOException if there's an output failure
+	 */
+	@GwtIncompatible
+	public void writeExternal(ObjectOutput out) throws IOException {
+		randomA.writeExternal(out);
+		randomB.writeExternal(out);
 	}
 }
