@@ -44,14 +44,14 @@ public class CompositeWrapper extends EnhancedRandom {
 
 	@Override
 	public long getSelectedState(int selection) {
-		if(selection < randomA.getStateCount())
+		if (selection < randomA.getStateCount())
 			return randomA.getSelectedState(selection);
 		return randomB.getSelectedState(selection - randomA.getStateCount());
 	}
 
 	@Override
 	public void setSelectedState(int selection, long value) {
-		if(selection < randomA.getStateCount())
+		if (selection < randomA.getStateCount())
 			randomA.setSelectedState(selection, value);
 		else randomB.setSelectedState(selection - randomA.getStateCount(), value);
 	}
@@ -63,9 +63,9 @@ public class CompositeWrapper extends EnhancedRandom {
 
 	@Override
 	public void setSeed(long seed) {
-		if(randomA != null)
+		if (randomA != null)
 			randomA.setSeed(seed);
-		if(randomB != null)
+		if (randomB != null)
 			randomB.setSeed(seed);
 	}
 
@@ -97,5 +97,42 @@ public class CompositeWrapper extends EnhancedRandom {
 	@Override
 	public EnhancedRandom copy() {
 		return new CompositeWrapper(randomA.copy(), randomB.copy());
+	}
+
+	public EnhancedRandom getRandomA() {
+		return randomA;
+	}
+
+	public void setRandomA(EnhancedRandom randomA) {
+		if(randomA != null) this.randomA = randomA;
+	}
+
+	public EnhancedRandom getRandomB() {
+		return randomB;
+	}
+
+	public void setRandomB(EnhancedRandom randomB) {
+		if(randomB != null) this.randomB = randomB;
+	}
+
+	@Override
+	public final boolean equals(Object o) {
+		if (!(o instanceof CompositeWrapper)) return false;
+
+		CompositeWrapper that = (CompositeWrapper) o;
+		return randomA.equals(that.randomA) && randomB.equals(that.randomB);
+	}
+
+	@Override
+	public int hashCode() {
+		return randomA.hashCode() ^ 421 * randomB.hashCode();
+	}
+
+	@Override
+	public String toString() {
+		return "CompositeWrapper{" +
+			"randomA=" + randomA +
+			", randomB=" + randomB +
+			'}';
 	}
 }
