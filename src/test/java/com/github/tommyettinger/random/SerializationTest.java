@@ -2,7 +2,6 @@ package com.github.tommyettinger.random;
 
 import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.random.distribution.Distribution;
-import com.github.tommyettinger.random.experimental.CompositeWrapper;
 import org.junit.Assert;
 import org.junit.Test;
 

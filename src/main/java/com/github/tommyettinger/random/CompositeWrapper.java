@@ -1,7 +1,6 @@
-package com.github.tommyettinger.random.experimental;
+package com.github.tommyettinger.random;
 
 import com.github.tommyettinger.digital.Base;
-import com.github.tommyettinger.random.*;
 
 import java.io.IOException;
 import java.io.ObjectInput;

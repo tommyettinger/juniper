@@ -1,6 +1,5 @@
 package com.github.tommyettinger.random;
 
-import com.github.tommyettinger.random.experimental.CompositeWrapper;
 import org.apache.fory.Fory;
 import org.apache.fory.config.Language;
 import org.apache.fory.logging.LoggerFactory;
@@ -14,7 +13,6 @@ import org.junit.Test;
 public class YoDawgTest {
 	@Test
 	public void testStringSerialize() {
-		Deserializer.register(new CompositeWrapper(1));
 		CompositeWrapper base = new CompositeWrapper(new DistinctRandom(123), new LFSR64QuasiRandom(456));
 		CompositeWrapper random = new CompositeWrapper(base, new FlowRandom(789));
 		String randomSer = random.stringSerialize();
@@ -43,9 +41,8 @@ public class YoDawgTest {
 	}
 
 	@Test
-	public void testCompositeWrapper() {
+	public void testForySerialize() {
 		LoggerFactory.disableLogging();
-		Deserializer.register(new CompositeWrapper(1));
 		Fory fory = Fory.builder().withLanguage(Language.JAVA).build();
 		fory.register(EnhancedRandom.class);
 		fory.register(CompositeWrapper.class);

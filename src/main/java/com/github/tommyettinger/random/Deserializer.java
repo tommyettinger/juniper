@@ -115,6 +115,7 @@ public final class Deserializer {
 		register(new DeckWrapper(1));
 		register(new ReverseWrapper(1));
 		register(new ArchivalWrapper(new DistinctRandom(1)));
+		register(new CompositeWrapper(1));
 
 		final EnhancedRandom random = new DistinctRandom(0L);
 		register(new ArcsineDistribution(random, 0.0, 1.0));
