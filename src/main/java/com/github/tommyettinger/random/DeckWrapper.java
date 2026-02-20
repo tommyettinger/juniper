@@ -512,14 +512,14 @@ public class DeckWrapper extends EnhancedRandom {
 	}
 
 	/**
-	 * Needs the type of {@link #wrapped} registered.
+	 * Needs the type of {@link #wrapped} registered with {@link Deserializer}.
 	 *
 	 * @param in the stream to read data from in order to restore the object
 	 * @throws IOException if I/O errors occur
 	 */
 	@GwtIncompatible
 	public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-		wrapped = (EnhancedRandom) in.readObject();
+		wrapped = Deserializer.deserialize(in.readUTF(), Base.BASE90);
 		index = in.readInt();
 		for (int i = 0; i < 16; i++) {
 			buffer[i] = in.readLong();
@@ -527,14 +527,14 @@ public class DeckWrapper extends EnhancedRandom {
 	}
 
 	/**
-	 * Needs the type of {@link #wrapped} registered.
+	 * Needs the type of {@link #wrapped} registered with {@link Deserializer}.
 	 *
 	 * @param out the stream to write the object to
 	 * @throws IOException Includes any I/O exceptions that may occur
 	 */
 	@GwtIncompatible
 	public void writeExternal(ObjectOutput out) throws IOException {
-		out.writeObject(wrapped);
+		out.writeUTF(wrapped.stringSerialize(Base.BASE90));
 		out.writeInt(index);
 		for (int i = 0; i < 16; i++) {
 			out.writeLong(buffer[i]);
