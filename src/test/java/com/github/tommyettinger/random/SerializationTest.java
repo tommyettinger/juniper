@@ -2,6 +2,7 @@ package com.github.tommyettinger.random;
 
 import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.random.distribution.Distribution;
+import com.github.tommyettinger.random.experimental.CompositeWrapper;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -104,7 +105,35 @@ public class SerializationTest {
 		int output1 = random.nextInt(100);
 		float output2 = random.nextExclusiveFloat();
 		DeckWrapper random2 = new DeckWrapper(new DistinctRandom(123));
-		String randomSer2 = random2.stringSerialize();
+		String randomSer2 = random2.appendSerialized(new StringBuilder()).toString();
+		long duplicate0 = random2.nextLong();
+		int duplicate1 = random2.nextInt(100);
+		float duplicate2 = random2.nextExclusiveFloat();
+		Assert.assertEquals(output0, duplicate0);
+		Assert.assertEquals(output1, duplicate1);
+		Assert.assertEquals(output2, duplicate2, Float.MIN_NORMAL);
+		random.stringDeserialize(randomSer);
+		random2.stringDeserialize(randomSer2);
+		output0 = random.nextLong();
+		output1 = random.nextInt(100);
+		output2 = random.nextExclusiveFloat();
+		duplicate0 = random2.nextLong();
+		duplicate1 = random2.nextInt(100);
+		duplicate2 = random2.nextExclusiveFloat();
+		Assert.assertEquals(output0, duplicate0);
+		Assert.assertEquals(output1, duplicate1);
+		Assert.assertEquals(output2, duplicate2, Float.MIN_NORMAL);
+	}
+
+	@Test
+	public void testCompositeWrapper() {
+		CompositeWrapper random = new CompositeWrapper(new DistinctRandom(123), new LFSR64QuasiRandom(456));
+		String randomSer = random.stringSerialize();
+		long output0 = random.nextLong();
+		int output1 = random.nextInt(100);
+		float output2 = random.nextExclusiveFloat();
+		CompositeWrapper random2 = new CompositeWrapper(new DistinctRandom(123), new LFSR64QuasiRandom(456));
+		String randomSer2 = random2.appendSerialized(new StringBuilder()).toString();
 		long duplicate0 = random2.nextLong();
 		int duplicate1 = random2.nextInt(100);
 		float duplicate2 = random2.nextExclusiveFloat();
