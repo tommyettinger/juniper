@@ -128,12 +128,12 @@ public class SerializationTest {
 
 	@Test
 	public void testCompositeWrapper() {
-		CompositeWrapper random = new CompositeWrapper(new DistinctRandom(123), new LFSR64QuasiRandom(456));
+		CompositeWrapper random = new CompositeWrapper(new AceRandom(123), new LFSR64QuasiRandom(456));
 		String randomSer = random.stringSerialize();
 		long output0 = random.nextLong();
 		int output1 = random.nextInt(100);
 		float output2 = random.nextExclusiveFloat();
-		CompositeWrapper random2 = new CompositeWrapper(new DistinctRandom(123), new LFSR64QuasiRandom(456));
+		CompositeWrapper random2 = new CompositeWrapper(new AceRandom(123), new LFSR64QuasiRandom(456));
 		String randomSer2 = random2.appendSerialized(new StringBuilder()).toString();
 		long duplicate0 = random2.nextLong();
 		int duplicate1 = random2.nextInt(100);

@@ -259,9 +259,9 @@ public class CompositeWrapper extends EnhancedRandom {
 	public CompositeWrapper stringDeserialize(String data, Base base) {
 		int start = data.indexOf(base.paddingChar) + 1;
 		int len = base.readInt(data, start, start = data.indexOf(base.paddingChar, start));
-		setRandomA(Deserializer.deserialize(data.substring(start + 1, start += len), base));
-		len = base.readInt(data, start + 1, start = data.indexOf(base.paddingChar, start + 1));
-		setRandomB(Deserializer.deserialize(data.substring(start + 1, start + len), base));
+		setRandomA(Deserializer.deserialize(data.substring(start + 1, start += len + 1), base));
+		len = base.readInt(data, start, start = data.indexOf(base.paddingChar, start));
+		setRandomB(Deserializer.deserialize(data.substring(start + 1, start + len + 1), base));
 		return this;
 	}
 
