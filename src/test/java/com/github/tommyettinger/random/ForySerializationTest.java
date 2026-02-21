@@ -57,7 +57,7 @@ public class ForySerializationTest {
 			fory.register(c);
 		}
 
-		for(Distribution r : all) {
+		for (Distribution r : all) {
 			r.generator = rand.randomElement(randoms).copy();
 			r.generator.setSeed(rand.nextLong());
 			byte[] s = fory.serializeJavaObject(r);
@@ -91,7 +91,7 @@ public class ForySerializationTest {
 			fory.register(c);
 		}
 
-		for(Distribution r : all) {
+		for (Distribution r : all) {
 			EnhancedRandom er = rand.randomElement(randoms).copy();
 			er.setSeed(rand.nextLong());
 			DistributionWrapper dr = new DistributionWrapper(r, DistributionWrapper.ReductionMode.FRACTION, er);
@@ -235,6 +235,7 @@ public class ForySerializationTest {
 			Assert.assertEquals("Failed at iteration " + i + " with generators:\n" + ksr + '\n' + ksr2, ksr.nextLong(1000000), ksr2.nextLong(1000000));
 		}
 	}
+
 	@Test
 	public void testArchivalWrapper2() {
 		LoggerFactory.disableLogging();

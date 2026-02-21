@@ -84,12 +84,14 @@ public class Xoroshiro128Speck1Random extends EnhancedRandom {
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", 16);
 
 	/**
 	 * (2 to the 128) minus 1.
+	 *
 	 * @return (2 to the 128) minus 1
 	 */
 	@Override
@@ -103,7 +105,7 @@ public class Xoroshiro128Speck1Random extends EnhancedRandom {
 	 * @return 2 (two)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 2;
 	}
 
@@ -115,7 +117,7 @@ public class Xoroshiro128Speck1Random extends EnhancedRandom {
 	 * @return the value of the selected state
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		return (selection & 1) == 0 ? stateA : stateB;
 	}
 
@@ -128,14 +130,14 @@ public class Xoroshiro128Speck1Random extends EnhancedRandom {
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		switch (selection & 1) {
-		case 0:
-			stateA = ((value | stateB) == 0L) ? 0x9E3779B97F4A7C15L : value;
-			break;
-		case 1:
-			stateB = ((stateA | value) == 0L) ? 0x9E3779B97F4A7C15L : value;
-			break;
+			case 0:
+				stateA = ((value | stateB) == 0L) ? 0x9E3779B97F4A7C15L : value;
+				break;
+			case 1:
+				stateB = ((stateA | value) == 0L) ? 0x9E3779B97F4A7C15L : value;
+				break;
 		}
 	}
 
@@ -148,7 +150,7 @@ public class Xoroshiro128Speck1Random extends EnhancedRandom {
 	 * @param seed the initial seed; may be any long
 	 */
 	@Override
-	public void setSeed (long seed) {
+	public void setSeed(long seed) {
 		long x = (seed + 0x9E3779B97F4A7C15L);
 		x ^= x >>> 27;
 		x *= 0x3C79AC492BA7B653L;
@@ -163,7 +165,7 @@ public class Xoroshiro128Speck1Random extends EnhancedRandom {
 		stateB = x ^ x >>> 27;
 	}
 
-	public long getStateA () {
+	public long getStateA() {
 		return stateA;
 	}
 
@@ -173,11 +175,11 @@ public class Xoroshiro128Speck1Random extends EnhancedRandom {
 	 *
 	 * @param stateA can be any long
 	 */
-	public void setStateA (long stateA) {
+	public void setStateA(long stateA) {
 		this.stateA = stateA;
 	}
 
-	public long getStateB () {
+	public long getStateB() {
 		return stateB;
 	}
 
@@ -186,7 +188,7 @@ public class Xoroshiro128Speck1Random extends EnhancedRandom {
 	 *
 	 * @param stateB can be any long
 	 */
-	public void setStateB (long stateB) {
+	public void setStateB(long stateB) {
 		this.stateB = stateB;
 	}
 
@@ -199,7 +201,7 @@ public class Xoroshiro128Speck1Random extends EnhancedRandom {
 	 * @param stateB the second state; can be any long
 	 */
 	@Override
-	public void setState (long stateA, long stateB) {
+	public void setState(long stateA, long stateB) {
 		this.stateA = stateA;
 		this.stateB = stateB;
 		if ((stateA | stateB) == 0L)
@@ -207,7 +209,7 @@ public class Xoroshiro128Speck1Random extends EnhancedRandom {
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		final long s0 = stateA;
 		long s1 = stateB;
 		long result = ((s0 << 3 | s0 >>> 61) ^ (((s1 << 56 | s1 >>> 8) + s0 ^ 0xD1B54A32D192ED03L)));
@@ -218,7 +220,7 @@ public class Xoroshiro128Speck1Random extends EnhancedRandom {
 	}
 
 	@Override
-	public long previousLong () {
+	public long previousLong() {
 		stateB = (stateB << 27 | stateB >>> 37);
 		stateA ^= stateB ^ stateB << 16;
 		stateA = (stateA << 40 | stateA >>> 24);
@@ -228,39 +230,35 @@ public class Xoroshiro128Speck1Random extends EnhancedRandom {
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		final long s0 = stateA;
 		long s1 = stateB;
 		long result = ((s0 << 3 | s0 >>> 61) ^ (((s1 << 56 | s1 >>> 8) + s0 ^ 0xD1B54A32D192ED03L)));
 		s1 ^= s0;
 		stateA = (s0 << 24 | s0 >>> 40) ^ s1 ^ (s1 << 16);
 		stateB = (s1 << 37 | s1 >>> 27);
-		return (int)(result >>> 64 - bits);
+		return (int) (result >>> 64 - bits);
 	}
 
 	/**
 	 * Jumps extremely far in the generator's sequence, such that it requires {@code Math.pow(2, 32)} calls to leap() to
 	 * complete a cycle through the generator's entire sequence. This can be used to create over 4 billion
 	 * substreams of this generator's sequence, each with a period of {@code Math.pow(2, 96)}.
+	 *
 	 * @return the result of what nextLong() would return if it was called at the state this jumped to
 	 */
-	public long leap()
-	{
+	public long leap() {
 		long s0 = 0L;
 		long s1 = 0L;
-		for (long b = 0xd2a98b26625eee7bL; b != 0L; b >>>= 1)
-		{
-			if ((1L & b) != 0L)
-			{
+		for (long b = 0xd2a98b26625eee7bL; b != 0L; b >>>= 1) {
+			if ((1L & b) != 0L) {
 				s0 ^= stateA;
 				s1 ^= stateB;
 			}
 			nextLong();
 		}
-		for (long b = 0xdddf9b1090aa7ac1L; b != 0L; b >>>= 1)
-		{
-			if ((1L & b) != 0L)
-			{
+		for (long b = 0xdddf9b1090aa7ac1L; b != 0L; b >>>= 1) {
+			if ((1L & b) != 0L) {
 				s0 ^= stateA;
 				s1 ^= stateB;
 			}
@@ -277,25 +275,25 @@ public class Xoroshiro128Speck1Random extends EnhancedRandom {
 	}
 
 	@Override
-	public Xoroshiro128Speck1Random copy () {
+	public Xoroshiro128Speck1Random copy() {
 		return new Xoroshiro128Speck1Random(stateA, stateB);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		Xoroshiro128Speck1Random that = (Xoroshiro128Speck1Random)o;
+		Xoroshiro128Speck1Random that = (Xoroshiro128Speck1Random) o;
 
 		if (stateA != that.stateA)
 			return false;
 		return stateB == that.stateB;
 	}
 
-	public String toString () {
+	public String toString() {
 		return "Xoroshiro128Speck1Random{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L}";
 	}
 }

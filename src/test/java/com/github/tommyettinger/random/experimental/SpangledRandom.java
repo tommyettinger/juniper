@@ -52,12 +52,14 @@ public class SpangledRandom extends EnhancedRandom {
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
 
 	/**
 	 * 2 to the 64.
+	 *
 	 * @return 2 to the 64
 	 */
 	@Override
@@ -127,7 +129,7 @@ public class SpangledRandom extends EnhancedRandom {
 	 *
 	 * @param stateA any {@code long} value
 	 * @param stateB any {@code long} value
-	 * @param keys a long array of any length that will be used in full; if null it will be treated as empty
+	 * @param keys   a long array of any length that will be used in full; if null it will be treated as empty
 	 */
 	public SpangledRandom(long stateA, long stateB, long[] keys) {
 		this(stateA, stateB, keys, 0, keys == null ? 2 : keys.length);
@@ -147,16 +149,16 @@ public class SpangledRandom extends EnhancedRandom {
 	 * It is highly recommended that you use at least 2 keys, even if this means using a larger toIndex than the length
 	 * of the keys array (which just fills later keys with 0).
 	 *
-	 * @param stateA any {@code long} value
-	 * @param stateB any {@code long} value
-	 * @param keys a long array of any length; if null it will be treated as {@link MathTools#GOLDEN_LONGS}
+	 * @param stateA    any {@code long} value
+	 * @param stateB    any {@code long} value
+	 * @param keys      a long array of any length; if null it will be treated as {@link MathTools#GOLDEN_LONGS}
 	 * @param fromIndex as per {@code from} in {@link Arrays#copyOfRange(long[], int, int)}, called on {@code keys}
-	 * @param toIndex as per {@code to} in {@link Arrays#copyOfRange(long[], int, int)}, called on {@code keys}
+	 * @param toIndex   as per {@code to} in {@link Arrays#copyOfRange(long[], int, int)}, called on {@code keys}
 	 */
 	public SpangledRandom(long stateA, long stateB, long[] keys, int fromIndex, int toIndex) {
 		this.stateA = stateA;
 		this.stateB = stateB;
-		if(keys == null)
+		if (keys == null)
 			this.keys = Arrays.copyOfRange(MathTools.GOLDEN_LONGS, fromIndex, toIndex);
 		else
 			this.keys = Arrays.copyOfRange(keys, fromIndex, toIndex);
@@ -168,7 +170,7 @@ public class SpangledRandom extends EnhancedRandom {
 	 * @return 2 (two)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 2;
 	}
 
@@ -180,7 +182,7 @@ public class SpangledRandom extends EnhancedRandom {
 	 * @return the value of the selected state
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		if ((selection & 1) == 0) {
 			return stateA;
 		}
@@ -195,7 +197,7 @@ public class SpangledRandom extends EnhancedRandom {
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		if ((selection & 1) == 0) {
 			stateA = value;
 		} else {
@@ -211,7 +213,7 @@ public class SpangledRandom extends EnhancedRandom {
 	 * @param seed the initial seed; may be any long
 	 */
 	@Override
-	public void setSeed (long seed) {
+	public void setSeed(long seed) {
 		stateA = seed + 0xC6BC279692B5C323L;
 		seed -= 0xC6BC279692B5C323L;
 		seed ^= seed >>> 32;
@@ -224,7 +226,7 @@ public class SpangledRandom extends EnhancedRandom {
 		stateB = seed;
 	}
 
-	public long getStateA () {
+	public long getStateA() {
 		return stateA;
 	}
 
@@ -233,11 +235,11 @@ public class SpangledRandom extends EnhancedRandom {
 	 *
 	 * @param stateA can be any long
 	 */
-	public void setStateA (long stateA) {
+	public void setStateA(long stateA) {
 		this.stateA = stateA;
 	}
 
-	public long getStateB () {
+	public long getStateB() {
 		return stateB;
 	}
 
@@ -246,7 +248,7 @@ public class SpangledRandom extends EnhancedRandom {
 	 *
 	 * @param stateB can be any long
 	 */
-	public void setStateB (long stateB) {
+	public void setStateB(long stateB) {
 		this.stateB = stateB;
 	}
 
@@ -257,13 +259,14 @@ public class SpangledRandom extends EnhancedRandom {
 	 * @param stateA the first state; can be any long
 	 * @param stateB the second state; can be any long
 	 */
-	public void setState (long stateA, long stateB) {
+	public void setState(long stateA, long stateB) {
 		this.stateA = stateA;
 		this.stateB = stateB;
 	}
 
 	/**
 	 * Gets a direct reference to the key array. Changes to the array this returns will also affect this SpangledRandom.
+	 *
 	 * @return a direct reference to the key array (not a copy)
 	 */
 	public long[] getKeys() {
@@ -278,7 +281,7 @@ public class SpangledRandom extends EnhancedRandom {
 	 * @param keys a long array of any length to copy and use as the keys here; if null, will be treated as empty
 	 */
 	public void setKeys(long[] keys) {
-		if(keys == null)
+		if (keys == null)
 			this.keys = Arrays.copyOfRange(MathTools.GOLDEN_LONGS, 0, 2);
 		else
 			this.keys = Arrays.copyOf(keys, keys.length);
@@ -297,29 +300,31 @@ public class SpangledRandom extends EnhancedRandom {
 	 * It is highly recommended that you use at least 2 keys, even if this means using a larger toIndex than the length
 	 * of the keys array (which just fills later keys with 0).
 	 *
-	 * @param keys a long array of any length to copy and use as the keys here; if null, will be treated as {@link MathTools#GOLDEN_LONGS}
+	 * @param keys      a long array of any length to copy and use as the keys here; if null, will be treated as {@link MathTools#GOLDEN_LONGS}
 	 * @param fromIndex as per {@code from} in {@link Arrays#copyOfRange(long[], int, int)}, called on {@code keys}
-	 * @param toIndex as per {@code to} in {@link Arrays#copyOfRange(long[], int, int)}, called on {@code keys}
+	 * @param toIndex   as per {@code to} in {@link Arrays#copyOfRange(long[], int, int)}, called on {@code keys}
 	 */
 	public void setKeys(long[] keys, int fromIndex, int toIndex) {
-		if(keys == null)
+		if (keys == null)
 			this.keys = Arrays.copyOfRange(MathTools.GOLDEN_LONGS, fromIndex, toIndex);
 		else
 			this.keys = Arrays.copyOfRange(keys, fromIndex, toIndex);
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		long a = (stateA += 0x9E3779B97F4A7C15L);
 		long b = (stateB += 0xD1B54A32D192ED03L);
-		b = ((b << 56 | b >>> 8) + a ^ 0xA62B82F58DB8A985L); a = ((a << 3 | a >>> 61) ^ b);
+		b = ((b << 56 | b >>> 8) + a ^ 0xA62B82F58DB8A985L);
+		a = ((a << 3 | a >>> 61) ^ b);
 		for (int i = 0; i < keys.length; i++) {
 			a += (b << 41 | b >>> 23);
 			b = ((b << 56 | b >>> 8) + a ^ keys[i]);
 			a = ((a << 3 | a >>> 61) ^ b);
 		}
 		a += (b << 41 | b >>> 23);
-		b = ((b << 56 | b >>> 8) + a ^ 0xE35E156A2314DCDAL); a = ((a << 3 | a >>> 61) ^ b);
+		b = ((b << 56 | b >>> 8) + a ^ 0xE35E156A2314DCDAL);
+		a = ((a << 3 | a >>> 61) ^ b);
 		a += (b << 41 | b >>> 23);
 		return ((a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ 0xBEA225F9EB34556DL));
 	}
@@ -331,41 +336,45 @@ public class SpangledRandom extends EnhancedRandom {
 //		long b = (stateB += BitConversion.countLeadingZeros(a));
 
 	@Override
-	public long previousLong () {
+	public long previousLong() {
 		long a = stateA;
 		stateA -= 0x9E3779B97F4A7C15L;
 		long b = stateB;
 		stateB -= 0xD1B54A32D192ED03L;
-		b = ((b << 56 | b >>> 8) + a ^ 0xA62B82F58DB8A985L); a = ((a << 3 | a >>> 61) ^ b);
+		b = ((b << 56 | b >>> 8) + a ^ 0xA62B82F58DB8A985L);
+		a = ((a << 3 | a >>> 61) ^ b);
 		for (int i = 0; i < keys.length; i++) {
 			a += (b << 41 | b >>> 23);
 			b = ((b << 56 | b >>> 8) + a ^ keys[i]);
 			a = ((a << 3 | a >>> 61) ^ b);
 		}
 		a += (b << 41 | b >>> 23);
-		b = ((b << 56 | b >>> 8) + a ^ 0xE35E156A2314DCDAL); a = ((a << 3 | a >>> 61) ^ b);
+		b = ((b << 56 | b >>> 8) + a ^ 0xE35E156A2314DCDAL);
+		a = ((a << 3 | a >>> 61) ^ b);
 		a += (b << 41 | b >>> 23);
 		return ((a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ 0xBEA225F9EB34556DL));
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		long a = (stateA += 0x9E3779B97F4A7C15L);
 		long b = (stateB += 0xD1B54A32D192ED03L);
-		b = ((b << 56 | b >>> 8) + a ^ 0xA62B82F58DB8A985L); a = ((a << 3 | a >>> 61) ^ b);
+		b = ((b << 56 | b >>> 8) + a ^ 0xA62B82F58DB8A985L);
+		a = ((a << 3 | a >>> 61) ^ b);
 		for (int i = 0; i < keys.length; i++) {
 			a += (b << 41 | b >>> 23);
 			b = ((b << 56 | b >>> 8) + a ^ keys[i]);
 			a = ((a << 3 | a >>> 61) ^ b);
 		}
 		a += (b << 41 | b >>> 23);
-		b = ((b << 56 | b >>> 8) + a ^ 0xE35E156A2314DCDAL); a = ((a << 3 | a >>> 61) ^ b);
+		b = ((b << 56 | b >>> 8) + a ^ 0xE35E156A2314DCDAL);
+		a = ((a << 3 | a >>> 61) ^ b);
 		a += (b << 41 | b >>> 23);
 		return (int) (((a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ 0xBEA225F9EB34556DL))) >>> (32 - bits);
 	}
 
 	@Override
-	public long skip (final long advance) {
+	public long skip(final long advance) {
 		long a = (stateA += 0x9E3779B97F4A7C15L * advance);
 		long b = (stateB += 0xD1B54A32D192ED03L * advance);
 		b = ((b << 56 | b >>> 8) + a ^ 0xA62B82F58DB8A985L);
@@ -383,7 +392,7 @@ public class SpangledRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public SpangledRandom copy () {
+	public SpangledRandom copy() {
 		return new SpangledRandom(stateA, stateB, keys);
 	}
 
@@ -455,19 +464,19 @@ public class SpangledRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		SpangledRandom that = (SpangledRandom)o;
+		SpangledRandom that = (SpangledRandom) o;
 
 		return stateA == that.stateA && stateB == that.stateB && Arrays.equals(keys, that.keys);
 	}
 
-	public String toString () {
-		return "SpangledRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, keys.length="+keys.length+"}";
+	public String toString() {
+		return "SpangledRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, keys.length=" + keys.length + "}";
 	}
 
 //	public static void main(String[] args) {

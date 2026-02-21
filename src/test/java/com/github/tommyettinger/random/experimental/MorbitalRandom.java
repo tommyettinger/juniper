@@ -19,7 +19,9 @@ package com.github.tommyettinger.random.experimental;
 
 import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.digital.BitConversion;
-import com.github.tommyettinger.random.*;
+import com.github.tommyettinger.random.DistinctRandom;
+import com.github.tommyettinger.random.EnhancedRandom;
+import com.github.tommyettinger.random.OrbitalRandom;
 
 import java.math.BigInteger;
 
@@ -94,12 +96,14 @@ public class MorbitalRandom extends EnhancedRandom {
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("100000000000000000000000000000000", 16);
 
 	/**
 	 * 2 to the 128.
+	 *
 	 * @return 2 to the 128
 	 */
 	@Override
@@ -113,7 +117,7 @@ public class MorbitalRandom extends EnhancedRandom {
 	 * @return 2 (two)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 2;
 	}
 
@@ -125,7 +129,7 @@ public class MorbitalRandom extends EnhancedRandom {
 	 * @return the value of the selected state
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		if ((selection & 1) == 1) {
 			return stateB;
 		}
@@ -140,7 +144,7 @@ public class MorbitalRandom extends EnhancedRandom {
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		if ((selection & 1) == 1) {
 			stateB = value;
 		} else {
@@ -157,7 +161,7 @@ public class MorbitalRandom extends EnhancedRandom {
 	 * @param seed the initial seed; may be any long
 	 */
 	@Override
-	public void setSeed (long seed) {
+	public void setSeed(long seed) {
 		stateA = seed;
 		stateB = ~seed;
 //		// This is based on MX3, but pulls out values and assigns them to states mid-way, sometimes XORing them.
@@ -173,7 +177,7 @@ public class MorbitalRandom extends EnhancedRandom {
 //		stateB = (seed ^ ~0xC6BC279692B5C323L);
 	}
 
-	public long getStateA () {
+	public long getStateA() {
 		return stateA;
 	}
 
@@ -182,11 +186,11 @@ public class MorbitalRandom extends EnhancedRandom {
 	 *
 	 * @param stateA can be any long
 	 */
-	public void setStateA (long stateA) {
+	public void setStateA(long stateA) {
 		this.stateA = stateA;
 	}
 
-	public long getStateB () {
+	public long getStateB() {
 		return stateB;
 	}
 
@@ -195,7 +199,7 @@ public class MorbitalRandom extends EnhancedRandom {
 	 *
 	 * @param stateB can be any long
 	 */
-	public void setStateB (long stateB) {
+	public void setStateB(long stateB) {
 		this.stateB = stateB;
 	}
 
@@ -208,13 +212,13 @@ public class MorbitalRandom extends EnhancedRandom {
 	 * @param stateB the second state; can be any long
 	 */
 	@Override
-	public void setState (long stateA, long stateB) {
+	public void setState(long stateA, long stateB) {
 		this.stateA = stateA;
 		this.stateB = stateB;
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		final long x = stateA;
 		long y = stateB;
 		stateA += 0xD1B54A32D192ED03L;
@@ -225,7 +229,7 @@ public class MorbitalRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public long previousLong () {
+	public long previousLong() {
 		final long x = stateA -= 0xD1B54A32D192ED03L;
 		long y = stateB -= 0x8CB92BA72F3D8DD7L + BitConversion.countLeadingZeros(x);
 		y = (y ^ (x << 37 | x >>> 27)) * 0x3C79AC492BA7B653L;
@@ -234,34 +238,34 @@ public class MorbitalRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		final long x = stateA;
 		long y = stateB;
 		stateA += 0xD1B54A32D192ED03L;
 		stateB += 0x8CB92BA72F3D8DD7L + BitConversion.countLeadingZeros(x);
 		y = (y ^ (x << 37 | x >>> 27)) * 0x3C79AC492BA7B653L;
 		y = (y ^ y >>> 33) * 0xF1357AEA2E62A9C5L;
-		return (int)(y ^ y >>> 27) >>> (32 - bits);
+		return (int) (y ^ y >>> 27) >>> (32 - bits);
 	}
 
 	@Override
-	public MorbitalRandom copy () {
+	public MorbitalRandom copy() {
 		return new MorbitalRandom(stateA, stateB);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		MorbitalRandom that = (MorbitalRandom)o;
+		MorbitalRandom that = (MorbitalRandom) o;
 
 		return stateA == that.stateA && stateB == that.stateB;
 	}
 
-	public String toString () {
+	public String toString() {
 		return "MorbitalRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L}";
 	}
 
@@ -295,19 +299,31 @@ public class MorbitalRandom extends EnhancedRandom {
 		}
 		random = new MorbitalRandom(1L);
 		{
-			long n0 = random.nextLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.stateA, random.stateB);
-			long n1 = random.nextLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.stateA, random.stateB);
-			long n2 = random.nextLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.stateA, random.stateB);
-			long n3 = random.nextLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.stateA, random.stateB);
-			long n4 = random.nextLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.stateA, random.stateB);
-			long n5 = random.nextLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.stateA, random.stateB);
+			long n0 = random.nextLong();
+			System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.stateA, random.stateB);
+			long n1 = random.nextLong();
+			System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.stateA, random.stateB);
+			long n2 = random.nextLong();
+			System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.stateA, random.stateB);
+			long n3 = random.nextLong();
+			System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.stateA, random.stateB);
+			long n4 = random.nextLong();
+			System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.stateA, random.stateB);
+			long n5 = random.nextLong();
+			System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.stateA, random.stateB);
 			System.out.println("Going back...");
-			long p5 = random.previousLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.stateA, random.stateB);
-			long p4 = random.previousLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.stateA, random.stateB);
-			long p3 = random.previousLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.stateA, random.stateB);
-			long p2 = random.previousLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.stateA, random.stateB);
-			long p1 = random.previousLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.stateA, random.stateB);
-			long p0 = random.previousLong(); System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.stateA, random.stateB);
+			long p5 = random.previousLong();
+			System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.stateA, random.stateB);
+			long p4 = random.previousLong();
+			System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.stateA, random.stateB);
+			long p3 = random.previousLong();
+			System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.stateA, random.stateB);
+			long p2 = random.previousLong();
+			System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.stateA, random.stateB);
+			long p1 = random.previousLong();
+			System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.stateA, random.stateB);
+			long p0 = random.previousLong();
+			System.out.printf("a: 0x%016X, b: 0x%016X,\n", random.stateA, random.stateB);
 			System.out.println(n0 == p0);
 			System.out.println(n1 == p1);
 			System.out.println(n2 == p2);

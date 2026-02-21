@@ -109,12 +109,14 @@ public class LowFlow3Random extends EnhancedRandom {
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
 
 	/**
 	 * 2 to the 64.
+	 *
 	 * @return 2 to the 64
 	 */
 	@Override
@@ -128,7 +130,7 @@ public class LowFlow3Random extends EnhancedRandom {
 	 * @return 2 (two)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 2;
 	}
 
@@ -140,7 +142,7 @@ public class LowFlow3Random extends EnhancedRandom {
 	 * @return the value of the selected state
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		if ((selection & 1) == 1) {
 			return stateB;
 		}
@@ -155,7 +157,7 @@ public class LowFlow3Random extends EnhancedRandom {
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		if ((selection & 1) == 1) {
 			stateB = value;
 		} else {
@@ -170,7 +172,7 @@ public class LowFlow3Random extends EnhancedRandom {
 	 * @param seed the initial seed; may be any long
 	 */
 	@Override
-	public void setSeed (long seed) {
+	public void setSeed(long seed) {
 		// This is based on MX3, but pulls out values and assigns them to states mid-way, sometimes XORing them.
 		seed += 0x9E3779B97F4A7C15L;
 		seed ^= seed >>> 32;
@@ -184,7 +186,7 @@ public class LowFlow3Random extends EnhancedRandom {
 		stateB = (seed ^ ~0xC6BC279692B5C323L);
 	}
 
-	public long getStateA () {
+	public long getStateA() {
 		return stateA;
 	}
 
@@ -193,11 +195,11 @@ public class LowFlow3Random extends EnhancedRandom {
 	 *
 	 * @param stateA can be any long
 	 */
-	public void setStateA (long stateA) {
+	public void setStateA(long stateA) {
 		this.stateA = stateA;
 	}
 
-	public long getStateB () {
+	public long getStateB() {
 		return stateB;
 	}
 
@@ -206,7 +208,7 @@ public class LowFlow3Random extends EnhancedRandom {
 	 *
 	 * @param stateB can be any long
 	 */
-	public void setStateB (long stateB) {
+	public void setStateB(long stateB) {
 		this.stateB = stateB;
 	}
 
@@ -219,13 +221,13 @@ public class LowFlow3Random extends EnhancedRandom {
 	 * @param stateB the second state; can be any long
 	 */
 	@Override
-	public void setState (long stateA, long stateB) {
+	public void setState(long stateA, long stateB) {
 		this.stateA = stateA;
 		this.stateB = stateB;
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		long x = (stateA += 0xD1B54A32D192ED03L);
 		long y = (stateB += BitConversion.countLeadingZeros(x));
 		x = (x ^ (y << 37 | y >>> 27)) * 0x3C79AC492BA7B653L;
@@ -234,7 +236,7 @@ public class LowFlow3Random extends EnhancedRandom {
 	}
 
 	@Override
-	public long previousLong () {
+	public long previousLong() {
 		long x = stateA;
 		long y = stateB;
 		stateA -= 0xD1B54A32D192ED03L;
@@ -245,32 +247,32 @@ public class LowFlow3Random extends EnhancedRandom {
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		long x = (stateA += 0xD1B54A32D192ED03L);
 		long y = (stateB += BitConversion.countLeadingZeros(x));
 		x = (x ^ (y << 37 | y >>> 27)) * 0x3C79AC492BA7B653L;
 		x = (x ^ x >>> 33) * 0x1C69B3F74AC4AE35L;
-		return (int)(x ^ x >>> 27) >>> (32 - bits);
+		return (int) (x ^ x >>> 27) >>> (32 - bits);
 	}
 
 	@Override
-	public LowFlow3Random copy () {
+	public LowFlow3Random copy() {
 		return new LowFlow3Random(stateA, stateB);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		LowFlow3Random that = (LowFlow3Random)o;
+		LowFlow3Random that = (LowFlow3Random) o;
 
 		return stateA == that.stateA && stateB == that.stateB;
 	}
 
-	public String toString () {
+	public String toString() {
 		return "FlowRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L}";
 	}
 

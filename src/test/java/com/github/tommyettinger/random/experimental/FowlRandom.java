@@ -79,7 +79,7 @@ public class FowlRandom extends EnhancedRandom {
 	 * @return 2 (two)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 2;
 	}
 
@@ -91,7 +91,7 @@ public class FowlRandom extends EnhancedRandom {
 	 * @return the value of the selected state
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		if ((selection & 1) == 1) {
 			return stateB;
 		}
@@ -106,7 +106,7 @@ public class FowlRandom extends EnhancedRandom {
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		if ((selection & 1) == 1) {
 			stateB = value;
 		} else {
@@ -123,7 +123,7 @@ public class FowlRandom extends EnhancedRandom {
 	 * @param seed the initial seed; may be any long
 	 */
 	@Override
-	public void setSeed (long seed) {
+	public void setSeed(long seed) {
 		stateA = seed;
 		stateB = ~seed;
 //		// This is based on MX3, but pulls out values and assigns them to states mid-way, sometimes XORing them.
@@ -139,7 +139,7 @@ public class FowlRandom extends EnhancedRandom {
 //		stateB = (seed ^ ~0xC6BC279692B5C323L);
 	}
 
-	public long getStateA () {
+	public long getStateA() {
 		return stateA;
 	}
 
@@ -148,11 +148,11 @@ public class FowlRandom extends EnhancedRandom {
 	 *
 	 * @param stateA can be any long
 	 */
-	public void setStateA (long stateA) {
+	public void setStateA(long stateA) {
 		this.stateA = stateA;
 	}
 
-	public long getStateB () {
+	public long getStateB() {
 		return stateB;
 	}
 
@@ -161,7 +161,7 @@ public class FowlRandom extends EnhancedRandom {
 	 *
 	 * @param stateB can be any long
 	 */
-	public void setStateB (long stateB) {
+	public void setStateB(long stateB) {
 		this.stateB = stateB;
 	}
 
@@ -174,13 +174,13 @@ public class FowlRandom extends EnhancedRandom {
 	 * @param stateB the second state; can be any long
 	 */
 	@Override
-	public void setState (long stateA, long stateB) {
+	public void setState(long stateA, long stateB) {
 		this.stateA = stateA;
 		this.stateB = stateB;
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		long x = (stateA += BitConversion.countLeadingZeros(stateB));
 		long y = (stateB += 0xD1B54A32D192ED03L);
 		x = (x ^ (y << 37 | y >>> 27)) * 0x3C79AC492BA7B653L;
@@ -189,7 +189,7 @@ public class FowlRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public long previousLong () {
+	public long previousLong() {
 		long x = stateA;
 		long y = stateB;
 		stateB -= 0xD1B54A32D192ED03L;
@@ -200,32 +200,32 @@ public class FowlRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		long x = (stateA += BitConversion.countLeadingZeros(stateB));
 		long y = (stateB += 0xD1B54A32D192ED03L);
 		x = (x ^ (y << 37 | y >>> 27)) * 0x3C79AC492BA7B653L;
 		x = (x ^ x >>> 33) * 0xF1357AEA2E62A9C5L;
-		return (int)(x ^ x >>> 27) >>> (32 - bits);
+		return (int) (x ^ x >>> 27) >>> (32 - bits);
 	}
 
 	@Override
-	public FowlRandom copy () {
+	public FowlRandom copy() {
 		return new FowlRandom(stateA, stateB);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		FowlRandom that = (FowlRandom)o;
+		FowlRandom that = (FowlRandom) o;
 
 		return stateA == that.stateA && stateB == that.stateB;
 	}
 
-	public String toString () {
+	public String toString() {
 		return "FowlRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L}";
 	}
 

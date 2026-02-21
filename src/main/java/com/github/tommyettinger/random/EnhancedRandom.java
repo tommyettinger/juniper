@@ -17,11 +17,7 @@
 
 package com.github.tommyettinger.random;
 
-import com.github.tommyettinger.digital.Base;
-import com.github.tommyettinger.digital.BitConversion;
-import com.github.tommyettinger.digital.Distributor;
-import com.github.tommyettinger.digital.MathTools;
-import com.github.tommyettinger.digital.RoughMath;
+import com.github.tommyettinger.digital.*;
 
 import java.io.Externalizable;
 import java.io.IOException;
@@ -101,7 +97,7 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * @param b must be greater than 0; typically the result of {@link #getMinimumPeriod()}
 	 * @return the least common multiple of {@code a} and {@code b}, as a BigInteger
 	 */
-	public static BigInteger lcm(BigInteger a, BigInteger b){
+	public static BigInteger lcm(BigInteger a, BigInteger b) {
 		return a.divide(a.gcd(b)).multiply(b);
 	}
 
@@ -714,7 +710,7 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * not use long math, while {@link #nextUnsignedInt(int)} does.
 	 * This produces very slightly different results on average than {@link #nextUnsignedInt(int)}.
 	 *
-	 * @param rand a random int, typically produced by {@link #nextInt()}
+	 * @param rand  a random int, typically produced by {@link #nextInt()}
 	 * @param bound the unsigned upper bound
 	 * @return an int between 0 (inclusive) and bound (exclusive, unsigned)
 	 */
@@ -727,6 +723,7 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 		return (randHigh * boundLow >>> 16) + (randLow * boundHigh >>> 16) + randHigh * boundHigh | 0;
 		// see RangedTest for an alternative with identical results to nextUnsignedInt().
 	}
+
 	/**
 	 * Processes a given int {@code rand}, which should be random and is typically produced by {@link #nextInt()}, and
 	 * an int {@code bound}, which is treated as signed, to return an int between 0 (inclusive, inner) and bound
@@ -738,7 +735,7 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	 * not use long math, while {@link #nextSignedInt(int)} does.
 	 * This produces very slightly different results on average than {@link #nextSignedInt(int)}.
 	 *
-	 * @param rand a random int, typically produced by {@link #nextInt()}
+	 * @param rand  a random int, typically produced by {@link #nextInt()}
 	 * @param bound the signed outer bound
 	 * @return an int between 0 (inclusive, inner) and bound (exclusive, outer)
 	 */
@@ -1474,8 +1471,7 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 * an exponential distribution whose mean is 1.
 	 *
 	 * @return a non-negative {@code double} value pseudorandomly chosen from an
-	 *         exponential distribution with a mean of 1
-	 *
+	 * exponential distribution with a mean of 1
 	 * @implNote This implementation is simply {@code return -Math.log(nextExclusiveDouble());} .
 	 */
 	public double nextExponential() {
@@ -1727,7 +1723,7 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 * @see <a href="https://www.pcg-random.org/posts/bugs-in-splitmix.html">This was informed by O'Neill's blog post about SplittableRandom's gamma.</a>
 	 */
 	public static int rateGamma(long gamma) {
-		if((gamma & 1L) == 0L) return 32;
+		if ((gamma & 1L) == 0L) return 32;
 		final long inverse = MathTools.modularMultiplicativeInverse(gamma);
 		return Math.max(Math.max(Math.max(
 					Math.abs(Long.bitCount(gamma) - 32),
@@ -2353,9 +2349,9 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 * StringBuilder), which may be used by {@link #stringDeserialize(String)} to load this state at another time.
 	 * Always uses {@link Base#BASE16 base 16}.
 	 *
-	 * @param sb an Appendable CharSequence that will be modified
-	 * @return {@code sb}, for chaining
+	 * @param sb  an Appendable CharSequence that will be modified
 	 * @param <T> any type that is both a CharSequence and an Appendable, such as StringBuilder, StringBuffer, or CharBuffer
+	 * @return {@code sb}, for chaining
 	 */
 	public <T extends CharSequence & Appendable> T appendSerialized(T sb) {
 		return appendSerialized(sb, Base.BASE16);
@@ -2367,10 +2363,10 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 * May use any {@link Base}; {@link Base#BASE10} and {@link Base#BASE16} are the most intuitive, but
 	 * {@link Base#SIMPLE64} and especially {@link Base#BASE90} will be more compact.
 	 *
-	 * @param sb an Appendable CharSequence that will be modified
+	 * @param sb   an Appendable CharSequence that will be modified
 	 * @param base which Base to use, from the "digital" library, such as {@link Base#BASE10}
+	 * @param <T>  any type that is both a CharSequence and an Appendable, such as StringBuilder, StringBuffer, or CharBuffer
 	 * @return {@code sb}, for chaining
-	 * @param <T> any type that is both a CharSequence and an Appendable, such as StringBuilder, StringBuffer, or CharBuffer
 	 */
 	public <T extends CharSequence & Appendable> T appendSerialized(T sb, Base base) {
 		try {
@@ -2398,7 +2394,6 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 *
 	 * @param data a String probably produced by {@link #stringSerialize()}
 	 * @return this, after setting its state
-	 *
 	 * @see Deserializer You can deserialize a serialized EnhancedRandom String to its correct type using Deserializer.
 	 */
 	public EnhancedRandom stringDeserialize(String data) {
@@ -2414,7 +2409,6 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 * @param data a String probably produced by {@link #stringSerialize(Base)}
 	 * @param base which Base to use, from the "digital" library, such as {@link Base#BASE10}
 	 * @return this, after setting its state
-	 *
 	 * @see Deserializer You can deserialize a serialized EnhancedRandom String to its correct type using Deserializer.
 	 */
 	public EnhancedRandom stringDeserialize(String data, Base base) {

@@ -46,12 +46,14 @@ public class ScruffRandom extends EnhancedRandom {
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
 
 	/**
 	 * 2 to the 64.
+	 *
 	 * @return 2 to the 64
 	 */
 	@Override
@@ -119,7 +121,7 @@ public class ScruffRandom extends EnhancedRandom {
 	 * @return 4 (four)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 4;
 	}
 
@@ -131,7 +133,7 @@ public class ScruffRandom extends EnhancedRandom {
 	 * @return the value of the selected state
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		switch (selection) {
 			case 0:
 				return stateA;
@@ -153,7 +155,7 @@ public class ScruffRandom extends EnhancedRandom {
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		switch (selection) {
 			case 0:
 				stateA = value;
@@ -178,7 +180,7 @@ public class ScruffRandom extends EnhancedRandom {
 	 * @param seed the initial seed; may be any long
 	 */
 	@Override
-	public void setSeed (long seed) {
+	public void setSeed(long seed) {
 		seed ^= 0xEFA239AADFF080FFL; // somewhat-arbitrary choice from the array in MathTools.GOLDEN_LONGS
 		stateA = seed;
 		stateC = ~seed;
@@ -193,7 +195,7 @@ public class ScruffRandom extends EnhancedRandom {
 		stateD = seed ^ ~0xC6BC279692B5C323L;
 	}
 
-	public long getStateA () {
+	public long getStateA() {
 		return stateA;
 	}
 
@@ -202,11 +204,11 @@ public class ScruffRandom extends EnhancedRandom {
 	 *
 	 * @param stateA can be any long
 	 */
-	public void setStateA (long stateA) {
+	public void setStateA(long stateA) {
 		this.stateA = stateA;
 	}
 
-	public long getStateB () {
+	public long getStateB() {
 		return stateB;
 	}
 
@@ -215,11 +217,11 @@ public class ScruffRandom extends EnhancedRandom {
 	 *
 	 * @param stateB can be any long
 	 */
-	public void setStateB (long stateB) {
+	public void setStateB(long stateB) {
 		this.stateB = stateB;
 	}
 
-	public long getStateC () {
+	public long getStateC() {
 		return stateC;
 	}
 
@@ -228,11 +230,11 @@ public class ScruffRandom extends EnhancedRandom {
 	 *
 	 * @param stateC can be any long
 	 */
-	public void setStateC (long stateC) {
+	public void setStateC(long stateC) {
 		this.stateC = stateC;
 	}
 
-	public long getStateD () {
+	public long getStateD() {
 		return stateD;
 	}
 
@@ -241,7 +243,7 @@ public class ScruffRandom extends EnhancedRandom {
 	 *
 	 * @param stateD can be any long
 	 */
-	public void setStateD (long stateD) {
+	public void setStateD(long stateD) {
 		this.stateD = stateD;
 	}
 
@@ -256,7 +258,7 @@ public class ScruffRandom extends EnhancedRandom {
 	 * @param stateD the fourth state; can be any long
 	 */
 	@Override
-	public void setState (long stateA, long stateB, long stateC, long stateD) {
+	public void setState(long stateA, long stateB, long stateC, long stateD) {
 		this.stateA = stateA;
 		this.stateB = stateB;
 		this.stateC = stateC;
@@ -264,7 +266,7 @@ public class ScruffRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		final long fa = stateA;
 		final long fb = stateB;
 		final long fc = stateC;
@@ -277,20 +279,22 @@ public class ScruffRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public long previousLong () {
+	public long previousLong() {
 		final long c = stateC;
 		stateC = (stateD << 43 | stateD >>> 21);
 		stateD = stateB * 0x572B5EE77A54E3BDL; // modular multiplicative inverse of 0xD1342543DE82EF95L
 		stateB = c ^ (stateA -= 0x9E3779B97F4A7C15L);
 		return stateD - stateC;
 	}
+
 	/**
 	 * Jumps extremely far in the generator's sequence, such that one call to leap() advances the state as many as
 	 * {@code Math.pow(2, 48)} calls to {@link #nextLong()}. This can be used to create 65536 substreams of this
 	 * generator's sequence, each with a period of at least {@code Math.pow(2, 48)} but likely much more.
+	 *
 	 * @return the result of what nextLong() would return if it was called at the state this jumped to
 	 */
-	public long leap () {
+	public long leap() {
 		final long fa = stateA;
 		final long fb = stateB;
 		final long fc = stateC;
@@ -304,7 +308,7 @@ public class ScruffRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		final long fa = stateA;
 		final long fb = stateB;
 		final long fc = stateC;
@@ -313,27 +317,27 @@ public class ScruffRandom extends EnhancedRandom {
 		stateB = fd * 0xD1342543DE82EF95L;
 		stateC = fa ^ fb;
 		stateD = (fc << 21 | fc >>> 43);
-		return (int)(fd - fc) >>> (32 - bits);
+		return (int) (fd - fc) >>> (32 - bits);
 	}
 
 	@Override
-	public ScruffRandom copy () {
+	public ScruffRandom copy() {
 		return new ScruffRandom(stateA, stateB, stateC, stateD);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		ScruffRandom that = (ScruffRandom)o;
+		ScruffRandom that = (ScruffRandom) o;
 
 		return stateA == that.stateA && stateB == that.stateB && stateC == that.stateC && stateD == that.stateD;
 	}
 
-	public String toString () {
+	public String toString() {
 		return "ScruffRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L, stateD=" + (stateD) + "L}";
 	}
 }

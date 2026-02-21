@@ -93,12 +93,14 @@ public class HornRandom extends EnhancedRandom {
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
 
 	/**
 	 * 2 to the 64.
+	 *
 	 * @return 2 to the 64
 	 */
 	@Override
@@ -112,7 +114,7 @@ public class HornRandom extends EnhancedRandom {
 	 * @return 1 (one)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 1;
 	}
 
@@ -123,7 +125,7 @@ public class HornRandom extends EnhancedRandom {
 	 * @return the only state's exact value
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		return state;
 	}
 
@@ -135,7 +137,7 @@ public class HornRandom extends EnhancedRandom {
 	 * @param value     the exact value to use for the state; all longs are valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		state = value;
 	}
 
@@ -147,7 +149,7 @@ public class HornRandom extends EnhancedRandom {
 	 * @param seed the exact value to use for the state; all longs are valid
 	 */
 	@Override
-	public void setSeed (long seed) {
+	public void setSeed(long seed) {
 		state = seed;
 	}
 
@@ -157,7 +159,7 @@ public class HornRandom extends EnhancedRandom {
 	 *
 	 * @return the current state, as a long
 	 */
-	public long getState () {
+	public long getState() {
 		return state;
 	}
 
@@ -168,12 +170,12 @@ public class HornRandom extends EnhancedRandom {
 	 * @param state the long value to use for the state variable
 	 */
 	@Override
-	public void setState (long state) {
+	public void setState(long state) {
 		this.state = state;
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		long x = (state += 5555555555555555555L);
 		x ^= x * x | 7L;
 		x = (x << -27 | x >>> 27);
@@ -193,7 +195,7 @@ public class HornRandom extends EnhancedRandom {
 	 * @return a random {@code long} by the same algorithm as {@link #nextLong()}, using the appropriately-advanced state
 	 */
 	@Override
-	public long skip (long advance) {
+	public long skip(long advance) {
 		long x = (state += advance * 5555555555555555555L);
 		x ^= x * x | 7L;
 		x = (x << -27 | x >>> 27);
@@ -202,7 +204,7 @@ public class HornRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public long previousLong () {
+	public long previousLong() {
 		long x = state;
 		state -= 5555555555555555555L;
 		x ^= x * x | 7L;
@@ -212,33 +214,33 @@ public class HornRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		long x = (state += 5555555555555555555L);
 		x ^= x * x | 7L;
 		x = (x << -27 | x >>> 27);
 		x ^= x * x | 7L;
-		return (int)(x ^ x >>> 27) >>> (32 - bits);
+		return (int) (x ^ x >>> 27) >>> (32 - bits);
 	}
 
 	@Override
-	public HornRandom copy () {
+	public HornRandom copy() {
 		return new HornRandom(state);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		HornRandom that = (HornRandom)o;
+		HornRandom that = (HornRandom) o;
 
 		return state == that.state;
 	}
 
 	@Override
-	public String toString () {
+	public String toString() {
 		return "HornRandom{state=" + (state) + "L}";
 	}
 }

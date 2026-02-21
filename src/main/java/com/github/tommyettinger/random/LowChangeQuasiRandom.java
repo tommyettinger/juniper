@@ -39,71 +39,73 @@ import java.math.BigInteger;
  */
 public class LowChangeQuasiRandom extends EnhancedRandom {
 
-    /**
-     * The primary state of the generator; this is what gets returned by {@link #nextLong()}.
-     */
-    public long state;
-    /**
-     * The secondary state of the generator; the upper 6 bits are used to determine which single bit will change in
-     * {@link #state} when a new number is generated.
-     */
-    public long choice;
+	/**
+	 * The primary state of the generator; this is what gets returned by {@link #nextLong()}.
+	 */
+	public long state;
+	/**
+	 * The secondary state of the generator; the upper 6 bits are used to determine which single bit will change in
+	 * {@link #state} when a new number is generated.
+	 */
+	public long choice;
 
-    public LowChangeQuasiRandom() {
-        state = EnhancedRandom.seedFromMath();
-        choice = EnhancedRandom.seedFromMath();
-    }
+	public LowChangeQuasiRandom() {
+		state = EnhancedRandom.seedFromMath();
+		choice = EnhancedRandom.seedFromMath();
+	}
 
-    public LowChangeQuasiRandom(long seed) {
-        setSeed(seed);
-    }
+	public LowChangeQuasiRandom(long seed) {
+		setSeed(seed);
+	}
 
-    public LowChangeQuasiRandom(long state, long choice) {
-        this.state = state;
-        this.choice = choice;
-    }
+	public LowChangeQuasiRandom(long state, long choice) {
+		this.state = state;
+		this.choice = choice;
+	}
 
-    @Override
-    public int getStateCount() {
-        return 2;
-    }
+	@Override
+	public int getStateCount() {
+		return 2;
+	}
 
-    @Override
-    public long getSelectedState(int selection) {
-        return (selection & 1) == 0 ? state : choice;
-    }
+	@Override
+	public long getSelectedState(int selection) {
+		return (selection & 1) == 0 ? state : choice;
+	}
 
-    @Override
-    public void setSelectedState(int selection, long value) {
-        if((selection & 1) == 0) state = value;
-        else choice = value;
-    }
+	@Override
+	public void setSelectedState(int selection, long value) {
+		if ((selection & 1) == 0) state = value;
+		else choice = value;
+	}
 
-    @Override
-    public void setState(long state) {
-        this.state = state;
-        this.choice = state;
-    }
+	@Override
+	public void setState(long state) {
+		this.state = state;
+		this.choice = state;
+	}
 
-    @Override
-    public void setState(long stateA, long stateB) {
-        this.state = stateA;
-        this.choice = stateB;
-    }
+	@Override
+	public void setState(long stateA, long stateB) {
+		this.state = stateA;
+		this.choice = stateB;
+	}
 
-    @Override
-    public String getTag() {
-        return "LCQR";
-    }
+	@Override
+	public String getTag() {
+		return "LCQR";
+	}
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
 
 	/**
 	 * 2 to the 64.
+	 *
 	 * @return 2 to the 64
 	 */
 	@Override
@@ -111,24 +113,24 @@ public class LowChangeQuasiRandom extends EnhancedRandom {
 		return MINIMUM_PERIOD;
 	}
 
-    @Override
-    public void setSeed(long seed) {
-        state = seed;
-        choice = ~seed;
-    }
+	@Override
+	public void setSeed(long seed) {
+		state = seed;
+		choice = ~seed;
+	}
 
-    @Override
-    public long nextLong() {
-        return state ^= 1L << ((choice += 0x9E3779B97F4A7C15L) >>> 58);
-    }
+	@Override
+	public long nextLong() {
+		return state ^= 1L << ((choice += 0x9E3779B97F4A7C15L) >>> 58);
+	}
 
-    @Override
-    public long previousLong() {
-        final long s = state;
-        state ^= 1L << (choice >>> 58);
-        choice -= 0x9E3779B97F4A7C15L;
-        return s;
-    }
+	@Override
+	public long previousLong() {
+		final long s = state;
+		state ^= 1L << (choice >>> 58);
+		choice -= 0x9E3779B97F4A7C15L;
+		return s;
+	}
 
 	@Override
 	public double nextGaussian() {
@@ -142,22 +144,22 @@ public class LowChangeQuasiRandom extends EnhancedRandom {
 	}
 
 	@Override
-    public LowChangeQuasiRandom copy() {
-        return new LowChangeQuasiRandom(state, choice);
-    }
+	public LowChangeQuasiRandom copy() {
+		return new LowChangeQuasiRandom(state, choice);
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
 
-        LowChangeQuasiRandom that = (LowChangeQuasiRandom) o;
+		LowChangeQuasiRandom that = (LowChangeQuasiRandom) o;
 
-        if (state != that.state) return false;
-        return choice == that.choice;
-    }
+		if (state != that.state) return false;
+		return choice == that.choice;
+	}
 
-    public String toString () {
-        return "LowChangeQuasiRandom{" + "stateA=" + (state) + "L, stateB=" + (choice) + "L}";
-    }
+	public String toString() {
+		return "LowChangeQuasiRandom{" + "stateA=" + (state) + "L, stateB=" + (choice) + "L}";
+	}
 }

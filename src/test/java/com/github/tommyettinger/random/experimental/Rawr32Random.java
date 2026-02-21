@@ -17,7 +17,7 @@
 
 package com.github.tommyettinger.random.experimental;
 
-import com.github.tommyettinger.random.*;
+import com.github.tommyettinger.random.EnhancedRandom;
 
 import java.math.BigInteger;
 
@@ -52,7 +52,7 @@ public class Rawr32Random extends EnhancedRandom {
 	 * Creates a new Rawr32Random with a random state.
 	 */
 	public Rawr32Random() {
-		this((int)EnhancedRandom.seedFromMath(), (int)EnhancedRandom.seedFromMath(), (int)EnhancedRandom.seedFromMath(), (int)EnhancedRandom.seedFromMath());
+		this((int) EnhancedRandom.seedFromMath(), (int) EnhancedRandom.seedFromMath(), (int) EnhancedRandom.seedFromMath(), (int) EnhancedRandom.seedFromMath());
 	}
 
 	/**
@@ -90,6 +90,7 @@ public class Rawr32Random extends EnhancedRandom {
 
 	/**
 	 * This generator mainly generates int values.
+	 *
 	 * @return true
 	 */
 	@Override
@@ -99,12 +100,14 @@ public class Rawr32Random extends EnhancedRandom {
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
 
 	/**
 	 * 2 to the 64.
+	 *
 	 * @return 2 to the 64
 	 */
 	@Override
@@ -118,7 +121,7 @@ public class Rawr32Random extends EnhancedRandom {
 	 * @return 4 (four)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 4;
 	}
 
@@ -130,16 +133,16 @@ public class Rawr32Random extends EnhancedRandom {
 	 * @return the value of the selected state, which is an int that will be promoted to long
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		switch (selection) {
-		case 0:
-			return stateA;
-		case 1:
-			return stateB;
-		case 2:
-			return stateC;
-		default:
-			return stateD;
+			case 0:
+				return stateA;
+			case 1:
+				return stateB;
+			case 2:
+				return stateC;
+			default:
+				return stateD;
 		}
 	}
 
@@ -152,20 +155,20 @@ public class Rawr32Random extends EnhancedRandom {
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		switch (selection) {
-		case 0:
-			stateA = (int)value;
-			break;
-		case 1:
-			stateB = (int)value;
-			break;
-		case 2:
-			stateC = (int)value;
-			break;
-		default:
-			stateD = (int)value;
-			break;
+			case 0:
+				stateA = (int) value;
+				break;
+			case 1:
+				stateB = (int) value;
+				break;
+			case 2:
+				stateC = (int) value;
+				break;
+			default:
+				stateD = (int) value;
+				break;
 		}
 	}
 
@@ -178,9 +181,9 @@ public class Rawr32Random extends EnhancedRandom {
 	 * @param seed the initial seed; may be any long
 	 */
 	@Override
-	public void setSeed (long seed) {
+	public void setSeed(long seed) {
 		//0xDB4F0B91, 0xBBE05633, 0xA0F2EC75, 0x89E18285
-		int a = (int)seed ^ 0xDB4F0B91, b = (int)(seed >>> 16) ^ 0xBBE05633, c = (int)(seed >>> 32) ^ 0xA0F2EC75, d = (int)(seed >>> 48) ^ 0x89E18285;
+		int a = (int) seed ^ 0xDB4F0B91, b = (int) (seed >>> 16) ^ 0xBBE05633, c = (int) (seed >>> 32) ^ 0xA0F2EC75, d = (int) (seed >>> 48) ^ 0x89E18285;
 		for (int i = 0; i < 5; i++) {
 			b = (b << 24 | b >>> 8) + a ^ ++c;
 			a = (a << 3 | a >>> 29) ^ b;
@@ -203,7 +206,7 @@ public class Rawr32Random extends EnhancedRandom {
 		stateD = a;
 	}
 
-	public long getStateA () {
+	public long getStateA() {
 		return stateA;
 	}
 
@@ -212,11 +215,11 @@ public class Rawr32Random extends EnhancedRandom {
 	 *
 	 * @param stateA can be any long, but will be cast to an int before use
 	 */
-	public void setStateA (long stateA) {
-		this.stateA = (int)stateA;
+	public void setStateA(long stateA) {
+		this.stateA = (int) stateA;
 	}
 
-	public long getStateB () {
+	public long getStateB() {
 		return stateB;
 	}
 
@@ -225,11 +228,11 @@ public class Rawr32Random extends EnhancedRandom {
 	 *
 	 * @param stateB can be any long, but will be cast to an int before use
 	 */
-	public void setStateB (long stateB) {
-		this.stateB = (int)stateB;
+	public void setStateB(long stateB) {
+		this.stateB = (int) stateB;
 	}
 
-	public long getStateC () {
+	public long getStateC() {
 		return stateC;
 	}
 
@@ -238,11 +241,11 @@ public class Rawr32Random extends EnhancedRandom {
 	 *
 	 * @param stateC can be any long, but will be cast to an int before use
 	 */
-	public void setStateC (long stateC) {
-		this.stateC = (int)stateC;
+	public void setStateC(long stateC) {
+		this.stateC = (int) stateC;
 	}
 
-	public long getStateD () {
+	public long getStateD() {
 		return stateD;
 	}
 
@@ -251,8 +254,8 @@ public class Rawr32Random extends EnhancedRandom {
 	 *
 	 * @param stateD can be any long, but will be cast to an int before use
 	 */
-	public void setStateD (long stateD) {
-		this.stateD = (int)stateD;
+	public void setStateD(long stateD) {
+		this.stateD = (int) stateD;
 	}
 
 	/**
@@ -266,15 +269,15 @@ public class Rawr32Random extends EnhancedRandom {
 	 * @param stateD the fourth state; can be any long, but will be cast to an int before use
 	 */
 	@Override
-	public void setState (long stateA, long stateB, long stateC, long stateD) {
-		this.stateA = (int)stateA;
-		this.stateB = (int)stateB;
-		this.stateC = (int)stateC;
-		this.stateD = (int)stateD;
+	public void setState(long stateA, long stateB, long stateC, long stateD) {
+		this.stateA = (int) stateA;
+		this.stateB = (int) stateB;
+		this.stateC = (int) stateC;
+		this.stateD = (int) stateD;
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		int x = stateA;
 		int y = stateB;
 		int z = stateC;
@@ -283,7 +286,7 @@ public class Rawr32Random extends EnhancedRandom {
 		int tempB = y + Integer.numberOfLeadingZeros(x);
 		int tempC = (w << 3 | w >>> 29) - x;
 		int tempD = (z << 24 | z >>> 8) ^ y;
-		x ^= (w << 29 | w >>>  3) + y;
+		x ^= (w << 29 | w >>> 3) + y;
 		y += (z << 19 | z >>> 13) ^ x;
 		int hi = x - (y << 21 | y >>> 11);
 		x = tempA;
@@ -294,14 +297,14 @@ public class Rawr32Random extends EnhancedRandom {
 		stateB = y + Integer.numberOfLeadingZeros(x);
 		stateC = (w << 3 | w >>> 29) - x;
 		stateD = (z << 24 | z >>> 8) ^ y;
-		x ^= (w << 29 | w >>>  3) + y;
+		x ^= (w << 29 | w >>> 3) + y;
 		y += (z << 19 | z >>> 13) ^ x;
 		int lo = x - (y << 21 | y >>> 11);
-		return (long)(hi) << 32 | (lo & 0xFFFFFFFFL);
+		return (long) (hi) << 32 | (lo & 0xFFFFFFFFL);
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		int x = stateA;
 		int y = stateB;
 		int z = stateC;
@@ -310,13 +313,13 @@ public class Rawr32Random extends EnhancedRandom {
 		stateB = y + Integer.numberOfLeadingZeros(x);
 		stateC = (w << 3 | w >>> 29) - x;
 		stateD = (z << 24 | z >>> 8) ^ y;
-		x ^= (w << 29 | w >>>  3) + y;
+		x ^= (w << 29 | w >>> 3) + y;
 		y += (z << 19 | z >>> 13) ^ x;
 		return (x - (y << 21 | y >>> 11)) >>> (32 - bits);
 	}
 
 	@Override
-	public int nextInt () {
+	public int nextInt() {
 		int x = stateA;
 		int y = stateB;
 		int z = stateC;
@@ -325,7 +328,7 @@ public class Rawr32Random extends EnhancedRandom {
 		stateB = y + Integer.numberOfLeadingZeros(x);
 		stateC = (w << 3 | w >>> 29) - x;
 		stateD = (z << 24 | z >>> 8) ^ y;
-		x ^= (w << 29 | w >>>  3) + y;
+		x ^= (w << 29 | w >>> 3) + y;
 		y += (z << 19 | z >>> 13) ^ x;
 		return x - (y << 21 | y >>> 11);
 	}
@@ -334,7 +337,7 @@ public class Rawr32Random extends EnhancedRandom {
 	public long previousLong() {
 		int lo = previousInt();
 		int hi = previousInt();
-		return (long)(hi) << 32 | (lo & 0xFFFFFFFFL);
+		return (long) (hi) << 32 | (lo & 0xFFFFFFFFL);
 	}
 
 	public int previousInt() {
@@ -352,29 +355,33 @@ public class Rawr32Random extends EnhancedRandom {
 		y = stateB;
 		z = stateC;
 		w = stateD;
-		x ^= (w << 29 | w >>>  3) + y;
+		x ^= (w << 29 | w >>> 3) + y;
 		y += (z << 19 | z >>> 13) ^ x;
 		return x - (y << 21 | y >>> 11);
 	}
 
 	@Override
-	public int nextInt (int bound) {
-		return (int)(bound * (nextInt() & 0xFFFFFFFFL) >> 32) & ~(bound >> 31);
+	public int nextInt(int bound) {
+		return (int) (bound * (nextInt() & 0xFFFFFFFFL) >> 32) & ~(bound >> 31);
 	}
 
 	@Override
-	public int nextSignedInt (int outerBound) {
-		outerBound = (int)(outerBound * (nextInt() & 0xFFFFFFFFL) >> 32);
+	public int nextSignedInt(int outerBound) {
+		outerBound = (int) (outerBound * (nextInt() & 0xFFFFFFFFL) >> 32);
 		return outerBound + (outerBound >>> 31);
 	}
 
 	@Override
-	public void nextBytes (byte[] bytes) {
-		for (int i = 0; i < bytes.length; ) {for (int r = nextInt(), n = Math.min(bytes.length - i, 4); n-- > 0; r >>>= 8) {bytes[i++] = (byte)r;}}
+	public void nextBytes(byte[] bytes) {
+		for (int i = 0; i < bytes.length; ) {
+			for (int r = nextInt(), n = Math.min(bytes.length - i, 4); n-- > 0; r >>>= 8) {
+				bytes[i++] = (byte) r;
+			}
+		}
 	}
 
 	@Override
-	public long nextLong (long inner, long outer) {
+	public long nextLong(long inner, long outer) {
 		final long randLow = nextInt() & 0xFFFFFFFFL;
 		final long randHigh = nextInt() & 0xFFFFFFFFL;
 		if (inner >= outer)
@@ -386,7 +393,7 @@ public class Rawr32Random extends EnhancedRandom {
 	}
 
 	@Override
-	public long nextSignedLong (long inner, long outer) {
+	public long nextSignedLong(long inner, long outer) {
 		if (outer < inner) {
 			long t = outer;
 			outer = inner + 1L;
@@ -401,38 +408,38 @@ public class Rawr32Random extends EnhancedRandom {
 	}
 
 	@Override
-	public boolean nextBoolean () {
+	public boolean nextBoolean() {
 		return nextInt() < 0;
 	}
 
 	@Override
-	public float nextFloat () {
+	public float nextFloat() {
 		return (nextInt() >>> 8) * 0x1p-24f;
 	}
 
 	@Override
-	public float nextInclusiveFloat () {
+	public float nextInclusiveFloat() {
 		return (0x1000001L * (nextInt() & 0xFFFFFFFFL) >> 32) * 0x1p-24f;
 	}
 
 	@Override
-	public Rawr32Random copy () {
+	public Rawr32Random copy() {
 		return new Rawr32Random(stateA, stateB, stateC, stateD);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		Rawr32Random that = (Rawr32Random)o;
+		Rawr32Random that = (Rawr32Random) o;
 
 		return stateA == that.stateA && stateB == that.stateB && stateC == that.stateC && stateD == that.stateD;
 	}
 
-	public String toString () {
+	public String toString() {
 		return "Rawr32Random{" + "stateA=" + (stateA) + ", stateB=" + (stateB) + ", stateC=" + (stateC) + ", stateD=" + (stateD) + "}";
 	}
 

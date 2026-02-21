@@ -33,63 +33,66 @@ import java.math.BigInteger;
  * that distribution.
  */
 public class DistributionWrapper extends EnhancedRandom {
-    /**
-     * One of two possible modes this can use to limit the range of a Distribution. {@code FRACTION} simply gets the
-     * fractional part of a distribution by subtracting the floor from a result. {@code CLAMP} uses
-     * {@link Math#min(double, double)} and {@link Math#max(double, double)} to cap the values at both ends, inclusive
-     * on 0.0 and exclusive on 1.0 .
-     */
-    public enum ReductionMode {
-        /**
-         * Gets one distributed double, gets the portion after the decimal point, and only uses that.
-         */
-        FRACTION {
-            @Override
-            public double applyAsDouble(Distribution dist) {
-                final double n = dist.nextDouble();
-                return n - Math.floor(n);
-            }
-        },
-        /**
-         * Gets one distributed double and clamps it to 0.0 if it is less than 0.0, or to 0.9999999999999999 if it is
-         * 0.9999999999999999 or greater, then uses that.
-         */
-        CLAMP {
-            @Override
-            public double applyAsDouble(Distribution dist) {
-                return Math.min(Math.max(dist.nextDouble(), 0.0), 0.9999999999999999);
-            }
-        },
-        /**
-         * Repeatedly attempts to get one distributed double, check if it is between 0.0 inclusive and 1.0 exclusive,
-         * and either return it if it is within range or get another distributed double and try again.
-         * This is not guaranteed to complete for all distributions! While this can be the most correct ReductionMode
-         * for some distributions, use it with caution. Make sure the {@link Distribution#getMinimum()} and
-         * {@link Distribution#getMaximum()} allow results to be returned between 0 and 1.
-         */
-        REJECT {
-            @Override
-            public double applyAsDouble(Distribution dist) {
-                double n;
-                while ((n = dist.nextDouble()) < 0.0 || n >= 1.0) {
-                }
-                return n;
-            }
-        };
+	/**
+	 * One of two possible modes this can use to limit the range of a Distribution. {@code FRACTION} simply gets the
+	 * fractional part of a distribution by subtracting the floor from a result. {@code CLAMP} uses
+	 * {@link Math#min(double, double)} and {@link Math#max(double, double)} to cap the values at both ends, inclusive
+	 * on 0.0 and exclusive on 1.0 .
+	 */
+	public enum ReductionMode {
+		/**
+		 * Gets one distributed double, gets the portion after the decimal point, and only uses that.
+		 */
+		FRACTION {
+			@Override
+			public double applyAsDouble(Distribution dist) {
+				final double n = dist.nextDouble();
+				return n - Math.floor(n);
+			}
+		},
+		/**
+		 * Gets one distributed double and clamps it to 0.0 if it is less than 0.0, or to 0.9999999999999999 if it is
+		 * 0.9999999999999999 or greater, then uses that.
+		 */
+		CLAMP {
+			@Override
+			public double applyAsDouble(Distribution dist) {
+				return Math.min(Math.max(dist.nextDouble(), 0.0), 0.9999999999999999);
+			}
+		},
+		/**
+		 * Repeatedly attempts to get one distributed double, check if it is between 0.0 inclusive and 1.0 exclusive,
+		 * and either return it if it is within range or get another distributed double and try again.
+		 * This is not guaranteed to complete for all distributions! While this can be the most correct ReductionMode
+		 * for some distributions, use it with caution. Make sure the {@link Distribution#getMinimum()} and
+		 * {@link Distribution#getMaximum()} allow results to be returned between 0 and 1.
+		 */
+		REJECT {
+			@Override
+			public double applyAsDouble(Distribution dist) {
+				double n;
+				while ((n = dist.nextDouble()) < 0.0 || n >= 1.0) {
+				}
+				return n;
+			}
+		};
 
-        ReductionMode() {
-        }
+		ReductionMode() {
+		}
 
-        public abstract double applyAsDouble(Distribution dist);
-    }
-    private static final ReductionMode[] MODES = ReductionMode.values();
-    @Override
-    public String getTag() {
-        return "DsrW";
-    }
+		public abstract double applyAsDouble(Distribution dist);
+	}
+
+	private static final ReductionMode[] MODES = ReductionMode.values();
+
+	@Override
+	public String getTag() {
+		return "DsrW";
+	}
 
 	/**
 	 * Depends on the {@link #getDistribution() distribution's} {@link Distribution#generator generator's} result.
+	 *
 	 * @return whatever {@code getDistribution().generator.mainlyGeneratesInt()} returns
 	 */
 	@Override
@@ -99,6 +102,7 @@ public class DistributionWrapper extends EnhancedRandom {
 
 	/**
 	 * Depends on the {@link #getDistribution() distribution's} {@link Distribution#generator generator's} result.
+	 *
 	 * @return whatever {@code getDistribution().generator.getMinimumPeriod()} returns
 	 */
 	@Override
@@ -106,146 +110,150 @@ public class DistributionWrapper extends EnhancedRandom {
 		return distribution.generator.getMinimumPeriod();
 	}
 
-    protected Distribution distribution;
+	protected Distribution distribution;
 
-    protected ReductionMode reduction;
+	protected ReductionMode reduction;
 
-    public DistributionWrapper() {
-        distribution = new ContinuousUniformDistribution(0.0, 1.0);
-        reduction = ReductionMode.FRACTION;
-    }
+	public DistributionWrapper() {
+		distribution = new ContinuousUniformDistribution(0.0, 1.0);
+		reduction = ReductionMode.FRACTION;
+	}
 
-    public DistributionWrapper(long seed) {
-        distribution = new ContinuousUniformDistribution(new AceRandom(seed), 0.0, 1.0);
-        reduction = ReductionMode.FRACTION;
-    }
+	public DistributionWrapper(long seed) {
+		distribution = new ContinuousUniformDistribution(new AceRandom(seed), 0.0, 1.0);
+		reduction = ReductionMode.FRACTION;
+	}
 
-    /**
-     * Creates a DistributionWrapper that follows a ContinuousUniformDistribution, limiting its results using
-     * {@link ReductionMode#FRACTION}, and uses a direct reference to the given EnhancedRandom. You can copy the
-     * EnhancedRandom if you want it to change independently of the original EnhancedRandom, using
-     * {@link EnhancedRandom#copy()}. This is probably not very useful on its own, since you will probably want to
-     * change the distribution (using {@link #setDistribution(Distribution)}), and that also changes the EnhancedRandom
-     * that was assigned here.
-     * @param random referenced directly; if you don't want this, use a {@link EnhancedRandom#copy()}
-     */
-    public DistributionWrapper(EnhancedRandom random) {
-        if(random == null) random = new AceRandom();
-        distribution = new ContinuousUniformDistribution(random, 0.0, 1.0);
-        reduction = ReductionMode.FRACTION;
-    }
+	/**
+	 * Creates a DistributionWrapper that follows a ContinuousUniformDistribution, limiting its results using
+	 * {@link ReductionMode#FRACTION}, and uses a direct reference to the given EnhancedRandom. You can copy the
+	 * EnhancedRandom if you want it to change independently of the original EnhancedRandom, using
+	 * {@link EnhancedRandom#copy()}. This is probably not very useful on its own, since you will probably want to
+	 * change the distribution (using {@link #setDistribution(Distribution)}), and that also changes the EnhancedRandom
+	 * that was assigned here.
+	 *
+	 * @param random referenced directly; if you don't want this, use a {@link EnhancedRandom#copy()}
+	 */
+	public DistributionWrapper(EnhancedRandom random) {
+		if (random == null) random = new AceRandom();
+		distribution = new ContinuousUniformDistribution(random, 0.0, 1.0);
+		reduction = ReductionMode.FRACTION;
+	}
 
-    public DistributionWrapper(long stateA, long stateB, long stateC, long stateD) {
-        distribution = new ContinuousUniformDistribution(new AceRandom(stateA, stateB, stateC, stateD), 0.0, 1.0);
-        reduction = ReductionMode.FRACTION;
-    }
+	public DistributionWrapper(long stateA, long stateB, long stateC, long stateD) {
+		distribution = new ContinuousUniformDistribution(new AceRandom(stateA, stateB, stateC, stateD), 0.0, 1.0);
+		reduction = ReductionMode.FRACTION;
+	}
 
-    public DistributionWrapper(Distribution distribution, ReductionMode reductionMode) {
-        this.distribution = distribution.copy();
-        if(reductionMode != null) reduction = reductionMode;
-        else reduction = ReductionMode.FRACTION;
-    }
+	public DistributionWrapper(Distribution distribution, ReductionMode reductionMode) {
+		this.distribution = distribution.copy();
+		if (reductionMode != null) reduction = reductionMode;
+		else reduction = ReductionMode.FRACTION;
+	}
 
-    public DistributionWrapper(Distribution distribution, ReductionMode reductionMode, long seed) {
-        this.distribution = distribution.copy();
-        this.distribution.generator.setSeed(seed);
-        if(reductionMode != null) reduction = reductionMode;
-        else reduction = ReductionMode.FRACTION;
-    }
+	public DistributionWrapper(Distribution distribution, ReductionMode reductionMode, long seed) {
+		this.distribution = distribution.copy();
+		this.distribution.generator.setSeed(seed);
+		if (reductionMode != null) reduction = reductionMode;
+		else reduction = ReductionMode.FRACTION;
+	}
 
-    /**
-     * Creates a DistributionWrapper that follows the given Distribution (copied), limiting its results using the given
-     * ReductionMode, and uses a direct reference to the given EnhancedRandom. You can copy the EnhancedRandom if you
-     * want it to change independently of the original EnhancedRandom, using {@link EnhancedRandom#copy()}.
-     * @param distribution a Distribution that will be copied; the copy's generator will be reassigned.
-     * @param reductionMode how to reduce values outside the 0 to 1 range, as an enum constant
-     * @param random referenced directly; if you don't want this, use a {@link EnhancedRandom#copy()}
-     */
-    public DistributionWrapper(Distribution distribution, ReductionMode reductionMode, EnhancedRandom random) {
-        this.distribution = distribution.copy();
-        if(random != null) this.distribution.generator = random;
-        if(reductionMode != null) reduction = reductionMode;
-        else reduction = ReductionMode.FRACTION;
-    }
+	/**
+	 * Creates a DistributionWrapper that follows the given Distribution (copied), limiting its results using the given
+	 * ReductionMode, and uses a direct reference to the given EnhancedRandom. You can copy the EnhancedRandom if you
+	 * want it to change independently of the original EnhancedRandom, using {@link EnhancedRandom#copy()}.
+	 *
+	 * @param distribution  a Distribution that will be copied; the copy's generator will be reassigned.
+	 * @param reductionMode how to reduce values outside the 0 to 1 range, as an enum constant
+	 * @param random        referenced directly; if you don't want this, use a {@link EnhancedRandom#copy()}
+	 */
+	public DistributionWrapper(Distribution distribution, ReductionMode reductionMode, EnhancedRandom random) {
+		this.distribution = distribution.copy();
+		if (random != null) this.distribution.generator = random;
+		if (reductionMode != null) reduction = reductionMode;
+		else reduction = ReductionMode.FRACTION;
+	}
 
-    public DistributionWrapper(Distribution distribution, ReductionMode reductionMode, long stateA, long stateB, long stateC, long stateD) {
-        this.distribution = distribution.copy();
-        this.distribution.generator = new AceRandom(stateA, stateB, stateC, stateD);
-        if(reductionMode != null) reduction = reductionMode;
-        else reduction = ReductionMode.FRACTION;
-    }
+	public DistributionWrapper(Distribution distribution, ReductionMode reductionMode, long stateA, long stateB, long stateC, long stateD) {
+		this.distribution = distribution.copy();
+		this.distribution.generator = new AceRandom(stateA, stateB, stateC, stateD);
+		if (reductionMode != null) reduction = reductionMode;
+		else reduction = ReductionMode.FRACTION;
+	}
 
-    public ReductionMode getReduction(){
-        return reduction;
-    }
+	public ReductionMode getReduction() {
+		return reduction;
+	}
 
-    public void setReduction(ReductionMode reduction) {
-        if(reduction != null)
-            this.reduction = reduction;
-    }
+	public void setReduction(ReductionMode reduction) {
+		if (reduction != null)
+			this.reduction = reduction;
+	}
 
-    @Override
-    public long nextLong() {
-        return (distribution.generator.getSelectedState(0) >>> 52) | ((long)(nextDouble() * 0x1p52) << 12);
-    }
+	@Override
+	public long nextLong() {
+		return (distribution.generator.getSelectedState(0) >>> 52) | ((long) (nextDouble() * 0x1p52) << 12);
+	}
 
-    @Override
-    public int next(int bits) {
-        return (int)(long)((1L << bits) * nextDouble());
-    }
+	@Override
+	public int next(int bits) {
+		return (int) (long) ((1L << bits) * nextDouble());
+	}
 
-    @Override
-    public double nextDouble() {
-        return reduction.applyAsDouble(distribution);
-    }
+	@Override
+	public double nextDouble() {
+		return reduction.applyAsDouble(distribution);
+	}
 
-    @Override
-    public float nextFloat() {
-        return (float) nextDouble();
-    }
+	@Override
+	public float nextFloat() {
+		return (float) nextDouble();
+	}
 
-    @Override
-    public void nextBytes(byte[] bytes) {
-        if (bytes != null) {
-            for (int i = 0; i < bytes.length; ) {
-                for (int n = Math.min(bytes.length - i, 8); n-- > 0; ) {
-                    bytes[i++] = (byte) (256 * nextDouble());
-                }
-            }
-        }
-    }
+	@Override
+	public void nextBytes(byte[] bytes) {
+		if (bytes != null) {
+			for (int i = 0; i < bytes.length; ) {
+				for (int n = Math.min(bytes.length - i, 8); n-- > 0; ) {
+					bytes[i++] = (byte) (256 * nextDouble());
+				}
+			}
+		}
+	}
 
-    @Override
-    public int nextInt() {
-        return (int)(long)(0x1p32 * nextDouble());
-    }
+	@Override
+	public int nextInt() {
+		return (int) (long) (0x1p32 * nextDouble());
+	}
 
-    @Override
-    public int nextInt(int bound) {
-        return (int)(bound * nextDouble()) & ~(bound >> 31);
-    }
+	@Override
+	public int nextInt(int bound) {
+		return (int) (bound * nextDouble()) & ~(bound >> 31);
+	}
 
-    @Override
-    public int nextSignedInt(int outerBound) {
-        return (int)(outerBound * nextDouble());
-    }
+	@Override
+	public int nextSignedInt(int outerBound) {
+		return (int) (outerBound * nextDouble());
+	}
 
-    @Override
-    public boolean nextBoolean() {
-        return nextDouble() < 0.5f;
-    }
+	@Override
+	public boolean nextBoolean() {
+		return nextDouble() < 0.5f;
+	}
 
-    /**
-     * This runs {@link Distributor#probitD(double)} on a distributed double this produces.
-     * @return a "Gaussian-ized" result of {@link #nextExclusiveDouble()}}
-     */
-    @Override
-    public double nextGaussian() {
-        return Distributor.probitD(nextExclusiveDouble());
-    }
+	/**
+	 * This runs {@link Distributor#probitD(double)} on a distributed double this produces.
+	 *
+	 * @return a "Gaussian-ized" result of {@link #nextExclusiveDouble()}}
+	 */
+	@Override
+	public double nextGaussian() {
+		return Distributor.probitD(nextExclusiveDouble());
+	}
 
 	/**
 	 * This runs {@link Distributor#probitF(float)} on a distributed float this produces.
+	 *
 	 * @return a "Gaussian-ized" result of {@link #nextExclusiveFloat()}}
 	 */
 	@Override
@@ -254,138 +262,150 @@ public class DistributionWrapper extends EnhancedRandom {
 	}
 
 	/**
-     * This does not use the optimizations from {@link EnhancedRandom#nextExclusiveDouble()}, because those aren't
-     * reasonable when distributed.
-     * @return a pseudo-random double between 0.0, exclusive, and 1.0, exclusive
-     */
-    @Override
-    public double nextExclusiveDouble() {
-        return reduction.applyAsDouble(distribution) + 0x1p-55;
-    }
+	 * This does not use the optimizations from {@link EnhancedRandom#nextExclusiveDouble()}, because those aren't
+	 * reasonable when distributed.
+	 *
+	 * @return a pseudo-random double between 0.0, exclusive, and 1.0, exclusive
+	 */
+	@Override
+	public double nextExclusiveDouble() {
+		return reduction.applyAsDouble(distribution) + 0x1p-55;
+	}
 
-    /**
-     * @return a random uniform double between -1 and 1 with a tiny hole around 0 (all exclusive)
-     */
-    @Override
-    public double nextExclusiveSignedDouble() {
+	/**
+	 * @return a random uniform double between -1 and 1 with a tiny hole around 0 (all exclusive)
+	 */
+	@Override
+	public double nextExclusiveSignedDouble() {
 		final double raw = (reduction.applyAsDouble(distribution) - 0.5) * 1.9999999999999998;
 		return raw + (BitConversion.doubleToHighIntBits(raw) >> 31 | 1) * 0x1p-55;
 	}
 
-    /**
-     * This acts like {@link EnhancedRandom#nextExclusiveFloatEquidistant()}; it does not use the optimizations
-     * from {@link EnhancedRandom#nextExclusiveFloat()}, because those aren't reasonable when distributed.
-     * @return a pseudo-random float between 0.0, exclusive, and 1.0, exclusive
-     */
-    @Override
-    public float nextExclusiveFloat() {
-        return (float) reduction.applyAsDouble(distribution) * 0.99999994f + 0x1p-26f;
-    }
+	/**
+	 * This acts like {@link EnhancedRandom#nextExclusiveFloatEquidistant()}; it does not use the optimizations
+	 * from {@link EnhancedRandom#nextExclusiveFloat()}, because those aren't reasonable when distributed.
+	 *
+	 * @return a pseudo-random float between 0.0, exclusive, and 1.0, exclusive
+	 */
+	@Override
+	public float nextExclusiveFloat() {
+		return (float) reduction.applyAsDouble(distribution) * 0.99999994f + 0x1p-26f;
+	}
 
-    /**
-     * @return a random uniform float between -1 and 1 with a tiny hole around 0 (all exclusive)
-     */
-    @Override
-    public float nextExclusiveSignedFloat() {
+	/**
+	 * @return a random uniform float between -1 and 1 with a tiny hole around 0 (all exclusive)
+	 */
+	@Override
+	public float nextExclusiveSignedFloat() {
 		final float raw = ((float) reduction.applyAsDouble(distribution) - 0.5f) * 1.9999999f;
 		return raw + (BitConversion.floatToIntBits(raw) >> 31 | 1) * 0x1p-26f;
-    }
+	}
 
-    @Override
-    public DistributionWrapper copy() {
-        return new DistributionWrapper(distribution, reduction);
-    }
+	@Override
+	public DistributionWrapper copy() {
+		return new DistributionWrapper(distribution, reduction);
+	}
 
-    @Override
-    public void setState(long stateA) {
-        distribution.generator.setState(stateA);
-    }
-    @Override
-    public void setState(long stateA, long stateB) {
-        distribution.generator.setState(stateA, stateB);
-    }
-    @Override
-    public void setState(long stateA, long stateB, long stateC) {
-        distribution.generator.setState(stateA, stateB, stateC);
-    }
-    @Override
-    public void setState(long stateA, long stateB, long stateC, long stateD) {
-        distribution.generator.setState(stateA, stateB, stateC, stateD);
-    }
-    @Override
-    public void setState(long stateA, long stateB, long stateC, long stateD, long stateE) {
-        distribution.generator.setState(stateA, stateB, stateC, stateD, stateE);
-    }
-    @Override
-    public void setState(long stateA, long stateB, long stateC, long stateD, long stateE, long stateF) {
-        distribution.generator.setState(stateA, stateB, stateC, stateD, stateE, stateF);
-    }
-    @Override
-    public void setState(long stateA, long stateB, long stateC, long stateD, long stateE, long stateF, long stateG) {
-        distribution.generator.setState(stateA, stateB, stateC, stateD, stateE, stateF, stateG);
-    }
-    @Override
-    public void setState(long stateA, long stateB, long stateC, long stateD, long stateE, long stateF, long stateG, long stateH) {
-        distribution.generator.setState(stateA, stateB, stateC, stateD, stateE, stateF, stateG, stateH);
-    }
-    @Override
-    public void setState(long stateA, long stateB, long stateC, long stateD, long stateE, long stateF, long stateG, long stateH, long stateI) {
-        distribution.generator.setState(stateA, stateB, stateC, stateD, stateE, stateF, stateG, stateH, stateI);
-    }
-    @Override
-    public void setState(long stateA, long stateB, long stateC, long stateD, long stateE, long stateF, long stateG, long stateH, long stateI, long stateJ) {
-        distribution.generator.setState(stateA, stateB, stateC, stateD, stateE, stateF, stateG, stateH, stateI, stateJ);
-    }
-    @Override
-    public void setState(long... state) {
-        distribution.generator.setState(state);
-    }
+	@Override
+	public void setState(long stateA) {
+		distribution.generator.setState(stateA);
+	}
 
-    @Override
-    public int getStateCount() {
-        return distribution.generator.getStateCount();
-    }
+	@Override
+	public void setState(long stateA, long stateB) {
+		distribution.generator.setState(stateA, stateB);
+	}
 
-    @Override
-    public long getSelectedState(int selection) {
-        return distribution.generator.getSelectedState(selection);
-    }
+	@Override
+	public void setState(long stateA, long stateB, long stateC) {
+		distribution.generator.setState(stateA, stateB, stateC);
+	}
 
-    @Override
-    public void setSelectedState(int selection, long value) {
-        distribution.generator.setSelectedState(selection, value);
-    }
+	@Override
+	public void setState(long stateA, long stateB, long stateC, long stateD) {
+		distribution.generator.setState(stateA, stateB, stateC, stateD);
+	}
 
-    @Override
-    public void setSeed(long seed) {
-        if(distribution != null)
-            distribution.generator.setSeed(seed);
-    }
+	@Override
+	public void setState(long stateA, long stateB, long stateC, long stateD, long stateE) {
+		distribution.generator.setState(stateA, stateB, stateC, stateD, stateE);
+	}
 
-    public Distribution getDistribution() {
-        return distribution;
-    }
+	@Override
+	public void setState(long stateA, long stateB, long stateC, long stateD, long stateE, long stateF) {
+		distribution.generator.setState(stateA, stateB, stateC, stateD, stateE, stateF);
+	}
 
-    public void setDistribution(Distribution distribution) {
-        this.distribution = distribution;
-    }
+	@Override
+	public void setState(long stateA, long stateB, long stateC, long stateD, long stateE, long stateF, long stateG) {
+		distribution.generator.setState(stateA, stateB, stateC, stateD, stateE, stateF, stateG);
+	}
 
-    public EnhancedRandom getRandom() {
-        return distribution.generator;
-    }
+	@Override
+	public void setState(long stateA, long stateB, long stateC, long stateD, long stateE, long stateF, long stateG, long stateH) {
+		distribution.generator.setState(stateA, stateB, stateC, stateD, stateE, stateF, stateG, stateH);
+	}
 
-    public void setRandom(EnhancedRandom random) {
-        this.distribution.generator = random;
-    }
+	@Override
+	public void setState(long stateA, long stateB, long stateC, long stateD, long stateE, long stateF, long stateG, long stateH, long stateI) {
+		distribution.generator.setState(stateA, stateB, stateC, stateD, stateE, stateF, stateG, stateH, stateI);
+	}
 
-    /**
-     * @param base which Base to use, from the "digital" library, such as {@link Base#BASE10}
-     * @return this, for chaining
-     */
-    @Override
-    public String stringSerialize(Base base) {
-        return getTag() + base.paddingChar + base.signed(reduction.ordinal()) + base.positiveSign + distribution.stringSerialize(base);
-    }
+	@Override
+	public void setState(long stateA, long stateB, long stateC, long stateD, long stateE, long stateF, long stateG, long stateH, long stateI, long stateJ) {
+		distribution.generator.setState(stateA, stateB, stateC, stateD, stateE, stateF, stateG, stateH, stateI, stateJ);
+	}
+
+	@Override
+	public void setState(long... state) {
+		distribution.generator.setState(state);
+	}
+
+	@Override
+	public int getStateCount() {
+		return distribution.generator.getStateCount();
+	}
+
+	@Override
+	public long getSelectedState(int selection) {
+		return distribution.generator.getSelectedState(selection);
+	}
+
+	@Override
+	public void setSelectedState(int selection, long value) {
+		distribution.generator.setSelectedState(selection, value);
+	}
+
+	@Override
+	public void setSeed(long seed) {
+		if (distribution != null)
+			distribution.generator.setSeed(seed);
+	}
+
+	public Distribution getDistribution() {
+		return distribution;
+	}
+
+	public void setDistribution(Distribution distribution) {
+		this.distribution = distribution;
+	}
+
+	public EnhancedRandom getRandom() {
+		return distribution.generator;
+	}
+
+	public void setRandom(EnhancedRandom random) {
+		this.distribution.generator = random;
+	}
+
+	/**
+	 * @param base which Base to use, from the "digital" library, such as {@link Base#BASE10}
+	 * @return this, for chaining
+	 */
+	@Override
+	public String stringSerialize(Base base) {
+		return getTag() + base.paddingChar + base.signed(reduction.ordinal()) + base.positiveSign + distribution.stringSerialize(base);
+	}
 
 
 	@Override
@@ -404,49 +424,49 @@ public class DistributionWrapper extends EnhancedRandom {
 
 
 	/**
-     * @param data a String probably produced by {@link #stringSerialize(Base)}
-     * @param base which Base to use, from the "digital" library, such as {@link Base#BASE10}
-     * @return this, for chaining
-     */
-    @Override
-    public DistributionWrapper stringDeserialize(String data, Base base) {
-        int idx = data.indexOf(base.paddingChar);
-        setReduction(MODES[base.readInt(data, idx + 1, (idx = data.indexOf(base.positiveSign, idx + 1)))]);
-        distribution = Deserializer.deserializeDistribution(data.substring(idx + 1), base);
-        return this;
-    }
+	 * @param data a String probably produced by {@link #stringSerialize(Base)}
+	 * @param base which Base to use, from the "digital" library, such as {@link Base#BASE10}
+	 * @return this, for chaining
+	 */
+	@Override
+	public DistributionWrapper stringDeserialize(String data, Base base) {
+		int idx = data.indexOf(base.paddingChar);
+		setReduction(MODES[base.readInt(data, idx + 1, (idx = data.indexOf(base.positiveSign, idx + 1)))]);
+		distribution = Deserializer.deserializeDistribution(data.substring(idx + 1), base);
+		return this;
+	}
 
-    /**
-     * Needs the type of {@link #distribution} and its {@link Distribution#generator}'s type
-	 * registered with {@link Deserializer}.
-     *
-     * @param out the stream to write the object to
-     * @throws IOException Includes any I/O exceptions that may occur
-     */
-    @GwtIncompatible
-    public void writeExternal(ObjectOutput out) throws IOException {
-        out.writeInt(reduction.ordinal());
-        out.writeUTF(distribution.stringSerialize(Base.BASE90));
-    }
-
-    /**
+	/**
 	 * Needs the type of {@link #distribution} and its {@link Distribution#generator}'s type
 	 * registered with {@link Deserializer}.
-     *
-     * @param in the stream to read data from in order to restore the object
-     * @throws IOException if I/O errors occur
-     */
-    @GwtIncompatible
-    public void readExternal(ObjectInput in) throws IOException {
-        reduction = MODES[in.readInt()];
-        distribution = Deserializer.deserializeDistribution(in.readUTF(), Base.BASE90);
-    }
+	 *
+	 * @param out the stream to write the object to
+	 * @throws IOException Includes any I/O exceptions that may occur
+	 */
+	@GwtIncompatible
+	public void writeExternal(ObjectOutput out) throws IOException {
+		out.writeInt(reduction.ordinal());
+		out.writeUTF(distribution.stringSerialize(Base.BASE90));
+	}
 
-    @Override
-    public String toString() {
-        return "DistributionWrapper{" +
-                "distribution=" + distribution +
-                ", reduction=" + reduction +
-                '}';
-    }
+	/**
+	 * Needs the type of {@link #distribution} and its {@link Distribution#generator}'s type
+	 * registered with {@link Deserializer}.
+	 *
+	 * @param in the stream to read data from in order to restore the object
+	 * @throws IOException if I/O errors occur
+	 */
+	@GwtIncompatible
+	public void readExternal(ObjectInput in) throws IOException {
+		reduction = MODES[in.readInt()];
+		distribution = Deserializer.deserializeDistribution(in.readUTF(), Base.BASE90);
+	}
+
+	@Override
+	public String toString() {
+		return "DistributionWrapper{" +
+			"distribution=" + distribution +
+			", reduction=" + reduction +
+			'}';
+	}
 }

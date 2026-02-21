@@ -35,7 +35,7 @@ public class GodotEditRandom extends EnhancedRandom {
 	/**
 	 * From PCG sources, copied into Godot 4.4, this is the default value for {@link #inc}.
 	 */
-	public static final long DEFAULT_INC  = 0x14057B7EF767814FL;
+	public static final long DEFAULT_INC = 0x14057B7EF767814FL;
 	public static final long DEFAULT_SEED = 0xA7323897838D73DBL;
 
 	/**
@@ -48,7 +48,7 @@ public class GodotEditRandom extends EnhancedRandom {
 		long old = state;
 		// 0x5851F42D4C957F2DL is 6364136223846793005L
 		state = old * 0x5851F42D4C957F2DL + inc;
-		int xs = (int)(old >>> 27 ^ old >>> 45);
+		int xs = (int) (old >>> 27 ^ old >>> 45);
 		int rot = (int) (old >>> 59);
 		return (xs >>> rot | xs << 32 - rot);
 	}
@@ -59,9 +59,9 @@ public class GodotEditRandom extends EnhancedRandom {
 	 * Changed significantly from what Godot uses.
 	 *
 	 * @param initstate used in full to determine {@link #state}
-	 * @param initseq used (in full except for the sign bit, which is ignored) to determine {@link #inc}
+	 * @param initseq   used (in full except for the sign bit, which is ignored) to determine {@link #inc}
 	 */
-	public void pcg32_srandom_r(long initstate, long initseq){
+	public void pcg32_srandom_r(long initstate, long initseq) {
 		// Guarantees the lowest bit will be set, which is the goal for an LCG increment.
 		// This is invertible for positive initseq values only.
 		// 0xD1342543DE82EF96L is from "Computationally Easy, Spectrally Good Multipliers for
@@ -74,7 +74,7 @@ public class GodotEditRandom extends EnhancedRandom {
 		// And this performs an invertible change on state, XOR-Rotate-XOR-Rotate, using the low 6 bits of inc
 		// as one of the rotation amounts (which is always an odd number), and a different rotation (left by 22) for
 		// the other rotation amount.
-		final int low = (int)inc;
+		final int low = (int) inc;
 		state ^= (state << low | state >>> 64 - low) ^ (state << 22 | state >>> 42);
 	}
 
@@ -91,10 +91,10 @@ public class GodotEditRandom extends EnhancedRandom {
 		long uBound = bound & 0xFFFFFFFFL,
 			// We use a "naive scheme" because we don't have uint types in Java.
 			threshold = (0x100000000L - uBound) % uBound;
-		for (;;) {
+		for (; ; ) {
 			long r = pcg32_random_r() & 0xFFFFFFFFL;
 			if (r >= threshold)
-				return (int)(r % uBound);
+				return (int) (r % uBound);
 		}
 
 	}
@@ -142,7 +142,7 @@ public class GodotEditRandom extends EnhancedRandom {
 	 * significantly from {@code p_seed} and {@code p_inc}.
 	 *
 	 * @param p_seed any {@code long} value
-	 * @param p_inc any positive {@code long} value; the sign bit is ignored
+	 * @param p_inc  any positive {@code long} value; the sign bit is ignored
 	 */
 	public GodotEditRandom(long p_seed, long p_inc) {
 		super(p_seed);
@@ -183,6 +183,7 @@ public class GodotEditRandom extends EnhancedRandom {
 
 	/**
 	 * This generator mainly generates int values, though it internally uses 64-bit math.
+	 *
 	 * @return true
 	 */
 	@Override
@@ -192,12 +193,14 @@ public class GodotEditRandom extends EnhancedRandom {
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
 
 	/**
 	 * 2 to the 64.
+	 *
 	 * @return 2 to the 64
 	 */
 	@Override
@@ -211,7 +214,7 @@ public class GodotEditRandom extends EnhancedRandom {
 	 * @return 2 (two)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 2;
 	}
 
@@ -225,7 +228,7 @@ public class GodotEditRandom extends EnhancedRandom {
 	 * @return the value of the selected state
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		if ((selection & 1) == 1) {
 			return inc;
 		}
@@ -243,7 +246,7 @@ public class GodotEditRandom extends EnhancedRandom {
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		if ((selection & 1) == 1) {
 			setInc(value);
 		} else {
@@ -258,11 +261,13 @@ public class GodotEditRandom extends EnhancedRandom {
 	/**
 	 * Gets the initial increment value, before it was modified to get {@link #getInc() inc}. The inc is what this uses
 	 * day-to-day, and the initial increment is only used for resetting the state.
+	 *
 	 * @return
 	 */
 	public long getInitialIncrement() {
 		return initialInc;
 	}
+
 	/**
 	 * This initializes both states of the generator to random values based on the given seed.
 	 * (2 to the 64) possible initial generator states can be produced here.
@@ -270,12 +275,13 @@ public class GodotEditRandom extends EnhancedRandom {
 	 * @param seed the initial seed; may be any long
 	 */
 	@Override
-	public void setSeed (long seed) {
+	public void setSeed(long seed) {
 		seed(seed);
 	}
 
 	/**
 	 * Gets the first part of the state.
+	 *
 	 * @return the first part of the state
 	 */
 	public long getState() {
@@ -296,6 +302,7 @@ public class GodotEditRandom extends EnhancedRandom {
 
 	/**
 	 * Gets the second part of the state (the increment).
+	 *
 	 * @return the second part of the state
 	 */
 	public long getInc() {
@@ -324,29 +331,29 @@ public class GodotEditRandom extends EnhancedRandom {
 	 * Godot normally does not permit.
 	 *
 	 * @param state the first state; can be any long
-	 * @param inc the second state; can be any positive long
+	 * @param inc   the second state; can be any positive long
 	 */
 	@Override
-	public void setState (long state, long inc) {
+	public void setState(long state, long inc) {
 		initialInc = inc;
 		initialState = state;
 		pcg32_srandom_r(initialState, initialInc);
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		return (long) pcg32_random_r() << 32 | (pcg32_random_r() & 0xFFFFFFFFL);
 	}
 
 	@Override
 	public long previousLong() {
-		return (previousInt() & 0xFFFFFFFFL) | (long)previousInt() << 32;
+		return (previousInt() & 0xFFFFFFFFL) | (long) previousInt() << 32;
 	}
 
 	@Override
-	public int previousInt () {
+	public int previousInt() {
 		long old = state = (state - inc) * 0xC097EF87329E28A5L;
-		int xs = (int)(old >>> 27 ^ old >>> 45);
+		int xs = (int) (old >>> 27 ^ old >>> 45);
 		int rot = (int) (old >>> 59);
 		return (xs >>> rot | xs << 32 - rot);
 	}
@@ -357,7 +364,7 @@ public class GodotEditRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		return pcg32_random_r() >>> (32 - bits);
 	}
 
@@ -410,7 +417,7 @@ public class GodotEditRandom extends EnhancedRandom {
 	@Override
 	public float nextInclusiveFloat() {
 		int expOffset = pcg32_random_r();
-		if(expOffset == 0) return 0f;
+		if (expOffset == 0) return 0f;
 		return Math.scalb(0x1p31f - (pcg32_random_r() | 0xFFFFFFFF80000001L), -32 - Integer.numberOfLeadingZeros(expOffset));
 	}
 
@@ -423,7 +430,7 @@ public class GodotEditRandom extends EnhancedRandom {
 	@Override
 	public double nextInclusiveDouble() {
 		int expOffset = pcg32_random_r();
-		if(expOffset == 0) return 0.0;
+		if (expOffset == 0) return 0.0;
 		long significand = ((long) pcg32_random_r() << 32 | (pcg32_random_r() & 0xFFFFFFFFL)) | 0x8000000000000001L;
 		return Math.scalb(0x1p63 - significand, -64 - Integer.numberOfLeadingZeros(expOffset));
 	}
@@ -469,7 +476,7 @@ public class GodotEditRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public GodotEditRandom copy () {
+	public GodotEditRandom copy() {
 		GodotEditRandom cpy = new GodotEditRandom(initialState, initialInc);
 		cpy.state = this.state;
 		cpy.inc = this.inc;
@@ -477,20 +484,20 @@ public class GodotEditRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		GodotEditRandom that = (GodotEditRandom)o;
+		GodotEditRandom that = (GodotEditRandom) o;
 
 		if (state != that.state)
 			return false;
 		return inc == that.inc;
 	}
 
-	public String toString () {
+	public String toString() {
 		return "GodotEditRandom{" + "initialState=" + (initialState) + "L, initialInc=" + (initialInc) +
 			"L, state=" + (state) + "L, inc=" + (inc) + "L}";
 	}

@@ -35,12 +35,14 @@ public class MunchRandom extends EnhancedRandom {
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("1000000000000000000000000000000000000000000000000", 16);
 
 	/**
 	 * 2 to the 192.
+	 *
 	 * @return 2 to the 129
 	 */
 	@Override
@@ -113,7 +115,7 @@ public class MunchRandom extends EnhancedRandom {
 	 * @return 3 (three)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 3;
 	}
 
@@ -125,7 +127,7 @@ public class MunchRandom extends EnhancedRandom {
 	 * @return the value of the selected state
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		switch (selection) {
 			case 0:
 				return stateA;
@@ -145,17 +147,17 @@ public class MunchRandom extends EnhancedRandom {
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		switch (selection) {
-		case 0:
-			stateA = value;
-			break;
-		case 1:
-			stateB = value;
-			break;
-		case 2:
-			stateC = value;
-			break;
+			case 0:
+				stateA = value;
+				break;
+			case 1:
+				stateB = value;
+				break;
+			case 2:
+				stateC = value;
+				break;
 		}
 	}
 
@@ -167,7 +169,7 @@ public class MunchRandom extends EnhancedRandom {
 	 * @param seed the initial seed; may be any long
 	 */
 	@Override
-	public void setSeed (long seed) {
+	public void setSeed(long seed) {
 		seed ^= seed >>> 32;
 		seed *= 0xbea225f9eb34556dL;
 		seed ^= seed >>> 29;
@@ -180,7 +182,7 @@ public class MunchRandom extends EnhancedRandom {
 		stateC = (seed ^ ~0xC6BC279692B5C323L);
 	}
 
-	public long getStateA () {
+	public long getStateA() {
 		return stateA;
 	}
 
@@ -189,11 +191,11 @@ public class MunchRandom extends EnhancedRandom {
 	 *
 	 * @param stateA can be any long
 	 */
-	public void setStateA (long stateA) {
+	public void setStateA(long stateA) {
 		this.stateA = stateA;
 	}
 
-	public long getStateB () {
+	public long getStateB() {
 		return stateB;
 	}
 
@@ -202,11 +204,11 @@ public class MunchRandom extends EnhancedRandom {
 	 *
 	 * @param stateB can be any long
 	 */
-	public void setStateB (long stateB) {
+	public void setStateB(long stateB) {
 		this.stateB = stateB;
 	}
 
-	public long getStateC () {
+	public long getStateC() {
 		return stateC;
 	}
 
@@ -215,7 +217,7 @@ public class MunchRandom extends EnhancedRandom {
 	 *
 	 * @param stateC can be any long
 	 */
-	public void setStateC (long stateC) {
+	public void setStateC(long stateC) {
 		this.stateC = stateC;
 	}
 
@@ -240,17 +242,17 @@ public class MunchRandom extends EnhancedRandom {
 	 * @param stateC the third state; can be any long
 	 */
 	@Override
-	public void setState (long stateA, long stateB, long stateC) {
+	public void setState(long stateA, long stateB, long stateC) {
 		this.stateA = stateA;
 		this.stateB = stateB;
 		this.stateC = stateC;
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		long a = (stateA += 0x9E3779B97F4A7C15L);
 		long b = (stateB += BitConversion.countLeadingZeros(a));
-		long c = (stateC += BitConversion.countLeadingZeros(a|b));
+		long c = (stateC += BitConversion.countLeadingZeros(a | b));
 		a = (a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ c);
 		a = (a ^ a >>> 27) * 0x3C79AC492BA7B653L;
 		a = (a ^ a >>> 33) * 0x1C69B3F74AC4AE35L;
@@ -258,13 +260,13 @@ public class MunchRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public long previousLong () {
+	public long previousLong() {
 		long a = stateA;
 		long b = stateB;
 		long c = stateC;
 		stateA -= 0x9E3779B97F4A7C15L;
 		stateB -= BitConversion.countLeadingZeros(a);
-		stateC -= BitConversion.countLeadingZeros(a|b);
+		stateC -= BitConversion.countLeadingZeros(a | b);
 		a = (a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ c);
 		a = (a ^ a >>> 27) * 0x3C79AC492BA7B653L;
 		a = (a ^ a >>> 33) * 0x1C69B3F74AC4AE35L;
@@ -272,14 +274,14 @@ public class MunchRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		long a = (stateA += 0x9E3779B97F4A7C15L);
 		long b = (stateB += BitConversion.countLeadingZeros(a));
-		long c = (stateC += BitConversion.countLeadingZeros(a|b));
+		long c = (stateC += BitConversion.countLeadingZeros(a | b));
 		a = (a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ c);
 		a = (a ^ a >>> 27) * 0x3C79AC492BA7B653L;
 		a = (a ^ a >>> 33) * 0x1C69B3F74AC4AE35L;
-		return (int)(a ^ a >>> 27) >>> (32 - bits);
+		return (int) (a ^ a >>> 27) >>> (32 - bits);
 	}
 
 	//0xA62B82F58DB8A985L
@@ -288,23 +290,23 @@ public class MunchRandom extends EnhancedRandom {
 	//0x98AE0BD636E2A614L
 
 	@Override
-	public MunchRandom copy () {
+	public MunchRandom copy() {
 		return new MunchRandom(stateA, stateB, stateC);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		MunchRandom that = (MunchRandom)o;
+		MunchRandom that = (MunchRandom) o;
 
 		return stateA == that.stateA && stateB == that.stateB && stateC == that.stateC;
 	}
 
-	public String toString () {
+	public String toString() {
 		return "MunchRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L}";
 	}
 

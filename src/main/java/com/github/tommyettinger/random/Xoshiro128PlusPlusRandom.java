@@ -73,7 +73,7 @@ public class Xoshiro128PlusPlusRandom extends Enhanced32Random {
 	 * Creates a new Xoshiro128PlusPlusRandom with a random state.
 	 */
 	public Xoshiro128PlusPlusRandom() {
-		this((int)EnhancedRandom.seedFromMath(), (int)EnhancedRandom.seedFromMath(), (int)EnhancedRandom.seedFromMath(), (int)EnhancedRandom.seedFromMath());
+		this((int) EnhancedRandom.seedFromMath(), (int) EnhancedRandom.seedFromMath(), (int) EnhancedRandom.seedFromMath(), (int) EnhancedRandom.seedFromMath());
 	}
 
 	/**
@@ -101,7 +101,7 @@ public class Xoshiro128PlusPlusRandom extends Enhanced32Random {
 		this.stateA = stateA;
 		this.stateB = stateB;
 		this.stateC = stateC;
-		this.stateD = (stateA|stateB|stateC|stateD) == 0 ? 1 : stateD;
+		this.stateD = (stateA | stateB | stateC | stateD) == 0 ? 1 : stateD;
 	}
 
 	@Override
@@ -111,6 +111,7 @@ public class Xoshiro128PlusPlusRandom extends Enhanced32Random {
 
 	/**
 	 * This generator is almost as fast at generating {@code long} values as it is {@code int} values.
+	 *
 	 * @return false
 	 */
 	@Override
@@ -120,12 +121,14 @@ public class Xoshiro128PlusPlusRandom extends Enhanced32Random {
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", 16);
 
 	/**
 	 * (2 to the 128) - 1.
+	 *
 	 * @return (2 to the 128) - 1
 	 */
 	@Override
@@ -139,7 +142,7 @@ public class Xoshiro128PlusPlusRandom extends Enhanced32Random {
 	 * @return 4 (four)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 4;
 	}
 
@@ -151,16 +154,16 @@ public class Xoshiro128PlusPlusRandom extends Enhanced32Random {
 	 * @return the value of the selected state, which is an int that will be promoted to long
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		switch (selection) {
-		case 0:
-			return stateA;
-		case 1:
-			return stateB;
-		case 2:
-			return stateC;
-		default:
-			return stateD;
+			case 0:
+				return stateA;
+			case 1:
+				return stateB;
+			case 2:
+				return stateC;
+			default:
+				return stateD;
 		}
 	}
 
@@ -175,22 +178,22 @@ public class Xoshiro128PlusPlusRandom extends Enhanced32Random {
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		switch (selection) {
-		case 0:
-			stateA = (int)value;
-			break;
-		case 1:
-			stateB = (int)value;
-			break;
-		case 2:
-			stateC = (int)value;
-			break;
-		default:
-			stateD = (int)value;
-			break;
+			case 0:
+				stateA = (int) value;
+				break;
+			case 1:
+				stateB = (int) value;
+				break;
+			case 2:
+				stateC = (int) value;
+				break;
+			default:
+				stateD = (int) value;
+				break;
 		}
-		if((stateA|stateB|stateC|stateD) == 0) stateD = 1;
+		if ((stateA | stateB | stateC | stateD) == 0) stateD = 1;
 	}
 
 	/**
@@ -201,24 +204,24 @@ public class Xoshiro128PlusPlusRandom extends Enhanced32Random {
 	 * @param seed the initial seed; may be any long
 	 */
 	@Override
-	public void setSeed (long seed) {
+	public void setSeed(long seed) {
 		long x = seed;
 		x ^= x >>> 27;
 		x *= 0x3C79AC492BA7B653L;
 		x ^= x >>> 33;
 		x *= 0x1C69B3F74AC4AE35L;
-		stateA = (int)(x ^= x >>> 27);
-		stateB = (int)(x >>> 32);
+		stateA = (int) (x ^= x >>> 27);
+		stateB = (int) (x >>> 32);
 		x = (seed + 0x9E3779B97F4A7C15L);
 		x ^= x >>> 27;
 		x *= 0x3C79AC492BA7B653L;
 		x ^= x >>> 33;
 		x *= 0x1C69B3F74AC4AE35L;
-		stateC = (int)(x ^= x >>> 27);
-		stateD = (int)(x >>> 32);
+		stateC = (int) (x ^= x >>> 27);
+		stateD = (int) (x >>> 32);
 	}
 
-	public int getStateA () {
+	public int getStateA() {
 		return stateA;
 	}
 
@@ -227,11 +230,11 @@ public class Xoshiro128PlusPlusRandom extends Enhanced32Random {
 	 *
 	 * @param stateA can be any int
 	 */
-	public void setStateA (int stateA) {
+	public void setStateA(int stateA) {
 		this.stateA = stateA;
 	}
 
-	public int getStateB () {
+	public int getStateB() {
 		return stateB;
 	}
 
@@ -240,11 +243,11 @@ public class Xoshiro128PlusPlusRandom extends Enhanced32Random {
 	 *
 	 * @param stateB can be any int
 	 */
-	public void setStateB (int stateB) {
+	public void setStateB(int stateB) {
 		this.stateB = stateB;
 	}
 
-	public int getStateC () {
+	public int getStateC() {
 		return stateC;
 	}
 
@@ -253,11 +256,11 @@ public class Xoshiro128PlusPlusRandom extends Enhanced32Random {
 	 *
 	 * @param stateC can be any int
 	 */
-	public void setStateC (int stateC) {
+	public void setStateC(int stateC) {
 		this.stateC = stateC;
 	}
 
-	public int getStateD () {
+	public int getStateD() {
 		return stateD;
 	}
 
@@ -268,8 +271,8 @@ public class Xoshiro128PlusPlusRandom extends Enhanced32Random {
 	 *
 	 * @param stateD can be any long, but will be cast to an int before use
 	 */
-	public void setStateD (int stateD) {
-		this.stateD = (stateA|stateB|stateC|stateD) == 0 ? 1 : stateD;
+	public void setStateD(int stateD) {
+		this.stateD = (stateA | stateB | stateC | stateD) == 0 ? 1 : stateD;
 	}
 
 	/**
@@ -285,11 +288,11 @@ public class Xoshiro128PlusPlusRandom extends Enhanced32Random {
 	 * @param stateD the fourth state; can be any long, but will be cast to an int before use
 	 */
 	@Override
-	public void setState (long stateA, long stateB, long stateC, long stateD) {
-		this.stateA = (int)stateA;
-		this.stateB = (int)stateB;
-		this.stateC = (int)stateC;
-		this.stateD = ((int)stateA|(int)stateB|(int)stateC|(int)stateD) == 0 ? 1 : (int)stateD;
+	public void setState(long stateA, long stateB, long stateC, long stateD) {
+		this.stateA = (int) stateA;
+		this.stateB = (int) stateB;
+		this.stateC = (int) stateC;
+		this.stateD = ((int) stateA | (int) stateB | (int) stateC | (int) stateD) == 0 ? 1 : (int) stateD;
 	}
 
 	/**
@@ -301,15 +304,15 @@ public class Xoshiro128PlusPlusRandom extends Enhanced32Random {
 	 * @param stateC the third state; can be any int
 	 * @param stateD the fourth state; can be any int
 	 */
-	public void setState (int stateA, int stateB, int stateC, int stateD) {
+	public void setState(int stateA, int stateB, int stateC, int stateD) {
 		this.stateA = stateA;
 		this.stateB = stateB;
 		this.stateC = stateC;
-		this.stateD = (stateA|stateB|stateC|stateD) == 0 ? 1 : stateD;
+		this.stateD = (stateA | stateB | stateC | stateD) == 0 ? 1 : stateD;
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		int h = (stateA + stateD);
 		h = (h << 7 | h >>> 25) + stateA;
 		int l = stateC - stateB;
@@ -325,7 +328,7 @@ public class Xoshiro128PlusPlusRandom extends Enhanced32Random {
 	}
 
 	@Override
-	public long previousLong () {
+	public long previousLong() {
 		stateD = (stateD << 21 | stateD >>> 11); // stateD has d ^ b
 		int pa = stateA ^= stateD; // StateA has a
 		stateC ^= stateB; // StateC has b ^ b << 9
@@ -344,7 +347,7 @@ public class Xoshiro128PlusPlusRandom extends Enhanced32Random {
 	}
 
 	@Override
-	public int previousInt () {
+	public int previousInt() {
 		stateD = (stateD << 21 | stateD >>> 11); // stateD has d ^ b
 		int pa = stateA ^= stateD; // StateA has a
 		stateC ^= stateB; // StateC has b ^ b << 9
@@ -361,7 +364,7 @@ public class Xoshiro128PlusPlusRandom extends Enhanced32Random {
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		int result = (stateA + stateD);
 		result = (result << 7 | result >>> 25) + stateA;
 		int t = stateB << 9;
@@ -375,7 +378,7 @@ public class Xoshiro128PlusPlusRandom extends Enhanced32Random {
 	}
 
 	@Override
-	public int nextInt () {
+	public int nextInt() {
 		int result = (stateA + stateD);
 		result = (result << 7 | result >>> 25) + stateA;
 		int t = stateB << 9;
@@ -456,7 +459,7 @@ public class Xoshiro128PlusPlusRandom extends Enhanced32Random {
 	}
 
 	@Override
-	public Xoshiro128PlusPlusRandom copy () {
+	public Xoshiro128PlusPlusRandom copy() {
 		return new Xoshiro128PlusPlusRandom(stateA, stateB, stateC, stateD);
 	}
 
@@ -464,16 +467,16 @@ public class Xoshiro128PlusPlusRandom extends Enhanced32Random {
 	 * Jumps extremely far in the generator's sequence, such that it requires {@code Math.pow(2, 64)} calls to leap() to
 	 * complete a cycle through the generator's entire sequence. This can be used to create over 18 quintillion
 	 * substreams of this generator's sequence, each with a period of {@code Math.pow(2, 64)}.
+	 *
 	 * @return the result of what nextLong() would return if it was called at the state this jumped to
 	 */
-	public long leap()
-	{
+	public long leap() {
 		int s0 = 0;
 		int s1 = 0;
 		int s2 = 0;
 		int s3 = 0;
 
-		for(int b = 0; b < 32; b++) {
+		for (int b = 0; b < 32; b++) {
 			if ((0x8764000b & 1 << b) != 0) {
 				s0 ^= stateA;
 				s1 ^= stateB;
@@ -489,7 +492,7 @@ public class Xoshiro128PlusPlusRandom extends Enhanced32Random {
 			stateD = (stateD << 11 | stateD >>> 21);
 		}
 
-		for(int b = 0; b < 32; b++) {
+		for (int b = 0; b < 32; b++) {
 			if ((0xf542d2d3 & 1 << b) != 0) {
 				s0 ^= stateA;
 				s1 ^= stateB;
@@ -505,7 +508,7 @@ public class Xoshiro128PlusPlusRandom extends Enhanced32Random {
 			stateD = (stateD << 11 | stateD >>> 21);
 		}
 
-		for(int b = 0; b < 32; b++) {
+		for (int b = 0; b < 32; b++) {
 			if ((0x6fa035c3 & 1 << b) != 0) {
 				s0 ^= stateA;
 				s1 ^= stateB;
@@ -521,7 +524,7 @@ public class Xoshiro128PlusPlusRandom extends Enhanced32Random {
 			stateD = (stateD << 11 | stateD >>> 21);
 		}
 
-		for(int b = 0; b < 32; b++) {
+		for (int b = 0; b < 32; b++) {
 			if ((0x77f2db5b & 1 << b) != 0) {
 				s0 ^= stateA;
 				s1 ^= stateB;
@@ -560,18 +563,18 @@ public class Xoshiro128PlusPlusRandom extends Enhanced32Random {
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		Xoshiro128PlusPlusRandom that = (Xoshiro128PlusPlusRandom)o;
+		Xoshiro128PlusPlusRandom that = (Xoshiro128PlusPlusRandom) o;
 
 		return stateA == that.stateA && stateB == that.stateB && stateC == that.stateC && stateD == that.stateD;
 	}
 
-	public String toString () {
+	public String toString() {
 		return "Xoshiro128PlusPlusRandom{" + "stateA=" + (stateA) + ", stateB=" + (stateB) + ", stateC=" + (stateC) + ", stateD=" + (stateD) + "}";
 	}
 }

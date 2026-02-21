@@ -61,12 +61,14 @@ public class Crand64Random extends EnhancedRandom {
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
 
 	/**
 	 * 2 to the 64.
+	 *
 	 * @return 2 to the 64
 	 */
 	@Override
@@ -103,7 +105,7 @@ public class Crand64Random extends EnhancedRandom {
 		stateB = EnhancedRandom.seedFromMath();
 		stateC = EnhancedRandom.seedFromMath();
 		stateD = EnhancedRandom.seedFromMath();
-		stateE = EnhancedRandom.seedFromMath()|1L;
+		stateE = EnhancedRandom.seedFromMath() | 1L;
 	}
 
 	/**
@@ -131,7 +133,7 @@ public class Crand64Random extends EnhancedRandom {
 		this.stateB = stateB;
 		this.stateC = stateC;
 		this.stateD = stateD;
-		this.stateE = stateE|1L;
+		this.stateE = stateE | 1L;
 	}
 
 	/**
@@ -140,7 +142,7 @@ public class Crand64Random extends EnhancedRandom {
 	 * @return 5 (five)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 5;
 	}
 
@@ -152,7 +154,7 @@ public class Crand64Random extends EnhancedRandom {
 	 * @return the value of the selected state
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		switch (selection) {
 			case 0:
 				return stateA;
@@ -176,7 +178,7 @@ public class Crand64Random extends EnhancedRandom {
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		switch (selection) {
 			case 0:
 				stateA = value;
@@ -191,7 +193,7 @@ public class Crand64Random extends EnhancedRandom {
 				stateD = value;
 				break;
 			default:
-				stateE = value|1L;
+				stateE = value | 1L;
 		}
 	}
 
@@ -203,7 +205,7 @@ public class Crand64Random extends EnhancedRandom {
 	 * @param seed the initial seed; may be any long
 	 */
 	@Override
-	public void setSeed (long seed) {
+	public void setSeed(long seed) {
 		seed = (seed ^ 0x1C69B3F74AC4AE35L) * 0x3C79AC492BA7B653L; // an XLCG
 		stateA = seed ^ ~0xC6BC279692B5C323L;
 		seed ^= seed >>> 32;
@@ -213,13 +215,14 @@ public class Crand64Random extends EnhancedRandom {
 		stateC = seed ^ ~0xD3833E804F4C574BL;                      // updates are spread across the MX3 hash
 		seed *= 0xBEA225F9EB34556DL;
 		seed ^= seed >>> 32;
-		stateD = seed ^ 0xC6BC279692B5C323L;;
+		stateD = seed ^ 0xC6BC279692B5C323L;
+		;
 		seed *= 0xBEA225F9EB34556DL;
 		seed ^= seed >>> 29;
-		stateE = seed|1L;
+		stateE = seed | 1L;
 	}
 
-	public long getStateA () {
+	public long getStateA() {
 		return stateA;
 	}
 
@@ -228,11 +231,11 @@ public class Crand64Random extends EnhancedRandom {
 	 *
 	 * @param stateA can be any long
 	 */
-	public void setStateA (long stateA) {
+	public void setStateA(long stateA) {
 		this.stateA = stateA;
 	}
 
-	public long getStateB () {
+	public long getStateB() {
 		return stateB;
 	}
 
@@ -241,11 +244,11 @@ public class Crand64Random extends EnhancedRandom {
 	 *
 	 * @param stateB can be any long
 	 */
-	public void setStateB (long stateB) {
+	public void setStateB(long stateB) {
 		this.stateB = stateB;
 	}
 
-	public long getStateC () {
+	public long getStateC() {
 		return stateC;
 	}
 
@@ -254,11 +257,11 @@ public class Crand64Random extends EnhancedRandom {
 	 *
 	 * @param stateC can be any long
 	 */
-	public void setStateC (long stateC) {
+	public void setStateC(long stateC) {
 		this.stateC = stateC;
 	}
 
-	public long getStateD () {
+	public long getStateD() {
 		return stateD;
 	}
 
@@ -267,11 +270,11 @@ public class Crand64Random extends EnhancedRandom {
 	 *
 	 * @param stateD can be any long
 	 */
-	public void setStateD (long stateD) {
+	public void setStateD(long stateD) {
 		this.stateD = stateD;
 	}
 
-	public long getStateE () {
+	public long getStateE() {
 		return stateE;
 	}
 
@@ -280,8 +283,8 @@ public class Crand64Random extends EnhancedRandom {
 	 *
 	 * @param stateE can be any long
 	 */
-	public void setStateE (long stateE) {
-		this.stateE = stateE|1L;
+	public void setStateE(long stateE) {
+		this.stateE = stateE | 1L;
 	}
 
 	/**
@@ -295,16 +298,16 @@ public class Crand64Random extends EnhancedRandom {
 	 * @param stateD the fourth state; can be any long
 	 * @param stateE the fifth state; can be any long
 	 */
-	public void setState (long stateA, long stateB, long stateC, long stateD, long stateE) {
+	public void setState(long stateA, long stateB, long stateC, long stateD, long stateE) {
 		this.stateA = stateA;
 		this.stateB = stateB;
 		this.stateC = stateC;
 		this.stateD = stateD;
-		this.stateE = stateE|1L;
+		this.stateE = stateE | 1L;
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		final long result = (stateA ^ (stateD += stateE)) + stateB;
 		stateA = stateB ^ (stateB >>> 11);
 		stateB = stateC + (stateC << 3);
@@ -328,7 +331,7 @@ public class Crand64Random extends EnhancedRandom {
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		final long result = (stateA ^ (stateD += stateE)) + stateB;
 		stateA = stateB ^ (stateB >>> 11);
 		stateB = stateC + (stateC << 3);
@@ -337,24 +340,24 @@ public class Crand64Random extends EnhancedRandom {
 	}
 
 	@Override
-	public Crand64Random copy () {
+	public Crand64Random copy() {
 		return new Crand64Random(stateA, stateB, stateC, stateD, stateE);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		Crand64Random that = (Crand64Random)o;
+		Crand64Random that = (Crand64Random) o;
 
 		return stateA == that.stateA && stateB == that.stateB && stateC == that.stateC && stateD == that.stateD &&
-				stateE == that.stateE;
+			stateE == that.stateE;
 	}
 
-	public String toString () {
+	public String toString() {
 		return "Crand64Random{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L, stateD=" + (stateD) + "L, stateE=" + (stateE) + "L}";
 	}
 }

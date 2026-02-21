@@ -69,12 +69,14 @@ public class LFSR64QuasiRandom extends EnhancedRandom {
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("FFFFFFFFFFFFFFFF", 16);
 
 	/**
 	 * (2 to the 64) minus 1.
+	 *
 	 * @return (2 to the 64) minus 1
 	 */
 	@Override
@@ -88,7 +90,7 @@ public class LFSR64QuasiRandom extends EnhancedRandom {
 	 * @return 1 (one)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 1;
 	}
 
@@ -99,9 +101,9 @@ public class LFSR64QuasiRandom extends EnhancedRandom {
 	 * @return the value of the state
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		return state;
-    }
+	}
 
 	/**
 	 * Sets the state to {@code value}, as-is. If this would cause the state to be 0, it
@@ -111,8 +113,8 @@ public class LFSR64QuasiRandom extends EnhancedRandom {
 	 * @param value     the exact value to use for the state, if valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
-        state = (value == 0L) ? 0x9E3779B97F4A7C15L : value;
+	public void setSelectedState(int selection, long value) {
+		state = (value == 0L) ? 0x9E3779B97F4A7C15L : value;
 	}
 
 	/**
@@ -121,11 +123,11 @@ public class LFSR64QuasiRandom extends EnhancedRandom {
 	 * @param seed the initial seed; may be any long
 	 */
 	@Override
-	public void setSeed (long seed) {
+	public void setSeed(long seed) {
 		state = (seed == 0L) ? 0x9E3779B97F4A7C15L : seed;
 	}
 
-	public long getState () {
+	public long getState() {
 		return state;
 	}
 
@@ -135,22 +137,22 @@ public class LFSR64QuasiRandom extends EnhancedRandom {
 	 * @param state the first state; can be any long
 	 */
 	@Override
-	public void setState (long state) {
+	public void setState(long state) {
 		this.state = (state == 0L) ? 0x9E3779B97F4A7C15L : state;
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		return (state = (state << 1) ^ (state >> 63 & 0xfeedbabedeadbeefL));
 	}
 
 	@Override
-	public int next (int bits) {
-		return (int)(state = (state << 1) ^ (state >> 63 & 0xfeedbabedeadbeefL)) >>> 32 - bits;
+	public int next(int bits) {
+		return (int) (state = (state << 1) ^ (state >> 63 & 0xfeedbabedeadbeefL)) >>> 32 - bits;
 	}
 
 	@Override
-	public long previousLong () {
+	public long previousLong() {
 		final long result = state;
 		final long lsb = (state & 1L);
 		state = ((state ^ (-lsb & 0xfeedbabedeadbeefL)) >>> 1) ^ lsb << 63;
@@ -169,23 +171,23 @@ public class LFSR64QuasiRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public LFSR64QuasiRandom copy () {
+	public LFSR64QuasiRandom copy() {
 		return new LFSR64QuasiRandom(state);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		LFSR64QuasiRandom that = (LFSR64QuasiRandom)o;
+		LFSR64QuasiRandom that = (LFSR64QuasiRandom) o;
 
 		return state == that.state;
 	}
 
-	public String toString () {
+	public String toString() {
 		return "LFSR64QuasiRandom{" + "state=" + state + "L}";
 	}
 

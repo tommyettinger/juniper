@@ -24,7 +24,8 @@ import java.io.File;
 import java.util.Date;
 import java.util.List;
 
-import static com.github.tommyettinger.random.InitialCorrelationEvaluator.*;
+import static com.github.tommyettinger.random.InitialCorrelationEvaluator.INTERVAL_X;
+import static com.github.tommyettinger.random.InitialCorrelationEvaluator.INTERVAL_Y;
 
 /**
  * Like {@link InitialCorrelationEvaluator}, but only checks the first four generations, discarding none.
@@ -38,86 +39,87 @@ import static com.github.tommyettinger.random.InitialCorrelationEvaluator.*;
  * generator is.
  */
 public class ImmediateInitialCorrelationEvaluator {
-    public static int DROPPED_STEPS = 4;
-    public static int STEP_LIMIT = 4;
-    public double steps = 0;
-    public int mode = 0;
-    public double amount = 0;
-    public double actualMode = 0;
-    public double actualAmount = 0;
-    private double[][] real;
-    private double[][] imag;
-    public EnhancedRandom[][] randoms;
+	public static int DROPPED_STEPS = 4;
+	public static int STEP_LIMIT = 4;
+	public double steps = 0;
+	public int mode = 0;
+	public double amount = 0;
+	public double actualMode = 0;
+	public double actualAmount = 0;
+	private double[][] real;
+	private double[][] imag;
+	public EnhancedRandom[][] randoms;
 
-    public ImmediateInitialCorrelationEvaluator() {
+	public ImmediateInitialCorrelationEvaluator() {
 
-    }
+	}
 
-    /**
-     *
-     * @param randomGrid
-     * @param firstStepUsed
-     * @param stepLimit
-     * @return a positive number if the distribution of {@code randoms} is close to uniform; otherwise a negative number
-     */
-    public double run(EnhancedRandom[][] randomGrid, int firstStepUsed, int stepLimit){
-        this.randoms = new EnhancedRandom[randomGrid.length][randomGrid[0].length];
-        real = new double[randoms.length][randoms[0].length];
-        imag = new double[randoms.length][randoms[0].length];
-        actualAmount = 0;
-        actualMode = 0;
-        for (int bit = 0; bit < 32; bit++) {
-            steps = 0;
-            for (int x = 0; x < randomGrid.length; x++) {
-                for (int y = 0; y < randomGrid[0].length; y++) {
-                    this.randoms[x][y] = randomGrid[x][y].copy();
-                }
-            }
+	/**
+	 *
+	 * @param randomGrid
+	 * @param firstStepUsed
+	 * @param stepLimit
+	 * @return a positive number if the distribution of {@code randoms} is close to uniform; otherwise a negative number
+	 */
+	public double run(EnhancedRandom[][] randomGrid, int firstStepUsed, int stepLimit) {
+		this.randoms = new EnhancedRandom[randomGrid.length][randomGrid[0].length];
+		real = new double[randoms.length][randoms[0].length];
+		imag = new double[randoms.length][randoms[0].length];
+		actualAmount = 0;
+		actualMode = 0;
+		for (int bit = 0; bit < 32; bit++) {
+			steps = 0;
+			for (int x = 0; x < randomGrid.length; x++) {
+				for (int y = 0; y < randomGrid[0].length; y++) {
+					this.randoms[x][y] = randomGrid[x][y].copy();
+				}
+			}
 //            ArrayTools.fill(real, 0.0);
 //            ArrayTools.fill(imag, 0.0);
 
-            for (int i = 0; i < firstStepUsed; i++) {
-                for (int x = 0; x < randoms.length; x++) {
-                    for (int y = 0; y < randoms[x].length; y++) {
-                        randoms[x][y].nextInt();
-                    }
-                }
-            }
-            double amountSum = 0;
-            int minMode = Integer.MAX_VALUE;
-            for (int i = firstStepUsed, lim = firstStepUsed + stepLimit; i < lim; i++) {
-                step(bit);
-                amountSum += amount;
-                minMode = Math.min(mode, minMode);
-            }
-            actualAmount += amountSum / steps;
-            actualMode = minMode;
-        }
+			for (int i = 0; i < firstStepUsed; i++) {
+				for (int x = 0; x < randoms.length; x++) {
+					for (int y = 0; y < randoms[x].length; y++) {
+						randoms[x][y].nextInt();
+					}
+				}
+			}
+			double amountSum = 0;
+			int minMode = Integer.MAX_VALUE;
+			for (int i = firstStepUsed, lim = firstStepUsed + stepLimit; i < lim; i++) {
+				step(bit);
+				amountSum += amount;
+				minMode = Math.min(mode, minMode);
+			}
+			actualAmount += amountSum / steps;
+			actualMode = minMode;
+		}
 //        actualMode *= 0.5; // not sure why this is needed to get similar behavior to before...
-        return 3.5 - Math.abs(actualMode - 116.5) - (actualAmount - 0.031) * 10;
-    }
-    public void step(int bit) {
-        ++steps;
-        ArrayTools.fill(imag, 0.0);
+		return 3.5 - Math.abs(actualMode - 116.5) - (actualAmount - 0.031) * 10;
+	}
 
-        for (int x = 0; x < randoms.length; x++) {
-            for (int y = 0; y < randoms[x].length; y++) {
-                real[x][y] = randoms[x][y].nextInt() >>> bit & 1;
-            }
-        }
-        Fft.transformWindowless2D(real, imag);
-        Fft.getHistogram(real, imag);
-        mode = Fft.maxIndex(Fft.histogram);
-        amount = Fft.histogram[mode] * 0x1p-5 / (randoms.length * randoms[0].length);
-    }
+	public void step(int bit) {
+		++steps;
+		ArrayTools.fill(imag, 0.0);
 
-    public static void main(String[] arg) {
-        StringBuilder sb = new StringBuilder(1024);
-        EnhancedRandom[][] g = new EnhancedRandom[256][256];
+		for (int x = 0; x < randoms.length; x++) {
+			for (int y = 0; y < randoms[x].length; y++) {
+				real[x][y] = randoms[x][y].nextInt() >>> bit & 1;
+			}
+		}
+		Fft.transformWindowless2D(real, imag);
+		Fft.getHistogram(real, imag);
+		mode = Fft.maxIndex(Fft.histogram);
+		amount = Fft.histogram[mode] * 0x1p-5 / (randoms.length * randoms[0].length);
+	}
 
-        List<EnhancedRandom> rs =
+	public static void main(String[] arg) {
+		StringBuilder sb = new StringBuilder(1024);
+		EnhancedRandom[][] g = new EnhancedRandom[256][256];
+
+		List<EnhancedRandom> rs =
 //			Generators.randomList;
-                Generators.randomList.subList(Generators.randomCount - 1, Generators.randomCount);
+			Generators.randomList.subList(Generators.randomCount - 1, Generators.randomCount);
 
 //        List<EnhancedRandom> rs = ObjectList.with(
 //                new I64LFSR64MX3Random(1, 1)
@@ -150,44 +152,44 @@ public class ImmediateInitialCorrelationEvaluator {
 
 //        ArrayList<EnhancedRandom> rs = Generators.randomList;
 
-        rs.sort((l, r) -> l.getClass().getSimpleName().compareTo(r.getClass().getSimpleName()));
+		rs.sort((l, r) -> l.getClass().getSimpleName().compareTo(r.getClass().getSimpleName()));
 //        rs.sort(Comparator.comparing(EnhancedRandom::getClass, Comparator.comparing(Class::getSimpleName)));
-        for (EnhancedRandom r : rs) {
-            for (int x = 0; x < g.length; x++) {
-                for (int y = 0; y < g[x].length; y++) {
-                    g[x][y] = r.copy();
+		for (EnhancedRandom r : rs) {
+			for (int x = 0; x < g.length; x++) {
+				for (int y = 0; y < g[x].length; y++) {
+					g[x][y] = r.copy();
 //                    long b =
 //                            y + ((x + y) * (x + y + 1L) >> 1);
 //                            x << 16 ^ y;
 //                            interleaveBits(x, y);
 //                    g[x][y].setSeed(b);
-                    if(r.getStateCount() == 1)
-                        g[x][y].setState(CorrelationVisualizer.interleaveBits(x * INTERVAL_X, y * INTERVAL_Y));
+					if (r.getStateCount() == 1)
+						g[x][y].setState(CorrelationVisualizer.interleaveBits(x * INTERVAL_X, y * INTERVAL_Y));
 ////                        g[x][y].setState(x << 16 ^ y);
 ////                        g[x][y].setState(y + ((x + y) * (x + y + 1L) >> 1)); // Cantor pairing function
-                    else
+					else
 ////                        g[x][y].setState((long)x<<1|1L, (long)y<<1|1L, 1L, 1L, 1L);
-                        g[x][y].setState(x * INTERVAL_X, y * INTERVAL_Y, 1L, 1L, 1L, 1L);
-                }
-            }
-            ImmediateInitialCorrelationEvaluator evaluator = new ImmediateInitialCorrelationEvaluator();
-            double result = evaluator.run(g, DROPPED_STEPS, STEP_LIMIT);
-            System.out.println("Lowest mode: "
-                    + Base.BASE10.decimal(evaluator.actualMode, 8)
-                    + " has mean amount " + Base.BASE10.decimal(evaluator.actualAmount, 12)
-                    + (result > 0.0 ? "  PASS 👍 for " : "  FAIL 💀 for ") + r.getClass().getSimpleName());
-            sb.append("[Immediate] Lowest mode: ");
-            Base.BASE10.appendDecimal(sb, evaluator.actualMode, 8);
-            sb.append(" has mean amount ");
-            Base.BASE10.appendDecimal(sb, evaluator.actualAmount, 12);
-            sb.append(result > 0.0 ? "  PASS 👍 for " : "  FAIL 💀 for ")
-                    .append(r.getClass().getSimpleName()).append('\n');
-        }
-        Date date = new Date();
-        FileHandle loc = new FileHandle(new File("results/").getAbsoluteFile());
-        loc.mkdirs();
-        loc = loc.child("ImmediateInitialCorrelation["+DROPPED_STEPS+",4]_" + INTERVAL_X + "x" + INTERVAL_Y + "_" + date.getTime() + '_' +
-                date.toString().replace(':', '_') + ".txt");
-        loc.writeString(sb.toString(), false, "UTF-8");
-    }
+						g[x][y].setState(x * INTERVAL_X, y * INTERVAL_Y, 1L, 1L, 1L, 1L);
+				}
+			}
+			ImmediateInitialCorrelationEvaluator evaluator = new ImmediateInitialCorrelationEvaluator();
+			double result = evaluator.run(g, DROPPED_STEPS, STEP_LIMIT);
+			System.out.println("Lowest mode: "
+				+ Base.BASE10.decimal(evaluator.actualMode, 8)
+				+ " has mean amount " + Base.BASE10.decimal(evaluator.actualAmount, 12)
+				+ (result > 0.0 ? "  PASS 👍 for " : "  FAIL 💀 for ") + r.getClass().getSimpleName());
+			sb.append("[Immediate] Lowest mode: ");
+			Base.BASE10.appendDecimal(sb, evaluator.actualMode, 8);
+			sb.append(" has mean amount ");
+			Base.BASE10.appendDecimal(sb, evaluator.actualAmount, 12);
+			sb.append(result > 0.0 ? "  PASS 👍 for " : "  FAIL 💀 for ")
+				.append(r.getClass().getSimpleName()).append('\n');
+		}
+		Date date = new Date();
+		FileHandle loc = new FileHandle(new File("results/").getAbsoluteFile());
+		loc.mkdirs();
+		loc = loc.child("ImmediateInitialCorrelation[" + DROPPED_STEPS + ",4]_" + INTERVAL_X + "x" + INTERVAL_Y + "_" + date.getTime() + '_' +
+			date.toString().replace(':', '_') + ".txt");
+		loc.writeString(sb.toString(), false, "UTF-8");
+	}
 }

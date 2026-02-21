@@ -45,12 +45,14 @@ public class ThrashRandom extends EnhancedRandom {
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
 
 	/**
 	 * 2 to the 64.
+	 *
 	 * @return 2 to the 64
 	 */
 	@Override
@@ -123,7 +125,7 @@ public class ThrashRandom extends EnhancedRandom {
 	 * @return 3 (three)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 3;
 	}
 
@@ -135,7 +137,7 @@ public class ThrashRandom extends EnhancedRandom {
 	 * @return the value of the selected state
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		switch (selection) {
 			case 0:
 				return stateA;
@@ -155,17 +157,17 @@ public class ThrashRandom extends EnhancedRandom {
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		switch (selection) {
-		case 0:
-			stateA = value;
-			break;
-		case 1:
-			stateB = value;
-			break;
-		case 2:
-			stateC = value;
-			break;
+			case 0:
+				stateA = value;
+				break;
+			case 1:
+				stateB = value;
+				break;
+			case 2:
+				stateC = value;
+				break;
 		}
 	}
 
@@ -177,19 +179,19 @@ public class ThrashRandom extends EnhancedRandom {
 	 * @param s the initial seed; may be any long
 	 */
 	@Override
-	public void setSeed (long s) {
+	public void setSeed(long s) {
 		s += 0xF1357AEA2E62A9C5L;
 		s = (s ^ (s << 23 | s >>> 41) ^ (s << 47 | s >>> 17)) ^ 0xC6BC279692B5C323L;
 		stateA = s;
 		s += 0xF1357AEA2E62A9C5L;
-		s = (s ^ (s <<  3 | s >>> 61) ^ (s << 57 | s >>>  7)) ^ 0xC6BC279692B5C323L;
+		s = (s ^ (s << 3 | s >>> 61) ^ (s << 57 | s >>> 7)) ^ 0xC6BC279692B5C323L;
 		stateB = s;
 		s += 0xF1357AEA2E62A9C5L;
 		s = (s ^ (s << 43 | s >>> 21) ^ (s << 37 | s >>> 27)) ^ 0xC6BC279692B5C323L;
 		stateC = s;
 	}
 
-	public long getStateA () {
+	public long getStateA() {
 		return stateA;
 	}
 
@@ -198,11 +200,11 @@ public class ThrashRandom extends EnhancedRandom {
 	 *
 	 * @param stateA can be any long
 	 */
-	public void setStateA (long stateA) {
+	public void setStateA(long stateA) {
 		this.stateA = stateA;
 	}
 
-	public long getStateB () {
+	public long getStateB() {
 		return stateB;
 	}
 
@@ -211,11 +213,11 @@ public class ThrashRandom extends EnhancedRandom {
 	 *
 	 * @param stateB can be any long
 	 */
-	public void setStateB (long stateB) {
+	public void setStateB(long stateB) {
 		this.stateB = stateB;
 	}
 
-	public long getStateC () {
+	public long getStateC() {
 		return stateC;
 	}
 
@@ -224,7 +226,7 @@ public class ThrashRandom extends EnhancedRandom {
 	 *
 	 * @param stateC can be any long
 	 */
-	public void setStateC (long stateC) {
+	public void setStateC(long stateC) {
 		this.stateC = stateC;
 	}
 
@@ -249,22 +251,22 @@ public class ThrashRandom extends EnhancedRandom {
 	 * @param stateC the third state; can be any long
 	 */
 	@Override
-	public void setState (long stateA, long stateB, long stateC) {
+	public void setState(long stateA, long stateB, long stateC) {
 		this.stateA = stateA;
 		this.stateB = stateB;
 		this.stateC = stateC;
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		return stateA = (stateB = (stateB << 47 | stateB >>> 17) ^ (stateC += 0xD1B54A32D192ED03L))
-				+ (stateA << 23 | stateA >>> 41);
+			+ (stateA << 23 | stateA >>> 41);
 	}
 	// variant, one-line version
 //      return a=(b=(b<<47|b>>>17)^(c+=0xD1B54A32D192ED03L))+(a<<23|a>>>41);
 
 	@Override
-	public long previousLong () {
+	public long previousLong() {
 		final long a = stateA;
 		final long b = stateB;
 		final long c = stateC;
@@ -275,10 +277,11 @@ public class ThrashRandom extends EnhancedRandom {
 		stateA = (stateA << 41 | stateA >>> 23);
 		return a;
 	}
+
 	@Override
-	public int next (int bits) {
-		return (int)(stateA = (stateB = (stateB << 47 | stateB >>> 17) ^ (stateC += 0xD1B54A32D192ED03L))
-				 + (stateA << 23 | stateA >>> 41)) >>> (32 - bits);
+	public int next(int bits) {
+		return (int) (stateA = (stateB = (stateB << 47 | stateB >>> 17) ^ (stateC += 0xD1B54A32D192ED03L))
+			+ (stateA << 23 | stateA >>> 41)) >>> (32 - bits);
 	}
 
 	/**
@@ -293,28 +296,28 @@ public class ThrashRandom extends EnhancedRandom {
 	 */
 	@Override
 	public int nextInt() {
-		return (int)(stateA = (stateB = (stateB << 47 | stateB >>> 17) ^ (stateC += 0xD1B54A32D192ED03L))
-				 + (stateA << 23 | stateA >>> 41));
+		return (int) (stateA = (stateB = (stateB << 47 | stateB >>> 17) ^ (stateC += 0xD1B54A32D192ED03L))
+			+ (stateA << 23 | stateA >>> 41));
 	}
 
 	@Override
-	public ThrashRandom copy () {
+	public ThrashRandom copy() {
 		return new ThrashRandom(stateA, stateB, stateC);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		ThrashRandom that = (ThrashRandom)o;
+		ThrashRandom that = (ThrashRandom) o;
 
 		return stateA == that.stateA && stateB == that.stateB && stateC == that.stateC;
 	}
 
-	public String toString () {
+	public String toString() {
 		return "ThrashRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L}";
 	}
 

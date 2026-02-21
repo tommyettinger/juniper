@@ -43,6 +43,7 @@ public class WumpusRandom extends EnhancedRandom {
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("7ffffffffffffffe80000000000000010000000000000000", 16);
@@ -50,6 +51,7 @@ public class WumpusRandom extends EnhancedRandom {
 	/**
 	 * (2 to the 64) times ((2 to the 64) minus 1) times ((2 to the 63) minus 1).
 	 * This is between 2 to the 190, and 2 to the 191, and is much closer to the latter.
+	 *
 	 * @return (2 to the 64) times ((2 to the 64) minus 1) times ((2 to the 63) minus 1)
 	 */
 	@Override
@@ -76,9 +78,9 @@ public class WumpusRandom extends EnhancedRandom {
 	public WumpusRandom() {
 		stateA = EnhancedRandom.seedFromMath();
 		stateB = EnhancedRandom.seedFromMath() & -2L;
-		if(stateB == 0) stateB = -2L;
+		if (stateB == 0) stateB = -2L;
 		stateC = EnhancedRandom.seedFromMath();
-		if(stateC == 0) stateC = 1L;
+		if (stateC == 0) stateC = 1L;
 	}
 
 	/**
@@ -127,7 +129,7 @@ public class WumpusRandom extends EnhancedRandom {
 	 * @return 3 (three)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 3;
 	}
 
@@ -139,7 +141,7 @@ public class WumpusRandom extends EnhancedRandom {
 	 * @return the value of the selected state
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		switch (selection) {
 			case 0:
 				return stateA;
@@ -159,18 +161,18 @@ public class WumpusRandom extends EnhancedRandom {
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		switch (selection) {
-		case 0:
-			stateA = value;
-			break;
-		case 1:
-			stateB = value == 0L ? -2L : (value & -2L);
+			case 0:
+				stateA = value;
+				break;
+			case 1:
+				stateB = value == 0L ? -2L : (value & -2L);
 
-			break;
-		case 2:
-			stateC = value == 0L ? 1L : value;
-			break;
+				break;
+			case 2:
+				stateC = value == 0L ? 1L : value;
+				break;
 		}
 	}
 
@@ -182,7 +184,7 @@ public class WumpusRandom extends EnhancedRandom {
 	 * @param seed the initial seed; may be any long
 	 */
 	@Override
-	public void setSeed (long seed) {
+	public void setSeed(long seed) {
 		// This is based on MX3, but pulls out values and assigns them to states mid-way, sometimes XORing them.
 		seed ^= seed >>> 32;
 		seed *= 0xbea225f9eb34556dL;
@@ -198,7 +200,7 @@ public class WumpusRandom extends EnhancedRandom {
 		stateC = seed == 0L ? 1L : seed;
 	}
 
-	public long getStateA () {
+	public long getStateA() {
 		return stateA;
 	}
 
@@ -207,11 +209,11 @@ public class WumpusRandom extends EnhancedRandom {
 	 *
 	 * @param stateA can be any long
 	 */
-	public void setStateA (long stateA) {
+	public void setStateA(long stateA) {
 		this.stateA = stateA;
 	}
 
-	public long getStateB () {
+	public long getStateB() {
 		return stateB;
 	}
 
@@ -221,11 +223,11 @@ public class WumpusRandom extends EnhancedRandom {
 	 *
 	 * @param stateB can be any even long except 0
 	 */
-	public void setStateB (long stateB) {
+	public void setStateB(long stateB) {
 		this.stateB = stateB == 0L ? -2L : (stateB & -2L);
 	}
 
-	public long getStateC () {
+	public long getStateC() {
 		return stateC;
 	}
 
@@ -234,7 +236,7 @@ public class WumpusRandom extends EnhancedRandom {
 	 *
 	 * @param stateC can be any long except 0
 	 */
-	public void setStateC (long stateC) {
+	public void setStateC(long stateC) {
 		this.stateC = stateC == 0L ? 1L : stateC;
 	}
 
@@ -259,14 +261,14 @@ public class WumpusRandom extends EnhancedRandom {
 	 * @param stateC the third state; can be any long except 0
 	 */
 	@Override
-	public void setState (long stateA, long stateB, long stateC) {
+	public void setState(long stateA, long stateB, long stateC) {
 		this.stateA = stateA;
 		this.stateB = stateB == 0L ? -2L : stateB & -2L;
 		this.stateC = stateC == 0 ? 1L : stateC;
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		final long a = stateA;
 		final long b = stateB;
 		final long c = stateC;
@@ -278,7 +280,7 @@ public class WumpusRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public long previousLong () {
+	public long previousLong() {
 		final long lsb = (stateC & 1L);
 		stateC = ((stateC ^ (-lsb & 0xFEEDBABEDEADBEEFL)) >>> 1) ^ lsb << 63;
 		final long slsb = (stateB & 2L);
@@ -289,7 +291,7 @@ public class WumpusRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		final long a = stateA;
 		final long b = stateB;
 		final long c = stateC;
@@ -297,27 +299,27 @@ public class WumpusRandom extends EnhancedRandom {
 		stateA = a * 0xD1342543DE82EF95L + 1L ^ c;
 		stateB = (b << 1) ^ (b >> 63 & 0xB35846EEAB94A77EL);
 		stateC = (c << 1) ^ (c >> 63 & 0xFEEDBABEDEADBEEFL);
-		return (int)(z ^ (z << 25 | z >>> 39) ^ (z << 50 | z >>> 14)) >>> (32 - bits);
+		return (int) (z ^ (z << 25 | z >>> 39) ^ (z << 50 | z >>> 14)) >>> (32 - bits);
 	}
 
 	@Override
-	public WumpusRandom copy () {
+	public WumpusRandom copy() {
 		return new WumpusRandom(stateA, stateB, stateC);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		WumpusRandom that = (WumpusRandom)o;
+		WumpusRandom that = (WumpusRandom) o;
 
 		return stateA == that.stateA && stateB == that.stateB && stateC == that.stateC;
 	}
 
-	public String toString () {
+	public String toString() {
 		return "WumpusRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L}";
 	}
 
@@ -351,19 +353,31 @@ public class WumpusRandom extends EnhancedRandom {
 		}
 		{
 			WumpusRandom random = new WumpusRandom(1L);
-			long n0 = random.nextLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL\n", random.stateA, random.stateB, random.stateC);
-			long n1 = random.nextLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL\n", random.stateA, random.stateB, random.stateC);
-			long n2 = random.nextLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL\n", random.stateA, random.stateB, random.stateC);
-			long n3 = random.nextLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL\n", random.stateA, random.stateB, random.stateC);
-			long n4 = random.nextLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL\n", random.stateA, random.stateB, random.stateC);
-			long n5 = random.nextLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL\n", random.stateA, random.stateB, random.stateC);
+			long n0 = random.nextLong();
+			System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL\n", random.stateA, random.stateB, random.stateC);
+			long n1 = random.nextLong();
+			System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL\n", random.stateA, random.stateB, random.stateC);
+			long n2 = random.nextLong();
+			System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL\n", random.stateA, random.stateB, random.stateC);
+			long n3 = random.nextLong();
+			System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL\n", random.stateA, random.stateB, random.stateC);
+			long n4 = random.nextLong();
+			System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL\n", random.stateA, random.stateB, random.stateC);
+			long n5 = random.nextLong();
+			System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL\n", random.stateA, random.stateB, random.stateC);
 			System.out.println("Going back...");
-			long p5 = random.previousLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL\n", random.stateA, random.stateB, random.stateC);
-			long p4 = random.previousLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL\n", random.stateA, random.stateB, random.stateC);
-			long p3 = random.previousLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL\n", random.stateA, random.stateB, random.stateC);
-			long p2 = random.previousLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL\n", random.stateA, random.stateB, random.stateC);
-			long p1 = random.previousLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL\n", random.stateA, random.stateB, random.stateC);
-			long p0 = random.previousLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL\n", random.stateA, random.stateB, random.stateC);
+			long p5 = random.previousLong();
+			System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL\n", random.stateA, random.stateB, random.stateC);
+			long p4 = random.previousLong();
+			System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL\n", random.stateA, random.stateB, random.stateC);
+			long p3 = random.previousLong();
+			System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL\n", random.stateA, random.stateB, random.stateC);
+			long p2 = random.previousLong();
+			System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL\n", random.stateA, random.stateB, random.stateC);
+			long p1 = random.previousLong();
+			System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL\n", random.stateA, random.stateB, random.stateC);
+			long p0 = random.previousLong();
+			System.out.printf("a: 0x%016XL, b: 0x%016XL, c: 0x%016XL\n", random.stateA, random.stateB, random.stateC);
 			System.out.println(n0 == p0);
 			System.out.println(n1 == p1);
 			System.out.println(n2 == p2);

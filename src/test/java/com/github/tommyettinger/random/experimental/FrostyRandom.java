@@ -116,7 +116,7 @@ public class FrostyRandom extends EnhancedRandom {
 	 * @return 2 (two)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 2;
 	}
 
@@ -128,7 +128,7 @@ public class FrostyRandom extends EnhancedRandom {
 	 * @return the value of the selected state
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		if ((selection & 1) == 1) {
 			return stateB;
 		}
@@ -143,7 +143,7 @@ public class FrostyRandom extends EnhancedRandom {
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		if ((selection & 1) == 1) {
 			stateB = value;
 		} else {
@@ -160,7 +160,7 @@ public class FrostyRandom extends EnhancedRandom {
 	 * @param seed the initial seed; may be any long
 	 */
 	@Override
-	public void setSeed (long seed) {
+	public void setSeed(long seed) {
 		stateA = seed;
 		stateB = ~seed;
 //		// This is based on MX3, but pulls out values and assigns them to states mid-way, sometimes XORing them.
@@ -176,7 +176,7 @@ public class FrostyRandom extends EnhancedRandom {
 //		stateB = (seed ^ ~0xC6BC279692B5C323L);
 	}
 
-	public long getStateA () {
+	public long getStateA() {
 		return stateA;
 	}
 
@@ -185,11 +185,11 @@ public class FrostyRandom extends EnhancedRandom {
 	 *
 	 * @param stateA can be any long
 	 */
-	public void setStateA (long stateA) {
+	public void setStateA(long stateA) {
 		this.stateA = stateA;
 	}
 
-	public long getStateB () {
+	public long getStateB() {
 		return stateB;
 	}
 
@@ -198,7 +198,7 @@ public class FrostyRandom extends EnhancedRandom {
 	 *
 	 * @param stateB can be any long
 	 */
-	public void setStateB (long stateB) {
+	public void setStateB(long stateB) {
 		this.stateB = stateB;
 	}
 
@@ -211,7 +211,7 @@ public class FrostyRandom extends EnhancedRandom {
 	 * @param stateB the second state; can be any long
 	 */
 	@Override
-	public void setState (long stateA, long stateB) {
+	public void setState(long stateA, long stateB) {
 		this.stateA = stateA;
 		this.stateB = stateB;
 	}
@@ -228,49 +228,51 @@ public class FrostyRandom extends EnhancedRandom {
 //		y ^= (y << r | y >>> -r) ^ (y << q | y >>> -q);
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		long x = (stateA += 0xD1B54A32D192ED03L);
 		long y = (stateB += 0x8CB92BA72F3D8DD7L);
-		y = (y <<  3 | y >>> 61) ^ (x = (x << 56 | x >>>  8) + y ^ 0xBEA225F9EB34556DL) + (x << 37 | x >>> 27);
+		y = (y << 3 | y >>> 61) ^ (x = (x << 56 | x >>> 8) + y ^ 0xBEA225F9EB34556DL) + (x << 37 | x >>> 27);
 		x = (x << 11 | x >>> 53) ^ (y = (y << 41 | y >>> 23) + x ^ 0xA62B82F58DB8A985L) + (y << 29 | y >>> 35);
-		y = (y << 12 | y >>> 52) ^ (x = (x << 43 | x >>> 21) + y ^ 0x9E3779B97F4A7C15L) + (x << 59 | x >>>  5);
+		y = (y << 12 | y >>> 52) ^ (x = (x << 43 | x >>> 21) + y ^ 0x9E3779B97F4A7C15L) + (x << 59 | x >>> 5);
 		x = (x << 50 | x >>> 14) ^ (y = (y << 52 | y >>> 12) + x ^ 0xF1357AEA2E62A9C5L) + (y << 23 | y >>> 41);
 		return x;
 	}
 
 	@Override
-	public long previousLong () {
+	public long previousLong() {
 		long x = stateA;
 		long y = stateB;
 		stateA -= 0xD1B54A32D192ED03L;
 		stateB -= 0x8CB92BA72F3D8DD7L;
-		y = (y <<  3 | y >>> 61) ^ (x = (x << 56 | x >>>  8) + y ^ 0xBEA225F9EB34556DL) + (x << 37 | x >>> 27);
+		y = (y << 3 | y >>> 61) ^ (x = (x << 56 | x >>> 8) + y ^ 0xBEA225F9EB34556DL) + (x << 37 | x >>> 27);
 		x = (x << 11 | x >>> 53) ^ (y = (y << 41 | y >>> 23) + x ^ 0xA62B82F58DB8A985L) + (y << 29 | y >>> 35);
-		y = (y << 12 | y >>> 52) ^ (x = (x << 43 | x >>> 21) + y ^ 0x9E3779B97F4A7C15L) + (x << 59 | x >>>  5);
+		y = (y << 12 | y >>> 52) ^ (x = (x << 43 | x >>> 21) + y ^ 0x9E3779B97F4A7C15L) + (x << 59 | x >>> 5);
 		x = (x << 50 | x >>> 14) ^ (y = (y << 52 | y >>> 12) + x ^ 0xF1357AEA2E62A9C5L) + (y << 23 | y >>> 41);
 		return x;
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		long x = (stateA += 0xD1B54A32D192ED03L);
 		long y = (stateB += 0x8CB92BA72F3D8DD7L);
-		y = (y <<  3 | y >>> 61) ^ (x = (x << 56 | x >>>  8) + y ^ 0xBEA225F9EB34556DL) + (x << 37 | x >>> 27);
+		y = (y << 3 | y >>> 61) ^ (x = (x << 56 | x >>> 8) + y ^ 0xBEA225F9EB34556DL) + (x << 37 | x >>> 27);
 		x = (x << 11 | x >>> 53) ^ (y = (y << 41 | y >>> 23) + x ^ 0xA62B82F58DB8A985L) + (y << 29 | y >>> 35);
-		y = (y << 12 | y >>> 52) ^ (x = (x << 43 | x >>> 21) + y ^ 0x9E3779B97F4A7C15L) + (x << 59 | x >>>  5);
+		y = (y << 12 | y >>> 52) ^ (x = (x << 43 | x >>> 21) + y ^ 0x9E3779B97F4A7C15L) + (x << 59 | x >>> 5);
 		x = (x << 50 | x >>> 14) ^ (y = (y << 52 | y >>> 12) + x ^ 0xF1357AEA2E62A9C5L) + (y << 23 | y >>> 41);
-		return (int)x >>> (32 - bits);
+		return (int) x >>> (32 - bits);
 	}
+
 	@Override
-	public long skip (final long advance) {
+	public long skip(final long advance) {
 		long x = (stateA += 0xD1B54A32D192ED03L * advance);
 		long y = (stateB += 0x8CB92BA72F3D8DD7L * advance);
-		y = (y <<  3 | y >>> 61) ^ (x = (x << 56 | x >>>  8) + y ^ 0xBEA225F9EB34556DL) + (x << 37 | x >>> 27);
+		y = (y << 3 | y >>> 61) ^ (x = (x << 56 | x >>> 8) + y ^ 0xBEA225F9EB34556DL) + (x << 37 | x >>> 27);
 		x = (x << 11 | x >>> 53) ^ (y = (y << 41 | y >>> 23) + x ^ 0xA62B82F58DB8A985L) + (y << 29 | y >>> 35);
-		y = (y << 12 | y >>> 52) ^ (x = (x << 43 | x >>> 21) + y ^ 0x9E3779B97F4A7C15L) + (x << 59 | x >>>  5);
+		y = (y << 12 | y >>> 52) ^ (x = (x << 43 | x >>> 21) + y ^ 0x9E3779B97F4A7C15L) + (x << 59 | x >>> 5);
 		x = (x << 50 | x >>> 14) ^ (y = (y << 52 | y >>> 12) + x ^ 0xF1357AEA2E62A9C5L) + (y << 23 | y >>> 41);
 		return x;
 	}
+
 	/**
 	 * Gets a long that identifies which of the 2 to the 64 possible streams this is on.
 	 * This takes constant time.
@@ -312,23 +314,23 @@ public class FrostyRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public FrostyRandom copy () {
+	public FrostyRandom copy() {
 		return new FrostyRandom(stateA, stateB);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		FrostyRandom that = (FrostyRandom)o;
+		FrostyRandom that = (FrostyRandom) o;
 
 		return stateA == that.stateA && stateB == that.stateB;
 	}
 
-	public String toString () {
+	public String toString() {
 		return "FrostyRandom{stateA=" + (stateA) + "L, stateB=" + (stateB) + "L}";
 	}
 

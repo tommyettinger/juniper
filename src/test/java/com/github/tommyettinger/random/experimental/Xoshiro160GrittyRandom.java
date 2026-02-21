@@ -87,7 +87,7 @@ public class Xoshiro160GrittyRandom extends EnhancedRandom {
 	 * Creates a new Xoshiro160GrittyRandom with a random state.
 	 */
 	public Xoshiro160GrittyRandom() {
-		this((int)EnhancedRandom.seedFromMath(), (int)EnhancedRandom.seedFromMath(), (int)EnhancedRandom.seedFromMath(), (int)EnhancedRandom.seedFromMath(), (int)EnhancedRandom.seedFromMath());
+		this((int) EnhancedRandom.seedFromMath(), (int) EnhancedRandom.seedFromMath(), (int) EnhancedRandom.seedFromMath(), (int) EnhancedRandom.seedFromMath(), (int) EnhancedRandom.seedFromMath());
 	}
 
 	/**
@@ -117,7 +117,7 @@ public class Xoshiro160GrittyRandom extends EnhancedRandom {
 		this.stateA = stateA;
 		this.stateB = stateB;
 		this.stateC = stateC;
-		this.stateD = (stateA|stateB|stateC|stateD) == 0 ? 1 : stateD;
+		this.stateD = (stateA | stateB | stateC | stateD) == 0 ? 1 : stateD;
 		this.stateE = stateE;
 	}
 
@@ -128,6 +128,7 @@ public class Xoshiro160GrittyRandom extends EnhancedRandom {
 
 	/**
 	 * This generator mainly generates int values.
+	 *
 	 * @return true
 	 */
 	@Override
@@ -137,12 +138,14 @@ public class Xoshiro160GrittyRandom extends EnhancedRandom {
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000", 16);
 
 	/**
 	 * (2 to the 160) minus (2 to the 32).
+	 *
 	 * @return (2 to the 160) minus (2 to the 32)
 	 */
 	@Override
@@ -156,7 +159,7 @@ public class Xoshiro160GrittyRandom extends EnhancedRandom {
 	 * @return 5 (five)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 5;
 	}
 
@@ -168,18 +171,18 @@ public class Xoshiro160GrittyRandom extends EnhancedRandom {
 	 * @return the value of the selected state, which is an int that will be promoted to long
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		switch (selection) {
-		case 0:
-			return stateA;
-		case 1:
-			return stateB;
-		case 2:
-			return stateC;
-		case 3:
-			return stateD;
-		default:
-			return stateE;
+			case 0:
+				return stateA;
+			case 1:
+				return stateB;
+			case 2:
+				return stateC;
+			case 3:
+				return stateD;
+			default:
+				return stateE;
 		}
 	}
 
@@ -194,7 +197,7 @@ public class Xoshiro160GrittyRandom extends EnhancedRandom {
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		switch (selection) {
 			case 0:
 				stateA = (int) value;
@@ -212,7 +215,7 @@ public class Xoshiro160GrittyRandom extends EnhancedRandom {
 				stateE = (int) value;
 				break;
 		}
-		if((stateA|stateB|stateC|stateD) == 0) stateD = 1;
+		if ((stateA | stateB | stateC | stateD) == 0) stateD = 1;
 	}
 
 	/**
@@ -223,22 +226,22 @@ public class Xoshiro160GrittyRandom extends EnhancedRandom {
 	 * @param seed the initial seed; may be any long
 	 */
 	@Override
-	public void setSeed (long seed) {
+	public void setSeed(long seed) {
 		long x = seed;
 		x ^= x >>> 27;
 		x *= 0x3C79AC492BA7B653L;
 		x ^= x >>> 33;
 		x *= 0x1C69B3F74AC4AE35L;
-		stateA = (int)(x ^= x >>> 27);
-		stateB = (int)(x >>> 32);
+		stateA = (int) (x ^= x >>> 27);
+		stateB = (int) (x >>> 32);
 		x = (seed + 0x9E3779B97F4A7C15L);
 		x ^= x >>> 27;
 		x *= 0x3C79AC492BA7B653L;
 		x ^= x >>> 33;
 		x *= 0x1C69B3F74AC4AE35L;
-		stateC = (int)(x ^= x >>> 27);
-		stateD = (int)(x >>> 32);
-		stateE = (int)(seed ^ seed >>> 32);
+		stateC = (int) (x ^= x >>> 27);
+		stateD = (int) (x >>> 32);
+		stateE = (int) (seed ^ seed >>> 32);
 	}
 
 	/**
@@ -247,9 +250,9 @@ public class Xoshiro160GrittyRandom extends EnhancedRandom {
 	 *
 	 * @param seed the initial seed; may be any int
 	 */
-	public void setSeed (int seed) {
+	public void setSeed(int seed) {
 		int a = seed ^ 0xDB4F0B91, b = (seed << 8 | seed >>> 24) ^ 0xBBE05633,
-				c = (seed << 16 | seed >>> 16) ^ 0xA0F2EC75, d = (seed << 24 | seed >>> 8) ^ 0x89E18285;
+			c = (seed << 16 | seed >>> 16) ^ 0xA0F2EC75, d = (seed << 24 | seed >>> 8) ^ 0x89E18285;
 		a = imul(a ^ a >>> 16, 0x21f0aaad);
 		a = imul(a ^ a >>> 15, 0x735a2d97);
 		stateA = a ^ a >>> 15;
@@ -265,7 +268,7 @@ public class Xoshiro160GrittyRandom extends EnhancedRandom {
 		stateE = seed ^ seed >>> 16;
 	}
 
-	public long getStateA () {
+	public long getStateA() {
 		return stateA;
 	}
 
@@ -274,12 +277,12 @@ public class Xoshiro160GrittyRandom extends EnhancedRandom {
 	 *
 	 * @param stateA can be any long, but will be cast to an int before use
 	 */
-	public void setStateA (long stateA) {
-		this.stateA = (int)stateA;
-		if((this.stateA|this.stateB|this.stateC|this.stateD) == 0) this.stateD = 1;
+	public void setStateA(long stateA) {
+		this.stateA = (int) stateA;
+		if ((this.stateA | this.stateB | this.stateC | this.stateD) == 0) this.stateD = 1;
 	}
 
-	public long getStateB () {
+	public long getStateB() {
 		return stateB;
 	}
 
@@ -288,12 +291,12 @@ public class Xoshiro160GrittyRandom extends EnhancedRandom {
 	 *
 	 * @param stateB can be any long, but will be cast to an int before use
 	 */
-	public void setStateB (long stateB) {
-		this.stateB = (int)stateB;
-		if((this.stateA|this.stateB|this.stateC|this.stateD) == 0) this.stateD = 1;
+	public void setStateB(long stateB) {
+		this.stateB = (int) stateB;
+		if ((this.stateA | this.stateB | this.stateC | this.stateD) == 0) this.stateD = 1;
 	}
 
-	public long getStateC () {
+	public long getStateC() {
 		return stateC;
 	}
 
@@ -302,12 +305,12 @@ public class Xoshiro160GrittyRandom extends EnhancedRandom {
 	 *
 	 * @param stateC can be any long, but will be cast to an int before use
 	 */
-	public void setStateC (long stateC) {
-		this.stateC = (int)stateC;
-		if((this.stateA|this.stateB|this.stateC|this.stateD) == 0) this.stateD = 1;
+	public void setStateC(long stateC) {
+		this.stateC = (int) stateC;
+		if ((this.stateA | this.stateB | this.stateC | this.stateD) == 0) this.stateD = 1;
 	}
 
-	public long getStateD () {
+	public long getStateD() {
 		return stateD;
 	}
 
@@ -318,11 +321,11 @@ public class Xoshiro160GrittyRandom extends EnhancedRandom {
 	 *
 	 * @param stateD can be any long, but will be cast to an int before use
 	 */
-	public void setStateD (long stateD) {
-		this.stateD = (stateA|stateB|stateC|(int)stateD) == 0 ? 1 : (int)stateD;
+	public void setStateD(long stateD) {
+		this.stateD = (stateA | stateB | stateC | (int) stateD) == 0 ? 1 : (int) stateD;
 	}
 
-	public long getStateE () {
+	public long getStateE() {
 		return stateE;
 	}
 
@@ -331,8 +334,8 @@ public class Xoshiro160GrittyRandom extends EnhancedRandom {
 	 *
 	 * @param stateE can be any long, but will be cast to an int before use
 	 */
-	public void setStateE (long stateE) {
-		this.stateE = (int)stateE;
+	public void setStateE(long stateE) {
+		this.stateE = (int) stateE;
 	}
 
 	/**
@@ -349,26 +352,26 @@ public class Xoshiro160GrittyRandom extends EnhancedRandom {
 	 * @param stateE the fifth state; can be any long, but will be cast to an int before use
 	 */
 	@Override
-	public void setState (long stateA, long stateB, long stateC, long stateD, long stateE) {
-		this.stateA = (int)stateA;
-		this.stateB = (int)stateB;
-		this.stateC = (int)stateC;
-		this.stateD = ((int)stateA|(int)stateB|(int)stateC|(int)stateD) == 0 ? 1 : (int)stateD;
-		this.stateE = (int)stateE;
+	public void setState(long stateA, long stateB, long stateC, long stateD, long stateE) {
+		this.stateA = (int) stateA;
+		this.stateB = (int) stateB;
+		this.stateC = (int) stateC;
+		this.stateD = ((int) stateA | (int) stateB | (int) stateC | (int) stateD) == 0 ? 1 : (int) stateD;
+		this.stateE = (int) stateE;
 	}
 
 	@Override
-	public long nextLong () {
-		return (long)nextInt() << 32 ^ nextInt();
+	public long nextLong() {
+		return (long) nextInt() << 32 ^ nextInt();
 	}
 
 	@Override
-	public long previousLong () {
-		return previousInt() ^ (long)previousInt() << 32;
+	public long previousLong() {
+		return previousInt() ^ (long) previousInt() << 32;
 	}
 
 	@Override
-	public int previousInt () {
+	public int previousInt() {
 		stateD = (stateD << 21 | stateD >>> 11); // stateD has d ^ b
 		stateA ^= stateD; // StateA has a
 		stateC ^= stateB; // StateC has b ^ b << 9
@@ -385,7 +388,7 @@ public class Xoshiro160GrittyRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		final int res = (stateE ^ stateE >>> 15) * 0x19E37B;
 		final int t = stateB << 9;
 		stateE += 0xC3564E95 + stateD;
@@ -399,7 +402,7 @@ public class Xoshiro160GrittyRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public int nextInt () {
+	public int nextInt() {
 		final int res = (stateE ^ stateE >>> 15) * 0x19E37B;
 		final int t = stateB << 9;
 		stateE += 0xC3564E95 + stateD;
@@ -414,7 +417,7 @@ public class Xoshiro160GrittyRandom extends EnhancedRandom {
 
 
 	@Override
-	public int nextInt (int bound) {
+	public int nextInt(int bound) {
 		final int res = (stateE ^ stateE >>> 15) * 0x19E37B;
 		final int t = stateB << 9;
 		stateE += 0xC3564E95 + stateD;
@@ -424,11 +427,11 @@ public class Xoshiro160GrittyRandom extends EnhancedRandom {
 		stateA ^= stateD;
 		stateC ^= t;
 		stateD = (stateD << 11 | stateD >>> 21);
-		return (int)(bound * ((res ^ (res << 17 | res >>> 15) ^ (res << 13 | res >>> 19)) & 0xFFFFFFFFL) >> 32) & ~(bound >> 31);
+		return (int) (bound * ((res ^ (res << 17 | res >>> 15) ^ (res << 13 | res >>> 19)) & 0xFFFFFFFFL) >> 32) & ~(bound >> 31);
 	}
 
 	@Override
-	public int nextSignedInt (int outerBound) {
+	public int nextSignedInt(int outerBound) {
 		final int res = (stateE ^ stateE >>> 15) * 0x19E37B;
 		final int t = stateB << 9;
 		stateE += 0xC3564E95 + stateD;
@@ -438,7 +441,7 @@ public class Xoshiro160GrittyRandom extends EnhancedRandom {
 		stateA ^= stateD;
 		stateC ^= t;
 		stateD = (stateD << 11 | stateD >>> 21);
-		outerBound = (int)(outerBound * ((res ^ (res << 17 | res >>> 15) ^ (res << 13 | res >>> 19)) & 0xFFFFFFFFL) >> 32);
+		outerBound = (int) (outerBound * ((res ^ (res << 17 | res >>> 15) ^ (res << 13 | res >>> 19)) & 0xFFFFFFFFL) >> 32);
 		return outerBound + (outerBound >>> 31);
 	}
 
@@ -453,11 +456,11 @@ public class Xoshiro160GrittyRandom extends EnhancedRandom {
 		stateA ^= stateD;
 		stateC ^= t;
 		stateD = (stateD << 11 | stateD >>> 21);
-		return (int)((bound & 0xFFFFFFFFL) * ((res ^ (res << 17 | res >>> 15) ^ (res << 13 | res >>> 19)) & 0xFFFFFFFFL) >>> 32);
+		return (int) ((bound & 0xFFFFFFFFL) * ((res ^ (res << 17 | res >>> 15) ^ (res << 13 | res >>> 19)) & 0xFFFFFFFFL) >>> 32);
 	}
 
 	@Override
-	public void nextBytes (byte[] bytes) {
+	public void nextBytes(byte[] bytes) {
 		if (bytes != null) {
 			for (int i = 0; i < bytes.length; ) {
 				int res = (stateE ^ stateE >>> 15) * 0x19E37B;
@@ -488,7 +491,7 @@ public class Xoshiro160GrittyRandom extends EnhancedRandom {
 		stateA ^= stateD;
 		stateC ^= t;
 		stateD = (stateD << 11 | stateD >>> 21);
-		return (int)(innerBound + ((((outerBound - innerBound) & 0xFFFFFFFFL) * ((res ^ (res << 17 | res >>> 15) ^ (res << 13 | res >>> 19)) & 0xFFFFFFFFL) >>> 32) & ~((long)outerBound - (long)innerBound >> 63)));
+		return (int) (innerBound + ((((outerBound - innerBound) & 0xFFFFFFFFL) * ((res ^ (res << 17 | res >>> 15) ^ (res << 13 | res >>> 19)) & 0xFFFFFFFFL) >>> 32) & ~((long) outerBound - (long) innerBound >> 63)));
 	}
 
 	@Override
@@ -502,7 +505,7 @@ public class Xoshiro160GrittyRandom extends EnhancedRandom {
 		stateA ^= stateD;
 		stateC ^= t;
 		stateD = (stateD << 11 | stateD >>> 21);
-		return innerBound + (int)(((outerBound - innerBound) & 0xFFFFFFFFL) * ((res ^ (res << 17 | res >>> 15) ^ (res << 13 | res >>> 19)) & 0xFFFFFFFFL) >>> 32);
+		return innerBound + (int) (((outerBound - innerBound) & 0xFFFFFFFFL) * ((res ^ (res << 17 | res >>> 15) ^ (res << 13 | res >>> 19)) & 0xFFFFFFFFL) >>> 32);
 	}
 
 	@Override
@@ -537,7 +540,7 @@ public class Xoshiro160GrittyRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public long nextLong (long inner, long outer) {
+	public long nextLong(long inner, long outer) {
 		final long randHi = nextInt() & 0xFFFFFFFFL;
 		final long randLo = nextInt() & 0xFFFFFFFFL;
 
@@ -550,7 +553,7 @@ public class Xoshiro160GrittyRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public long nextSignedLong (long inner, long outer) {
+	public long nextSignedLong(long inner, long outer) {
 		if (outer < inner) {
 			long t = outer;
 			outer = inner + 1L;
@@ -566,8 +569,7 @@ public class Xoshiro160GrittyRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public boolean nextBoolean ()
-	{
+	public boolean nextBoolean() {
 		final int res = (stateE ^ stateE >>> 15) * 0x19E37B;
 		final int t = stateB << 9;
 		stateE += 0xC3564E95 + stateD;
@@ -581,7 +583,7 @@ public class Xoshiro160GrittyRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public float nextFloat () {
+	public float nextFloat() {
 		final int res = (stateE ^ stateE >>> 15) * 0x19E37B;
 		final int t = stateB << 9;
 		stateE += 0xC3564E95 + stateD;
@@ -595,7 +597,7 @@ public class Xoshiro160GrittyRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public float nextInclusiveFloat () {
+	public float nextInclusiveFloat() {
 		final int res = (stateE ^ stateE >>> 15) * 0x19E37B;
 		final int t = stateB << 9;
 		stateE += 0xC3564E95 + stateD;
@@ -609,7 +611,7 @@ public class Xoshiro160GrittyRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public Xoshiro160GrittyRandom copy () {
+	public Xoshiro160GrittyRandom copy() {
 		return new Xoshiro160GrittyRandom(stateA, stateB, stateC, stateD, stateE);
 	}
 
@@ -625,14 +627,13 @@ public class Xoshiro160GrittyRandom extends EnhancedRandom {
 	 *
 	 * @return the result of what nextInt() would return if it was called at the state this jumped to
 	 */
-	public int leap()
-	{
+	public int leap() {
 		int s0 = 0;
 		int s1 = 0;
 		int s2 = 0;
 		int s3 = 0;
 
-		for(int b = 0; b < 32; b++) {
+		for (int b = 0; b < 32; b++) {
 			if ((0x8764000b & 1 << b) != 0) {
 				s0 ^= stateA;
 				s1 ^= stateB;
@@ -642,7 +643,7 @@ public class Xoshiro160GrittyRandom extends EnhancedRandom {
 			nextInt();
 		}
 
-		for(int b = 0; b < 32; b++) {
+		for (int b = 0; b < 32; b++) {
 			if ((0xf542d2d3 & 1 << b) != 0) {
 				s0 ^= stateA;
 				s1 ^= stateB;
@@ -652,7 +653,7 @@ public class Xoshiro160GrittyRandom extends EnhancedRandom {
 			nextInt();
 		}
 
-		for(int b = 0; b < 32; b++) {
+		for (int b = 0; b < 32; b++) {
 			if ((0x6fa035c3 & 1 << b) != 0) {
 				s0 ^= stateA;
 				s1 ^= stateB;
@@ -662,7 +663,7 @@ public class Xoshiro160GrittyRandom extends EnhancedRandom {
 			nextInt();
 		}
 
-		for(int b = 0; b < 32; b++) {
+		for (int b = 0; b < 32; b++) {
 			if ((0x77f2db5b & 1 << b) != 0) {
 				s0 ^= stateA;
 				s1 ^= stateB;
@@ -681,18 +682,18 @@ public class Xoshiro160GrittyRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		Xoshiro160GrittyRandom that = (Xoshiro160GrittyRandom)o;
+		Xoshiro160GrittyRandom that = (Xoshiro160GrittyRandom) o;
 
 		return stateA == that.stateA && stateB == that.stateB && stateC == that.stateC && stateD == that.stateD && stateE == that.stateE;
 	}
 
-	public String toString () {
+	public String toString() {
 		return "Xoshiro160GrittyRandom{" + "stateA=" + (stateA) + ", stateB=" + (stateB) + ", stateC=" + (stateC) + ", stateD=" + (stateD) + ", stateE=" + (stateE) + "}";
 	}
 
@@ -726,19 +727,31 @@ public class Xoshiro160GrittyRandom extends EnhancedRandom {
 		}
 		random = new Xoshiro160GrittyRandom(1L);
 		{
-			long n0 = random.nextLong(); System.out.printf("a: 0x%08X, b: 0x%08X, c: 0x%08X, d: 0x%08X, e: 0x%08X\n", random.stateA, random.stateB, random.stateC, random.stateD, random.stateE);
-			long n1 = random.nextLong(); System.out.printf("a: 0x%08X, b: 0x%08X, c: 0x%08X, d: 0x%08X, e: 0x%08X\n", random.stateA, random.stateB, random.stateC, random.stateD, random.stateE);
-			long n2 = random.nextLong(); System.out.printf("a: 0x%08X, b: 0x%08X, c: 0x%08X, d: 0x%08X, e: 0x%08X\n", random.stateA, random.stateB, random.stateC, random.stateD, random.stateE);
-			long n3 = random.nextLong(); System.out.printf("a: 0x%08X, b: 0x%08X, c: 0x%08X, d: 0x%08X, e: 0x%08X\n", random.stateA, random.stateB, random.stateC, random.stateD, random.stateE);
-			long n4 = random.nextLong(); System.out.printf("a: 0x%08X, b: 0x%08X, c: 0x%08X, d: 0x%08X, e: 0x%08X\n", random.stateA, random.stateB, random.stateC, random.stateD, random.stateE);
-			long n5 = random.nextLong(); System.out.printf("a: 0x%08X, b: 0x%08X, c: 0x%08X, d: 0x%08X, e: 0x%08X\n", random.stateA, random.stateB, random.stateC, random.stateD, random.stateE);
+			long n0 = random.nextLong();
+			System.out.printf("a: 0x%08X, b: 0x%08X, c: 0x%08X, d: 0x%08X, e: 0x%08X\n", random.stateA, random.stateB, random.stateC, random.stateD, random.stateE);
+			long n1 = random.nextLong();
+			System.out.printf("a: 0x%08X, b: 0x%08X, c: 0x%08X, d: 0x%08X, e: 0x%08X\n", random.stateA, random.stateB, random.stateC, random.stateD, random.stateE);
+			long n2 = random.nextLong();
+			System.out.printf("a: 0x%08X, b: 0x%08X, c: 0x%08X, d: 0x%08X, e: 0x%08X\n", random.stateA, random.stateB, random.stateC, random.stateD, random.stateE);
+			long n3 = random.nextLong();
+			System.out.printf("a: 0x%08X, b: 0x%08X, c: 0x%08X, d: 0x%08X, e: 0x%08X\n", random.stateA, random.stateB, random.stateC, random.stateD, random.stateE);
+			long n4 = random.nextLong();
+			System.out.printf("a: 0x%08X, b: 0x%08X, c: 0x%08X, d: 0x%08X, e: 0x%08X\n", random.stateA, random.stateB, random.stateC, random.stateD, random.stateE);
+			long n5 = random.nextLong();
+			System.out.printf("a: 0x%08X, b: 0x%08X, c: 0x%08X, d: 0x%08X, e: 0x%08X\n", random.stateA, random.stateB, random.stateC, random.stateD, random.stateE);
 			System.out.println("Going back...");
-			long p5 = random.previousLong(); System.out.printf("a: 0x%08X, b: 0x%08X, c: 0x%08X, d: 0x%08X, e: 0x%08X\n", random.stateA, random.stateB, random.stateC, random.stateD, random.stateE);
-			long p4 = random.previousLong(); System.out.printf("a: 0x%08X, b: 0x%08X, c: 0x%08X, d: 0x%08X, e: 0x%08X\n", random.stateA, random.stateB, random.stateC, random.stateD, random.stateE);
-			long p3 = random.previousLong(); System.out.printf("a: 0x%08X, b: 0x%08X, c: 0x%08X, d: 0x%08X, e: 0x%08X\n", random.stateA, random.stateB, random.stateC, random.stateD, random.stateE);
-			long p2 = random.previousLong(); System.out.printf("a: 0x%08X, b: 0x%08X, c: 0x%08X, d: 0x%08X, e: 0x%08X\n", random.stateA, random.stateB, random.stateC, random.stateD, random.stateE);
-			long p1 = random.previousLong(); System.out.printf("a: 0x%08X, b: 0x%08X, c: 0x%08X, d: 0x%08X, e: 0x%08X\n", random.stateA, random.stateB, random.stateC, random.stateD, random.stateE);
-			long p0 = random.previousLong(); System.out.printf("a: 0x%08X, b: 0x%08X, c: 0x%08X, d: 0x%08X, e: 0x%08X\n", random.stateA, random.stateB, random.stateC, random.stateD, random.stateE);
+			long p5 = random.previousLong();
+			System.out.printf("a: 0x%08X, b: 0x%08X, c: 0x%08X, d: 0x%08X, e: 0x%08X\n", random.stateA, random.stateB, random.stateC, random.stateD, random.stateE);
+			long p4 = random.previousLong();
+			System.out.printf("a: 0x%08X, b: 0x%08X, c: 0x%08X, d: 0x%08X, e: 0x%08X\n", random.stateA, random.stateB, random.stateC, random.stateD, random.stateE);
+			long p3 = random.previousLong();
+			System.out.printf("a: 0x%08X, b: 0x%08X, c: 0x%08X, d: 0x%08X, e: 0x%08X\n", random.stateA, random.stateB, random.stateC, random.stateD, random.stateE);
+			long p2 = random.previousLong();
+			System.out.printf("a: 0x%08X, b: 0x%08X, c: 0x%08X, d: 0x%08X, e: 0x%08X\n", random.stateA, random.stateB, random.stateC, random.stateD, random.stateE);
+			long p1 = random.previousLong();
+			System.out.printf("a: 0x%08X, b: 0x%08X, c: 0x%08X, d: 0x%08X, e: 0x%08X\n", random.stateA, random.stateB, random.stateC, random.stateD, random.stateE);
+			long p0 = random.previousLong();
+			System.out.printf("a: 0x%08X, b: 0x%08X, c: 0x%08X, d: 0x%08X, e: 0x%08X\n", random.stateA, random.stateB, random.stateC, random.stateD, random.stateE);
 			System.out.println(n0 == p0);
 			System.out.println(n1 == p1);
 			System.out.println(n2 == p2);

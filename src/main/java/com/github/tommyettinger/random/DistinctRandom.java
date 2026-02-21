@@ -67,7 +67,7 @@ public class DistinctRandom extends EnhancedRandom {
 	/**
 	 * Creates a new DistinctRandom with a random state.
 	 */
-	public DistinctRandom () {
+	public DistinctRandom() {
 		this(EnhancedRandom.seedFromMath());
 	}
 
@@ -76,7 +76,7 @@ public class DistinctRandom extends EnhancedRandom {
 	 *
 	 * @param state any {@code long} value
 	 */
-	public DistinctRandom (long state) {
+	public DistinctRandom(long state) {
 		super(state);
 		this.state = state;
 	}
@@ -88,12 +88,14 @@ public class DistinctRandom extends EnhancedRandom {
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
 
 	/**
 	 * 2 to the 64.
+	 *
 	 * @return 2 to the 64
 	 */
 	@Override
@@ -107,7 +109,7 @@ public class DistinctRandom extends EnhancedRandom {
 	 * @return 1 (one)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 1;
 	}
 
@@ -118,7 +120,7 @@ public class DistinctRandom extends EnhancedRandom {
 	 * @return the only state's exact value
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		return state;
 	}
 
@@ -130,7 +132,7 @@ public class DistinctRandom extends EnhancedRandom {
 	 * @param value     the exact value to use for the state; all longs are valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		state = value;
 	}
 
@@ -142,7 +144,7 @@ public class DistinctRandom extends EnhancedRandom {
 	 * @param seed the exact value to use for the state; all longs are valid
 	 */
 	@Override
-	public void setSeed (long seed) {
+	public void setSeed(long seed) {
 		state = seed;
 	}
 
@@ -152,7 +154,7 @@ public class DistinctRandom extends EnhancedRandom {
 	 *
 	 * @return the current state, as a long
 	 */
-	public long getState () {
+	public long getState() {
 		return state;
 	}
 
@@ -163,12 +165,12 @@ public class DistinctRandom extends EnhancedRandom {
 	 * @param state the long value to use for the state variable
 	 */
 	@Override
-	public void setState (long state) {
+	public void setState(long state) {
 		this.state = state;
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		long x = (state += 0x9E3779B97F4A7C15L);
 		x ^= x >>> 27;
 		x *= 0x3C79AC492BA7B653L;
@@ -189,7 +191,7 @@ public class DistinctRandom extends EnhancedRandom {
 	 * @return a random {@code long} by the same algorithm as {@link #nextLong()}, using the appropriately-advanced state
 	 */
 	@Override
-	public long skip (long advance) {
+	public long skip(long advance) {
 		long x = (state += 0x9E3779B97F4A7C15L * advance);
 		x ^= x >>> 27;
 		x *= 0x3C79AC492BA7B653L;
@@ -199,7 +201,7 @@ public class DistinctRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public long previousLong () {
+	public long previousLong() {
 		long x = state;
 		state -= 0x9E3779B97F4A7C15L;
 		x ^= x >>> 27;
@@ -210,34 +212,34 @@ public class DistinctRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		long x = (state += 0x9E3779B97F4A7C15L);
 		x ^= x >>> 27;
 		x *= 0x3C79AC492BA7B653L;
 		x ^= x >>> 33;
 		x *= 0x1C69B3F74AC4AE35L;
-		return (int)(x ^ x >>> 27) >>> (32 - bits);
+		return (int) (x ^ x >>> 27) >>> (32 - bits);
 	}
 
 	@Override
-	public DistinctRandom copy () {
+	public DistinctRandom copy() {
 		return new DistinctRandom(state);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		DistinctRandom that = (DistinctRandom)o;
+		DistinctRandom that = (DistinctRandom) o;
 
 		return state == that.state;
 	}
 
 	@Override
-	public String toString () {
+	public String toString() {
 		return "DistinctRandom{state=" + (state) + "L}";
 	}
 }

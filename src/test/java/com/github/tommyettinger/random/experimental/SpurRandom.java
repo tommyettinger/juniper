@@ -34,12 +34,14 @@ public class SpurRandom extends EnhancedRandom {
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("1000000000000000000000000000000000000000000000000", 16);
 
 	/**
 	 * 2 to the 192.
+	 *
 	 * @return 2 to the 192
 	 */
 	@Override
@@ -112,7 +114,7 @@ public class SpurRandom extends EnhancedRandom {
 	 * @return 3 (three)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 3;
 	}
 
@@ -124,7 +126,7 @@ public class SpurRandom extends EnhancedRandom {
 	 * @return the value of the selected state
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		switch (selection) {
 			case 0:
 				return stateA;
@@ -144,17 +146,17 @@ public class SpurRandom extends EnhancedRandom {
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		switch (selection) {
-		case 0:
-			stateA = value;
-			break;
-		case 1:
-			stateB = value;
-			break;
-		case 2:
-			stateC = value;
-			break;
+			case 0:
+				stateA = value;
+				break;
+			case 1:
+				stateB = value;
+				break;
+			case 2:
+				stateC = value;
+				break;
 		}
 	}
 
@@ -166,7 +168,7 @@ public class SpurRandom extends EnhancedRandom {
 	 * @param seed the initial seed; may be any long
 	 */
 	@Override
-	public void setSeed (long seed) {
+	public void setSeed(long seed) {
 		seed ^= seed >>> 32;
 		seed *= 0xbea225f9eb34556dL;
 		seed ^= seed >>> 29;
@@ -179,7 +181,7 @@ public class SpurRandom extends EnhancedRandom {
 		stateC = (seed ^ ~0xC6BC279692B5C323L);
 	}
 
-	public long getStateA () {
+	public long getStateA() {
 		return stateA;
 	}
 
@@ -188,11 +190,11 @@ public class SpurRandom extends EnhancedRandom {
 	 *
 	 * @param stateA can be any long
 	 */
-	public void setStateA (long stateA) {
+	public void setStateA(long stateA) {
 		this.stateA = stateA;
 	}
 
-	public long getStateB () {
+	public long getStateB() {
 		return stateB;
 	}
 
@@ -201,11 +203,11 @@ public class SpurRandom extends EnhancedRandom {
 	 *
 	 * @param stateB can be any long
 	 */
-	public void setStateB (long stateB) {
+	public void setStateB(long stateB) {
 		this.stateB = stateB;
 	}
 
-	public long getStateC () {
+	public long getStateC() {
 		return stateC;
 	}
 
@@ -214,7 +216,7 @@ public class SpurRandom extends EnhancedRandom {
 	 *
 	 * @param stateC can be any long
 	 */
-	public void setStateC (long stateC) {
+	public void setStateC(long stateC) {
 		this.stateC = stateC;
 	}
 
@@ -239,22 +241,22 @@ public class SpurRandom extends EnhancedRandom {
 	 * @param stateC the third state; can be any long
 	 */
 	@Override
-	public void setState (long stateA, long stateB, long stateC) {
+	public void setState(long stateA, long stateB, long stateC) {
 		this.stateA = stateA;
 		this.stateB = stateB;
 		this.stateC = stateC;
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		long a = (stateA = stateA * 0xD1342543DE82EF95L + 0x9E3779B97F4A7C15L); // Vigna and Steele, 2021
 		long b = (stateB = stateB * 0x2C6FE96EE78B6955L + BitConversion.countLeadingZeros(a)); // L'Ecuyer 1999, errata 2005
-		long c = (stateC = stateC * 0x369DEA0F31A53F85L + BitConversion.countLeadingZeros(a&b)); // L'Ecuyer 1999, errata 2005
+		long c = (stateC = stateC * 0x369DEA0F31A53F85L + BitConversion.countLeadingZeros(a & b)); // L'Ecuyer 1999, errata 2005
 		return (a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ c); // Speck cipher round function, https://en.wikipedia.org/wiki/Speck_(cipher)
 	}
 
 	@Override
-	public long previousLong () {
+	public long previousLong() {
 		long a = stateA;
 		long b = stateB;
 		long c = stateC;
@@ -265,34 +267,34 @@ public class SpurRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		long a = (stateA = stateA * 0xD1342543DE82EF95L + 0x9E3779B97F4A7C15L); // Vigna and Steele, 2021
 		long b = (stateB = stateB * 0x2C6FE96EE78B6955L + BitConversion.countLeadingZeros(a)); // L'Ecuyer 1999, errata 2005
-		long c = (stateC = stateC * 0x369DEA0F31A53F85L + BitConversion.countLeadingZeros(a&b)); // L'Ecuyer 1999, errata 2005
+		long c = (stateC = stateC * 0x369DEA0F31A53F85L + BitConversion.countLeadingZeros(a & b)); // L'Ecuyer 1999, errata 2005
 //		b = ((b << 56 | b >>> 8) + a ^ c); // Speck cipher round function, https://en.wikipedia.org/wiki/Speck_(cipher)
 //		a = ((a << 3 | a >>> 61) ^ b);
-		return (int)((a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ c) >>> 64 - bits);
+		return (int) ((a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ c) >>> 64 - bits);
 	}
 
 
 	@Override
-	public SpurRandom copy () {
+	public SpurRandom copy() {
 		return new SpurRandom(stateA, stateB, stateC);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		SpurRandom that = (SpurRandom)o;
+		SpurRandom that = (SpurRandom) o;
 
 		return stateA == that.stateA && stateB == that.stateB && stateC == that.stateC;
 	}
 
-	public String toString () {
+	public String toString() {
 		return "SpurRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L}";
 	}
 

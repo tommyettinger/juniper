@@ -534,7 +534,7 @@ public class GammaGeneratorTest {
 		};
 
 		int totalRating = 0;
-		for(long c : constants){
+		for (long c : constants) {
 			int rating = EnhancedRandom.rateGamma(c);
 			System.out.printf("%20dL or 0x%016XL rating: %d\n", c, c, rating);
 			totalRating += rating;

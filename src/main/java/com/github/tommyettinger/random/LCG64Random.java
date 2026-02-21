@@ -89,12 +89,14 @@ public class LCG64Random extends EnhancedRandom {
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
 
 	/**
 	 * 2 to the 64.
+	 *
 	 * @return 2 to the 64
 	 */
 	@Override
@@ -108,7 +110,7 @@ public class LCG64Random extends EnhancedRandom {
 	 * @return 1 (one)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 1;
 	}
 
@@ -119,7 +121,7 @@ public class LCG64Random extends EnhancedRandom {
 	 * @return the only state's exact value
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		return state;
 	}
 
@@ -131,7 +133,7 @@ public class LCG64Random extends EnhancedRandom {
 	 * @param value     the exact value to use for the state; all longs are valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		state = value;
 	}
 
@@ -143,7 +145,7 @@ public class LCG64Random extends EnhancedRandom {
 	 * @param seed the exact value to use for the state; all longs are valid
 	 */
 	@Override
-	public void setSeed (long seed) {
+	public void setSeed(long seed) {
 		state = seed;
 	}
 
@@ -153,7 +155,7 @@ public class LCG64Random extends EnhancedRandom {
 	 *
 	 * @return the current state, as a long
 	 */
-	public long getState () {
+	public long getState() {
 		return state;
 	}
 
@@ -164,18 +166,18 @@ public class LCG64Random extends EnhancedRandom {
 	 * @param state the long value to use for the state variable
 	 */
 	@Override
-	public void setState (long state) {
+	public void setState(long state) {
 		this.state = state;
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		// 0xD1342543DE82EF95L is from https://arxiv.org/abs/2001.05304v3
 		return (state = state * 0xD1342543DE82EF95L + 1L);
 	}
 
 	@Override
-	public long previousLong () {
+	public long previousLong() {
 		final long s = state;
 		// 0x572B5EE77A54E3BDL is the modular multiplicative inverse of 0xD1342543DE82EF95L
 		state = (state - 1L) * 0x572B5EE77A54E3BDL;
@@ -183,7 +185,7 @@ public class LCG64Random extends EnhancedRandom {
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		return (int) ((state = state * 0xD1342543DE82EF95L + 1L) >>> 64 - bits);
 	}
 
@@ -194,17 +196,17 @@ public class LCG64Random extends EnhancedRandom {
 
 	@Override
 	public int nextInt(int bound) {
-		return (int)(bound * ((state = state * 0xD1342543DE82EF95L + 1L) >>> 32) >> 32) & ~(bound >> 31);
+		return (int) (bound * ((state = state * 0xD1342543DE82EF95L + 1L) >>> 32) >> 32) & ~(bound >> 31);
 	}
 
 	@Override
 	public int nextSignedInt(int outerBound) {
-		outerBound = (int)(outerBound * ((state = state * 0xD1342543DE82EF95L + 1L) >>> 32) >> 32);
+		outerBound = (int) (outerBound * ((state = state * 0xD1342543DE82EF95L + 1L) >>> 32) >> 32);
 		return outerBound + (outerBound >>> 31);
 	}
 
 	@Override
-	public double nextExclusiveDouble () {
+	public double nextExclusiveDouble() {
 		/* 1.1102230246251565E-16 is 0x1p-53, 5.551115123125782E-17 is 0x1.fffffffffffffp-55 */
 		return ((state = state * 0xD1342543DE82EF95L + 1L) >>> 11) * 1.1102230246251565E-16 + 5.551115123125782E-17;
 	}
@@ -238,28 +240,28 @@ public class LCG64Random extends EnhancedRandom {
 
 	@Override
 	public float nextGaussianFloat() {
-		return Distributor.probitI((int)((state = state * 0xD1342543DE82EF95L + 1L) >>> 32));
+		return Distributor.probitI((int) ((state = state * 0xD1342543DE82EF95L + 1L) >>> 32));
 	}
 
 	@Override
-	public LCG64Random copy () {
+	public LCG64Random copy() {
 		return new LCG64Random(state);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		LCG64Random that = (LCG64Random)o;
+		LCG64Random that = (LCG64Random) o;
 
 		return state == that.state;
 	}
 
 	@Override
-	public String toString () {
+	public String toString() {
 		return "LCG64Random{state=" + (state) + "L}";
 	}
 }

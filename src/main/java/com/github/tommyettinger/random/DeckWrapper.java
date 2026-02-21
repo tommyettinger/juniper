@@ -27,7 +27,7 @@ public class DeckWrapper extends EnhancedRandom {
 		refill();
 	}
 
-	public DeckWrapper(EnhancedRandom toWrap){
+	public DeckWrapper(EnhancedRandom toWrap) {
 		super();
 		wrapped = toWrap;
 		index = 0;
@@ -35,7 +35,7 @@ public class DeckWrapper extends EnhancedRandom {
 		refill();
 	}
 
-	public DeckWrapper(DeckWrapper other){
+	public DeckWrapper(DeckWrapper other) {
 		super();
 		wrapped = other.wrapped.copy();
 		index = other.index;
@@ -53,7 +53,7 @@ public class DeckWrapper extends EnhancedRandom {
 
 	@Override
 	public void setSeed(long seed) {
-		if(wrapped == null){
+		if (wrapped == null) {
 			return;
 		}
 		wrapped.setSeed(seed);
@@ -64,7 +64,7 @@ public class DeckWrapper extends EnhancedRandom {
 	@Override
 	public long nextLong() {
 		long result = buffer[index++ & 15];
-		if((index & 15) == 0) refill();
+		if ((index & 15) == 0) refill();
 		return result;
 	}
 
@@ -105,13 +105,13 @@ public class DeckWrapper extends EnhancedRandom {
 
 	@Override
 	public float nextInclusiveFloat() {
-		return (int)(0x1000001L * (nextLong() >>> 32) >> 32) * 0x1p-24f;
+		return (int) (0x1000001L * (nextLong() >>> 32) >> 32) * 0x1p-24f;
 	}
 
 	@Override
 	public float nextExclusiveFloat() {
 		/* 5.9604645E-8f is 0x1p-24f, 2.980232E-8f is 0x1.FFFFFEp-26f */
-		return  (nextLong() >>> 40) * 5.9604645E-8f + 2.980232E-8f;
+		return (nextLong() >>> 40) * 5.9604645E-8f + 2.980232E-8f;
 	}
 
 	@Override
@@ -621,11 +621,11 @@ public class DeckWrapper extends EnhancedRandom {
 	 */
 	@Override
 	public DeckWrapper stringDeserialize(String data, Base base) {
-		int start = data.indexOf(base.paddingChar)+1;
+		int start = data.indexOf(base.paddingChar) + 1;
 		int len = base.readInt(data, start, start = data.indexOf(base.paddingChar, start));
 		setWrapped(Deserializer.deserialize(data.substring(start + 1, start += len), base));
 		index = base.readInt(data, start + 1, start = data.indexOf(base.paddingChar, start + 1));
-		long[] longs = base.longSplit(data, String.valueOf(base.positiveSign), start + 1, data.indexOf(base.paddingChar, start+1));
+		long[] longs = base.longSplit(data, String.valueOf(base.positiveSign), start + 1, data.indexOf(base.paddingChar, start + 1));
 		System.arraycopy(longs,
 			0, buffer, 0, 16);
 		return this;

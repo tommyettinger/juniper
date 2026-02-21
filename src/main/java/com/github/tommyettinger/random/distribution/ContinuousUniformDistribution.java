@@ -18,120 +18,122 @@
 package com.github.tommyettinger.random.distribution;
 
 import com.github.tommyettinger.digital.MathTools;
-import com.github.tommyettinger.random.EnhancedRandom;
 import com.github.tommyettinger.random.AceRandom;
+import com.github.tommyettinger.random.EnhancedRandom;
 
 /**
  * A two-parameter distribution with range between the given parameters, both inclusive.
+ *
  * @see <a href="https://en.wikipedia.org/wiki/Continuous_uniform_distribution">Wikipedia's page on this distribution.</a>
  */
 public class ContinuousUniformDistribution extends Distribution {
-    public String getTag() {
-        return "ContinuousUniform";
-    }
+	public String getTag() {
+		return "ContinuousUniform";
+	}
 
-    @Override
-    public ContinuousUniformDistribution copy() {
-        return new ContinuousUniformDistribution(generator.copy(), alpha, beta);
-    }
+	@Override
+	public ContinuousUniformDistribution copy() {
+		return new ContinuousUniformDistribution(generator.copy(), alpha, beta);
+	}
 
-    private double alpha;
-    private double beta;
+	private double alpha;
+	private double beta;
 
-    public double getAlpha() {
-        return alpha;
-    }
+	public double getAlpha() {
+		return alpha;
+	}
 
-    public double getBeta() {
-        return beta;
-    }
+	public double getBeta() {
+		return beta;
+	}
 
-    @Override
-    public double getParameterA() {
-        return alpha;
-    }
+	@Override
+	public double getParameterA() {
+		return alpha;
+	}
 
-    @Override
-    public double getParameterB() {
-        return beta;
-    }
+	@Override
+	public double getParameterB() {
+		return beta;
+	}
 
-    /**
-     * Uses an {@link AceRandom}, alpha = 0.0, beta = 1.0 .
-     */
-    public ContinuousUniformDistribution() {
-        this(new AceRandom(), 0.0, 1.0);
-    }
+	/**
+	 * Uses an {@link AceRandom}, alpha = 0.0, beta = 1.0 .
+	 */
+	public ContinuousUniformDistribution() {
+		this(new AceRandom(), 0.0, 1.0);
+	}
 
-    /**
-     * Uses an {@link AceRandom} and the given alpha and beta.
-     */
-    public ContinuousUniformDistribution(double alpha, double beta) {
-        this(new AceRandom(), alpha, beta);
-    }
+	/**
+	 * Uses an {@link AceRandom} and the given alpha and beta.
+	 */
+	public ContinuousUniformDistribution(double alpha, double beta) {
+		this(new AceRandom(), alpha, beta);
+	}
 
-    /**
-     * Uses the given EnhancedRandom directly. Uses the given alpha and beta.
-     */
-    public ContinuousUniformDistribution(EnhancedRandom generator, double alpha, double beta)
-    {
-        this.generator = generator;
-        if(!setParameters(alpha, beta, 0.0))
-            throw new IllegalArgumentException("Given alpha and/or beta are invalid.");
-    }
+	/**
+	 * Uses the given EnhancedRandom directly. Uses the given alpha and beta.
+	 */
+	public ContinuousUniformDistribution(EnhancedRandom generator, double alpha, double beta) {
+		this.generator = generator;
+		if (!setParameters(alpha, beta, 0.0))
+			throw new IllegalArgumentException("Given alpha and/or beta are invalid.");
+	}
 
-    @Override
-    public double getMaximum() {
-        return beta;
-    }
+	@Override
+	public double getMaximum() {
+		return beta;
+	}
 
-    @Override
-    public double getMean() {
-        return (alpha + beta) * 0.5;
-    }
+	@Override
+	public double getMean() {
+		return (alpha + beta) * 0.5;
+	}
 
-    @Override
-    public double getMedian() {
-        return (alpha + beta) * 0.5;
-    }
+	@Override
+	public double getMedian() {
+		return (alpha + beta) * 0.5;
+	}
 
-    @Override
-    public double getMinimum() {
-        return alpha;
-    }
+	@Override
+	public double getMinimum() {
+		return alpha;
+	}
 
-    @Override
-    public double[] getMode() {
-        throw new UnsupportedOperationException("Mode is undefined.");
-    }
+	@Override
+	public double[] getMode() {
+		throw new UnsupportedOperationException("Mode is undefined.");
+	}
 
-    @Override
-    public double getVariance() {
-        return MathTools.square(beta - alpha) / 12.0;
-    }
-    /**
-     * Sets all parameters and returns true if they are valid, otherwise leaves parameters unchanged and returns false.
-     * @param a alpha; should be less than or equal to beta
-     * @param b beta; should be greater than or equal to alpha
-     * @param c ignored
-     * @return true if the parameters given are valid and will be used
-     */
-    @Override
-    public boolean setParameters(double a, double b, double c) {
-        if(a <= b){
-            alpha = a;
-            beta = b;
-            return true;
-        }
-        return false;
-    }
+	@Override
+	public double getVariance() {
+		return MathTools.square(beta - alpha) / 12.0;
+	}
 
-    @Override
-    public double nextDouble() {
-        return sample(generator, alpha, beta);
-    }
+	/**
+	 * Sets all parameters and returns true if they are valid, otherwise leaves parameters unchanged and returns false.
+	 *
+	 * @param a alpha; should be less than or equal to beta
+	 * @param b beta; should be greater than or equal to alpha
+	 * @param c ignored
+	 * @return true if the parameters given are valid and will be used
+	 */
+	@Override
+	public boolean setParameters(double a, double b, double c) {
+		if (a <= b) {
+			alpha = a;
+			beta = b;
+			return true;
+		}
+		return false;
+	}
 
-    public static double sample(EnhancedRandom generator, double alpha, double beta) {
-        return generator.nextInclusiveDouble(alpha, beta);
-    }
+	@Override
+	public double nextDouble() {
+		return sample(generator, alpha, beta);
+	}
+
+	public static double sample(EnhancedRandom generator, double alpha, double beta) {
+		return generator.nextInclusiveDouble(alpha, beta);
+	}
 }

@@ -104,6 +104,7 @@ public class Resolute32Random extends EnhancedRandom {
 
 	/**
 	 * This generator mainly generates int values.
+	 *
 	 * @return true
 	 */
 	@Override
@@ -113,12 +114,14 @@ public class Resolute32Random extends EnhancedRandom {
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("1000000000000000000000000", 16);
 
 	/**
 	 * 2 to the 96.
+	 *
 	 * @return 2 to the 96
 	 */
 	@Override
@@ -132,7 +135,7 @@ public class Resolute32Random extends EnhancedRandom {
 	 * @return 3 (three)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 3;
 	}
 
@@ -144,7 +147,7 @@ public class Resolute32Random extends EnhancedRandom {
 	 * @return the value of the selected state, which is an int that will be promoted to long
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		switch (selection) {
 			case 0:
 				return stateA;
@@ -164,7 +167,7 @@ public class Resolute32Random extends EnhancedRandom {
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		switch (selection) {
 			case 0:
 				stateA = (int) value;
@@ -185,8 +188,8 @@ public class Resolute32Random extends EnhancedRandom {
 	 * @param seed the initial seed; may be any long
 	 */
 	@Override
-	public void setSeed (long seed) {
-		int a = (int)seed, b = (int)(seed >>> 32), c = (int)(~seed >>> 16);
+	public void setSeed(long seed) {
+		int a = (int) seed, b = (int) (seed >>> 32), c = (int) (~seed >>> 16);
 		for (int i = 0; i < 5; i++) {
 			b = (b << 24 | b >>> 8) + a ^ ++c;
 			a = (a << 3 | a >>> 29) ^ b;
@@ -204,7 +207,7 @@ public class Resolute32Random extends EnhancedRandom {
 		stateC = a;
 	}
 
-	public long getStateA () {
+	public long getStateA() {
 		return stateA;
 	}
 
@@ -213,11 +216,11 @@ public class Resolute32Random extends EnhancedRandom {
 	 *
 	 * @param stateA can be any long, but will be cast to an int before use
 	 */
-	public void setStateA (long stateA) {
-		this.stateA = (int)stateA;
+	public void setStateA(long stateA) {
+		this.stateA = (int) stateA;
 	}
 
-	public long getStateB () {
+	public long getStateB() {
 		return stateB;
 	}
 
@@ -226,11 +229,11 @@ public class Resolute32Random extends EnhancedRandom {
 	 *
 	 * @param stateB can be any long, but will be cast to an int before use
 	 */
-	public void setStateB (long stateB) {
-		this.stateB = (int)stateB;
+	public void setStateB(long stateB) {
+		this.stateB = (int) stateB;
 	}
 
-	public long getStateC () {
+	public long getStateC() {
 		return stateC;
 	}
 
@@ -239,8 +242,8 @@ public class Resolute32Random extends EnhancedRandom {
 	 *
 	 * @param stateC can be any long, but will be cast to an int before use
 	 */
-	public void setStateC (long stateC) {
-		this.stateC = (int)stateC;
+	public void setStateC(long stateC) {
+		this.stateC = (int) stateC;
 	}
 
 	/**
@@ -253,24 +256,24 @@ public class Resolute32Random extends EnhancedRandom {
 	 * @param stateC the third state; can be any long, but will be cast to an int before use
 	 */
 	@Override
-	public void setState (long stateA, long stateB, long stateC) {
-		this.stateA = (int)stateA;
-		this.stateB = (int)stateB;
-		this.stateC = (int)stateC;
+	public void setState(long stateA, long stateB, long stateC) {
+		this.stateA = (int) stateA;
+		this.stateB = (int) stateB;
+		this.stateC = (int) stateC;
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		int a = (stateA += 0x91E10DA5);
 		int b = (stateB += 0x6C8E9CF5 ^ Integer.numberOfLeadingZeros(a));
-		int c = (stateC += 0x7FEB352D ^ Integer.numberOfLeadingZeros(a&b));
+		int c = (stateC += 0x7FEB352D ^ Integer.numberOfLeadingZeros(a & b));
 		a = c ^ a * b;
 		a = (a ^ a >>> 12) * 0x297A2D39;
 		a ^= a >>> 15;
 		long h = a;
 		a = (stateA += 0x91E10DA5);
 		b = (stateB += 0x6C8E9CF5 ^ Integer.numberOfLeadingZeros(a));
-		c = (stateC += 0x7FEB352D ^ Integer.numberOfLeadingZeros(a&b));
+		c = (stateC += 0x7FEB352D ^ Integer.numberOfLeadingZeros(a & b));
 		a = c ^ a * b;
 		a = (a ^ a >>> 12) * 0x297a2d39;
 		a ^= a >>> 15;
@@ -278,7 +281,7 @@ public class Resolute32Random extends EnhancedRandom {
 	}
 
 	@Override
-	public long previousLong () {
+	public long previousLong() {
 		int a = stateA;
 		int b = stateB;
 		int c = stateC;
@@ -289,7 +292,7 @@ public class Resolute32Random extends EnhancedRandom {
 		a = stateA;
 		stateA -= 0x91E10DA5;
 		stateB -= 0x6C8E9CF5 ^ Integer.numberOfLeadingZeros(a);
-		stateC -= 0x7FEB352D ^ Integer.numberOfLeadingZeros(a&b);
+		stateC -= 0x7FEB352D ^ Integer.numberOfLeadingZeros(a & b);
 		a = stateA;
 		b = stateB;
 		c = stateC;
@@ -300,15 +303,15 @@ public class Resolute32Random extends EnhancedRandom {
 		a = stateA;
 		stateA -= 0x91E10DA5;
 		stateB -= 0x6C8E9CF5 ^ Integer.numberOfLeadingZeros(a);
-		stateC -= 0x7FEB352D ^ Integer.numberOfLeadingZeros(a&b);
+		stateC -= 0x7FEB352D ^ Integer.numberOfLeadingZeros(a & b);
 		return h << 32 ^ l;
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		int a = (stateA += 0x91E10DA5);
 		int b = (stateB += 0x6C8E9CF5 ^ Integer.numberOfLeadingZeros(a));
-		int c = (stateC += 0x7FEB352D ^ Integer.numberOfLeadingZeros(a&b));
+		int c = (stateC += 0x7FEB352D ^ Integer.numberOfLeadingZeros(a & b));
 		a = c ^ a * b;
 		a = (a ^ a >>> 12) * 0x297A2D39;
 		a ^= a >>> 15;
@@ -316,7 +319,7 @@ public class Resolute32Random extends EnhancedRandom {
 	}
 
 	@Override
-	public int nextInt () {
+	public int nextInt() {
 		int a = (stateA += 0x91E10DA5);
 		int b = (stateB += 0x6C8E9CF5 ^ Integer.numberOfLeadingZeros(a));
 		int c = (stateC += 0x7FEB352D ^ Integer.numberOfLeadingZeros(a & b));
@@ -337,28 +340,32 @@ public class Resolute32Random extends EnhancedRandom {
 		c = stateB;
 		stateA -= 0x91E10DA5;
 		stateB -= 0x6C8E9CF5 ^ Integer.numberOfLeadingZeros(b);
-		stateC -= 0x7FEB352D ^ Integer.numberOfLeadingZeros(b&c);
+		stateC -= 0x7FEB352D ^ Integer.numberOfLeadingZeros(b & c);
 		return a;
 	}
 
 	@Override
-	public int nextInt (int bound) {
-		return (int)(bound * (nextInt() & 0xFFFFFFFFL) >> 32) & ~(bound >> 31);
+	public int nextInt(int bound) {
+		return (int) (bound * (nextInt() & 0xFFFFFFFFL) >> 32) & ~(bound >> 31);
 	}
 
 	@Override
-	public int nextSignedInt (int outerBound) {
-		outerBound = (int)(outerBound * (nextInt() & 0xFFFFFFFFL) >> 32);
+	public int nextSignedInt(int outerBound) {
+		outerBound = (int) (outerBound * (nextInt() & 0xFFFFFFFFL) >> 32);
 		return outerBound + (outerBound >>> 31);
 	}
 
 	@Override
-	public void nextBytes (byte[] bytes) {
-		for (int i = 0; i < bytes.length; ) {for (int r = nextInt(), n = Math.min(bytes.length - i, 4); n-- > 0; r >>>= 8) {bytes[i++] = (byte)r;}}
+	public void nextBytes(byte[] bytes) {
+		for (int i = 0; i < bytes.length; ) {
+			for (int r = nextInt(), n = Math.min(bytes.length - i, 4); n-- > 0; r >>>= 8) {
+				bytes[i++] = (byte) r;
+			}
+		}
 	}
 
 	@Override
-	public long nextLong (long inner, long outer) {
+	public long nextLong(long inner, long outer) {
 		final long rand = nextLong();
 		if (inner >= outer)
 			return inner;
@@ -371,7 +378,7 @@ public class Resolute32Random extends EnhancedRandom {
 	}
 
 	@Override
-	public long nextSignedLong (long inner, long outer) {
+	public long nextSignedLong(long inner, long outer) {
 		if (outer < inner) {
 			long t = outer;
 			outer = inner + 1L;
@@ -387,38 +394,38 @@ public class Resolute32Random extends EnhancedRandom {
 	}
 
 	@Override
-	public boolean nextBoolean () {
+	public boolean nextBoolean() {
 		return nextInt() < 0;
 	}
 
 	@Override
-	public float nextFloat () {
+	public float nextFloat() {
 		return (nextInt() >>> 8) * 0x1p-24f;
 	}
 
 	@Override
-	public float nextInclusiveFloat () {
+	public float nextInclusiveFloat() {
 		return (0x1000001L * (nextInt() & 0xFFFFFFFFL) >> 32) * 0x1p-24f;
 	}
 
 	@Override
-	public Resolute32Random copy () {
+	public Resolute32Random copy() {
 		return new Resolute32Random(stateA, stateB, stateC);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		Resolute32Random that = (Resolute32Random)o;
+		Resolute32Random that = (Resolute32Random) o;
 
 		return stateA == that.stateA && stateB == that.stateB && stateC == that.stateC;
 	}
 
-	public String toString () {
+	public String toString() {
 		return "Resolute32Random{" + "stateA=" + (stateA) + ", stateB=" + (stateB) + ", stateC=" + (stateC) + "}";
 	}
 

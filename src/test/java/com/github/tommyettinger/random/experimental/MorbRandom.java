@@ -84,12 +84,14 @@ public class MorbRandom extends EnhancedRandom {
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("100000000000000000000000000000000", 16);
 
 	/**
 	 * 2 to the 128.
+	 *
 	 * @return 2 to the 128
 	 */
 	@Override
@@ -103,7 +105,7 @@ public class MorbRandom extends EnhancedRandom {
 	 * @return 2 (two)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 2;
 	}
 
@@ -115,7 +117,7 @@ public class MorbRandom extends EnhancedRandom {
 	 * @return the value of the selected state
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		if ((selection & 1) == 1) {
 			return stateB;
 		}
@@ -130,7 +132,7 @@ public class MorbRandom extends EnhancedRandom {
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		if ((selection & 1) == 1) {
 			stateB = value;
 		} else {
@@ -145,7 +147,7 @@ public class MorbRandom extends EnhancedRandom {
 	 * @param seed the initial seed; may be any long
 	 */
 	@Override
-	public void setSeed (long seed) {
+	public void setSeed(long seed) {
 		// This is based on MX3, but pulls out values and assigns them to states mid-way, sometimes XORing them.
 		seed += 0x9E3779B97F4A7C15L;
 		seed ^= seed >>> 32;
@@ -159,7 +161,7 @@ public class MorbRandom extends EnhancedRandom {
 		stateB = (seed ^ ~0xC6BC279692B5C323L);
 	}
 
-	public long getStateA () {
+	public long getStateA() {
 		return stateA;
 	}
 
@@ -168,11 +170,11 @@ public class MorbRandom extends EnhancedRandom {
 	 *
 	 * @param stateA can be any long
 	 */
-	public void setStateA (long stateA) {
+	public void setStateA(long stateA) {
 		this.stateA = stateA;
 	}
 
-	public long getStateB () {
+	public long getStateB() {
 		return stateB;
 	}
 
@@ -181,7 +183,7 @@ public class MorbRandom extends EnhancedRandom {
 	 *
 	 * @param stateB can be any long
 	 */
-	public void setStateB (long stateB) {
+	public void setStateB(long stateB) {
 		this.stateB = stateB;
 	}
 
@@ -194,13 +196,13 @@ public class MorbRandom extends EnhancedRandom {
 	 * @param stateB the second state; can be any long
 	 */
 	@Override
-	public void setState (long stateA, long stateB) {
+	public void setState(long stateA, long stateB) {
 		this.stateA = stateA;
 		this.stateB = stateB;
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		long x = stateA;
 		final long y = stateB;
 		stateA += 0x9E3779B97F4A7C15L;
@@ -212,7 +214,7 @@ public class MorbRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public long previousLong () {
+	public long previousLong() {
 		stateA -= 0x9E3779B97F4A7C15L;
 		stateB -= (stateA + (stateA >>> 1)) >>> 63;
 		long x = stateA, y = stateB;
@@ -222,34 +224,34 @@ public class MorbRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		long x = stateA, y = stateB;
 		stateA += 0x9E3779B97F4A7C15L;
 		stateB += (x + (x >>> 1)) >>> 63;
 		x = (x ^ (x << 25 | x >>> 64 - 25) ^ (x << 50 | x >>> 64 - 50) ^ y) * 0xF1357AEA2E62A9C5L + y;
 		x = (x ^ (x << 19 | x >>> 64 - 19) ^ (x << 28 | x >>> 64 - 28));
-		return (int)(x ^ (x << 23 | x >>> 64 - 23) ^ (x << 47 | x >>> 64 - 47)) >>> (32 - bits);
+		return (int) (x ^ (x << 23 | x >>> 64 - 23) ^ (x << 47 | x >>> 64 - 47)) >>> (32 - bits);
 	}
 
 
 	@Override
-	public MorbRandom copy () {
+	public MorbRandom copy() {
 		return new MorbRandom(stateA, stateB);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		MorbRandom that = (MorbRandom)o;
+		MorbRandom that = (MorbRandom) o;
 
 		return stateA == that.stateA && stateB == that.stateB;
 	}
 
-	public String toString () {
+	public String toString() {
 		return "MorbRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L}";
 	}
 

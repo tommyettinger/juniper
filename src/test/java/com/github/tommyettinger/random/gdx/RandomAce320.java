@@ -46,6 +46,7 @@ public class RandomAce320 extends GdxRandom {
 
 	/**
 	 * Returns the String {@code "AceR"}, which is the tag here.
+	 *
 	 * @return the String {@code "AceR"}
 	 */
 	@Override
@@ -130,7 +131,7 @@ public class RandomAce320 extends GdxRandom {
 	 * @return 5 (five)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 5;
 	}
 
@@ -142,7 +143,7 @@ public class RandomAce320 extends GdxRandom {
 	 * @return the value of the selected state
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		switch (selection) {
 			case 0:
 				return stateA;
@@ -166,7 +167,7 @@ public class RandomAce320 extends GdxRandom {
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		switch (selection) {
 			case 0:
 				stateA = value;
@@ -193,7 +194,7 @@ public class RandomAce320 extends GdxRandom {
 	 * @param seed the initial seed; may be any long
 	 */
 	@Override
-	public void setSeed (long seed) {
+	public void setSeed(long seed) {
 		seed = (seed ^ 0x1C69B3F74AC4AE35L) * 0x3C79AC492BA7B653L; // an XLCG
 		stateA = seed ^ ~0xC6BC279692B5C323L;
 		seed ^= seed >>> 32;
@@ -209,7 +210,7 @@ public class RandomAce320 extends GdxRandom {
 		stateE = seed;
 	}
 
-	public long getStateA () {
+	public long getStateA() {
 		return stateA;
 	}
 
@@ -218,11 +219,11 @@ public class RandomAce320 extends GdxRandom {
 	 *
 	 * @param stateA can be any long
 	 */
-	public void setStateA (long stateA) {
+	public void setStateA(long stateA) {
 		this.stateA = stateA;
 	}
 
-	public long getStateB () {
+	public long getStateB() {
 		return stateB;
 	}
 
@@ -231,11 +232,11 @@ public class RandomAce320 extends GdxRandom {
 	 *
 	 * @param stateB can be any long
 	 */
-	public void setStateB (long stateB) {
+	public void setStateB(long stateB) {
 		this.stateB = stateB;
 	}
 
-	public long getStateC () {
+	public long getStateC() {
 		return stateC;
 	}
 
@@ -244,11 +245,11 @@ public class RandomAce320 extends GdxRandom {
 	 *
 	 * @param stateC can be any long
 	 */
-	public void setStateC (long stateC) {
+	public void setStateC(long stateC) {
 		this.stateC = stateC;
 	}
 
-	public long getStateD () {
+	public long getStateD() {
 		return stateD;
 	}
 
@@ -257,11 +258,11 @@ public class RandomAce320 extends GdxRandom {
 	 *
 	 * @param stateD can be any long
 	 */
-	public void setStateD (long stateD) {
+	public void setStateD(long stateD) {
 		this.stateD = stateD;
 	}
 
-	public long getStateE () {
+	public long getStateE() {
 		return stateE;
 	}
 
@@ -270,7 +271,7 @@ public class RandomAce320 extends GdxRandom {
 	 *
 	 * @param stateE can be any long
 	 */
-	public void setStateE (long stateE) {
+	public void setStateE(long stateE) {
 		this.stateE = stateE;
 	}
 
@@ -286,7 +287,7 @@ public class RandomAce320 extends GdxRandom {
 	 * @param stateE the fifth state; can be any long
 	 */
 	@Override
-	public void setState (long stateA, long stateB, long stateC, long stateD, long stateE) {
+	public void setState(long stateA, long stateB, long stateC, long stateD, long stateE) {
 		this.stateA = stateA;
 		this.stateB = stateB;
 		this.stateC = stateC;
@@ -295,7 +296,7 @@ public class RandomAce320 extends GdxRandom {
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		final long fa = stateA;
 		final long fb = stateB;
 		final long fc = stateC;
@@ -309,7 +310,7 @@ public class RandomAce320 extends GdxRandom {
 	}
 
 	@Override
-	public long previousLong () {
+	public long previousLong() {
 		final long fb = stateB;
 		final long fc = stateC;
 		final long fd = stateD;
@@ -323,7 +324,7 @@ public class RandomAce320 extends GdxRandom {
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		final long fa = stateA;
 		final long fb = stateB;
 		final long fc = stateC;
@@ -340,9 +341,10 @@ public class RandomAce320 extends GdxRandom {
 	 * Jumps extremely far in the generator's sequence, such that one call to leap() advances the state as many as
 	 * {@code Math.pow(2, 48)} calls to {@link #nextLong()}. This can be used to create 65536 substreams of this
 	 * generator's sequence, each with a period of at least {@code Math.pow(2, 48)} but likely much more.
+	 *
 	 * @return the result of what nextLong() would return if it was called at the state this jumped to
 	 */
-	public long leap () {
+	public long leap() {
 		final long fa = stateA;
 		final long fb = stateB;
 		final long fc = stateC;
@@ -356,7 +358,7 @@ public class RandomAce320 extends GdxRandom {
 	}
 
 	@Override
-	public RandomAce320 copy () {
+	public RandomAce320 copy() {
 		return new RandomAce320(stateA, stateB, stateC, stateD, stateE);
 	}
 
@@ -374,19 +376,19 @@ public class RandomAce320 extends GdxRandom {
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		RandomAce320 that = (RandomAce320)o;
+		RandomAce320 that = (RandomAce320) o;
 
 		return stateA == that.stateA && stateB == that.stateB && stateC == that.stateC && stateD == that.stateD &&
-				stateE == that.stateE;
+			stateE == that.stateE;
 	}
 
-	public String toString () {
+	public String toString() {
 		return "RandomAce320{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L, stateD=" + (stateD) + "L, stateE=" + (stateE) + "L}";
 	}
 }

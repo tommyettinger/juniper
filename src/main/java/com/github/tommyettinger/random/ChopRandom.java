@@ -68,8 +68,8 @@ public class ChopRandom extends Enhanced32Random {
 	/**
 	 * Creates a new ChopRandom with a random state.
 	 */
-	public ChopRandom () {
-		this((int)EnhancedRandom.seedFromMath(), (int)EnhancedRandom.seedFromMath(), (int)EnhancedRandom.seedFromMath(), (int)EnhancedRandom.seedFromMath());
+	public ChopRandom() {
+		this((int) EnhancedRandom.seedFromMath(), (int) EnhancedRandom.seedFromMath(), (int) EnhancedRandom.seedFromMath(), (int) EnhancedRandom.seedFromMath());
 	}
 
 	/**
@@ -78,7 +78,7 @@ public class ChopRandom extends Enhanced32Random {
 	 *
 	 * @param seed any {@code long} value
 	 */
-	public ChopRandom (long seed) {
+	public ChopRandom(long seed) {
 		super(seed);
 		setSeed(seed);
 	}
@@ -92,7 +92,7 @@ public class ChopRandom extends Enhanced32Random {
 	 * @param stateC any {@code int} value; will be returned exactly on the first call to {@link #nextInt()}
 	 * @param stateD any {@code int} value
 	 */
-	public ChopRandom (int stateA, int stateB, int stateC, int stateD) {
+	public ChopRandom(int stateA, int stateB, int stateC, int stateD) {
 		super(stateA);
 		this.stateA = stateA;
 		this.stateB = stateB;
@@ -107,6 +107,7 @@ public class ChopRandom extends Enhanced32Random {
 
 	/**
 	 * This generator mainly generates int values.
+	 *
 	 * @return true
 	 */
 	@Override
@@ -120,7 +121,7 @@ public class ChopRandom extends Enhanced32Random {
 	 * @return 4 (four)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 4;
 	}
 
@@ -132,16 +133,16 @@ public class ChopRandom extends Enhanced32Random {
 	 * @return the value of the selected state, which is an int that will be promoted to long
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		switch (selection) {
-		case 0:
-			return stateA;
-		case 1:
-			return stateB;
-		case 2:
-			return stateC;
-		default:
-			return stateD;
+			case 0:
+				return stateA;
+			case 1:
+				return stateB;
+			case 2:
+				return stateC;
+			default:
+				return stateD;
 		}
 	}
 
@@ -154,20 +155,20 @@ public class ChopRandom extends Enhanced32Random {
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		switch (selection) {
-		case 0:
-			stateA = (int)value;
-			break;
-		case 1:
-			stateB = (int)value;
-			break;
-		case 2:
-			stateC = (int)value;
-			break;
-		default:
-			stateD = (int)value;
-			break;
+			case 0:
+				stateA = (int) value;
+				break;
+			case 1:
+				stateB = (int) value;
+				break;
+			case 2:
+				stateC = (int) value;
+				break;
+			default:
+				stateD = (int) value;
+				break;
 		}
 	}
 
@@ -180,34 +181,34 @@ public class ChopRandom extends Enhanced32Random {
 	 * @param seed the initial seed; may be any long
 	 */
 	@Override
-	public void setSeed (long seed) {
+	public void setSeed(long seed) {
 		long x = (seed += 0x9E3779B97F4A7C15L);
 		x ^= x >>> 27;
 		x *= 0x3C79AC492BA7B653L;
 		x ^= x >>> 33;
 		x *= 0x1C69B3F74AC4AE35L;
-		stateA = (int)(x ^ x >>> 27);
+		stateA = (int) (x ^ x >>> 27);
 		x = (seed += 0x9E3779B97F4A7C15L);
 		x ^= x >>> 27;
 		x *= 0x3C79AC492BA7B653L;
 		x ^= x >>> 33;
 		x *= 0x1C69B3F74AC4AE35L;
-		stateB = (int)(x ^ x >>> 27);
+		stateB = (int) (x ^ x >>> 27);
 		x = (seed += 0x9E3779B97F4A7C15L);
 		x ^= x >>> 27;
 		x *= 0x3C79AC492BA7B653L;
 		x ^= x >>> 33;
 		x *= 0x1C69B3F74AC4AE35L;
-		stateC = (int)(x ^ x >>> 27);
+		stateC = (int) (x ^ x >>> 27);
 		x = (seed + 0x9E3779B97F4A7C15L);
 		x ^= x >>> 27;
 		x *= 0x3C79AC492BA7B653L;
 		x ^= x >>> 33;
 		x *= 0x1C69B3F74AC4AE35L;
-		stateD = (int)(x ^ x >>> 27);
+		stateD = (int) (x ^ x >>> 27);
 	}
 
-	public int getStateA () {
+	public int getStateA() {
 		return stateA;
 	}
 
@@ -216,11 +217,11 @@ public class ChopRandom extends Enhanced32Random {
 	 *
 	 * @param stateA can be any int
 	 */
-	public void setStateA (int stateA) {
+	public void setStateA(int stateA) {
 		this.stateA = stateA;
 	}
 
-	public int getStateB () {
+	public int getStateB() {
 		return stateB;
 	}
 
@@ -229,11 +230,11 @@ public class ChopRandom extends Enhanced32Random {
 	 *
 	 * @param stateB can be any int
 	 */
-	public void setStateB (int stateB) {
+	public void setStateB(int stateB) {
 		this.stateB = stateB;
 	}
 
-	public int getStateC () {
+	public int getStateC() {
 		return stateC;
 	}
 
@@ -246,11 +247,11 @@ public class ChopRandom extends Enhanced32Random {
 	 *
 	 * @param stateC can be any int
 	 */
-	public void setStateC (int stateC) {
+	public void setStateC(int stateC) {
 		this.stateC = stateC;
 	}
 
-	public int getStateD () {
+	public int getStateD() {
 		return stateD;
 	}
 
@@ -259,7 +260,7 @@ public class ChopRandom extends Enhanced32Random {
 	 *
 	 * @param stateD can be any int
 	 */
-	public void setStateD (int stateD) {
+	public void setStateD(int stateD) {
 		this.stateD = stateD;
 	}
 
@@ -277,11 +278,11 @@ public class ChopRandom extends Enhanced32Random {
 	 * @param stateD the fourth state; can be any long, but will be cast to an int before use
 	 */
 	@Override
-	public void setState (long stateA, long stateB, long stateC, long stateD) {
-		this.stateA = (int)stateA;
-		this.stateB = (int)stateB;
-		this.stateC = (int)stateC;
-		this.stateD = (int)stateD;
+	public void setState(long stateA, long stateB, long stateC, long stateD) {
+		this.stateA = (int) stateA;
+		this.stateB = (int) stateB;
+		this.stateC = (int) stateC;
+		this.stateD = (int) stateD;
 	}
 
 	/**
@@ -293,7 +294,7 @@ public class ChopRandom extends Enhanced32Random {
 	 * @param stateC the third state; can be any int
 	 * @param stateD the fourth state; can be any int
 	 */
-	public void setState (int stateA, int stateB, int stateC, int stateD) {
+	public void setState(int stateA, int stateB, int stateC, int stateD) {
 		this.stateA = stateA;
 		this.stateB = stateB;
 		this.stateC = stateC;
@@ -301,7 +302,7 @@ public class ChopRandom extends Enhanced32Random {
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		final int fa = stateA;
 		final int fb = stateB;
 		final int fc = stateC;
@@ -318,11 +319,11 @@ public class ChopRandom extends Enhanced32Random {
 		stateB = (sb << 11 | sb >>> 21);
 		stateC = ga ^ gb + gc;
 		stateD = fd + 0x5B6B62CA;
-		return (long)fc << 32 ^ gc;
+		return (long) fc << 32 ^ gc;
 	}
 
 	@Override
-	public long previousLong () {
+	public long previousLong() {
 		final int fa = stateA;
 		final int fb = stateB;
 		final int fc = stateC;
@@ -333,7 +334,7 @@ public class ChopRandom extends Enhanced32Random {
 		stateB = (ga >>> 26 | ga << 6) ^ stateC;
 		stateA = gc ^ stateB + stateC;
 
-		return (long)stateC << 32 ^ gc;
+		return (long) stateC << 32 ^ gc;
 	}
 
 	@Override
@@ -349,7 +350,7 @@ public class ChopRandom extends Enhanced32Random {
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		final int fa = stateA;
 		final int fb = stateB;
 		final int fc = stateC;
@@ -364,7 +365,7 @@ public class ChopRandom extends Enhanced32Random {
 	}
 
 	@Override
-	public int nextInt () {
+	public int nextInt() {
 		final int fa = stateA;
 		final int fb = stateB;
 		final int fc = stateC;
@@ -379,23 +380,23 @@ public class ChopRandom extends Enhanced32Random {
 	}
 
 	@Override
-	public ChopRandom copy () {
+	public ChopRandom copy() {
 		return new ChopRandom(stateA, stateB, stateC, stateD);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		ChopRandom that = (ChopRandom)o;
+		ChopRandom that = (ChopRandom) o;
 
 		return stateA == that.stateA && stateB == that.stateB && stateC == that.stateC && stateD == that.stateD;
 	}
 
-	public String toString () {
+	public String toString() {
 		return "ChopRandom{" + "stateA=" + (stateA) + ", stateB=" + (stateB) + ", stateC=" + (stateC) + ", stateD=" + (stateD) + "}";
 	}
 }

@@ -19,7 +19,7 @@ package com.github.tommyettinger.random.experimental;
 
 import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.function.LongLongToLongBiFunction;
-import com.github.tommyettinger.random.*;
+import com.github.tommyettinger.random.EnhancedRandom;
 
 public class Configurable4Random extends EnhancedRandom {
 
@@ -75,7 +75,7 @@ public class Configurable4Random extends EnhancedRandom {
 	 * @return 4 (four)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 4;
 	}
 
@@ -87,7 +87,7 @@ public class Configurable4Random extends EnhancedRandom {
 	 * @return the value of the selected state
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		return state[selection & 3];
 	}
 
@@ -100,7 +100,7 @@ public class Configurable4Random extends EnhancedRandom {
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		state[selection & 3] = value;
 	}
 
@@ -112,10 +112,11 @@ public class Configurable4Random extends EnhancedRandom {
 	 * This uses MX3 by Jon Maiga to mix {@code seed}, then only does a little distribution of the
 	 * mixed long so that 128 of 256 bits are always set across the four states. Because this uses
 	 * MX3, it uses long multiplication; this is the only part of Configurable4Random that does so.
+	 *
 	 * @param seed the initial seed; may be any long
 	 */
 	public void setSeed(long seed) {
-		if(state == null) return;
+		if (state == null) return;
 		seed = (seed ^ 0x1C69B3F74AC4AE35L) * 0x3C79AC492BA7B653L; // an XLCG
 		seed ^= seed >>> 32;
 		state[0] = seed ^ 0xD3833E804F4C574BL;
@@ -124,13 +125,14 @@ public class Configurable4Random extends EnhancedRandom {
 		state[1] = seed ^ ~0xD3833E804F4C574BL;                    // updates are spread across the MX3 hash
 		seed *= 0xBEA225F9EB34556DL;
 		seed ^= seed >>> 32;
-		state[2] = seed ^ 0xC6BC279692B5C323L;;
+		state[2] = seed ^ 0xC6BC279692B5C323L;
+		;
 		seed *= 0xBEA225F9EB34556DL;
 		seed ^= seed >>> 29;
 		state[3] = seed;
 	}
 
-	public long getStateA () {
+	public long getStateA() {
 		return state[0];
 	}
 
@@ -139,11 +141,11 @@ public class Configurable4Random extends EnhancedRandom {
 	 *
 	 * @param stateA can be any long
 	 */
-	public void setStateA (long stateA) {
+	public void setStateA(long stateA) {
 		this.state[0] = stateA;
 	}
 
-	public long getStateB () {
+	public long getStateB() {
 		return state[1];
 	}
 
@@ -152,11 +154,11 @@ public class Configurable4Random extends EnhancedRandom {
 	 *
 	 * @param stateB can be any long
 	 */
-	public void setStateB (long stateB) {
+	public void setStateB(long stateB) {
 		this.state[1] = stateB;
 	}
 
-	public long getStateC () {
+	public long getStateC() {
 		return state[2];
 	}
 
@@ -165,11 +167,11 @@ public class Configurable4Random extends EnhancedRandom {
 	 *
 	 * @param stateC can be any long
 	 */
-	public void setStateC (long stateC) {
+	public void setStateC(long stateC) {
 		this.state[2] = stateC;
 	}
 
-	public long getStateD () {
+	public long getStateD() {
 		return state[3];
 	}
 
@@ -178,7 +180,7 @@ public class Configurable4Random extends EnhancedRandom {
 	 *
 	 * @param stateD can be any long
 	 */
-	public void setStateD (long stateD) {
+	public void setStateD(long stateD) {
 		this.state[3] = stateD;
 	}
 
@@ -193,7 +195,7 @@ public class Configurable4Random extends EnhancedRandom {
 	 * @param stateD the fourth state; can be any long
 	 */
 	@Override
-	public void setState (long stateA, long stateB, long stateC, long stateD) {
+	public void setState(long stateA, long stateB, long stateC, long stateD) {
 		this.state[0] = stateA;
 		this.state[1] = stateB;
 		this.state[2] = stateC;
@@ -201,10 +203,10 @@ public class Configurable4Random extends EnhancedRandom {
 	}
 
 	private static final LongLongToLongBiFunction[] OPS = {
-			(a, b) -> a + b,
-			(a, b) -> a * 0xF1357AEA2E62A9C5L,
-			(a, b) -> (a << 41 | a >>> 23),
-			(a, b) -> a ^ b,
+		(a, b) -> a + b,
+		(a, b) -> a * 0xF1357AEA2E62A9C5L,
+		(a, b) -> (a << 41 | a >>> 23),
+		(a, b) -> a ^ b,
 	};
 
 	/**
@@ -214,11 +216,11 @@ public class Configurable4Random extends EnhancedRandom {
 	 * Only the bottom two bits of each item are used. state[3] is not stored, since it never changes here.
 	 */
 	public static final int[] CONFIG =
-			{
-					1, 2,-0,
-					0, 0, 3,
-					2, 1,-0,
-					0};
+		{
+			1, 2, -0,
+			0, 0, 3,
+			2, 1, -0,
+			0};
 
 	public static void printConfig() {
 		System.out.println(Base.BASE10.join(", ", CONFIG));
@@ -233,7 +235,7 @@ public class Configurable4Random extends EnhancedRandom {
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		state[0] = OPS[CONFIG[0]].applyAsLong(state[CONFIG[1]], state[CONFIG[2]]);
 		state[1] = OPS[CONFIG[3]].applyAsLong(state[CONFIG[4]], state[CONFIG[5]]);
 		state[2] = OPS[CONFIG[6]].applyAsLong(state[CONFIG[7]], state[CONFIG[8]]);
@@ -242,28 +244,28 @@ public class Configurable4Random extends EnhancedRandom {
 	}
 
 	@Override
-	public int next (int bits) {
-		return (int)nextLong() >>> (32 - bits);
+	public int next(int bits) {
+		return (int) nextLong() >>> (32 - bits);
 	}
 
 	@Override
-	public Configurable4Random copy () {
+	public Configurable4Random copy() {
 		return new Configurable4Random(state[0], state[1], state[2], state[3]);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		Configurable4Random that = (Configurable4Random)o;
+		Configurable4Random that = (Configurable4Random) o;
 
 		return state[0] == that.state[0] && state[1] == that.state[1] && state[2] == that.state[2] && state[3] == that.state[3];
 	}
 
-	public String toString () {
+	public String toString() {
 		return "Configurable4Random{" + "stateA=" + (state[0]) + "L, stateB=" + (state[1]) + "L, stateC=" + (state[2]) + "L, stateD=" + (state[3]) + "L}";
 	}
 }

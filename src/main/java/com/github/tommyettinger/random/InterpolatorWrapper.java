@@ -33,13 +33,14 @@ import java.math.BigInteger;
  * Interpolator does from the 0 to 1 range, but for any requested range.
  */
 public class InterpolatorWrapper extends EnhancedRandom {
-    @Override
-    public String getTag() {
-        return "InrW";
-    }
+	@Override
+	public String getTag() {
+		return "InrW";
+	}
 
 	/**
 	 * Depends on the {@link #getRandom() random's} result.
+	 *
 	 * @return whatever {@code getRandom().mainlyGeneratesInt()} returns
 	 */
 	@Override
@@ -49,6 +50,7 @@ public class InterpolatorWrapper extends EnhancedRandom {
 
 	/**
 	 * Depends on the {@link #getRandom() random's} result.
+	 *
 	 * @return whatever {@code getRandom().getMinimumPeriod()} returns
 	 */
 	@Override
@@ -56,97 +58,99 @@ public class InterpolatorWrapper extends EnhancedRandom {
 		return random.getMinimumPeriod();
 	}
 
-    protected Interpolator interpolator;
-    protected EnhancedRandom random;
+	protected Interpolator interpolator;
+	protected EnhancedRandom random;
 
-    public InterpolatorWrapper() {
-        interpolator = Interpolations.linear;
-        random = new AceRandom();
-    }
+	public InterpolatorWrapper() {
+		interpolator = Interpolations.linear;
+		random = new AceRandom();
+	}
 
-    public InterpolatorWrapper(long seed) {
-        interpolator = Interpolations.linear;
-        random = new AceRandom(seed);
-    }
+	public InterpolatorWrapper(long seed) {
+		interpolator = Interpolations.linear;
+		random = new AceRandom(seed);
+	}
 
-    /**
-     * Creates an InterpolatorWrapper that uses a direct reference to the given EnhancedRandom. You can copy the
-     * EnhancedRandom if you want it to change independently of the original EnhancedRandom, using
-     * {@link EnhancedRandom#copy()}.
-     * @param random referenced directly; if you don't want this, use a {@link EnhancedRandom#copy()}
-     */
-    public InterpolatorWrapper(EnhancedRandom random) {
-        if(random == null) this.random = new AceRandom();
-        interpolator = Interpolations.linear;
-    }
+	/**
+	 * Creates an InterpolatorWrapper that uses a direct reference to the given EnhancedRandom. You can copy the
+	 * EnhancedRandom if you want it to change independently of the original EnhancedRandom, using
+	 * {@link EnhancedRandom#copy()}.
+	 *
+	 * @param random referenced directly; if you don't want this, use a {@link EnhancedRandom#copy()}
+	 */
+	public InterpolatorWrapper(EnhancedRandom random) {
+		if (random == null) this.random = new AceRandom();
+		interpolator = Interpolations.linear;
+	}
 
-    public InterpolatorWrapper(long stateA, long stateB) {
-        interpolator = Interpolations.linear;
-        random = new AceRandom(stateA, stateB);
-    }
+	public InterpolatorWrapper(long stateA, long stateB) {
+		interpolator = Interpolations.linear;
+		random = new AceRandom(stateA, stateB);
+	}
 
-    public InterpolatorWrapper(long stateA, long stateB, long stateC) {
-        interpolator = Interpolations.linear;
-        random = new AceRandom(stateA, stateB, stateC);
-    }
+	public InterpolatorWrapper(long stateA, long stateB, long stateC) {
+		interpolator = Interpolations.linear;
+		random = new AceRandom(stateA, stateB, stateC);
+	}
 
-    public InterpolatorWrapper(long stateA, long stateB, long stateC, long stateD) {
-        interpolator = Interpolations.linear;
-        random = new AceRandom(stateA, stateB, stateC, stateD);
-    }
+	public InterpolatorWrapper(long stateA, long stateB, long stateC, long stateD) {
+		interpolator = Interpolations.linear;
+		random = new AceRandom(stateA, stateB, stateC, stateD);
+	}
 
-    public InterpolatorWrapper(long stateA, long stateB, long stateC, long stateD, long stateE) {
-        interpolator = Interpolations.linear;
-        random = new AceRandom(stateA, stateB, stateC, stateD, stateE);
-    }
+	public InterpolatorWrapper(long stateA, long stateB, long stateC, long stateD, long stateE) {
+		interpolator = Interpolations.linear;
+		random = new AceRandom(stateA, stateB, stateC, stateD, stateE);
+	}
 
-    public InterpolatorWrapper(Interpolator interpolator) {
-        this.interpolator = interpolator;
-        random = new AceRandom();
-    }
+	public InterpolatorWrapper(Interpolator interpolator) {
+		this.interpolator = interpolator;
+		random = new AceRandom();
+	}
 
-    public InterpolatorWrapper(Interpolator interpolator, long seed) {
-        this.interpolator = interpolator;
-        random = new AceRandom(seed);
-    }
+	public InterpolatorWrapper(Interpolator interpolator, long seed) {
+		this.interpolator = interpolator;
+		random = new AceRandom(seed);
+	}
 
-    /**
-     * Creates a InterpolatorWrapper that follows the given Interpolator (copied), limiting its results using the given
-     * ReductionMode, and uses a direct reference to the given EnhancedRandom. You can copy the EnhancedRandom if you
-     * want it to change independently of the original EnhancedRandom, using {@link EnhancedRandom#copy()}.
-     * @param interpolator a Interpolator that will be copied; the copy's generator will be reassigned.
-     * @param random referenced directly; if you don't want this, use a {@link EnhancedRandom#copy()}
-     */
-    public InterpolatorWrapper(Interpolator interpolator, EnhancedRandom random) {
-        this.interpolator = interpolator;
-        if(random != null) this.random = random;
-        else this.random = new AceRandom();
-    }
+	/**
+	 * Creates a InterpolatorWrapper that follows the given Interpolator (copied), limiting its results using the given
+	 * ReductionMode, and uses a direct reference to the given EnhancedRandom. You can copy the EnhancedRandom if you
+	 * want it to change independently of the original EnhancedRandom, using {@link EnhancedRandom#copy()}.
+	 *
+	 * @param interpolator a Interpolator that will be copied; the copy's generator will be reassigned.
+	 * @param random       referenced directly; if you don't want this, use a {@link EnhancedRandom#copy()}
+	 */
+	public InterpolatorWrapper(Interpolator interpolator, EnhancedRandom random) {
+		this.interpolator = interpolator;
+		if (random != null) this.random = random;
+		else this.random = new AceRandom();
+	}
 
-    public InterpolatorWrapper(Interpolator interpolator, long stateA, long stateB, long stateC, long stateD) {
-        this.interpolator = interpolator;
-        this.random = new AceRandom(stateA, stateB, stateC, stateD);
-    }
+	public InterpolatorWrapper(Interpolator interpolator, long stateA, long stateB, long stateC, long stateD) {
+		this.interpolator = interpolator;
+		this.random = new AceRandom(stateA, stateB, stateC, stateD);
+	}
 
-    @Override
-    public long nextLong() {
-        return (random.getSelectedState(0) >>> 24) | ((long)(nextFloat() * 0x1p24f) << 40);
-    }
+	@Override
+	public long nextLong() {
+		return (random.getSelectedState(0) >>> 24) | ((long) (nextFloat() * 0x1p24f) << 40);
+	}
 
-    @Override
-    public int next(int bits) {
-        return (int)(long)((1L << bits) * nextDouble());
-    }
+	@Override
+	public int next(int bits) {
+		return (int) (long) ((1L << bits) * nextDouble());
+	}
 
-    @Override
-    public double nextDouble() {
-        return interpolator.apply(random.nextFloat());
-    }
+	@Override
+	public double nextDouble() {
+		return interpolator.apply(random.nextFloat());
+	}
 
-    @Override
-    public float nextFloat() {
-        return interpolator.apply(random.nextFloat());
-    }
+	@Override
+	public float nextFloat() {
+		return interpolator.apply(random.nextFloat());
+	}
 
 	@Override
 	public float nextFloat(float innerBound, float outerBound) {
@@ -154,185 +158,197 @@ public class InterpolatorWrapper extends EnhancedRandom {
 	}
 
 	@Override
-    public void nextBytes(byte[] bytes) {
-        if (bytes != null) {
-            for (int i = 0; i < bytes.length; ) {
+	public void nextBytes(byte[] bytes) {
+		if (bytes != null) {
+			for (int i = 0; i < bytes.length; ) {
 				bytes[i++] = (byte) (256 * nextFloat());
-            }
-        }
-    }
+			}
+		}
+	}
 
-    @Override
-    public int nextInt() {
-        return (int)(long)(0x1p32 * nextDouble());
-    }
+	@Override
+	public int nextInt() {
+		return (int) (long) (0x1p32 * nextDouble());
+	}
 
-    @Override
-    public int nextInt(int bound) {
-        return (int)(bound * nextDouble()) & ~(bound >> 31);
-    }
+	@Override
+	public int nextInt(int bound) {
+		return (int) (bound * nextDouble()) & ~(bound >> 31);
+	}
 
-    @Override
-    public int nextSignedInt(int outerBound) {
-        return (int)(outerBound * nextDouble());
-    }
+	@Override
+	public int nextSignedInt(int outerBound) {
+		return (int) (outerBound * nextDouble());
+	}
 
-    @Override
-    public boolean nextBoolean() {
-        return nextFloat() < 0.5f;
-    }
+	@Override
+	public boolean nextBoolean() {
+		return nextFloat() < 0.5f;
+	}
 
-    /**
-     * This runs {@link Distributor#probitD(double)} on a distributed double this produces.
-     * @return a "Gaussian-ized" result of {@link #nextDouble()}
-     */
-    @Override
-    public double nextGaussian() {
-        return Distributor.probitD(nextDouble());
-    }
+	/**
+	 * This runs {@link Distributor#probitD(double)} on a distributed double this produces.
+	 *
+	 * @return a "Gaussian-ized" result of {@link #nextDouble()}
+	 */
+	@Override
+	public double nextGaussian() {
+		return Distributor.probitD(nextDouble());
+	}
 
-    /**
-     * This runs {@link Distributor#probitF(float)} on a distributed float this produces.
-     * @return a "Gaussian-ized" result of {@link #nextFloat()}
-     */
-    @Override
-    public float nextGaussianFloat() {
-        return Distributor.probitF(nextFloat());
-    }
+	/**
+	 * This runs {@link Distributor#probitF(float)} on a distributed float this produces.
+	 *
+	 * @return a "Gaussian-ized" result of {@link #nextFloat()}
+	 */
+	@Override
+	public float nextGaussianFloat() {
+		return Distributor.probitF(nextFloat());
+	}
 
-    /**
-     * @return a pseudo-random double between 0.0, exclusive, and 1.0, exclusive
-     */
-    @Override
-    public double nextExclusiveDouble() {
-        return interpolator.apply(random.nextExclusiveFloat());
-    }
+	/**
+	 * @return a pseudo-random double between 0.0, exclusive, and 1.0, exclusive
+	 */
+	@Override
+	public double nextExclusiveDouble() {
+		return interpolator.apply(random.nextExclusiveFloat());
+	}
 
-    /**
-     * @return a random uniform double between -1 and 1 with a tiny hole around 0 (all exclusive)
-     */
-    @Override
-    public double nextExclusiveSignedDouble() {
+	/**
+	 * @return a random uniform double between -1 and 1 with a tiny hole around 0 (all exclusive)
+	 */
+	@Override
+	public double nextExclusiveSignedDouble() {
 		final double raw = (interpolator.apply(random.nextFloat()) - 0.5) * 1.9999999999999998;
-        return raw + (BitConversion.doubleToHighIntBits(raw) >> 31 | 1) * 0x1p-55;
-    }
+		return raw + (BitConversion.doubleToHighIntBits(raw) >> 31 | 1) * 0x1p-55;
+	}
 
-    /**
-     * @return a pseudo-random float between 0.0, exclusive, and 1.0, exclusive
-     */
-    @Override
-    public float nextExclusiveFloat() {
-        return interpolator.apply(random.nextExclusiveFloat());
-    }
+	/**
+	 * @return a pseudo-random float between 0.0, exclusive, and 1.0, exclusive
+	 */
+	@Override
+	public float nextExclusiveFloat() {
+		return interpolator.apply(random.nextExclusiveFloat());
+	}
 
-    /**
-     * @return a random uniform float between -1 and 1 with a tiny hole around 0 (all exclusive)
-     */
-    @Override
-    public float nextExclusiveSignedFloat() {
+	/**
+	 * @return a random uniform float between -1 and 1 with a tiny hole around 0 (all exclusive)
+	 */
+	@Override
+	public float nextExclusiveSignedFloat() {
 		final float raw = (interpolator.apply(random.nextFloat()) - 0.5f) * 1.9999999f;
-        return raw + (BitConversion.floatToIntBits(raw) >> 31 | 1) * 0x1p-26f;
-    }
+		return raw + (BitConversion.floatToIntBits(raw) >> 31 | 1) * 0x1p-26f;
+	}
 
-    @Override
-    public InterpolatorWrapper copy() {
-        return new InterpolatorWrapper(interpolator, random.copy());
-    }
+	@Override
+	public InterpolatorWrapper copy() {
+		return new InterpolatorWrapper(interpolator, random.copy());
+	}
 
-    @Override
-    public void setState(long stateA) {
-        random.setState(stateA);
-    }
-    @Override
-    public void setState(long stateA, long stateB) {
-        random.setState(stateA, stateB);
-    }
-    @Override
-    public void setState(long stateA, long stateB, long stateC) {
-        random.setState(stateA, stateB, stateC);
-    }
-    @Override
-    public void setState(long stateA, long stateB, long stateC, long stateD) {
-        random.setState(stateA, stateB, stateC, stateD);
-    }
-    @Override
-    public void setState(long stateA, long stateB, long stateC, long stateD, long stateE) {
-        random.setState(stateA, stateB, stateC, stateD, stateE);
-    }
-    @Override
-    public void setState(long stateA, long stateB, long stateC, long stateD, long stateE, long stateF) {
-        random.setState(stateA, stateB, stateC, stateD, stateE, stateF);
-    }
+	@Override
+	public void setState(long stateA) {
+		random.setState(stateA);
+	}
+
+	@Override
+	public void setState(long stateA, long stateB) {
+		random.setState(stateA, stateB);
+	}
+
+	@Override
+	public void setState(long stateA, long stateB, long stateC) {
+		random.setState(stateA, stateB, stateC);
+	}
+
+	@Override
+	public void setState(long stateA, long stateB, long stateC, long stateD) {
+		random.setState(stateA, stateB, stateC, stateD);
+	}
+
+	@Override
+	public void setState(long stateA, long stateB, long stateC, long stateD, long stateE) {
+		random.setState(stateA, stateB, stateC, stateD, stateE);
+	}
+
+	@Override
+	public void setState(long stateA, long stateB, long stateC, long stateD, long stateE, long stateF) {
+		random.setState(stateA, stateB, stateC, stateD, stateE, stateF);
+	}
+
 	@Override
 	public void setState(long stateA, long stateB, long stateC, long stateD, long stateE, long stateF, long stateG) {
 		random.setState(stateA, stateB, stateC, stateD, stateE, stateF, stateG);
 	}
+
 	@Override
 	public void setState(long stateA, long stateB, long stateC, long stateD, long stateE, long stateF, long stateG, long stateH) {
 		random.setState(stateA, stateB, stateC, stateD, stateE, stateF, stateG, stateH);
 	}
+
 	@Override
 	public void setState(long stateA, long stateB, long stateC, long stateD, long stateE, long stateF, long stateG, long stateH, long stateI) {
 		random.setState(stateA, stateB, stateC, stateD, stateE, stateF, stateG, stateH, stateI);
 	}
+
 	@Override
 	public void setState(long stateA, long stateB, long stateC, long stateD, long stateE, long stateF, long stateG, long stateH, long stateI, long stateJ) {
 		random.setState(stateA, stateB, stateC, stateD, stateE, stateF, stateG, stateH, stateI, stateJ);
 	}
-    @Override
-    public void setState(long... state) {
-        random.setState(state);
-    }
 
-    @Override
-    public int getStateCount() {
-        return random.getStateCount();
-    }
+	@Override
+	public void setState(long... state) {
+		random.setState(state);
+	}
 
-    @Override
-    public long getSelectedState(int selection) {
-        return random.getSelectedState(selection);
-    }
+	@Override
+	public int getStateCount() {
+		return random.getStateCount();
+	}
 
-    @Override
-    public void setSelectedState(int selection, long value) {
-        random.setSelectedState(selection, value);
-    }
+	@Override
+	public long getSelectedState(int selection) {
+		return random.getSelectedState(selection);
+	}
 
-    @Override
-    public void setSeed(long seed) {
-        if(random != null)
-            random.setSeed(seed);
-    }
+	@Override
+	public void setSelectedState(int selection, long value) {
+		random.setSelectedState(selection, value);
+	}
 
-    public Interpolator getInterpolator() {
-        return interpolator;
-    }
+	@Override
+	public void setSeed(long seed) {
+		if (random != null)
+			random.setSeed(seed);
+	}
 
-    /**
-     *
-     * @param interpolator an {@link Interpolator} from the "digital" library
-     */
-    public void setInterpolator(Interpolator interpolator) {
-        this.interpolator = interpolator;
-    }
+	public Interpolator getInterpolator() {
+		return interpolator;
+	}
 
-    public EnhancedRandom getRandom() {
-        return random;
-    }
+	/**
+	 *
+	 * @param interpolator an {@link Interpolator} from the "digital" library
+	 */
+	public void setInterpolator(Interpolator interpolator) {
+		this.interpolator = interpolator;
+	}
 
-    public void setRandom(EnhancedRandom random) {
-        this.random = random;
-    }
+	public EnhancedRandom getRandom() {
+		return random;
+	}
 
-    /**
-     * @param base which Base to use, from the "digital" library, such as {@link Base#BASE10}
-     * @return this, for chaining
-     */
-    @Override
-    public String stringSerialize(Base base) {
-        return getTag() + base.paddingChar + interpolator.getTag() + base.positiveSign + random.stringSerialize(base);
-    }
+	public void setRandom(EnhancedRandom random) {
+		this.random = random;
+	}
+
+	/**
+	 * @param base which Base to use, from the "digital" library, such as {@link Base#BASE10}
+	 * @return this, for chaining
+	 */
+	@Override
+	public String stringSerialize(Base base) {
+		return getTag() + base.paddingChar + interpolator.getTag() + base.positiveSign + random.stringSerialize(base);
+	}
 
 	@Override
 	public <T extends CharSequence & Appendable> T appendSerialized(T sb, Base base) {
@@ -348,53 +364,53 @@ public class InterpolatorWrapper extends EnhancedRandom {
 		return sb;
 	}
 
-    /**
-     * @param data a String probably produced by {@link #stringSerialize(Base)}
-     * @param base which Base to use, from the "digital" library, such as {@link Base#BASE10}
-     * @return this, for chaining
-     */
-    @Override
-    public InterpolatorWrapper stringDeserialize(String data, Base base) {
-        int idx = data.indexOf(base.paddingChar);
-        interpolator = Interpolations.get(data.substring(idx + 1, (idx = data.indexOf(base.positiveSign, idx + 1))));
-        random = Deserializer.deserialize(data.substring(idx + 1), base);
-        return this;
-    }
+	/**
+	 * @param data a String probably produced by {@link #stringSerialize(Base)}
+	 * @param base which Base to use, from the "digital" library, such as {@link Base#BASE10}
+	 * @return this, for chaining
+	 */
+	@Override
+	public InterpolatorWrapper stringDeserialize(String data, Base base) {
+		int idx = data.indexOf(base.paddingChar);
+		interpolator = Interpolations.get(data.substring(idx + 1, (idx = data.indexOf(base.positiveSign, idx + 1))));
+		random = Deserializer.deserialize(data.substring(idx + 1), base);
+		return this;
+	}
 
-    /**
-     * Needs the type of {@link #random} registered.
-     *
-     * @param out the stream to write the object to
-     * @throws IOException Includes any I/O exceptions that may occur
-     * @serialData String interpolator (the {@link Interpolator#tag} of the Interpolator), then EnhancedRandom random.
-     */
-    @GwtIncompatible
-    public void writeExternal(ObjectOutput out) throws IOException {
-        out.writeUTF(interpolator.getTag());
-        out.writeUTF(random.stringSerialize(Base.BASE90));
-    }
+	/**
+	 * Needs the type of {@link #random} registered.
+	 *
+	 * @param out the stream to write the object to
+	 * @throws IOException Includes any I/O exceptions that may occur
+	 * @serialData String interpolator (the {@link Interpolator#tag} of the Interpolator), then EnhancedRandom random.
+	 */
+	@GwtIncompatible
+	public void writeExternal(ObjectOutput out) throws IOException {
+		out.writeUTF(interpolator.getTag());
+		out.writeUTF(random.stringSerialize(Base.BASE90));
+	}
 
-    /**
-     * The object implements the readExternal method to restore its
-     * contents by calling the methods of DataInput for primitive
-     * types and readObject for objects, strings and arrays.  The
-     * readExternal method must read the values in the same sequence
-     * and with the same types as were written by writeExternal.
-     *
-     * @param in the stream to read data from in order to restore the object
-     * @throws IOException if I/O errors occur
-     */
-    @GwtIncompatible
-    public void readExternal(ObjectInput in) throws IOException {
-        interpolator = Interpolations.get(in.readUTF());
-        random = Deserializer.deserialize(in.readUTF(), Base.BASE90);
-    }
+	/**
+	 * The object implements the readExternal method to restore its
+	 * contents by calling the methods of DataInput for primitive
+	 * types and readObject for objects, strings and arrays.  The
+	 * readExternal method must read the values in the same sequence
+	 * and with the same types as were written by writeExternal.
+	 *
+	 * @param in the stream to read data from in order to restore the object
+	 * @throws IOException if I/O errors occur
+	 */
+	@GwtIncompatible
+	public void readExternal(ObjectInput in) throws IOException {
+		interpolator = Interpolations.get(in.readUTF());
+		random = Deserializer.deserialize(in.readUTF(), Base.BASE90);
+	}
 
-    @Override
-    public String toString() {
-        return "InterpolatorWrapper{" +
-                "interpolator=" + interpolator +
-                ", random=" + random +
-                '}';
-    }
+	@Override
+	public String toString() {
+		return "InterpolatorWrapper{" +
+			"interpolator=" + interpolator +
+			", random=" + random +
+			'}';
+	}
 }

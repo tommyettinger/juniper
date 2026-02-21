@@ -272,7 +272,7 @@ public class TraceGammaTest {
 	public static void main(String[] args) {
 
 		int totalRating = 0;
-		for(int index = 0; index < 256; index++){
+		for (int index = 0; index < 256; index++) {
 			long c = EnhancedRandom.fixGamma((index & 0xFFFFFFFL) << 1);
 			int rating = EnhancedRandom.rateGamma(c);
 			System.out.printf("%20dL or 0x%016XL rating: %d\n", c, c, rating);

@@ -66,8 +66,8 @@ public class Lamb32Random extends Enhanced32Random {
 	 */
 	public Lamb32Random() {
 		super();
-		stateA = (int)EnhancedRandom.seedFromMath();
-		stateB = (int)EnhancedRandom.seedFromMath();
+		stateA = (int) EnhancedRandom.seedFromMath();
+		stateB = (int) EnhancedRandom.seedFromMath();
 	}
 
 	/**
@@ -100,12 +100,14 @@ public class Lamb32Random extends Enhanced32Random {
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
 
 	/**
 	 * (2 to the 64).
+	 *
 	 * @return (2 to the 64)
 	 */
 	@Override
@@ -119,12 +121,13 @@ public class Lamb32Random extends Enhanced32Random {
 	 * @return 2 (two)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 2;
 	}
 
 	/**
 	 * Lamb32Random mainly generates int values.
+	 *
 	 * @return true
 	 */
 	@Override
@@ -140,12 +143,12 @@ public class Lamb32Random extends Enhanced32Random {
 	 * @return the value of the selected state, treated as long but internally an int
 	 */
 	@Override
-	public long getSelectedState (int selection) {
-        if (selection == 0) {
-            return stateA;
-        }
-        return stateB;
-    }
+	public long getSelectedState(int selection) {
+		if (selection == 0) {
+			return stateA;
+		}
+		return stateB;
+	}
 
 	/**
 	 * Sets one of the states, determined by {@code selection}, to {@code value}, cast to int.
@@ -156,12 +159,12 @@ public class Lamb32Random extends Enhanced32Random {
 	 * @param value     the value to use for the selected state, which will be cast to int
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
-        if (selection == 0) {
-            stateA = (int)value;
-        } else {
-            stateB = (int)value;
-        }
+	public void setSelectedState(int selection, long value) {
+		if (selection == 0) {
+			stateA = (int) value;
+		} else {
+			stateB = (int) value;
+		}
 	}
 
 	/**
@@ -171,14 +174,14 @@ public class Lamb32Random extends Enhanced32Random {
 	 * @param seed the initial seed; may be any long
 	 */
 	@Override
-	public void setSeed (long seed) {
-		stateA = BitConversion.imul((int)(seed >>> 32), 555555555) ^ 333333333;
-		stateB = BitConversion.imul((int)seed, 555555555) ^ 333333333;
+	public void setSeed(long seed) {
+		stateA = BitConversion.imul((int) (seed >>> 32), 555555555) ^ 333333333;
+		stateB = BitConversion.imul((int) seed, 555555555) ^ 333333333;
 		stateA ^= (stateA << 17 | stateA >>> 15) ^ (stateA << 8 | stateA >>> 24);
 		stateB ^= (stateB << 14 | stateB >>> 18) ^ (stateB << 5 | stateB >>> 27);
 	}
 
-	public int getStateA () {
+	public int getStateA() {
 		return stateA;
 	}
 
@@ -187,11 +190,11 @@ public class Lamb32Random extends Enhanced32Random {
 	 *
 	 * @param stateA can be any int
 	 */
-	public void setStateA (int stateA) {
+	public void setStateA(int stateA) {
 		this.stateA = stateA;
 	}
 
-	public int getStateB () {
+	public int getStateB() {
 		return stateB;
 	}
 
@@ -200,7 +203,7 @@ public class Lamb32Random extends Enhanced32Random {
 	 *
 	 * @param stateB can be any int
 	 */
-	public void setStateB (int stateB) {
+	public void setStateB(int stateB) {
 		this.stateB = stateB;
 	}
 
@@ -213,9 +216,9 @@ public class Lamb32Random extends Enhanced32Random {
 	 * @param stateB the second state; can be any int
 	 */
 	@Override
-	public void setState (long stateA, long stateB) {
-		this.stateA = (int)stateA;
-		this.stateB = (int)stateB;
+	public void setState(long stateA, long stateB) {
+		this.stateA = (int) stateA;
+		this.stateB = (int) stateB;
 	}
 
 	/**
@@ -225,13 +228,13 @@ public class Lamb32Random extends Enhanced32Random {
 	 * @param stateA the first state; can be any int
 	 * @param stateB the second state; can be any int
 	 */
-	public void setState (int stateA, int stateB) {
+	public void setState(int stateA, int stateB) {
 		this.stateA = stateA;
 		this.stateB = stateB;
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		return (long) nextInt() << 32 ^ nextInt();
 	}
 
@@ -254,7 +257,7 @@ public class Lamb32Random extends Enhanced32Random {
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		int z = BitConversion.imul(stateA ^ (stateB << 12 | stateB >>> -12), 999999999);
 		stateA = BitConversion.imul(stateA + BitConversion.countLeadingZeros(stateB), 777777777);
 		stateB = BitConversion.imul(stateB, 555555555) ^ 333333333;
@@ -262,14 +265,15 @@ public class Lamb32Random extends Enhanced32Random {
 	}
 
 	@Override
-	public long previousLong () {
-		return previousInt() ^ (long)previousInt() << 32;
+	public long previousLong() {
+		return previousInt() ^ (long) previousInt() << 32;
 	}
 
 	/**
 	 * Jumps extremely far in the generator's sequence, such that it requires {@code Math.pow(2, 32)} calls to leap() to
 	 * complete a cycle through the generator's entire sequence. This can be used to create over 4 billion
 	 * substreams of this generator's sequence, each with a period of {@code Math.pow(2, 32)}.
+	 *
 	 * @return the result of what nextLong() would return if it was called at the state this jumped to
 	 */
 	public long leap() {
@@ -285,25 +289,25 @@ public class Lamb32Random extends Enhanced32Random {
 	}
 
 	@Override
-	public Lamb32Random copy () {
+	public Lamb32Random copy() {
 		return new Lamb32Random(stateA, stateB);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		Lamb32Random that = (Lamb32Random)o;
+		Lamb32Random that = (Lamb32Random) o;
 
 		if (stateA != that.stateA)
 			return false;
 		return stateB == that.stateB;
 	}
 
-	public String toString () {
+	public String toString() {
 		return "Lamb32Random{" + "stateA=" + (stateA) + ", stateB=" + (stateB) + "}";
 	}
 }

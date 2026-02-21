@@ -1,9 +1,9 @@
 /*
  * Fast discrete cosine transform algorithms (Java)
- * 
+ *
  * Copyright (c) 2017 Project Nayuki. (MIT License)
  * https://www.nayuki.io/page/fast-discrete-cosine-transform-algorithms
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
  * the Software without restriction, including without limitation the rights to
@@ -38,13 +38,14 @@ import java.util.Arrays;
  * This implementation comes from <a href="https://www.nayuki.io/page/fast-discrete-cosine-transform-algorithms">Project Nayuki</a>.
  */
 public final class Dct {
-	
+
 	/**
 	 * Computes the unscaled DCT type II on the specified array in place.
 	 * The array length must be a power of 2.
 	 * <br>
 	 * For the formula, see <a href="https://en.wikipedia.org/wiki/Discrete_cosine_transform#DCT-II">
 	 * Wikipedia: Discrete cosine transform - DCT-II</a>.
+	 *
 	 * @param vector the vector of numbers to transform
 	 * @throws NullPointerException if the array is {@code null}
 	 */
@@ -54,8 +55,8 @@ public final class Dct {
 			throw new IllegalArgumentException("Length must be power of 2");
 		transform(vector, 0, n, new double[n]);
 	}
-	
-	
+
+
 	public static void transform(double[] vector, int off, int len, double[] temp) {
 		// Algorithm by Byeong Gi Lee, 1984. For details, see:
 		// http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.118.3056&rep=rep1&type=pdf#page=34
@@ -72,7 +73,7 @@ public final class Dct {
 		transform(temp, off, halfLen, vector);
 		transform(temp, off + halfLen, halfLen, vector);
 		for (int i = 0; i < halfLen - 1; i++) {
-			vector[off + i * 2    ] = temp[off + i];
+			vector[off + i * 2] = temp[off + i];
 			vector[off + i * 2 + 1] = temp[off + i + halfLen] + temp[off + i + halfLen + 1];
 		}
 		vector[off + len - 2] = temp[off + halfLen - 1];
@@ -84,6 +85,7 @@ public final class Dct {
 	 * The array length must be a power of 2.
 	 * <p>For the formula, see <a href="https://en.wikipedia.org/wiki/Discrete_cosine_transform#DCT-III">
 	 * Wikipedia: Discrete cosine transform - DCT-III</a>.</p>
+	 *
 	 * @param vector the vector of numbers to transform
 	 * @throws NullPointerException if the array is {@code null}
 	 */
@@ -94,8 +96,8 @@ public final class Dct {
 		vector[0] /= 2;
 		inverseTransform(vector, 0, n, new double[n]);
 	}
-	
-	
+
+
 	public static void inverseTransform(double[] vector, int off, int len, double[] temp) {
 		// Algorithm by Byeong Gi Lee, 1984. For details, see:
 		// https://www.nayuki.io/res/fast-discrete-cosine-transform-algorithms/lee-new-algo-discrete-cosine-transform.pdf
@@ -118,7 +120,7 @@ public final class Dct {
 		}
 	}
 
-	public static void transform2D(double[][] vector, double[][] temp){
+	public static void transform2D(double[][] vector, double[][] temp) {
 		final int n = vector.length;
 		double inc = 1.0 / n;
 		// window function
@@ -132,7 +134,7 @@ public final class Dct {
 		transformWindowless2D(vector, temp);
 	}
 
-	public static void transformWindowless2D(double[][] vector, double[][] temp){
+	public static void transformWindowless2D(double[][] vector, double[][] temp) {
 		final int n = vector.length;
 		for (int x = 0; x < n; x++) {
 			transform(vector[x], 0, n, temp[x]);
@@ -150,7 +152,7 @@ public final class Dct {
 		}
 	}
 
-	public static void inverseTransform2D(double[][] vector, double[][] temp){
+	public static void inverseTransform2D(double[][] vector, double[][] temp) {
 		final int n = vector.length;
 		double inc = 1.0 / n;
 		// window function
@@ -164,7 +166,7 @@ public final class Dct {
 		inverseTransformWindowless2D(vector, temp);
 	}
 
-	public static void inverseTransformWindowless2D(double[][] vector, double[][] temp){
+	public static void inverseTransformWindowless2D(double[][] vector, double[][] temp) {
 		final int n = vector.length;
 		for (int x = 0; x < n; x++) {
 			inverseTransform(vector[x], 0, n, temp[x]);
@@ -184,10 +186,10 @@ public final class Dct {
 
 	/**
 	 *
-	 * @param vector must be square and have side length that is a power of two
+	 * @param vector     must be square and have side length that is a power of two
 	 * @param background will contain ABGR packed float colors;  must have the same dimensions as {@code vector}
 	 */
-	public static void getColors(double[][] vector, float[][] background){
+	public static void getColors(double[][] vector, float[][] background) {
 		final int n = vector.length;
 		double max = 0.0, mag, r;
 		for (int x = 0; x < n; x++) {
@@ -199,7 +201,7 @@ public final class Dct {
 				background[x][y] = (float) mag;
 			}
 		}
-		if(max <= 0.0)
+		if (max <= 0.0)
 			max = 0.001;
 		double d = 1.0 / Math.log1p(max);
 		double c = 255.9999 * d;
@@ -209,7 +211,7 @@ public final class Dct {
 			for (int y = 0; y < n; y++) {
 				double lg = Math.log1p(background[x][y]);
 //				real[x][y] = d * lg;
-				cb = (int)(c * lg);
+				cb = (int) (c * lg);
 				Fft.histogram[cb]++;
 				background[x][y] = Float.intBitsToFloat(cb * 0x010101 | 0xFE000000);
 			}
@@ -219,7 +221,7 @@ public final class Dct {
 	public static final float BLACK = Float.intBitsToFloat(0xFE000000);
 	public static final float WHITE = Float.intBitsToFloat(0xFEFFFFFF);
 
-	public static void getColorsThreshold(double[][] vector, float[][] background, float threshold){
+	public static void getColorsThreshold(double[][] vector, float[][] background, float threshold) {
 		final int n = vector.length;
 		double max = 0.0, mag, r, i;
 		for (int x = 0; x < n; x++) {
@@ -231,7 +233,7 @@ public final class Dct {
 				background[x][y] = (float) mag;
 			}
 		}
-		if(max <= 0.0)
+		if (max <= 0.0)
 			max = 0.001;
 		double d = 1.0 / Math.log1p(max);
 		double cb;

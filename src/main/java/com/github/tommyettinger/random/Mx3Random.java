@@ -74,12 +74,14 @@ public class Mx3Random extends EnhancedRandom {
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
 
 	/**
 	 * 2 to the 64.
+	 *
 	 * @return 2 to the 64
 	 */
 	@Override
@@ -93,7 +95,7 @@ public class Mx3Random extends EnhancedRandom {
 	 * @return 1 (one)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 1;
 	}
 
@@ -104,7 +106,7 @@ public class Mx3Random extends EnhancedRandom {
 	 * @return the only state's exact value
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		return state;
 	}
 
@@ -116,7 +118,7 @@ public class Mx3Random extends EnhancedRandom {
 	 * @param value     the exact value to use for the state; all longs are valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		state = value;
 	}
 
@@ -128,7 +130,7 @@ public class Mx3Random extends EnhancedRandom {
 	 * @param seed the exact value to use for the state; all longs are valid
 	 */
 	@Override
-	public void setSeed (long seed) {
+	public void setSeed(long seed) {
 		state = seed;
 	}
 
@@ -138,7 +140,7 @@ public class Mx3Random extends EnhancedRandom {
 	 *
 	 * @return the current state, as a long
 	 */
-	public long getState () {
+	public long getState() {
 		return state;
 	}
 
@@ -149,12 +151,12 @@ public class Mx3Random extends EnhancedRandom {
 	 * @param state the long value to use for the state variable
 	 */
 	@Override
-	public void setState (long state) {
+	public void setState(long state) {
 		this.state = state;
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		long x = ++state;
 		x ^= x >>> 32;
 		x *= 0xBEA225F9EB34556DL;
@@ -177,7 +179,7 @@ public class Mx3Random extends EnhancedRandom {
 	 * @return a random {@code long} by the same algorithm as {@link #nextLong()}, using the appropriately-advanced state
 	 */
 	@Override
-	public long skip (long advance) {
+	public long skip(long advance) {
 		long x = (state += advance);
 		x ^= x >>> 32;
 		x *= 0xBEA225F9EB34556DL;
@@ -189,7 +191,7 @@ public class Mx3Random extends EnhancedRandom {
 	}
 
 	@Override
-	public long previousLong () {
+	public long previousLong() {
 		long x = state--;
 		x ^= x >>> 32;
 		x *= 0xBEA225F9EB34556DL;
@@ -201,7 +203,7 @@ public class Mx3Random extends EnhancedRandom {
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		long x = ++state;
 		x ^= x >>> 32;
 		x *= 0xBEA225F9EB34556DL;
@@ -209,28 +211,28 @@ public class Mx3Random extends EnhancedRandom {
 		x *= 0xBEA225F9EB34556DL;
 		x ^= x >>> 32;
 		x *= 0xBEA225F9EB34556DL;
-		return (int)(x ^ x >>> 29) >>> (32 - bits);
+		return (int) (x ^ x >>> 29) >>> (32 - bits);
 	}
 
 	@Override
-	public Mx3Random copy () {
+	public Mx3Random copy() {
 		return new Mx3Random(state);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		Mx3Random that = (Mx3Random)o;
+		Mx3Random that = (Mx3Random) o;
 
 		return state == that.state;
 	}
 
 	@Override
-	public String toString () {
+	public String toString() {
 		return "Mx3Random{state=" + (state) + "L}";
 	}
 }

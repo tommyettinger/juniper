@@ -88,12 +88,14 @@ public class LCG64LFSR64MoremurRandom extends EnhancedRandom {
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("FFFFFFFFFFFFFFFF0000000000000000", 16);
 
 	/**
 	 * (2 to the 128) minus (2 to the 64).
+	 *
 	 * @return (2 to the 128) minus (2 to the 64)
 	 */
 	@Override
@@ -107,7 +109,7 @@ public class LCG64LFSR64MoremurRandom extends EnhancedRandom {
 	 * @return 2 (two)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 2;
 	}
 
@@ -119,12 +121,12 @@ public class LCG64LFSR64MoremurRandom extends EnhancedRandom {
 	 * @return the value of the selected state
 	 */
 	@Override
-	public long getSelectedState (int selection) {
-        if (selection == 0) {
-            return stateA;
-        }
-        return stateB;
-    }
+	public long getSelectedState(int selection) {
+		if (selection == 0) {
+			return stateA;
+		}
+		return stateB;
+	}
 
 	/**
 	 * Sets one of the states, determined by {@code selection}, to {@code value}, as-is.
@@ -136,12 +138,12 @@ public class LCG64LFSR64MoremurRandom extends EnhancedRandom {
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
-        if (selection == 0) {
-            stateA = (value == 0L) ? 0x9E3779B97F4A7C15L : value;
-        } else {
-            stateB = value;
-        }
+	public void setSelectedState(int selection, long value) {
+		if (selection == 0) {
+			stateA = (value == 0L) ? 0x9E3779B97F4A7C15L : value;
+		} else {
+			stateB = value;
+		}
 	}
 
 	/**
@@ -153,7 +155,7 @@ public class LCG64LFSR64MoremurRandom extends EnhancedRandom {
 	 * @param seed the initial seed; may be any long
 	 */
 	@Override
-	public void setSeed (long seed) {
+	public void setSeed(long seed) {
 		long x = (seed + 0x9E3779B97F4A7C15L);
 		x ^= x >>> 32;
 		x *= 0xBEA225F9EB34556DL;
@@ -165,7 +167,7 @@ public class LCG64LFSR64MoremurRandom extends EnhancedRandom {
 		stateB = x ^ x >>> 29;
 	}
 
-	public long getStateA () {
+	public long getStateA() {
 		return stateA;
 	}
 
@@ -174,11 +176,11 @@ public class LCG64LFSR64MoremurRandom extends EnhancedRandom {
 	 *
 	 * @param stateA can be any long except 0
 	 */
-	public void setStateA (long stateA) {
+	public void setStateA(long stateA) {
 		this.stateA = (stateA == 0L) ? 0x9E3779B97F4A7C15L : stateA;
 	}
 
-	public long getStateB () {
+	public long getStateB() {
 		return stateB;
 	}
 
@@ -187,7 +189,7 @@ public class LCG64LFSR64MoremurRandom extends EnhancedRandom {
 	 *
 	 * @param stateB can be any long
 	 */
-	public void setStateB (long stateB) {
+	public void setStateB(long stateB) {
 		this.stateB = stateB;
 	}
 
@@ -200,23 +202,23 @@ public class LCG64LFSR64MoremurRandom extends EnhancedRandom {
 	 * @param stateB the second state; can be any long
 	 */
 	@Override
-	public void setState (long stateA, long stateB) {
+	public void setState(long stateA, long stateB) {
 		this.stateA = (stateA == 0L) ? 0x9E3779B97F4A7C15L : stateA;
 		this.stateB = stateB;
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		return moremur((stateA = (stateA << 1) ^ (stateA >> 63 & 0xfeedbabedeadbeefL)) + (stateB = stateB * 0xD1342543DE82EF95L + 1L));
 	}
 
 	@Override
-	public int next (int bits) {
-		return (int)(moremur((stateA = (stateA << 1) ^ (stateA >> 63 & 0xfeedbabedeadbeefL)) + (stateB = stateB * 0xD1342543DE82EF95L + 1L)) >>> 64 - bits);
+	public int next(int bits) {
+		return (int) (moremur((stateA = (stateA << 1) ^ (stateA >> 63 & 0xfeedbabedeadbeefL)) + (stateB = stateB * 0xD1342543DE82EF95L + 1L)) >>> 64 - bits);
 	}
 
 	@Override
-	public long previousLong () {
+	public long previousLong() {
 		long result = moremur(stateA + stateB);
 		long lsb = (stateA & 1L);
 		stateA ^= (-lsb & 0xfeedbabedeadbeefL);
@@ -229,10 +231,10 @@ public class LCG64LFSR64MoremurRandom extends EnhancedRandom {
 	 * Jumps extremely far in the generator's sequence, such that it requires {@code Math.pow(2, 64)} calls to leap() to
 	 * complete a cycle through the generator's entire sequence. This can be used to create over 18 quintillion
 	 * substreams of this generator's sequence, each with a period of {@code Math.pow(2, 64) - 1L}.
+	 *
 	 * @return the result of what nextLong() would return if it was called at the state this jumped to
 	 */
-	public long leap()
-	{
+	public long leap() {
 		return moremur((stateA = (stateA << 1) ^ (stateA >> 63 & 0xfeedbabedeadbeefL)) + stateB);
 	}
 
@@ -245,25 +247,25 @@ public class LCG64LFSR64MoremurRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public LCG64LFSR64MoremurRandom copy () {
+	public LCG64LFSR64MoremurRandom copy() {
 		return new LCG64LFSR64MoremurRandom(stateA, stateB);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		LCG64LFSR64MoremurRandom that = (LCG64LFSR64MoremurRandom)o;
+		LCG64LFSR64MoremurRandom that = (LCG64LFSR64MoremurRandom) o;
 
 		if (stateA != that.stateA)
 			return false;
 		return stateB == that.stateB;
 	}
 
-	public String toString () {
+	public String toString() {
 		return "LCG64LFSR64MoremurRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L}";
 	}
 

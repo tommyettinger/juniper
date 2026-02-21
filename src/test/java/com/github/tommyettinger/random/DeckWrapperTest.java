@@ -13,7 +13,7 @@ public class DeckWrapperTest {
 		for (int y = 0; y < 10; y++) {
 			int[] found = new int[16];
 			for (int i = 0; i < 16; i++) {
-				int res = (int)(dw.nextLong() >>> 60);
+				int res = (int) (dw.nextLong() >>> 60);
 				System.out.printf("%02d ", res);
 				found[res]++;
 			}
@@ -127,7 +127,7 @@ public class DeckWrapperTest {
 		for (int y = 0; y < 10; y++) {
 			int[] found = new int[16];
 			for (int i = 0; i < 16; i++) {
-				int res = (int)dw.nextLong(16);
+				int res = (int) dw.nextLong(16);
 				System.out.printf("%02d ", res);
 				found[res]++;
 			}
@@ -146,7 +146,7 @@ public class DeckWrapperTest {
 		for (int y = 0; y < 10; y++) {
 			int[] found = new int[16];
 			for (int i = 0; i < 16; i++) {
-				int res = (int)dw.nextLong(0, 16);
+				int res = (int) dw.nextLong(0, 16);
 				System.out.printf("%02d ", res);
 				found[res]++;
 			}
@@ -165,7 +165,7 @@ public class DeckWrapperTest {
 		for (int y = 0; y < 10; y++) {
 			int[] found = new int[16];
 			for (int i = 0; i < 16; i++) {
-				int res = (int)dw.nextSignedLong(16);
+				int res = (int) dw.nextSignedLong(16);
 				System.out.printf("%02d ", res);
 				found[res]++;
 			}
@@ -184,7 +184,7 @@ public class DeckWrapperTest {
 		for (int y = 0; y < 10; y++) {
 			int[] found = new int[16];
 			for (int i = 0; i < 16; i++) {
-				int res = (int)dw.nextSignedLong(0, 16);
+				int res = (int) dw.nextSignedLong(0, 16);
 				System.out.printf("%02d ", res);
 				found[res]++;
 			}
@@ -203,7 +203,7 @@ public class DeckWrapperTest {
 		for (int y = 0; y < 10; y++) {
 			int[] found = new int[16];
 			for (int i = 0; i < 16; i++) {
-				int res = (int)dw.nextFloat(16f);
+				int res = (int) dw.nextFloat(16f);
 				System.out.printf("%02d ", res);
 				found[res]++;
 			}
@@ -222,7 +222,7 @@ public class DeckWrapperTest {
 		for (int y = 0; y < 10; y++) {
 			int[] found = new int[16];
 			for (int i = 0; i < 16; i++) {
-				int res = (int)dw.nextDouble(16.0);
+				int res = (int) dw.nextDouble(16.0);
 				System.out.printf("%02d ", res);
 				found[res]++;
 			}
@@ -241,7 +241,7 @@ public class DeckWrapperTest {
 		for (int y = 0; y < 10; y++) {
 			int[] found = new int[16];
 			for (int i = 0; i < 16; i++) {
-				int res = (int)dw.nextExclusiveFloat(16f);
+				int res = (int) dw.nextExclusiveFloat(16f);
 				System.out.printf("%02d ", res);
 				found[res]++;
 			}
@@ -260,7 +260,7 @@ public class DeckWrapperTest {
 		for (int y = 0; y < 10; y++) {
 			int[] found = new int[16];
 			for (int i = 0; i < 16; i++) {
-				int res = (int)dw.nextExclusiveDouble(16.0);
+				int res = (int) dw.nextExclusiveDouble(16.0);
 				System.out.printf("%02d ", res);
 				found[res]++;
 			}
@@ -279,7 +279,7 @@ public class DeckWrapperTest {
 		for (int y = 0; y < 10; y++) {
 			int[] found = new int[16];
 			for (int i = 0; i < 16; i++) {
-				int res = (int)(dw.nextExclusiveSignedFloat() * 8f + 8f);
+				int res = (int) (dw.nextExclusiveSignedFloat() * 8f + 8f);
 				System.out.printf("%02d ", res);
 				found[res]++;
 			}
@@ -298,7 +298,7 @@ public class DeckWrapperTest {
 		for (int y = 0; y < 10; y++) {
 			int[] found = new int[16];
 			for (int i = 0; i < 16; i++) {
-				int res = (int)(dw.nextExclusiveSignedDouble() * 8.0 + 8.0);
+				int res = (int) (dw.nextExclusiveSignedDouble() * 8.0 + 8.0);
 				System.out.printf("%02d ", res);
 				found[res]++;
 			}
@@ -317,7 +317,7 @@ public class DeckWrapperTest {
 		for (int y = 0; y < 10; y++) {
 			int[] found = new int[16];
 			for (int i = 0; i < 16; i++) {
-				int res = (int)dw.nextInclusiveFloat(Math.nextDown(16f));
+				int res = (int) dw.nextInclusiveFloat(Math.nextDown(16f));
 				System.out.printf("%02d ", res);
 				found[res]++;
 			}
@@ -336,7 +336,7 @@ public class DeckWrapperTest {
 		for (int y = 0; y < 10; y++) {
 			int[] found = new int[16];
 			for (int i = 0; i < 16; i++) {
-				int res = (int)dw.nextInclusiveDouble(Math.nextDown(16.0));
+				int res = (int) dw.nextInclusiveDouble(Math.nextDown(16.0));
 				System.out.printf("%02d ", res);
 				found[res]++;
 			}
@@ -376,7 +376,7 @@ public class DeckWrapperTest {
 			for (int i = 0; i < 16; i++) {
 				double res = dw.nextGaussian();
 				System.out.printf("%+02.6f ", res);
-				if(res < 0) found[0]++;
+				if (res < 0) found[0]++;
 				else found[1]++;
 			}
 			boolean success = found[0] == found[1];
@@ -391,7 +391,7 @@ public class DeckWrapperTest {
 			for (int i = 0; i < 16; i++) {
 				double res = dw.nextGaussianFloat();
 				System.out.printf("%+02.6f ", res);
-				if(res < 0) found[0]++;
+				if (res < 0) found[0]++;
 				else found[1]++;
 			}
 			boolean success = found[0] == found[1];

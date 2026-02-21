@@ -76,12 +76,14 @@ public class LaborRandom extends EnhancedRandom {
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
 
 	/**
 	 * 2 to the 64.
+	 *
 	 * @return 2 to the 64
 	 */
 	@Override
@@ -95,7 +97,7 @@ public class LaborRandom extends EnhancedRandom {
 	 * @return 2 (two)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 2;
 	}
 
@@ -107,7 +109,7 @@ public class LaborRandom extends EnhancedRandom {
 	 * @return the value of the selected state
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		if ((selection & 1) == 1) {
 			return stateB;
 		}
@@ -122,7 +124,7 @@ public class LaborRandom extends EnhancedRandom {
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		if ((selection & 1) == 1) {
 			stateB = value;
 		} else {
@@ -137,7 +139,7 @@ public class LaborRandom extends EnhancedRandom {
 	 * @param seed the initial seed; may be any long
 	 */
 	@Override
-	public void setSeed (long seed) {
+	public void setSeed(long seed) {
 		long x = (seed + 0x9E3779B97F4A7C15L);
 		x ^= x >>> 27;
 		x *= 0x3C79AC492BA7B653L;
@@ -152,7 +154,7 @@ public class LaborRandom extends EnhancedRandom {
 		stateB = x ^ x >>> 27;
 	}
 
-	public long getStateA () {
+	public long getStateA() {
 		return stateA;
 	}
 
@@ -161,11 +163,11 @@ public class LaborRandom extends EnhancedRandom {
 	 *
 	 * @param stateA can be any long
 	 */
-	public void setStateA (long stateA) {
+	public void setStateA(long stateA) {
 		this.stateA = stateA;
 	}
 
-	public long getStateB () {
+	public long getStateB() {
 		return stateB;
 	}
 
@@ -174,7 +176,7 @@ public class LaborRandom extends EnhancedRandom {
 	 *
 	 * @param stateB can be any long
 	 */
-	public void setStateB (long stateB) {
+	public void setStateB(long stateB) {
 		this.stateB = stateB;
 	}
 
@@ -187,13 +189,13 @@ public class LaborRandom extends EnhancedRandom {
 	 * @param stateB the second state; can be any long
 	 */
 	@Override
-	public void setState (long stateA, long stateB) {
+	public void setState(long stateA, long stateB) {
 		this.stateA = stateA;
 		this.stateB = stateB;
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		long a = (stateA += 0x9E3779B97F4A7C15L);
 		long b = (stateB += 0xD1B54A32D192ED03L);
 //		a = ((b << 41 | b >>> 23) ^ a);
@@ -210,8 +212,8 @@ public class LaborRandom extends EnhancedRandom {
 //		a = ((a << 3 | a >>> 61) ^ b);
 //		a = ((b << 41 | b >>> 23) ^ a);
 
-		b = a ^ (b <<  3 | b >>> 61);
-		a = b + (a << 56 | a >>>  8);
+		b = a ^ (b << 3 | b >>> 61);
+		a = b + (a << 56 | a >>> 8);
 		b = a + (b << 29 | b >>> 35);
 		a = b + (a << 47 | a >>> 17);
 		b = a ^ (b << 11 | b >>> 53);
@@ -226,13 +228,13 @@ public class LaborRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public long previousLong () {
+	public long previousLong() {
 		long a = stateA;
 		long b = stateB;
 		stateB -= 0xD1B54A32D192ED03L;
 		stateA -= 0x9E3779B97F4A7C15L;
-		b = a ^ (b <<  3 | b >>> 61);
-		a = b + (a << 56 | a >>>  8);
+		b = a ^ (b << 3 | b >>> 61);
+		a = b + (a << 56 | a >>> 8);
 		b = a + (b << 29 | b >>> 35);
 		a = b + (a << 47 | a >>> 17);
 		b = a ^ (b << 11 | b >>> 53);
@@ -248,11 +250,11 @@ public class LaborRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		long a = (stateA += 0x9E3779B97F4A7C15L);
 		long b = (stateB += 0xD1B54A32D192ED03L);
-		b = a ^ (b <<  3 | b >>> 61);
-		a = b + (a << 56 | a >>>  8);
+		b = a ^ (b << 3 | b >>> 61);
+		a = b + (a << 56 | a >>> 8);
 		b = a + (b << 29 | b >>> 35);
 		a = b + (a << 47 | a >>> 17);
 		b = a ^ (b << 11 | b >>> 53);
@@ -263,14 +265,15 @@ public class LaborRandom extends EnhancedRandom {
 		a = b + (a << 11 | a >>> 53);
 		b = a + (b << 50 | b >>> 14);
 		a = b ^ (a << 23 | a >>> 41);
-		return (int)(a) >>> (32 - bits);
+		return (int) (a) >>> (32 - bits);
 	}
+
 	@Override
-	public long skip (final long advance) {
+	public long skip(final long advance) {
 		long a = (stateA += 0x9E3779B97F4A7C15L * advance);
 		long b = (stateB += 0xD1B54A32D192ED03L * advance);
-		b = a ^ (b <<  3 | b >>> 61);
-		a = b + (a << 56 | a >>>  8);
+		b = a ^ (b << 3 | b >>> 61);
+		a = b + (a << 56 | a >>> 8);
 		b = a + (b << 29 | b >>> 35);
 		a = b + (a << 47 | a >>> 17);
 		b = a ^ (b << 11 | b >>> 53);
@@ -283,6 +286,7 @@ public class LaborRandom extends EnhancedRandom {
 		a = b ^ (a << 23 | a >>> 41);
 		return a;
 	}
+
 	/**
 	 * Gets a long that identifies which of the 2 to the 64 possible streams this is on.
 	 * This takes constant time.
@@ -321,25 +325,25 @@ public class LaborRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public LaborRandom copy () {
+	public LaborRandom copy() {
 		return new LaborRandom(stateA, stateB);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		LaborRandom that = (LaborRandom)o;
+		LaborRandom that = (LaborRandom) o;
 
 		if (stateA != that.stateA)
 			return false;
 		return stateB == that.stateB;
 	}
 
-	public String toString () {
+	public String toString() {
 		return "LaborRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L}";
 	}
 

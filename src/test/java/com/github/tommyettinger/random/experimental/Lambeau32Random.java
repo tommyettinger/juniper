@@ -83,9 +83,9 @@ public class Lambeau32Random extends EnhancedRandom {
 	 */
 	public Lambeau32Random() {
 		super();
-		stateA = (int)EnhancedRandom.seedFromMath();
-		stateB = (int)EnhancedRandom.seedFromMath();
-		stateC = (int)EnhancedRandom.seedFromMath();
+		stateA = (int) EnhancedRandom.seedFromMath();
+		stateB = (int) EnhancedRandom.seedFromMath();
+		stateC = (int) EnhancedRandom.seedFromMath();
 	}
 
 	/**
@@ -120,12 +120,14 @@ public class Lambeau32Random extends EnhancedRandom {
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("1000000000000000000000000", 16);
 
 	/**
 	 * (2 to the 96).
+	 *
 	 * @return (2 to the 96)
 	 */
 	@Override
@@ -139,12 +141,13 @@ public class Lambeau32Random extends EnhancedRandom {
 	 * @return 3 (three)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 3;
 	}
 
 	/**
 	 * Lambeau32Random mainly generates int values.
+	 *
 	 * @return true
 	 */
 	@Override
@@ -160,13 +163,16 @@ public class Lambeau32Random extends EnhancedRandom {
 	 * @return the value of the selected state, treated as long but internally an int
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		switch (selection) {
-			case 0: return stateA;
-			case 1: return stateB;
-			default: return stateC;
+			case 0:
+				return stateA;
+			case 1:
+				return stateB;
+			default:
+				return stateC;
 		}
-    }
+	}
 
 	/**
 	 * Sets one of the states, determined by {@code selection}, to {@code value}, cast to int.
@@ -177,7 +183,7 @@ public class Lambeau32Random extends EnhancedRandom {
 	 * @param value     the value to use for the selected state, which will be cast to int
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 
 		switch (selection) {
 			case 0:
@@ -198,10 +204,10 @@ public class Lambeau32Random extends EnhancedRandom {
 	 * @param seed the initial seed; may be any long
 	 */
 	@Override
-	public void setSeed (long seed) {
-		stateA = (int)(seed >>> 32);
-		stateB = (int)(seed >>> 48);
-		stateC = (int)seed;
+	public void setSeed(long seed) {
+		stateA = (int) (seed >>> 32);
+		stateB = (int) (seed >>> 48);
+		stateC = (int) seed;
 		int a = nextInt();
 		int b = nextInt();
 		int c = nextInt();
@@ -210,7 +216,7 @@ public class Lambeau32Random extends EnhancedRandom {
 		stateC = c;
 	}
 
-	public int getStateA () {
+	public int getStateA() {
 		return stateA;
 	}
 
@@ -219,11 +225,11 @@ public class Lambeau32Random extends EnhancedRandom {
 	 *
 	 * @param stateA can be any int
 	 */
-	public void setStateA (long stateA) {
-		this.stateA = (int)stateA;
+	public void setStateA(long stateA) {
+		this.stateA = (int) stateA;
 	}
 
-	public int getStateB () {
+	public int getStateB() {
 		return stateB;
 	}
 
@@ -232,8 +238,8 @@ public class Lambeau32Random extends EnhancedRandom {
 	 *
 	 * @param stateB can be any int
 	 */
-	public void setStateB (long stateB) {
-		this.stateB = (int)stateB;
+	public void setStateB(long stateB) {
+		this.stateB = (int) stateB;
 	}
 
 	public int getStateC() {
@@ -245,8 +251,8 @@ public class Lambeau32Random extends EnhancedRandom {
 	 *
 	 * @param stateC can be any int
 	 */
-	public void setStateC (long stateC) {
-		this.stateC = (int)stateC;
+	public void setStateC(long stateC) {
+		this.stateC = (int) stateC;
 	}
 
 	/**
@@ -259,14 +265,14 @@ public class Lambeau32Random extends EnhancedRandom {
 	 * @param stateC the third state; can be any int
 	 */
 	@Override
-	public void setState (long stateA, long stateB, long stateC) {
-		this.stateA = (int)stateA;
-		this.stateB = (int)stateB;
-		this.stateC = (int)stateC;
+	public void setState(long stateA, long stateB, long stateC) {
+		this.stateA = (int) stateA;
+		this.stateB = (int) stateB;
+		this.stateC = (int) stateC;
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		return (long) nextInt() << 32 ^ nextInt();
 	}
 
@@ -291,7 +297,7 @@ public class Lambeau32Random extends EnhancedRandom {
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		int z = BitConversion.imul(stateA ^ (stateB << 10 | stateB >>> -10) ^ (stateC << 13 | stateC >>> -13), 999999999);
 		stateC = ~(BitConversion.countLeadingZeros(stateA & stateB) + stateC);
 		stateB = BitConversion.imul(BitConversion.countLeadingZeros(stateA) + stateB, 777777777);
@@ -300,14 +306,15 @@ public class Lambeau32Random extends EnhancedRandom {
 	}
 
 	@Override
-	public long previousLong () {
-		return previousInt() ^ (long)previousInt() << 32;
+	public long previousLong() {
+		return previousInt() ^ (long) previousInt() << 32;
 	}
 
 	/**
 	 * Jumps extremely far in the generator's sequence, such that it requires {@code Math.pow(2, 32)} calls to leap() to
 	 * complete a cycle through the generator's entire sequence. This can be used to create over 4 billion
 	 * substreams of this generator's sequence, each with a period of {@code Math.pow(2, 64)}.
+	 *
 	 * @return the result of what nextLong() would return if it was called at the state this jumped to
 	 */
 	public long leap() {
@@ -325,23 +332,23 @@ public class Lambeau32Random extends EnhancedRandom {
 	}
 
 	@Override
-	public int nextInt (int bound) {
-		return (int)(bound * (nextInt() & 0xFFFFFFFFL) >> 32) & ~(bound >> 31);
+	public int nextInt(int bound) {
+		return (int) (bound * (nextInt() & 0xFFFFFFFFL) >> 32) & ~(bound >> 31);
 	}
 
 	@Override
-	public int nextSignedInt (int outerBound) {
-		outerBound = (int)(outerBound * (nextInt() & 0xFFFFFFFFL) >> 32);
+	public int nextSignedInt(int outerBound) {
+		outerBound = (int) (outerBound * (nextInt() & 0xFFFFFFFFL) >> 32);
 		return outerBound + (outerBound >>> 31);
 	}
 
 	@Override
 	public int nextUnsignedInt(int bound) {
-		return (int)((bound & 0xFFFFFFFFL) * (nextInt() & 0xFFFFFFFFL) >>> 32);
+		return (int) ((bound & 0xFFFFFFFFL) * (nextInt() & 0xFFFFFFFFL) >>> 32);
 	}
 
 	@Override
-	public void nextBytes (byte[] bytes) {
+	public void nextBytes(byte[] bytes) {
 		if (bytes != null) {
 			for (int i = 0; i < bytes.length; ) {
 				int r = nextInt();
@@ -354,12 +361,12 @@ public class Lambeau32Random extends EnhancedRandom {
 
 	@Override
 	public int nextInt(int innerBound, int outerBound) {
-		return (int)(innerBound + ((((outerBound - innerBound) & 0xFFFFFFFFL) * (nextInt() & 0xFFFFFFFFL) >>> 32) & ~((long)outerBound - (long)innerBound >> 63)));
+		return (int) (innerBound + ((((outerBound - innerBound) & 0xFFFFFFFFL) * (nextInt() & 0xFFFFFFFFL) >>> 32) & ~((long) outerBound - (long) innerBound >> 63)));
 	}
 
 	@Override
 	public int nextSignedInt(int innerBound, int outerBound) {
-		return innerBound + (int)(((outerBound - innerBound) & 0xFFFFFFFFL) * (nextInt() & 0xFFFFFFFFL) >>> 32);
+		return innerBound + (int) (((outerBound - innerBound) & 0xFFFFFFFFL) * (nextInt() & 0xFFFFFFFFL) >>> 32);
 	}
 
 	@Override
@@ -392,7 +399,7 @@ public class Lambeau32Random extends EnhancedRandom {
 	}
 
 	@Override
-	public long nextLong (long inner, long outer) {
+	public long nextLong(long inner, long outer) {
 		final long randLow = nextInt() & 0xFFFFFFFFL;
 		final long randHigh = nextInt() & 0xFFFFFFFFL;
 		if (inner >= outer)
@@ -404,7 +411,7 @@ public class Lambeau32Random extends EnhancedRandom {
 	}
 
 	@Override
-	public long nextSignedLong (long inner, long outer) {
+	public long nextSignedLong(long inner, long outer) {
 		if (outer < inner) {
 			long t = outer;
 			outer = inner + 1L;
@@ -419,41 +426,40 @@ public class Lambeau32Random extends EnhancedRandom {
 	}
 
 	@Override
-	public boolean nextBoolean ()
-	{
+	public boolean nextBoolean() {
 		return nextInt() < 0;
 	}
 
 	@Override
-	public float nextFloat () {
+	public float nextFloat() {
 		return (nextInt() >>> 8) * 0x1p-24f;
 	}
 
 	@Override
-	public float nextInclusiveFloat () {
+	public float nextInclusiveFloat() {
 		return (0x1000001L * (nextInt() & 0xFFFFFFFFL) >> 32) * 0x1p-24f;
 	}
 
 	@Override
-	public Lambeau32Random copy () {
+	public Lambeau32Random copy() {
 		return new Lambeau32Random(stateA, stateB, stateC);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		Lambeau32Random that = (Lambeau32Random)o;
+		Lambeau32Random that = (Lambeau32Random) o;
 
 		if (stateA != that.stateA) return false;
 		if (stateB != that.stateB) return false;
 		return stateC == that.stateC;
 	}
 
-	public String toString () {
+	public String toString() {
 		return "Lambeau32Random{" + "stateA=" + (stateA) + ", stateB=" + (stateB) + ", stateC=" + (stateC) + "}";
 	}
 //

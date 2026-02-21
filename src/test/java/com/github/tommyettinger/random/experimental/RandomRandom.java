@@ -30,28 +30,29 @@ import java.util.Random;
  * UnsupportedOperationException.
  */
 public class RandomRandom extends EnhancedRandom {
-    public Random base = new Random();
+	public Random base = new Random();
 
-    public RandomRandom() {
-        this(seedFromMath());
-    }
+	public RandomRandom() {
+		this(seedFromMath());
+	}
 
-    public RandomRandom(long seed) {
-        setSeed(seed);
-    }
+	public RandomRandom(long seed) {
+		setSeed(seed);
+	}
 
-    @Override
-    public int getStateCount() {
-        return 1;
-    }
+	@Override
+	public int getStateCount() {
+		return 1;
+	}
 
-    @Override
-    public String getTag() {
-        return "RndR";
-    }
+	@Override
+	public String getTag() {
+		return "RndR";
+	}
 
 	/**
 	 * This generator mainly generates int values.
+	 *
 	 * @return true
 	 */
 	@Override
@@ -61,12 +62,14 @@ public class RandomRandom extends EnhancedRandom {
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("1000000000000", 16);
 
 	/**
 	 * 2 to the 48.
+	 *
 	 * @return 2 to the 48
 	 */
 	@Override
@@ -74,57 +77,57 @@ public class RandomRandom extends EnhancedRandom {
 		return MINIMUM_PERIOD;
 	}
 
-    @Override
-    public void setSeed(long seed) {
-        if(base == null)
-            base = new Random();
-        base.setSeed(seed);
-    }
+	@Override
+	public void setSeed(long seed) {
+		if (base == null)
+			base = new Random();
+		base.setSeed(seed);
+	}
 
-    @Override
-    public void setState(long state) {
-        if(base == null)
-            base = new Random();
-        base.setSeed(state);
-    }
+	@Override
+	public void setState(long state) {
+		if (base == null)
+			base = new Random();
+		base.setSeed(state);
+	}
 
-    @Override
-    public long nextLong() {
-        return base.nextLong();
-    }
+	@Override
+	public long nextLong() {
+		return base.nextLong();
+	}
 
-    @Override
-    public int next(int bits) {
-        return base.nextInt() >>> (32 - bits);
-    }
+	@Override
+	public int next(int bits) {
+		return base.nextInt() >>> (32 - bits);
+	}
 
-    @Override
-    public int nextInt() {
-        return base.nextInt();
-    }
+	@Override
+	public int nextInt() {
+		return base.nextInt();
+	}
 
-    @Override
-    public int nextInt(int bound) {
-        return base.nextInt(bound);
-    }
+	@Override
+	public int nextInt(int bound) {
+		return base.nextInt(bound);
+	}
 
-    @Override
-    public float nextFloat() {
-        return base.nextFloat();
-    }
+	@Override
+	public float nextFloat() {
+		return base.nextFloat();
+	}
 
-    @Override
-    public double nextDouble() {
-        return base.nextDouble();
-    }
+	@Override
+	public double nextDouble() {
+		return base.nextDouble();
+	}
 
-    @Override
-    public double nextGaussian() {
-        return base.nextGaussian();
-    }
+	@Override
+	public double nextGaussian() {
+		return base.nextGaussian();
+	}
 
-    @Override
-    public EnhancedRandom copy() {
-        return new RandomRandom(seedFromMath());
-    }
+	@Override
+	public EnhancedRandom copy() {
+		return new RandomRandom(seedFromMath());
+	}
 }

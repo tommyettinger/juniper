@@ -46,6 +46,7 @@ import java.math.BigInteger;
  * does also use quite a lot more state than SplitMix64, and those extra 320 bits of state change in their own complex
  * ways, both related and unrelated to the stream, which may be sufficient to not need a gamma of the same quality that
  * SplitMix64 appears to need to pass tests.
+ *
  * @deprecated Use {@link TraceRandom} instead, which is nearly the same as this algorithm but avoids "bad" streams.
  */
 @Deprecated
@@ -101,18 +102,20 @@ public class MaceRandom extends EnhancedRandom {
 	 * calling {@link #extract(long)}.
 	 * <br>
 	 * Based on Hacker's Delight (2nd edition).
+	 *
 	 * @param bits the up-to-24-bit values to be deposited into positions denoted by mask
 	 * @return a long starting with {@link #GOLDEN_64} where only bits in {@link #MASK} can be changed
 	 */
 	public static long deposit(long bits) {
 		bits &= 0xFFFFFF;
 		bits = (bits & ~TABLE_4) | (bits << 16 & TABLE_4);
-		bits = (bits & ~TABLE_3) | (bits <<  8 & TABLE_3);
-		bits = (bits & ~TABLE_2) | (bits <<  4 & TABLE_2);
-		bits = (bits & ~TABLE_1) | (bits <<  2 & TABLE_1);
-		bits = (bits & ~TABLE_0) | (bits <<  1 & TABLE_0);
+		bits = (bits & ~TABLE_3) | (bits << 8 & TABLE_3);
+		bits = (bits & ~TABLE_2) | (bits << 4 & TABLE_2);
+		bits = (bits & ~TABLE_1) | (bits << 2 & TABLE_1);
+		bits = (bits & ~TABLE_0) | (bits << 1 & TABLE_0);
 		return (bits & MASK) ^ GOLDEN_64;
 	}
+
 	/**
 	 * Given a long {@code bits} which should be a result of {@link #getStream()}, uses {@link #MASK} (with 24 bits set
 	 * to 1) to determine which positions in {@code bits} will matter, and produces a long result of up to 24 bits, with
@@ -121,6 +124,7 @@ public class MaceRandom extends EnhancedRandom {
 	 * {@link #getStreamIdentifier()} and {@link #setStreamIdentifier(int)}.
 	 * <br>
 	 * Based on Hacker's Delight (2nd edition).
+	 *
 	 * @param bits the bit values that will be masked by {@code mask} and placed into the low-order bits of the result
 	 * @return a long with the highest bit that can be set equal to the {@link Long#bitCount(long)} of {@code mask}
 	 */
@@ -129,9 +133,9 @@ public class MaceRandom extends EnhancedRandom {
 		long mk = ~MASK, mask = MASK; // We will count 0's to right.
 		for (int i = 0; i < 5; i++) {
 			long mp = mk ^ mk << 1; // Parallel suffix.
-			mp ^= mp <<  2;
-			mp ^= mp <<  4;
-			mp ^= mp <<  8;
+			mp ^= mp << 2;
+			mp ^= mp << 4;
+			mp ^= mp << 8;
 			mp ^= mp << 16;
 			mp ^= mp << 32;
 			long mv = mp & mask; // Bits to move.
@@ -150,12 +154,14 @@ public class MaceRandom extends EnhancedRandom {
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
 
 	/**
 	 * 2 to the 64.
+	 *
 	 * @return 2 to the 64
 	 */
 	@Override
@@ -194,7 +200,7 @@ public class MaceRandom extends EnhancedRandom {
 	 * Creates a new MaceRandom with a random state.
 	 */
 	public MaceRandom() {
-		setStreamIdentifier((int)EnhancedRandom.seedFromMath());
+		setStreamIdentifier((int) EnhancedRandom.seedFromMath());
 		stateA = EnhancedRandom.seedFromMath();
 		stateB = EnhancedRandom.seedFromMath();
 		stateC = EnhancedRandom.seedFromMath();
@@ -218,11 +224,11 @@ public class MaceRandom extends EnhancedRandom {
 	 * The states will be used verbatim, and the streamIdentifier can be retrieved with {@link #getStreamIdentifier()}.
 	 *
 	 * @param streamIdentifier an up-to-24-bit int (between 0 and 16777215, inclusive); higher bits are ignored
-	 * @param stateA any {@code long} value
-	 * @param stateB any {@code long} value
-	 * @param stateC any {@code long} value
-	 * @param stateD any {@code long} value
-	 * @param stateE any {@code long} value
+	 * @param stateA           any {@code long} value
+	 * @param stateB           any {@code long} value
+	 * @param stateC           any {@code long} value
+	 * @param stateD           any {@code long} value
+	 * @param stateE           any {@code long} value
 	 */
 	public MaceRandom(int streamIdentifier, long stateA, long stateB, long stateC, long stateD, long stateE) {
 		setStreamIdentifier(streamIdentifier);
@@ -239,7 +245,7 @@ public class MaceRandom extends EnhancedRandom {
 	 * @return 6 (six)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 6;
 	}
 
@@ -251,7 +257,7 @@ public class MaceRandom extends EnhancedRandom {
 	 * @return the value of the selected state
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		switch (selection) {
 			case 1:
 				return stateA;
@@ -277,7 +283,7 @@ public class MaceRandom extends EnhancedRandom {
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		switch (selection) {
 			case 1:
 				stateA = value;
@@ -308,55 +314,56 @@ public class MaceRandom extends EnhancedRandom {
 	 * @param seed the initial seed; may be any long
 	 */
 	@Override
-	public void setSeed (long seed) {
+	public void setSeed(long seed) {
 		// Based on (not identical to) the Speck block cipher's key expansion.
 		// Only uses add, bitwise rotation, and XOR operations.
 		long s0 = seed, s1 = seed ^ 0xC6BC279692B5C323L, ctr = seed ^ 0x1C69B3F74AC4AE35L;
-		s1 = (s1 << 56 | s1 >>>  8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
-		s0 = (s0 <<  3 | s0 >>> 61) ^ s1;
+		s1 = (s1 << 56 | s1 >>> 8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
+		s0 = (s0 << 3 | s0 >>> 61) ^ s1;
 		stateA = s0;
-		s1 = (s1 << 56 | s1 >>>  8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
-		s0 = (s0 <<  3 | s0 >>> 61) ^ s1;
+		s1 = (s1 << 56 | s1 >>> 8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
+		s0 = (s0 << 3 | s0 >>> 61) ^ s1;
 		stateB = s0;
-		s1 = (s1 << 56 | s1 >>>  8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
-		s0 = (s0 <<  3 | s0 >>> 61) ^ s1;
+		s1 = (s1 << 56 | s1 >>> 8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
+		s0 = (s0 << 3 | s0 >>> 61) ^ s1;
 		stateC = s0;
-		s1 = (s1 << 56 | s1 >>>  8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
-		s0 = (s0 <<  3 | s0 >>> 61) ^ s1;
+		s1 = (s1 << 56 | s1 >>> 8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
+		s0 = (s0 << 3 | s0 >>> 61) ^ s1;
 		stateD = s0;
-		s1 = (s1 << 56 | s1 >>>  8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
-		s0 = (s0 <<  3 | s0 >>> 61) ^ s1;
+		s1 = (s1 << 56 | s1 >>> 8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
+		s0 = (s0 << 3 | s0 >>> 61) ^ s1;
 		stateE = s0;
-		s1 = (s1 << 56 | s1 >>>  8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
-		s0 = (s0 <<  3 | s0 >>> 61) ^ s1;
+		s1 = (s1 << 56 | s1 >>> 8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
+		s0 = (s0 << 3 | s0 >>> 61) ^ s1;
 		stateA += s0;
-		s1 = (s1 << 56 | s1 >>>  8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
-		s0 = (s0 <<  3 | s0 >>> 61) ^ s1;
+		s1 = (s1 << 56 | s1 >>> 8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
+		s0 = (s0 << 3 | s0 >>> 61) ^ s1;
 		stateB += s0;
-		s1 = (s1 << 56 | s1 >>>  8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
-		s0 = (s0 <<  3 | s0 >>> 61) ^ s1;
+		s1 = (s1 << 56 | s1 >>> 8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
+		s0 = (s0 << 3 | s0 >>> 61) ^ s1;
 		stateC += s0;
-		s1 = (s1 << 56 | s1 >>>  8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
-		s0 = (s0 <<  3 | s0 >>> 61) ^ s1;
+		s1 = (s1 << 56 | s1 >>> 8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
+		s0 = (s0 << 3 | s0 >>> 61) ^ s1;
 		stateD += s0;
-		s1 = (s1 << 56 | s1 >>>  8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
-		s0 = (s0 <<  3 | s0 >>> 61) ^ s1;
+		s1 = (s1 << 56 | s1 >>> 8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
+		s0 = (s0 << 3 | s0 >>> 61) ^ s1;
 		stateE += s0;
 
-		setStreamIdentifier((s0 <<  3 | s0 >>> 61) ^ (s1 << 56 | s1 >>>  8) + s0 ^ (ctr + 0xBEA225F9EB34556DL));
+		setStreamIdentifier((s0 << 3 | s0 >>> 61) ^ (s1 << 56 | s1 >>> 8) + s0 ^ (ctr + 0xBEA225F9EB34556DL));
 	}
 
-	public long getStream () {
+	public long getStream() {
 		return stream;
 	}
 
 	/**
 	 * Gets an up-to-24-bit long that uniquely identifies the stream this MaceRandom uses.
 	 * This identifier can be passed to {@link #setStreamIdentifier(int)} to change the stream.
+	 *
 	 * @return the smaller identifier used to determine the actual stream
 	 */
-	public int getStreamIdentifier () {
-		return (int)extract(stream);
+	public int getStreamIdentifier() {
+		return (int) extract(stream);
 	}
 
 	/**
@@ -377,7 +384,7 @@ public class MaceRandom extends EnhancedRandom {
 		this.stream = deposit((value ^ value >>> 24 ^ value >>> 48));
 	}
 
-	public long getStateA () {
+	public long getStateA() {
 		return stateA;
 	}
 
@@ -386,11 +393,11 @@ public class MaceRandom extends EnhancedRandom {
 	 *
 	 * @param stateA can be any long
 	 */
-	public void setStateA (long stateA) {
+	public void setStateA(long stateA) {
 		this.stateA = stateA;
 	}
 
-	public long getStateB () {
+	public long getStateB() {
 		return stateB;
 	}
 
@@ -399,11 +406,11 @@ public class MaceRandom extends EnhancedRandom {
 	 *
 	 * @param stateB can be any long
 	 */
-	public void setStateB (long stateB) {
+	public void setStateB(long stateB) {
 		this.stateB = stateB;
 	}
 
-	public long getStateC () {
+	public long getStateC() {
 		return stateC;
 	}
 
@@ -412,11 +419,11 @@ public class MaceRandom extends EnhancedRandom {
 	 *
 	 * @param stateC can be any long
 	 */
-	public void setStateC (long stateC) {
+	public void setStateC(long stateC) {
 		this.stateC = stateC;
 	}
 
-	public long getStateD () {
+	public long getStateD() {
 		return stateD;
 	}
 
@@ -425,11 +432,11 @@ public class MaceRandom extends EnhancedRandom {
 	 *
 	 * @param stateD can be any long
 	 */
-	public void setStateD (long stateD) {
+	public void setStateD(long stateD) {
 		this.stateD = stateD;
 	}
 
-	public long getStateE () {
+	public long getStateE() {
 		return stateE;
 	}
 
@@ -438,7 +445,7 @@ public class MaceRandom extends EnhancedRandom {
 	 *
 	 * @param stateE can be any long
 	 */
-	public void setStateE (long stateE) {
+	public void setStateE(long stateE) {
 		this.stateE = stateE;
 	}
 
@@ -449,13 +456,13 @@ public class MaceRandom extends EnhancedRandom {
 	 * as a group.
 	 *
 	 * @param streamID an up-to-24-bit int (between 0 and 16777215, inclusive); higher bits will be mixed in, and if present the stream may not be unique
-	 * @param stateA the first state; can be any long
-	 * @param stateB the second state; can be any long
-	 * @param stateC the third state; can be any long
-	 * @param stateD the fourth state; can be any long
-	 * @param stateE the fifth state; can be any long
+	 * @param stateA   the first state; can be any long
+	 * @param stateB   the second state; can be any long
+	 * @param stateC   the third state; can be any long
+	 * @param stateD   the fourth state; can be any long
+	 * @param stateE   the fifth state; can be any long
 	 */
-	public void setState (long streamID, long stateA, long stateB, long stateC, long stateD, long stateE) {
+	public void setState(long streamID, long stateA, long stateB, long stateC, long stateD, long stateE) {
 		setStreamIdentifier(streamID);
 		this.stateA = stateA;
 		this.stateB = stateB;
@@ -465,7 +472,7 @@ public class MaceRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		final long fa = stateA;
 		final long fb = stateB;
 		final long fc = stateC;
@@ -480,7 +487,7 @@ public class MaceRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public long previousLong () {
+	public long previousLong() {
 		final long fb = stateB;
 		final long fc = stateC;
 		final long fd = stateD;
@@ -494,7 +501,7 @@ public class MaceRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		final long fa = stateA;
 		final long fb = stateB;
 		final long fc = stateC;
@@ -509,24 +516,24 @@ public class MaceRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public MaceRandom copy () {
+	public MaceRandom copy() {
 		return new MaceRandom(getStreamIdentifier(), stateA, stateB, stateC, stateD, stateE);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		MaceRandom that = (MaceRandom)o;
+		MaceRandom that = (MaceRandom) o;
 
 		return stateA == that.stateA && stateB == that.stateB && stateC == that.stateC && stateD == that.stateD &&
 			stateE == that.stateE && stream == that.stream;
 	}
 
-	public String toString () {
+	public String toString() {
 		return "MaceRandom{" + "streamIdentifier=" + getStreamIdentifier() + ", stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L, stateD=" + (stateD) + "L, stateE=" + (stateE) + "L}";
 	}
 }

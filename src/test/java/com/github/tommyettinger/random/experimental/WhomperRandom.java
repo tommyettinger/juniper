@@ -36,12 +36,14 @@ public class WhomperRandom extends EnhancedRandom {
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("FFFFFFFFFFFFFFFF0000000000000000", 16);
 
 	/**
 	 * (2 to the 128) minus (2 to the 64).
+	 *
 	 * @return (2 to the 128) minus (2 to the 64)
 	 */
 	@Override
@@ -69,7 +71,7 @@ public class WhomperRandom extends EnhancedRandom {
 		stateA = EnhancedRandom.seedFromMath();
 		stateB = EnhancedRandom.seedFromMath() | 1L;
 		stateC = EnhancedRandom.seedFromMath();
-		if(stateC == 0) stateC = 1L;
+		if (stateC == 0) stateC = 1L;
 	}
 
 	/**
@@ -118,7 +120,7 @@ public class WhomperRandom extends EnhancedRandom {
 	 * @return 3 (three)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 3;
 	}
 
@@ -130,7 +132,7 @@ public class WhomperRandom extends EnhancedRandom {
 	 * @return the value of the selected state
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		switch (selection) {
 			case 0:
 				return stateA;
@@ -150,17 +152,17 @@ public class WhomperRandom extends EnhancedRandom {
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		switch (selection) {
-		case 0:
-			stateA = value;
-			break;
-		case 1:
-			stateB = value | 1L;
-			break;
-		case 2:
-			stateC = value == 0L ? 1L : value;
-			break;
+			case 0:
+				stateA = value;
+				break;
+			case 1:
+				stateB = value | 1L;
+				break;
+			case 2:
+				stateC = value == 0L ? 1L : value;
+				break;
 		}
 	}
 
@@ -172,7 +174,7 @@ public class WhomperRandom extends EnhancedRandom {
 	 * @param seed the initial seed; may be any long
 	 */
 	@Override
-	public void setSeed (long seed) {
+	public void setSeed(long seed) {
 		// This is based on MX3, but pulls out values and assigns them to states mid-way, sometimes XORing them.
 		seed ^= seed >>> 32;
 		seed *= 0xbea225f9eb34556dL;
@@ -187,7 +189,7 @@ public class WhomperRandom extends EnhancedRandom {
 		stateC = seed == 0L ? 1L : seed;
 	}
 
-	public long getStateA () {
+	public long getStateA() {
 		return stateA;
 	}
 
@@ -196,11 +198,11 @@ public class WhomperRandom extends EnhancedRandom {
 	 *
 	 * @param stateA can be any long
 	 */
-	public void setStateA (long stateA) {
+	public void setStateA(long stateA) {
 		this.stateA = stateA;
 	}
 
-	public long getStateB () {
+	public long getStateB() {
 		return stateB;
 	}
 
@@ -210,11 +212,11 @@ public class WhomperRandom extends EnhancedRandom {
 	 *
 	 * @param stateB can be any even long except 0
 	 */
-	public void setStateB (long stateB) {
+	public void setStateB(long stateB) {
 		this.stateB = stateB | 1L;
 	}
 
-	public long getStateC () {
+	public long getStateC() {
 		return stateC;
 	}
 
@@ -223,7 +225,7 @@ public class WhomperRandom extends EnhancedRandom {
 	 *
 	 * @param stateC can be any long except 0
 	 */
-	public void setStateC (long stateC) {
+	public void setStateC(long stateC) {
 		this.stateC = stateC == 0L ? 1L : stateC;
 	}
 
@@ -248,14 +250,14 @@ public class WhomperRandom extends EnhancedRandom {
 	 * @param stateC the third state; can be any long except 0
 	 */
 	@Override
-	public void setState (long stateA, long stateB, long stateC) {
+	public void setState(long stateA, long stateB, long stateC) {
 		this.stateA = stateA;
 		this.stateB = stateB | 1L;
 		this.stateC = stateC == 0 ? 1L : stateC;
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		final long a = stateA;
 		final long c = stateC;
 		long z = (a ^ a >>> 27) * 0x3C79AC492BA7B653L;
@@ -267,7 +269,7 @@ public class WhomperRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public long previousLong () {
+	public long previousLong() {
 		final long lsb = (stateC & 1L);
 		stateC = ((stateC ^ (-lsb & 0xFEEDBABEDEADBEEFL)) >>> 1) ^ lsb << 63;
 		stateA = ((stateA ^ stateC) - stateB) * 0x572B5EE77A54E3BDL;
@@ -277,7 +279,7 @@ public class WhomperRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		final long a = stateA;
 		final long c = stateC;
 		long z = (a ^ a >>> 27) * 0x3C79AC492BA7B653L;
@@ -285,27 +287,27 @@ public class WhomperRandom extends EnhancedRandom {
 		z ^= z >>> 27;
 		stateA = a * 0xD1342543DE82EF95L + stateB ^ c;
 		stateC = (c << 1) ^ (c >> 63 & 0xFEEDBABEDEADBEEFL);
-		return (int)z >>> (32 - bits);
+		return (int) z >>> (32 - bits);
 	}
 
 	@Override
-	public WhomperRandom copy () {
+	public WhomperRandom copy() {
 		return new WhomperRandom(stateA, stateB, stateC);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		WhomperRandom that = (WhomperRandom)o;
+		WhomperRandom that = (WhomperRandom) o;
 
 		return stateA == that.stateA && stateB == that.stateB && stateC == that.stateC;
 	}
 
-	public String toString () {
+	public String toString() {
 		return "WhomperRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L}";
 	}
 

@@ -28,7 +28,7 @@ import java.math.BigInteger;
  * <br>
  * The 7-and-9 Xorshift is documented at least on Wikipedia, which <a href="https://en.wikipedia.org/wiki/Xorshift#cite_note-5">has this citation for it</a>.
  * <a href="">PCG-Random was created by M.E. O'Neill</a>; this uses one of its mixers.
-  * <a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/util/random/package-summary.html">The java.util.random package docs are also useful.</a>
+ * <a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/util/random/package-summary.html">The java.util.random package docs are also useful.</a>
  */
 public class L64X64PcgRandom extends EnhancedRandom {
 
@@ -85,12 +85,14 @@ public class L64X64PcgRandom extends EnhancedRandom {
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("FFFFFFFFFFFFFFFF0000000000000000", 16);
 
 	/**
 	 * (2 to the 128) minus (2 to the 64).
+	 *
 	 * @return (2 to the 128) minus (2 to the 64)
 	 */
 	@Override
@@ -104,7 +106,7 @@ public class L64X64PcgRandom extends EnhancedRandom {
 	 * @return 2 (two)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 2;
 	}
 
@@ -116,12 +118,12 @@ public class L64X64PcgRandom extends EnhancedRandom {
 	 * @return the value of the selected state
 	 */
 	@Override
-	public long getSelectedState (int selection) {
-        if (selection == 0) {
-            return stateA;
-        }
-        return stateB;
-    }
+	public long getSelectedState(int selection) {
+		if (selection == 0) {
+			return stateA;
+		}
+		return stateB;
+	}
 
 	/**
 	 * Sets one of the states, determined by {@code selection}, to {@code value}, as-is.
@@ -133,12 +135,12 @@ public class L64X64PcgRandom extends EnhancedRandom {
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
-        if (selection == 0) {
-            stateA = (value == 0L) ? 0x9E3779B97F4A7C15L : value;
-        } else {
-            stateB = value;
-        }
+	public void setSelectedState(int selection, long value) {
+		if (selection == 0) {
+			stateA = (value == 0L) ? 0x9E3779B97F4A7C15L : value;
+		} else {
+			stateB = value;
+		}
 	}
 
 	/**
@@ -150,7 +152,7 @@ public class L64X64PcgRandom extends EnhancedRandom {
 	 * @param seed the initial seed; may be any long
 	 */
 	@Override
-	public void setSeed (long seed) {
+	public void setSeed(long seed) {
 		long x = (seed + 0x9E3779B97F4A7C15L);
 		x ^= x >>> 32;
 		x *= 0xBEA225F9EB34556DL;
@@ -162,7 +164,7 @@ public class L64X64PcgRandom extends EnhancedRandom {
 		stateB = x ^ x >>> 29;
 	}
 
-	public long getStateA () {
+	public long getStateA() {
 		return stateA;
 	}
 
@@ -171,11 +173,11 @@ public class L64X64PcgRandom extends EnhancedRandom {
 	 *
 	 * @param stateA can be any long except 0
 	 */
-	public void setStateA (long stateA) {
+	public void setStateA(long stateA) {
 		this.stateA = (stateA == 0L) ? 0x9E3779B97F4A7C15L : stateA;
 	}
 
-	public long getStateB () {
+	public long getStateB() {
 		return stateB;
 	}
 
@@ -184,7 +186,7 @@ public class L64X64PcgRandom extends EnhancedRandom {
 	 *
 	 * @param stateB can be any long
 	 */
-	public void setStateB (long stateB) {
+	public void setStateB(long stateB) {
 		this.stateB = stateB;
 	}
 
@@ -197,13 +199,13 @@ public class L64X64PcgRandom extends EnhancedRandom {
 	 * @param stateB the second state; can be any long
 	 */
 	@Override
-	public void setState (long stateA, long stateB) {
+	public void setState(long stateA, long stateB) {
 		this.stateA = (stateA == 0L) ? 0x9E3779B97F4A7C15L : stateA;
 		this.stateB = stateB;
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		long res = pcg(stateA + stateB);
 		stateB = stateB * 0xD1342543DE82EF95L + 1L;
 		stateA ^= stateA << 7;
@@ -212,16 +214,16 @@ public class L64X64PcgRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		long res = pcg(stateA + stateB);
 		stateB = stateB * 0xD1342543DE82EF95L + 1L;
 		stateA ^= stateA << 7;
 		stateA ^= stateA >>> 9;
-		return (int)(res >>> 64 - bits);
+		return (int) (res >>> 64 - bits);
 	}
 
 	@Override
-	public long previousLong () {
+	public long previousLong() {
 		stateA ^= stateA >>> 9;
 		stateA ^= stateA >>> 18;
 		stateA ^= stateA >>> 36;
@@ -237,10 +239,10 @@ public class L64X64PcgRandom extends EnhancedRandom {
 	 * Jumps extremely far in the generator's sequence, such that it requires {@code Math.pow(2, 64)} calls to leap() to
 	 * complete a cycle through the generator's entire sequence. This can be used to create over 18 quintillion
 	 * substreams of this generator's sequence, each with a period of {@code Math.pow(2, 64) - 1L}.
+	 *
 	 * @return the result of what nextLong() would return if it was called at the state this jumped to
 	 */
-	public long leap()
-	{
+	public long leap() {
 		stateA ^= stateA << 7;
 		stateA ^= stateA >>> 9;
 		return pcg(stateA + stateB);
@@ -253,25 +255,25 @@ public class L64X64PcgRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public L64X64PcgRandom copy () {
+	public L64X64PcgRandom copy() {
 		return new L64X64PcgRandom(stateA, stateB);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		L64X64PcgRandom that = (L64X64PcgRandom)o;
+		L64X64PcgRandom that = (L64X64PcgRandom) o;
 
 		if (stateA != that.stateA)
 			return false;
 		return stateB == that.stateB;
 	}
 
-	public String toString () {
+	public String toString() {
 		return "L64X64PcgRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L}";
 	}
 }

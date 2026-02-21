@@ -47,12 +47,14 @@ public class MarshRandom extends EnhancedRandom {
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
 
 	/**
 	 * 2 to the 64.
+	 *
 	 * @return 2 to the 64
 	 */
 	@Override
@@ -125,7 +127,7 @@ public class MarshRandom extends EnhancedRandom {
 	 * @return 3 (three)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 3;
 	}
 
@@ -137,7 +139,7 @@ public class MarshRandom extends EnhancedRandom {
 	 * @return the value of the selected state
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		switch (selection) {
 			case 0:
 				return stateA;
@@ -157,17 +159,17 @@ public class MarshRandom extends EnhancedRandom {
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		switch (selection) {
-		case 0:
-			stateA = value;
-			break;
-		case 1:
-			stateB = value;
-			break;
-		case 2:
-			stateC = value;
-			break;
+			case 0:
+				stateA = value;
+				break;
+			case 1:
+				stateB = value;
+				break;
+			case 2:
+				stateC = value;
+				break;
 		}
 	}
 
@@ -179,7 +181,7 @@ public class MarshRandom extends EnhancedRandom {
 	 * @param seed the initial seed; may be any long
 	 */
 	@Override
-	public void setSeed (long seed) {
+	public void setSeed(long seed) {
 		// This is based on MX3, but pulls out values and assigns them to states mid-way, sometimes XORing them.
 		seed ^= seed >>> 32;
 		seed *= 0xbea225f9eb34556dL;
@@ -193,7 +195,7 @@ public class MarshRandom extends EnhancedRandom {
 		stateC = (seed ^ ~0xC6BC279692B5C323L);
 	}
 
-	public long getStateA () {
+	public long getStateA() {
 		return stateA;
 	}
 
@@ -202,11 +204,11 @@ public class MarshRandom extends EnhancedRandom {
 	 *
 	 * @param stateA can be any long
 	 */
-	public void setStateA (long stateA) {
+	public void setStateA(long stateA) {
 		this.stateA = stateA;
 	}
 
-	public long getStateB () {
+	public long getStateB() {
 		return stateB;
 	}
 
@@ -215,11 +217,11 @@ public class MarshRandom extends EnhancedRandom {
 	 *
 	 * @param stateB can be any long
 	 */
-	public void setStateB (long stateB) {
+	public void setStateB(long stateB) {
 		this.stateB = stateB;
 	}
 
-	public long getStateC () {
+	public long getStateC() {
 		return stateC;
 	}
 
@@ -228,7 +230,7 @@ public class MarshRandom extends EnhancedRandom {
 	 *
 	 * @param stateC can be any long
 	 */
-	public void setStateC (long stateC) {
+	public void setStateC(long stateC) {
 		this.stateC = stateC;
 	}
 
@@ -253,14 +255,14 @@ public class MarshRandom extends EnhancedRandom {
 	 * @param stateC the third state; can be any long
 	 */
 	@Override
-	public void setState (long stateA, long stateB, long stateC) {
+	public void setState(long stateA, long stateB, long stateC) {
 		this.stateA = stateA;
 		this.stateB = stateB;
 		this.stateC = stateC;
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		long a = (stateA += 0xDE916ABCC965815BL); // the eighth number from the 39-dimensional harmonious sequence
 		long b = (stateB += 0xF1357AEA2E62A9C5L); // from https://arxiv.org/abs/2001.05304 (a 64-bit MCG constant)
 		long c = (stateC += 0xBEA225F9EB34556DL); // used by https://github.com/jonmaiga/mx3
@@ -282,8 +284,8 @@ public class MarshRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public long previousLong () {
-        long a = stateA;
+	public long previousLong() {
+		long a = stateA;
 		long b = stateB;
 		long c = stateC;
 		stateA -= 0xDE916ABCC965815BL;
@@ -296,14 +298,14 @@ public class MarshRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		long a = (stateA += 0xDE916ABCC965815BL);
 		long b = (stateB += 0xF1357AEA2E62A9C5L);
 		long c = (stateC += 0xBEA225F9EB34556DL);
 		a = (a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ c);
 		a = (a ^ a >>> 27) * 0x3C79AC492BA7B653L;
 		a = (a ^ a >>> 33) * 0x1C69B3F74AC4AE35L;
-		return (int)(a ^ a >>> 27) >>> (32 - bits);
+		return (int) (a ^ a >>> 27) >>> (32 - bits);
 	}
 
 	//0xA62B82F58DB8A985L
@@ -312,7 +314,7 @@ public class MarshRandom extends EnhancedRandom {
 	//0x98AE0BD636E2A614L
 
 	@Override
-	public MarshRandom copy () {
+	public MarshRandom copy() {
 		return new MarshRandom(stateA, stateB, stateC);
 	}
 
@@ -443,18 +445,18 @@ public class MarshRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		MarshRandom that = (MarshRandom)o;
+		MarshRandom that = (MarshRandom) o;
 
 		return stateA == that.stateA && stateB == that.stateB && stateC == that.stateC;
 	}
 
-	public String toString () {
+	public String toString() {
 		return "MarshRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L}";
 	}
 

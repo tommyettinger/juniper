@@ -56,7 +56,7 @@ public class Jsf32Random extends Enhanced32Random {
 	 * Creates a new Jsf32Random with a random state.
 	 */
 	public Jsf32Random() {
-		this((int)EnhancedRandom.seedFromMath());
+		this((int) EnhancedRandom.seedFromMath());
 	}
 
 	/**
@@ -99,12 +99,13 @@ public class Jsf32Random extends Enhanced32Random {
 	 * @return 4 (four)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 4;
 	}
 
 	/**
 	 * This generator mainly generates int values.
+	 *
 	 * @return true
 	 */
 	@Override
@@ -120,16 +121,16 @@ public class Jsf32Random extends Enhanced32Random {
 	 * @return the value of the selected state, which is an int that will be promoted to long
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		switch (selection) {
-		case 0:
-			return stateA;
-		case 1:
-			return stateB;
-		case 2:
-			return stateC;
-		default:
-			return stateD;
+			case 0:
+				return stateA;
+			case 1:
+				return stateB;
+			case 2:
+				return stateC;
+			default:
+				return stateD;
 		}
 	}
 
@@ -144,20 +145,20 @@ public class Jsf32Random extends Enhanced32Random {
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		switch (selection) {
-		case 0:
-			stateA = (int)value;
-			break;
-		case 1:
-			stateB = (int)value;
-			break;
-		case 2:
-			stateC = (int)value;
-			break;
-		default:
-			stateD = (int)value;
-			break;
+			case 0:
+				stateA = (int) value;
+				break;
+			case 1:
+				stateB = (int) value;
+				break;
+			case 2:
+				stateC = (int) value;
+				break;
+			default:
+				stateD = (int) value;
+				break;
 		}
 	}
 
@@ -171,10 +172,10 @@ public class Jsf32Random extends Enhanced32Random {
 	 * @param seed the initial seed; may be any long
 	 */
 	@Override
-	public void setSeed (long seed) {
+	public void setSeed(long seed) {
 		stateA = 0xF1EA5EED;
 		int y = (int) seed;
-		if(seed == y){
+		if (seed == y) {
 			stateB = stateC = stateD = y;
 			for (int i = 0; i < 20; i++) {
 				nextInt();
@@ -186,17 +187,17 @@ public class Jsf32Random extends Enhanced32Random {
 		x *= 0x3C79AC492BA7B653L;
 		x ^= x >>> 33;
 		x *= 0x1C69B3F74AC4AE35L;
-		stateB = (int)(x ^ x >>> 27);
+		stateB = (int) (x ^ x >>> 27);
 		x = (seed + 0x9E3779B97F4A7C15L);
 		x ^= x >>> 27;
 		x *= 0x3C79AC492BA7B653L;
 		x ^= x >>> 33;
 		x *= 0x1C69B3F74AC4AE35L;
-		stateC = (int)(x ^= x >>> 27);
-		stateD = (int)(x >>> 32);
+		stateC = (int) (x ^= x >>> 27);
+		stateD = (int) (x >>> 32);
 	}
 
-	public int getStateA () {
+	public int getStateA() {
 		return stateA;
 	}
 
@@ -205,11 +206,11 @@ public class Jsf32Random extends Enhanced32Random {
 	 *
 	 * @param stateA can be any int
 	 */
-	public void setStateA (int stateA) {
+	public void setStateA(int stateA) {
 		this.stateA = stateA;
 	}
 
-	public int getStateB () {
+	public int getStateB() {
 		return stateB;
 	}
 
@@ -218,11 +219,11 @@ public class Jsf32Random extends Enhanced32Random {
 	 *
 	 * @param stateB can be any int
 	 */
-	public void setStateB (int stateB) {
+	public void setStateB(int stateB) {
 		this.stateB = stateB;
 	}
 
-	public int getStateC () {
+	public int getStateC() {
 		return stateC;
 	}
 
@@ -231,11 +232,11 @@ public class Jsf32Random extends Enhanced32Random {
 	 *
 	 * @param stateC can be any int
 	 */
-	public void setStateC (int stateC) {
+	public void setStateC(int stateC) {
 		this.stateC = stateC;
 	}
 
-	public int getStateD () {
+	public int getStateD() {
 		return stateD;
 	}
 
@@ -244,7 +245,7 @@ public class Jsf32Random extends Enhanced32Random {
 	 *
 	 * @param stateD can be any int
 	 */
-	public void setStateD (int stateD) {
+	public void setStateD(int stateD) {
 		this.stateD = stateD;
 	}
 
@@ -259,11 +260,11 @@ public class Jsf32Random extends Enhanced32Random {
 	 * @param stateD the fourth state; can be any long, but will be cast to an int before use
 	 */
 	@Override
-	public void setState (long stateA, long stateB, long stateC, long stateD) {
-		this.stateA = (int)stateA;
-		this.stateB = (int)stateB;
-		this.stateC = (int)stateC;
-		this.stateD = (int)stateD;
+	public void setState(long stateA, long stateB, long stateC, long stateD) {
+		this.stateA = (int) stateA;
+		this.stateB = (int) stateB;
+		this.stateC = (int) stateC;
+		this.stateD = (int) stateD;
 	}
 
 	/**
@@ -275,7 +276,7 @@ public class Jsf32Random extends Enhanced32Random {
 	 * @param stateC the third state; can be any int
 	 * @param stateD the fourth state; can be any int
 	 */
-	public void setState (int stateA, int stateB, int stateC, int stateD) {
+	public void setState(int stateA, int stateB, int stateC, int stateD) {
 		this.stateA = stateA;
 		this.stateB = stateB;
 		this.stateC = stateC;
@@ -283,7 +284,7 @@ public class Jsf32Random extends Enhanced32Random {
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		int e = stateA - (stateB << 27 | stateB >>> 5);
 		stateA = stateB ^ (stateC << 17 | stateC >>> 15);
 		stateB = stateC + stateD;
@@ -298,7 +299,7 @@ public class Jsf32Random extends Enhanced32Random {
 	}
 
 	@Override
-	public long previousLong () {
+	public long previousLong() {
 		final int l = stateD;
 		int e = stateD - stateA;
 		final int h = stateD = stateC - e;
@@ -314,7 +315,7 @@ public class Jsf32Random extends Enhanced32Random {
 	}
 
 	@Override
-	public int previousInt () {
+	public int previousInt() {
 		final int l = stateD;
 		final int e = stateD - stateA;
 		stateD = stateC - e;
@@ -325,7 +326,7 @@ public class Jsf32Random extends Enhanced32Random {
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		final int e = stateA - (stateB << 27 | stateB >>> 5);
 		stateA = stateB ^ (stateC << 17 | stateC >>> 15);
 		stateB = stateC + stateD;
@@ -334,7 +335,7 @@ public class Jsf32Random extends Enhanced32Random {
 	}
 
 	@Override
-	public int nextInt () {
+	public int nextInt() {
 		final int e = stateA - (stateB << 27 | stateB >>> 5);
 		stateA = stateB ^ (stateC << 17 | stateC >>> 15);
 		stateB = stateC + stateD;
@@ -343,23 +344,23 @@ public class Jsf32Random extends Enhanced32Random {
 	}
 
 	@Override
-	public Jsf32Random copy () {
+	public Jsf32Random copy() {
 		return new Jsf32Random(stateA, stateB, stateC, stateD);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		Jsf32Random that = (Jsf32Random)o;
+		Jsf32Random that = (Jsf32Random) o;
 
 		return stateA == that.stateA && stateB == that.stateB && stateC == that.stateC && stateD == that.stateD;
 	}
 
-	public String toString () {
+	public String toString() {
 		return "Jsf32Random{" + "stateA=" + (stateA) + ", stateB=" + (stateB) + ", stateC=" + (stateC) + ", stateD=" + (stateD) + "}";
 	}
 

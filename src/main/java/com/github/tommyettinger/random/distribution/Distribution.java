@@ -30,160 +30,181 @@ import java.io.IOException;
  * values from this with {@link #nextDouble()}.
  */
 public abstract class Distribution {
-    public Distribution() {
-    }
-    /**
-     * An EnhancedRandom generator from this library to use.
-     */
-    public EnhancedRandom generator;
-    /**
-     * Gets the maximum possible value of distributed random numbers.
-     * @return the maximum possible value of distributed random numbers
-     */
-    public abstract double getMaximum();
+	public Distribution() {
+	}
 
-    /**
-     * Gets the mean of distributed random numbers.
-     * @return the mean of distributed random numbers
-     */
-    public abstract double getMean();
+	/**
+	 * An EnhancedRandom generator from this library to use.
+	 */
+	public EnhancedRandom generator;
 
-    /**
-     * Gets the median of distributed random numbers.
-     * @return the median of distributed random numbers
-     */
-    public abstract double getMedian();
+	/**
+	 * Gets the maximum possible value of distributed random numbers.
+	 *
+	 * @return the maximum possible value of distributed random numbers
+	 */
+	public abstract double getMaximum();
 
-    /**
-     * Gets the minimum possible value of distributed random numbers.
-     * @return the minimum possible value of distributed random numbers
-     */
-    public abstract double getMinimum();
+	/**
+	 * Gets the mean of distributed random numbers.
+	 *
+	 * @return the mean of distributed random numbers
+	 */
+	public abstract double getMean();
 
-    /**
-     * Gets the mode(s) of distributed random numbers.
-     * @return the mode(s) of distributed random numbers
-     */
-    public abstract double[] getMode();
+	/**
+	 * Gets the median of distributed random numbers.
+	 *
+	 * @return the median of distributed random numbers
+	 */
+	public abstract double getMedian();
 
-    /**
-     * Gets the variance of distributed random numbers.
-     * @return the variance of distributed random numbers
-     */
-    public abstract double getVariance();
+	/**
+	 * Gets the minimum possible value of distributed random numbers.
+	 *
+	 * @return the minimum possible value of distributed random numbers
+	 */
+	public abstract double getMinimum();
 
-    /**
-     * Validates, and if all correct, sets up to 3 parameters to this distribution.
-     * If this distribution has fewer than 3 parameters, later arguments are ignored.
-     * @param a will be used to set parameter A
-     * @param b will be used to set parameter B
-     * @param c will be used to set parameter C
-     * @return true if the parameters are valid and are used now; false if they were not changed
-     */
-    public abstract boolean setParameters(double a, double b, double c);
+	/**
+	 * Gets the mode(s) of distributed random numbers.
+	 *
+	 * @return the mode(s) of distributed random numbers
+	 */
+	public abstract double[] getMode();
 
-    /**
-     * Generates a double using this distribution.
-     * @return a distributed double
-     */
-    public abstract double nextDouble();
+	/**
+	 * Gets the variance of distributed random numbers.
+	 *
+	 * @return the variance of distributed random numbers
+	 */
+	public abstract double getVariance();
 
-    /**
-     * Gets the tag used to identify this type of Distribution, as a String. This tag should be unique. Unlike the
-     * tags for EnhancedRandom types, the names here can vary in length.
-     * @return a unique String identifier for this type of Distribution; must be non-null, can be any non-zero length
-     */
-    public abstract String getTag();
+	/**
+	 * Validates, and if all correct, sets up to 3 parameters to this distribution.
+	 * If this distribution has fewer than 3 parameters, later arguments are ignored.
+	 *
+	 * @param a will be used to set parameter A
+	 * @param b will be used to set parameter B
+	 * @param c will be used to set parameter C
+	 * @return true if the parameters are valid and are used now; false if they were not changed
+	 */
+	public abstract boolean setParameters(double a, double b, double c);
 
-    /**
-     * Gets the value of parameter "A" as a double. This corresponds to parameter "A" in
-     * {@link #setParameters(double, double, double)}; it is usually called by some other name in the generator, and may
-     * not be stored as a double internally.
-     * <br>
-     * This defaults to always returning {@link Double#NaN}, but any parameters a distribution actually uses should be
-     * overridden to return the actual parameter, which is almost certainly not going to be NaN. If a getParameter
-     * method returns NaN, you can generally safely assume that the parameter is not used by this distribution.
-     * @return the value of parameter "A" as a double.
-     */
-    public double getParameterA() {
-        return Double.NaN;
-    }
+	/**
+	 * Generates a double using this distribution.
+	 *
+	 * @return a distributed double
+	 */
+	public abstract double nextDouble();
 
-    /**
-     * Gets the value of parameter "B" as a double. This corresponds to parameter "B" in
-     * {@link #setParameters(double, double, double)}; it is usually called by some other name in the generator, and may
-     * not be stored as a double internally.
-     * <br>
-     * This defaults to always returning {@link Double#NaN}, but any parameters a distribution actually uses should be
-     * overridden to return the actual parameter, which is almost certainly not going to be NaN. If a getParameter
-     * method returns NaN, you can generally safely assume that the parameter is not used by this distribution.
-     * @return the value of parameter "B" as a double.
-     */
-    public double getParameterB() {
-        return Double.NaN;
-    }
+	/**
+	 * Gets the tag used to identify this type of Distribution, as a String. This tag should be unique. Unlike the
+	 * tags for EnhancedRandom types, the names here can vary in length.
+	 *
+	 * @return a unique String identifier for this type of Distribution; must be non-null, can be any non-zero length
+	 */
+	public abstract String getTag();
 
-    /**
-     * Gets the value of parameter "C" as a double. This corresponds to parameter "C" in
-     * {@link #setParameters(double, double, double)}; it is usually called by some other name in the generator, and may
-     * not be stored as a double internally.
-     * <br>
-     * This defaults to always returning {@link Double#NaN}, but any parameters a distribution actually uses should be
-     * overridden to return the actual parameter, which is almost certainly not going to be NaN. If a getParameter
-     * method returns NaN, you can generally safely assume that the parameter is not used by this distribution.
-     * @return the value of parameter "C" as a double.
-     */
-    public double getParameterC() {
-        return Double.NaN;
-    }
+	/**
+	 * Gets the value of parameter "A" as a double. This corresponds to parameter "A" in
+	 * {@link #setParameters(double, double, double)}; it is usually called by some other name in the generator, and may
+	 * not be stored as a double internally.
+	 * <br>
+	 * This defaults to always returning {@link Double#NaN}, but any parameters a distribution actually uses should be
+	 * overridden to return the actual parameter, which is almost certainly not going to be NaN. If a getParameter
+	 * method returns NaN, you can generally safely assume that the parameter is not used by this distribution.
+	 *
+	 * @return the value of parameter "A" as a double.
+	 */
+	public double getParameterA() {
+		return Double.NaN;
+	}
 
-    /**
-     * Returns an exact copy of this Distribution, with the same parameters and a copy of the generator.
-     * @return an exact copy of this Distribution
-     */
-    public abstract Distribution copy();
-    /**
-     * Serializes the current state of this Distribution to a String that can be used by
-     * {@link #stringDeserialize(String)} to load this state at another time. This always uses
-     * {@link Base#BASE16 base 16} for its conversions.
-     * @return a String storing all data from the Distribution part of this generator
-     */
-    public String stringSerialize() {
-        return stringSerialize(Base.BASE16);
-    }
+	/**
+	 * Gets the value of parameter "B" as a double. This corresponds to parameter "B" in
+	 * {@link #setParameters(double, double, double)}; it is usually called by some other name in the generator, and may
+	 * not be stored as a double internally.
+	 * <br>
+	 * This defaults to always returning {@link Double#NaN}, but any parameters a distribution actually uses should be
+	 * overridden to return the actual parameter, which is almost certainly not going to be NaN. If a getParameter
+	 * method returns NaN, you can generally safely assume that the parameter is not used by this distribution.
+	 *
+	 * @return the value of parameter "B" as a double.
+	 */
+	public double getParameterB() {
+		return Double.NaN;
+	}
 
-    /**
-     * Serializes the current generator and parameters of this Distribution to a String that can be used by
-     * {@link #stringDeserialize(String)} to load this Distribution at another time.
-     * @param base which Base to use, from the "digital" library, such as {@link Base#BASE10}
-     * @return a String storing the current generator and parameters of this Distribution
-     */
-    public String stringSerialize(Base base) {
-        return appendSerialized(new StringBuilder(20), base).toString();
-    }
+	/**
+	 * Gets the value of parameter "C" as a double. This corresponds to parameter "C" in
+	 * {@link #setParameters(double, double, double)}; it is usually called by some other name in the generator, and may
+	 * not be stored as a double internally.
+	 * <br>
+	 * This defaults to always returning {@link Double#NaN}, but any parameters a distribution actually uses should be
+	 * overridden to return the actual parameter, which is almost certainly not going to be NaN. If a getParameter
+	 * method returns NaN, you can generally safely assume that the parameter is not used by this distribution.
+	 *
+	 * @return the value of parameter "C" as a double.
+	 */
+	public double getParameterC() {
+		return Double.NaN;
+	}
 
-    /**
-     * Serializes the current generator and parameters of this Distribution and appends that textual form to a given
+	/**
+	 * Returns an exact copy of this Distribution, with the same parameters and a copy of the generator.
+	 *
+	 * @return an exact copy of this Distribution
+	 */
+	public abstract Distribution copy();
+
+	/**
+	 * Serializes the current state of this Distribution to a String that can be used by
+	 * {@link #stringDeserialize(String)} to load this state at another time. This always uses
+	 * {@link Base#BASE16 base 16} for its conversions.
+	 *
+	 * @return a String storing all data from the Distribution part of this generator
+	 */
+	public String stringSerialize() {
+		return stringSerialize(Base.BASE16);
+	}
+
+	/**
+	 * Serializes the current generator and parameters of this Distribution to a String that can be used by
+	 * {@link #stringDeserialize(String)} to load this Distribution at another time.
+	 *
+	 * @param base which Base to use, from the "digital" library, such as {@link Base#BASE10}
+	 * @return a String storing the current generator and parameters of this Distribution
+	 */
+	public String stringSerialize(Base base) {
+		return appendSerialized(new StringBuilder(20), base).toString();
+	}
+
+	/**
+	 * Serializes the current generator and parameters of this Distribution and appends that textual form to a given
 	 * Appendable CharSequence, such as a StringBuilder, that can be used by {@link #stringDeserialize(String)} to load
 	 * this Distribution at another time. This always uses {@link Base#BASE16 base 16}.
-	 * @param sb an Appendable CharSequence that will be modified
-	 * @return {@code sb}, for chaining
+	 *
+	 * @param sb  an Appendable CharSequence that will be modified
 	 * @param <T> any type that is both a CharSequence and an Appendable, such as StringBuilder, StringBuffer, or CharBuffer
-     */
-    public <T extends CharSequence & Appendable> T appendSerialized(T sb) {
+	 * @return {@code sb}, for chaining
+	 */
+	public <T extends CharSequence & Appendable> T appendSerialized(T sb) {
 		return appendSerialized(sb, Base.BASE16);
 	}
-    /**
-     * Serializes the current generator and parameters of this Distribution and appends that textual form to a given
+
+	/**
+	 * Serializes the current generator and parameters of this Distribution and appends that textual form to a given
 	 * Appendable CharSequence, such as a StringBuilder, that can be used by
-     * {@link #stringDeserialize(String)} to load this Distribution at another time.
-	 * @param sb an Appendable CharSequence that will be modified
-     * @param base which Base to use, from the "digital" library, such as {@link Base#BASE10}
+	 * {@link #stringDeserialize(String)} to load this Distribution at another time.
+	 *
+	 * @param sb   an Appendable CharSequence that will be modified
+	 * @param base which Base to use, from the "digital" library, such as {@link Base#BASE10}
+	 * @param <T>  any type that is both a CharSequence and an Appendable, such as StringBuilder, StringBuffer, or CharBuffer
 	 * @return {@code sb}, for chaining
-	 * @param <T> any type that is both a CharSequence and an Appendable, such as StringBuilder, StringBuffer, or CharBuffer
-     */
-    public <T extends CharSequence & Appendable> T appendSerialized(T sb, Base base) {
-        try {
+	 */
+	public <T extends CharSequence & Appendable> T appendSerialized(T sb, Base base) {
+		try {
 			sb.append(getTag());
 			sb.append(base.positiveSign);
 			sb.append(generator.stringSerialize(base));
@@ -196,68 +217,70 @@ public abstract class Distribution {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-        return sb;
-    }
+		return sb;
+	}
 
-    /**
-     * Given a String in the format produced by {@link #stringSerialize()}, this will attempt to set this Distribution
-     * object to match the state in the serialized data. This only works if this Distribution is the same
-     * implementation that was serialized. Always uses {@link Base#BASE16}. Returns this Distribution, after possibly
-     * changing its parameters and generator. The implementation for the generator can change, so the reference also
-     * changes whenever this is called.
-     * @param data a String probably produced by {@link #stringSerialize()}
-     * @return this, after setting its state
-     */
-    public Distribution stringDeserialize(String data) {
-        return stringDeserialize(data, Base.BASE16);
-    }
+	/**
+	 * Given a String in the format produced by {@link #stringSerialize()}, this will attempt to set this Distribution
+	 * object to match the state in the serialized data. This only works if this Distribution is the same
+	 * implementation that was serialized. Always uses {@link Base#BASE16}. Returns this Distribution, after possibly
+	 * changing its parameters and generator. The implementation for the generator can change, so the reference also
+	 * changes whenever this is called.
+	 *
+	 * @param data a String probably produced by {@link #stringSerialize()}
+	 * @return this, after setting its state
+	 */
+	public Distribution stringDeserialize(String data) {
+		return stringDeserialize(data, Base.BASE16);
+	}
 
-    /**
-     * Given a String in the format produced by {@link #stringSerialize(Base)}, and the same {@link Base} used by
-     * the serialization, this will attempt to set this Distribution object to match the state in the serialized
-     * data. This only works if this Distribution is the same implementation that was serialized, and also needs
-     * the Bases to be identical. Returns this Distribution, after possibly changing its parameters and generator.
-     * The implementation for the generator can change, so the reference also changes whenever this is called.
-     * @param data a String probably produced by {@link #stringSerialize(Base)}
-     * @param base which Base to use, from the "digital" library, such as {@link Base#BASE10}
-     * @return this, after setting its state
-     */
-    public Distribution stringDeserialize(String data, Base base) {
-        int idx = data.indexOf(base.positiveSign) + 1;
-        generator = Deserializer.deserialize(data.substring(idx, idx = data.indexOf(base.paddingChar, data.indexOf(base.paddingChar, idx + 1) + 1) + 1), base);
-        setParameters(base.readDoubleExact(data, idx, (idx = data.indexOf(base.paddingChar, idx + 1))),
-                base.readDoubleExact(data, idx + 1, (idx = data.indexOf(base.paddingChar, idx + 1))),
-                base.readDoubleExact(data, idx + 1, (data.indexOf(base.paddingChar, idx + 1))));
-        return this;
-    }
+	/**
+	 * Given a String in the format produced by {@link #stringSerialize(Base)}, and the same {@link Base} used by
+	 * the serialization, this will attempt to set this Distribution object to match the state in the serialized
+	 * data. This only works if this Distribution is the same implementation that was serialized, and also needs
+	 * the Bases to be identical. Returns this Distribution, after possibly changing its parameters and generator.
+	 * The implementation for the generator can change, so the reference also changes whenever this is called.
+	 *
+	 * @param data a String probably produced by {@link #stringSerialize(Base)}
+	 * @param base which Base to use, from the "digital" library, such as {@link Base#BASE10}
+	 * @return this, after setting its state
+	 */
+	public Distribution stringDeserialize(String data, Base base) {
+		int idx = data.indexOf(base.positiveSign) + 1;
+		generator = Deserializer.deserialize(data.substring(idx, idx = data.indexOf(base.paddingChar, data.indexOf(base.paddingChar, idx + 1) + 1) + 1), base);
+		setParameters(base.readDoubleExact(data, idx, (idx = data.indexOf(base.paddingChar, idx + 1))),
+			base.readDoubleExact(data, idx + 1, (idx = data.indexOf(base.paddingChar, idx + 1))),
+			base.readDoubleExact(data, idx + 1, (data.indexOf(base.paddingChar, idx + 1))));
+		return this;
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
 
-        Distribution that = (Distribution) o;
+		Distribution that = (Distribution) o;
 
-        if(!EnhancedRandom.areEqual(generator, that.generator))
-            return false;
-        double p = getParameterA(), t = that.getParameterA();
-        if(!Double.isNaN(p) && !Double.isNaN(t) && p != t) return false;
-        p = getParameterB();
-        t = that.getParameterB();
-        if(!Double.isNaN(p) && !Double.isNaN(t) && p != t) return false;
-        p = getParameterC();
-        t = that.getParameterC();
-        return Double.isNaN(p) || Double.isNaN(t) || p == t;
-    }
+		if (!EnhancedRandom.areEqual(generator, that.generator))
+			return false;
+		double p = getParameterA(), t = that.getParameterA();
+		if (!Double.isNaN(p) && !Double.isNaN(t) && p != t) return false;
+		p = getParameterB();
+		t = that.getParameterB();
+		if (!Double.isNaN(p) && !Double.isNaN(t) && p != t) return false;
+		p = getParameterC();
+		t = that.getParameterC();
+		return Double.isNaN(p) || Double.isNaN(t) || p == t;
+	}
 
-    @Override
-    public String toString() {
-        double a = getParameterA(), b = getParameterB(), c = getParameterC();
-        return "Distribution{" +
-                "generator=" + generator +
-                (a != a ? "" : ", parameterA=" + getParameterA()) +
-                (b != b ? "" : ", parameterB=" + getParameterB()) +
-                (c != c ? "" : ", parameterC=" + getParameterC()) +
-                '}';
-    }
+	@Override
+	public String toString() {
+		double a = getParameterA(), b = getParameterB(), c = getParameterC();
+		return "Distribution{" +
+			"generator=" + generator +
+			(a != a ? "" : ", parameterA=" + getParameterA()) +
+			(b != b ? "" : ", parameterB=" + getParameterB()) +
+			(c != c ? "" : ", parameterC=" + getParameterC()) +
+			'}';
+	}
 }

@@ -73,12 +73,14 @@ public class CobraRandom extends EnhancedRandom {
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("100000000000000000000000000000000", 16);
 
 	/**
 	 * 2 to the 128.
+	 *
 	 * @return 2 to the 128
 	 */
 	@Override
@@ -92,7 +94,7 @@ public class CobraRandom extends EnhancedRandom {
 	 * @return 2 (two)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 2;
 	}
 
@@ -104,7 +106,7 @@ public class CobraRandom extends EnhancedRandom {
 	 * @return the value of the selected state
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		if ((selection & 1) == 1) {
 			return stateB;
 		}
@@ -119,7 +121,7 @@ public class CobraRandom extends EnhancedRandom {
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		if ((selection & 1) == 1) {
 			stateB = value;
 		} else {
@@ -134,7 +136,7 @@ public class CobraRandom extends EnhancedRandom {
 	 * @param seed the initial seed; may be any long
 	 */
 	@Override
-	public void setSeed (long seed) {
+	public void setSeed(long seed) {
 		long x = (seed + 0x9E3779B97F4A7C15L);
 		x ^= x >>> 27;
 		x *= 0x3C79AC492BA7B653L;
@@ -149,7 +151,7 @@ public class CobraRandom extends EnhancedRandom {
 		stateB = x ^ x >>> 27;
 	}
 
-	public long getStateA () {
+	public long getStateA() {
 		return stateA;
 	}
 
@@ -158,11 +160,11 @@ public class CobraRandom extends EnhancedRandom {
 	 *
 	 * @param stateA can be any long
 	 */
-	public void setStateA (long stateA) {
+	public void setStateA(long stateA) {
 		this.stateA = stateA;
 	}
 
-	public long getStateB () {
+	public long getStateB() {
 		return stateB;
 	}
 
@@ -171,7 +173,7 @@ public class CobraRandom extends EnhancedRandom {
 	 *
 	 * @param stateB can be any long
 	 */
-	public void setStateB (long stateB) {
+	public void setStateB(long stateB) {
 		this.stateB = stateB;
 	}
 
@@ -184,61 +186,61 @@ public class CobraRandom extends EnhancedRandom {
 	 * @param stateB the second state; can be any long
 	 */
 	@Override
-	public void setState (long stateA, long stateB) {
+	public void setState(long stateA, long stateB) {
 		this.stateA = stateA;
 		this.stateB = stateB;
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		long a = (stateA = stateA * 0xF7C2EBC08F67F2B5L + 0xD1342543DE82EF95L);
 		long b = (stateB += 0x9E3779B97F4A7C16L + BitConversion.countLeadingZeros(a));
 		a = (a ^ (a << 23 | a >>> 41) ^ (a << 53 | a >>> 11)) * 0x3C79AC492BA7B653L;
-		b = (b ^ (b << 47 | b >>> 17) ^ (b <<  5 | b >>> 59)) * 0x1C69B3F74AC4AE35L;
+		b = (b ^ (b << 47 | b >>> 17) ^ (b << 5 | b >>> 59)) * 0x1C69B3F74AC4AE35L;
 		return a ^ a >>> 33 ^ b ^ b >>> 30;
 	}
 
 	@Override
-	public long previousLong () {
+	public long previousLong() {
 		long a = stateA;
 		stateA = (a - 0xD1342543DE82EF95L) * 0x09795DFF8024EB9DL;
 		long b = stateB;
 		stateB -= 0x9E3779B97F4A7C16L + BitConversion.countLeadingZeros(a);
 		a = (a ^ (a << 23 | a >>> 41) ^ (a << 53 | a >>> 11)) * 0x3C79AC492BA7B653L;
-		b = (b ^ (b << 47 | b >>> 17) ^ (b <<  5 | b >>> 59)) * 0x1C69B3F74AC4AE35L;
+		b = (b ^ (b << 47 | b >>> 17) ^ (b << 5 | b >>> 59)) * 0x1C69B3F74AC4AE35L;
 		return a ^ a >>> 33 ^ b ^ b >>> 30;
 
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		long a = (stateA = stateA * 0xF7C2EBC08F67F2B5L + 0xD1342543DE82EF95L);
 		long b = (stateB += 0x9E3779B97F4A7C16L + BitConversion.countLeadingZeros(a));
 		a = (a ^ (a << 23 | a >>> 41) ^ (a << 53 | a >>> 11)) * 0x3C79AC492BA7B653L;
-		b = (b ^ (b << 47 | b >>> 17) ^ (b <<  5 | b >>> 59)) * 0x1C69B3F74AC4AE35L;
-		return (int)(a ^ a >>> 33 ^ b ^ b >>> 30) >>> (32 - bits);
+		b = (b ^ (b << 47 | b >>> 17) ^ (b << 5 | b >>> 59)) * 0x1C69B3F74AC4AE35L;
+		return (int) (a ^ a >>> 33 ^ b ^ b >>> 30) >>> (32 - bits);
 	}
 
 	@Override
-	public CobraRandom copy () {
+	public CobraRandom copy() {
 		return new CobraRandom(stateA, stateB);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		CobraRandom that = (CobraRandom)o;
+		CobraRandom that = (CobraRandom) o;
 
 		if (stateA != that.stateA)
 			return false;
 		return stateB == that.stateB;
 	}
 
-	public String toString () {
+	public String toString() {
 		return "CobraRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L}";
 	}
 }

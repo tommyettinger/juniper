@@ -58,7 +58,7 @@ public class MizuchiRandom extends EnhancedRandom {
 	/**
 	 * Creates a new MizuchiRandom with a random state.
 	 */
-	public MizuchiRandom () {
+	public MizuchiRandom() {
 		super();
 		stateA = EnhancedRandom.seedFromMath();
 		stateB = EnhancedRandom.seedFromMath() | 1L;
@@ -70,7 +70,7 @@ public class MizuchiRandom extends EnhancedRandom {
 	 *
 	 * @param seed any {@code long} value
 	 */
-	public MizuchiRandom (long seed) {
+	public MizuchiRandom(long seed) {
 		super(seed);
 		setSeed(seed);
 	}
@@ -83,7 +83,7 @@ public class MizuchiRandom extends EnhancedRandom {
 	 * @param stateA any {@code long} value
 	 * @param stateB any {@code long} value; should be odd, otherwise this will add 1 to make it odd
 	 */
-	public MizuchiRandom (long stateA, long stateB) {
+	public MizuchiRandom(long stateA, long stateB) {
 		super(stateA);
 		this.stateA = stateA;
 		this.stateB = stateB | 1L;
@@ -96,12 +96,14 @@ public class MizuchiRandom extends EnhancedRandom {
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
 
 	/**
 	 * 2 to the 64.
+	 *
 	 * @return 2 to the 64
 	 */
 	@Override
@@ -115,7 +117,7 @@ public class MizuchiRandom extends EnhancedRandom {
 	 * @return 2 (two)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 2;
 	}
 
@@ -127,7 +129,7 @@ public class MizuchiRandom extends EnhancedRandom {
 	 * @return the value of the selected state
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		if ((selection & 1) == 1) {
 			return stateB;
 		}
@@ -142,7 +144,7 @@ public class MizuchiRandom extends EnhancedRandom {
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		if ((selection & 1) == 1) {
 			stateB = value | 1L;
 		} else {
@@ -157,7 +159,7 @@ public class MizuchiRandom extends EnhancedRandom {
 	 * @param seed the initial seed; may be any long
 	 */
 	@Override
-	public void setSeed (long seed) {
+	public void setSeed(long seed) {
 		long x = (seed += 0x9E3779B97F4A7C15L);
 		x ^= x >>> 27;
 		x *= 0x3C79AC492BA7B653L;
@@ -172,7 +174,7 @@ public class MizuchiRandom extends EnhancedRandom {
 		stateB = (x ^ x >>> 27) | 1L;
 	}
 
-	public long getStateA () {
+	public long getStateA() {
 		return stateA;
 	}
 
@@ -181,11 +183,11 @@ public class MizuchiRandom extends EnhancedRandom {
 	 *
 	 * @param stateA can be any long
 	 */
-	public void setStateA (long stateA) {
+	public void setStateA(long stateA) {
 		this.stateA = stateA;
 	}
 
-	public long getStateB () {
+	public long getStateB() {
 		return stateB;
 	}
 
@@ -194,7 +196,7 @@ public class MizuchiRandom extends EnhancedRandom {
 	 *
 	 * @param stateB can be any odd-number long; otherwise this adds 1 to make it odd
 	 */
-	public void setStateB (long stateB) {
+	public void setStateB(long stateB) {
 		this.stateB = stateB | 1L;
 	}
 
@@ -207,20 +209,20 @@ public class MizuchiRandom extends EnhancedRandom {
 	 * @param stateB the second state; can be any odd-number long
 	 */
 	@Override
-	public void setState (long stateA, long stateB) {
+	public void setState(long stateA, long stateB) {
 		this.stateA = stateA;
 		this.stateB = stateB | 1L;
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		long z = (stateA = stateA * 0xF7C2EBC08F67F2B5L + stateB);
 		z = (z ^ z >>> 23 ^ z >>> 47) * 0xAEF17502108EF2D9L;
 		return (z ^ z >>> 25);
 	}
 
 	@Override
-	public long previousLong () {
+	public long previousLong() {
 		long z = stateA;
 		stateA = (stateA - stateB) * 0x09795DFF8024EB9DL;
 		z = (z ^ z >>> 23 ^ z >>> 47) * 0xAEF17502108EF2D9L;
@@ -229,32 +231,32 @@ public class MizuchiRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		long z = (stateA = stateA * 0xF7C2EBC08F67F2B5L + stateB);
 		z = (z ^ z >>> 23 ^ z >>> 47) * 0xAEF17502108EF2D9L;
-		return (int)(z ^ z >>> 25) >>> (32 - bits);
+		return (int) (z ^ z >>> 25) >>> (32 - bits);
 	}
 
 	@Override
-	public MizuchiRandom copy () {
+	public MizuchiRandom copy() {
 		return new MizuchiRandom(stateA, stateB);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		MizuchiRandom that = (MizuchiRandom)o;
+		MizuchiRandom that = (MizuchiRandom) o;
 
 		if (stateA != that.stateA)
 			return false;
 		return stateB == that.stateB;
 	}
 
-	public String toString () {
+	public String toString() {
 		return "MizuchiRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L}";
 	}
 }

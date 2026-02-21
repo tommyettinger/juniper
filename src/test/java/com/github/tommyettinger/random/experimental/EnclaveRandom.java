@@ -83,12 +83,14 @@ public class EnclaveRandom extends EnhancedRandom {
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
 
 	/**
 	 * 2 to the 64.
+	 *
 	 * @return 2 to the 64
 	 */
 	@Override
@@ -102,7 +104,7 @@ public class EnclaveRandom extends EnhancedRandom {
 	 * @return 2 (two)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 2;
 	}
 
@@ -114,7 +116,7 @@ public class EnclaveRandom extends EnhancedRandom {
 	 * @return the state's or gamma's exact value
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		return selection == 0 ? state : gamma;
 	}
 
@@ -127,8 +129,8 @@ public class EnclaveRandom extends EnhancedRandom {
 	 * @param value     the exact value to use for the state, or the base value to try first for the gamma
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
-		if(selection == 0)
+	public void setSelectedState(int selection, long value) {
+		if (selection == 0)
 			state = value;
 		else
 			gamma = EnhancedRandom.fixGamma(value, 1);
@@ -142,7 +144,7 @@ public class EnclaveRandom extends EnhancedRandom {
 	 * @param seed the exact value to use for the state; all longs are valid
 	 */
 	@Override
-	public void setSeed (long seed) {
+	public void setSeed(long seed) {
 		state = seed;
 	}
 
@@ -152,7 +154,7 @@ public class EnclaveRandom extends EnhancedRandom {
 	 *
 	 * @return the current state, as a long
 	 */
-	public long getState () {
+	public long getState() {
 		return state;
 	}
 
@@ -163,7 +165,7 @@ public class EnclaveRandom extends EnhancedRandom {
 	 * @param state the long value to use for the state variable
 	 */
 	@Override
-	public void setState (long state) {
+	public void setState(long state) {
 		this.state = state;
 	}
 
@@ -174,6 +176,7 @@ public class EnclaveRandom extends EnhancedRandom {
 	/**
 	 * Runs {@code value} through {@link EnhancedRandom#fixGamma(long, int)} with a threshold of 1, stores the result as
 	 * the gamma here, and returns the result.
+	 *
 	 * @param value the base value to try first in fixGamma(); should always be odd, but will be made odd otherwise
 	 * @return the gamma this actually will use after setting
 	 */
@@ -199,7 +202,7 @@ public class EnclaveRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		long x = (state += gamma), y = x | 1L;
 		x = x * x + y;
 		x = (x << 32 | x >>> 32);
@@ -220,7 +223,7 @@ public class EnclaveRandom extends EnhancedRandom {
 	 * @return a random {@code long} by the same algorithm as {@link #nextLong()}, using the appropriately-advanced state
 	 */
 	@Override
-	public long skip (long advance) {
+	public long skip(long advance) {
 		long x = (state -= advance * gamma), y = x | 1L;
 		x = x * x + y;
 		x = (x << 32 | x >>> 32);
@@ -230,7 +233,7 @@ public class EnclaveRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public long previousLong () {
+	public long previousLong() {
 		long x = state, y = x | 1L;
 		state -= gamma;
 		x = x * x + y;
@@ -241,34 +244,34 @@ public class EnclaveRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		long x = (state += gamma), y = x | 1L;
 		x = x * x + y;
 		x = (x << 32 | x >>> 32);
 		y = x | 1L;
 		x = x * x + y;
-		return (int)(x ^ x >>> 31) >>> (32 - bits);
+		return (int) (x ^ x >>> 31) >>> (32 - bits);
 	}
 
 	@Override
-	public EnclaveRandom copy () {
+	public EnclaveRandom copy() {
 		return new EnclaveRandom(state, gamma);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		EnclaveRandom that = (EnclaveRandom)o;
+		EnclaveRandom that = (EnclaveRandom) o;
 
 		return state == that.state;
 	}
 
 	@Override
-	public String toString () {
+	public String toString() {
 		return "EnclaveRandom{state=" + (state) + "L}";
 	}
 }

@@ -70,7 +70,7 @@ public class FourWheelRandom extends EnhancedRandom {
 	/**
 	 * Creates a new FourWheelRandom with a random state.
 	 */
-	public FourWheelRandom () {
+	public FourWheelRandom() {
 		super();
 		stateA = EnhancedRandom.seedFromMath();
 		stateB = EnhancedRandom.seedFromMath();
@@ -84,7 +84,7 @@ public class FourWheelRandom extends EnhancedRandom {
 	 *
 	 * @param seed any {@code long} value
 	 */
-	public FourWheelRandom (long seed) {
+	public FourWheelRandom(long seed) {
 		super(seed);
 		setSeed(seed);
 	}
@@ -98,7 +98,7 @@ public class FourWheelRandom extends EnhancedRandom {
 	 * @param stateC any {@code long} value
 	 * @param stateD any {@code long} value
 	 */
-	public FourWheelRandom (long stateA, long stateB, long stateC, long stateD) {
+	public FourWheelRandom(long stateA, long stateB, long stateC, long stateD) {
 		super(stateA);
 		this.stateA = stateA;
 		this.stateB = stateB;
@@ -117,7 +117,7 @@ public class FourWheelRandom extends EnhancedRandom {
 	 * @return 4 (four)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 4;
 	}
 
@@ -129,16 +129,16 @@ public class FourWheelRandom extends EnhancedRandom {
 	 * @return the value of the selected state
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		switch (selection) {
-		case 0:
-			return stateA;
-		case 1:
-			return stateB;
-		case 2:
-			return stateC;
-		default:
-			return stateD;
+			case 0:
+				return stateA;
+			case 1:
+				return stateB;
+			case 2:
+				return stateC;
+			default:
+				return stateD;
 		}
 	}
 
@@ -151,20 +151,20 @@ public class FourWheelRandom extends EnhancedRandom {
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		switch (selection) {
-		case 0:
-			stateA = value;
-			break;
-		case 1:
-			stateB = value;
-			break;
-		case 2:
-			stateC = value;
-			break;
-		default:
-			stateD = value;
-			break;
+			case 0:
+				stateA = value;
+				break;
+			case 1:
+				stateB = value;
+				break;
+			case 2:
+				stateC = value;
+				break;
+			default:
+				stateD = value;
+				break;
 		}
 	}
 
@@ -177,7 +177,7 @@ public class FourWheelRandom extends EnhancedRandom {
 	 * @param seed the initial seed; may be any long
 	 */
 	@Override
-	public void setSeed (long seed) {
+	public void setSeed(long seed) {
 		long x = (seed += 0x9E3779B97F4A7C15L);
 		x ^= x >>> 27;
 		x *= 0x3C79AC492BA7B653L;
@@ -204,7 +204,7 @@ public class FourWheelRandom extends EnhancedRandom {
 		stateD = x ^ x >>> 27;
 	}
 
-	public long getStateA () {
+	public long getStateA() {
 		return stateA;
 	}
 
@@ -213,11 +213,11 @@ public class FourWheelRandom extends EnhancedRandom {
 	 *
 	 * @param stateA can be any long
 	 */
-	public void setStateA (long stateA) {
+	public void setStateA(long stateA) {
 		this.stateA = stateA;
 	}
 
-	public long getStateB () {
+	public long getStateB() {
 		return stateB;
 	}
 
@@ -226,11 +226,11 @@ public class FourWheelRandom extends EnhancedRandom {
 	 *
 	 * @param stateB can be any long
 	 */
-	public void setStateB (long stateB) {
+	public void setStateB(long stateB) {
 		this.stateB = stateB;
 	}
 
-	public long getStateC () {
+	public long getStateC() {
 		return stateC;
 	}
 
@@ -239,11 +239,11 @@ public class FourWheelRandom extends EnhancedRandom {
 	 *
 	 * @param stateC can be any long
 	 */
-	public void setStateC (long stateC) {
+	public void setStateC(long stateC) {
 		this.stateC = stateC;
 	}
 
-	public long getStateD () {
+	public long getStateD() {
 		return stateD;
 	}
 
@@ -255,7 +255,7 @@ public class FourWheelRandom extends EnhancedRandom {
 	 *
 	 * @param stateD can be any long
 	 */
-	public void setStateD (long stateD) {
+	public void setStateD(long stateD) {
 		this.stateD = stateD;
 	}
 
@@ -273,7 +273,7 @@ public class FourWheelRandom extends EnhancedRandom {
 	 * @param stateD the fourth state; this will be returned as-is if the next call is to {@link #nextLong()}
 	 */
 	@Override
-	public void setState (long stateA, long stateB, long stateC, long stateD) {
+	public void setState(long stateA, long stateB, long stateC, long stateD) {
 		this.stateA = stateA;
 		this.stateB = stateB;
 		this.stateC = stateC;
@@ -281,7 +281,7 @@ public class FourWheelRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		final long fa = stateA;
 		final long fb = stateB;
 		final long fc = stateC;
@@ -294,7 +294,7 @@ public class FourWheelRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public long previousLong () {
+	public long previousLong() {
 		final long fa = stateA;
 		final long fb = stateB;
 		final long fd = stateD;
@@ -307,7 +307,7 @@ public class FourWheelRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		final long fa = stateA;
 		final long fb = stateB;
 		final long fc = stateC;
@@ -316,22 +316,22 @@ public class FourWheelRandom extends EnhancedRandom {
 		stateB = fa + 0xC6BC279692B5C323L;
 		stateC = (fb << 47 | fb >>> 17) - fd;
 		stateD = fb ^ fc;
-		return (int)fd >>> (32 - bits);
+		return (int) fd >>> (32 - bits);
 	}
 
 	@Override
-	public FourWheelRandom copy () {
+	public FourWheelRandom copy() {
 		return new FourWheelRandom(stateA, stateB, stateC, stateD);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		FourWheelRandom that = (FourWheelRandom)o;
+		FourWheelRandom that = (FourWheelRandom) o;
 
 		if (stateA != that.stateA)
 			return false;
@@ -342,7 +342,7 @@ public class FourWheelRandom extends EnhancedRandom {
 		return stateD == that.stateD;
 	}
 
-	public String toString () {
+	public String toString() {
 		return "FourWheelRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L, stateD=" + (stateD) + "L}";
 	}
 }

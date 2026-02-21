@@ -194,7 +194,7 @@ public class Issue7314Test {
 
 		ObjectMap.Entries<String, Integer> entries = map.entries();
 		// remove all
-		for (ObjectMap.Entry<String, Integer> e; entries.hasNext();) {
+		for (ObjectMap.Entry<String, Integer> e; entries.hasNext(); ) {
 			e = entries.next();
 			System.out.println(e.value);
 			entries.remove();
@@ -238,7 +238,7 @@ public class Issue7314Test {
 
 		ObjectObjectMap.MapIterator<String, Integer, Map.Entry<String, Integer>> entries = map.iterator();
 		// remove all
-		for (Map.Entry<String, Integer> e; entries.hasNext();) {
+		for (Map.Entry<String, Integer> e; entries.hasNext(); ) {
 			e = entries.next();
 			System.out.println(e.getValue());
 			entries.remove();
@@ -285,7 +285,7 @@ public class Issue7314Test {
 
 		Iterator<Map.Entry<String, Integer>> entries = map.entrySet().iterator();
 		// remove all
-		for (Map.Entry<String, Integer> e; entries.hasNext();) {
+		for (Map.Entry<String, Integer> e; entries.hasNext(); ) {
 			e = entries.next();
 			System.out.println(e.getValue());
 			entries.remove();

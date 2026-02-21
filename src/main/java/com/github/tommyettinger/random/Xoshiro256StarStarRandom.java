@@ -68,7 +68,7 @@ public class Xoshiro256StarStarRandom extends EnhancedRandom {
 	/**
 	 * Creates a new Xoshiro256StarStarRandom with a random state.
 	 */
-	public Xoshiro256StarStarRandom () {
+	public Xoshiro256StarStarRandom() {
 		super();
 		stateA = EnhancedRandom.seedFromMath();
 		stateB = EnhancedRandom.seedFromMath();
@@ -84,7 +84,7 @@ public class Xoshiro256StarStarRandom extends EnhancedRandom {
 	 *
 	 * @param seed any {@code long} value
 	 */
-	public Xoshiro256StarStarRandom (long seed) {
+	public Xoshiro256StarStarRandom(long seed) {
 		super(seed);
 		setSeed(seed);
 	}
@@ -98,7 +98,7 @@ public class Xoshiro256StarStarRandom extends EnhancedRandom {
 	 * @param stateC any {@code long} value
 	 * @param stateD any {@code long} value
 	 */
-	public Xoshiro256StarStarRandom (long stateA, long stateB, long stateC, long stateD) {
+	public Xoshiro256StarStarRandom(long stateA, long stateB, long stateC, long stateD) {
 		super(stateA);
 		this.stateA = stateA;
 		this.stateB = stateB;
@@ -112,14 +112,17 @@ public class Xoshiro256StarStarRandom extends EnhancedRandom {
 	public String getTag() {
 		return "XSSR";
 	}
+
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", 16);
 
 	/**
 	 * (2 to the 256) - 1.
+	 *
 	 * @return (2 to the 256) - 1
 	 */
 	@Override
@@ -133,7 +136,7 @@ public class Xoshiro256StarStarRandom extends EnhancedRandom {
 	 * @return 4 (four)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 4;
 	}
 
@@ -145,16 +148,16 @@ public class Xoshiro256StarStarRandom extends EnhancedRandom {
 	 * @return the value of the selected state
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		switch (selection) {
-		case 0:
-			return stateA;
-		case 1:
-			return stateB;
-		case 2:
-			return stateC;
-		default:
-			return stateD;
+			case 0:
+				return stateA;
+			case 1:
+				return stateB;
+			case 2:
+				return stateC;
+			default:
+				return stateD;
 		}
 	}
 
@@ -168,20 +171,20 @@ public class Xoshiro256StarStarRandom extends EnhancedRandom {
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		switch (selection) {
-		case 0:
-			stateA = ((value | stateB | stateC | stateD) == 0L) ? 0x9E3779B97F4A7C15L : value;
-			break;
-		case 1:
-			stateB = ((stateA | value | stateC | stateD) == 0L) ? 0x9E3779B97F4A7C15L : value;
-			break;
-		case 2:
-			stateC = ((stateA | stateB | value | stateD) == 0L) ? 0x9E3779B97F4A7C15L : value;
-			break;
-		default:
-			stateD = ((stateA | stateB | stateC | value) == 0L) ? 0x9E3779B97F4A7C15L : value;
-			break;
+			case 0:
+				stateA = ((value | stateB | stateC | stateD) == 0L) ? 0x9E3779B97F4A7C15L : value;
+				break;
+			case 1:
+				stateB = ((stateA | value | stateC | stateD) == 0L) ? 0x9E3779B97F4A7C15L : value;
+				break;
+			case 2:
+				stateC = ((stateA | stateB | value | stateD) == 0L) ? 0x9E3779B97F4A7C15L : value;
+				break;
+			default:
+				stateD = ((stateA | stateB | stateC | value) == 0L) ? 0x9E3779B97F4A7C15L : value;
+				break;
 		}
 	}
 
@@ -194,7 +197,7 @@ public class Xoshiro256StarStarRandom extends EnhancedRandom {
 	 * @param seed the initial seed; may be any long
 	 */
 	@Override
-	public void setSeed (long seed) {
+	public void setSeed(long seed) {
 		long x = (seed + 0x9E3779B97F4A7C15L);
 		x ^= x >>> 27;
 		x *= 0x3C79AC492BA7B653L;
@@ -221,7 +224,7 @@ public class Xoshiro256StarStarRandom extends EnhancedRandom {
 		stateD = x ^ x >>> 27;
 	}
 
-	public long getStateA () {
+	public long getStateA() {
 		return stateA;
 	}
 
@@ -230,11 +233,11 @@ public class Xoshiro256StarStarRandom extends EnhancedRandom {
 	 *
 	 * @param stateA can be any long
 	 */
-	public void setStateA (long stateA) {
+	public void setStateA(long stateA) {
 		this.stateA = stateA;
 	}
 
-	public long getStateB () {
+	public long getStateB() {
 		return stateB;
 	}
 
@@ -244,11 +247,11 @@ public class Xoshiro256StarStarRandom extends EnhancedRandom {
 	 *
 	 * @param stateB can be any long
 	 */
-	public void setStateB (long stateB) {
+	public void setStateB(long stateB) {
 		this.stateB = stateB;
 	}
 
-	public long getStateC () {
+	public long getStateC() {
 		return stateC;
 	}
 
@@ -257,11 +260,11 @@ public class Xoshiro256StarStarRandom extends EnhancedRandom {
 	 *
 	 * @param stateC can be any long
 	 */
-	public void setStateC (long stateC) {
+	public void setStateC(long stateC) {
 		this.stateC = stateC;
 	}
 
-	public long getStateD () {
+	public long getStateD() {
 		return stateD;
 	}
 
@@ -270,7 +273,7 @@ public class Xoshiro256StarStarRandom extends EnhancedRandom {
 	 *
 	 * @param stateD can be any long
 	 */
-	public void setStateD (long stateD) {
+	public void setStateD(long stateD) {
 		this.stateD = stateD;
 	}
 
@@ -285,7 +288,7 @@ public class Xoshiro256StarStarRandom extends EnhancedRandom {
 	 * @param stateD the fourth state; this will be returned as-is if the next call is to {@link #nextLong()}
 	 */
 	@Override
-	public void setState (long stateA, long stateB, long stateC, long stateD) {
+	public void setState(long stateA, long stateB, long stateC, long stateD) {
 		this.stateA = stateA;
 		this.stateB = stateB;
 		this.stateC = stateC;
@@ -295,7 +298,7 @@ public class Xoshiro256StarStarRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		long t = stateB * 5;
 		final long result = (t << 7 | t >>> 57) * 9;
 		t = stateB << 17;
@@ -309,7 +312,7 @@ public class Xoshiro256StarStarRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		long t = stateB * 5;
 		final long result = (t << 7 | t >>> 57) * 9;
 		t = stateB << 17;
@@ -319,11 +322,11 @@ public class Xoshiro256StarStarRandom extends EnhancedRandom {
 		stateA ^= stateD;
 		stateC ^= t;
 		stateD = (stateD << 45 | stateD >>> 19);
-		return (int)(result >>> 64 - bits);
+		return (int) (result >>> 64 - bits);
 	}
 
 	@Override
-	public long previousLong () {
+	public long previousLong() {
 		stateD = (stateD << 19 | stateD >>> 45); // stateD has d ^ b
 		stateA ^= stateD; // StateA has a
 		stateC ^= stateB; // StateC has b ^ b << 17;
@@ -342,18 +345,16 @@ public class Xoshiro256StarStarRandom extends EnhancedRandom {
 	 * Jumps extremely far in the generator's sequence, such that it requires {@code Math.pow(2, 64)} calls to leap() to
 	 * complete a cycle through the generator's entire sequence. This can be used to create over 18 quintillion
 	 * substreams of this generator's sequence, each with a period of {@code Math.pow(2, 192)}.
+	 *
 	 * @return the result of what nextLong() would return if it was called at the state this jumped to
 	 */
-	public long leap()
-	{
+	public long leap() {
 		long s0 = 0L;
 		long s1 = 0L;
 		long s2 = 0L;
 		long s3 = 0L;
-		for (long b = 0x76e15d3efefdcbbfL; b != 0L; b >>>= 1)
-		{
-			if ((1L & b) != 0L)
-			{
+		for (long b = 0x76e15d3efefdcbbfL; b != 0L; b >>>= 1) {
+			if ((1L & b) != 0L) {
 				s0 ^= stateA;
 				s1 ^= stateB;
 				s2 ^= stateC;
@@ -361,10 +362,8 @@ public class Xoshiro256StarStarRandom extends EnhancedRandom {
 			}
 			nextLong();
 		}
-		for (long b = 0xc5004e441c522fb3L; b != 0L; b >>>= 1)
-		{
-			if ((1L & b) != 0L)
-			{
+		for (long b = 0xc5004e441c522fb3L; b != 0L; b >>>= 1) {
+			if ((1L & b) != 0L) {
 				s0 ^= stateA;
 				s1 ^= stateB;
 				s2 ^= stateC;
@@ -372,10 +371,8 @@ public class Xoshiro256StarStarRandom extends EnhancedRandom {
 			}
 			nextLong();
 		}
-		for (long b = 0x77710069854ee241L; b != 0L; b >>>= 1)
-		{
-			if ((1L & b) != 0L)
-			{
+		for (long b = 0x77710069854ee241L; b != 0L; b >>>= 1) {
+			if ((1L & b) != 0L) {
 				s0 ^= stateA;
 				s1 ^= stateB;
 				s2 ^= stateC;
@@ -383,10 +380,8 @@ public class Xoshiro256StarStarRandom extends EnhancedRandom {
 			}
 			nextLong();
 		}
-		for (long b = 0x39109bb02acbe635L; b != 0L; b >>>= 1)
-		{
-			if ((1L & b) != 0L)
-			{
+		for (long b = 0x39109bb02acbe635L; b != 0L; b >>>= 1) {
+			if ((1L & b) != 0L) {
 				s0 ^= stateA;
 				s1 ^= stateB;
 				s2 ^= stateC;
@@ -411,23 +406,23 @@ public class Xoshiro256StarStarRandom extends EnhancedRandom {
 		s1 ^= s2; // StateB has b;
 
 		s1 *= 5;
-		return  (s1 << 7 | s1 >>> 57) * 9;
+		return (s1 << 7 | s1 >>> 57) * 9;
 	}
 
 
 	@Override
-	public Xoshiro256StarStarRandom copy () {
+	public Xoshiro256StarStarRandom copy() {
 		return new Xoshiro256StarStarRandom(stateA, stateB, stateC, stateD);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		Xoshiro256StarStarRandom that = (Xoshiro256StarStarRandom)o;
+		Xoshiro256StarStarRandom that = (Xoshiro256StarStarRandom) o;
 
 		if (stateA != that.stateA)
 			return false;
@@ -438,7 +433,7 @@ public class Xoshiro256StarStarRandom extends EnhancedRandom {
 		return stateD == that.stateD;
 	}
 
-	public String toString () {
+	public String toString() {
 		return "Xoshiro256StarStarRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L, stateD=" + (stateD) + "L}";
 	}
 }

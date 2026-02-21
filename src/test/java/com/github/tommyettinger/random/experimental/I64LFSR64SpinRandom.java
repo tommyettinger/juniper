@@ -89,12 +89,14 @@ public class I64LFSR64SpinRandom extends EnhancedRandom {
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("FFFFFFFFFFFFFFFF0000000000000000", 16);
 
 	/**
 	 * (2 to the 128) minus (2 to the 64).
+	 *
 	 * @return (2 to the 128) minus (2 to the 64)
 	 */
 	@Override
@@ -108,7 +110,7 @@ public class I64LFSR64SpinRandom extends EnhancedRandom {
 	 * @return 2 (two)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 2;
 	}
 
@@ -120,12 +122,12 @@ public class I64LFSR64SpinRandom extends EnhancedRandom {
 	 * @return the value of the selected state
 	 */
 	@Override
-	public long getSelectedState (int selection) {
-        if (selection == 0) {
-            return stateA;
-        }
-        return stateB;
-    }
+	public long getSelectedState(int selection) {
+		if (selection == 0) {
+			return stateA;
+		}
+		return stateB;
+	}
 
 	/**
 	 * Sets one of the states, determined by {@code selection}, to {@code value}, as-is.
@@ -137,12 +139,12 @@ public class I64LFSR64SpinRandom extends EnhancedRandom {
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
-        if (selection == 0) {
-            stateA = (value == 0L) ? 0x9E3779B97F4A7C15L : value;
-        } else {
-            stateB = value;
-        }
+	public void setSelectedState(int selection, long value) {
+		if (selection == 0) {
+			stateA = (value == 0L) ? 0x9E3779B97F4A7C15L : value;
+		} else {
+			stateB = value;
+		}
 	}
 
 	/**
@@ -154,7 +156,7 @@ public class I64LFSR64SpinRandom extends EnhancedRandom {
 	 * @param seed the initial seed; may be any long
 	 */
 	@Override
-	public void setSeed (long seed) {
+	public void setSeed(long seed) {
 		long x = (seed + 0x9E3779B97F4A7C15L);
 		x ^= x >>> 32;
 		x *= 0xBEA225F9EB34556DL;
@@ -166,7 +168,7 @@ public class I64LFSR64SpinRandom extends EnhancedRandom {
 		stateB = x ^ x >>> 29;
 	}
 
-	public long getStateA () {
+	public long getStateA() {
 		return stateA;
 	}
 
@@ -175,11 +177,11 @@ public class I64LFSR64SpinRandom extends EnhancedRandom {
 	 *
 	 * @param stateA can be any long except 0
 	 */
-	public void setStateA (long stateA) {
+	public void setStateA(long stateA) {
 		this.stateA = (stateA == 0L) ? 0x9E3779B97F4A7C15L : stateA;
 	}
 
-	public long getStateB () {
+	public long getStateB() {
 		return stateB;
 	}
 
@@ -188,7 +190,7 @@ public class I64LFSR64SpinRandom extends EnhancedRandom {
 	 *
 	 * @param stateB can be any long
 	 */
-	public void setStateB (long stateB) {
+	public void setStateB(long stateB) {
 		this.stateB = stateB;
 	}
 
@@ -201,23 +203,23 @@ public class I64LFSR64SpinRandom extends EnhancedRandom {
 	 * @param stateB the second state; can be any long
 	 */
 	@Override
-	public void setState (long stateA, long stateB) {
+	public void setState(long stateA, long stateB) {
 		this.stateA = (stateA == 0L) ? 0x9E3779B97F4A7C15L : stateA;
 		this.stateB = stateB;
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		return spin((stateA = (stateA << 1) ^ (stateA >> 63 & 0xfeedbabedeadbeefL)), (stateB += 0xBEA225F9EB34556DL));
 	}
 
 	@Override
-	public int next (int bits) {
-		return (int)(spin((stateA = (stateA << 1) ^ (stateA >> 63 & 0xfeedbabedeadbeefL)), (stateB += 0xBEA225F9EB34556DL)) >>> 64 - bits);
+	public int next(int bits) {
+		return (int) (spin((stateA = (stateA << 1) ^ (stateA >> 63 & 0xfeedbabedeadbeefL)), (stateB += 0xBEA225F9EB34556DL)) >>> 64 - bits);
 	}
 
 	@Override
-	public long previousLong () {
+	public long previousLong() {
 		long result = spin(stateA, stateB);
 		long lsb = (stateA & 1L);
 		stateA ^= (-lsb & 0xfeedbabedeadbeefL);
@@ -230,45 +232,45 @@ public class I64LFSR64SpinRandom extends EnhancedRandom {
 	 * Jumps extremely far in the generator's sequence, such that it requires {@code Math.pow(2, 64)} calls to leap() to
 	 * complete a cycle through the generator's entire sequence. This can be used to create over 18 quintillion
 	 * substreams of this generator's sequence, each with a period of {@code Math.pow(2, 64) - 1L}.
+	 *
 	 * @return the result of what nextLong() would return if it was called at the state this jumped to
 	 */
-	public long leap()
-	{
+	public long leap() {
 		return spin((stateA = (stateA << 1) ^ (stateA >> 63 & 0xfeedbabedeadbeefL)), stateB);
 	}
 
-    public static long spin(long x, long y) {
-        x ^= (x << 11 | x >>> 53) ^ (x << 17 | x >>> 47);
-        y += (x << 34 | x >>> 30);
-        y ^= (y << 21 | y >>> 43) ^ (y << 37 | y >>> 27);
-        x += (y << 29 | y >>> 35);
-        x ^= (x << 11 | x >>> 53) ^ (x << 17 | x >>> 47);
-        y += (x << 34 | x >>> 30);
-        y ^= (y << 21 | y >>> 43) ^ (y << 37 | y >>> 27);
-        x += (y << 29 | y >>> 35);
-        return x ^ y;
-    }
+	public static long spin(long x, long y) {
+		x ^= (x << 11 | x >>> 53) ^ (x << 17 | x >>> 47);
+		y += (x << 34 | x >>> 30);
+		y ^= (y << 21 | y >>> 43) ^ (y << 37 | y >>> 27);
+		x += (y << 29 | y >>> 35);
+		x ^= (x << 11 | x >>> 53) ^ (x << 17 | x >>> 47);
+		y += (x << 34 | x >>> 30);
+		y ^= (y << 21 | y >>> 43) ^ (y << 37 | y >>> 27);
+		x += (y << 29 | y >>> 35);
+		return x ^ y;
+	}
 
 	@Override
-	public I64LFSR64SpinRandom copy () {
+	public I64LFSR64SpinRandom copy() {
 		return new I64LFSR64SpinRandom(stateA, stateB);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		I64LFSR64SpinRandom that = (I64LFSR64SpinRandom)o;
+		I64LFSR64SpinRandom that = (I64LFSR64SpinRandom) o;
 
 		if (stateA != that.stateA)
 			return false;
 		return stateB == that.stateB;
 	}
 
-	public String toString () {
+	public String toString() {
 		return "I64LFSR64MoremurRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L}";
 	}
 

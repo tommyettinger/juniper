@@ -98,12 +98,14 @@ public class Sfc64Random extends EnhancedRandom {
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
 
 	/**
 	 * 2 to the 64.
+	 *
 	 * @return 2 to the 64
 	 */
 	@Override
@@ -117,7 +119,7 @@ public class Sfc64Random extends EnhancedRandom {
 	 * @return 4 (four)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 4;
 	}
 
@@ -129,16 +131,16 @@ public class Sfc64Random extends EnhancedRandom {
 	 * @return the value of the selected state
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		switch (selection) {
-		case 0:
-			return stateA;
-		case 1:
-			return stateB;
-		case 2:
-			return stateC;
-		default:
-			return stateD;
+			case 0:
+				return stateA;
+			case 1:
+				return stateB;
+			case 2:
+				return stateC;
+			default:
+				return stateD;
 		}
 	}
 
@@ -151,20 +153,20 @@ public class Sfc64Random extends EnhancedRandom {
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		switch (selection) {
-		case 0:
-			stateA = value;
-			break;
-		case 1:
-			stateB = value;
-			break;
-		case 2:
-			stateC = value;
-			break;
-		default:
-			stateD = value;
-			break;
+			case 0:
+				stateA = value;
+				break;
+			case 1:
+				stateB = value;
+				break;
+			case 2:
+				stateC = value;
+				break;
+			default:
+				stateD = value;
+				break;
 		}
 	}
 
@@ -177,6 +179,7 @@ public class Sfc64Random extends EnhancedRandom {
 	 * mixed long so that 128 of 256 bits are always set across the four states. Because this uses
 	 * MX3, it uses long multiplication; this and {@link #previousLong()} are the only parts of
 	 * Sfc64Random that do so.
+	 *
 	 * @param seed the initial seed; may be any long
 	 */
 	public void setSeed(long seed) {
@@ -193,7 +196,7 @@ public class Sfc64Random extends EnhancedRandom {
 		stateD = seed ^ ~0xC6BC279692B5C323L;
 	}
 
-	public long getStateA () {
+	public long getStateA() {
 		return stateA;
 	}
 
@@ -202,11 +205,11 @@ public class Sfc64Random extends EnhancedRandom {
 	 *
 	 * @param stateA can be any long
 	 */
-	public void setStateA (long stateA) {
+	public void setStateA(long stateA) {
 		this.stateA = stateA;
 	}
 
-	public long getStateB () {
+	public long getStateB() {
 		return stateB;
 	}
 
@@ -215,11 +218,11 @@ public class Sfc64Random extends EnhancedRandom {
 	 *
 	 * @param stateB can be any long
 	 */
-	public void setStateB (long stateB) {
+	public void setStateB(long stateB) {
 		this.stateB = stateB;
 	}
 
-	public long getStateC () {
+	public long getStateC() {
 		return stateC;
 	}
 
@@ -228,11 +231,11 @@ public class Sfc64Random extends EnhancedRandom {
 	 *
 	 * @param stateC can be any long
 	 */
-	public void setStateC (long stateC) {
+	public void setStateC(long stateC) {
 		this.stateC = stateC;
 	}
 
-	public long getStateD () {
+	public long getStateD() {
 		return stateD;
 	}
 
@@ -241,7 +244,7 @@ public class Sfc64Random extends EnhancedRandom {
 	 *
 	 * @param stateD can be any long
 	 */
-	public void setStateD (long stateD) {
+	public void setStateD(long stateD) {
 		this.stateD = stateD;
 	}
 
@@ -256,7 +259,7 @@ public class Sfc64Random extends EnhancedRandom {
 	 * @param stateD the fourth state; can be any long
 	 */
 	@Override
-	public void setState (long stateA, long stateB, long stateC, long stateD) {
+	public void setState(long stateA, long stateB, long stateC, long stateD) {
 		this.stateA = stateA;
 		this.stateB = stateB;
 		this.stateC = stateC;
@@ -264,7 +267,7 @@ public class Sfc64Random extends EnhancedRandom {
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		final long tmp = stateA + stateB + stateD++;
 		stateA = stateB ^ (stateB >>> 11);
 		stateB = stateC + (stateC << 3);
@@ -282,16 +285,16 @@ public class Sfc64Random extends EnhancedRandom {
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		final long tmp = stateA + stateB + stateD++;
 		stateA = stateB ^ (stateB >>> 11);
 		stateB = stateC + (stateC << 3);
 		stateC = (stateC << 24 | stateC >>> 40) + tmp;
-		return (int)tmp >>> (32 - bits);
+		return (int) tmp >>> (32 - bits);
 	}
 
 	@Override
-	public Sfc64Random copy () {
+	public Sfc64Random copy() {
 		return new Sfc64Random(stateA, stateB, stateC, stateD);
 	}
 
@@ -300,9 +303,10 @@ public class Sfc64Random extends EnhancedRandom {
 	 * {@code Math.pow(2, 48)} calls to {@link #nextLong()}. This can be used to create 65536 substreams of this
 	 * generator's sequence, each with a period of at least {@code Math.pow(2, 48)} but likely much more.
 	 * The results of {@link #nextLong()} and this method, when called from the same state, are likely correlated.
+	 *
 	 * @return the result of what nextLong() would return if it was called at the state this jumped to
 	 */
-	public long leap () {
+	public long leap() {
 		final long tmp = stateA + stateB + (stateD += 0x1000000000000L);
 		stateA = stateB ^ (stateB >>> 11);
 		stateB = stateC + (stateC << 3);
@@ -311,18 +315,18 @@ public class Sfc64Random extends EnhancedRandom {
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		Sfc64Random that = (Sfc64Random)o;
+		Sfc64Random that = (Sfc64Random) o;
 
 		return stateA == that.stateA && stateB == that.stateB && stateC == that.stateC && stateD == that.stateD;
 	}
 
-	public String toString () {
+	public String toString() {
 		return "Sfc64Random{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L, stateD=" + (stateD) + "L}";
 	}
 

@@ -1,9 +1,9 @@
 /*
  * Fast discrete cosine transform algorithms (Java)
- * 
+ *
  * Copyright (c) 2017 Project Nayuki. (MIT License)
  * https://www.nayuki.io/page/fast-discrete-cosine-transform-algorithms
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
  * the Software without restriction, including without limitation the rights to
@@ -52,14 +52,14 @@ public final class DctChoice {
 		transformTable(temp, off, halfLen, vector);
 		transformTable(temp, off + halfLen, halfLen, vector);
 		for (int i = 0; i < halfLen - 1; i++) {
-			vector[off + i * 2    ] = temp[off + i];
+			vector[off + i * 2] = temp[off + i];
 			vector[off + i * 2 + 1] = temp[off + i + halfLen] + temp[off + i + halfLen + 1];
 		}
 		vector[off + len - 2] = temp[off + halfLen - 1];
 		vector[off + len - 1] = temp[off + len - 1];
 	}
 
-	public static void transform2DTable(double[][] vector, double[][] temp){
+	public static void transform2DTable(double[][] vector, double[][] temp) {
 		final int n = vector.length;
 		for (int x = 0; x < n; x++) {
 			transformTable(vector[x], 0, n, temp[x]);
@@ -76,6 +76,7 @@ public final class DctChoice {
 			transformTable(vector[x], 0, n, temp[x]);
 		}
 	}
+
 	public static void transformMath(double[] vector, int off, final int len, double[] temp) {
 		// Algorithm by Byeong Gi Lee, 1984. For details, see:
 		// http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.118.3056&rep=rep1&type=pdf#page=34
@@ -92,14 +93,14 @@ public final class DctChoice {
 		transformMath(temp, off, halfLen, vector);
 		transformMath(temp, off + halfLen, halfLen, vector);
 		for (int i = 0; i < halfLen - 1; i++) {
-			vector[off + i * 2    ] = temp[off + i];
+			vector[off + i * 2] = temp[off + i];
 			vector[off + i * 2 + 1] = temp[off + i + halfLen] + temp[off + i + halfLen + 1];
 		}
 		vector[off + len - 2] = temp[off + halfLen - 1];
 		vector[off + len - 1] = temp[off + len - 1];
 	}
 
-	public static void transform2DMath(double[][] vector, double[][] temp){
+	public static void transform2DMath(double[][] vector, double[][] temp) {
 		final int n = vector.length;
 		for (int x = 0; x < n; x++) {
 			transformMath(vector[x], 0, n, temp[x]);
@@ -116,6 +117,7 @@ public final class DctChoice {
 			transformMath(vector[x], 0, n, temp[x]);
 		}
 	}
+
 	public static void transformSmooth(double[] vector, int off, final int len, double[] temp) {
 		// Algorithm by Byeong Gi Lee, 1984. For details, see:
 		// http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.118.3056&rep=rep1&type=pdf#page=34
@@ -132,14 +134,14 @@ public final class DctChoice {
 		transformSmooth(temp, off, halfLen, vector);
 		transformSmooth(temp, off + halfLen, halfLen, vector);
 		for (int i = 0; i < halfLen - 1; i++) {
-			vector[off + i * 2    ] = temp[off + i];
+			vector[off + i * 2] = temp[off + i];
 			vector[off + i * 2 + 1] = temp[off + i + halfLen] + temp[off + i + halfLen + 1];
 		}
 		vector[off + len - 2] = temp[off + halfLen - 1];
 		vector[off + len - 1] = temp[off + len - 1];
 	}
 
-	public static void transform2DSmooth(double[][] vector, double[][] temp){
+	public static void transform2DSmooth(double[][] vector, double[][] temp) {
 		final int n = vector.length;
 		for (int x = 0; x < n; x++) {
 			transformSmooth(vector[x], 0, n, temp[x]);
@@ -156,6 +158,7 @@ public final class DctChoice {
 			transformSmooth(vector[x], 0, n, temp[x]);
 		}
 	}
+
 	public static void transformSmoother(double[] vector, int off, final int len, double[] temp) {
 		// Algorithm by Byeong Gi Lee, 1984. For details, see:
 		// http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.118.3056&rep=rep1&type=pdf#page=34
@@ -172,14 +175,14 @@ public final class DctChoice {
 		transformSmoother(temp, off, halfLen, vector);
 		transformSmoother(temp, off + halfLen, halfLen, vector);
 		for (int i = 0; i < halfLen - 1; i++) {
-			vector[off + i * 2    ] = temp[off + i];
+			vector[off + i * 2] = temp[off + i];
 			vector[off + i * 2 + 1] = temp[off + i + halfLen] + temp[off + i + halfLen + 1];
 		}
 		vector[off + len - 2] = temp[off + halfLen - 1];
 		vector[off + len - 1] = temp[off + len - 1];
 	}
 
-	public static void transform2DSmoother(double[][] vector, double[][] temp){
+	public static void transform2DSmoother(double[][] vector, double[][] temp) {
 		final int n = vector.length;
 		for (int x = 0; x < n; x++) {
 			transformSmoother(vector[x], 0, n, temp[x]);

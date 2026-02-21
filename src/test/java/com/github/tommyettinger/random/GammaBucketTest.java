@@ -1,8 +1,8 @@
 package com.github.tommyettinger.random;
 
 public class GammaBucketTest {
-    /**
-     * {@code gamma * 0x9E3779B97F4A7C16L + 1L}:
+	/**
+	 * {@code gamma * 0x9E3779B97F4A7C16L + 1L}:
 	 * <pre>
 	 * SCORE  0:            0 (0x0000000000000000L) gammas
 	 * SCORE  1:     54187802 (0x00000000033AD71AL) gammas
@@ -38,15 +38,15 @@ public class GammaBucketTest {
 	 * SCORE 31:            1 (0x0000000000000001L) gammas
 	 * SCORE 32:            0 (0x0000000000000000L) gammas
 	 * </pre>
-     */
-    public static void main(String[] args) {
-        int[] buckets = new int[33];
-        for (long gamma = 0L; gamma < 0x100000000L; gamma++) {
-            int score = EnhancedRandom.rateGamma(gamma * 0x9E3779B97F4A7C16L + 1L);
+	 */
+	public static void main(String[] args) {
+		int[] buckets = new int[33];
+		for (long gamma = 0L; gamma < 0x100000000L; gamma++) {
+			int score = EnhancedRandom.rateGamma(gamma * 0x9E3779B97F4A7C16L + 1L);
 			buckets[score]++;
-        }
+		}
 		for (int i = 0; i < buckets.length; i++) {
 			System.out.printf("SCORE %2d: %12d (0x%016XL) gammas\n", i, buckets[i], buckets[i]);
 		}
-    }
+	}
 }

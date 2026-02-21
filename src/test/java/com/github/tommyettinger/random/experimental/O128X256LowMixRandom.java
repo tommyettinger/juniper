@@ -113,12 +113,14 @@ public class O128X256LowMixRandom extends EnhancedRandom {
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000000000000000000000000000", 16);
 
 	/**
 	 * (2 to the 384) minus (2 to the 128).
+	 *
 	 * @return (2 to the 384) minus (2 to the 128)
 	 */
 	@Override
@@ -132,7 +134,7 @@ public class O128X256LowMixRandom extends EnhancedRandom {
 	 * @return 6 (six)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 6;
 	}
 
@@ -144,20 +146,20 @@ public class O128X256LowMixRandom extends EnhancedRandom {
 	 * @return the value of the selected state
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		switch (selection) {
-		case 0:
-			return stateA;
-		case 1:
-			return stateB;
-		case 2:
-			return stateC;
-		case 3:
-			return stateD;
-		case 4:
-			return stateE;
-		default:
-			return stateF;
+			case 0:
+				return stateA;
+			case 1:
+				return stateB;
+			case 2:
+				return stateC;
+			case 3:
+				return stateD;
+			case 4:
+				return stateE;
+			default:
+				return stateF;
 		}
 	}
 
@@ -171,25 +173,25 @@ public class O128X256LowMixRandom extends EnhancedRandom {
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		switch (selection) {
-            case 0:
-                stateA = ((value | stateB | stateC | stateD) == 0L) ? 0x9E3779B97F4A7C15L : value;
-                break;
-            case 1:
-                stateB = ((stateA | value | stateC | stateD) == 0L) ? 0x9E3779B97F4A7C15L : value;
-                break;
-            case 2:
-                stateC = ((stateA | stateB | value | stateD) == 0L) ? 0x9E3779B97F4A7C15L : value;
-                break;
-            case 3:
-                stateD = ((stateA | stateB | stateC | value) == 0L) ? 0x9E3779B97F4A7C15L : value;
-                break;
+			case 0:
+				stateA = ((value | stateB | stateC | stateD) == 0L) ? 0x9E3779B97F4A7C15L : value;
+				break;
+			case 1:
+				stateB = ((stateA | value | stateC | stateD) == 0L) ? 0x9E3779B97F4A7C15L : value;
+				break;
+			case 2:
+				stateC = ((stateA | stateB | value | stateD) == 0L) ? 0x9E3779B97F4A7C15L : value;
+				break;
+			case 3:
+				stateD = ((stateA | stateB | stateC | value) == 0L) ? 0x9E3779B97F4A7C15L : value;
+				break;
 			case 4:
-                stateE = value;
+				stateE = value;
 				break;
 			default:
-                stateF = value;
+				stateF = value;
 		}
 	}
 
@@ -202,7 +204,7 @@ public class O128X256LowMixRandom extends EnhancedRandom {
 	 * @param seed the initial seed; may be any long
 	 */
 	@Override
-	public void setSeed (long seed) {
+	public void setSeed(long seed) {
 		long x = (seed + 0x9E3779B97F4A7C15L);
 		x ^= x >>> 27;
 		x *= 0x3C79AC492BA7B653L;
@@ -231,7 +233,7 @@ public class O128X256LowMixRandom extends EnhancedRandom {
 		stateF = seed ^ x - 0x9E3779B97F4A7C15L;
 	}
 
-	public long getStateA () {
+	public long getStateA() {
 		return stateA;
 	}
 
@@ -240,11 +242,11 @@ public class O128X256LowMixRandom extends EnhancedRandom {
 	 *
 	 * @param stateA can be any long
 	 */
-	public void setStateA (long stateA) {
+	public void setStateA(long stateA) {
 		this.stateA = stateA;
 	}
 
-	public long getStateB () {
+	public long getStateB() {
 		return stateB;
 	}
 
@@ -253,11 +255,11 @@ public class O128X256LowMixRandom extends EnhancedRandom {
 	 *
 	 * @param stateB can be any long
 	 */
-	public void setStateB (long stateB) {
+	public void setStateB(long stateB) {
 		this.stateB = stateB;
 	}
 
-	public long getStateC () {
+	public long getStateC() {
 		return stateC;
 	}
 
@@ -266,11 +268,11 @@ public class O128X256LowMixRandom extends EnhancedRandom {
 	 *
 	 * @param stateC can be any long
 	 */
-	public void setStateC (long stateC) {
+	public void setStateC(long stateC) {
 		this.stateC = stateC;
 	}
 
-	public long getStateD () {
+	public long getStateD() {
 		return stateD;
 	}
 
@@ -279,11 +281,11 @@ public class O128X256LowMixRandom extends EnhancedRandom {
 	 *
 	 * @param stateD can be any long
 	 */
-	public void setStateD (long stateD) {
+	public void setStateD(long stateD) {
 		this.stateD = stateD;
 	}
 
-	public long getStateE () {
+	public long getStateE() {
 		return stateE;
 	}
 
@@ -292,11 +294,11 @@ public class O128X256LowMixRandom extends EnhancedRandom {
 	 *
 	 * @param stateE can be any long
 	 */
-	public void setStateE (long stateE) {
+	public void setStateE(long stateE) {
 		this.stateE = stateE;
 	}
 
-	public long getStateF () {
+	public long getStateF() {
 		return stateF;
 	}
 
@@ -305,7 +307,7 @@ public class O128X256LowMixRandom extends EnhancedRandom {
 	 *
 	 * @param stateF can be any long
 	 */
-	public void setStateF (long stateF) {
+	public void setStateF(long stateF) {
 		this.stateF = stateF;
 	}
 
@@ -323,7 +325,7 @@ public class O128X256LowMixRandom extends EnhancedRandom {
 	 * @param stateF the sixth state; can be any long
 	 */
 	@Override
-	public void setState (long stateA, long stateB, long stateC, long stateD, long stateE, long stateF) {
+	public void setState(long stateA, long stateB, long stateC, long stateD, long stateE, long stateF) {
 		this.stateA = stateA;
 		this.stateB = stateB;
 		this.stateC = stateC;
@@ -335,7 +337,7 @@ public class O128X256LowMixRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		long res = (stateE << 41 | stateE >>> 23) + (stateA << 17 | stateA >>> 47) + stateF;
 		stateE += 0xD1B54A32D192ED03L;
 		stateF += 0x8CB92BA72F3D8DD7L + BitConversion.countLeadingZeros(stateE);
@@ -350,7 +352,7 @@ public class O128X256LowMixRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		long res = (stateE << 41 | stateE >>> 23) + (stateA << 17 | stateA >>> 47) + stateF;
 		stateE += 0xD1B54A32D192ED03L;
 		stateF += 0x8CB92BA72F3D8DD7L + BitConversion.countLeadingZeros(stateE);
@@ -361,11 +363,11 @@ public class O128X256LowMixRandom extends EnhancedRandom {
 		stateA ^= stateD;
 		stateC ^= t;
 		stateD = (stateD << 45 | stateD >>> 19);
-		return (int)(res >>> 64 - bits);
+		return (int) (res >>> 64 - bits);
 	}
 
 	@Override
-	public long previousLong () {
+	public long previousLong() {
 		stateD = (stateD << 19 | stateD >>> 45); // stateD has d ^ b
 		stateA ^= stateD; // StateA has a
 		stateC ^= stateB; // StateC has b ^ b << 17;
@@ -384,18 +386,16 @@ public class O128X256LowMixRandom extends EnhancedRandom {
 	 * Jumps extremely far in the generator's sequence, such that it requires {@code Math.pow(2, 64)} calls to leap() to
 	 * complete a cycle through the generator's entire sequence. This can be used to create over 18 quintillion
 	 * substreams of this generator's sequence, each with a period of {@code Math.pow(2, 192)}.
+	 *
 	 * @return the result of what nextLong() would return if it was called at the state this jumped to
 	 */
-	public long leap()
-	{
+	public long leap() {
 		long s0 = 0L;
 		long s1 = 0L;
 		long s2 = 0L;
 		long s3 = 0L;
-		for (long b = 0x76e15d3efefdcbbfL; b != 0L; b >>>= 1)
-		{
-			if ((1L & b) != 0L)
-			{
+		for (long b = 0x76e15d3efefdcbbfL; b != 0L; b >>>= 1) {
+			if ((1L & b) != 0L) {
 				s0 ^= stateA;
 				s1 ^= stateB;
 				s2 ^= stateC;
@@ -403,10 +403,8 @@ public class O128X256LowMixRandom extends EnhancedRandom {
 			}
 			nextLong();
 		}
-		for (long b = 0xc5004e441c522fb3L; b != 0L; b >>>= 1)
-		{
-			if ((1L & b) != 0L)
-			{
+		for (long b = 0xc5004e441c522fb3L; b != 0L; b >>>= 1) {
+			if ((1L & b) != 0L) {
 				s0 ^= stateA;
 				s1 ^= stateB;
 				s2 ^= stateC;
@@ -414,10 +412,8 @@ public class O128X256LowMixRandom extends EnhancedRandom {
 			}
 			nextLong();
 		}
-		for (long b = 0x77710069854ee241L; b != 0L; b >>>= 1)
-		{
-			if ((1L & b) != 0L)
-			{
+		for (long b = 0x77710069854ee241L; b != 0L; b >>>= 1) {
+			if ((1L & b) != 0L) {
 				s0 ^= stateA;
 				s1 ^= stateB;
 				s2 ^= stateC;
@@ -425,10 +421,8 @@ public class O128X256LowMixRandom extends EnhancedRandom {
 			}
 			nextLong();
 		}
-		for (long b = 0x39109bb02acbe635L; b != 0L; b >>>= 1)
-		{
-			if ((1L & b) != 0L)
-			{
+		for (long b = 0x39109bb02acbe635L; b != 0L; b >>>= 1) {
+			if ((1L & b) != 0L) {
 				s0 ^= stateA;
 				s1 ^= stateB;
 				s2 ^= stateC;
@@ -448,18 +442,18 @@ public class O128X256LowMixRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public O128X256LowMixRandom copy () {
+	public O128X256LowMixRandom copy() {
 		return new O128X256LowMixRandom(stateA, stateB, stateC, stateD, stateE, stateF);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		O128X256LowMixRandom that = (O128X256LowMixRandom)o;
+		O128X256LowMixRandom that = (O128X256LowMixRandom) o;
 
 		if (stateA != that.stateA)
 			return false;
@@ -474,7 +468,7 @@ public class O128X256LowMixRandom extends EnhancedRandom {
 		return stateF == that.stateF;
 	}
 
-	public String toString () {
+	public String toString() {
 		return "O128X256LowMixRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L, stateD=" + (stateD) + "L, stateE=" + (stateE) + "L, stateF=" + (stateF) + "L}";
 	}
 }

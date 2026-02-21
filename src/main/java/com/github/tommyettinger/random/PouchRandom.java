@@ -61,12 +61,14 @@ public class PouchRandom extends EnhancedRandom {
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("8000000000000000", 16);
 
 	/**
 	 * 2 to the 63.
+	 *
 	 * @return 2 to the 63
 	 */
 	@Override
@@ -99,7 +101,7 @@ public class PouchRandom extends EnhancedRandom {
 		stateB = EnhancedRandom.seedFromMath();
 		stateC = EnhancedRandom.seedFromMath();
 		stateD = EnhancedRandom.seedFromMath() | 1L;
-		if((stateA|stateB|stateC)==0L) stateA = 1L;
+		if ((stateA | stateB | stateC) == 0L) stateA = 1L;
 	}
 
 	/**
@@ -128,7 +130,7 @@ public class PouchRandom extends EnhancedRandom {
 		this.stateB = stateB;
 		this.stateC = stateC;
 		this.stateD = stateD | 1L;
-		if((stateA|stateB|stateC)==0L) this.stateA = 1L;
+		if ((stateA | stateB | stateC) == 0L) this.stateA = 1L;
 
 	}
 
@@ -138,7 +140,7 @@ public class PouchRandom extends EnhancedRandom {
 	 * @return 4 (four)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 4;
 	}
 
@@ -150,16 +152,16 @@ public class PouchRandom extends EnhancedRandom {
 	 * @return the value of the selected state
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		switch (selection) {
-		case 0:
-			return stateA;
-		case 1:
-			return stateB;
-		case 2:
-			return stateC;
-		default:
-			return stateD;
+			case 0:
+				return stateA;
+			case 1:
+				return stateB;
+			case 2:
+				return stateC;
+			default:
+				return stateD;
 		}
 	}
 
@@ -173,23 +175,23 @@ public class PouchRandom extends EnhancedRandom {
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		switch (selection) {
-		case 0:
-			stateA = value;
-			if((stateA|stateB|stateC)==0L) this.stateA = 1L;
-			break;
-		case 1:
-			stateB = value;
-			if((stateA|stateB|stateC)==0L) this.stateB = 1L;
-			break;
-		case 2:
-			stateC = value;
-			if((stateA|stateB|stateC)==0L) this.stateC = 1L;
-			break;
-		case 3:
-			stateD = value | 1L;
-			break;
+			case 0:
+				stateA = value;
+				if ((stateA | stateB | stateC) == 0L) this.stateA = 1L;
+				break;
+			case 1:
+				stateB = value;
+				if ((stateA | stateB | stateC) == 0L) this.stateB = 1L;
+				break;
+			case 2:
+				stateC = value;
+				if ((stateA | stateB | stateC) == 0L) this.stateC = 1L;
+				break;
+			case 3:
+				stateD = value | 1L;
+				break;
 		}
 	}
 
@@ -200,7 +202,7 @@ public class PouchRandom extends EnhancedRandom {
 	 * @param seed the initial seed; may be any long
 	 */
 	@Override
-	public void setSeed (long seed) {
+	public void setSeed(long seed) {
 		seed ^= seed >>> 32;
 		stateA = seed ^ 0xC6BC279692B5C323L;
 		seed *= 0xBEA225F9EB34556DL;
@@ -212,11 +214,11 @@ public class PouchRandom extends EnhancedRandom {
 		seed *= 0xBEA225F9EB34556DL;
 		seed ^= seed >>> 29;
 		stateD = (seed ^ ~0xC6BC279692B5C323L) | 1L;
-		if((stateA|stateB|stateC)==0L) this.stateA = 1L;
+		if ((stateA | stateB | stateC) == 0L) this.stateA = 1L;
 
 	}
 
-	public long getStateA () {
+	public long getStateA() {
 		return stateA;
 	}
 
@@ -226,12 +228,12 @@ public class PouchRandom extends EnhancedRandom {
 	 *
 	 * @param stateA can be any long
 	 */
-	public void setStateA (long stateA) {
+	public void setStateA(long stateA) {
 		this.stateA = stateA;
-		if((stateA|stateB|stateC)==0L) this.stateA = 1L;
+		if ((stateA | stateB | stateC) == 0L) this.stateA = 1L;
 	}
 
-	public long getStateB () {
+	public long getStateB() {
 		return stateB;
 	}
 
@@ -241,12 +243,12 @@ public class PouchRandom extends EnhancedRandom {
 	 *
 	 * @param stateB can be any long
 	 */
-	public void setStateB (long stateB) {
+	public void setStateB(long stateB) {
 		this.stateB = stateB;
-		if((stateA|stateB|stateC)==0L) this.stateB = 1L;
+		if ((stateA | stateB | stateC) == 0L) this.stateB = 1L;
 	}
 
-	public long getStateC () {
+	public long getStateC() {
 		return stateC;
 	}
 
@@ -256,12 +258,12 @@ public class PouchRandom extends EnhancedRandom {
 	 *
 	 * @param stateC can be any long
 	 */
-	public void setStateC (long stateC) {
+	public void setStateC(long stateC) {
 		this.stateC = stateC;
-		if((stateA|stateB|stateC)==0L) this.stateC = 1L;
+		if ((stateA | stateB | stateC) == 0L) this.stateC = 1L;
 	}
 
-	public long getStateD () {
+	public long getStateD() {
 		return stateD;
 	}
 
@@ -271,7 +273,7 @@ public class PouchRandom extends EnhancedRandom {
 	 *
 	 * @param stateD can be any long
 	 */
-	public void setStateD (long stateD) {
+	public void setStateD(long stateD) {
 		this.stateD = stateD | 1L;
 	}
 
@@ -286,16 +288,16 @@ public class PouchRandom extends EnhancedRandom {
 	 * @param stateD the fourth state; can be any odd long
 	 */
 	@Override
-	public void setState (long stateA, long stateB, long stateC, long stateD) {
+	public void setState(long stateA, long stateB, long stateC, long stateD) {
 		this.stateA = stateA;
 		this.stateB = stateB;
 		this.stateC = stateC;
 		this.stateD = stateD | 1L;
-		if((stateA|stateB|stateC)==0L) this.stateA = 1L;
+		if ((stateA | stateB | stateC) == 0L) this.stateA = 1L;
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		final long a = stateA;
 		final long b = stateB;
 		final long c = stateC;
@@ -311,9 +313,10 @@ public class PouchRandom extends EnhancedRandom {
 	 * Jumps extremely far in the generator's sequence, such that one call to leap() advances the state as many as
 	 * {@code Math.pow(2, 48)} calls to {@link #nextLong()}. This can be used to create 32768 substreams of this
 	 * generator's sequence, each with a period of at least {@code Math.pow(2, 48)} but likely much more.
+	 *
 	 * @return the result of what nextLong() would return if it was called at the state this jumped to
 	 */
-	public long leap () {
+	public long leap() {
 		final long a = stateA;
 		final long b = stateB;
 		final long c = stateC;
@@ -326,7 +329,7 @@ public class PouchRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public long previousLong () {
+	public long previousLong() {
 		final long a = stateA;
 		final long b = stateB;
 		final long c = stateC;
@@ -346,7 +349,7 @@ public class PouchRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		final long a = stateA;
 		final long b = stateB;
 		final long c = stateC;
@@ -355,27 +358,27 @@ public class PouchRandom extends EnhancedRandom {
 		stateB = (a << 47 | a >>> 17);
 		stateC = b - a;
 		stateD = d + 0xE35E156A2314DCDAL;
-		return (int)c >>> (32 - bits);
+		return (int) c >>> (32 - bits);
 	}
 
 	@Override
-	public PouchRandom copy () {
+	public PouchRandom copy() {
 		return new PouchRandom(stateA, stateB, stateC, stateD);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		PouchRandom that = (PouchRandom)o;
+		PouchRandom that = (PouchRandom) o;
 
 		return stateA == that.stateA && stateB == that.stateB && stateC == that.stateC && stateD == that.stateD;
 	}
 
-	public String toString () {
+	public String toString() {
 		return "PouchRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L, stateD=" + (stateD) + "L}";
 	}
 

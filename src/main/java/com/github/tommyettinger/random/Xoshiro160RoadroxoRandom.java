@@ -92,7 +92,7 @@ public class Xoshiro160RoadroxoRandom extends Enhanced32Random {
 	 * Creates a new Xoshiro160RoadroxoRandom with a random state.
 	 */
 	public Xoshiro160RoadroxoRandom() {
-		this((int)EnhancedRandom.seedFromMath(), (int)EnhancedRandom.seedFromMath(), (int)EnhancedRandom.seedFromMath(), (int)EnhancedRandom.seedFromMath(), (int)EnhancedRandom.seedFromMath());
+		this((int) EnhancedRandom.seedFromMath(), (int) EnhancedRandom.seedFromMath(), (int) EnhancedRandom.seedFromMath(), (int) EnhancedRandom.seedFromMath(), (int) EnhancedRandom.seedFromMath());
 	}
 
 	/**
@@ -122,7 +122,7 @@ public class Xoshiro160RoadroxoRandom extends Enhanced32Random {
 		this.stateA = stateA;
 		this.stateB = stateB;
 		this.stateC = stateC;
-		this.stateD = (stateA|stateB|stateC|stateD) == 0 ? 1 : stateD;
+		this.stateD = (stateA | stateB | stateC | stateD) == 0 ? 1 : stateD;
 		this.stateE = stateE;
 	}
 
@@ -133,6 +133,7 @@ public class Xoshiro160RoadroxoRandom extends Enhanced32Random {
 
 	/**
 	 * This generator is almost as fast at generating {@code long} values as it is {@code int} values.
+	 *
 	 * @return false
 	 */
 	@Override
@@ -142,12 +143,14 @@ public class Xoshiro160RoadroxoRandom extends Enhanced32Random {
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000", 16);
 
 	/**
 	 * (2 to the 160) - (2 to the 64).
+	 *
 	 * @return (2 to the 160) - (2 to the 64)
 	 */
 	@Override
@@ -161,7 +164,7 @@ public class Xoshiro160RoadroxoRandom extends Enhanced32Random {
 	 * @return 5 (five)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 5;
 	}
 
@@ -173,18 +176,18 @@ public class Xoshiro160RoadroxoRandom extends Enhanced32Random {
 	 * @return the value of the selected state, which is an int that will be promoted to long
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		switch (selection) {
-		case 0:
-			return stateA;
-		case 1:
-			return stateB;
-		case 2:
-			return stateC;
-		case 3:
-			return stateD;
-		default:
-			return stateE;
+			case 0:
+				return stateA;
+			case 1:
+				return stateB;
+			case 2:
+				return stateC;
+			case 3:
+				return stateD;
+			default:
+				return stateE;
 		}
 	}
 
@@ -199,7 +202,7 @@ public class Xoshiro160RoadroxoRandom extends Enhanced32Random {
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		switch (selection) {
 			case 0:
 				stateA = (int) value;
@@ -217,7 +220,7 @@ public class Xoshiro160RoadroxoRandom extends Enhanced32Random {
 				stateE = (int) value;
 				break;
 		}
-		if((stateA|stateB|stateC|stateD) == 0) stateD = 1;
+		if ((stateA | stateB | stateC | stateD) == 0) stateD = 1;
 	}
 
 	/**
@@ -228,22 +231,22 @@ public class Xoshiro160RoadroxoRandom extends Enhanced32Random {
 	 * @param seed the initial seed; may be any long
 	 */
 	@Override
-	public void setSeed (long seed) {
+	public void setSeed(long seed) {
 		long x = seed;
 		x ^= x >>> 27;
 		x *= 0x3C79AC492BA7B653L;
 		x ^= x >>> 33;
 		x *= 0x1C69B3F74AC4AE35L;
-		stateA = (int)(x ^= x >>> 27);
-		stateB = (int)(x >>> 32);
+		stateA = (int) (x ^= x >>> 27);
+		stateB = (int) (x >>> 32);
 		x = (seed + 0x9E3779B97F4A7C15L);
 		x ^= x >>> 27;
 		x *= 0x3C79AC492BA7B653L;
 		x ^= x >>> 33;
 		x *= 0x1C69B3F74AC4AE35L;
-		stateC = (int)(x ^= x >>> 27);
-		stateD = (int)(x >>> 32);
-		stateE = (int)(seed ^ seed >>> 32);
+		stateC = (int) (x ^= x >>> 27);
+		stateD = (int) (x >>> 32);
+		stateE = (int) (seed ^ seed >>> 32);
 	}
 
 	/**
@@ -252,9 +255,9 @@ public class Xoshiro160RoadroxoRandom extends Enhanced32Random {
 	 *
 	 * @param seed the initial seed; may be any int
 	 */
-	public void setSeed (int seed) {
+	public void setSeed(int seed) {
 		int a = seed ^ 0xDB4F0B91, b = (seed << 8 | seed >>> 24) ^ 0xBBE05633,
-				c = (seed << 16 | seed >>> 16) ^ 0xA0F2EC75, d = (seed << 24 | seed >>> 8) ^ 0x89E18285;
+			c = (seed << 16 | seed >>> 16) ^ 0xA0F2EC75, d = (seed << 24 | seed >>> 8) ^ 0x89E18285;
 		a = imul(a ^ a >>> 16, 0x21f0aaad);
 		a = imul(a ^ a >>> 15, 0x735a2d97);
 		stateA = a ^ a >>> 15;
@@ -270,7 +273,7 @@ public class Xoshiro160RoadroxoRandom extends Enhanced32Random {
 		stateE = seed ^ seed >>> 16;
 	}
 
-	public int getStateA () {
+	public int getStateA() {
 		return stateA;
 	}
 
@@ -279,12 +282,12 @@ public class Xoshiro160RoadroxoRandom extends Enhanced32Random {
 	 *
 	 * @param stateA can be any int
 	 */
-	public void setStateA (int stateA) {
+	public void setStateA(int stateA) {
 		this.stateA = stateA;
-		if((this.stateA|this.stateB|this.stateC|this.stateD) == 0) this.stateD = 1;
+		if ((this.stateA | this.stateB | this.stateC | this.stateD) == 0) this.stateD = 1;
 	}
 
-	public int getStateB () {
+	public int getStateB() {
 		return stateB;
 	}
 
@@ -293,12 +296,12 @@ public class Xoshiro160RoadroxoRandom extends Enhanced32Random {
 	 *
 	 * @param stateB can be any int
 	 */
-	public void setStateB (int stateB) {
+	public void setStateB(int stateB) {
 		this.stateB = stateB;
-		if((this.stateA|this.stateB|this.stateC|this.stateD) == 0) this.stateD = 1;
+		if ((this.stateA | this.stateB | this.stateC | this.stateD) == 0) this.stateD = 1;
 	}
 
-	public int getStateC () {
+	public int getStateC() {
 		return stateC;
 	}
 
@@ -307,12 +310,12 @@ public class Xoshiro160RoadroxoRandom extends Enhanced32Random {
 	 *
 	 * @param stateC can be any int
 	 */
-	public void setStateC (int stateC) {
+	public void setStateC(int stateC) {
 		this.stateC = stateC;
-		if((this.stateA|this.stateB|this.stateC|this.stateD) == 0) this.stateD = 1;
+		if ((this.stateA | this.stateB | this.stateC | this.stateD) == 0) this.stateD = 1;
 	}
 
-	public int getStateD () {
+	public int getStateD() {
 		return stateD;
 	}
 
@@ -323,11 +326,11 @@ public class Xoshiro160RoadroxoRandom extends Enhanced32Random {
 	 *
 	 * @param stateD can be any int
 	 */
-	public void setStateD (int stateD) {
-		this.stateD = (stateA|stateB|stateC| stateD) == 0 ? 1 : stateD;
+	public void setStateD(int stateD) {
+		this.stateD = (stateA | stateB | stateC | stateD) == 0 ? 1 : stateD;
 	}
 
-	public int getStateE () {
+	public int getStateE() {
 		return stateE;
 	}
 
@@ -336,7 +339,7 @@ public class Xoshiro160RoadroxoRandom extends Enhanced32Random {
 	 *
 	 * @param stateE can be any int
 	 */
-	public void setStateE (int stateE) {
+	public void setStateE(int stateE) {
 		this.stateE = stateE;
 	}
 
@@ -354,12 +357,12 @@ public class Xoshiro160RoadroxoRandom extends Enhanced32Random {
 	 * @param stateE the fifth state; can be any long, but will be cast to an int before use
 	 */
 	@Override
-	public void setState (long stateA, long stateB, long stateC, long stateD, long stateE) {
-		this.stateA = (int)stateA;
-		this.stateB = (int)stateB;
-		this.stateC = (int)stateC;
-		this.stateD = ((int)stateA|(int)stateB|(int)stateC|(int)stateD) == 0 ? 1 : (int)stateD;
-		this.stateE = (int)stateE;
+	public void setState(long stateA, long stateB, long stateC, long stateD, long stateE) {
+		this.stateA = (int) stateA;
+		this.stateB = (int) stateB;
+		this.stateC = (int) stateC;
+		this.stateD = ((int) stateA | (int) stateB | (int) stateC | (int) stateD) == 0 ? 1 : (int) stateD;
+		this.stateE = (int) stateE;
 	}
 
 	/**
@@ -374,16 +377,16 @@ public class Xoshiro160RoadroxoRandom extends Enhanced32Random {
 	 * @param stateD the fourth state; can be any int
 	 * @param stateE the fifth state; can be any int
 	 */
-	public void setState (int stateA, int stateB, int stateC, int stateD, int stateE) {
+	public void setState(int stateA, int stateB, int stateC, int stateD, int stateE) {
 		this.stateA = stateA;
 		this.stateB = stateB;
 		this.stateC = stateC;
-		this.stateD = (stateA|stateB|stateC|stateD) == 0 ? 1 : stateD;
+		this.stateD = (stateA | stateB | stateC | stateD) == 0 ? 1 : stateD;
 		this.stateE = stateE;
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		final int hi = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
 		final int lo = (stateC << 19 | stateC >>> 13) ^ (stateE << 7 | stateE >>> 25) + stateD;
 		int t = stateB << 9;
@@ -398,7 +401,7 @@ public class Xoshiro160RoadroxoRandom extends Enhanced32Random {
 	}
 
 	@Override
-	public long previousLong () {
+	public long previousLong() {
 		stateD = (stateD << 21 | stateD >>> 11); // stateD has d ^ b
 		stateA ^= stateD; // StateA has a
 		stateC ^= stateB; // StateC has b ^ b << 9
@@ -415,7 +418,7 @@ public class Xoshiro160RoadroxoRandom extends Enhanced32Random {
 	}
 
 	@Override
-	public int previousInt () {
+	public int previousInt() {
 		stateD = (stateD << 21 | stateD >>> 11); // stateD has d ^ b
 		stateA ^= stateD; // StateA has a
 		stateC ^= stateB; // StateC has b ^ b << 9
@@ -431,7 +434,7 @@ public class Xoshiro160RoadroxoRandom extends Enhanced32Random {
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		final int result = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
 		final int t = stateB << 9;
 		stateE += 0xC3564E95 ^ stateD;
@@ -445,7 +448,7 @@ public class Xoshiro160RoadroxoRandom extends Enhanced32Random {
 	}
 
 	@Override
-	public int nextInt () {
+	public int nextInt() {
 		final int res = (stateE << 23 | stateE >>> 9) ^ (stateA << 14 | stateA >>> 18) + stateB;
 		final int t = stateB << 9;
 		stateE += 0xC3564E95 ^ stateD;
@@ -523,7 +526,7 @@ public class Xoshiro160RoadroxoRandom extends Enhanced32Random {
 	}
 
 	@Override
-	public Xoshiro160RoadroxoRandom copy () {
+	public Xoshiro160RoadroxoRandom copy() {
 		return new Xoshiro160RoadroxoRandom(stateA, stateB, stateC, stateD, stateE);
 	}
 
@@ -537,14 +540,13 @@ public class Xoshiro160RoadroxoRandom extends Enhanced32Random {
 	 *
 	 * @return the result of what nextLong() would return if it was called at the state this jumped to
 	 */
-	public long leap()
-	{
+	public long leap() {
 		int s0 = 0;
 		int s1 = 0;
 		int s2 = 0;
 		int s3 = 0;
 
-		for(int b = 0; b < 32; b++) {
+		for (int b = 0; b < 32; b++) {
 			if ((0x8764000b & 1 << b) != 0) {
 				s0 ^= stateA;
 				s1 ^= stateB;
@@ -562,7 +564,7 @@ public class Xoshiro160RoadroxoRandom extends Enhanced32Random {
 
 		}
 
-		for(int b = 0; b < 32; b++) {
+		for (int b = 0; b < 32; b++) {
 			if ((0xf542d2d3 & 1 << b) != 0) {
 				s0 ^= stateA;
 				s1 ^= stateB;
@@ -579,7 +581,7 @@ public class Xoshiro160RoadroxoRandom extends Enhanced32Random {
 			stateD = (stateD << 11 | stateD >>> 21);
 		}
 
-		for(int b = 0; b < 32; b++) {
+		for (int b = 0; b < 32; b++) {
 			if ((0x6fa035c3 & 1 << b) != 0) {
 				s0 ^= stateA;
 				s1 ^= stateB;
@@ -596,7 +598,7 @@ public class Xoshiro160RoadroxoRandom extends Enhanced32Random {
 			stateD = (stateD << 11 | stateD >>> 21);
 		}
 
-		for(int b = 0; b < 32; b++) {
+		for (int b = 0; b < 32; b++) {
 			if ((0x77f2db5b & 1 << b) != 0) {
 				s0 ^= stateA;
 				s1 ^= stateB;
@@ -629,23 +631,23 @@ public class Xoshiro160RoadroxoRandom extends Enhanced32Random {
 		s3 ^= s1; // s3 has d
 		int s4 = stateE - (0xC3564E95 ^ s3);
 
-		return (long)((s4 << 23 | s4 >>> 9) ^ (s0 << 14 | s0 >>> 18) + s1) << 32 ^
+		return (long) ((s4 << 23 | s4 >>> 9) ^ (s0 << 14 | s0 >>> 18) + s1) << 32 ^
 			((s2 << 19 | s2 >>> 13) ^ (s4 << 7 | s4 >>> 25) + s3);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		Xoshiro160RoadroxoRandom that = (Xoshiro160RoadroxoRandom)o;
+		Xoshiro160RoadroxoRandom that = (Xoshiro160RoadroxoRandom) o;
 
 		return stateA == that.stateA && stateB == that.stateB && stateC == that.stateC && stateD == that.stateD && stateE == that.stateE;
 	}
 
-	public String toString () {
+	public String toString() {
 		return "Xoshiro160RoadroxoRandom{" + "stateA=" + (stateA) + ", stateB=" + (stateB) + ", stateC=" + (stateC) + ", stateD=" + (stateD) + ", stateE=" + (stateE) + "}";
 	}
 }

@@ -93,7 +93,7 @@ public class CupolaRandom extends EnhancedRandom {
 	 * @return 2 (two)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 2;
 	}
 
@@ -105,7 +105,7 @@ public class CupolaRandom extends EnhancedRandom {
 	 * @return the value of the selected state
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		if ((selection & 1) == 1) {
 			return stateB;
 		}
@@ -120,7 +120,7 @@ public class CupolaRandom extends EnhancedRandom {
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		if ((selection & 1) == 1) {
 			stateB = value;
 		} else {
@@ -137,7 +137,7 @@ public class CupolaRandom extends EnhancedRandom {
 	 * @param seed the initial seed; may be any long
 	 */
 	@Override
-	public void setSeed (long seed) {
+	public void setSeed(long seed) {
 		stateA = seed;
 		stateB = ~seed;
 //		// This is based on MX3, but pulls out values and assigns them to states mid-way, sometimes XORing them.
@@ -153,7 +153,7 @@ public class CupolaRandom extends EnhancedRandom {
 //		stateB = (seed ^ ~0xC6BC279692B5C323L);
 	}
 
-	public long getStateA () {
+	public long getStateA() {
 		return stateA;
 	}
 
@@ -162,11 +162,11 @@ public class CupolaRandom extends EnhancedRandom {
 	 *
 	 * @param stateA can be any long
 	 */
-	public void setStateA (long stateA) {
+	public void setStateA(long stateA) {
 		this.stateA = stateA;
 	}
 
-	public long getStateB () {
+	public long getStateB() {
 		return stateB;
 	}
 
@@ -175,7 +175,7 @@ public class CupolaRandom extends EnhancedRandom {
 	 *
 	 * @param stateB can be any long
 	 */
-	public void setStateB (long stateB) {
+	public void setStateB(long stateB) {
 		this.stateB = stateB;
 	}
 
@@ -188,13 +188,13 @@ public class CupolaRandom extends EnhancedRandom {
 	 * @param stateB the second state; can be any long
 	 */
 	@Override
-	public void setState (long stateA, long stateB) {
+	public void setState(long stateA, long stateB) {
 		this.stateA = stateA;
 		this.stateB = stateB;
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 //		long x = ((stateA << 31 | stateA >>> 33) ^ stateB) * 0xF1357AEA2E62A9C5L;
 		long x = ((stateA << 21 | stateA >>> 43) ^ stateB);
 //		long x = ((stateA << 33 | stateA >>> 31) ^ stateB);
@@ -217,40 +217,41 @@ public class CupolaRandom extends EnhancedRandom {
 //		x ^= x >>> (int)(x >>> 59) + 7 ^ x >>> 47;
 //		return x ^ x << ((int)x & 31) + 6 ^ x << 41;
 		// Passes ICE test, PractRand passes 64TB!
-		x ^= x >>> (int)(x >>> 60) + 14;
+		x ^= x >>> (int) (x >>> 60) + 14;
 		x *= 0xF1357AEA2E62A9C5L;
-		return x ^ x >>> (int)(x >>> 59) + 6 ^ x >>> 44;
+		return x ^ x >>> (int) (x >>> 59) + 6 ^ x >>> 44;
 	}
 
 	@Override
-	public long previousLong () {
+	public long previousLong() {
 		stateA -= 0x369DEA0F31A53F85L;
 		stateB -= 0x9E3779B97F4A7C15L;
 		long x = ((stateA << 21 | stateA >>> 43) ^ stateB);
-		x ^= x >>> (int)(x >>> 60) + 14;
+		x ^= x >>> (int) (x >>> 60) + 14;
 		x *= 0xF1357AEA2E62A9C5L;
-		return x ^ x >>> (int)(x >>> 59) + 6 ^ x >>> 44;
+		return x ^ x >>> (int) (x >>> 59) + 6 ^ x >>> 44;
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		long x = ((stateA << 21 | stateA >>> 43) ^ stateB);
 		stateA += 0x369DEA0F31A53F85L;
 		stateB += 0x9E3779B97F4A7C15L;
-		x ^= x >>> (int)(x >>> 60) + 14;
+		x ^= x >>> (int) (x >>> 60) + 14;
 		x *= 0xF1357AEA2E62A9C5L;
-		return (int)(x ^ x >>> (int)(x >>> 59) + 6 ^ x >>> 44) >>> (32 - bits);
+		return (int) (x ^ x >>> (int) (x >>> 59) + 6 ^ x >>> 44) >>> (32 - bits);
 	}
+
 	@Override
-	public long skip (final long advance) {
+	public long skip(final long advance) {
 		stateA += 0x369DEA0F31A53F85L * (advance - 1L);
 		stateB += 0x9E3779B97F4A7C15L * (advance - 1L);
 		long x = ((stateA << 21 | stateA >>> 43) ^ stateB);
 		stateA += 0x369DEA0F31A53F85L;
 		stateB += 0x9E3779B97F4A7C15L;
-		x ^= x >>> (int)(x >>> 60) + 14;
+		x ^= x >>> (int) (x >>> 60) + 14;
 		x *= 0xF1357AEA2E62A9C5L;
-		return x ^ x >>> (int)(x >>> 59) + 6 ^ x >>> 44;
+		return x ^ x >>> (int) (x >>> 59) + 6 ^ x >>> 44;
 	}
 
 	/**
@@ -291,23 +292,23 @@ public class CupolaRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public CupolaRandom copy () {
+	public CupolaRandom copy() {
 		return new CupolaRandom(stateA, stateB);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		CupolaRandom that = (CupolaRandom)o;
+		CupolaRandom that = (CupolaRandom) o;
 
 		return stateA == that.stateA && stateB == that.stateB;
 	}
 
-	public String toString () {
+	public String toString() {
 		return "CupolaRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L}";
 	}
 
@@ -351,15 +352,15 @@ public class CupolaRandom extends EnhancedRandom {
 		long stream = random.getStream();
 		System.out.println("next on " + stream + " : " + random.nextLong());
 		System.out.println("prev on " + stream + " : " + random.previousLong());
-		random.setStream(stream+1L);
-		System.out.println("next on " + (stream+1L) + " : " + random.nextLong());
-		System.out.println("prev on " + (stream+1L) + " : " + random.previousLong());
+		random.setStream(stream + 1L);
+		System.out.println("next on " + (stream + 1L) + " : " + random.nextLong());
+		System.out.println("prev on " + (stream + 1L) + " : " + random.previousLong());
 		random.setStream(stream);
 		System.out.println("next on " + stream + " : " + random.nextLong());
 		System.out.println("prev on " + stream + " : " + random.previousLong());
 		random.shiftStream(1L);
-		System.out.println("next on " + (stream+1L) + " : " + random.nextLong());
-		System.out.println("prev on " + (stream+1L) + " : " + random.previousLong());
+		System.out.println("next on " + (stream + 1L) + " : " + random.nextLong());
+		System.out.println("prev on " + (stream + 1L) + " : " + random.previousLong());
 	}
 
 }

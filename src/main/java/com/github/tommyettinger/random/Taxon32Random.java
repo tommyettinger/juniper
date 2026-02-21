@@ -53,53 +53,54 @@ import java.math.BigInteger;
  * The name comes from how some of the operations here are difficult to classify.
  */
 public class Taxon32Random extends Enhanced32Random {
-    /**
-     * The first state; can be any int.
-     */
-    protected int stateA;
-    /**
-     * The second state; can be any int.
-     */
-    protected int stateB;
+	/**
+	 * The first state; can be any int.
+	 */
+	protected int stateA;
+	/**
+	 * The second state; can be any int.
+	 */
+	protected int stateB;
 
-    /**
-     * Creates a new Taxon32Random with a random state.
-     */
-    public Taxon32Random() {
-        this((int)((Math.random() - 0.5) * 0x1p32), (int)((Math.random() - 0.5) * 0x1p32));
-    }
+	/**
+	 * Creates a new Taxon32Random with a random state.
+	 */
+	public Taxon32Random() {
+		this((int) ((Math.random() - 0.5) * 0x1p32), (int) ((Math.random() - 0.5) * 0x1p32));
+	}
 
-    /**
-     * Creates a new Taxon32Random with the given seed; all {@code long} values are permitted.
-     * The seed will be passed to {@link #setSeed(long)} to attempt to adequately distribute the seed randomly.
-     *
-     * @param seed any {@code long} value
-     */
-    public Taxon32Random(long seed) {
-        super(seed);
-        setSeed(seed);
-    }
+	/**
+	 * Creates a new Taxon32Random with the given seed; all {@code long} values are permitted.
+	 * The seed will be passed to {@link #setSeed(long)} to attempt to adequately distribute the seed randomly.
+	 *
+	 * @param seed any {@code long} value
+	 */
+	public Taxon32Random(long seed) {
+		super(seed);
+		setSeed(seed);
+	}
 
-    /**
-     * Creates a new Taxon32Random with the given two states; all {@code int} values are permitted.
-     * These states will be used verbatim.
-     *
-     * @param stateA any {@code int} value
-     * @param stateB any {@code int} value
-     */
-    public Taxon32Random(int stateA, int stateB) {
-        super(stateA);
-        this.stateA = stateA;
-        this.stateB = stateB;
-    }
+	/**
+	 * Creates a new Taxon32Random with the given two states; all {@code int} values are permitted.
+	 * These states will be used verbatim.
+	 *
+	 * @param stateA any {@code int} value
+	 * @param stateB any {@code int} value
+	 */
+	public Taxon32Random(int stateA, int stateB) {
+		super(stateA);
+		this.stateA = stateA;
+		this.stateB = stateB;
+	}
 
-    @Override
-    public String getTag() {
-        return "TxnR";
-    }
+	@Override
+	public String getTag() {
+		return "TxnR";
+	}
 
 	/**
 	 * This generator mainly generates int values.
+	 *
 	 * @return true
 	 */
 	@Override
@@ -109,12 +110,14 @@ public class Taxon32Random extends Enhanced32Random {
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
 
 	/**
 	 * 2 to the 64.
+	 *
 	 * @return 2 to the 64
 	 */
 	@Override
@@ -122,62 +125,62 @@ public class Taxon32Random extends Enhanced32Random {
 		return MINIMUM_PERIOD;
 	}
 
-    /**
-     * This generator has 2 {@code int} states, so this returns 2.
-     *
-     * @return 2 (two)
-     */
-    @Override
-    public int getStateCount() {
-        return 2;
-    }
+	/**
+	 * This generator has 2 {@code int} states, so this returns 2.
+	 *
+	 * @return 2 (two)
+	 */
+	@Override
+	public int getStateCount() {
+		return 2;
+	}
 
-    /**
-     * Gets the state determined by {@code selection}, as-is. The value for selection should be
-     * between 0 and 1, inclusive; if it is any other value this gets state B as if 1 was given.
-     *
-     * @param selection used to select which state variable to get; generally 0 or 1
-     * @return the value of the selected state, which is an int that will be promoted to long
-     */
-    @Override
-    public long getSelectedState(int selection) {
-        if (selection == 0) {
-            return stateA;
-        }
-        return stateB;
-    }
+	/**
+	 * Gets the state determined by {@code selection}, as-is. The value for selection should be
+	 * between 0 and 1, inclusive; if it is any other value this gets state B as if 1 was given.
+	 *
+	 * @param selection used to select which state variable to get; generally 0 or 1
+	 * @return the value of the selected state, which is an int that will be promoted to long
+	 */
+	@Override
+	public long getSelectedState(int selection) {
+		if (selection == 0) {
+			return stateA;
+		}
+		return stateB;
+	}
 
-    /**
-     * Sets one of the states, determined by {@code selection}, to the lower 32 bits of {@code value}, as-is.
-     * Selections 0 and 1 refer to states A and B, and if the selection is anything
-     * else, this treats it as 1 and sets stateB. This always casts {@code value} to an int before using it.
-     *
-     * @param selection used to select which state variable to set; generally 0 or 1
-     * @param value     the exact value to use for the selected state, if valid
-     */
-    @Override
-    public void setSelectedState(int selection, long value) {
-        if (selection == 0) {
-            stateA = (int) value;
-        } else {
-            stateB = (int) value;
-        }
-    }
+	/**
+	 * Sets one of the states, determined by {@code selection}, to the lower 32 bits of {@code value}, as-is.
+	 * Selections 0 and 1 refer to states A and B, and if the selection is anything
+	 * else, this treats it as 1 and sets stateB. This always casts {@code value} to an int before using it.
+	 *
+	 * @param selection used to select which state variable to set; generally 0 or 1
+	 * @param value     the exact value to use for the selected state, if valid
+	 */
+	@Override
+	public void setSelectedState(int selection, long value) {
+		if (selection == 0) {
+			stateA = (int) value;
+		} else {
+			stateB = (int) value;
+		}
+	}
 
-    /**
-     * This initializes both states of the generator to random values based on the given seed.
-     * (2 to the 64) possible initial generator states can be produced here, all with a different
-     * first value returned by {@link #nextLong()}.
-     *
-     * @param seed the initial seed; may be any long
-     */
-    @Override
-    public void setSeed(long seed) {
-        stateA = (int) seed;
-        stateB = (int) (seed >>> 32);
-    }
+	/**
+	 * This initializes both states of the generator to random values based on the given seed.
+	 * (2 to the 64) possible initial generator states can be produced here, all with a different
+	 * first value returned by {@link #nextLong()}.
+	 *
+	 * @param seed the initial seed; may be any long
+	 */
+	@Override
+	public void setSeed(long seed) {
+		stateA = (int) seed;
+		stateB = (int) (seed >>> 32);
+	}
 
-	public int getStateA () {
+	public int getStateA() {
 		return stateA;
 	}
 
@@ -186,11 +189,11 @@ public class Taxon32Random extends Enhanced32Random {
 	 *
 	 * @param stateA can be any int
 	 */
-	public void setStateA (int stateA) {
+	public void setStateA(int stateA) {
 		this.stateA = stateA;
 	}
 
-	public int getStateB () {
+	public int getStateB() {
 		return stateB;
 	}
 
@@ -199,7 +202,7 @@ public class Taxon32Random extends Enhanced32Random {
 	 *
 	 * @param stateB can be any int
 	 */
-	public void setStateB (int stateB) {
+	public void setStateB(int stateB) {
 		this.stateB = stateB;
 	}
 
@@ -212,9 +215,9 @@ public class Taxon32Random extends Enhanced32Random {
 	 * @param stateB the second state; can be any int
 	 */
 	@Override
-	public void setState (long stateA, long stateB) {
-		this.stateA = (int)stateA;
-		this.stateB = (int)stateB;
+	public void setState(long stateA, long stateB) {
+		this.stateA = (int) stateA;
+		this.stateB = (int) stateB;
 	}
 
 	/**
@@ -224,84 +227,84 @@ public class Taxon32Random extends Enhanced32Random {
 	 * @param stateA the first state; can be any int
 	 * @param stateB the second state; can be any int
 	 */
-	public void setState (int stateA, int stateB) {
+	public void setState(int stateA, int stateB) {
 		this.stateA = stateA;
 		this.stateB = stateB;
 	}
 
-    @Override
-    public long nextLong() {
-        int x = (stateA = stateA + 0x9E3779BD ^ 0xD1B54A32);
-        int t = x & 0xDB4F0B96 - x;
-        int y = (stateB = stateB + (t << 1 | t >>> 31) ^ 0xAF723597);
-        y += (x << y | x >>> 32 - y);
-        y = (y ^ y >>> 22 ^ y << 5) * 0xB45ED;
-        int hi = y ^ y >>> 21;
-        x = (stateA = stateA + 0x9E3779BD ^ 0xD1B54A32);
-        t = x & 0xDB4F0B96 - x;
-        y = (stateB = stateB + (t << 1 | t >>> 31) ^ 0xAF723597);
-        y += (x << y | x >>> 32 - y);
-        y = (y ^ y >>> 22 ^ y << 5) * 0xB45ED;
-        int lo = y ^ y >>> 21;
-        return (long) hi << 32 ^ lo;
-    }
+	@Override
+	public long nextLong() {
+		int x = (stateA = stateA + 0x9E3779BD ^ 0xD1B54A32);
+		int t = x & 0xDB4F0B96 - x;
+		int y = (stateB = stateB + (t << 1 | t >>> 31) ^ 0xAF723597);
+		y += (x << y | x >>> 32 - y);
+		y = (y ^ y >>> 22 ^ y << 5) * 0xB45ED;
+		int hi = y ^ y >>> 21;
+		x = (stateA = stateA + 0x9E3779BD ^ 0xD1B54A32);
+		t = x & 0xDB4F0B96 - x;
+		y = (stateB = stateB + (t << 1 | t >>> 31) ^ 0xAF723597);
+		y += (x << y | x >>> 32 - y);
+		y = (y ^ y >>> 22 ^ y << 5) * 0xB45ED;
+		int lo = y ^ y >>> 21;
+		return (long) hi << 32 ^ lo;
+	}
 
-    @Override
-    public int next(int bits) {
-        int x = (stateA = stateA + 0x9E3779BD ^ 0xD1B54A32);
-        int t = x & 0xDB4F0B96 - x;
-        int y = (stateB = stateB + (t << 1 | t >>> 31) ^ 0xAF723597);
-        y += (x << y | x >>> 32 - y);
-        y = (y ^ y >>> 22 ^ y << 5) * 0xB45ED;
-        return (y ^ y >>> 21) >>> (32 - bits);
-    }
+	@Override
+	public int next(int bits) {
+		int x = (stateA = stateA + 0x9E3779BD ^ 0xD1B54A32);
+		int t = x & 0xDB4F0B96 - x;
+		int y = (stateB = stateB + (t << 1 | t >>> 31) ^ 0xAF723597);
+		y += (x << y | x >>> 32 - y);
+		y = (y ^ y >>> 22 ^ y << 5) * 0xB45ED;
+		return (y ^ y >>> 21) >>> (32 - bits);
+	}
 
-    @Override
-    public int nextInt() {
-        int x = (stateA = stateA + 0x9E3779BD ^ 0xD1B54A32);
-        int t = x & 0xDB4F0B96 - x;
-        int y = (stateB = stateB + (t << 1 | t >>> 31) ^ 0xAF723597);
-        y += (x << y | x >>> 32 - y);
-        y = (y ^ y >>> 22 ^ y << 5) * 0xB45ED;
-        return y ^ y >>> 21;
-    }
+	@Override
+	public int nextInt() {
+		int x = (stateA = stateA + 0x9E3779BD ^ 0xD1B54A32);
+		int t = x & 0xDB4F0B96 - x;
+		int y = (stateB = stateB + (t << 1 | t >>> 31) ^ 0xAF723597);
+		y += (x << y | x >>> 32 - y);
+		y = (y ^ y >>> 22 ^ y << 5) * 0xB45ED;
+		return y ^ y >>> 21;
+	}
 
-    @Override
-    public long previousLong() {
-        return previousInt() ^ (long) previousInt() << 32;
-    }
+	@Override
+	public long previousLong() {
+		return previousInt() ^ (long) previousInt() << 32;
+	}
 
-    @SuppressWarnings("PointlessBitwiseExpression")
-    @Override
-    public int previousInt() {
-        int y = stateB;
-        final int x = stateA;
-        int t = x & 0xDB4F0B96 - x;
-        stateB = (y ^ 0xAF723597) - (t << 1 | t >>> 31) | 0; // no-op OR with 0 ensures this stays in-range in JS.
-        stateA = (x ^ 0xD1B54A32) - 0x9E3779BD | 0;
-        y += (x << y | x >>> 32 - y);
-        y = (y ^ y >>> 22 ^ y << 5) * 0xB45ED;
-        return y ^ y >>> 21;
-    }
+	@SuppressWarnings("PointlessBitwiseExpression")
+	@Override
+	public int previousInt() {
+		int y = stateB;
+		final int x = stateA;
+		int t = x & 0xDB4F0B96 - x;
+		stateB = (y ^ 0xAF723597) - (t << 1 | t >>> 31) | 0; // no-op OR with 0 ensures this stays in-range in JS.
+		stateA = (x ^ 0xD1B54A32) - 0x9E3779BD | 0;
+		y += (x << y | x >>> 32 - y);
+		y = (y ^ y >>> 22 ^ y << 5) * 0xB45ED;
+		return y ^ y >>> 21;
+	}
 
-    @Override
-    public Taxon32Random copy() {
-        return new Taxon32Random(stateA, stateB);
-    }
+	@Override
+	public Taxon32Random copy() {
+		return new Taxon32Random(stateA, stateB);
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
 
-        Taxon32Random that = (Taxon32Random) o;
+		Taxon32Random that = (Taxon32Random) o;
 
-        return stateA == that.stateA && stateB == that.stateB;
-    }
+		return stateA == that.stateA && stateB == that.stateB;
+	}
 
-    public String toString() {
-        return "Taxon32Random{" + "stateA=" + (stateA) + ", stateB=" + (stateB) + "}";
-    }
+	public String toString() {
+		return "Taxon32Random{" + "stateA=" + (stateA) + ", stateB=" + (stateB) + "}";
+	}
 }

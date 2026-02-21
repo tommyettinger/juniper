@@ -58,12 +58,14 @@ public class QomStage1Random extends EnhancedRandom {
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
 
 	/**
 	 * 2 to the 64.
+	 *
 	 * @return 2 to the 64
 	 */
 	@Override
@@ -77,7 +79,7 @@ public class QomStage1Random extends EnhancedRandom {
 	 * @return 1 (one)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 1;
 	}
 
@@ -88,7 +90,7 @@ public class QomStage1Random extends EnhancedRandom {
 	 * @return the only state's exact value
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		return state;
 	}
 
@@ -100,7 +102,7 @@ public class QomStage1Random extends EnhancedRandom {
 	 * @param value     the exact value to use for the state; all longs are valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		state = value;
 	}
 
@@ -112,7 +114,7 @@ public class QomStage1Random extends EnhancedRandom {
 	 * @param seed the exact value to use for the state; all longs are valid
 	 */
 	@Override
-	public void setSeed (long seed) {
+	public void setSeed(long seed) {
 		state = seed;
 	}
 
@@ -122,7 +124,7 @@ public class QomStage1Random extends EnhancedRandom {
 	 *
 	 * @return the current state, as a long
 	 */
-	public long getState () {
+	public long getState() {
 		return state;
 	}
 
@@ -133,12 +135,12 @@ public class QomStage1Random extends EnhancedRandom {
 	 * @param state the long value to use for the state variable
 	 */
 	@Override
-	public void setState (long state) {
+	public void setState(long state) {
 		this.state = state;
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		long x = (state -= state * state | 1111111111111111111L); /* nineteen 1 digits, as decimal */
 		x = (x ^ x >>> 28) * 5555555555555555555L;
 		return x ^ (x << 25 | x >>> -25) ^ (x << 50 | x >>> -50);
@@ -147,7 +149,7 @@ public class QomStage1Random extends EnhancedRandom {
 	private static final MathTools.LongToLongFunction inverseQom = MathTools.invertUpwardFunction(x -> x - (x * x | 1111111111111111111L));
 
 	@Override
-	public long previousLong () {
+	public long previousLong() {
 		long x = state;
 		state = inverseQom.applyAsLong(state);
 		x = (x ^ x >>> 28) * 5555555555555555555L;
@@ -155,31 +157,31 @@ public class QomStage1Random extends EnhancedRandom {
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		long x = (state -= state * state | 1111111111111111111L);  /* nineteen 1 digits, as decimal */
 		x = (x ^ x >>> 28) * 5555555555555555555L;
-		return (int)(x ^ (x << 25 | x >>> -25) ^ (x << 50 | x >>> -50)) >>> (32 - bits);
+		return (int) (x ^ (x << 25 | x >>> -25) ^ (x << 50 | x >>> -50)) >>> (32 - bits);
 	}
 
 	@Override
-	public QomStage1Random copy () {
+	public QomStage1Random copy() {
 		return new QomStage1Random(state);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		QomStage1Random that = (QomStage1Random)o;
+		QomStage1Random that = (QomStage1Random) o;
 
 		return state == that.state;
 	}
 
 	@Override
-	public String toString () {
+	public String toString() {
 		return "QomStage1Random{state=" + (state) + "L}";
 	}
 
@@ -213,19 +215,31 @@ public class QomStage1Random extends EnhancedRandom {
 		}
 		random = new QomStage1Random(1L);
 		{
-			long n0 = random.nextLong(); System.out.printf("state: 0x%016XL\n", random.state);
-			long n1 = random.nextLong(); System.out.printf("state: 0x%016XL\n", random.state);
-			long n2 = random.nextLong(); System.out.printf("state: 0x%016XL\n", random.state);
-			long n3 = random.nextLong(); System.out.printf("state: 0x%016XL\n", random.state);
-			long n4 = random.nextLong(); System.out.printf("state: 0x%016XL\n", random.state);
-			long n5 = random.nextLong(); System.out.printf("state: 0x%016XL\n", random.state);
+			long n0 = random.nextLong();
+			System.out.printf("state: 0x%016XL\n", random.state);
+			long n1 = random.nextLong();
+			System.out.printf("state: 0x%016XL\n", random.state);
+			long n2 = random.nextLong();
+			System.out.printf("state: 0x%016XL\n", random.state);
+			long n3 = random.nextLong();
+			System.out.printf("state: 0x%016XL\n", random.state);
+			long n4 = random.nextLong();
+			System.out.printf("state: 0x%016XL\n", random.state);
+			long n5 = random.nextLong();
+			System.out.printf("state: 0x%016XL\n", random.state);
 			System.out.println("Going back...");
-			long p5 = random.previousLong(); System.out.printf("state: 0x%016XL\n", random.state);
-			long p4 = random.previousLong(); System.out.printf("state: 0x%016XL\n", random.state);
-			long p3 = random.previousLong(); System.out.printf("state: 0x%016XL\n", random.state);
-			long p2 = random.previousLong(); System.out.printf("state: 0x%016XL\n", random.state);
-			long p1 = random.previousLong(); System.out.printf("state: 0x%016XL\n", random.state);
-			long p0 = random.previousLong(); System.out.printf("state: 0x%016XL\n", random.state);
+			long p5 = random.previousLong();
+			System.out.printf("state: 0x%016XL\n", random.state);
+			long p4 = random.previousLong();
+			System.out.printf("state: 0x%016XL\n", random.state);
+			long p3 = random.previousLong();
+			System.out.printf("state: 0x%016XL\n", random.state);
+			long p2 = random.previousLong();
+			System.out.printf("state: 0x%016XL\n", random.state);
+			long p1 = random.previousLong();
+			System.out.printf("state: 0x%016XL\n", random.state);
+			long p0 = random.previousLong();
+			System.out.printf("state: 0x%016XL\n", random.state);
 			System.out.println(n0 == p0);
 			System.out.println(n1 == p1);
 			System.out.println(n2 == p2);

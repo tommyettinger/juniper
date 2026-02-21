@@ -92,12 +92,14 @@ public class PcgRXSMXSRandom extends EnhancedRandom {
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
 
 	/**
 	 * 2 to the 64.
+	 *
 	 * @return 2 to the 64
 	 */
 	@Override
@@ -111,7 +113,7 @@ public class PcgRXSMXSRandom extends EnhancedRandom {
 	 * @return 2 (two)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 2;
 	}
 
@@ -123,7 +125,7 @@ public class PcgRXSMXSRandom extends EnhancedRandom {
 	 * @return the value of the selected state
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		if ((selection & 1) == 1) {
 			return stateB;
 		}
@@ -138,7 +140,7 @@ public class PcgRXSMXSRandom extends EnhancedRandom {
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		if ((selection & 1) == 1) {
 			stateB = value | 1L;
 		} else {
@@ -153,7 +155,7 @@ public class PcgRXSMXSRandom extends EnhancedRandom {
 	 * @param seed the initial seed; may be any long
 	 */
 	@Override
-	public void setSeed (long seed) {
+	public void setSeed(long seed) {
 		long x = (seed += 0x9E3779B97F4A7C15L);
 		x ^= x >>> 27;
 		x *= 0x3C79AC492BA7B653L;
@@ -170,9 +172,10 @@ public class PcgRXSMXSRandom extends EnhancedRandom {
 
 	/**
 	 * Gets the first part of the state.
+	 *
 	 * @return the first part of the state
 	 */
-	public long getStateA () {
+	public long getStateA() {
 		return stateA;
 	}
 
@@ -181,15 +184,16 @@ public class PcgRXSMXSRandom extends EnhancedRandom {
 	 *
 	 * @param stateA can be any long
 	 */
-	public void setStateA (long stateA) {
+	public void setStateA(long stateA) {
 		this.stateA = stateA;
 	}
 
 	/**
 	 * Gets the second part of the state (the stream or increment).
+	 *
 	 * @return the second part of the state
 	 */
-	public long getStateB () {
+	public long getStateB() {
 		return stateB;
 	}
 
@@ -199,7 +203,7 @@ public class PcgRXSMXSRandom extends EnhancedRandom {
 	 *
 	 * @param stateB can be any odd-number long; otherwise this adds 1 to make it odd
 	 */
-	public void setStateB (long stateB) {
+	public void setStateB(long stateB) {
 		this.stateB = stateB | 1L;
 	}
 
@@ -212,20 +216,20 @@ public class PcgRXSMXSRandom extends EnhancedRandom {
 	 * @param stateB the second state; can be any odd-number long
 	 */
 	@Override
-	public void setState (long stateA, long stateB) {
+	public void setState(long stateA, long stateB) {
 		this.stateA = stateA;
 		this.stateB = stateB | 1L;
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		long z = (stateA = stateA * 0x5851F42D4C957F2DL + stateB);
 		z = (z ^ (z >>> ((z >>> 59) + 5))) * 0xAEF17502108EF2D9L;
 		return (z ^ z >>> 43);
 	}
 
 	@Override
-	public long previousLong () {
+	public long previousLong() {
 		long z = stateA;
 		stateA = (stateA - stateB) * 0xC097EF87329E28A5L;
 		z = (z ^ (z >>> ((z >>> 59) + 5))) * 0xAEF17502108EF2D9L;
@@ -233,32 +237,32 @@ public class PcgRXSMXSRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		long z = (stateA = stateA * 0x5851F42D4C957F2DL + stateB);
 		z = (z ^ (z >>> ((z >>> 59) + 5))) * 0xAEF17502108EF2D9L;
-		return (int)(z ^ z >>> 43) >>> (32 - bits);
+		return (int) (z ^ z >>> 43) >>> (32 - bits);
 	}
 
 	@Override
-	public PcgRXSMXSRandom copy () {
+	public PcgRXSMXSRandom copy() {
 		return new PcgRXSMXSRandom(stateA, stateB);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		PcgRXSMXSRandom that = (PcgRXSMXSRandom)o;
+		PcgRXSMXSRandom that = (PcgRXSMXSRandom) o;
 
 		if (stateA != that.stateA)
 			return false;
 		return stateB == that.stateB;
 	}
 
-	public String toString () {
+	public String toString() {
 		return "PcgRXSMXSRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L}";
 	}
 }

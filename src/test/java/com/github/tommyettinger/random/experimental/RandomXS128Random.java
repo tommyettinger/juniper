@@ -31,39 +31,41 @@ import java.util.Random;
  * UnsupportedOperationException.
  */
 public class RandomXS128Random extends EnhancedRandom {
-    public RandomXS128 base = new RandomXS128();
+	public RandomXS128 base = new RandomXS128();
 
-    public RandomXS128Random() {
-        this(seedFromMath());
-    }
+	public RandomXS128Random() {
+		this(seedFromMath());
+	}
 
-    public RandomXS128Random(long seed) {
-        setSeed(seed);
-    }
+	public RandomXS128Random(long seed) {
+		setSeed(seed);
+	}
 
-    public RandomXS128Random(long stateA, long stateB) {
-        if((stateA | stateB) == 0L) stateB = -1L;
-        base.setState(stateA, stateB);
-    }
+	public RandomXS128Random(long stateA, long stateB) {
+		if ((stateA | stateB) == 0L) stateB = -1L;
+		base.setState(stateA, stateB);
+	}
 
-    @Override
-    public int getStateCount() {
-        return 2;
-    }
+	@Override
+	public int getStateCount() {
+		return 2;
+	}
 
-    @Override
-    public String getTag() {
-        return "RXSR";
-    }
+	@Override
+	public String getTag() {
+		return "RXSR";
+	}
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", 16);
 
 	/**
 	 * (2 to the 128) minus 1.
+	 *
 	 * @return (2 to the 128) minus 1
 	 */
 	@Override
@@ -71,76 +73,76 @@ public class RandomXS128Random extends EnhancedRandom {
 		return MINIMUM_PERIOD;
 	}
 
-    @Override
-    public void setSeed(long seed) {
-        if(base == null)
-            base = new RandomXS128();
-        base.setSeed(seed);
-    }
+	@Override
+	public void setSeed(long seed) {
+		if (base == null)
+			base = new RandomXS128();
+		base.setSeed(seed);
+	}
 
-    @Override
-    public void setState(long state) {
-        if(base == null)
-            base = new RandomXS128(state, state);
-        base.setState(state, state == 0 ? 1 : state);
-    }
+	@Override
+	public void setState(long state) {
+		if (base == null)
+			base = new RandomXS128(state, state);
+		base.setState(state, state == 0 ? 1 : state);
+	}
 
-    @Override
-    public long getSelectedState(int selection) {
-        return base.getState(selection & 1);
-    }
+	@Override
+	public long getSelectedState(int selection) {
+		return base.getState(selection & 1);
+	}
 
-    @Override
-    public void setSelectedState(int selection, long value) {
-        if((selection & 1) == 0)
-            base.setState(value, base.getState(1));
-        else
-            base.setState(base.getState(0), value);
-    }
+	@Override
+	public void setSelectedState(int selection, long value) {
+		if ((selection & 1) == 0)
+			base.setState(value, base.getState(1));
+		else
+			base.setState(base.getState(0), value);
+	}
 
-    @Override
-    public void setState(long stateA, long stateB) {
-        if((stateA | stateB) == 0L) stateB = -1L;
-        base.setState(stateA, stateB);
-    }
+	@Override
+	public void setState(long stateA, long stateB) {
+		if ((stateA | stateB) == 0L) stateB = -1L;
+		base.setState(stateA, stateB);
+	}
 
-    @Override
-    public long nextLong() {
-        return base.nextLong();
-    }
+	@Override
+	public long nextLong() {
+		return base.nextLong();
+	}
 
-    @Override
-    public int next(int bits) {
-        return base.nextInt() >>> (32 - bits);
-    }
+	@Override
+	public int next(int bits) {
+		return base.nextInt() >>> (32 - bits);
+	}
 
-    @Override
-    public int nextInt() {
-        return base.nextInt();
-    }
+	@Override
+	public int nextInt() {
+		return base.nextInt();
+	}
 
-    @Override
-    public int nextInt(int bound) {
-        return base.nextInt(bound);
-    }
+	@Override
+	public int nextInt(int bound) {
+		return base.nextInt(bound);
+	}
 
-    @Override
-    public float nextFloat() {
-        return base.nextFloat();
-    }
+	@Override
+	public float nextFloat() {
+		return base.nextFloat();
+	}
 
-    @Override
-    public double nextDouble() {
-        return base.nextDouble();
-    }
+	@Override
+	public double nextDouble() {
+		return base.nextDouble();
+	}
 
-    @Override
-    public double nextGaussian() {
-        return super.nextGaussian();
-    }
+	@Override
+	public double nextGaussian() {
+		return super.nextGaussian();
+	}
 
-    @Override
-    public EnhancedRandom copy() {
-        return new RandomXS128Random(base.getState(0), base.getState(1));
-    }
+	@Override
+	public EnhancedRandom copy() {
+		return new RandomXS128Random(base.getState(0), base.getState(1));
+	}
 }

@@ -6,16 +6,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.github.tommyettinger.digital.Hasher;
 import com.github.tommyettinger.random.cipher.SpeckCipher;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.Reader;
-import java.io.UnsupportedEncodingException;
-import java.io.Writer;
+import java.io.*;
 
 /**
  * A basic way to encrypt a {@link FileHandle} using {@link SpeckCipher}. The supported operations are mostly limited to
@@ -52,10 +43,10 @@ public class SpeckEncryptedFileHandle extends FileHandle {
 	 * the first path or some other source of a unique String.
 	 *
 	 * @param file the FileHandle to wrap; may be any type, such as {@link Files.FileType#Internal}
-	 * @param k1 part 1 of the key; may be any long
-	 * @param k2 part 2 of the key; may be any long
-	 * @param k3 part 3 of the key; may be any long
-	 * @param k4 part 4 of the key; may be any long
+	 * @param k1   part 1 of the key; may be any long
+	 * @param k2   part 2 of the key; may be any long
+	 * @param k3   part 3 of the key; may be any long
+	 * @param k4   part 4 of the key; may be any long
 	 */
 	public SpeckEncryptedFileHandle(FileHandle file, long k1, long k2, long k3, long k4) {
 		this(file, k1, k2, k3, k4, file.path());
@@ -68,11 +59,11 @@ public class SpeckEncryptedFileHandle extends FileHandle {
 	 * used when reading and writing to different paths; the unique String should be generated from only one of the
 	 * paths, if you generate it from a path at all.
 	 *
-	 * @param file the FileHandle to wrap; may be any type, such as {@link Files.FileType#Internal}
-	 * @param k1 part 1 of the key; may be any long
-	 * @param k2 part 2 of the key; may be any long
-	 * @param k3 part 3 of the key; may be any long
-	 * @param k4 part 4 of the key; may be any long
+	 * @param file   the FileHandle to wrap; may be any type, such as {@link Files.FileType#Internal}
+	 * @param k1     part 1 of the key; may be any long
+	 * @param k2     part 2 of the key; may be any long
+	 * @param k3     part 3 of the key; may be any long
+	 * @param k4     part 4 of the key; may be any long
 	 * @param unique any String that is likely to be unique for a given key, such as the path to the wrapped file
 	 */
 	public SpeckEncryptedFileHandle(FileHandle file, long k1, long k2, long k3, long k4, String unique) {
@@ -202,17 +193,17 @@ public class SpeckEncryptedFileHandle extends FileHandle {
 
 	@Override
 	public String readString() {
-        return new String(readBytes());
-    }
+		return new String(readBytes());
+	}
 
 	@Override
 	public String readString(String charset) {
-        try {
-            return new String(readBytes(), charset);
-        } catch (UnsupportedEncodingException e) {
-            throw new GdxRuntimeException("Error (incorrect encoding) reading file " + file);
-        }
-    }
+		try {
+			return new String(readBytes(), charset);
+		} catch (UnsupportedEncodingException e) {
+			throw new GdxRuntimeException("Error (incorrect encoding) reading file " + file);
+		}
+	}
 
 	@Override
 	public Writer writer(boolean append) {
@@ -232,13 +223,13 @@ public class SpeckEncryptedFileHandle extends FileHandle {
 
 	@Override
 	public void writeString(String string, boolean append, String charset) {
-        try {
+		try {
 			final byte[] bytes = string.getBytes(charset);
 			file.writeBytes(SpeckCipher.encryptInPlaceCTR(k1, k2, k3, k4, n0, bytes, 0, bytes.length), append);
 		} catch (UnsupportedEncodingException e) {
 			throw new GdxRuntimeException("Error (incorrect encoding) writing file " + file);
-        }
-    }
+		}
+	}
 
 	@Override
 	public FileHandle[] list() {

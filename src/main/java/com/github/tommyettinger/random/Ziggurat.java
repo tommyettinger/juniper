@@ -46,39 +46,40 @@ import com.github.tommyettinger.digital.Distributor;
  * From <a href="https://github.com/camel-cdr/cauldron/blob/7d5328441b1a1bc8143f627aebafe58b29531cb9/cauldron/random.h#L2013-L2265">Cauldron</a>,
  * MIT-licensed. This in turn is based on Doornik's form of the Ziggurat method:
  * <br>
- *      Doornik, Jurgen A (2005):
- *      "An improved ziggurat method to generate normal random samples."
- *      University of Oxford: 77.
+ * Doornik, Jurgen A (2005):
+ * "An improved ziggurat method to generate normal random samples."
+ * University of Oxford: 77.
+ *
  * @see Distributor Distributor is full of ways to generate normal-distributed variates.
  * @see com.github.tommyettinger.digital.RoughMath#normalRough(long) RoughMath also has ways to generate normal-distributed floats.
  * @deprecated {@link Distributor#normal(long)} should be used instead in the cases where this might be used.
  */
 @Deprecated
 public final class Ziggurat {
-    /**
-     * Should never be constructed.
-     */
-    private Ziggurat() {
-    }
+	/**
+	 * Should never be constructed.
+	 */
+	private Ziggurat() {
+	}
 
-    /**
-     * Given a long where all bits are sufficiently (independently) random, this produces a normal-distributed
-     * (Gaussian) variable as if by a normal distribution with mean (mu) 0.0 and standard deviation (sigma) 1.0.
-     * Note that no additive counters are considered sufficiently random for this, and linear congruential generators
-     * might not be random enough either if they return the low-order bits without changes.
-     * Patterns between different {@code state} values provided to this will generally not be preserved in the
-     * output, but this may not be true all the time for patterns on all bits.
-     * <br>
-     * This is an alias for {@link Distributor#normal(long)}. If you want to preserve input patterns in the
-     * normal-distributed output, you can use {@link Distributor#probitD(double)} or
-     * {@link Distributor#probitL(long)}, or variants on those.
-     *
-     * @param state a long that should be sufficiently random; quasi-random longs may not be enough
-     * @return a normal-distributed double with mean (mu) 0.0 and standard deviation (sigma) 1.0
+	/**
+	 * Given a long where all bits are sufficiently (independently) random, this produces a normal-distributed
+	 * (Gaussian) variable as if by a normal distribution with mean (mu) 0.0 and standard deviation (sigma) 1.0.
+	 * Note that no additive counters are considered sufficiently random for this, and linear congruential generators
+	 * might not be random enough either if they return the low-order bits without changes.
+	 * Patterns between different {@code state} values provided to this will generally not be preserved in the
+	 * output, but this may not be true all the time for patterns on all bits.
+	 * <br>
+	 * This is an alias for {@link Distributor#normal(long)}. If you want to preserve input patterns in the
+	 * normal-distributed output, you can use {@link Distributor#probitD(double)} or
+	 * {@link Distributor#probitL(long)}, or variants on those.
+	 *
+	 * @param state a long that should be sufficiently random; quasi-random longs may not be enough
+	 * @return a normal-distributed double with mean (mu) 0.0 and standard deviation (sigma) 1.0
 	 * @deprecated Use {@link Distributor#normal(long)} instead of this, which would just call it indirectly.
-     */
+	 */
 	@Deprecated
-    public static double normal(long state) {
-        return Distributor.normal(state);
-    }
+	public static double normal(long state) {
+		return Distributor.normal(state);
+	}
 }

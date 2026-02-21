@@ -36,265 +36,267 @@ import static com.github.tommyettinger.random.InitialCorrelationEvaluator.INTERV
 import static com.github.tommyettinger.random.InitialCorrelationEvaluator.INTERVAL_Y;
 
 /**
+ *
  */
 public class CorrelationVisualizer extends ApplicationAdapter {
 
-    public static String title = "";
-    private ImmediateModeRenderer20 renderer;
-    public static final int width = 256, height = 256;
-    private static final float[][] previousGrid = new float[width][height];
+	public static String title = "";
+	private ImmediateModeRenderer20 renderer;
+	public static final int width = 256, height = 256;
+	private static final float[][] previousGrid = new float[width][height];
 
-    public static final EnhancedRandom[][][] randoms;
-    static {
-        randoms = new EnhancedRandom[randomList.size()][][];
-        for (int i = 0; i < randoms.length; i++) {
-            randoms[i] = makeGrid(randomList.get(i), width, height);
-        }
-    }
-    public int currentRandom = 0;
-    public int currentMode = 0;
-    public static int frame = 0;
-    public static int modeCount = 3;
+	public static final EnhancedRandom[][][] randoms;
 
-    public static EnhancedRandom[][] makeGrid(EnhancedRandom base, int width, int height){
-        EnhancedRandom[][] g = new EnhancedRandom[width][height];
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                g[x][y] = base.copy();
-                switch (g[x][y].getStateCount()) {
-                    case 1:
-                        g[x][y].setState(interleaveBits(x*INTERVAL_X, y*INTERVAL_Y));
-                        break;
-                    case 2:
-                        g[x][y].setState((long)x*INTERVAL_X, (long)y*INTERVAL_Y);
-                        break;
-                    case 3:
-                        g[x][y].setState((long)x*INTERVAL_X, (long)y*INTERVAL_Y, 1L);
-                        break;
-                    case 4:
-                        g[x][y].setState((long)x*INTERVAL_X, (long)y*INTERVAL_Y, 1L, 1L);
-                        break;
-                    case 5:
-                        g[x][y].setState((long)x*INTERVAL_X, (long)y*INTERVAL_Y, 1L, 1L, 1L);
-                        break;
-                }
-            }
-        }
-        return g;
-    }
+	static {
+		randoms = new EnhancedRandom[randomList.size()][][];
+		for (int i = 0; i < randoms.length; i++) {
+			randoms[i] = makeGrid(randomList.get(i), width, height);
+		}
+	}
 
-    public static void refreshGrid() {
-        for (int i = 0, n = randoms.length; i < n; i++) {
-            EnhancedRandom[][] g = randoms[i];
-            for (int x = 0; x < width; x++) {
-                for (int y = 0; y < height; y++) {
-                    switch (g[x][y].getStateCount()) {
-                        case 1:
-                            g[x][y].setState(interleaveBits(x*INTERVAL_X, y*INTERVAL_Y));
-                            break;
-                        case 2:
-                            g[x][y].setState((long)x*INTERVAL_X, (long)y*INTERVAL_Y);
-                            break;
-                        case 3:
-                            g[x][y].setState((long)x*INTERVAL_X, (long)y*INTERVAL_Y, 1L);
-                            break;
-                        case 4:
-                            g[x][y].setState((long)x*INTERVAL_X, (long)y*INTERVAL_Y, 1L, 1L);
-                            break;
-                        case 5:
-                            g[x][y].setState((long)x*INTERVAL_X, (long)y*INTERVAL_Y, 1L, 1L, 1L);
-                            break;
-                        case 6:
-                            g[x][y].setState((long)x*INTERVAL_X, (long)y*INTERVAL_Y, 1L, 1L, 1L, 1L);
-                            break;
-                    }
-                }
-            }
-        }
-        frame = 0;
-    }
+	public int currentRandom = 0;
+	public int currentMode = 0;
+	public static int frame = 0;
+	public static int modeCount = 3;
 
-    public static void seedGrid() {
-        for (int i = 0, n = randoms.length; i < n; i++) {
-            for (int x = 0; x < width; x++) {
-                for (int y = 0; y < height; y++) {
-                    randoms[i][x][y].setSeed(x << 16 ^ y);
-                }
-            }
-        }
-        frame = 0;
-    }
+	public static EnhancedRandom[][] makeGrid(EnhancedRandom base, int width, int height) {
+		EnhancedRandom[][] g = new EnhancedRandom[width][height];
+		for (int x = 0; x < width; x++) {
+			for (int y = 0; y < height; y++) {
+				g[x][y] = base.copy();
+				switch (g[x][y].getStateCount()) {
+					case 1:
+						g[x][y].setState(interleaveBits(x * INTERVAL_X, y * INTERVAL_Y));
+						break;
+					case 2:
+						g[x][y].setState((long) x * INTERVAL_X, (long) y * INTERVAL_Y);
+						break;
+					case 3:
+						g[x][y].setState((long) x * INTERVAL_X, (long) y * INTERVAL_Y, 1L);
+						break;
+					case 4:
+						g[x][y].setState((long) x * INTERVAL_X, (long) y * INTERVAL_Y, 1L, 1L);
+						break;
+					case 5:
+						g[x][y].setState((long) x * INTERVAL_X, (long) y * INTERVAL_Y, 1L, 1L, 1L);
+						break;
+				}
+			}
+		}
+		return g;
+	}
 
-    private Viewport view;
-    private boolean keepGoing = true;
+	public static void refreshGrid() {
+		for (int i = 0, n = randoms.length; i < n; i++) {
+			EnhancedRandom[][] g = randoms[i];
+			for (int x = 0; x < width; x++) {
+				for (int y = 0; y < height; y++) {
+					switch (g[x][y].getStateCount()) {
+						case 1:
+							g[x][y].setState(interleaveBits(x * INTERVAL_X, y * INTERVAL_Y));
+							break;
+						case 2:
+							g[x][y].setState((long) x * INTERVAL_X, (long) y * INTERVAL_Y);
+							break;
+						case 3:
+							g[x][y].setState((long) x * INTERVAL_X, (long) y * INTERVAL_Y, 1L);
+							break;
+						case 4:
+							g[x][y].setState((long) x * INTERVAL_X, (long) y * INTERVAL_Y, 1L, 1L);
+							break;
+						case 5:
+							g[x][y].setState((long) x * INTERVAL_X, (long) y * INTERVAL_Y, 1L, 1L, 1L);
+							break;
+						case 6:
+							g[x][y].setState((long) x * INTERVAL_X, (long) y * INTERVAL_Y, 1L, 1L, 1L, 1L);
+							break;
+					}
+				}
+			}
+		}
+		frame = 0;
+	}
 
-    /**
-     * Narrow-purpose; takes an x and a y value, each between 0 and 4294967295 inclusive, and interleaves their bits so
-     * the least significant bit and every other bit after it are filled with the bits of x, while the
-     * second-least-significant bit and every other bit after that are filled with the bits of y. Essentially, this
-     * takes two numbers with bits labeled like {@code a b c} for x and {@code R S T} for y and makes a number with
-     * those bits arranged like {@code R a S b T c}.
-     * @param x an int between 0 and 4294967295, inclusive
-     * @param y an int between 0 and 4294967295, inclusive
-     * @return an int that interleaves x and y, with x in the least significant bit position
-     */
-    public static long interleaveBits(long x, long y)
-    {
+	public static void seedGrid() {
+		for (int i = 0, n = randoms.length; i < n; i++) {
+			for (int x = 0; x < width; x++) {
+				for (int y = 0; y < height; y++) {
+					randoms[i][x][y].setSeed(x << 16 ^ y);
+				}
+			}
+		}
+		frame = 0;
+	}
+
+	private Viewport view;
+	private boolean keepGoing = true;
+
+	/**
+	 * Narrow-purpose; takes an x and a y value, each between 0 and 4294967295 inclusive, and interleaves their bits so
+	 * the least significant bit and every other bit after it are filled with the bits of x, while the
+	 * second-least-significant bit and every other bit after that are filled with the bits of y. Essentially, this
+	 * takes two numbers with bits labeled like {@code a b c} for x and {@code R S T} for y and makes a number with
+	 * those bits arranged like {@code R a S b T c}.
+	 *
+	 * @param x an int between 0 and 4294967295, inclusive
+	 * @param y an int between 0 and 4294967295, inclusive
+	 * @return an int that interleaves x and y, with x in the least significant bit position
+	 */
+	public static long interleaveBits(long x, long y) {
 //		return ((x & 0xFFFFFFFFL) | (y << 32));
 //		return x * 0xC13FA9A902A6328FL + y * 0x91E10DA5C79E7B1DL; // R2 sequence
-        x |= y << 32;
-        x =    ((x & 0x00000000ffff0000L) <<16) | ((x >>>16) & 0x00000000ffff0000L) | (x & 0xffff00000000ffffL);
-        x =    ((x & 0x0000ff000000ff00L) << 8) | ((x >>> 8) & 0x0000ff000000ff00L) | (x & 0xff0000ffff0000ffL);
-        x =    ((x & 0x00f000f000f000f0L) << 4) | ((x >>> 4) & 0x00f000f000f000f0L) | (x & 0xf00ff00ff00ff00fL);
-        x =    ((x & 0x0c0c0c0c0c0c0c0cL) << 2) | ((x >>> 2) & 0x0c0c0c0c0c0c0c0cL) | (x & 0xc3c3c3c3c3c3c3c3L);
-        return ((x & 0x2222222222222222L) << 1) | ((x >>> 1) & 0x2222222222222222L) | (x & 0x9999999999999999L);
-    }
+		x |= y << 32;
+		x = ((x & 0x00000000ffff0000L) << 16) | ((x >>> 16) & 0x00000000ffff0000L) | (x & 0xffff00000000ffffL);
+		x = ((x & 0x0000ff000000ff00L) << 8) | ((x >>> 8) & 0x0000ff000000ff00L) | (x & 0xff0000ffff0000ffL);
+		x = ((x & 0x00f000f000f000f0L) << 4) | ((x >>> 4) & 0x00f000f000f000f0L) | (x & 0xf00ff00ff00ff00fL);
+		x = ((x & 0x0c0c0c0c0c0c0c0cL) << 2) | ((x >>> 2) & 0x0c0c0c0c0c0c0c0cL) | (x & 0xc3c3c3c3c3c3c3c3L);
+		return ((x & 0x2222222222222222L) << 1) | ((x >>> 1) & 0x2222222222222222L) | (x & 0x9999999999999999L);
+	}
 
-    @Override
-    public void create() {
-        title = randoms[currentRandom][0][0].getClass().getSimpleName() + " on mode " + currentMode;
-        System.out.println(title);
-        renderer = new ImmediateModeRenderer20(width * height, false, true, 0);
-        view = new ScreenViewport();
-        InputAdapter input = new InputAdapter() {
-            @Override
-            public boolean keyDown(int keycode) {
-                switch (keycode) {
-                    case SPACE:
-                    case P: // pause
-                        keepGoing = !keepGoing;
-                        break;
-                    case S: // step
-                        System.out.println("Frame " + frame);
-                        putMap();
-                        break;
-                    case V: // vertical
-                        System.out.println("Viewing column 0:");
-                        System.out.println(randoms[currentRandom][0][0]);
-                        System.out.println(randoms[currentRandom][0][1]);
-                        System.out.println(randoms[currentRandom][0][2]);
-                        System.out.println(randoms[currentRandom][0][3]);
-                        break;
-                    case H: // horizontal
-                        System.out.println("Viewing row 0:");
-                        System.out.println(randoms[currentRandom][0][0]);
-                        System.out.println(randoms[currentRandom][1][0]);
-                        System.out.println(randoms[currentRandom][2][0]);
-                        System.out.println(randoms[currentRandom][3][0]);
-                        break;
-                    case NUM_1:
-                    case NUMPAD_1:
-                        seedGrid();
-                        putMap();
-                        break;
-                    case N: // next
-                    case EQUALS:
-                    case ENTER:
-                        currentRandom = ((currentRandom + (UIUtils.shift() ? Generators.randomCount - 1 : 1)) % Generators.randomCount);
-                        refreshGrid();
-                        title = randoms[currentRandom][0][0].getClass().getSimpleName()
-                                + " on mode " + currentMode;
-                        System.out.println(title);
-                        if (!keepGoing) putMap();
-                        break;
-                    case M: // mode
-                        currentMode = ((currentMode + (UIUtils.shift() ? modeCount - 1 : 1)) % modeCount);
-                        refreshGrid();
-                        title = randoms[currentRandom][0][0].getClass().getSimpleName()
-                                + " on mode " + currentMode;
-                        System.out.println(title);
-                        if (!keepGoing) putMap();
-                        break;
-                    case X:
-                        INTERVAL_X += (UIUtils.shift() ? -1 : 1);
-                        refreshGrid();
-                        System.out.printf("Intervals: X=%d, Y=%d\n", INTERVAL_X, INTERVAL_Y);
-                        break;
-                    case Y:
-                        INTERVAL_Y += (UIUtils.shift() ? -1 : 1);
-                        refreshGrid();
-                        System.out.printf("Intervals: X=%d, Y=%d\n", INTERVAL_X, INTERVAL_Y);
-                        break;
-                    case Q: // quit
-                    case ESCAPE: {
-                        Gdx.app.exit();
-                    }
-                }
-                return true;
-            }
-        };
-        Gdx.input.setInputProcessor(input);
-    }
+	@Override
+	public void create() {
+		title = randoms[currentRandom][0][0].getClass().getSimpleName() + " on mode " + currentMode;
+		System.out.println(title);
+		renderer = new ImmediateModeRenderer20(width * height, false, true, 0);
+		view = new ScreenViewport();
+		InputAdapter input = new InputAdapter() {
+			@Override
+			public boolean keyDown(int keycode) {
+				switch (keycode) {
+					case SPACE:
+					case P: // pause
+						keepGoing = !keepGoing;
+						break;
+					case S: // step
+						System.out.println("Frame " + frame);
+						putMap();
+						break;
+					case V: // vertical
+						System.out.println("Viewing column 0:");
+						System.out.println(randoms[currentRandom][0][0]);
+						System.out.println(randoms[currentRandom][0][1]);
+						System.out.println(randoms[currentRandom][0][2]);
+						System.out.println(randoms[currentRandom][0][3]);
+						break;
+					case H: // horizontal
+						System.out.println("Viewing row 0:");
+						System.out.println(randoms[currentRandom][0][0]);
+						System.out.println(randoms[currentRandom][1][0]);
+						System.out.println(randoms[currentRandom][2][0]);
+						System.out.println(randoms[currentRandom][3][0]);
+						break;
+					case NUM_1:
+					case NUMPAD_1:
+						seedGrid();
+						putMap();
+						break;
+					case N: // next
+					case EQUALS:
+					case ENTER:
+						currentRandom = ((currentRandom + (UIUtils.shift() ? Generators.randomCount - 1 : 1)) % Generators.randomCount);
+						refreshGrid();
+						title = randoms[currentRandom][0][0].getClass().getSimpleName()
+							+ " on mode " + currentMode;
+						System.out.println(title);
+						if (!keepGoing) putMap();
+						break;
+					case M: // mode
+						currentMode = ((currentMode + (UIUtils.shift() ? modeCount - 1 : 1)) % modeCount);
+						refreshGrid();
+						title = randoms[currentRandom][0][0].getClass().getSimpleName()
+							+ " on mode " + currentMode;
+						System.out.println(title);
+						if (!keepGoing) putMap();
+						break;
+					case X:
+						INTERVAL_X += (UIUtils.shift() ? -1 : 1);
+						refreshGrid();
+						System.out.printf("Intervals: X=%d, Y=%d\n", INTERVAL_X, INTERVAL_Y);
+						break;
+					case Y:
+						INTERVAL_Y += (UIUtils.shift() ? -1 : 1);
+						refreshGrid();
+						System.out.printf("Intervals: X=%d, Y=%d\n", INTERVAL_X, INTERVAL_Y);
+						break;
+					case Q: // quit
+					case ESCAPE: {
+						Gdx.app.exit();
+					}
+				}
+				return true;
+			}
+		};
+		Gdx.input.setInputProcessor(input);
+	}
 
-    public void putMap() {
-        ++frame;
-        renderer.begin(view.getCamera().combined, GL_POINTS);
-        int bt;
-        switch (currentMode) {
-            case 0:
-                for (int x = 0; x < width; x++) {
-                    for (int y = 0; y < height; y++) {
-                        bt = (int) randoms[currentRandom][x][y].nextLong() & 255;
-                        renderer.color(previousGrid[x][y] = BitConversion.intBitsToFloat(0xFE000000 | bt << 16 | bt << 8 | bt));
-                        renderer.vertex(x, y, 0);
-                    }
-                }
-                break;
-            case 1:
-                for (int x = 0; x < width; x++) {
-                    for (int y = 0; y < height; y++) {
-                        bt = -((int) randoms[currentRandom][x][y].nextLong() & 1) >>> 8;
-                        renderer.color(previousGrid[x][y] = BitConversion.intBitsToFloat(0xFE000000 | bt));
-                        renderer.vertex(x, y, 0);
-                    }
-                }
-                break;
-            case 2:
-                for (int x = 0; x < width; x++) {
-                    for (int y = 0; y < height; y++) {
-                        bt = -(int) (randoms[currentRandom][x][y].nextLong() >>> 63) >>> 8;
-                        renderer.color(previousGrid[x][y] = BitConversion.intBitsToFloat(0xFE000000 | bt));
-                        renderer.vertex(x, y, 0);
-                    }
-                }
-                break;
-        }
-        renderer.end();
-    }
+	public void putMap() {
+		++frame;
+		renderer.begin(view.getCamera().combined, GL_POINTS);
+		int bt;
+		switch (currentMode) {
+			case 0:
+				for (int x = 0; x < width; x++) {
+					for (int y = 0; y < height; y++) {
+						bt = (int) randoms[currentRandom][x][y].nextLong() & 255;
+						renderer.color(previousGrid[x][y] = BitConversion.intBitsToFloat(0xFE000000 | bt << 16 | bt << 8 | bt));
+						renderer.vertex(x, y, 0);
+					}
+				}
+				break;
+			case 1:
+				for (int x = 0; x < width; x++) {
+					for (int y = 0; y < height; y++) {
+						bt = -((int) randoms[currentRandom][x][y].nextLong() & 1) >>> 8;
+						renderer.color(previousGrid[x][y] = BitConversion.intBitsToFloat(0xFE000000 | bt));
+						renderer.vertex(x, y, 0);
+					}
+				}
+				break;
+			case 2:
+				for (int x = 0; x < width; x++) {
+					for (int y = 0; y < height; y++) {
+						bt = -(int) (randoms[currentRandom][x][y].nextLong() >>> 63) >>> 8;
+						renderer.color(previousGrid[x][y] = BitConversion.intBitsToFloat(0xFE000000 | bt));
+						renderer.vertex(x, y, 0);
+					}
+				}
+				break;
+		}
+		renderer.end();
+	}
 
-    @Override
-    public void render() {
-        ScreenUtils.clear(Color.BLACK);
-        Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() + " FPS showing " + title);
-        if (keepGoing) {
-            putMap();
-        }
-        else {
-            renderer.begin(view.getCamera().combined, GL_POINTS);
-            for (int x = 0; x < width; x++) {
-                for (int y = 0; y < height; y++) {
-                    renderer.color(previousGrid[x][y]);
-                    renderer.vertex(x, y, 0);
-                }
-            }
-            renderer.end();
-        }
-    }
+	@Override
+	public void render() {
+		ScreenUtils.clear(Color.BLACK);
+		Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() + " FPS showing " + title);
+		if (keepGoing) {
+			putMap();
+		} else {
+			renderer.begin(view.getCamera().combined, GL_POINTS);
+			for (int x = 0; x < width; x++) {
+				for (int y = 0; y < height; y++) {
+					renderer.color(previousGrid[x][y]);
+					renderer.vertex(x, y, 0);
+				}
+			}
+			renderer.end();
+		}
+	}
 
-    @Override
-    public void resize(int width, int height) {
-        super.resize(width, height);
-        view.update(width, height, true);
-        view.apply(true);
-    }
+	@Override
+	public void resize(int width, int height) {
+		super.resize(width, height);
+		view.update(width, height, true);
+		view.apply(true);
+	}
 
-    public static void main(String[] arg) {
-        Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-        config.useVsync(true);
-        config.setForegroundFPS(6);
-        config.setResizable(false);
-        config.setWindowedMode(width, height);
-        config.disableAudio(true);
-        new Lwjgl3Application(new CorrelationVisualizer(), config);
-    }
+	public static void main(String[] arg) {
+		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+		config.useVsync(true);
+		config.setForegroundFPS(6);
+		config.setResizable(false);
+		config.setWindowedMode(width, height);
+		config.disableAudio(true);
+		new Lwjgl3Application(new CorrelationVisualizer(), config);
+	}
 }

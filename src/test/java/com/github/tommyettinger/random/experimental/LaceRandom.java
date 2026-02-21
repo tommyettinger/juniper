@@ -33,12 +33,14 @@ public class LaceRandom extends EnhancedRandom {
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
 
 	/**
 	 * 2 to the 64.
+	 *
 	 * @return 2 to the 64
 	 */
 	@Override
@@ -113,7 +115,7 @@ public class LaceRandom extends EnhancedRandom {
 	 * @return 5 (five)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 5;
 	}
 
@@ -125,7 +127,7 @@ public class LaceRandom extends EnhancedRandom {
 	 * @return the value of the selected state
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		switch (selection) {
 			case 0:
 				return stateA;
@@ -149,7 +151,7 @@ public class LaceRandom extends EnhancedRandom {
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		switch (selection) {
 			case 0:
 				stateA = value;
@@ -175,43 +177,43 @@ public class LaceRandom extends EnhancedRandom {
 	 * @param seed the initial seed; may be any long
 	 */
 	@Override
-	public void setSeed (long seed) {
+	public void setSeed(long seed) {
 		// Based on (not identical to) the Speck block cipher's key expansion.
 		// Only uses add, bitwise rotation, and XOR operations.
 		long s0 = seed, s1 = seed ^ 0xC6BC279692B5C323L, ctr = seed ^ 0x1C69B3F74AC4AE35L;
-		s1 = (s1 << 56 | s1 >>>  8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
-		s0 = (s0 <<  3 | s0 >>> 61) ^ s1;
+		s1 = (s1 << 56 | s1 >>> 8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
+		s0 = (s0 << 3 | s0 >>> 61) ^ s1;
 		stateA = s0;
-		s1 = (s1 << 56 | s1 >>>  8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
-		s0 = (s0 <<  3 | s0 >>> 61) ^ s1;
+		s1 = (s1 << 56 | s1 >>> 8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
+		s0 = (s0 << 3 | s0 >>> 61) ^ s1;
 		stateB = s0;
-		s1 = (s1 << 56 | s1 >>>  8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
-		s0 = (s0 <<  3 | s0 >>> 61) ^ s1;
+		s1 = (s1 << 56 | s1 >>> 8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
+		s0 = (s0 << 3 | s0 >>> 61) ^ s1;
 		stateC = s0;
-		s1 = (s1 << 56 | s1 >>>  8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
-		s0 = (s0 <<  3 | s0 >>> 61) ^ s1;
+		s1 = (s1 << 56 | s1 >>> 8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
+		s0 = (s0 << 3 | s0 >>> 61) ^ s1;
 		stateD = s0;
-		s1 = (s1 << 56 | s1 >>>  8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
-		s0 = (s0 <<  3 | s0 >>> 61) ^ s1;
+		s1 = (s1 << 56 | s1 >>> 8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
+		s0 = (s0 << 3 | s0 >>> 61) ^ s1;
 		stateE = s0;
-		s1 = (s1 << 56 | s1 >>>  8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
-		s0 = (s0 <<  3 | s0 >>> 61) ^ s1;
+		s1 = (s1 << 56 | s1 >>> 8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
+		s0 = (s0 << 3 | s0 >>> 61) ^ s1;
 		stateA += s0;
-		s1 = (s1 << 56 | s1 >>>  8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
-		s0 = (s0 <<  3 | s0 >>> 61) ^ s1;
+		s1 = (s1 << 56 | s1 >>> 8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
+		s0 = (s0 << 3 | s0 >>> 61) ^ s1;
 		stateB += s0;
-		s1 = (s1 << 56 | s1 >>>  8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
-		s0 = (s0 <<  3 | s0 >>> 61) ^ s1;
+		s1 = (s1 << 56 | s1 >>> 8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
+		s0 = (s0 << 3 | s0 >>> 61) ^ s1;
 		stateC += s0;
-		s1 = (s1 << 56 | s1 >>>  8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
-		s0 = (s0 <<  3 | s0 >>> 61) ^ s1;
+		s1 = (s1 << 56 | s1 >>> 8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
+		s0 = (s0 << 3 | s0 >>> 61) ^ s1;
 		stateD += s0;
-		s1 = (s1 << 56 | s1 >>>  8) + s0 ^ (ctr + 0xBEA225F9EB34556DL);
-		s0 = (s0 <<  3 | s0 >>> 61) ^ s1;
+		s1 = (s1 << 56 | s1 >>> 8) + s0 ^ (ctr + 0xBEA225F9EB34556DL);
+		s0 = (s0 << 3 | s0 >>> 61) ^ s1;
 		stateE += s0;
 	}
 
-	public long getStateA () {
+	public long getStateA() {
 		return stateA;
 	}
 
@@ -220,11 +222,11 @@ public class LaceRandom extends EnhancedRandom {
 	 *
 	 * @param stateA can be any long
 	 */
-	public void setStateA (long stateA) {
+	public void setStateA(long stateA) {
 		this.stateA = stateA;
 	}
 
-	public long getStateB () {
+	public long getStateB() {
 		return stateB;
 	}
 
@@ -233,11 +235,11 @@ public class LaceRandom extends EnhancedRandom {
 	 *
 	 * @param stateB can be any long
 	 */
-	public void setStateB (long stateB) {
+	public void setStateB(long stateB) {
 		this.stateB = stateB;
 	}
 
-	public long getStateC () {
+	public long getStateC() {
 		return stateC;
 	}
 
@@ -246,11 +248,11 @@ public class LaceRandom extends EnhancedRandom {
 	 *
 	 * @param stateC can be any long
 	 */
-	public void setStateC (long stateC) {
+	public void setStateC(long stateC) {
 		this.stateC = stateC;
 	}
 
-	public long getStateD () {
+	public long getStateD() {
 		return stateD;
 	}
 
@@ -259,11 +261,11 @@ public class LaceRandom extends EnhancedRandom {
 	 *
 	 * @param stateD can be any long
 	 */
-	public void setStateD (long stateD) {
+	public void setStateD(long stateD) {
 		this.stateD = stateD;
 	}
 
-	public long getStateE () {
+	public long getStateE() {
 		return stateE;
 	}
 
@@ -272,7 +274,7 @@ public class LaceRandom extends EnhancedRandom {
 	 *
 	 * @param stateE can be any long
 	 */
-	public void setStateE (long stateE) {
+	public void setStateE(long stateE) {
 		this.stateE = stateE;
 	}
 
@@ -287,7 +289,7 @@ public class LaceRandom extends EnhancedRandom {
 	 * @param stateD the fourth state; can be any long
 	 * @param stateE the fifth state; can be any long
 	 */
-	public void setState (long stateA, long stateB, long stateC, long stateD, long stateE) {
+	public void setState(long stateA, long stateB, long stateC, long stateD, long stateE) {
 		this.stateA = stateA;
 		this.stateB = stateB;
 		this.stateC = stateC;
@@ -296,7 +298,7 @@ public class LaceRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		final long fa = stateA;
 		final long fb = stateB;
 		final long fc = stateC;
@@ -311,7 +313,7 @@ public class LaceRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public long previousLong () {
+	public long previousLong() {
 		final long fb = stateB;
 		final long fc = stateC;
 		final long fd = stateD;
@@ -325,7 +327,7 @@ public class LaceRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		final long fa = stateA;
 		final long fb = stateB;
 		final long fc = stateC;
@@ -340,24 +342,24 @@ public class LaceRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public LaceRandom copy () {
+	public LaceRandom copy() {
 		return new LaceRandom(stateA, stateB, stateC, stateD, stateE);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		LaceRandom that = (LaceRandom)o;
+		LaceRandom that = (LaceRandom) o;
 
 		return stateA == that.stateA && stateB == that.stateB && stateC == that.stateC && stateD == that.stateD &&
-				stateE == that.stateE;
+			stateE == that.stateE;
 	}
 
-	public String toString () {
+	public String toString() {
 		return "LaceRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L, stateD=" + (stateD) + "L, stateE=" + (stateE) + "L}";
 	}
 

@@ -47,7 +47,7 @@ public class Gobbler32Random extends EnhancedRandom {
 	 * Creates a new Gobbler32Random with a random state.
 	 */
 	public Gobbler32Random() {
-		this((int)EnhancedRandom.seedFromMath(), (int)EnhancedRandom.seedFromMath(), (int)EnhancedRandom.seedFromMath(), (int)EnhancedRandom.seedFromMath());
+		this((int) EnhancedRandom.seedFromMath(), (int) EnhancedRandom.seedFromMath(), (int) EnhancedRandom.seedFromMath(), (int) EnhancedRandom.seedFromMath());
 	}
 
 	/**
@@ -85,6 +85,7 @@ public class Gobbler32Random extends EnhancedRandom {
 
 	/**
 	 * This generator mainly generates int values.
+	 *
 	 * @return true
 	 */
 	@Override
@@ -94,12 +95,14 @@ public class Gobbler32Random extends EnhancedRandom {
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("100000000000000000000000000000000", 16);
 
 	/**
 	 * 2 to the 128.
+	 *
 	 * @return 2 to the 128
 	 */
 	@Override
@@ -113,7 +116,7 @@ public class Gobbler32Random extends EnhancedRandom {
 	 * @return 4 (four)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 4;
 	}
 
@@ -125,16 +128,16 @@ public class Gobbler32Random extends EnhancedRandom {
 	 * @return the value of the selected state, which is an int that will be promoted to long
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		switch (selection) {
-		case 0:
-			return stateA;
-		case 1:
-			return stateB;
-		case 2:
-			return stateC;
-		default:
-			return stateD;
+			case 0:
+				return stateA;
+			case 1:
+				return stateB;
+			case 2:
+				return stateC;
+			default:
+				return stateD;
 		}
 	}
 
@@ -147,20 +150,20 @@ public class Gobbler32Random extends EnhancedRandom {
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		switch (selection) {
-		case 0:
-			stateA = (int)value;
-			break;
-		case 1:
-			stateB = (int)value;
-			break;
-		case 2:
-			stateC = (int)value;
-			break;
-		default:
-			stateD = (int)value;
-			break;
+			case 0:
+				stateA = (int) value;
+				break;
+			case 1:
+				stateB = (int) value;
+				break;
+			case 2:
+				stateC = (int) value;
+				break;
+			default:
+				stateD = (int) value;
+				break;
 		}
 	}
 
@@ -173,21 +176,21 @@ public class Gobbler32Random extends EnhancedRandom {
 	 * @param seed the initial seed; may be any long
 	 */
 	@Override
-	public void setSeed (long seed) {
+	public void setSeed(long seed) {
 		seed ^= seed >>> 32;
-		stateA = (int)(seed ^ 0xC6BC279692B5C323L);
+		stateA = (int) (seed ^ 0xC6BC279692B5C323L);
 		seed *= 0xBEA225F9EB34556DL;
 		seed ^= seed >>> 29;
-		stateB = (int)(seed ^ ~0xD3833E804F4C574BL);
+		stateB = (int) (seed ^ ~0xD3833E804F4C574BL);
 		seed *= 0xBEA225F9EB34556DL;
 		seed ^= seed >>> 32;
-		stateC = (int)(seed ^ 0xD3833E804F4C574BL);
+		stateC = (int) (seed ^ 0xD3833E804F4C574BL);
 		seed *= 0xBEA225F9EB34556DL;
 		seed ^= seed >>> 29;
-		stateD = (int)(seed ^ ~0xC6BC279692B5C323L);
+		stateD = (int) (seed ^ ~0xC6BC279692B5C323L);
 	}
 
-	public long getStateA () {
+	public long getStateA() {
 		return stateA;
 	}
 
@@ -196,11 +199,11 @@ public class Gobbler32Random extends EnhancedRandom {
 	 *
 	 * @param stateA can be any long, but will be cast to an int before use
 	 */
-	public void setStateA (long stateA) {
-		this.stateA = (int)stateA;
+	public void setStateA(long stateA) {
+		this.stateA = (int) stateA;
 	}
 
-	public long getStateB () {
+	public long getStateB() {
 		return stateB;
 	}
 
@@ -209,11 +212,11 @@ public class Gobbler32Random extends EnhancedRandom {
 	 *
 	 * @param stateB can be any long, but will be cast to an int before use
 	 */
-	public void setStateB (long stateB) {
-		this.stateB = (int)stateB;
+	public void setStateB(long stateB) {
+		this.stateB = (int) stateB;
 	}
 
-	public long getStateC () {
+	public long getStateC() {
 		return stateC;
 	}
 
@@ -222,11 +225,11 @@ public class Gobbler32Random extends EnhancedRandom {
 	 *
 	 * @param stateC can be any long, but will be cast to an int before use
 	 */
-	public void setStateC (long stateC) {
-		this.stateC = (int)stateC;
+	public void setStateC(long stateC) {
+		this.stateC = (int) stateC;
 	}
 
-	public long getStateD () {
+	public long getStateD() {
 		return stateD;
 	}
 
@@ -235,8 +238,8 @@ public class Gobbler32Random extends EnhancedRandom {
 	 *
 	 * @param stateD can be any long, but will be cast to an int before use
 	 */
-	public void setStateD (long stateD) {
-		this.stateD = (int)stateD;
+	public void setStateD(long stateD) {
+		this.stateD = (int) stateD;
 	}
 
 	/**
@@ -250,11 +253,11 @@ public class Gobbler32Random extends EnhancedRandom {
 	 * @param stateD the fourth state; can be any long, but will be cast to an int before use
 	 */
 	@Override
-	public void setState (long stateA, long stateB, long stateC, long stateD) {
-		this.stateA = (int)stateA;
-		this.stateB = (int)stateB;
-		this.stateC = (int)stateC;
-		this.stateD = (int)stateD;
+	public void setState(long stateA, long stateB, long stateC, long stateD) {
+		this.stateA = (int) stateA;
+		this.stateB = (int) stateB;
+		this.stateC = (int) stateC;
+		this.stateD = (int) stateD;
 	}
 	//0x6C8E9CF5
 	//0x7FEB352D
@@ -265,60 +268,65 @@ public class Gobbler32Random extends EnhancedRandom {
 	//0x89E18285
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		int x, y, z, w;
 		x = (stateA += 0xDB4F0B91);
-		y = (stateB += (x << 21 | x >>> 11) + (0x9E3779BD * (Integer.numberOfLeadingZeros(x     ))));
+		y = (stateB += (x << 21 | x >>> 11) + (0x9E3779BD * (Integer.numberOfLeadingZeros(x))));
 		z = (stateC += (y << 21 | y >>> 11) + (0x9E3779BD * (Integer.numberOfLeadingZeros(x &= y))));
-		w = (stateD += (z << 21 | z >>> 11) + (0x9E3779BD * (Integer.numberOfLeadingZeros(x &  z))));
+		w = (stateD += (z << 21 | z >>> 11) + (0x9E3779BD * (Integer.numberOfLeadingZeros(x & z))));
 		int hi = w ^ (w << 7 | w >>> 25) ^ (w << 24 | w >>> 8);
 		x = (stateA += 0xDB4F0B91);
-		y = (stateB += (x << 21 | x >>> 11) + (0x9E3779BD * (Integer.numberOfLeadingZeros(x     ))));
+		y = (stateB += (x << 21 | x >>> 11) + (0x9E3779BD * (Integer.numberOfLeadingZeros(x))));
 		z = (stateC += (y << 21 | y >>> 11) + (0x9E3779BD * (Integer.numberOfLeadingZeros(x &= y))));
-		w = (stateD += (z << 21 | z >>> 11) + (0x9E3779BD * (Integer.numberOfLeadingZeros(x &  z))));
+		w = (stateD += (z << 21 | z >>> 11) + (0x9E3779BD * (Integer.numberOfLeadingZeros(x & z))));
 		int lo = w ^ (w << 7 | w >>> 25) ^ (w << 24 | w >>> 8);
-		return (long)hi << 32 ^ (lo & 0xFFFFFFFFL);
+		return (long) hi << 32 ^ (lo & 0xFFFFFFFFL);
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		int x, y, z, w;
 		x = (stateA += 0xDB4F0B91);
-		y = (stateB += (x << 21 | x >>> 11) + (0x9E3779BD * (Integer.numberOfLeadingZeros(x     ))));
+		y = (stateB += (x << 21 | x >>> 11) + (0x9E3779BD * (Integer.numberOfLeadingZeros(x))));
 		z = (stateC += (y << 21 | y >>> 11) + (0x9E3779BD * (Integer.numberOfLeadingZeros(x &= y))));
-		w = (stateD += (z << 21 | z >>> 11) + (0x9E3779BD * (Integer.numberOfLeadingZeros(x &  z))));
+		w = (stateD += (z << 21 | z >>> 11) + (0x9E3779BD * (Integer.numberOfLeadingZeros(x & z))));
 		return (w ^ (w << 7 | w >>> 25) ^ (w << 24 | w >>> 8)) >>> (32 - bits);
 	}
+
 	@Override
-	public int nextInt () {
+	public int nextInt() {
 		// Should use BitConversion.imul() and BitConversion.countLeadingZeros() on GWT via super-source.
 		// Should also avoid overflow on counters by using bitwise ops after adding (on GWT).
 		int x, y, z, w;
 		x = (stateA += 0xDB4F0B91);
-		y = (stateB += (x << 21 | x >>> 11) + (0x9E3779BD * (Integer.numberOfLeadingZeros(x     ))));
+		y = (stateB += (x << 21 | x >>> 11) + (0x9E3779BD * (Integer.numberOfLeadingZeros(x))));
 		z = (stateC += (y << 21 | y >>> 11) + (0x9E3779BD * (Integer.numberOfLeadingZeros(x &= y))));
-		w = (stateD += (z << 21 | z >>> 11) + (0x9E3779BD * (Integer.numberOfLeadingZeros(x &  z))));
+		w = (stateD += (z << 21 | z >>> 11) + (0x9E3779BD * (Integer.numberOfLeadingZeros(x & z))));
 		return (w ^ (w << 7 | w >>> 25) ^ (w << 24 | w >>> 8));
 	}
 
 	@Override
-	public int nextInt (int bound) {
-		return (int)(bound * (nextInt() & 0xFFFFFFFFL) >> 32) & ~(bound >> 31);
+	public int nextInt(int bound) {
+		return (int) (bound * (nextInt() & 0xFFFFFFFFL) >> 32) & ~(bound >> 31);
 	}
 
 	@Override
-	public int nextSignedInt (int outerBound) {
-		outerBound = (int)(outerBound * (nextInt() & 0xFFFFFFFFL) >> 32);
+	public int nextSignedInt(int outerBound) {
+		outerBound = (int) (outerBound * (nextInt() & 0xFFFFFFFFL) >> 32);
 		return outerBound + (outerBound >>> 31);
 	}
 
 	@Override
-	public void nextBytes (byte[] bytes) {
-		for (int i = 0; i < bytes.length; ) {for (int r = nextInt(), n = Math.min(bytes.length - i, 4); n-- > 0; r >>>= 8) {bytes[i++] = (byte)r;}}
+	public void nextBytes(byte[] bytes) {
+		for (int i = 0; i < bytes.length; ) {
+			for (int r = nextInt(), n = Math.min(bytes.length - i, 4); n-- > 0; r >>>= 8) {
+				bytes[i++] = (byte) r;
+			}
+		}
 	}
 
 	@Override
-	public long nextLong (long inner, long outer) {
+	public long nextLong(long inner, long outer) {
 		final long randLow = nextInt() & 0xFFFFFFFFL;
 		final long randHigh = nextInt() & 0xFFFFFFFFL;
 		if (inner >= outer)
@@ -330,7 +338,7 @@ public class Gobbler32Random extends EnhancedRandom {
 	}
 
 	@Override
-	public long nextSignedLong (long inner, long outer) {
+	public long nextSignedLong(long inner, long outer) {
 		if (outer < inner) {
 			long t = outer;
 			outer = inner + 1L;
@@ -345,38 +353,38 @@ public class Gobbler32Random extends EnhancedRandom {
 	}
 
 	@Override
-	public boolean nextBoolean () {
+	public boolean nextBoolean() {
 		return nextInt() < 0;
 	}
 
 	@Override
-	public float nextFloat () {
+	public float nextFloat() {
 		return (nextInt() >>> 8) * 0x1p-24f;
 	}
 
 	@Override
-	public float nextInclusiveFloat () {
+	public float nextInclusiveFloat() {
 		return (0x1000001L * (nextInt() & 0xFFFFFFFFL) >> 32) * 0x1p-24f;
 	}
 
 	@Override
-	public Gobbler32Random copy () {
-        return new Gobbler32Random(stateA, stateB, stateC, stateD);
+	public Gobbler32Random copy() {
+		return new Gobbler32Random(stateA, stateB, stateC, stateD);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		Gobbler32Random that = (Gobbler32Random)o;
+		Gobbler32Random that = (Gobbler32Random) o;
 
 		return stateA == that.stateA && stateB == that.stateB && stateC == that.stateC && stateD == that.stateD;
 	}
 
-	public String toString () {
+	public String toString() {
 		return "Gobbler32Random{" + "stateA=" + (stateA) + ", stateB=" + (stateB) + ", stateC=" + (stateC) + ", stateD=" + (stateD) + "}";
 	}
 }

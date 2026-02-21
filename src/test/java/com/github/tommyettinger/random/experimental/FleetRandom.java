@@ -76,7 +76,7 @@ public class FleetRandom extends EnhancedRandom {
 	 * @return 2 (two)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 2;
 	}
 
@@ -88,7 +88,7 @@ public class FleetRandom extends EnhancedRandom {
 	 * @return the value of the selected state
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		if ((selection & 1) == 0) {
 			return stateA;
 		}
@@ -103,7 +103,7 @@ public class FleetRandom extends EnhancedRandom {
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		if ((selection & 1) == 0) {
 			stateA = value;
 		} else {
@@ -119,7 +119,7 @@ public class FleetRandom extends EnhancedRandom {
 	 * @param seed the initial seed; may be any long
 	 */
 	@Override
-	public void setSeed (long seed) {
+	public void setSeed(long seed) {
 		stateA = seed + 0xC6BC279692B5C323L;
 		seed -= 0xC6BC279692B5C323L;
 		seed ^= seed >>> 32;
@@ -132,7 +132,7 @@ public class FleetRandom extends EnhancedRandom {
 		stateB = seed;
 	}
 
-	public long getStateA () {
+	public long getStateA() {
 		return stateA;
 	}
 
@@ -141,11 +141,11 @@ public class FleetRandom extends EnhancedRandom {
 	 *
 	 * @param stateA can be any long
 	 */
-	public void setStateA (long stateA) {
+	public void setStateA(long stateA) {
 		this.stateA = stateA;
 	}
 
-	public long getStateB () {
+	public long getStateB() {
 		return stateB;
 	}
 
@@ -154,7 +154,7 @@ public class FleetRandom extends EnhancedRandom {
 	 *
 	 * @param stateB can be any long
 	 */
-	public void setStateB (long stateB) {
+	public void setStateB(long stateB) {
 		this.stateB = stateB;
 	}
 
@@ -165,13 +165,13 @@ public class FleetRandom extends EnhancedRandom {
 	 * @param stateA the first state; can be any long
 	 * @param stateB the second state; can be any long
 	 */
-	public void setState (long stateA, long stateB) {
+	public void setState(long stateA, long stateB) {
 		this.stateA = stateA;
 		this.stateB = stateB;
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		long a = (stateA += 0x9E3779B97F4A7C15L);
 		long b = (stateB += 0xC6BC279692B5C323L ^ BitConversion.countLeadingZeros(a));
 		b ^= b >>> 28;
@@ -180,7 +180,7 @@ public class FleetRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public long previousLong () {
+	public long previousLong() {
 		long a = stateA;
 		long b = stateB;
 		stateA -= 0x9E3779B97F4A7C15L;
@@ -191,7 +191,7 @@ public class FleetRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		long a = (stateA += 0x9E3779B97F4A7C15L);
 		long b = (stateB += 0xC6BC279692B5C323L ^ BitConversion.countLeadingZeros(a));
 		b ^= b >>> 28;
@@ -200,23 +200,23 @@ public class FleetRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public FleetRandom copy () {
+	public FleetRandom copy() {
 		return new FleetRandom(stateA, stateB);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		FleetRandom that = (FleetRandom)o;
+		FleetRandom that = (FleetRandom) o;
 
 		return stateA == that.stateA && stateB == that.stateB;
 	}
 
-	public String toString () {
+	public String toString() {
 		return "FleetRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L}";
 	}
 

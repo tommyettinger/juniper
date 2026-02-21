@@ -78,7 +78,7 @@ public class Chill32Random extends Enhanced32Random {
 	 * Creates a new Chill32Random with a random state.
 	 */
 	public Chill32Random() {
-		this((int)EnhancedRandom.seedFromMath(), (int)EnhancedRandom.seedFromMath(), (int)EnhancedRandom.seedFromMath());
+		this((int) EnhancedRandom.seedFromMath(), (int) EnhancedRandom.seedFromMath(), (int) EnhancedRandom.seedFromMath());
 	}
 
 	/**
@@ -113,12 +113,14 @@ public class Chill32Random extends Enhanced32Random {
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("1000000000000000000000000", 16);
 
 	/**
 	 * 2 to the 96.
+	 *
 	 * @return 2 to the 96
 	 */
 	@Override
@@ -128,6 +130,7 @@ public class Chill32Random extends Enhanced32Random {
 
 	/**
 	 * This generator is almost as fast at generating {@code long} values as it is {@code int} values.
+	 *
 	 * @return false
 	 */
 	@Override
@@ -141,7 +144,7 @@ public class Chill32Random extends Enhanced32Random {
 	 * @return 3 (three)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 3;
 	}
 
@@ -153,7 +156,7 @@ public class Chill32Random extends Enhanced32Random {
 	 * @return the value of the selected state, which is an int that will be promoted to long
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		switch (selection) {
 			case 0:
 				return stateA;
@@ -173,7 +176,7 @@ public class Chill32Random extends Enhanced32Random {
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		switch (selection) {
 			case 0:
 				stateA = (int) value;
@@ -194,8 +197,8 @@ public class Chill32Random extends Enhanced32Random {
 	 * @param seed the initial seed; may be any long
 	 */
 	@Override
-	public void setSeed (long seed) {
-		int a = (int)seed, b = (int)(seed >>> 32), c = (int)(~seed >>> 16);
+	public void setSeed(long seed) {
+		int a = (int) seed, b = (int) (seed >>> 32), c = (int) (~seed >>> 16);
 		for (int i = 0; i < 5; i++) {
 			b = (b << 24 | b >>> 8) + a ^ ++c;
 			a = (a << 3 | a >>> 29) ^ b;
@@ -213,7 +216,7 @@ public class Chill32Random extends Enhanced32Random {
 		stateC = a;
 	}
 
-	public int getStateA () {
+	public int getStateA() {
 		return stateA;
 	}
 
@@ -222,11 +225,11 @@ public class Chill32Random extends Enhanced32Random {
 	 *
 	 * @param stateA can be any int
 	 */
-	public void setStateA (int stateA) {
+	public void setStateA(int stateA) {
 		this.stateA = stateA;
 	}
 
-	public int getStateB () {
+	public int getStateB() {
 		return stateB;
 	}
 
@@ -235,11 +238,11 @@ public class Chill32Random extends Enhanced32Random {
 	 *
 	 * @param stateB can be any int
 	 */
-	public void setStateB (int stateB) {
+	public void setStateB(int stateB) {
 		this.stateB = stateB;
 	}
 
-	public int getStateC () {
+	public int getStateC() {
 		return stateC;
 	}
 
@@ -248,7 +251,7 @@ public class Chill32Random extends Enhanced32Random {
 	 *
 	 * @param stateC can be any int
 	 */
-	public void setStateC (int stateC) {
+	public void setStateC(int stateC) {
 		this.stateC = stateC;
 	}
 
@@ -262,10 +265,10 @@ public class Chill32Random extends Enhanced32Random {
 	 * @param stateC the third state; can be any long, but will be cast to an int before use
 	 */
 	@Override
-	public void setState (long stateA, long stateB, long stateC) {
-		this.stateA = (int)stateA;
-		this.stateB = (int)stateB;
-		this.stateC = (int)stateC;
+	public void setState(long stateA, long stateB, long stateC) {
+		this.stateA = (int) stateA;
+		this.stateB = (int) stateB;
+		this.stateC = (int) stateC;
 	}
 
 	/**
@@ -276,60 +279,60 @@ public class Chill32Random extends Enhanced32Random {
 	 * @param stateB the second state; can be any int
 	 * @param stateC the third state; can be any int
 	 */
-	public void setState (int stateA, int stateB, int stateC) {
+	public void setState(int stateA, int stateB, int stateC) {
 		this.stateA = stateA;
 		this.stateB = stateB;
 		this.stateC = stateC;
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		int x = (stateA = stateA + 0xD192ED03 ^ 0xBEA225FA);
 		int y = (stateB = stateB + BitConversion.countLeadingZeros(x) ^ 0xA62B82F6);
 		int z = (stateC = stateC + BitConversion.countLeadingZeros(x & y) ^ 0x9E3779BA);
-		y = (y <<  3 | y >>> 29) ^ (x = (x << 24 | x >>>  8) + y ^ z) + (x <<  7 | x >>> 25);
-		x = (x << 14 | x >>> 18) ^ (y = (y << 29 | y >>>  3) + x ^ z) + (y << 11 | y >>> 21);
-		y = (y << 19 | y >>> 13) ^ (x = (x <<  5 | x >>> 27) + y ^ z) + (x << 29 | x >>>  3);
-		x = (x << 17 | x >>> 15) ^ (y = (y << 11 | y >>> 21) + x ^ z) + (y << 23 | y >>>  9);
-		return (long)y << 32 ^ x;
+		y = (y << 3 | y >>> 29) ^ (x = (x << 24 | x >>> 8) + y ^ z) + (x << 7 | x >>> 25);
+		x = (x << 14 | x >>> 18) ^ (y = (y << 29 | y >>> 3) + x ^ z) + (y << 11 | y >>> 21);
+		y = (y << 19 | y >>> 13) ^ (x = (x << 5 | x >>> 27) + y ^ z) + (x << 29 | x >>> 3);
+		x = (x << 17 | x >>> 15) ^ (y = (y << 11 | y >>> 21) + x ^ z) + (y << 23 | y >>> 9);
+		return (long) y << 32 ^ x;
 	}
 
 	@Override
-	public long previousLong () {
+	public long previousLong() {
 		int x = stateA;
 		int y = stateB;
 		int z = stateC;
 		stateA = (x ^ 0xBEA225FA) - 0xD192ED03 | 0;
 		stateB = (y ^ 0xA62B82F6) - BitConversion.countLeadingZeros(x) | 0;
 		stateC = (z ^ 0x9E3779BA) - BitConversion.countLeadingZeros(x & y) | 0;
-		y = (y <<  3 | y >>> 29) ^ (x = (x << 24 | x >>>  8) + y ^ z) + (x <<  7 | x >>> 25);
-		x = (x << 14 | x >>> 18) ^ (y = (y << 29 | y >>>  3) + x ^ z) + (y << 11 | y >>> 21);
-		y = (y << 19 | y >>> 13) ^ (x = (x <<  5 | x >>> 27) + y ^ z) + (x << 29 | x >>>  3);
-		x = (x << 17 | x >>> 15) ^ (y = (y << 11 | y >>> 21) + x ^ z) + (y << 23 | y >>>  9);
-		return (long)y << 32 ^ x;
+		y = (y << 3 | y >>> 29) ^ (x = (x << 24 | x >>> 8) + y ^ z) + (x << 7 | x >>> 25);
+		x = (x << 14 | x >>> 18) ^ (y = (y << 29 | y >>> 3) + x ^ z) + (y << 11 | y >>> 21);
+		y = (y << 19 | y >>> 13) ^ (x = (x << 5 | x >>> 27) + y ^ z) + (x << 29 | x >>> 3);
+		x = (x << 17 | x >>> 15) ^ (y = (y << 11 | y >>> 21) + x ^ z) + (y << 23 | y >>> 9);
+		return (long) y << 32 ^ x;
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		int x = (stateA = stateA + 0xD192ED03 ^ 0xBEA225FA);
 		int y = (stateB = stateB + BitConversion.countLeadingZeros(x) ^ 0xA62B82F6);
 		int z = (stateC = stateC + BitConversion.countLeadingZeros(x & y) ^ 0x9E3779BA);
-		y = (y <<  3 | y >>> 29) ^ (x = (x << 24 | x >>>  8) + y ^ z) + (x <<  7 | x >>> 25);
-		x = (x << 14 | x >>> 18) ^ (y = (y << 29 | y >>>  3) + x ^ z) + (y << 11 | y >>> 21);
-		y = (y << 19 | y >>> 13) ^ (x = (x <<  5 | x >>> 27) + y ^ z) + (x << 29 | x >>>  3);
-		x = (x << 17 | x >>> 15) ^ (y = (y << 11 | y >>> 21) + x ^ z) + (y << 23 | y >>>  9);
+		y = (y << 3 | y >>> 29) ^ (x = (x << 24 | x >>> 8) + y ^ z) + (x << 7 | x >>> 25);
+		x = (x << 14 | x >>> 18) ^ (y = (y << 29 | y >>> 3) + x ^ z) + (y << 11 | y >>> 21);
+		y = (y << 19 | y >>> 13) ^ (x = (x << 5 | x >>> 27) + y ^ z) + (x << 29 | x >>> 3);
+		x = (x << 17 | x >>> 15) ^ (y = (y << 11 | y >>> 21) + x ^ z) + (y << 23 | y >>> 9);
 		return x >>> (32 - bits);
 	}
 
 	@Override
-	public int nextInt () {
+	public int nextInt() {
 		int x = (stateA = stateA + 0xD192ED03 ^ 0xBEA225FA);
 		int y = (stateB = stateB + BitConversion.countLeadingZeros(x) ^ 0xA62B82F6);
 		int z = (stateC = stateC + BitConversion.countLeadingZeros(x & y) ^ 0x9E3779BA);
-		y = (y <<  3 | y >>> 29) ^ (x = (x << 24 | x >>>  8) + y ^ z) + (x <<  7 | x >>> 25);
-		x = (x << 14 | x >>> 18) ^ (y = (y << 29 | y >>>  3) + x ^ z) + (y << 11 | y >>> 21);
-		y = (y << 19 | y >>> 13) ^ (x = (x <<  5 | x >>> 27) + y ^ z) + (x << 29 | x >>>  3);
-		x = (x << 17 | x >>> 15) ^ (y = (y << 11 | y >>> 21) + x ^ z) + (y << 23 | y >>>  9);
+		y = (y << 3 | y >>> 29) ^ (x = (x << 24 | x >>> 8) + y ^ z) + (x << 7 | x >>> 25);
+		x = (x << 14 | x >>> 18) ^ (y = (y << 29 | y >>> 3) + x ^ z) + (y << 11 | y >>> 21);
+		y = (y << 19 | y >>> 13) ^ (x = (x << 5 | x >>> 27) + y ^ z) + (x << 29 | x >>> 3);
+		x = (x << 17 | x >>> 15) ^ (y = (y << 11 | y >>> 21) + x ^ z) + (y << 23 | y >>> 9);
 		return x;
 	}
 
@@ -340,10 +343,10 @@ public class Chill32Random extends Enhanced32Random {
 		stateA = (x ^ 0xBEA225FA) - 0xD192ED03 | 0;
 		stateB = (y ^ 0xA62B82F6) - BitConversion.countLeadingZeros(x) | 0;
 		stateC = (z ^ 0x9E3779BA) - BitConversion.countLeadingZeros(x & y) | 0;
-		y = (y <<  3 | y >>> 29) ^ (x = (x << 24 | x >>>  8) + y ^ z) + (x <<  7 | x >>> 25);
-		x = (x << 14 | x >>> 18) ^ (y = (y << 29 | y >>>  3) + x ^ z) + (y << 11 | y >>> 21);
-		y = (y << 19 | y >>> 13) ^ (x = (x <<  5 | x >>> 27) + y ^ z) + (x << 29 | x >>>  3);
-		x = (x << 17 | x >>> 15) ^ (y = (y << 11 | y >>> 21) + x ^ z) + (y << 23 | y >>>  9);
+		y = (y << 3 | y >>> 29) ^ (x = (x << 24 | x >>> 8) + y ^ z) + (x << 7 | x >>> 25);
+		x = (x << 14 | x >>> 18) ^ (y = (y << 29 | y >>> 3) + x ^ z) + (y << 11 | y >>> 21);
+		y = (y << 19 | y >>> 13) ^ (x = (x << 5 | x >>> 27) + y ^ z) + (x << 29 | x >>> 3);
+		x = (x << 17 | x >>> 15) ^ (y = (y << 11 | y >>> 21) + x ^ z) + (y << 23 | y >>> 9);
 		return x;
 	}
 
@@ -352,10 +355,10 @@ public class Chill32Random extends Enhanced32Random {
 		int x = (stateA = stateA + 0xD192ED03 ^ 0xBEA225FA);
 		int y = (stateB = stateB + BitConversion.countLeadingZeros(x) ^ 0xA62B82F6);
 		int z = (stateC = stateC + BitConversion.countLeadingZeros(x & y) ^ 0x9E3779BA);
-		y = (y <<  3 | y >>> 29) ^ (x = (x << 24 | x >>>  8) + y ^ z) + (x <<  7 | x >>> 25);
-		x = (x << 14 | x >>> 18) ^ (y = (y << 29 | y >>>  3) + x ^ z) + (y << 11 | y >>> 21);
-		y = (y << 19 | y >>> 13) ^ (x = (x <<  5 | x >>> 27) + y ^ z) + (x << 29 | x >>>  3);
-		x = (x << 17 | x >>> 15) ^ (y = (y << 11 | y >>> 21) + x ^ z) + (y << 23 | y >>>  9);
+		y = (y << 3 | y >>> 29) ^ (x = (x << 24 | x >>> 8) + y ^ z) + (x << 7 | x >>> 25);
+		x = (x << 14 | x >>> 18) ^ (y = (y << 29 | y >>> 3) + x ^ z) + (y << 11 | y >>> 21);
+		y = (y << 19 | y >>> 13) ^ (x = (x << 5 | x >>> 27) + y ^ z) + (x << 29 | x >>> 3);
+		x = (x << 17 | x >>> 15) ^ (y = (y << 11 | y >>> 21) + x ^ z) + (y << 23 | y >>> 9);
 
 		if (inner >= outer)
 			return inner;
@@ -372,10 +375,10 @@ public class Chill32Random extends Enhanced32Random {
 		int x = (stateA = stateA + 0xD192ED03 ^ 0xBEA225FA);
 		int y = (stateB = stateB + BitConversion.countLeadingZeros(x) ^ 0xA62B82F6);
 		int z = (stateC = stateC + BitConversion.countLeadingZeros(x & y) ^ 0x9E3779BA);
-		y = (y <<  3 | y >>> 29) ^ (x = (x << 24 | x >>>  8) + y ^ z) + (x <<  7 | x >>> 25);
-		x = (x << 14 | x >>> 18) ^ (y = (y << 29 | y >>>  3) + x ^ z) + (y << 11 | y >>> 21);
-		y = (y << 19 | y >>> 13) ^ (x = (x <<  5 | x >>> 27) + y ^ z) + (x << 29 | x >>>  3);
-		x = (x << 17 | x >>> 15) ^ (y = (y << 11 | y >>> 21) + x ^ z) + (y << 23 | y >>>  9);
+		y = (y << 3 | y >>> 29) ^ (x = (x << 24 | x >>> 8) + y ^ z) + (x << 7 | x >>> 25);
+		x = (x << 14 | x >>> 18) ^ (y = (y << 29 | y >>> 3) + x ^ z) + (y << 11 | y >>> 21);
+		y = (y << 19 | y >>> 13) ^ (x = (x << 5 | x >>> 27) + y ^ z) + (x << 29 | x >>> 3);
+		x = (x << 17 | x >>> 15) ^ (y = (y << 11 | y >>> 21) + x ^ z) + (y << 23 | y >>> 9);
 
 		if (outer < inner) {
 			long tmp = outer;
@@ -395,31 +398,31 @@ public class Chill32Random extends Enhanced32Random {
 		int x = (stateA = stateA + 0xD192ED03 ^ 0xBEA225FA);
 		int y = (stateB = stateB + BitConversion.countLeadingZeros(x) ^ 0xA62B82F6);
 		int z = (stateC = stateC + BitConversion.countLeadingZeros(x & y) ^ 0x9E3779BA);
-		y = (y <<  3 | y >>> 29) ^ (x = (x << 24 | x >>>  8) + y ^ z) + (x <<  7 | x >>> 25);
-		x = (x << 14 | x >>> 18) ^ (y = (y << 29 | y >>>  3) + x ^ z) + (y << 11 | y >>> 21);
-		y = (y << 19 | y >>> 13) ^ (x = (x <<  5 | x >>> 27) + y ^ z) + (x << 29 | x >>>  3);
-		x = (x << 17 | x >>> 15) ^ (y = (y << 11 | y >>> 21) + x ^ z) + (y << 23 | y >>>  9);
+		y = (y << 3 | y >>> 29) ^ (x = (x << 24 | x >>> 8) + y ^ z) + (x << 7 | x >>> 25);
+		x = (x << 14 | x >>> 18) ^ (y = (y << 29 | y >>> 3) + x ^ z) + (y << 11 | y >>> 21);
+		y = (y << 19 | y >>> 13) ^ (x = (x << 5 | x >>> 27) + y ^ z) + (x << 29 | x >>> 3);
+		x = (x << 17 | x >>> 15) ^ (y = (y << 11 | y >>> 21) + x ^ z) + (y << 23 | y >>> 9);
 		return MathTools.exclusiveDouble(x, y);
 	}
 
 	@Override
-	public Chill32Random copy () {
+	public Chill32Random copy() {
 		return new Chill32Random(stateA, stateB, stateC);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		Chill32Random that = (Chill32Random)o;
+		Chill32Random that = (Chill32Random) o;
 
 		return stateA == that.stateA && stateB == that.stateB && stateC == that.stateC;
 	}
 
-	public String toString () {
+	public String toString() {
 		return "Chill32Random{stateA=" + (stateA) + ", stateB=" + (stateB) + ", stateC=" + (stateC) + "}";
 	}
 

@@ -1,6 +1,5 @@
 package com.github.tommyettinger.random.experimental;
 
-import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.random.EnhancedRandom;
 import org.checkerframework.checker.nullness.qual.NonNull;
 

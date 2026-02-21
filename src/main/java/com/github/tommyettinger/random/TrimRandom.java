@@ -85,7 +85,7 @@ public class TrimRandom extends EnhancedRandom {
 	/**
 	 * Creates a new TrimRandom with a random state.
 	 */
-	public TrimRandom () {
+	public TrimRandom() {
 		super();
 		stateA = EnhancedRandom.seedFromMath();
 		stateB = EnhancedRandom.seedFromMath();
@@ -99,7 +99,7 @@ public class TrimRandom extends EnhancedRandom {
 	 *
 	 * @param seed any {@code long} value
 	 */
-	public TrimRandom (long seed) {
+	public TrimRandom(long seed) {
 		super(seed);
 		setSeed(seed);
 	}
@@ -113,7 +113,7 @@ public class TrimRandom extends EnhancedRandom {
 	 * @param stateC any {@code long} value; will be returned exactly on the first call to {@link #nextLong()}
 	 * @param stateD any {@code long} value
 	 */
-	public TrimRandom (long stateA, long stateB, long stateC, long stateD) {
+	public TrimRandom(long stateA, long stateB, long stateC, long stateD) {
 		super(stateA);
 		this.stateA = stateA;
 		this.stateB = stateB;
@@ -128,12 +128,14 @@ public class TrimRandom extends EnhancedRandom {
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
 
 	/**
 	 * 2 to the 64.
+	 *
 	 * @return 2 to the 64
 	 */
 	@Override
@@ -147,7 +149,7 @@ public class TrimRandom extends EnhancedRandom {
 	 * @return 4 (four)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 4;
 	}
 
@@ -159,16 +161,16 @@ public class TrimRandom extends EnhancedRandom {
 	 * @return the value of the selected state
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		switch (selection) {
-		case 0:
-			return stateA;
-		case 1:
-			return stateB;
-		case 2:
-			return stateC;
-		default:
-			return stateD;
+			case 0:
+				return stateA;
+			case 1:
+				return stateB;
+			case 2:
+				return stateC;
+			default:
+				return stateD;
 		}
 	}
 
@@ -181,20 +183,20 @@ public class TrimRandom extends EnhancedRandom {
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		switch (selection) {
-		case 0:
-			stateA = value;
-			break;
-		case 1:
-			stateB = value;
-			break;
-		case 2:
-			stateC = value;
-			break;
-		default:
-			stateD = value;
-			break;
+			case 0:
+				stateA = value;
+				break;
+			case 1:
+				stateB = value;
+				break;
+			case 2:
+				stateC = value;
+				break;
+			default:
+				stateD = value;
+				break;
 		}
 	}
 
@@ -206,6 +208,7 @@ public class TrimRandom extends EnhancedRandom {
 	 * This uses MX3 by Jon Maiga to mix {@code seed}, then only does a little distribution of the
 	 * mixed long so that 128 of 256 bits are always set across the four states. Because this uses
 	 * MX3, it uses long multiplication; this is the only part of TrimRandom that does so.
+	 *
 	 * @param seed the initial seed; may be any long
 	 */
 	public void setSeed(long seed) {
@@ -222,7 +225,7 @@ public class TrimRandom extends EnhancedRandom {
 		stateD = seed;
 	}
 
-	public long getStateA () {
+	public long getStateA() {
 		return stateA;
 	}
 
@@ -231,11 +234,11 @@ public class TrimRandom extends EnhancedRandom {
 	 *
 	 * @param stateA can be any long
 	 */
-	public void setStateA (long stateA) {
+	public void setStateA(long stateA) {
 		this.stateA = stateA;
 	}
 
-	public long getStateB () {
+	public long getStateB() {
 		return stateB;
 	}
 
@@ -244,11 +247,11 @@ public class TrimRandom extends EnhancedRandom {
 	 *
 	 * @param stateB can be any long
 	 */
-	public void setStateB (long stateB) {
+	public void setStateB(long stateB) {
 		this.stateB = stateB;
 	}
 
-	public long getStateC () {
+	public long getStateC() {
 		return stateC;
 	}
 
@@ -257,11 +260,11 @@ public class TrimRandom extends EnhancedRandom {
 	 *
 	 * @param stateC can be any long
 	 */
-	public void setStateC (long stateC) {
+	public void setStateC(long stateC) {
 		this.stateC = stateC;
 	}
 
-	public long getStateD () {
+	public long getStateD() {
 		return stateD;
 	}
 
@@ -270,7 +273,7 @@ public class TrimRandom extends EnhancedRandom {
 	 *
 	 * @param stateD can be any long
 	 */
-	public void setStateD (long stateD) {
+	public void setStateD(long stateD) {
 		this.stateD = stateD;
 	}
 
@@ -285,7 +288,7 @@ public class TrimRandom extends EnhancedRandom {
 	 * @param stateD the fourth state; can be any long
 	 */
 	@Override
-	public void setState (long stateA, long stateB, long stateC, long stateD) {
+	public void setState(long stateA, long stateB, long stateC, long stateD) {
 		this.stateA = stateA;
 		this.stateB = stateB;
 		this.stateC = stateC;
@@ -293,7 +296,7 @@ public class TrimRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		final long fa = stateA;
 		final long fb = stateB;
 		final long fc = stateC;
@@ -308,7 +311,7 @@ public class TrimRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public long previousLong () {
+	public long previousLong() {
 		final long fa = stateA;
 		final long fb = stateB;
 		final long fc = stateC;
@@ -322,7 +325,7 @@ public class TrimRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		final long fa = stateA;
 		final long fb = stateB;
 		final long fc = stateC;
@@ -333,11 +336,11 @@ public class TrimRandom extends EnhancedRandom {
 		stateB = (cd << 18 | cd >>> 46);
 		stateC = fa + bc;
 		stateD = fd + 0xDE916ABCC965815BL;
-		return (int)stateC >>> (32 - bits);
+		return (int) stateC >>> (32 - bits);
 	}
 
 	@Override
-	public TrimRandom copy () {
+	public TrimRandom copy() {
 		return new TrimRandom(stateA, stateB, stateC, stateD);
 	}
 
@@ -345,9 +348,10 @@ public class TrimRandom extends EnhancedRandom {
 	 * Jumps extremely far in the generator's sequence, such that one call to leap() advances the state as many as
 	 * {@code Math.pow(2, 48)} calls to {@link #nextLong()}. This can be used to create 65536 substreams of this
 	 * generator's sequence, each with a period of at least {@code Math.pow(2, 48)} but likely much more.
+	 *
 	 * @return the result of what nextLong() would return if it was called at the state this jumped to
 	 */
-	public long leap () {
+	public long leap() {
 		final long fa = stateA;
 		final long fb = stateB;
 		final long fc = stateC;
@@ -362,18 +366,18 @@ public class TrimRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		TrimRandom that = (TrimRandom)o;
+		TrimRandom that = (TrimRandom) o;
 
 		return stateA == that.stateA && stateB == that.stateB && stateC == that.stateC && stateD == that.stateD;
 	}
 
-	public String toString () {
+	public String toString() {
 		return "TrimRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L, stateD=" + (stateD) + "L}";
 	}
 }

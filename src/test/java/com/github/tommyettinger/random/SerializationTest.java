@@ -12,7 +12,7 @@ public class SerializationTest {
 	@Test
 	public void testWrite() {
 		List<EnhancedRandom> all = Deserializer.copyRandoms();
-		for(EnhancedRandom r : all) {
+		for (EnhancedRandom r : all) {
 			r.setSeed(-1L);
 			String s = r.stringSerialize();
 			System.out.println(s);
@@ -38,19 +38,19 @@ public class SerializationTest {
 			"PasR$-1+-69383448E861760A+-507BEC21852B4AD6+69383448E8617609+507BEC21852B4AD5$",
 		};
 		int idx = 0;
-		for(String s : serialized){
+		for (String s : serialized) {
 			EnhancedRandom x = all[idx++], r = Deserializer.deserialize(s);
 			System.out.println(s + " makes " + x + "  ,  " + r);
 			Assert.assertTrue(EnhancedRandom.areEqual(r, x));
 		}
 	}
+
 	@Test
 	public void testRoundTrip() {
 		List<EnhancedRandom> all = Deserializer.copyRandoms();
 
 		List<Base> bases = Base.values();
-		for(Base base : bases)
-		{
+		for (Base base : bases) {
 //        Base base = new Base("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'/!@#$%^&*()[]{}<>.?;|_=", false, ' ', '+', '-');
 			for (EnhancedRandom r : all) {
 				String s = r.stringSerialize(base);
@@ -60,19 +60,21 @@ public class SerializationTest {
 				System.out.println(s + "   " + de.stringSerialize(base));
 				de.nextLong();
 				long dl = de.nextLong();
-				Assert.assertEquals("Failure with " + s + " and radix " + base.base + ", base contents:\n"+base+"\n", rl, dl);
+				Assert.assertEquals("Failure with " + s + " and radix " + base.base + ", base contents:\n" + base + "\n", rl, dl);
 			}
 		}
 	}
+
 	@Test
 	public void testWriteDist() {
 		List<Distribution> all = Deserializer.copyDistributions();
-		for(Distribution d : all) {
+		for (Distribution d : all) {
 			String s = d.stringSerialize();
 			System.out.println(s);
 			Assert.assertTrue(s.startsWith(d.getTag()));
 		}
 	}
+
 	@Test
 	public void testRoundTripDist() {
 		List<Distribution> all = Deserializer.copyDistributions();
@@ -82,7 +84,7 @@ public class SerializationTest {
 		WhiskerRandom rand = new WhiskerRandom(123456789L);
 		Base base = Base.BASE10;
 		//Base.scrambledBase(new LaserRandom(123456789L));
-		for(Distribution r : all) {
+		for (Distribution r : all) {
 			r.generator = rand.randomElement(randoms).copy();
 			r.generator.setSeed(rand.nextLong());
 			String s = r.stringSerialize(base);
@@ -197,6 +199,7 @@ public class SerializationTest {
 			Assert.assertEquals("Failed at iteration " + i + " with generators:\n" + ksr + '\n' + ksr2, ksr.nextLong(1000000), ksr2.nextLong(1000000));
 		}
 	}
+
 	@Test
 	public void testArchivalWrapper2() {
 

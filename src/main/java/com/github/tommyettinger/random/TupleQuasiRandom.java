@@ -84,12 +84,14 @@ public class TupleQuasiRandom extends EnhancedRandom {
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
 
 	/**
 	 * 2 to the 64.
+	 *
 	 * @return 2 to the 64
 	 */
 	@Override
@@ -103,7 +105,7 @@ public class TupleQuasiRandom extends EnhancedRandom {
 	 * @return 1 (one)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 1;
 	}
 
@@ -114,7 +116,7 @@ public class TupleQuasiRandom extends EnhancedRandom {
 	 * @return the main state's exact value
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		return state;
 	}
 
@@ -125,7 +127,7 @@ public class TupleQuasiRandom extends EnhancedRandom {
 	 * @param value     the exact value to use for the main state; all longs are valid for the main state
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		state = value;
 	}
 
@@ -137,7 +139,7 @@ public class TupleQuasiRandom extends EnhancedRandom {
 	 * @param seed the exact value to use for the state; all longs are valid
 	 */
 	@Override
-	public void setSeed (long seed) {
+	public void setSeed(long seed) {
 		state = seed;
 	}
 
@@ -147,7 +149,7 @@ public class TupleQuasiRandom extends EnhancedRandom {
 	 *
 	 * @return the current state, as a long
 	 */
-	public long getState () {
+	public long getState() {
 		return state;
 	}
 
@@ -157,13 +159,13 @@ public class TupleQuasiRandom extends EnhancedRandom {
 	 * @param state the long value to use for the state variable
 	 */
 	@Override
-	public void setState (long state) {
+	public void setState(long state) {
 		this.state = state;
 	}
 
 	@Override
-	public long nextLong () {
-		return (((state += 0x9E3779B97F4A7C15L) >>> shift) * MathTools.GOLDEN_LONGS[(int)(state & MASK)]);
+	public long nextLong() {
+		return (((state += 0x9E3779B97F4A7C15L) >>> shift) * MathTools.GOLDEN_LONGS[(int) (state & MASK)]);
 	}
 
 	/**
@@ -178,48 +180,48 @@ public class TupleQuasiRandom extends EnhancedRandom {
 	 * @return a random {@code long} by the same algorithm as {@link #nextLong()}, using the appropriately-advanced state
 	 */
 	@Override
-	public long skip (long advance) {
-		return (((state += advance * 0x9E3779B97F4A7C15L) >>> shift) * MathTools.GOLDEN_LONGS[(int)(state & MASK)]);
+	public long skip(long advance) {
+		return (((state += advance * 0x9E3779B97F4A7C15L) >>> shift) * MathTools.GOLDEN_LONGS[(int) (state & MASK)]);
 	}
 
 	@Override
-	public long previousLong () {
-		final long result = ((state >>> shift) * MathTools.GOLDEN_LONGS[(int)(state & MASK)]);
+	public long previousLong() {
+		final long result = ((state >>> shift) * MathTools.GOLDEN_LONGS[(int) (state & MASK)]);
 		state -= 0x9E3779B97F4A7C15L;
 		return result;
 	}
 
 	@Override
-	public int next (int bits) {
-		return (int)((((state += 0x9E3779B97F4A7C15L) >>> shift) * MathTools.GOLDEN_LONGS[(int)(state & MASK)]) >>> 64 - bits);
+	public int next(int bits) {
+		return (int) ((((state += 0x9E3779B97F4A7C15L) >>> shift) * MathTools.GOLDEN_LONGS[(int) (state & MASK)]) >>> 64 - bits);
 	}
 
 	@Override
 	public int nextInt() {
-		return (int)((((state += 0x9E3779B97F4A7C15L) >>> shift) * MathTools.GOLDEN_LONGS[(int)(state & MASK)]) >>> 32);
+		return (int) ((((state += 0x9E3779B97F4A7C15L) >>> shift) * MathTools.GOLDEN_LONGS[(int) (state & MASK)]) >>> 32);
 	}
 
 	@Override
 	public int nextInt(int bound) {
-		return (int)(bound * ((((state += 0x9E3779B97F4A7C15L) >>> shift) * MathTools.GOLDEN_LONGS[(int)(state & MASK)]) >>> 32) >> 32) & ~(bound >> 31);
+		return (int) (bound * ((((state += 0x9E3779B97F4A7C15L) >>> shift) * MathTools.GOLDEN_LONGS[(int) (state & MASK)]) >>> 32) >> 32) & ~(bound >> 31);
 	}
 
 	@Override
 	public int nextSignedInt(int outerBound) {
-		outerBound = (int)(outerBound * ((((state += 0x9E3779B97F4A7C15L) >>> shift) * MathTools.GOLDEN_LONGS[(int)(state & MASK)]) >>> 32) >> 32);
+		outerBound = (int) (outerBound * ((((state += 0x9E3779B97F4A7C15L) >>> shift) * MathTools.GOLDEN_LONGS[(int) (state & MASK)]) >>> 32) >> 32);
 		return outerBound + (outerBound >>> 31);
 	}
 
 	@Override
-	public double nextExclusiveDouble () {
+	public double nextExclusiveDouble() {
 		/* 1.1102230246251565E-16 is 0x1p-53, 5.551115123125782E-17 is 0x1.fffffffffffffp-55 */
 		return ((((state += 0x9E3779B97F4A7C15L) >>> shift)
-				* MathTools.GOLDEN_LONGS[(int)(state & MASK)]) >>> 11) * 1.1102230246251565E-16 + 5.551115123125782E-17;
+			* MathTools.GOLDEN_LONGS[(int) (state & MASK)]) >>> 11) * 1.1102230246251565E-16 + 5.551115123125782E-17;
 	}
 
 	@Override
 	public double nextExclusiveSignedDouble() {
-		final long bits = (((state += 0x9E3779B97F4A7C15L) >>> shift) * MathTools.GOLDEN_LONGS[(int)(state & MASK)]);
+		final long bits = (((state += 0x9E3779B97F4A7C15L) >>> shift) * MathTools.GOLDEN_LONGS[(int) (state & MASK)]);
 		/* 1.1102230246251565E-16 is 0x1p-53, 5.551115123125782E-17 is 0x1.fffffffffffffp-55 */
 		final double n = (bits >>> 11) * 1.1102230246251565E-16 + 5.551115123125782E-17;
 		return Math.copySign(n, bits << 53);
@@ -229,12 +231,12 @@ public class TupleQuasiRandom extends EnhancedRandom {
 	public float nextExclusiveFloat() {
 		/* 5.9604645E-8f is 0x1p-24f, 2.980232E-8f is 0x1.FFFFFEp-26f */
 		return ((((state += 0x9E3779B97F4A7C15L) >>> shift)
-				* MathTools.GOLDEN_LONGS[(int)(state & MASK)]) >>> 40) * 5.9604645E-8f + 2.980232E-8f;
+			* MathTools.GOLDEN_LONGS[(int) (state & MASK)]) >>> 40) * 5.9604645E-8f + 2.980232E-8f;
 	}
 
 	@Override
 	public float nextExclusiveSignedFloat() {
-		final long bits = (((state += 0x9E3779B97F4A7C15L) >>> shift) * MathTools.GOLDEN_LONGS[(int)(state & MASK)]);
+		final long bits = (((state += 0x9E3779B97F4A7C15L) >>> shift) * MathTools.GOLDEN_LONGS[(int) (state & MASK)]);
 		/* 5.9604645E-8f is 0x1p-24f, 2.980232E-8f is 0x1.FFFFFEp-26f */
 		final float n = (bits >>> 40) * 5.9604645E-8f + 2.980232E-8f;
 		return Math.copySign(n, bits << 24);
@@ -244,11 +246,12 @@ public class TupleQuasiRandom extends EnhancedRandom {
 	public double nextGaussian() {
 		/* 5.421010862427522E-20 is 0x1p-64 */
 		return Distributor.probitD((((state += 0x9E3779B97F4A7C15L) >>> shift)
-				* MathTools.GOLDEN_LONGS[(int)(state & MASK)]) * 5.421010862427522E-20 + 0.5);
+			* MathTools.GOLDEN_LONGS[(int) (state & MASK)]) * 5.421010862427522E-20 + 0.5);
 	}
 
 	/**
 	 * This runs {@link Distributor#probitF(float)} on a distributed float this produces.
+	 *
 	 * @return a "Gaussian-ized" result of {@link #nextExclusiveFloat()}
 	 */
 	@Override
@@ -256,29 +259,29 @@ public class TupleQuasiRandom extends EnhancedRandom {
 		/* 5.9604645E-8f is 0x1p-24f, 2.980232E-8f is 0x1.FFFFFEp-26f */
 		return Distributor.probitF(
 			((((state += 0x9E3779B97F4A7C15L) >>> shift)
-			* MathTools.GOLDEN_LONGS[(int)(state & MASK)]) >>> 40) * 5.9604645E-8f + 2.980232E-8f
+				* MathTools.GOLDEN_LONGS[(int) (state & MASK)]) >>> 40) * 5.9604645E-8f + 2.980232E-8f
 		);
 	}
 
 	@Override
-	public TupleQuasiRandom copy () {
+	public TupleQuasiRandom copy() {
 		return new TupleQuasiRandom(state);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		TupleQuasiRandom that = (TupleQuasiRandom)o;
+		TupleQuasiRandom that = (TupleQuasiRandom) o;
 
 		return state == that.state;
 	}
 
 	@Override
-	public String toString () {
+	public String toString() {
 		return "TupleQuasiRandom{state=" + (state) + "L}";
 	}
 }

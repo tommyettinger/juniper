@@ -74,7 +74,7 @@ public class Chip32Random extends Enhanced32Random {
 	 * Creates a new Chip32Random with a random state.
 	 */
 	public Chip32Random() {
-		this((int)EnhancedRandom.seedFromMath(), (int)EnhancedRandom.seedFromMath(), (int)EnhancedRandom.seedFromMath(), (int)EnhancedRandom.seedFromMath());
+		this((int) EnhancedRandom.seedFromMath(), (int) EnhancedRandom.seedFromMath(), (int) EnhancedRandom.seedFromMath(), (int) EnhancedRandom.seedFromMath());
 	}
 
 	/**
@@ -123,12 +123,14 @@ public class Chip32Random extends Enhanced32Random {
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("100000000", 16);
 
 	/**
 	 * 2 to the 32.
+	 *
 	 * @return 2 to the 32
 	 */
 	@Override
@@ -142,18 +144,20 @@ public class Chip32Random extends Enhanced32Random {
 	 * @return 4 (four)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 4;
 	}
 
 	/**
 	 * This generator mainly generates int values.
+	 *
 	 * @return true
 	 */
 	@Override
 	public boolean mainlyGeneratesInt() {
 		return true;
 	}
+
 	/**
 	 * Gets the state determined by {@code selection}, as-is. The value for selection should be
 	 * between 0 and 3, inclusive; if it is any other value this gets state D as if 3 was given.
@@ -162,7 +166,7 @@ public class Chip32Random extends Enhanced32Random {
 	 * @return the value of the selected state, which is an int that will be promoted to long
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		switch (selection) {
 			case 0:
 				return stateA;
@@ -184,19 +188,19 @@ public class Chip32Random extends Enhanced32Random {
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		switch (selection) {
 			case 0:
-				stateA = (int)value;
+				stateA = (int) value;
 				break;
 			case 1:
-				stateB = (int)value;
+				stateB = (int) value;
 				break;
 			case 2:
-				stateC = (int)value;
+				stateC = (int) value;
 				break;
 			default:
-				stateD = (int)value;
+				stateD = (int) value;
 				break;
 		}
 	}
@@ -208,8 +212,8 @@ public class Chip32Random extends Enhanced32Random {
 	 * @param seed the initial seed; may be any long
 	 */
 	@Override
-	public void setSeed (long seed) {
-		int a = (int)seed ^ 0xDB4F0B91, b = (int)(seed >>> 11) ^ 0xBBE05633, c = (int)(seed >>> 21) ^ 0xA0F2EC75, d = (int)(seed >>> 32) ^ 0x89E18285;
+	public void setSeed(long seed) {
+		int a = (int) seed ^ 0xDB4F0B91, b = (int) (seed >>> 11) ^ 0xBBE05633, c = (int) (seed >>> 21) ^ 0xA0F2EC75, d = (int) (seed >>> 32) ^ 0x89E18285;
 		a = imul(a ^ a >>> 16, 0x21f0aaad);
 		a = imul(a ^ a >>> 15, 0x735a2d97);
 		stateA = a ^ a >>> 15;
@@ -230,9 +234,9 @@ public class Chip32Random extends Enhanced32Random {
 	 *
 	 * @param seed the initial seed; may be any int
 	 */
-	public void setSeed (int seed) {
+	public void setSeed(int seed) {
 		int a = seed ^ 0xDB4F0B91, b = (seed << 8 | seed >>> 24) ^ 0xBBE05633,
-				c = (seed << 16 | seed >>> 16) ^ 0xA0F2EC75, d = (seed << 24 | seed >>> 8) ^ 0x89E18285;
+			c = (seed << 16 | seed >>> 16) ^ 0xA0F2EC75, d = (seed << 24 | seed >>> 8) ^ 0x89E18285;
 		a = imul(a ^ a >>> 16, 0x21f0aaad);
 		a = imul(a ^ a >>> 15, 0x735a2d97);
 		stateA = a ^ a >>> 15;
@@ -247,7 +251,7 @@ public class Chip32Random extends Enhanced32Random {
 		stateD = d ^ d >>> 15;
 	}
 
-	public int getStateA () {
+	public int getStateA() {
 		return stateA;
 	}
 
@@ -256,11 +260,11 @@ public class Chip32Random extends Enhanced32Random {
 	 *
 	 * @param stateA can be any int
 	 */
-	public void setStateA (int stateA) {
+	public void setStateA(int stateA) {
 		this.stateA = stateA;
 	}
 
-	public int getStateB () {
+	public int getStateB() {
 		return stateB;
 	}
 
@@ -269,11 +273,11 @@ public class Chip32Random extends Enhanced32Random {
 	 *
 	 * @param stateB can be any int
 	 */
-	public void setStateB (int stateB) {
+	public void setStateB(int stateB) {
 		this.stateB = stateB;
 	}
 
-	public int getStateC () {
+	public int getStateC() {
 		return stateC;
 	}
 
@@ -282,11 +286,11 @@ public class Chip32Random extends Enhanced32Random {
 	 *
 	 * @param stateC can be any int
 	 */
-	public void setStateC (int stateC) {
+	public void setStateC(int stateC) {
 		this.stateC = stateC;
 	}
 
-	public int getStateD () {
+	public int getStateD() {
 		return stateD;
 	}
 
@@ -295,7 +299,7 @@ public class Chip32Random extends Enhanced32Random {
 	 *
 	 * @param stateD can be any int
 	 */
-	public void setStateD (int stateD) {
+	public void setStateD(int stateD) {
 		this.stateD = stateD;
 	}
 
@@ -310,11 +314,11 @@ public class Chip32Random extends Enhanced32Random {
 	 * @param stateD the fourth state; can be any long, but will be cast to an int before use
 	 */
 	@Override
-	public void setState (long stateA, long stateB, long stateC, long stateD) {
-		this.stateA = (int)stateA;
-		this.stateB = (int)stateB;
-		this.stateC = (int)stateC;
-		this.stateD = (int)stateD;
+	public void setState(long stateA, long stateB, long stateC, long stateD) {
+		this.stateA = (int) stateA;
+		this.stateB = (int) stateB;
+		this.stateC = (int) stateC;
+		this.stateD = (int) stateD;
 	}
 
 	/**
@@ -326,7 +330,7 @@ public class Chip32Random extends Enhanced32Random {
 	 * @param stateC the third state; can be any int
 	 * @param stateD the fourth state; can be any int
 	 */
-	public void setState (int stateA, int stateB, int stateC, int stateD) {
+	public void setState(int stateA, int stateB, int stateC, int stateD) {
 		this.stateA = stateA;
 		this.stateB = stateB;
 		this.stateC = stateC;
@@ -334,7 +338,7 @@ public class Chip32Random extends Enhanced32Random {
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		// This is the same as the following, but inlined manually:
 //		return (long)nextInt() << 32 ^ nextInt();
 
@@ -353,11 +357,11 @@ public class Chip32Random extends Enhanced32Random {
 		stateB = ga ^ gd;
 		stateC = (gb << 11 | gb >>> 21);
 		stateD = fd + 0x3C6EF372;
-		return (long)hi << 32 ^ lo;
+		return (long) hi << 32 ^ lo;
 	}
 
 	@Override
-	public long previousLong () {
+	public long previousLong() {
 		// This is the same as the following, but inlined manually:
 //		return previousInt() ^ (long)previousInt() << 32;
 
@@ -375,7 +379,7 @@ public class Chip32Random extends Enhanced32Random {
 		stateB = (fc >>> 11 | fc << 21);
 		stateC = fa - stateB;
 		final int hi = (stateA << 14 | stateA >>> 18) ^ (stateB << 23 | stateB >>> 9) + stateC;
-		return (long)hi << 32 ^ lo;
+		return (long) hi << 32 ^ lo;
 	}
 
 	@Override
@@ -390,7 +394,7 @@ public class Chip32Random extends Enhanced32Random {
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		final int fa = stateA;
 		final int fb = stateB;
 		final int fc = stateC;
@@ -403,7 +407,7 @@ public class Chip32Random extends Enhanced32Random {
 	}
 
 	@Override
-	public int nextInt () {
+	public int nextInt() {
 		final int fa = stateA;
 		final int fb = stateB;
 		final int fc = stateC;
@@ -416,23 +420,23 @@ public class Chip32Random extends Enhanced32Random {
 	}
 
 	@Override
-	public Chip32Random copy () {
+	public Chip32Random copy() {
 		return new Chip32Random(stateA, stateB, stateC, stateD);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		Chip32Random that = (Chip32Random)o;
+		Chip32Random that = (Chip32Random) o;
 
 		return stateA == that.stateA && stateB == that.stateB && stateC == that.stateC && stateD == that.stateD;
 	}
 
-	public String toString () {
+	public String toString() {
 		return "Chip32Random{" + "stateA=" + (stateA) + ", stateB=" + (stateB) + ", stateC=" + (stateC) + ", stateD=" + (stateD) + "}";
 	}
 }

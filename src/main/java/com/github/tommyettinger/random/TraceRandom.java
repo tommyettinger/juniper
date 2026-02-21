@@ -60,12 +60,14 @@ public class TraceRandom extends EnhancedRandom {
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
 
 	/**
 	 * 2 to the 64.
+	 *
 	 * @return 2 to the 64
 	 */
 	@Override
@@ -105,7 +107,7 @@ public class TraceRandom extends EnhancedRandom {
 	 * Creates a new TraceRandom with a random state.
 	 */
 	public TraceRandom() {
-		setStreamIdentifier((int)EnhancedRandom.seedFromMath());
+		setStreamIdentifier((int) EnhancedRandom.seedFromMath());
 		stateA = EnhancedRandom.seedFromMath();
 		stateB = EnhancedRandom.seedFromMath();
 		stateC = EnhancedRandom.seedFromMath();
@@ -130,11 +132,11 @@ public class TraceRandom extends EnhancedRandom {
 	 * streamIdentifier.
 	 *
 	 * @param streamIdentifier an up-to-28-bit int (between 0 and 268435455, inclusive); higher bits are ignored
-	 * @param stateA any {@code long} value
-	 * @param stateB any {@code long} value
-	 * @param stateC any {@code long} value
-	 * @param stateD any {@code long} value
-	 * @param stateE any {@code long} value
+	 * @param stateA           any {@code long} value
+	 * @param stateB           any {@code long} value
+	 * @param stateC           any {@code long} value
+	 * @param stateD           any {@code long} value
+	 * @param stateE           any {@code long} value
 	 */
 	public TraceRandom(int streamIdentifier, long stateA, long stateB, long stateC, long stateD, long stateE) {
 		setStreamIdentifier(streamIdentifier);
@@ -174,7 +176,7 @@ public class TraceRandom extends EnhancedRandom {
 	 * @return 6 (six)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 6;
 	}
 
@@ -186,7 +188,7 @@ public class TraceRandom extends EnhancedRandom {
 	 * @return the value of the selected state
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		switch (selection) {
 			case 1:
 				return stateA;
@@ -214,7 +216,7 @@ public class TraceRandom extends EnhancedRandom {
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		switch (selection) {
 			case 1:
 				stateA = value;
@@ -245,45 +247,45 @@ public class TraceRandom extends EnhancedRandom {
 	 * @param seed the initial seed; may be any long
 	 */
 	@Override
-	public void setSeed (long seed) {
+	public void setSeed(long seed) {
 		// Based on (not identical to) the Speck block cipher's key expansion.
 		// Only uses add, bitwise rotation, and XOR operations.
 		long s0 = seed, s1 = seed ^ 0xC6BC279692B5C323L, ctr = seed ^ 0x1C69B3F74AC4AE35L;
-		s1 = (s1 << 56 | s1 >>>  8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
-		s0 = (s0 <<  3 | s0 >>> 61) ^ s1;
+		s1 = (s1 << 56 | s1 >>> 8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
+		s0 = (s0 << 3 | s0 >>> 61) ^ s1;
 		stateA = s0;
-		s1 = (s1 << 56 | s1 >>>  8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
-		s0 = (s0 <<  3 | s0 >>> 61) ^ s1;
+		s1 = (s1 << 56 | s1 >>> 8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
+		s0 = (s0 << 3 | s0 >>> 61) ^ s1;
 		stateB = s0;
-		s1 = (s1 << 56 | s1 >>>  8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
-		s0 = (s0 <<  3 | s0 >>> 61) ^ s1;
+		s1 = (s1 << 56 | s1 >>> 8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
+		s0 = (s0 << 3 | s0 >>> 61) ^ s1;
 		stateC = s0;
-		s1 = (s1 << 56 | s1 >>>  8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
-		s0 = (s0 <<  3 | s0 >>> 61) ^ s1;
+		s1 = (s1 << 56 | s1 >>> 8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
+		s0 = (s0 << 3 | s0 >>> 61) ^ s1;
 		stateD = s0;
-		s1 = (s1 << 56 | s1 >>>  8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
-		s0 = (s0 <<  3 | s0 >>> 61) ^ s1;
+		s1 = (s1 << 56 | s1 >>> 8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
+		s0 = (s0 << 3 | s0 >>> 61) ^ s1;
 		stateE = s0;
-		s1 = (s1 << 56 | s1 >>>  8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
-		s0 = (s0 <<  3 | s0 >>> 61) ^ s1;
+		s1 = (s1 << 56 | s1 >>> 8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
+		s0 = (s0 << 3 | s0 >>> 61) ^ s1;
 		stateA += s0;
-		s1 = (s1 << 56 | s1 >>>  8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
-		s0 = (s0 <<  3 | s0 >>> 61) ^ s1;
+		s1 = (s1 << 56 | s1 >>> 8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
+		s0 = (s0 << 3 | s0 >>> 61) ^ s1;
 		stateB += s0;
-		s1 = (s1 << 56 | s1 >>>  8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
-		s0 = (s0 <<  3 | s0 >>> 61) ^ s1;
+		s1 = (s1 << 56 | s1 >>> 8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
+		s0 = (s0 << 3 | s0 >>> 61) ^ s1;
 		stateC += s0;
-		s1 = (s1 << 56 | s1 >>>  8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
-		s0 = (s0 <<  3 | s0 >>> 61) ^ s1;
+		s1 = (s1 << 56 | s1 >>> 8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
+		s0 = (s0 << 3 | s0 >>> 61) ^ s1;
 		stateD += s0;
-		s1 = (s1 << 56 | s1 >>>  8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
-		s0 = (s0 <<  3 | s0 >>> 61) ^ s1;
+		s1 = (s1 << 56 | s1 >>> 8) + s0 ^ (ctr += 0xBEA225F9EB34556DL);
+		s0 = (s0 << 3 | s0 >>> 61) ^ s1;
 		stateE += s0;
 
-		setStream((s0 <<  3 | s0 >>> 61) ^ (s1 << 56 | s1 >>>  8) + s0 ^ (ctr + 0xBEA225F9EB34556DL));
+		setStream((s0 << 3 | s0 >>> 61) ^ (s1 << 56 | s1 >>> 8) + s0 ^ (ctr + 0xBEA225F9EB34556DL));
 	}
 
-	public long getStream () {
+	public long getStream() {
 		return stream;
 	}
 
@@ -310,7 +312,7 @@ public class TraceRandom extends EnhancedRandom {
 		this.stream = EnhancedRandom.fixGamma(stream, 1);
 	}
 
-	public long getStateA () {
+	public long getStateA() {
 		return stateA;
 	}
 
@@ -319,11 +321,11 @@ public class TraceRandom extends EnhancedRandom {
 	 *
 	 * @param stateA can be any long
 	 */
-	public void setStateA (long stateA) {
+	public void setStateA(long stateA) {
 		this.stateA = stateA;
 	}
 
-	public long getStateB () {
+	public long getStateB() {
 		return stateB;
 	}
 
@@ -332,11 +334,11 @@ public class TraceRandom extends EnhancedRandom {
 	 *
 	 * @param stateB can be any long
 	 */
-	public void setStateB (long stateB) {
+	public void setStateB(long stateB) {
 		this.stateB = stateB;
 	}
 
-	public long getStateC () {
+	public long getStateC() {
 		return stateC;
 	}
 
@@ -345,11 +347,11 @@ public class TraceRandom extends EnhancedRandom {
 	 *
 	 * @param stateC can be any long
 	 */
-	public void setStateC (long stateC) {
+	public void setStateC(long stateC) {
 		this.stateC = stateC;
 	}
 
-	public long getStateD () {
+	public long getStateD() {
 		return stateD;
 	}
 
@@ -358,11 +360,11 @@ public class TraceRandom extends EnhancedRandom {
 	 *
 	 * @param stateD can be any long
 	 */
-	public void setStateD (long stateD) {
+	public void setStateD(long stateD) {
 		this.stateD = stateD;
 	}
 
-	public long getStateE () {
+	public long getStateE() {
 		return stateE;
 	}
 
@@ -371,7 +373,7 @@ public class TraceRandom extends EnhancedRandom {
 	 *
 	 * @param stateE can be any long
 	 */
-	public void setStateE (long stateE) {
+	public void setStateE(long stateE) {
 		this.stateE = stateE;
 	}
 
@@ -388,7 +390,8 @@ public class TraceRandom extends EnhancedRandom {
 	 * @param stateD the fourth state; can be any long
 	 * @param stateE the fifth state; can be any long
 	 */
-	public void setState (long stream, long stateA, long stateB, long stateC, long stateD, long stateE) {
+	@Override
+	public void setState(long stream, long stateA, long stateB, long stateC, long stateD, long stateE) {
 		setStream(stream);
 		this.stateA = stateA;
 		this.stateB = stateB;
@@ -398,7 +401,7 @@ public class TraceRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		final long fa = stateA;
 		final long fb = stateB;
 		final long fc = stateC;
@@ -413,7 +416,7 @@ public class TraceRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public long previousLong () {
+	public long previousLong() {
 		final long fb = stateB;
 		final long fc = stateC;
 		final long fd = stateD;
@@ -427,7 +430,7 @@ public class TraceRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		final long fa = stateA;
 		final long fb = stateB;
 		final long fc = stateC;
@@ -442,24 +445,24 @@ public class TraceRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public TraceRandom copy () {
+	public TraceRandom copy() {
 		return new TraceRandom(stream, stateA, stateB, stateC, stateD, stateE);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		TraceRandom that = (TraceRandom)o;
+		TraceRandom that = (TraceRandom) o;
 
 		return stateA == that.stateA && stateB == that.stateB && stateC == that.stateC && stateD == that.stateD &&
-				stateE == that.stateE && stream == that.stream;
+			stateE == that.stateE && stream == that.stream;
 	}
 
-	public String toString () {
+	public String toString() {
 		return "TraceRandom{" + "stream=" + stream + ", stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L, stateD=" + (stateD) + "L, stateE=" + (stateE) + "L}";
 	}
 }

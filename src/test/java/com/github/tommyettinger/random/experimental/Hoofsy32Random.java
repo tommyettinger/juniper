@@ -50,8 +50,8 @@ public class Hoofsy32Random extends EnhancedRandom {
 	 */
 	public Hoofsy32Random() {
 		super();
-		stateA = (int)EnhancedRandom.seedFromMath();
-		stateB = (int)EnhancedRandom.seedFromMath();
+		stateA = (int) EnhancedRandom.seedFromMath();
+		stateB = (int) EnhancedRandom.seedFromMath();
 	}
 
 	/**
@@ -84,12 +84,14 @@ public class Hoofsy32Random extends EnhancedRandom {
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
 
 	/**
 	 * (2 to the 64).
+	 *
 	 * @return (2 to the 64)
 	 */
 	@Override
@@ -103,7 +105,7 @@ public class Hoofsy32Random extends EnhancedRandom {
 	 * @return 2 (two)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 2;
 	}
 
@@ -115,12 +117,12 @@ public class Hoofsy32Random extends EnhancedRandom {
 	 * @return the value of the selected state, treated as long but internally an int
 	 */
 	@Override
-	public long getSelectedState (int selection) {
-        if (selection == 0) {
-            return stateA;
-        }
-        return stateB;
-    }
+	public long getSelectedState(int selection) {
+		if (selection == 0) {
+			return stateA;
+		}
+		return stateB;
+	}
 
 	/**
 	 * Sets one of the states, determined by {@code selection}, to {@code value}, cast to int.
@@ -131,12 +133,12 @@ public class Hoofsy32Random extends EnhancedRandom {
 	 * @param value     the value to use for the selected state, which will be cast to int
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
-        if (selection == 0) {
-            stateA = (int)value;
-        } else {
-            stateB = (int)value;
-        }
+	public void setSelectedState(int selection, long value) {
+		if (selection == 0) {
+			stateA = (int) value;
+		} else {
+			stateB = (int) value;
+		}
 	}
 
 	/**
@@ -146,18 +148,18 @@ public class Hoofsy32Random extends EnhancedRandom {
 	 * @param seed the initial seed; may be any long
 	 */
 	@Override
-	public void setSeed (long seed) {
+	public void setSeed(long seed) {
 		long z = (seed ^ 3333333333333333333L) * 5555555555555555555L;
 		z ^= z * z | 29L;
 		z ^= z >>> 30;
 		z ^= z * z | 31L;
 		z ^= z >>> 32;
 		z = (z ^ 3333333333333333333L) * 5555555555555555555L;
-		stateA = (int)(z >>> 32);
-		stateB = (int)z;
+		stateA = (int) (z >>> 32);
+		stateB = (int) z;
 	}
 
-	public long getStateA () {
+	public long getStateA() {
 		return stateA;
 	}
 
@@ -166,11 +168,11 @@ public class Hoofsy32Random extends EnhancedRandom {
 	 *
 	 * @param stateA can be any int
 	 */
-	public void setStateA (long stateA) {
-		this.stateA = (int)stateA;
+	public void setStateA(long stateA) {
+		this.stateA = (int) stateA;
 	}
 
-	public long getStateB () {
+	public long getStateB() {
 		return stateB;
 	}
 
@@ -179,8 +181,8 @@ public class Hoofsy32Random extends EnhancedRandom {
 	 *
 	 * @param stateB can be any int
 	 */
-	public void setStateB (long stateB) {
-		this.stateB = (int)stateB;
+	public void setStateB(long stateB) {
+		this.stateB = (int) stateB;
 	}
 
 	/**
@@ -192,13 +194,13 @@ public class Hoofsy32Random extends EnhancedRandom {
 	 * @param stateB the second state; can be any int
 	 */
 	@Override
-	public void setState (long stateA, long stateB) {
-		this.stateA = (int)stateA;
-		this.stateB = (int)stateB;
+	public void setState(long stateA, long stateB) {
+		this.stateA = (int) stateA;
+		this.stateB = (int) stateB;
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		return (long) nextInt() << 32 ^ nextInt();
 	}
 
@@ -229,7 +231,7 @@ public class Hoofsy32Random extends EnhancedRandom {
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		int z = (stateA ^ (stateB << 17 | stateB >>> 15));
 		stateA = stateA + 333333333 + BitConversion.countLeadingZeros(stateB) | 0;
 		stateB = stateB + 555555555 | 0;
@@ -241,14 +243,15 @@ public class Hoofsy32Random extends EnhancedRandom {
 	}
 
 	@Override
-	public long previousLong () {
-		return previousInt() ^ (long)previousInt() << 32;
+	public long previousLong() {
+		return previousInt() ^ (long) previousInt() << 32;
 	}
 
 	/**
 	 * Jumps extremely far in the generator's sequence, such that it requires {@code Math.pow(2, 32)} calls to leap() to
 	 * complete a cycle through the generator's entire sequence. This can be used to create over 4 billion
 	 * substreams of this generator's sequence, each with a period of {@code Math.pow(2, 32)}.
+	 *
 	 * @return the result of what nextLong() would return if it was called at the state this jumped to
 	 */
 	public long leap() {
@@ -267,29 +270,29 @@ public class Hoofsy32Random extends EnhancedRandom {
 		lo ^= BitConversion.imul(lo, lo) | 15;
 		lo ^= lo >>> 16;
 
-		return (long)hi << 32 ^ lo;
+		return (long) hi << 32 ^ lo;
 	}
 
 	@Override
-	public Hoofsy32Random copy () {
+	public Hoofsy32Random copy() {
 		return new Hoofsy32Random(stateA, stateB);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		Hoofsy32Random that = (Hoofsy32Random)o;
+		Hoofsy32Random that = (Hoofsy32Random) o;
 
 		if (stateA != that.stateA)
 			return false;
 		return stateB == that.stateB;
 	}
 
-	public String toString () {
+	public String toString() {
 		return "Hoofsy32Random{" + "stateA=" + (stateA) + ", stateB=" + (stateB) + "}";
 	}
 
@@ -323,19 +326,31 @@ public class Hoofsy32Random extends EnhancedRandom {
 		}
 		random.setSeed(1L);
 		{
-			long n0 = random.nextLong(); System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
-			long n1 = random.nextLong(); System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
-			long n2 = random.nextLong(); System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
-			long n3 = random.nextLong(); System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
-			long n4 = random.nextLong(); System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
-			long n5 = random.nextLong(); System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
+			long n0 = random.nextLong();
+			System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
+			long n1 = random.nextLong();
+			System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
+			long n2 = random.nextLong();
+			System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
+			long n3 = random.nextLong();
+			System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
+			long n4 = random.nextLong();
+			System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
+			long n5 = random.nextLong();
+			System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
 			System.out.println("Going back...");
-			long p5 = random.previousLong(); System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
-			long p4 = random.previousLong(); System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
-			long p3 = random.previousLong(); System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
-			long p2 = random.previousLong(); System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
-			long p1 = random.previousLong(); System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
-			long p0 = random.previousLong(); System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
+			long p5 = random.previousLong();
+			System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
+			long p4 = random.previousLong();
+			System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
+			long p3 = random.previousLong();
+			System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
+			long p2 = random.previousLong();
+			System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
+			long p1 = random.previousLong();
+			System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
+			long p0 = random.previousLong();
+			System.out.printf("a: 0x%08XL, b: 0x%08XL\n", random.stateA, random.stateB);
 			System.out.println(n0 == p0);
 			System.out.println(n1 == p1);
 			System.out.println(n2 == p2);

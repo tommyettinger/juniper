@@ -20,7 +20,6 @@ package com.github.tommyettinger.random.gdx;
 import com.badlogic.gdx.utils.*;
 
 import java.io.IOException;
-import java.lang.StringBuilder;
 import java.util.List;
 import java.util.Random;
 
@@ -51,6 +50,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * Gets the tag used to identify this type of GdxRandom, as a String. This tag should be unique,
 	 * and for uniformity purposes, all tags used in this library are 4 characters long. User-defined tags
 	 * should have a different length.
+	 *
 	 * @return a unique String identifier for this type of GdxRandom; usually 4 chars long.
 	 */
 	public abstract String getTag();
@@ -69,7 +69,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 *
 	 * @param seed the initial seed
 	 */
-	public abstract void setSeed (long seed);
+	public abstract void setSeed(long seed);
 
 	/**
 	 * Returns the next pseudorandom, uniformly distributed {@code long}
@@ -85,7 +85,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * @return the next pseudorandom, uniformly distributed {@code long}
 	 * value from this random number generator's sequence
 	 */
-	public abstract long nextLong ();
+	public abstract long nextLong();
 
 	/**
 	 * Creates a new GdxRandom with identical states to this one, so if the same GdxRandom methods are
@@ -96,7 +96,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 *
 	 * @return a deep copy of this GdxRandom.
 	 */
-	public abstract GdxRandom copy ();
+	public abstract GdxRandom copy();
 
 	// END SECTION: Methods that must be implemented
 
@@ -106,8 +106,8 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 *
 	 * @return a kind-of-uniform {@code long} value
 	 */
-	public static long seedFromMath () {
-		return (long)((Math.random() - 0.5) * 0x1p52) ^ (long)((Math.random() - 0.5) * 0x1p64);
+	public static long seedFromMath() {
+		return (long) ((Math.random() - 0.5) * 0x1p52) ^ (long) ((Math.random() - 0.5) * 0x1p64);
 	}
 
 	/**
@@ -122,7 +122,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 *
 	 * @return the non-negative number of selections possible for state variables
 	 */
-	public int getStateCount () {
+	public int getStateCount() {
 		return 0;
 	}
 
@@ -138,7 +138,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * @param selection used to select which state variable to get; generally non-negative
 	 * @return the exact value of the selected state
 	 */
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		throw new UnsupportedOperationException("getSelectedState() not supported.");
 	}
 
@@ -156,7 +156,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * @param selection used to select which state variable to set; generally non-negative
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		setSeed(value);
 	}
 
@@ -168,7 +168,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 *
 	 * @param state the long value to use for each state variable
 	 */
-	public void setState (long state) {
+	public void setState(long state) {
 		for (int i = getStateCount() - 1; i >= 0; i--) {
 			setSelectedState(i, state);
 		}
@@ -185,7 +185,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * @param stateA the long value to use for states at index 0, 2, 4, 6...
 	 * @param stateB the long value to use for states at index 1, 3, 5, 7...
 	 */
-	public void setState (long stateA, long stateB) {
+	public void setState(long stateA, long stateB) {
 		final int c = getStateCount();
 		for (int i = 0; i < c; i += 2) {
 			setSelectedState(i, stateA);
@@ -209,7 +209,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * @param stateB the long value to use for states at index 1, 4, 7, 10...
 	 * @param stateC the long value to use for states at index 2, 5, 8, 11...
 	 */
-	public void setState (long stateA, long stateB, long stateC) {
+	public void setState(long stateA, long stateB, long stateC) {
 		final int c = getStateCount();
 		for (int i = 0; i < c; i += 3) {
 			setSelectedState(i, stateA);
@@ -239,7 +239,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * @param stateC the long value to use for states at index 2, 6, 10, 14...
 	 * @param stateD the long value to use for states at index 3, 7, 11, 15...
 	 */
-	public void setState (long stateA, long stateB, long stateC, long stateD) {
+	public void setState(long stateA, long stateB, long stateC, long stateD) {
 		final int c = getStateCount();
 		for (int i = 0; i < c; i += 4) {
 			setSelectedState(i, stateA);
@@ -273,7 +273,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * @param stateD the long value to use for states at index 3, 8, 13, 18...
 	 * @param stateE the long value to use for states at index 4, 9, 14, 19...
 	 */
-	public void setState (long stateA, long stateB, long stateC, long stateD, long stateE) {
+	public void setState(long stateA, long stateB, long stateC, long stateD, long stateE) {
 		final int c = getStateCount();
 		for (int i = 0; i < c; i += 5) {
 			setSelectedState(i, stateA);
@@ -301,7 +301,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 *
 	 * @param states an array or varargs of long values to use as states
 	 */
-	public void setState (long... states) {
+	public void setState(long... states) {
 		final int c = getStateCount(), sl = states.length;
 		for (int b = 0; b < sl; b++) {
 			final long curr = states[b];
@@ -336,8 +336,8 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * @return the next pseudorandom value from this random number
 	 * generator's sequence
 	 */
-	public int next (int bits) {
-		return (int)nextLong() >>> 32 - bits;
+	public int next(int bits) {
+		return (int) nextLong() >>> 32 - bits;
 	}
 
 	/**
@@ -348,10 +348,10 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * @param bytes the byte array to fill with random bytes
 	 * @throws NullPointerException if the byte array is null
 	 */
-	public void nextBytes (byte[] bytes) {
+	public void nextBytes(byte[] bytes) {
 		for (int i = 0; i < bytes.length; ) {
 			for (long r = nextLong(), n = Math.min(bytes.length - i, 8); n-- > 0; r >>>= 8) {
-				bytes[i++] = (byte)r;
+				bytes[i++] = (byte) r;
 			}
 		}
 	}
@@ -366,8 +366,8 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * @return the next pseudorandom, uniformly distributed {@code int}
 	 * value from this random number generator's sequence
 	 */
-	public int nextInt () {
-		return (int)nextLong();
+	public int nextInt() {
+		return (int) nextLong();
 	}
 
 	/**
@@ -393,8 +393,8 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * value between zero (inclusive) and {@code bound} (exclusive)
 	 * from this random number generator's sequence
 	 */
-	public int nextInt (int bound) {
-		return (int)(bound * (nextLong() & 0xFFFFFFFFL) >> 32) & ~(bound >> 31);
+	public int nextInt(int bound) {
+		return (int) (bound * (nextLong() & 0xFFFFFFFFL) >> 32) & ~(bound >> 31);
 	}
 
 	/**
@@ -410,8 +410,8 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * @return a pseudorandom int between 0 (inclusive) and outerBound (exclusive)
 	 * @see #nextInt(int) Here's a note about the bias present in the bounded generation.
 	 */
-	public int nextSignedInt (int outerBound) {
-		outerBound = (int)(outerBound * (nextLong() & 0xFFFFFFFFL) >> 32);
+	public int nextSignedInt(int outerBound) {
+		outerBound = (int) (outerBound * (nextLong() & 0xFFFFFFFFL) >> 32);
 		return outerBound + (outerBound >>> 31);
 	}
 
@@ -434,8 +434,8 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * @return a pseudorandom int between innerBound (inclusive) and outerBound (exclusive)
 	 * @see #nextInt(int) Here's a note about the bias present in the bounded generation.
 	 */
-	public int nextInt (int innerBound, int outerBound) {
-		return (int)nextLong(innerBound, outerBound);
+	public int nextInt(int innerBound, int outerBound) {
+		return (int) nextLong(innerBound, outerBound);
 	}
 
 	/**
@@ -454,8 +454,8 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * @return a pseudorandom int between innerBound (inclusive) and outerBound (exclusive)
 	 * @see #nextInt(int) Here's a note about the bias present in the bounded generation.
 	 */
-	public int nextSignedInt (int innerBound, int outerBound) {
-		return (int)nextSignedLong(innerBound, outerBound);
+	public int nextSignedInt(int innerBound, int outerBound) {
+		return (int) nextSignedLong(innerBound, outerBound);
 	}
 
 	/**
@@ -484,7 +484,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * from this random number generator's sequence
 	 * @see #nextInt(int) Here's a note about the bias present in the bounded generation.
 	 */
-	public long nextLong (long bound) {
+	public long nextLong(long bound) {
 		return nextLong(0L, bound);
 	}
 
@@ -507,7 +507,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * @return a pseudorandom long between 0 (inclusive) and outerBound (exclusive)
 	 * @see #nextInt(int) Here's a note about the bias present in the bounded generation.
 	 */
-	public long nextSignedLong (long outerBound) {
+	public long nextSignedLong(long outerBound) {
 		return nextSignedLong(0L, outerBound);
 	}
 
@@ -525,7 +525,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * @return a pseudorandom long between inner (inclusive) and outer (exclusive)
 	 * @see #nextInt(int) Here's a note about the bias present in the bounded generation.
 	 */
-	public long nextLong (long inner, long outer) {
+	public long nextLong(long inner, long outer) {
 		final long rand = nextLong();
 		if (inner >= outer)
 			return inner;
@@ -548,7 +548,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * @return a pseudorandom long between inner (inclusive) and outer (exclusive)
 	 * @see #nextInt(int) Here's a note about the bias present in the bounded generation.
 	 */
-	public long nextSignedLong (long inner, long outer) {
+	public long nextSignedLong(long inner, long outer) {
 		final long rand = nextLong();
 		if (outer < inner) {
 			long t = outer;
@@ -581,7 +581,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * {@code boolean} value from this random number generator's
 	 * sequence
 	 */
-	public boolean nextBoolean () {
+	public boolean nextBoolean() {
 		return nextLong() < 0L;
 	}
 
@@ -609,7 +609,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * value between {@code 0.0} and {@code 1.0} from this
 	 * random number generator's sequence
 	 */
-	public float nextFloat () {
+	public float nextFloat() {
 		return (nextLong() >>> 40) * 0x1p-24f;
 	}
 
@@ -621,7 +621,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * @param outerBound the exclusive outer bound
 	 * @return a float between 0 (inclusive) and {@code outerBound} (exclusive)
 	 */
-	public float nextFloat (float outerBound) {
+	public float nextFloat(float outerBound) {
 		return nextFloat() * outerBound;
 	}
 
@@ -634,7 +634,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * @param outerBound the exclusive outer bound; may be negative
 	 * @return a float between {@code innerBound} (inclusive) and {@code outerBound} (exclusive)
 	 */
-	public float nextFloat (float innerBound, float outerBound) {
+	public float nextFloat(float innerBound, float outerBound) {
 		return innerBound + nextFloat() * (outerBound - innerBound);
 	}
 
@@ -658,7 +658,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * value between {@code 0.0} and {@code 1.0} from this
 	 * random number generator's sequence
 	 */
-	public double nextDouble () {
+	public double nextDouble() {
 		return (nextLong() >>> 11) * 0x1.0p-53;
 	}
 
@@ -670,7 +670,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * @param outerBound the exclusive outer bound
 	 * @return a double between 0 (inclusive) and {@code outerBound} (exclusive)
 	 */
-	public double nextDouble (double outerBound) {
+	public double nextDouble(double outerBound) {
 		return nextDouble() * outerBound;
 	}
 
@@ -683,7 +683,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * @param outerBound the exclusive outer bound; may be negative
 	 * @return a double between {@code innerBound} (inclusive) and {@code outerBound} (exclusive)
 	 */
-	public double nextDouble (double innerBound, double outerBound) {
+	public double nextDouble(double innerBound, double outerBound) {
 		return innerBound + nextDouble() * (outerBound - innerBound);
 	}
 
@@ -696,7 +696,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 *
 	 * @return a double between 0.0, inclusive, and 1.0, inclusive
 	 */
-	public double nextInclusiveDouble () {
+	public double nextInclusiveDouble() {
 //		return nextLong(0x20000000000001L) * 0x1p-53;
 
 //		final long rand = nextLong();
@@ -717,7 +717,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * @param outerBound the outer inclusive bound; may be positive or negative
 	 * @return a double between 0.0, inclusive, and {@code outerBound}, inclusive
 	 */
-	public double nextInclusiveDouble (double outerBound) {
+	public double nextInclusiveDouble(double outerBound) {
 		return nextInclusiveDouble() * outerBound;
 	}
 
@@ -730,7 +730,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * @param outerBound the outer inclusive bound; may be positive or negative
 	 * @return a double between {@code innerBound}, inclusive, and {@code outerBound}, inclusive
 	 */
-	public double nextInclusiveDouble (double innerBound, double outerBound) {
+	public double nextInclusiveDouble(double innerBound, double outerBound) {
 		return innerBound + nextInclusiveDouble() * (outerBound - innerBound);
 	}
 
@@ -746,10 +746,10 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 *
 	 * @return a float between 0.0, inclusive, and 1.0, inclusive
 	 */
-	public float nextInclusiveFloat () {
+	public float nextInclusiveFloat() {
 //		return (int)(0x1000001L * (nextLong() & 0xFFFFFFFFL) >> 32) * 0x1p-24f;
 		final long bits = nextLong();
-		return NumberUtils.intBitsToFloat(126 - Long.numberOfTrailingZeros(bits) << 23 | (int)(bits >>> 41)) + 0x1p-22f - 0x1p-22f;
+		return NumberUtils.intBitsToFloat(126 - Long.numberOfTrailingZeros(bits) << 23 | (int) (bits >>> 41)) + 0x1p-22f - 0x1p-22f;
 	}
 
 	/**
@@ -759,7 +759,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * @param outerBound the outer inclusive bound; may be positive or negative
 	 * @return a float between 0.0, inclusive, and {@code outerBound}, inclusive
 	 */
-	public float nextInclusiveFloat (float outerBound) {
+	public float nextInclusiveFloat(float outerBound) {
 		return nextInclusiveFloat() * outerBound;
 	}
 
@@ -772,7 +772,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * @param outerBound the outer inclusive bound; may be positive or negative
 	 * @return a float between {@code innerBound}, inclusive, and {@code outerBound}, inclusive
 	 */
-	public float nextInclusiveFloat (float innerBound, float outerBound) {
+	public float nextInclusiveFloat(float innerBound, float outerBound) {
 		return innerBound + nextInclusiveFloat() * (outerBound - innerBound);
 	}
 
@@ -803,7 +803,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 *
 	 * @return a random uniform double between 2.710505431213761E-20 and 0.9999999999999999 (both inclusive)
 	 */
-	public double nextExclusiveDouble () {
+	public double nextExclusiveDouble() {
 		final long bits = nextLong();
 		return NumberUtils.longBitsToDouble(1022L - Long.numberOfTrailingZeros(bits) << 52 | bits >>> 12);
 	}
@@ -822,7 +822,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 *
 	 * @return a random uniform double between 0 and 1 (both exclusive)
 	 */
-	public double nextExclusiveDoubleEquidistant () {
+	public double nextExclusiveDoubleEquidistant() {
 		return (nextLong(0x1FFFFFFFFFFFFFL) + 1L) * 0x1p-53;
 	}
 
@@ -835,7 +835,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * @param outerBound the outer exclusive bound; may be positive or negative
 	 * @return a double between 0.0, exclusive, and {@code outerBound}, exclusive
 	 */
-	public double nextExclusiveDouble (double outerBound) {
+	public double nextExclusiveDouble(double outerBound) {
 		return nextExclusiveDouble() * outerBound;
 	}
 
@@ -849,7 +849,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * @param outerBound the outer exclusive bound; may be positive or negative
 	 * @return a double between {@code innerBound}, exclusive, and {@code outerBound}, exclusive
 	 */
-	public double nextExclusiveDouble (double innerBound, double outerBound) {
+	public double nextExclusiveDouble(double innerBound, double outerBound) {
 		return innerBound + nextExclusiveDouble() * (outerBound - innerBound);
 	}
 
@@ -866,9 +866,10 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * bit of mantissa (the least significant bits numerically, but potentially important for some uses), this has
 	 * approximately the same likelihood of producing a "1" bit for any positions in the mantissa, and also equal odds
 	 * for the sign bit.
+	 *
 	 * @return a random uniform double between -1 and 1 with a tiny hole around 0 (all exclusive)
 	 */
-	public double nextExclusiveSignedDouble(){
+	public double nextExclusiveSignedDouble() {
 		final long bits = nextLong();
 		return NumberUtils.longBitsToDouble(1022L - Long.numberOfLeadingZeros(bits) << 52 | ((bits << 63 | bits >>> 1) & 0x800FFFFFFFFFFFFFL));
 	}
@@ -894,9 +895,9 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 *
 	 * @return a random uniform float between 0 and 1 (both exclusive)
 	 */
-	public float nextExclusiveFloat () {
+	public float nextExclusiveFloat() {
 		final long bits = nextLong();
-		return NumberUtils.intBitsToFloat(126 - Long.numberOfTrailingZeros(bits) << 23 | (int)(bits >>> 41));
+		return NumberUtils.intBitsToFloat(126 - Long.numberOfTrailingZeros(bits) << 23 | (int) (bits >>> 41));
 	}
 
 	/**
@@ -913,7 +914,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 *
 	 * @return a random uniform float between 0 and 1 (both exclusive)
 	 */
-	public float nextExclusiveFloatEquidistant () {
+	public float nextExclusiveFloatEquidistant() {
 		return (nextInt(0xFFFFFF) + 1) * 0x1p-24f;
 	}
 
@@ -926,7 +927,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * @param outerBound the outer exclusive bound; may be positive or negative
 	 * @return a float between 0.0, exclusive, and {@code outerBound}, exclusive
 	 */
-	public float nextExclusiveFloat (float outerBound) {
+	public float nextExclusiveFloat(float outerBound) {
 		return nextExclusiveFloat() * outerBound;
 	}
 
@@ -940,7 +941,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * @param outerBound the outer exclusive bound; may be positive or negative
 	 * @return a float between {@code innerBound}, exclusive, and {@code outerBound}, exclusive
 	 */
-	public float nextExclusiveFloat (float innerBound, float outerBound) {
+	public float nextExclusiveFloat(float innerBound, float outerBound) {
 		return innerBound + nextExclusiveFloat() * (outerBound - innerBound);
 	}
 
@@ -956,11 +957,12 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * is unable to produce a "1" bit for its lowest bit of mantissa (the least significant bits numerically, but
 	 * potentially important for some uses), this has approximately the same likelihood of producing a "1" bit for any
 	 * positions in the mantissa, and also equal odds for the sign bit.
+	 *
 	 * @return a random uniform double between -1 and 1 with a tiny hole around 0 (all exclusive)
 	 */
-	public float nextExclusiveSignedFloat(){
+	public float nextExclusiveSignedFloat() {
 		final long bits = nextLong();
-		return NumberUtils.intBitsToFloat(126 - Long.numberOfLeadingZeros(bits) << 23 | ((int)bits & 0x807FFFFF));
+		return NumberUtils.intBitsToFloat(126 - Long.numberOfLeadingZeros(bits) << 23 | ((int) bits & 0x807FFFFF));
 	}
 
 	/**
@@ -989,7 +991,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * {@code double} value with mean {@code 0.0} and standard deviation
 	 * {@code 1.0} from this random number generator's sequence
 	 */
-	public double nextGaussian () {
+	public double nextGaussian() {
 		return probit(nextExclusiveDouble());
 	}
 
@@ -999,10 +1001,9 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * <br>
 	 * This defaults to simply returning {@code mean + stddev * nextGaussian()}.
 	 *
-	 * @param mean the mean of the Gaussian distribution to be drawn from
+	 * @param mean   the mean of the Gaussian distribution to be drawn from
 	 * @param stddev the standard deviation (square root of the variance)
-	 *        of the Gaussian distribution to be drawn from
-	 *
+	 *               of the Gaussian distribution to be drawn from
 	 * @return a Gaussian distributed {@code double} with the specified mean and standard deviation
 	 */
 	public double nextGaussian(double mean, double stddev) {
@@ -1022,7 +1023,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * @param advance Number of future generations to skip over; can be negative to backtrack, 0 gets the most-recently-generated number
 	 * @return the random long generated after skipping forward or backwards by {@code advance} numbers
 	 */
-	public long skip (long advance) {
+	public long skip(long advance) {
 		throw new UnsupportedOperationException("skip() not supported.");
 	}
 
@@ -1036,7 +1037,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 *
 	 * @return the previous number this would have produced with {@link #nextLong()}
 	 */
-	public long previousLong () {
+	public long previousLong() {
 		return skip(-1L);
 	}
 
@@ -1060,7 +1061,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 *
 	 * @param other another GdxRandom, typically with the same class as this one, to copy its state into this
 	 */
-	public void setWith (GdxRandom other) {
+	public void setWith(GdxRandom other) {
 		final int myCount = getStateCount(), otherCount = other.getStateCount();
 		int i = 0;
 		for (; i < myCount && i < otherCount; i++) {
@@ -1105,22 +1106,22 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * @param d should be between 0 and 1, exclusive, but other values are tolerated
 	 * @return a normal-distributed double centered on 0.0; all results will be between -38.5 and 38.5, both inclusive
 	 */
-	public static double probit (final double d) {
+	public static double probit(final double d) {
 		if (d <= 0 || d >= 1) {
 			return Math.copySign(38.5, d - 0.5);
 		} else if (d < 0.02425) {
 			final double q = Math.sqrt(-2.0 * Math.log(d));
 			return (((((-7.784894002430293e-03 * q - 3.223964580411365e-01) * q - 2.400758277161838e+00) * q - 2.549732539343734e+00) * q + 4.374664141464968e+00) * q + 2.938163982698783e+00) / (
-					(((7.784695709041462e-03 * q + 3.224671290700398e-01) * q + 2.445134137142996e+00) * q + 3.754408661907416e+00) * q + 1.0);
+				(((7.784695709041462e-03 * q + 3.224671290700398e-01) * q + 2.445134137142996e+00) * q + 3.754408661907416e+00) * q + 1.0);
 		} else if (0.97575 < d) {
 			final double q = Math.sqrt(-2.0 * Math.log(1 - d));
 			return -(((((-7.784894002430293e-03 * q - 3.223964580411365e-01) * q - 2.400758277161838e+00) * q - 2.549732539343734e+00) * q + 4.374664141464968e+00) * q + 2.938163982698783e+00) / (
-					(((7.784695709041462e-03 * q + 3.224671290700398e-01) * q + 2.445134137142996e+00) * q + 3.754408661907416e+00) * q + 1.0);
+				(((7.784695709041462e-03 * q + 3.224671290700398e-01) * q + 2.445134137142996e+00) * q + 3.754408661907416e+00) * q + 1.0);
 		}
 		final double q = d - 0.5;
 		final double r = q * q;
 		return (((((-3.969683028665376e+01 * r + 2.209460984245205e+02) * r - 2.759285104469687e+02) * r + 1.383577518672690e+02) * r - 3.066479806614716e+01) * r + 2.506628277459239e+00) * q / (
-				((((-5.447609879822406e+01 * r + 1.615858368580409e+02) * r - 1.556989798598866e+02) * r + 6.680131188771972e+01) * r - 1.328068155288572e+01) * r + 1.0);
+			((((-5.447609879822406e+01 * r + 1.615858368580409e+02) * r - 1.556989798598866e+02) * r + 6.680131188771972e+01) * r - 1.328068155288572e+01) * r + 1.0);
 	}
 
 	/**
@@ -1135,10 +1136,10 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * @param right another GdxRandom to compare for equality
 	 * @return true if the two GdxRandom objects have the same class and state, or false otherwise
 	 */
-	public static boolean areEqual (GdxRandom left, GdxRandom right) {
+	public static boolean areEqual(GdxRandom left, GdxRandom right) {
 		if (left == right)
 			return true;
-		if(left == null || right == null)
+		if (left == null || right == null)
 			return false;
 		if (left.getClass() != right.getClass())
 			return false;
@@ -1157,7 +1158,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * @param chance a float between 0.0 and 1.0; higher values are more likely to result in true
 	 * @return a boolean selected with the given {@code chance} of being true
 	 */
-	public boolean nextBoolean (float chance) {
+	public boolean nextBoolean(float chance) {
 		return nextFloat() < chance;
 	}
 
@@ -1166,7 +1167,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 *
 	 * @return -1 or 1, selected with approximately equal likelihood
 	 */
-	public int nextSign () {
+	public int nextSign() {
 		return 1 | nextInt() >> 31;
 	}
 
@@ -1176,7 +1177,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * <p>
 	 * This is an optimized version of {@link #nextTriangular(float, float, float) nextTriangular(-1, 1, 0)}
 	 */
-	public float nextTriangular () {
+	public float nextTriangular() {
 		return nextFloat() - nextFloat();
 	}
 
@@ -1188,7 +1189,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 *
 	 * @param max the upper limit
 	 */
-	public float nextTriangular (float max) {
+	public float nextTriangular(float max) {
 		return (nextFloat() - nextFloat()) * max;
 	}
 
@@ -1201,7 +1202,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * @param min the lower limit
 	 * @param max the upper limit
 	 */
-	public float nextTriangular (float min, float max) {
+	public float nextTriangular(float min, float max) {
 		return nextTriangular(min, max, (min + max) * 0.5f);
 	}
 
@@ -1213,11 +1214,13 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * @param max  the upper limit
 	 * @param mode the point around which the values are more likely
 	 */
-	public float nextTriangular (float min, float max, float mode) {
+	public float nextTriangular(float min, float max, float mode) {
 		float u = nextFloat();
 		float d = max - min;
-		if (u <= (mode - min) / d) {return min + (float)Math.sqrt(u * d * (mode - min));}
-		return max - (float)Math.sqrt((1 - u) * d * (max - mode));
+		if (u <= (mode - min) / d) {
+			return min + (float) Math.sqrt(u * d * (mode - min));
+		}
+		return max - (float) Math.sqrt((1 - u) * d * (max - mode));
 	}
 
 	/**
@@ -1230,7 +1233,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * @param trials     how many random numbers to acquire and compare
 	 * @return the lowest random number between innerBound (inclusive) and outerBound (exclusive) this found
 	 */
-	public int minIntOf (int innerBound, int outerBound, int trials) {
+	public int minIntOf(int innerBound, int outerBound, int trials) {
 		int v = nextSignedInt(innerBound, outerBound);
 		for (int i = 1; i < trials; i++) {
 			v = Math.min(v, nextSignedInt(innerBound, outerBound));
@@ -1248,7 +1251,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * @param trials     how many random numbers to acquire and compare
 	 * @return the highest random number between innerBound (inclusive) and outerBound (exclusive) this found
 	 */
-	public int maxIntOf (int innerBound, int outerBound, int trials) {
+	public int maxIntOf(int innerBound, int outerBound, int trials) {
 		int v = nextSignedInt(innerBound, outerBound);
 		for (int i = 1; i < trials; i++) {
 			v = Math.max(v, nextSignedInt(innerBound, outerBound));
@@ -1266,7 +1269,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * @param trials     how many random numbers to acquire and compare
 	 * @return the lowest random number between innerBound (inclusive) and outerBound (exclusive) this found
 	 */
-	public long minLongOf (long innerBound, long outerBound, int trials) {
+	public long minLongOf(long innerBound, long outerBound, int trials) {
 		long v = nextSignedLong(innerBound, outerBound);
 		for (int i = 1; i < trials; i++) {
 			v = Math.min(v, nextSignedLong(innerBound, outerBound));
@@ -1284,7 +1287,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * @param trials     how many random numbers to acquire and compare
 	 * @return the highest random number between innerBound (inclusive) and outerBound (exclusive) this found
 	 */
-	public long maxLongOf (long innerBound, long outerBound, int trials) {
+	public long maxLongOf(long innerBound, long outerBound, int trials) {
 		long v = nextSignedLong(innerBound, outerBound);
 		for (int i = 1; i < trials; i++) {
 			v = Math.max(v, nextSignedLong(innerBound, outerBound));
@@ -1302,7 +1305,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * @param trials     how many random numbers to acquire and compare
 	 * @return the lowest random number between innerBound (inclusive) and outerBound (exclusive) this found
 	 */
-	public double minDoubleOf (double innerBound, double outerBound, int trials) {
+	public double minDoubleOf(double innerBound, double outerBound, int trials) {
 		double v = nextDouble(innerBound, outerBound);
 		for (int i = 1; i < trials; i++) {
 			v = Math.min(v, nextDouble(innerBound, outerBound));
@@ -1320,7 +1323,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * @param trials     how many random numbers to acquire and compare
 	 * @return the highest random number between innerBound (inclusive) and outerBound (exclusive) this found
 	 */
-	public double maxDoubleOf (double innerBound, double outerBound, int trials) {
+	public double maxDoubleOf(double innerBound, double outerBound, int trials) {
 		double v = nextDouble(innerBound, outerBound);
 		for (int i = 1; i < trials; i++) {
 			v = Math.max(v, nextDouble(innerBound, outerBound));
@@ -1338,7 +1341,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * @param trials     how many random numbers to acquire and compare
 	 * @return the lowest random number between innerBound (inclusive) and outerBound (exclusive) this found
 	 */
-	public float minFloatOf (float innerBound, float outerBound, int trials) {
+	public float minFloatOf(float innerBound, float outerBound, int trials) {
 		float v = nextFloat(innerBound, outerBound);
 		for (int i = 1; i < trials; i++) {
 			v = Math.min(v, nextFloat(innerBound, outerBound));
@@ -1356,7 +1359,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * @param trials     how many random numbers to acquire and compare
 	 * @return the highest random number between innerBound (inclusive) and outerBound (exclusive) this found
 	 */
-	public float maxFloatOf (float innerBound, float outerBound, int trials) {
+	public float maxFloatOf(float innerBound, float outerBound, int trials) {
 		float v = nextFloat(innerBound, outerBound);
 		for (int i = 1; i < trials; i++) {
 			v = Math.max(v, nextFloat(innerBound, outerBound));
@@ -1373,7 +1376,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * @throws NullPointerException      if array is null
 	 * @throws IndexOutOfBoundsException if array is empty
 	 */
-	public <T> T randomElement (T[] array) {
+	public <T> T randomElement(T[] array) {
 		return array[nextInt(array.length)];
 	}
 
@@ -1381,11 +1384,11 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * Gets a randomly selected item from the given List, such as an ArrayList.
 	 * If the List is empty, this throws an IndexOutOfBoundsException.
 	 *
-	 * @param list    a non-empty implementation of List, such as ArrayList
-	 * @param <T>     the type of items
+	 * @param list a non-empty implementation of List, such as ArrayList
+	 * @param <T>  the type of items
 	 * @return a randomly-selected item from list
 	 */
-	public <T> T randomElement (List<T> list) {
+	public <T> T randomElement(List<T> list) {
 		return list.get(nextInt(list.size()));
 	}
 
@@ -1394,10 +1397,10 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * If {@code arr} is empty, this throws an IndexOutOfBoundsException.
 	 * Unlike {@link LongArray#random()}, this allows using a seeded GdxRandom.
 	 *
-	 * @param arr    a non-empty LongArray
+	 * @param arr a non-empty LongArray
 	 * @return a randomly-selected item from arr
 	 */
-	public long randomElement (LongArray arr) {
+	public long randomElement(LongArray arr) {
 		return arr.get(nextInt(arr.size));
 	}
 
@@ -1406,10 +1409,10 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * If {@code arr} is empty, this throws an IndexOutOfBoundsException.
 	 * Unlike {@link IntArray#random()}, this allows using a seeded GdxRandom.
 	 *
-	 * @param arr    a non-empty IntArray
+	 * @param arr a non-empty IntArray
 	 * @return a randomly-selected item from arr
 	 */
-	public int randomElement (IntArray arr) {
+	public int randomElement(IntArray arr) {
 		return arr.get(nextInt(arr.size));
 	}
 
@@ -1418,10 +1421,10 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * If {@code arr} is empty, this throws an IndexOutOfBoundsException.
 	 * Unlike {@link ShortArray#random()}, this allows using a seeded GdxRandom.
 	 *
-	 * @param arr    a non-empty ShortArray
+	 * @param arr a non-empty ShortArray
 	 * @return a randomly-selected item from arr
 	 */
-	public short randomElement (ShortArray arr) {
+	public short randomElement(ShortArray arr) {
 		return arr.get(nextInt(arr.size));
 	}
 
@@ -1430,10 +1433,10 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * If {@code arr} is empty, this throws an IndexOutOfBoundsException.
 	 * Unlike {@link ByteArray#random()}, this allows using a seeded GdxRandom.
 	 *
-	 * @param arr    a non-empty ByteArray
+	 * @param arr a non-empty ByteArray
 	 * @return a randomly-selected item from arr
 	 */
-	public byte randomElement (ByteArray arr) {
+	public byte randomElement(ByteArray arr) {
 		return arr.get(nextInt(arr.size));
 	}
 
@@ -1442,10 +1445,10 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * If {@code arr} is empty, this throws an IndexOutOfBoundsException.
 	 * Unlike {@link FloatArray#random()}, this allows using a seeded GdxRandom.
 	 *
-	 * @param arr    a non-empty FloatArray
+	 * @param arr a non-empty FloatArray
 	 * @return a randomly-selected item from arr
 	 */
-	public float randomElement (FloatArray arr) {
+	public float randomElement(FloatArray arr) {
 		return arr.get(nextInt(arr.size));
 	}
 
@@ -1454,10 +1457,10 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * If {@code arr} is empty, this throws an IndexOutOfBoundsException.
 	 * Unlike {@link CharArray#random()}, this allows using a seeded GdxRandom.
 	 *
-	 * @param arr    a non-empty CharArray
+	 * @param arr a non-empty CharArray
 	 * @return a randomly-selected item from arr
 	 */
-	public char randomElement (CharArray arr) {
+	public char randomElement(CharArray arr) {
 		return arr.get(nextInt(arr.size));
 	}
 
@@ -1466,10 +1469,10 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * If {@code arr} is empty, this throws an IndexOutOfBoundsException.
 	 * Unlike {@link BooleanArray#random()}, this allows using a seeded GdxRandom.
 	 *
-	 * @param arr    a non-empty BooleanArray
+	 * @param arr a non-empty BooleanArray
 	 * @return a randomly-selected item from arr
 	 */
-	public boolean randomElement (BooleanArray arr) {
+	public boolean randomElement(BooleanArray arr) {
 		return arr.get(nextInt(arr.size));
 	}
 
@@ -1478,11 +1481,11 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * If {@code arr} is empty, this throws an IndexOutOfBoundsException.
 	 * Unlike {@link Array#random()}, this allows using a seeded GdxRandom.
 	 *
-	 * @param arr    a non-empty Array
-	 * @param <T>    the type of items
+	 * @param arr a non-empty Array
+	 * @param <T> the type of items
 	 * @return a randomly-selected item from arr
 	 */
-	public <T> T randomElement (Array<T> arr) {
+	public <T> T randomElement(Array<T> arr) {
 		return arr.get(nextInt(arr.size));
 	}
 
@@ -1491,7 +1494,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 *
 	 * @param items an int array; must be non-null
 	 */
-	public void shuffle (int[] items) {
+	public void shuffle(int[] items) {
 		shuffle(items, 0, items.length);
 	}
 
@@ -1502,7 +1505,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * @param offset the index of the first element of the array that can be shuffled
 	 * @param length the length of the section to shuffle
 	 */
-	public void shuffle (int[] items, int offset, int length) {
+	public void shuffle(int[] items, int offset, int length) {
 		offset = Math.min(Math.max(0, offset), items.length);
 		length = Math.min(items.length - offset, Math.max(0, length));
 		for (int i = offset + length - 1; i > offset; i--) {
@@ -1518,7 +1521,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 *
 	 * @param items a long array; must be non-null
 	 */
-	public void shuffle (long[] items) {
+	public void shuffle(long[] items) {
 		shuffle(items, 0, items.length);
 	}
 
@@ -1529,7 +1532,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * @param offset the index of the first element of the array that can be shuffled
 	 * @param length the length of the section to shuffle
 	 */
-	public void shuffle (long[] items, int offset, int length) {
+	public void shuffle(long[] items, int offset, int length) {
 		offset = Math.min(Math.max(0, offset), items.length);
 		length = Math.min(items.length - offset, Math.max(0, length));
 		for (int i = offset + length - 1; i > offset; i--) {
@@ -1545,7 +1548,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 *
 	 * @param items a float array; must be non-null
 	 */
-	public void shuffle (float[] items) {
+	public void shuffle(float[] items) {
 		shuffle(items, 0, items.length);
 	}
 
@@ -1556,7 +1559,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * @param offset the index of the first element of the array that can be shuffled
 	 * @param length the length of the section to shuffle
 	 */
-	public void shuffle (float[] items, int offset, int length) {
+	public void shuffle(float[] items, int offset, int length) {
 		offset = Math.min(Math.max(0, offset), items.length);
 		length = Math.min(items.length - offset, Math.max(0, length));
 		for (int i = offset + length - 1; i > offset; i--) {
@@ -1572,7 +1575,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 *
 	 * @param items a char array; must be non-null
 	 */
-	public void shuffle (char[] items) {
+	public void shuffle(char[] items) {
 		shuffle(items, 0, items.length);
 	}
 
@@ -1583,7 +1586,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * @param offset the index of the first element of the array that can be shuffled
 	 * @param length the length of the section to shuffle
 	 */
-	public void shuffle (char[] items, int offset, int length) {
+	public void shuffle(char[] items, int offset, int length) {
 		offset = Math.min(Math.max(0, offset), items.length);
 		length = Math.min(items.length - offset, Math.max(0, length));
 		for (int i = offset + length - 1; i > offset; i--) {
@@ -1599,7 +1602,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 *
 	 * @param items a byte array; must be non-null
 	 */
-	public void shuffle (byte[] items) {
+	public void shuffle(byte[] items) {
 		shuffle(items, 0, items.length);
 	}
 
@@ -1610,7 +1613,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * @param offset the index of the first element of the array that can be shuffled
 	 * @param length the length of the section to shuffle
 	 */
-	public void shuffle (byte[] items, int offset, int length) {
+	public void shuffle(byte[] items, int offset, int length) {
 		offset = Math.min(Math.max(0, offset), items.length);
 		length = Math.min(items.length - offset, Math.max(0, length));
 		for (int i = offset + length - 1; i > offset; i--) {
@@ -1626,7 +1629,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 *
 	 * @param items a double array; must be non-null
 	 */
-	public void shuffle (double[] items) {
+	public void shuffle(double[] items) {
 		shuffle(items, 0, items.length);
 	}
 
@@ -1637,7 +1640,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * @param offset the index of the first element of the array that can be shuffled
 	 * @param length the length of the section to shuffle
 	 */
-	public void shuffle (double[] items, int offset, int length) {
+	public void shuffle(double[] items, int offset, int length) {
 		offset = Math.min(Math.max(0, offset), items.length);
 		length = Math.min(items.length - offset, Math.max(0, length));
 		for (int i = offset + length - 1; i > offset; i--) {
@@ -1653,7 +1656,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 *
 	 * @param items a short array; must be non-null
 	 */
-	public void shuffle (short[] items) {
+	public void shuffle(short[] items) {
 		shuffle(items, 0, items.length);
 	}
 
@@ -1664,7 +1667,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * @param offset the index of the first element of the array that can be shuffled
 	 * @param length the length of the section to shuffle
 	 */
-	public void shuffle (short[] items, int offset, int length) {
+	public void shuffle(short[] items, int offset, int length) {
 		offset = Math.min(Math.max(0, offset), items.length);
 		length = Math.min(items.length - offset, Math.max(0, length));
 		for (int i = offset + length - 1; i > offset; i--) {
@@ -1680,7 +1683,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 *
 	 * @param items a boolean array; must be non-null
 	 */
-	public void shuffle (boolean[] items) {
+	public void shuffle(boolean[] items) {
 		shuffle(items, 0, items.length);
 	}
 
@@ -1691,7 +1694,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * @param offset the index of the first element of the array that can be shuffled
 	 * @param length the length of the section to shuffle
 	 */
-	public void shuffle (boolean[] items, int offset, int length) {
+	public void shuffle(boolean[] items, int offset, int length) {
 		offset = Math.min(Math.max(0, offset), items.length);
 		length = Math.min(items.length - offset, Math.max(0, length));
 		for (int i = offset + length - 1; i > offset; i--) {
@@ -1707,7 +1710,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 *
 	 * @param items an array of some reference type; must be non-null but may contain null items
 	 */
-	public <T> void shuffle (T[] items) {
+	public <T> void shuffle(T[] items) {
 		shuffle(items, 0, items.length);
 	}
 
@@ -1718,7 +1721,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * @param offset the index of the first element of the array that can be shuffled
 	 * @param length the length of the section to shuffle
 	 */
-	public <T> void shuffle (T[] items, int offset, int length) {
+	public <T> void shuffle(T[] items, int offset, int length) {
 		offset = Math.min(Math.max(0, offset), items.length);
 		length = Math.min(items.length - offset, Math.max(0, length));
 		for (int i = offset + length - 1; i > offset; i--) {
@@ -1735,7 +1738,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 *
 	 * @param arr an IntArray; must be non-null
 	 */
-	public void shuffle (IntArray arr) {
+	public void shuffle(IntArray arr) {
 		shuffle(arr.items, 0, arr.size);
 	}
 
@@ -1745,7 +1748,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 *
 	 * @param arr a LongArray; must be non-null
 	 */
-	public void shuffle (LongArray arr) {
+	public void shuffle(LongArray arr) {
 		shuffle(arr.items, 0, arr.size);
 	}
 
@@ -1755,7 +1758,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 *
 	 * @param arr a FloatArray; must be non-null
 	 */
-	public void shuffle (FloatArray arr) {
+	public void shuffle(FloatArray arr) {
 		shuffle(arr.items, 0, arr.size);
 	}
 
@@ -1765,7 +1768,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 *
 	 * @param arr a CharArray; must be non-null
 	 */
-	public void shuffle (CharArray arr) {
+	public void shuffle(CharArray arr) {
 		shuffle(arr.items, 0, arr.size);
 	}
 
@@ -1775,7 +1778,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 *
 	 * @param arr a ByteArray; must be non-null
 	 */
-	public void shuffle (ByteArray arr) {
+	public void shuffle(ByteArray arr) {
 		shuffle(arr.items, 0, arr.size);
 	}
 
@@ -1785,7 +1788,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 *
 	 * @param arr a ShortArray; must be non-null
 	 */
-	public void shuffle (ShortArray arr) {
+	public void shuffle(ShortArray arr) {
 		shuffle(arr.items, 0, arr.size);
 	}
 
@@ -1795,7 +1798,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 *
 	 * @param arr a BooleanArray; must be non-null
 	 */
-	public void shuffle (BooleanArray arr) {
+	public void shuffle(BooleanArray arr) {
 		shuffle(arr.items, 0, arr.size);
 	}
 
@@ -1805,7 +1808,7 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 *
 	 * @param arr an Array with any item type; must be non-null
 	 */
-	public void shuffle (Array<?> arr) {
+	public void shuffle(Array<?> arr) {
 		shuffle(arr.items, 0, arr.size);
 	}
 
@@ -1818,15 +1821,14 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * you could get a serialized String using this method and then pass that to
 	 * your alternative serialization method; that avoids needing to implement custom
 	 * serialization logic for whatever GdxRandom you use.
+	 *
 	 * @return a String storing all data from the GdxRandom part of this generator
 	 */
 	public String stringSerialize() {
 		StringBuilder ser = new StringBuilder(getTag());
 		ser.append('$');
-		if (getStateCount() > 0)
-		{
-			for (int i = 0; i < getStateCount() - 1; i++)
-			{
+		if (getStateCount() > 0) {
+			for (int i = 0; i < getStateCount() - 1; i++) {
 				ser.append(getSelectedState(i)).append('+');
 			}
 			ser.append(getSelectedState(getStateCount() - 1));
@@ -1847,9 +1849,10 @@ public abstract class GdxRandom extends Random implements Json.Serializable {
 	 * you could get a serialized String using this method and then pass that to
 	 * your alternative serialization method; that avoids needing to implement custom
 	 * serialization logic for whatever GdxRandom you use.
-	 * @param sb an Appendable CharSequence that will be modified
-	 * @return {@code sb}, for chaining
+	 *
+	 * @param sb  an Appendable CharSequence that will be modified
 	 * @param <T> any type that is both a CharSequence and an Appendable, such as StringBuilder, StringBuffer, or CharBuffer
+	 * @return {@code sb}, for chaining
 	 */
 	public <T extends CharSequence & Appendable> T appendSerialized(T sb) {
 		try {

@@ -242,7 +242,7 @@ public abstract class Enhanced32Random extends EnhancedRandom {
 	 * @return the next pseudorandom, uniformly distributed {@code long}
 	 * value from this random number generator's sequence
 	 */
-	public long nextLong(){
+	public long nextLong() {
 		return (long) nextInt() << 32 ^ nextInt();
 	}
 
@@ -539,7 +539,7 @@ public abstract class Enhanced32Random extends EnhancedRandom {
 	 *
 	 * @return a float between 0.0, inclusive, and 1.0, inclusive
 	 */
-	public float nextInclusiveFloat () {
+	public float nextInclusiveFloat() {
 		return EnhancedRandom.processSignedInt32(nextInt(), 0x1000001) * 5.9604645E-8f; // 5.9604645E-8f is 0x1p-24f
 	}
 
@@ -825,7 +825,6 @@ public abstract class Enhanced32Random extends EnhancedRandom {
 	 * generator's sequence (using {@link #nextInt()}). This also makes it different
 	 * from code like java.util.Random's nextGaussian() method, which can (rarely)
 	 * fetch an arbitrarily higher number of random doubles.
-
 	 *
 	 * @return the next pseudorandom, Gaussian ("normally") distributed
 	 * {@code float} value with mean {@code 0.0} and standard deviation
@@ -855,8 +854,7 @@ public abstract class Enhanced32Random extends EnhancedRandom {
 	 * an exponential distribution whose mean is 1.
 	 *
 	 * @return a non-negative {@code double} value pseudorandomly chosen from an
-	 *         exponential distribution with a mean of 1
-	 *
+	 * exponential distribution with a mean of 1
 	 * @implNote This implementation is simply {@code return -Math.log(nextExclusiveDouble());} .
 	 */
 	public double nextExponential() {

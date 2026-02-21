@@ -32,24 +32,24 @@ import java.util.Map;
  * Trying to replicate an issue with IntMap, or IntIntMap, with libGDX.
  */
 public class IntMapIssueTest {
-	private static void putGdx(IntIntMap map, int key, int value){
+	private static void putGdx(IntIntMap map, int key, int value) {
 		map.put(key, value);
-		if((key * 421 >>> 5) % 31 >= 10)
-			map.remove(key-1, -1);
+		if ((key * 421 >>> 5) % 31 >= 10)
+			map.remove(key - 1, -1);
 		System.out.println(map.get(655369993, -1));
 	}
 
-	private static void putJdk(HashMap<Integer, Integer> map, int key, int value){
+	private static void putJdk(HashMap<Integer, Integer> map, int key, int value) {
 		map.put(key, value);
-		if((key * 421 >>> 5) % 31 >= 10)
-			map.remove(key-1);
+		if ((key * 421 >>> 5) % 31 >= 10)
+			map.remove(key - 1);
 		System.out.println(map.get(655369993));
 	}
 
-	private static void putDs(com.github.tommyettinger.ds.IntIntMap map, int key, int value){
+	private static void putDs(com.github.tommyettinger.ds.IntIntMap map, int key, int value) {
 		map.put(key, value);
-		if((key * 421 >>> 5) % 31 >= 10)
-			map.remove(key-1);
+		if ((key * 421 >>> 5) % 31 >= 10)
+			map.remove(key - 1);
 		System.out.println(map.get(655369993));
 	}
 
@@ -94,6 +94,7 @@ public class IntMapIssueTest {
 		System.out.println("size = " + map.size);
 		Assert.assertEquals(18, map.size);
 	}
+
 	@Test
 	public void testJdk() {
 		HashMap<Integer, Integer> map = new HashMap<>(24, 0.8f);
@@ -194,7 +195,7 @@ public class IntMapIssueTest {
 		int ctr = 0;
 		while (it.hasNext && ctr < 4) {
 			IntMap.Entries<Integer> it2 = map.entries();
-			if(it2.hasNext()) it2.next();
+			if (it2.hasNext()) it2.next();
 			IntMap.Entry<Integer> item = it.next();
 			map.remove(item.key);
 			it.remove();
@@ -219,7 +220,7 @@ public class IntMapIssueTest {
 		int ctr = 0;
 		while (it.hasNext() && ctr < 4) {
 			Iterator<IntObjectMap.Entry<Integer>> it2 = map.entrySet().iterator();
-			if(it2.hasNext()) {
+			if (it2.hasNext()) {
 				it2.next();
 				it2.remove();
 			}
@@ -244,7 +245,7 @@ public class IntMapIssueTest {
 		int ctr = 0;
 		while (it.hasNext() && ctr < 4) {
 			Iterator<IntObjectMap.Entry<Integer>> it2 = map.entrySet().iterator();
-			if(it2.hasNext()) {
+			if (it2.hasNext()) {
 				it2.next();
 				it2.remove();
 			}
@@ -269,7 +270,7 @@ public class IntMapIssueTest {
 		int ctr = 0;
 		while (it.hasNext() && ctr < 4) {
 			Iterator<Map.Entry<Integer, Integer>> it2 = map.entrySet().iterator();
-			if(it2.hasNext()) it2.next();
+			if (it2.hasNext()) it2.next();
 			Map.Entry<Integer, Integer> item = it.next();
 			map.remove(item.getKey());
 			it.remove();
@@ -294,7 +295,7 @@ public class IntMapIssueTest {
 		int ctr = 0;
 		while (it.hasNext() && ctr < 4) {
 			Iterator<Map.Entry<Integer, Integer>> it2 = map.entrySet().iterator();
-			if(it2.hasNext()) {
+			if (it2.hasNext()) {
 				it2.next();
 				it2.remove();
 			}

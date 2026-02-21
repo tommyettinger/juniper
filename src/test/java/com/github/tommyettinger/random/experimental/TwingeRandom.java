@@ -81,12 +81,14 @@ public class TwingeRandom extends EnhancedRandom {
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
 
 	/**
 	 * 2 to the 64.
+	 *
 	 * @return 2 to the 64
 	 */
 	@Override
@@ -100,7 +102,7 @@ public class TwingeRandom extends EnhancedRandom {
 	 * @return 2 (two)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 2;
 	}
 
@@ -112,7 +114,7 @@ public class TwingeRandom extends EnhancedRandom {
 	 * @return the value of the selected state
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		if ((selection & 1) == 1) {
 			return stateB;
 		}
@@ -127,7 +129,7 @@ public class TwingeRandom extends EnhancedRandom {
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		if ((selection & 1) == 1) {
 			stateB = value;
 		} else {
@@ -144,7 +146,7 @@ public class TwingeRandom extends EnhancedRandom {
 	 * @param seed the initial seed; may be any long
 	 */
 	@Override
-	public void setSeed (long seed) {
+	public void setSeed(long seed) {
 		stateA = seed;
 		stateB = ~seed;
 //		// This is based on MX3, but pulls out values and assigns them to states mid-way, sometimes XORing them.
@@ -160,7 +162,7 @@ public class TwingeRandom extends EnhancedRandom {
 //		stateB = (seed ^ ~0xC6BC279692B5C323L);
 	}
 
-	public long getStateA () {
+	public long getStateA() {
 		return stateA;
 	}
 
@@ -169,11 +171,11 @@ public class TwingeRandom extends EnhancedRandom {
 	 *
 	 * @param stateA can be any long
 	 */
-	public void setStateA (long stateA) {
+	public void setStateA(long stateA) {
 		this.stateA = stateA;
 	}
 
-	public long getStateB () {
+	public long getStateB() {
 		return stateB;
 	}
 
@@ -182,7 +184,7 @@ public class TwingeRandom extends EnhancedRandom {
 	 *
 	 * @param stateB can be any long
 	 */
-	public void setStateB (long stateB) {
+	public void setStateB(long stateB) {
 		this.stateB = stateB;
 	}
 
@@ -195,53 +197,53 @@ public class TwingeRandom extends EnhancedRandom {
 	 * @param stateB the second state; can be any long
 	 */
 	@Override
-	public void setState (long stateA, long stateB) {
+	public void setState(long stateA, long stateB) {
 		this.stateA = stateA;
 		this.stateB = stateB;
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		long x = ((stateA << 33 | stateA >>> 31) ^ stateB);
 		stateA = stateA * 0x369DEA0F31A53F85L + 0x2C6FE96EE78B6955L;
 		stateB = stateB * 0xD1342543DE82EF95L + 0x9E3779B97F4A7C15L;
-		return x ^ x >>> (int)(x >>> 59) + 6 ^ x >>> 44;
+		return x ^ x >>> (int) (x >>> 59) + 6 ^ x >>> 44;
 	}
 
 	@Override
-	public long previousLong () {
+	public long previousLong() {
 		stateA = (stateA - 0x2C6FE96EE78B6955L) * 0xBE21F44C6018E14DL;
 		stateB = (stateB - 0x9E3779B97F4A7C15L) * 0x572B5EE77A54E3BDL;
 		long x = ((stateA << 33 | stateA >>> 31) ^ stateB);
-		return x ^ x >>> (int)(x >>> 59) + 6 ^ x >>> 44;
+		return x ^ x >>> (int) (x >>> 59) + 6 ^ x >>> 44;
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		long x = ((stateA << 33 | stateA >>> 31) ^ stateB);
 		stateA = stateA * 0x369DEA0F31A53F85L + 0x2C6FE96EE78B6955L;
 		stateB = stateB * 0xD1342543DE82EF95L + 0x9E3779B97F4A7C15L;
-		return (int)((x ^ x >>> (int)(x >>> 59) + 6) >>> (64 - bits));
+		return (int) ((x ^ x >>> (int) (x >>> 59) + 6) >>> (64 - bits));
 	}
 
 	@Override
-	public TwingeRandom copy () {
+	public TwingeRandom copy() {
 		return new TwingeRandom(stateA, stateB);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		TwingeRandom that = (TwingeRandom)o;
+		TwingeRandom that = (TwingeRandom) o;
 
 		return stateA == that.stateA && stateB == that.stateB;
 	}
 
-	public String toString () {
+	public String toString() {
 		return "TwingeRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L}";
 	}
 

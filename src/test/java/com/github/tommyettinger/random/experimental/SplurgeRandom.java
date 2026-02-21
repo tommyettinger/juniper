@@ -22,6 +22,7 @@ import com.github.tommyettinger.random.EnhancedRandom;
 import java.math.BigInteger;
 
 /**
+ *
  */
 public class SplurgeRandom extends EnhancedRandom {
 	@Override
@@ -31,12 +32,14 @@ public class SplurgeRandom extends EnhancedRandom {
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
 
 	/**
 	 * 2 to the 64.
+	 *
 	 * @return 2 to the 64
 	 */
 	@Override
@@ -117,7 +120,7 @@ public class SplurgeRandom extends EnhancedRandom {
 	 * @return 4 (four)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 4;
 	}
 
@@ -129,16 +132,16 @@ public class SplurgeRandom extends EnhancedRandom {
 	 * @return the value of the selected state
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		switch (selection) {
-		case 0:
-			return stateA;
-		case 1:
-			return stateB;
-		case 2:
-			return stateC;
-		default:
-			return stateD;
+			case 0:
+				return stateA;
+			case 1:
+				return stateB;
+			case 2:
+				return stateC;
+			default:
+				return stateD;
 		}
 	}
 
@@ -151,20 +154,20 @@ public class SplurgeRandom extends EnhancedRandom {
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		switch (selection) {
-		case 0:
-			stateA = value;
-			break;
-		case 1:
-			stateB = value;
-			break;
-		case 2:
-			stateC = value;
-			break;
-		case 3:
-			stateD = value;
-			break;
+			case 0:
+				stateA = value;
+				break;
+			case 1:
+				stateB = value;
+				break;
+			case 2:
+				stateC = value;
+				break;
+			case 3:
+				stateD = value;
+				break;
 		}
 	}
 
@@ -176,7 +179,7 @@ public class SplurgeRandom extends EnhancedRandom {
 	 * @param seed the initial seed; may be any long
 	 */
 	@Override
-	public void setSeed (long seed) {
+	public void setSeed(long seed) {
 		seed ^= seed >>> 32;
 		stateA = seed ^ 0xC6BC279692B5C323L;
 		seed *= 0xBEA225F9EB34556DL;
@@ -190,7 +193,7 @@ public class SplurgeRandom extends EnhancedRandom {
 		stateD = seed ^ ~0xC6BC279692B5C323L;
 	}
 
-	public long getStateA () {
+	public long getStateA() {
 		return stateA;
 	}
 
@@ -199,11 +202,11 @@ public class SplurgeRandom extends EnhancedRandom {
 	 *
 	 * @param stateA can be any long
 	 */
-	public void setStateA (long stateA) {
+	public void setStateA(long stateA) {
 		this.stateA = stateA;
 	}
 
-	public long getStateB () {
+	public long getStateB() {
 		return stateB;
 	}
 
@@ -212,11 +215,11 @@ public class SplurgeRandom extends EnhancedRandom {
 	 *
 	 * @param stateB can be any long
 	 */
-	public void setStateB (long stateB) {
+	public void setStateB(long stateB) {
 		this.stateB = stateB;
 	}
 
-	public long getStateC () {
+	public long getStateC() {
 		return stateC;
 	}
 
@@ -225,11 +228,11 @@ public class SplurgeRandom extends EnhancedRandom {
 	 *
 	 * @param stateC can be any long
 	 */
-	public void setStateC (long stateC) {
+	public void setStateC(long stateC) {
 		this.stateC = stateC;
 	}
 
-	public long getStateD () {
+	public long getStateD() {
 		return stateD;
 	}
 
@@ -238,7 +241,7 @@ public class SplurgeRandom extends EnhancedRandom {
 	 *
 	 * @param stateD can be any long
 	 */
-	public void setStateD (long stateD) {
+	public void setStateD(long stateD) {
 		this.stateD = stateD;
 	}
 
@@ -269,7 +272,7 @@ public class SplurgeRandom extends EnhancedRandom {
 	 * @param stateD the fourth state; can be any long
 	 */
 	@Override
-	public void setState (long stateA, long stateB, long stateC, long stateD) {
+	public void setState(long stateA, long stateB, long stateC, long stateD) {
 		this.stateA = stateA;
 		this.stateB = stateB;
 		this.stateC = stateC;
@@ -277,20 +280,20 @@ public class SplurgeRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		long a = (stateA += 0xDB4F0B9175AE2165L);
 		long b = (stateB += 0xBBE0563303A4615FL);
 		long c = (stateC += 0xA0F2EC75A1FE1575L);
 		long d = (stateD += 0x89E182857D9ED689L);
 		b += a ^ (a << 11 | a >>> 53) ^ (a << 46 | a >>> 18);
 		c += b ^ (b << 17 | b >>> 47) ^ (b << 34 | b >>> 30);
-		d += c ^ (c <<  5 | c >>> 59) ^ (c << 58 | c >>>  6);
+		d += c ^ (c << 5 | c >>> 59) ^ (c << 58 | c >>> 6);
 		a += d ^ (d << 47 | d >>> 17) ^ (d << 38 | d >>> 26);
 		return (a ^ (a << 44 | a >>> 20) ^ (a << 21 | a >>> 43));
 	}
 
 	@Override
-	public long previousLong () {
+	public long previousLong() {
 		long a = stateA;
 		long b = stateB;
 		long c = stateC;
@@ -301,7 +304,7 @@ public class SplurgeRandom extends EnhancedRandom {
 		stateD -= 0x89E182857D9ED689L;
 		b += a ^ (a << 11 | a >>> 53) ^ (a << 46 | a >>> 18);
 		c += b ^ (b << 17 | b >>> 47) ^ (b << 34 | b >>> 30);
-		d += c ^ (c <<  5 | c >>> 59) ^ (c << 58 | c >>>  6);
+		d += c ^ (c << 5 | c >>> 59) ^ (c << 58 | c >>> 6);
 		a += d ^ (d << 47 | d >>> 17) ^ (d << 38 | d >>> 26);
 		return (a ^ (a << 44 | a >>> 20) ^ (a << 21 | a >>> 43));
 	}
@@ -314,42 +317,42 @@ public class SplurgeRandom extends EnhancedRandom {
 		long d = (stateD += 0x89E182857D9ED689L * advance);
 		b += a ^ (a << 11 | a >>> 53) ^ (a << 46 | a >>> 18);
 		c += b ^ (b << 17 | b >>> 47) ^ (b << 34 | b >>> 30);
-		d += c ^ (c <<  5 | c >>> 59) ^ (c << 58 | c >>>  6);
+		d += c ^ (c << 5 | c >>> 59) ^ (c << 58 | c >>> 6);
 		a += d ^ (d << 47 | d >>> 17) ^ (d << 38 | d >>> 26);
 		return (a ^ (a << 44 | a >>> 20) ^ (a << 21 | a >>> 43));
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		long a = (stateA += 0xDB4F0B9175AE2165L);
 		long b = (stateB += 0xBBE0563303A4615FL);
 		long c = (stateC += 0xA0F2EC75A1FE1575L);
 		long d = (stateD += 0x89E182857D9ED689L);
 		b += a ^ (a << 11 | a >>> 53) ^ (a << 46 | a >>> 18);
 		c += b ^ (b << 17 | b >>> 47) ^ (b << 34 | b >>> 30);
-		d += c ^ (c <<  5 | c >>> 59) ^ (c << 58 | c >>>  6);
+		d += c ^ (c << 5 | c >>> 59) ^ (c << 58 | c >>> 6);
 		a += d ^ (d << 47 | d >>> 17) ^ (d << 38 | d >>> 26);
-		return (int)(a ^ (a << 44 | a >>> 20) ^ (a << 21 | a >>> 43)) >>> (32 - bits);
+		return (int) (a ^ (a << 44 | a >>> 20) ^ (a << 21 | a >>> 43)) >>> (32 - bits);
 	}
 
 	@Override
-	public SplurgeRandom copy () {
+	public SplurgeRandom copy() {
 		return new SplurgeRandom(stateA, stateB, stateC, stateD);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		SplurgeRandom that = (SplurgeRandom)o;
+		SplurgeRandom that = (SplurgeRandom) o;
 
 		return stateA == that.stateA && stateB == that.stateB && stateC == that.stateC && stateD == that.stateD;
 	}
 
-	public String toString () {
+	public String toString() {
 		return "SplurgeRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L, stateD=" + (stateD) + "L}";
 	}
 

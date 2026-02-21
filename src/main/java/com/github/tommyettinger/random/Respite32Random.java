@@ -99,6 +99,7 @@ public class Respite32Random extends Enhanced32Random {
 
 	/**
 	 * This generator mainly generates int values.
+	 *
 	 * @return true
 	 */
 	@Override
@@ -108,12 +109,14 @@ public class Respite32Random extends Enhanced32Random {
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("1000000000000000000000000", 16);
 
 	/**
 	 * 2 to the 96.
+	 *
 	 * @return 2 to the 96
 	 */
 	@Override
@@ -127,7 +130,7 @@ public class Respite32Random extends Enhanced32Random {
 	 * @return 3 (three)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 3;
 	}
 
@@ -139,7 +142,7 @@ public class Respite32Random extends Enhanced32Random {
 	 * @return the value of the selected state, which is an int that will be promoted to long
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		switch (selection) {
 			case 0:
 				return stateA;
@@ -159,7 +162,7 @@ public class Respite32Random extends Enhanced32Random {
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		switch (selection) {
 			case 0:
 				stateA = (int) value;
@@ -180,8 +183,8 @@ public class Respite32Random extends Enhanced32Random {
 	 * @param seed the initial seed; may be any long
 	 */
 	@Override
-	public void setSeed (long seed) {
-		int a = (int)seed, b = (int)(seed >>> 32), c = (int)(~seed >>> 16);
+	public void setSeed(long seed) {
+		int a = (int) seed, b = (int) (seed >>> 32), c = (int) (~seed >>> 16);
 		for (int i = 0; i < 5; i++) {
 			b = (b << 24 | b >>> 8) + a ^ ++c;
 			a = (a << 3 | a >>> 29) ^ b;
@@ -199,7 +202,7 @@ public class Respite32Random extends Enhanced32Random {
 		stateC = a;
 	}
 
-	public int getStateA () {
+	public int getStateA() {
 		return stateA;
 	}
 
@@ -208,11 +211,11 @@ public class Respite32Random extends Enhanced32Random {
 	 *
 	 * @param stateA can be any int
 	 */
-	public void setStateA (int stateA) {
+	public void setStateA(int stateA) {
 		this.stateA = stateA;
 	}
 
-	public int getStateB () {
+	public int getStateB() {
 		return stateB;
 	}
 
@@ -221,11 +224,11 @@ public class Respite32Random extends Enhanced32Random {
 	 *
 	 * @param stateB can be any int
 	 */
-	public void setStateB (int stateB) {
+	public void setStateB(int stateB) {
 		this.stateB = stateB;
 	}
 
-	public int getStateC () {
+	public int getStateC() {
 		return stateC;
 	}
 
@@ -234,7 +237,7 @@ public class Respite32Random extends Enhanced32Random {
 	 *
 	 * @param stateC can be any int
 	 */
-	public void setStateC (int stateC) {
+	public void setStateC(int stateC) {
 		this.stateC = stateC;
 	}
 
@@ -248,10 +251,10 @@ public class Respite32Random extends Enhanced32Random {
 	 * @param stateC the third state; can be any long, but will be cast to an int before use
 	 */
 	@Override
-	public void setState (long stateA, long stateB, long stateC) {
-		this.stateA = (int)stateA;
-		this.stateB = (int)stateB;
-		this.stateC = (int)stateC;
+	public void setState(long stateA, long stateB, long stateC) {
+		this.stateA = (int) stateA;
+		this.stateB = (int) stateB;
+		this.stateC = (int) stateC;
 	}
 
 	/**
@@ -262,17 +265,17 @@ public class Respite32Random extends Enhanced32Random {
 	 * @param stateB the second state; can be any int
 	 * @param stateC the third state; can be any int
 	 */
-	public void setState (int stateA, int stateB, int stateC) {
+	public void setState(int stateA, int stateB, int stateC) {
 		this.stateA = stateA;
 		this.stateB = stateB;
 		this.stateC = stateC;
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		int a = (stateA += 0x91E10DA5);
 		int b = (stateB += 0x6C8E9CF5 ^ Integer.numberOfLeadingZeros(a));
-		int c = (stateC += 0x7FEB352D ^ Integer.numberOfLeadingZeros(a&b));
+		int c = (stateC += 0x7FEB352D ^ Integer.numberOfLeadingZeros(a & b));
 		b = (b << 24 | b >>> 8) + a ^ c;
 		a = (a << 3 | a >>> 29) ^ b;
 		b = (b << 24 | b >>> 8) + a ^ c;
@@ -284,7 +287,7 @@ public class Respite32Random extends Enhanced32Random {
 		long h = a;
 		a = (stateA += 0x91E10DA5);
 		b = (stateB += 0x6C8E9CF5 ^ Integer.numberOfLeadingZeros(a));
-		c = (stateC += 0x7FEB352D ^ Integer.numberOfLeadingZeros(a&b));
+		c = (stateC += 0x7FEB352D ^ Integer.numberOfLeadingZeros(a & b));
 		b = (b << 24 | b >>> 8) + a ^ c;
 		a = (a << 3 | a >>> 29) ^ b;
 		b = (b << 24 | b >>> 8) + a ^ c;
@@ -297,7 +300,7 @@ public class Respite32Random extends Enhanced32Random {
 	}
 
 	@Override
-	public long previousLong () {
+	public long previousLong() {
 		int a = stateA;
 		int b = stateB;
 		int c = stateC;
@@ -314,7 +317,7 @@ public class Respite32Random extends Enhanced32Random {
 		b = stateB;
 		stateA -= 0x91E10DA5;
 		stateB -= 0x6C8E9CF5 ^ Integer.numberOfLeadingZeros(a);
-		stateC -= 0x7FEB352D ^ Integer.numberOfLeadingZeros(a&b);
+		stateC -= 0x7FEB352D ^ Integer.numberOfLeadingZeros(a & b);
 		a = stateA;
 		b = stateB;
 		c = stateC;
@@ -331,15 +334,15 @@ public class Respite32Random extends Enhanced32Random {
 		b = stateB;
 		stateA -= 0x91E10DA5;
 		stateB -= 0x6C8E9CF5 ^ Integer.numberOfLeadingZeros(a);
-		stateC -= 0x7FEB352D ^ Integer.numberOfLeadingZeros(a&b);
+		stateC -= 0x7FEB352D ^ Integer.numberOfLeadingZeros(a & b);
 		return h << 32 | l;
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		int a = (stateA += 0x91E10DA5);
 		int b = (stateB += 0x6C8E9CF5 ^ Integer.numberOfLeadingZeros(a));
-		int c = (stateC += 0x7FEB352D ^ Integer.numberOfLeadingZeros(a&b));
+		int c = (stateC += 0x7FEB352D ^ Integer.numberOfLeadingZeros(a & b));
 		b = (b << 24 | b >>> 8) + a ^ c;
 		a = (a << 3 | a >>> 29) ^ b;
 		b = (b << 24 | b >>> 8) + a ^ c;
@@ -352,10 +355,10 @@ public class Respite32Random extends Enhanced32Random {
 	}
 
 	@Override
-	public int nextInt () {
+	public int nextInt() {
 		int a = (stateA += 0x91E10DA5);
 		int b = (stateB += 0x6C8E9CF5 ^ Integer.numberOfLeadingZeros(a));
-		int c = (stateC += 0x7FEB352D ^ Integer.numberOfLeadingZeros(a&b));
+		int c = (stateC += 0x7FEB352D ^ Integer.numberOfLeadingZeros(a & b));
 		b = (b << 24 | b >>> 8) + a ^ c;
 		a = (a << 3 | a >>> 29) ^ b;
 		b = (b << 24 | b >>> 8) + a ^ c;
@@ -384,28 +387,28 @@ public class Respite32Random extends Enhanced32Random {
 		c = stateB;
 		stateA -= 0x91E10DA5;
 		stateB -= 0x6C8E9CF5 ^ Integer.numberOfLeadingZeros(b);
-		stateC -= 0x7FEB352D ^ Integer.numberOfLeadingZeros(b&c);
+		stateC -= 0x7FEB352D ^ Integer.numberOfLeadingZeros(b & c);
 		return a;
 	}
 
 	@Override
-	public Respite32Random copy () {
+	public Respite32Random copy() {
 		return new Respite32Random(stateA, stateB, stateC);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		Respite32Random that = (Respite32Random)o;
+		Respite32Random that = (Respite32Random) o;
 
 		return stateA == that.stateA && stateB == that.stateB && stateC == that.stateC;
 	}
 
-	public String toString () {
+	public String toString() {
 		return "Respite32Random{" + "stateA=" + (stateA) + ", stateB=" + (stateB) + ", stateC=" + (stateC) + "}";
 	}
 

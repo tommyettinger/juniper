@@ -19,7 +19,7 @@ package com.github.tommyettinger.random.experimental;
 
 import com.github.tommyettinger.digital.BitConversion;
 import com.github.tommyettinger.digital.MathTools;
-import com.github.tommyettinger.random.*;
+import com.github.tommyettinger.random.EnhancedRandom;
 
 import java.math.BigInteger;
 
@@ -53,7 +53,7 @@ public class Cover32Random extends EnhancedRandom {
 	 * Creates a new Cover32Random with a random state.
 	 */
 	public Cover32Random() {
-		this((int)EnhancedRandom.seedFromMath(), (int)EnhancedRandom.seedFromMath(), (int)EnhancedRandom.seedFromMath(), (int)EnhancedRandom.seedFromMath());
+		this((int) EnhancedRandom.seedFromMath(), (int) EnhancedRandom.seedFromMath(), (int) EnhancedRandom.seedFromMath(), (int) EnhancedRandom.seedFromMath());
 	}
 
 	/**
@@ -91,6 +91,7 @@ public class Cover32Random extends EnhancedRandom {
 
 	/**
 	 * This generator mainly generates int values.
+	 *
 	 * @return true
 	 */
 	@Override
@@ -100,12 +101,14 @@ public class Cover32Random extends EnhancedRandom {
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("1000000000000000000000000", 16);
 
 	/**
 	 * 2 to the 96.
+	 *
 	 * @return 2 to the 96
 	 */
 	@Override
@@ -119,7 +122,7 @@ public class Cover32Random extends EnhancedRandom {
 	 * @return 4 (four)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 4;
 	}
 
@@ -131,7 +134,7 @@ public class Cover32Random extends EnhancedRandom {
 	 * @return the value of the selected state, which is an int that will be promoted to long
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		switch (selection) {
 			case 0:
 				return stateA;
@@ -153,24 +156,24 @@ public class Cover32Random extends EnhancedRandom {
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		switch (selection) {
 			case 0:
-				stateA = (int)value;
+				stateA = (int) value;
 				break;
 			case 1:
-				stateB = (int)value;
+				stateB = (int) value;
 				break;
 			case 2:
-				stateC = (int)value;
+				stateC = (int) value;
 				break;
 			default:
-				stateD = (int)value;
+				stateD = (int) value;
 				break;
 		}
 	}
 
-	public long getStateA () {
+	public long getStateA() {
 		return stateA;
 	}
 
@@ -179,11 +182,11 @@ public class Cover32Random extends EnhancedRandom {
 	 *
 	 * @param stateA can be any long, but will be cast to an int before use
 	 */
-	public void setStateA (long stateA) {
-		this.stateA = (int)stateA;
+	public void setStateA(long stateA) {
+		this.stateA = (int) stateA;
 	}
 
-	public long getStateB () {
+	public long getStateB() {
 		return stateB;
 	}
 
@@ -192,11 +195,11 @@ public class Cover32Random extends EnhancedRandom {
 	 *
 	 * @param stateB can be any long, but will be cast to an int before use
 	 */
-	public void setStateB (long stateB) {
-		this.stateB = (int)stateB;
+	public void setStateB(long stateB) {
+		this.stateB = (int) stateB;
 	}
 
-	public long getStateC () {
+	public long getStateC() {
 		return stateC;
 	}
 
@@ -205,11 +208,11 @@ public class Cover32Random extends EnhancedRandom {
 	 *
 	 * @param stateC can be any long, but will be cast to an int before use
 	 */
-	public void setStateC (long stateC) {
-		this.stateC = (int)stateC;
+	public void setStateC(long stateC) {
+		this.stateC = (int) stateC;
 	}
 
-	public long getStateD () {
+	public long getStateD() {
 		return stateD;
 	}
 
@@ -218,8 +221,8 @@ public class Cover32Random extends EnhancedRandom {
 	 *
 	 * @param stateD can be any long, but will be cast to an int before use
 	 */
-	public void setStateD (long stateD) {
-		this.stateD = (int)stateD;
+	public void setStateD(long stateD) {
+		this.stateD = (int) stateD;
 	}
 
 	/**
@@ -233,11 +236,11 @@ public class Cover32Random extends EnhancedRandom {
 	 * @param stateD the fourth state; can be any long, but will be cast to an int before use
 	 */
 	@Override
-	public void setState (long stateA, long stateB, long stateC, long stateD) {
-		this.stateA = (int)stateA;
-		this.stateB = (int)stateB;
-		this.stateC = (int)stateC;
-		this.stateD = (int)stateD;
+	public void setState(long stateA, long stateB, long stateC, long stateD) {
+		this.stateA = (int) stateA;
+		this.stateB = (int) stateB;
+		this.stateC = (int) stateC;
+		this.stateD = (int) stateD;
 	}
 
 	/**
@@ -247,8 +250,8 @@ public class Cover32Random extends EnhancedRandom {
 	 * @param seed the initial seed; may be any long
 	 */
 	@Override
-	public void setSeed (long seed) {
-		int a = (int)seed, b = (int)(seed >>> 32), c = (int)(~seed >>> 16);
+	public void setSeed(long seed) {
+		int a = (int) seed, b = (int) (seed >>> 32), c = (int) (~seed >>> 16);
 		for (int i = 0; i < 5; i++) {
 			b = (b << 24 | b >>> 8) + a ^ ++c;
 			a = (a << 3 | a >>> 29) ^ b;
@@ -267,7 +270,7 @@ public class Cover32Random extends EnhancedRandom {
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 //		int x = (stateA = stateA + 0xD192ED03 ^ 0xBEA225FA);
 //		int y = (stateB = stateB + BitConversion.countLeadingZeros(x) ^ 0xA62B82F6);
 //		int z = (stateC = stateC + BitConversion.countLeadingZeros(x & y) ^ 0x9E3779BA);
@@ -276,16 +279,16 @@ public class Cover32Random extends EnhancedRandom {
 //		x ^= imul(z ^ (y << 17 | y >>> 15), 0x735a2d97);
 //		y ^= (x << 17 | x >>> 15);
 ////		x = (x << 17 | x >>> 15) + z ^ (y = (y << 11 | y >>> 21) + x ^ w) + (y << 23 | y >>>  9);
-		return (long)nextInt() << 32 ^ nextInt();
+		return (long) nextInt() << 32 ^ nextInt();
 	}
 
 	@Override
-	public long previousLong () {
-		return previousInt() ^ (long)previousInt() << 32;
+	public long previousLong() {
+		return previousInt() ^ (long) previousInt() << 32;
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		int x = (stateA = stateA + 0xD192ED03 ^ 0xBEA225FA);
 		int y = (stateB = stateB + BitConversion.countLeadingZeros(x) ^ 0xA62B82F6);
 		int z = (stateC = stateC + BitConversion.countLeadingZeros(x & y) ^ 0x9E3779BA);
@@ -296,7 +299,7 @@ public class Cover32Random extends EnhancedRandom {
 	}
 
 	@Override
-	public int nextInt () {
+	public int nextInt() {
 		int x = (stateA = stateA + 0xD192ED03 ^ 0xBEA225FA);
 		int y = (stateB = stateB + BitConversion.countLeadingZeros(x) ^ 0xA62B82F6);
 		int z = (stateC = stateC + BitConversion.countLeadingZeros(x & y) ^ 0x9E3779BA);
@@ -318,7 +321,7 @@ public class Cover32Random extends EnhancedRandom {
 		stateD = imul(w, MathTools.modularMultiplicativeInverse(0xD747A13B)) ^ z;
 		stateD = (stateD << 20 | stateD >>> 12);
 		int res = (x << 17 | x >>> 15) + z ^ (w << 5 | w >>> 27) ^
-				(y = (y << 11 | y >>> 21) + x ^ w + (z << 25 | z >>> 7)) + (y << 23 | y >>> 9);
+			(y = (y << 11 | y >>> 21) + x ^ w + (z << 25 | z >>> 7)) + (y << 23 | y >>> 9);
 		res = imul(res ^ res >>> 15, 0x735a2d97);
 		return res ^ res >>> 16;
 	}
@@ -329,23 +332,27 @@ public class Cover32Random extends EnhancedRandom {
 //		return x;
 
 	@Override
-	public int nextInt (int bound) {
-		return (int)(bound * (nextInt() & 0xFFFFFFFFL) >> 32) & ~(bound >> 31);
+	public int nextInt(int bound) {
+		return (int) (bound * (nextInt() & 0xFFFFFFFFL) >> 32) & ~(bound >> 31);
 	}
 
 	@Override
-	public int nextSignedInt (int outerBound) {
-		outerBound = (int)(outerBound * (nextInt() & 0xFFFFFFFFL) >> 32);
+	public int nextSignedInt(int outerBound) {
+		outerBound = (int) (outerBound * (nextInt() & 0xFFFFFFFFL) >> 32);
 		return outerBound + (outerBound >>> 31);
 	}
 
 	@Override
-	public void nextBytes (byte[] bytes) {
-		for (int i = 0; i < bytes.length; ) {for (int r = nextInt(), n = Math.min(bytes.length - i, 4); n-- > 0; r >>>= 8) {bytes[i++] = (byte)r;}}
+	public void nextBytes(byte[] bytes) {
+		for (int i = 0; i < bytes.length; ) {
+			for (int r = nextInt(), n = Math.min(bytes.length - i, 4); n-- > 0; r >>>= 8) {
+				bytes[i++] = (byte) r;
+			}
+		}
 	}
 
 	@Override
-	public long nextLong (long inner, long outer) {
+	public long nextLong(long inner, long outer) {
 		final long rand = nextLong();
 		if (inner >= outer)
 			return inner;
@@ -358,7 +365,7 @@ public class Cover32Random extends EnhancedRandom {
 	}
 
 	@Override
-	public long nextSignedLong (long inner, long outer) {
+	public long nextSignedLong(long inner, long outer) {
 		if (outer < inner) {
 			long t = outer;
 			outer = inner + 1L;
@@ -374,33 +381,33 @@ public class Cover32Random extends EnhancedRandom {
 	}
 
 	@Override
-	public boolean nextBoolean () {
+	public boolean nextBoolean() {
 		return nextInt() < 0;
 	}
 
 	@Override
-	public float nextFloat () {
+	public float nextFloat() {
 		return (nextInt() >>> 8) * 0x1p-24f;
 	}
 
 	@Override
-	public Cover32Random copy () {
+	public Cover32Random copy() {
 		return new Cover32Random(stateA, stateB, stateC, stateD);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		Cover32Random that = (Cover32Random)o;
+		Cover32Random that = (Cover32Random) o;
 
 		return stateA == that.stateA && stateB == that.stateB && stateC == that.stateC;
 	}
 
-	public String toString () {
+	public String toString() {
 		return "Cover32Random{stateA=" + (stateA) + ", stateB=" + (stateB) + ", stateC=" + (stateC) + "}";
 	}
 

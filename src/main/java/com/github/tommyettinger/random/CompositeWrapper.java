@@ -97,6 +97,7 @@ public class CompositeWrapper extends EnhancedRandom {
 	/**
 	 * The minimum period of a composite of two generators is the {@link #lcm(BigInteger, BigInteger)} of their
 	 * getMinimumPeriod() results.
+	 *
 	 * @return the least common multiple of {@code getRandomA().getMinimumPeriod()} and {@code getRandomB().getMinimumPeriod()}
 	 */
 	@Override
@@ -267,6 +268,7 @@ public class CompositeWrapper extends EnhancedRandom {
 	/**
 	 * Needs the classes of {@link #getRandomA()} and {@link #getRandomB()} to both be registered with
 	 * {@link Deserializer}.
+	 *
 	 * @param in the stream to read data from in order to restore the object
 	 * @throws IOException if there's an input failure
 	 */
@@ -279,6 +281,7 @@ public class CompositeWrapper extends EnhancedRandom {
 	/**
 	 * Needs the classes of {@link #getRandomA()} and {@link #getRandomB()} to both be registered with
 	 * {@link Deserializer}.
+	 *
 	 * @param out the stream to write the object to
 	 * @throws IOException if there's an output failure
 	 */

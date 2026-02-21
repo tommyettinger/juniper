@@ -71,7 +71,7 @@ public class MemorableConstantTest {
 			0x9E3779B97F4A7C17L
 		};
 
-		for(long c : constants){
+		for (long c : constants) {
 			System.out.printf("%20dL or 0x%016XL rating: %d\n", c, c, EnhancedRandom.rateGamma(c));
 			System.out.printf("%20dL or 0x%016XL rating: %d\n", -c, -c, EnhancedRandom.rateGamma(-c));
 		}

@@ -85,7 +85,7 @@ public class StrangerRandom extends EnhancedRandom {
 	 * @param state the initial state of a 7-9 xorshift generator
 	 * @return state jumped ahead 0x9E3779B97F4A7C15 times (unsigned)
 	 */
-	public static long jump (long state) {
+	public static long jump(long state) {
 		final long poly = 0x5556837749D9A17FL;
 		long val = 0L, b = 1L;
 		for (int i = 0; i < 63; i++, b <<= 1) {
@@ -100,7 +100,7 @@ public class StrangerRandom extends EnhancedRandom {
 	/**
 	 * Creates a new StrangerRandom with a random state.
 	 */
-	public StrangerRandom () {
+	public StrangerRandom() {
 		super();
 		stateA = EnhancedRandom.seedFromMath();
 		if (stateA == 0L)
@@ -116,7 +116,7 @@ public class StrangerRandom extends EnhancedRandom {
 	 *
 	 * @param seed any {@code long} value
 	 */
-	public StrangerRandom (long seed) {
+	public StrangerRandom(long seed) {
 		super(seed);
 		setSeed(seed);
 	}
@@ -131,7 +131,7 @@ public class StrangerRandom extends EnhancedRandom {
 	 * @param stateC any {@code long} value
 	 * @param stateD any {@code long} value
 	 */
-	public StrangerRandom (long stateA, long stateB, long stateC, long stateD) {
+	public StrangerRandom(long stateA, long stateB, long stateC, long stateD) {
 		super(stateA);
 		this.stateA = (stateA == 0L) ? 0xD3833E804F4C574BL : stateA;
 		this.stateB = (stateB == 0L) ? 0x790B300BF9FE738FL : stateB;
@@ -143,14 +143,17 @@ public class StrangerRandom extends EnhancedRandom {
 	public String getTag() {
 		return "StrR";
 	}
+
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("1FFFFFFFFFFFFFFFE", 16);
 
 	/**
 	 * (2 to the 65) minus 2.
+	 *
 	 * @return (2 to the 65) minus 2
 	 */
 	@Override
@@ -164,7 +167,7 @@ public class StrangerRandom extends EnhancedRandom {
 	 * @return 4 (four)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 4;
 	}
 
@@ -176,16 +179,16 @@ public class StrangerRandom extends EnhancedRandom {
 	 * @return the value of the selected state
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		switch (selection) {
-		case 0:
-			return stateA;
-		case 1:
-			return stateB;
-		case 2:
-			return stateC;
-		default:
-			return stateD;
+			case 0:
+				return stateA;
+			case 1:
+				return stateB;
+			case 2:
+				return stateC;
+			default:
+				return stateD;
 		}
 	}
 
@@ -198,20 +201,20 @@ public class StrangerRandom extends EnhancedRandom {
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		switch (selection) {
-		case 0:
-			stateA = value == 0L ? 0xD3833E804F4C574BL : value;
-			break;
-		case 1:
-			stateB = value == 0L ? 0x790B300BF9FE738FL : value;
-			break;
-		case 2:
-			stateC = value;
-			break;
-		default:
-			stateD = value;
-			break;
+			case 0:
+				stateA = value == 0L ? 0xD3833E804F4C574BL : value;
+				break;
+			case 1:
+				stateB = value == 0L ? 0x790B300BF9FE738FL : value;
+				break;
+			case 2:
+				stateC = value;
+				break;
+			default:
+				stateD = value;
+				break;
 		}
 	}
 
@@ -228,7 +231,7 @@ public class StrangerRandom extends EnhancedRandom {
 	 * @param seed the initial seed; may be any long
 	 */
 	@Override
-	public void setSeed (long seed) {
+	public void setSeed(long seed) {
 		stateA = seed ^ 0xFA346CBFD5890825L;
 		if (stateA == 0L)
 			stateA = 0xD3833E804F4C574BL;
@@ -237,7 +240,7 @@ public class StrangerRandom extends EnhancedRandom {
 		stateD = jump(stateC + 0xC6BC279692B5C323L);
 	}
 
-	public long getStateA () {
+	public long getStateA() {
 		return stateA;
 	}
 
@@ -246,11 +249,11 @@ public class StrangerRandom extends EnhancedRandom {
 	 *
 	 * @param stateA can be any long except 0; this treats 0 as 0xD3833E804F4C574BL
 	 */
-	public void setStateA (long stateA) {
+	public void setStateA(long stateA) {
 		this.stateA = (stateA == 0L) ? 0xD3833E804F4C574BL : stateA;
 	}
 
-	public long getStateB () {
+	public long getStateB() {
 		return stateB;
 	}
 
@@ -259,11 +262,11 @@ public class StrangerRandom extends EnhancedRandom {
 	 *
 	 * @param stateB can be any long except 0; this treats 0 as 0x790B300BF9FE738FL
 	 */
-	public void setStateB (long stateB) {
+	public void setStateB(long stateB) {
 		this.stateB = (stateB == 0L) ? 0x790B300BF9FE738FL : stateB;
 	}
 
-	public long getStateC () {
+	public long getStateC() {
 		return stateC;
 	}
 
@@ -275,11 +278,11 @@ public class StrangerRandom extends EnhancedRandom {
 	 *
 	 * @param stateC can be any long
 	 */
-	public void setStateC (long stateC) {
+	public void setStateC(long stateC) {
 		this.stateC = stateC;
 	}
 
-	public long getStateD () {
+	public long getStateD() {
 		return stateD;
 	}
 
@@ -288,7 +291,7 @@ public class StrangerRandom extends EnhancedRandom {
 	 *
 	 * @param stateD can be any long
 	 */
-	public void setStateD (long stateD) {
+	public void setStateD(long stateD) {
 		this.stateD = stateD;
 	}
 
@@ -306,7 +309,7 @@ public class StrangerRandom extends EnhancedRandom {
 	 * @param stateD the fourth state; can be any long
 	 */
 	@Override
-	public void setState (long stateA, long stateB, long stateC, long stateD) {
+	public void setState(long stateA, long stateB, long stateC, long stateD) {
 		this.stateA = (stateA == 0L) ? 0xD3833E804F4C574BL : stateA;
 		this.stateB = (stateB == 0L) ? 0x790B300BF9FE738FL : stateB;
 		this.stateC = stateC;
@@ -326,7 +329,7 @@ public class StrangerRandom extends EnhancedRandom {
 	 * @param stateD the long value to use for stateD; can be any long
 	 */
 	@Override
-	public void setState (long stateA, long stateC, long stateD) {
+	public void setState(long stateA, long stateC, long stateD) {
 		this.stateA = (stateA == 0L) ? 0xD3833E804F4C574BL : stateA;
 		this.stateB = jump(this.stateA);
 		this.stateC = stateC;
@@ -334,7 +337,7 @@ public class StrangerRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		final long fa = stateA;
 		final long fb = stateB;
 		final long fc = stateC;
@@ -347,7 +350,7 @@ public class StrangerRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public long previousLong () {
+	public long previousLong() {
 		final long fa = stateA;
 		final long fb = stateB;
 		final long fd = stateD;
@@ -367,7 +370,7 @@ public class StrangerRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		final long fa = stateA;
 		final long fb = stateB;
 		final long fc = stateC;
@@ -376,22 +379,22 @@ public class StrangerRandom extends EnhancedRandom {
 		stateB = fa ^ fa >>> 9;
 		stateC = (fd << 39 | fd >>> 25) - fb;
 		stateD = fa - fc + 0xC6BC279692B5C323L;
-		return (int)fc >>> (32 - bits);
+		return (int) fc >>> (32 - bits);
 	}
 
 	@Override
-	public StrangerRandom copy () {
+	public StrangerRandom copy() {
 		return new StrangerRandom(stateA, stateB, stateC, stateD);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		StrangerRandom that = (StrangerRandom)o;
+		StrangerRandom that = (StrangerRandom) o;
 
 		if (stateA != that.stateA)
 			return false;
@@ -402,7 +405,7 @@ public class StrangerRandom extends EnhancedRandom {
 		return stateD == that.stateD;
 	}
 
-	public String toString () {
+	public String toString() {
 		return "StrangerRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L, stateD=" + (stateD) + "L}";
 	}
 }

@@ -48,12 +48,14 @@ public class ThrooshRandom extends EnhancedRandom {
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
 
 	/**
 	 * 2 to the 64.
+	 *
 	 * @return 2 to the 64
 	 */
 	@Override
@@ -135,7 +137,7 @@ public class ThrooshRandom extends EnhancedRandom {
 	 * @return 4 (four)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 4;
 	}
 
@@ -147,7 +149,7 @@ public class ThrooshRandom extends EnhancedRandom {
 	 * @return the value of the selected state
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		switch (selection) {
 			case 0:
 				return stateA;
@@ -169,20 +171,20 @@ public class ThrooshRandom extends EnhancedRandom {
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		switch (selection) {
-		case 0:
-			stateA = value;
-			break;
-		case 1:
-			stateB = value;
-			break;
-		case 2:
-			stateC = value;
-			break;
-		case 3:
-			stateD = value;
-			break;
+			case 0:
+				stateA = value;
+				break;
+			case 1:
+				stateB = value;
+				break;
+			case 2:
+				stateC = value;
+				break;
+			case 3:
+				stateD = value;
+				break;
 		}
 	}
 
@@ -194,12 +196,12 @@ public class ThrooshRandom extends EnhancedRandom {
 	 * @param s the initial seed; may be any long
 	 */
 	@Override
-	public void setSeed (long s) {
+	public void setSeed(long s) {
 		s += 0xF1357AEA2E62A9C5L;
 		s = (s ^ (s << 23 | s >>> 41) ^ (s << 47 | s >>> 17)) ^ 0xC6BC279692B5C323L;
 		stateA = s;
 		s += 0xF1357AEA2E62A9C5L;
-		s = (s ^ (s <<  3 | s >>> 61) ^ (s << 57 | s >>>  7)) ^ 0xC6BC279692B5C323L;
+		s = (s ^ (s << 3 | s >>> 61) ^ (s << 57 | s >>> 7)) ^ 0xC6BC279692B5C323L;
 		stateB = s;
 		s += 0xF1357AEA2E62A9C5L;
 		s = (s ^ (s << 43 | s >>> 21) ^ (s << 37 | s >>> 27)) ^ 0xC6BC279692B5C323L;
@@ -209,7 +211,7 @@ public class ThrooshRandom extends EnhancedRandom {
 		stateD = s;
 	}
 
-	public long getStateA () {
+	public long getStateA() {
 		return stateA;
 	}
 
@@ -218,11 +220,11 @@ public class ThrooshRandom extends EnhancedRandom {
 	 *
 	 * @param stateA can be any long
 	 */
-	public void setStateA (long stateA) {
+	public void setStateA(long stateA) {
 		this.stateA = stateA;
 	}
 
-	public long getStateB () {
+	public long getStateB() {
 		return stateB;
 	}
 
@@ -231,11 +233,11 @@ public class ThrooshRandom extends EnhancedRandom {
 	 *
 	 * @param stateB can be any long
 	 */
-	public void setStateB (long stateB) {
+	public void setStateB(long stateB) {
 		this.stateB = stateB;
 	}
 
-	public long getStateC () {
+	public long getStateC() {
 		return stateC;
 	}
 
@@ -244,11 +246,11 @@ public class ThrooshRandom extends EnhancedRandom {
 	 *
 	 * @param stateC can be any long
 	 */
-	public void setStateC (long stateC) {
+	public void setStateC(long stateC) {
 		this.stateC = stateC;
 	}
 
-	public long getStateD () {
+	public long getStateD() {
 		return stateD;
 	}
 
@@ -257,7 +259,7 @@ public class ThrooshRandom extends EnhancedRandom {
 	 *
 	 * @param stateD can be any long
 	 */
-	public void setStateD (long stateD) {
+	public void setStateD(long stateD) {
 		this.stateD = stateD;
 	}
 
@@ -281,7 +283,7 @@ public class ThrooshRandom extends EnhancedRandom {
 	 * @param stateC the third state; can be any long
 	 */
 	@Override
-	public void setState (long stateA, long stateB, long stateC) {
+	public void setState(long stateA, long stateB, long stateC) {
 		this.stateA = stateA;
 		this.stateB = stateB;
 		this.stateC = stateC;
@@ -299,7 +301,7 @@ public class ThrooshRandom extends EnhancedRandom {
 	 * @param stateD the fourth state; can be any long
 	 */
 	@Override
-	public void setState (long stateA, long stateB, long stateC, long stateD) {
+	public void setState(long stateA, long stateB, long stateC, long stateD) {
 		this.stateA = stateA;
 		this.stateB = stateB;
 		this.stateC = stateC;
@@ -307,7 +309,7 @@ public class ThrooshRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		final long fa = stateA;
 		final long fb = stateB;
 		final long fc = stateC;
@@ -321,7 +323,7 @@ public class ThrooshRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public long previousLong () {
+	public long previousLong() {
 		final long a = stateA;
 		final long b = stateB;
 		stateC -= 0xBEA225F9EB34556DL;
@@ -332,8 +334,9 @@ public class ThrooshRandom extends EnhancedRandom {
 		stateD ^= stateA;
 		return stateD;
 	}
+
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		final long fa = stateA;
 		final long fb = stateB;
 		final long fc = stateC;
@@ -342,7 +345,7 @@ public class ThrooshRandom extends EnhancedRandom {
 		stateB = (fb << 41 | fb >>> 23) ^ fc;
 		stateC = fc + 0xBEA225F9EB34556DL;
 		stateD = fd ^ fa;
-		return (int)fd >>> (32 - bits);
+		return (int) fd >>> (32 - bits);
 	}
 
 	/**
@@ -365,27 +368,27 @@ public class ThrooshRandom extends EnhancedRandom {
 		stateB = (fb << 41 | fb >>> 23) ^ fc;
 		stateC = fc + 0xBEA225F9EB34556DL;
 		stateD = fd ^ fa;
-		return (int)fd;
+		return (int) fd;
 	}
 
 	@Override
-	public ThrooshRandom copy () {
+	public ThrooshRandom copy() {
 		return new ThrooshRandom(stateA, stateB, stateC, stateD);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		ThrooshRandom that = (ThrooshRandom)o;
+		ThrooshRandom that = (ThrooshRandom) o;
 
 		return stateA == that.stateA && stateB == that.stateB && stateC == that.stateC && stateD == that.stateD;
 	}
 
-	public String toString () {
+	public String toString() {
 		return "ThrooshRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L, stateD=" + (stateD) + "L}";
 	}
 

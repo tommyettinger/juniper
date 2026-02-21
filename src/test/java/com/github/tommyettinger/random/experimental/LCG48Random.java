@@ -28,6 +28,7 @@ import java.math.BigInteger;
 public class LCG48Random extends EnhancedRandom {
 	/**
 	 * Returns the String {@code "L48R"}, which is the tag here.
+	 *
 	 * @return the String {@code "L48R"}
 	 */
 	@Override
@@ -37,6 +38,7 @@ public class LCG48Random extends EnhancedRandom {
 
 	/**
 	 * This generator mainly generates int values.
+	 *
 	 * @return true
 	 */
 	@Override
@@ -46,12 +48,14 @@ public class LCG48Random extends EnhancedRandom {
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("1000000000000", 16);
 
 	/**
 	 * 2 to the 48.
+	 *
 	 * @return 2 to the 48
 	 */
 	@Override
@@ -90,7 +94,7 @@ public class LCG48Random extends EnhancedRandom {
 	 * @return 1 (one)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 1;
 	}
 
@@ -101,7 +105,7 @@ public class LCG48Random extends EnhancedRandom {
 	 * @return the only state's exact value
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		return state;
 	}
 
@@ -113,7 +117,7 @@ public class LCG48Random extends EnhancedRandom {
 	 * @param value     the exact value to use for the state; all longs are valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		state = value;
 	}
 
@@ -124,7 +128,7 @@ public class LCG48Random extends EnhancedRandom {
 	 * @param seed the value to use for the state; all longs are valid, and this will be altered
 	 */
 	@Override
-	public void setSeed (long seed) {
+	public void setSeed(long seed) {
 		state = (seed ^ 0x5DEECE66DL) & 0xffffffffffffL;
 	}
 
@@ -134,7 +138,7 @@ public class LCG48Random extends EnhancedRandom {
 	 *
 	 * @return the current state, as a long
 	 */
-	public long getState () {
+	public long getState() {
 		return state;
 	}
 
@@ -145,29 +149,29 @@ public class LCG48Random extends EnhancedRandom {
 	 * @param state the long value to use for the state variable
 	 */
 	@Override
-	public void setState (long state) {
+	public void setState(long state) {
 		this.state = state;
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		long hi = (state = (state * 0x5DEECE66DL + 0xBL) & 0xffffffffffffL) << 16 & 0xFFFFFFFF00000000L;
 		long lo = (state = (state * 0x5DEECE66DL + 0xBL) & 0xffffffffffffL) >>> 16;
 		return hi + lo;
 	}
 
 	@Override
-	public int next (int bits) {
-		return (int)((state = (state * 0x5DEECE66DL + 0xBL) & 0xffffffffffffL) >>> (48 - bits));
+	public int next(int bits) {
+		return (int) ((state = (state * 0x5DEECE66DL + 0xBL) & 0xffffffffffffL) >>> (48 - bits));
 	}
 
 	@Override
 	public int nextInt() {
-		return (int)((state = (state * 0x5DEECE66DL + 0xBL)& 0xffffffffffffL) >>> 16);
+		return (int) ((state = (state * 0x5DEECE66DL + 0xBL) & 0xffffffffffffL) >>> 16);
 	}
 
 	@Override
-	public LCG48Random copy () {
+	public LCG48Random copy() {
 		return new LCG48Random(state);
 	}
 
@@ -185,19 +189,19 @@ public class LCG48Random extends EnhancedRandom {
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		LCG48Random that = (LCG48Random)o;
+		LCG48Random that = (LCG48Random) o;
 
 		return state == that.state;
 	}
 
 	@Override
-	public String toString () {
+	public String toString() {
 		return "LCG48Random{state=" + (state) + "L}";
 	}
 }

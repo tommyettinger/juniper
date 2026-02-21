@@ -33,114 +33,114 @@ public class RangedTest {
 		return processUnsignedInt32Biased(rand, bound + boundSign ^ boundSign) + boundSign ^ boundSign;
 	}
 
-	public static int processInt32Old(int rand, int innerBound, int outerBound){
+	public static int processInt32Old(int rand, int innerBound, int outerBound) {
 		return (int) (innerBound + (processUnsignedInt32Unbiased(rand, outerBound - innerBound) & ~((long) outerBound - (long) innerBound >> 63)));
 	}
 
-	public static int processInt32(int rand, int innerBound, int outerBound){
+	public static int processInt32(int rand, int innerBound, int outerBound) {
 		final int check = innerBound ^ Math.max(innerBound, outerBound);
 		return (innerBound + (processUnsignedInt32Unbiased(rand, outerBound - innerBound) & (check | -check) >> 31));
 	}
 
-    @Ignore // comment this out if you want to run this; it can take a little while
-    @Test
-    public void testIntRange() {
-        for (int limit = 2; limit <= 1024; limit++) {
-            // we need to use tanh because manually calculating can give very wrong results for high limits.
-            double threshold = 1.91 - Math.tanh(limit);
-            threshold *= threshold;
-            System.out.println("Testing all EnhancedRandom using nextInt("+limit+") with threshold " + threshold);
-            ArrayList<EnhancedRandom> randoms = Deserializer.copyRandoms();
-            for (EnhancedRandom r : randoms) {
-                if(r.getTag().equals("KnSR")
-                        || r.getTag().equals("LCQR")
-                ) continue;
-                r.setSeed(12345L);
-                int[] buckets = new int[limit];
-                for (int i = limit << 12; i > 0; i--) {
-                    buckets[r.nextInt(limit)]++;
-                }
-                int min = Integer.MAX_VALUE, max = -1;
-                for (int i = 0; i < limit; i++) {
-                    min = Math.min(min, buckets[i]);
-                    max = Math.max(max, buckets[i]);
-                }
-                Assert.assertTrue("Distribution failure for nextInt() with limit " + limit + " using " + r + ": " +
-                                ((double) min / (double) max),
-                        (double) min / (double) max >= threshold);
+	@Ignore // comment this out if you want to run this; it can take a little while
+	@Test
+	public void testIntRange() {
+		for (int limit = 2; limit <= 1024; limit++) {
+			// we need to use tanh because manually calculating can give very wrong results for high limits.
+			double threshold = 1.91 - Math.tanh(limit);
+			threshold *= threshold;
+			System.out.println("Testing all EnhancedRandom using nextInt(" + limit + ") with threshold " + threshold);
+			ArrayList<EnhancedRandom> randoms = Deserializer.copyRandoms();
+			for (EnhancedRandom r : randoms) {
+				if (r.getTag().equals("KnSR")
+					|| r.getTag().equals("LCQR")
+				) continue;
+				r.setSeed(12345L);
+				int[] buckets = new int[limit];
+				for (int i = limit << 12; i > 0; i--) {
+					buckets[r.nextInt(limit)]++;
+				}
+				int min = Integer.MAX_VALUE, max = -1;
+				for (int i = 0; i < limit; i++) {
+					min = Math.min(min, buckets[i]);
+					max = Math.max(max, buckets[i]);
+				}
+				Assert.assertTrue("Distribution failure for nextInt() with limit " + limit + " using " + r + ": " +
+						((double) min / (double) max),
+					(double) min / (double) max >= threshold);
 //                System.out.println("Success for nextInt() with limit " + limit + " using " + r.getTag() + ": " +
 //                        ((double) min / (double) max));
-            }
-        }
-    }
+			}
+		}
+	}
 
-    @Ignore // comment this out if you want to run this; it can take a little while
-    @Test
-    public void testSignedIntRange() {
-        for (int limit = 2; limit <= 1024; limit++) {
-            // we need to use tanh because manually calculating can give very wrong results for high limits.
-            double threshold = 1.91 - Math.tanh(limit);
-            threshold *= threshold;
-            System.out.println("Testing all EnhancedRandom using nextInt("+limit+") with threshold " + threshold);
-            ArrayList<EnhancedRandom> randoms = Deserializer.copyRandoms();
-            for (EnhancedRandom r : randoms) {
-                if(r.getTag().equals("KnSR")
-                        || r.getTag().equals("LCQR")
-                        || r.getTag().equals("VCQR")
-                ) continue;
-                r.setSeed(12345L);
-                int[] buckets = new int[limit];
-                for (int i = limit << 12; i > 0; i--) {
-                    buckets[r.nextSignedInt(-1, limit-1)+1]++;
-                }
-                int min = Integer.MAX_VALUE, max = -1;
-                for (int i = 0; i < limit; i++) {
-                    min = Math.min(min, buckets[i]);
-                    max = Math.max(max, buckets[i]);
-                }
-                Assert.assertTrue("Distribution failure for nextSignedInt() with limit " + limit + " using " + r + ": " +
-                                ((double) min / (double) max),
-                        (double) min / (double) max >= threshold);
+	@Ignore // comment this out if you want to run this; it can take a little while
+	@Test
+	public void testSignedIntRange() {
+		for (int limit = 2; limit <= 1024; limit++) {
+			// we need to use tanh because manually calculating can give very wrong results for high limits.
+			double threshold = 1.91 - Math.tanh(limit);
+			threshold *= threshold;
+			System.out.println("Testing all EnhancedRandom using nextInt(" + limit + ") with threshold " + threshold);
+			ArrayList<EnhancedRandom> randoms = Deserializer.copyRandoms();
+			for (EnhancedRandom r : randoms) {
+				if (r.getTag().equals("KnSR")
+					|| r.getTag().equals("LCQR")
+					|| r.getTag().equals("VCQR")
+				) continue;
+				r.setSeed(12345L);
+				int[] buckets = new int[limit];
+				for (int i = limit << 12; i > 0; i--) {
+					buckets[r.nextSignedInt(-1, limit - 1) + 1]++;
+				}
+				int min = Integer.MAX_VALUE, max = -1;
+				for (int i = 0; i < limit; i++) {
+					min = Math.min(min, buckets[i]);
+					max = Math.max(max, buckets[i]);
+				}
+				Assert.assertTrue("Distribution failure for nextSignedInt() with limit " + limit + " using " + r + ": " +
+						((double) min / (double) max),
+					(double) min / (double) max >= threshold);
 //                System.out.println("Success for nextInt() with limit " + limit + " using " + r.getTag() + ": " +
 //                        ((double) min / (double) max));
-            }
-        }
-    }
+			}
+		}
+	}
 
-    /**
-     * BUILD SUCCESSFUL in 2m 28s
-     * Or, with some minor GC cleanup,
-     * BUILD SUCCESSFUL in 2m 23s
-     */
-    @Ignore // comment this out if you want to run this; it can take a little while
-    @Test
-    public void testLongRange() {
-        ArrayList<EnhancedRandom> randoms = Deserializer.copyRandoms();
-        for (int limit = 2; limit <= 1024; limit++) {
-            // we need to use tanh because manually calculating can give very wrong results for high limits.
-            double threshold = 1.9 - Math.tanh(limit);
-            threshold *= threshold;
-            System.out.println("Testing all EnhancedRandom using nextLong("+limit+") with threshold " + threshold);
-            for (int c = 0; c < randoms.size(); c++) {
-                EnhancedRandom r = randoms.get(c);
-                r.setSeed(1L);
-                int[] buckets = new int[limit];
-                for (int i = limit << 11; i > 0; i--) {
-                    buckets[(int)r.nextLong(limit)]++;
-                }
-                int min = Integer.MAX_VALUE, max = -1;
-                for (int i = 0; i < limit; i++) {
-                    min = Math.min(min, buckets[i]);
-                    max = Math.max(max, buckets[i]);
-                }
-                Assert.assertTrue("Distribution failure for nextLong() with limit " + limit + " using " + r + ": " +
-                                ((double) min / (double) max),
-                        (double) min / (double) max >= threshold);
+	/**
+	 * BUILD SUCCESSFUL in 2m 28s
+	 * Or, with some minor GC cleanup,
+	 * BUILD SUCCESSFUL in 2m 23s
+	 */
+	@Ignore // comment this out if you want to run this; it can take a little while
+	@Test
+	public void testLongRange() {
+		ArrayList<EnhancedRandom> randoms = Deserializer.copyRandoms();
+		for (int limit = 2; limit <= 1024; limit++) {
+			// we need to use tanh because manually calculating can give very wrong results for high limits.
+			double threshold = 1.9 - Math.tanh(limit);
+			threshold *= threshold;
+			System.out.println("Testing all EnhancedRandom using nextLong(" + limit + ") with threshold " + threshold);
+			for (int c = 0; c < randoms.size(); c++) {
+				EnhancedRandom r = randoms.get(c);
+				r.setSeed(1L);
+				int[] buckets = new int[limit];
+				for (int i = limit << 11; i > 0; i--) {
+					buckets[(int) r.nextLong(limit)]++;
+				}
+				int min = Integer.MAX_VALUE, max = -1;
+				for (int i = 0; i < limit; i++) {
+					min = Math.min(min, buckets[i]);
+					max = Math.max(max, buckets[i]);
+				}
+				Assert.assertTrue("Distribution failure for nextLong() with limit " + limit + " using " + r + ": " +
+						((double) min / (double) max),
+					(double) min / (double) max >= threshold);
 //                System.out.println("Success for nextLong() with limit " + limit + " using " + r + ": " +
 //                        ((double) min / (double) max));
-            }
-        }
-    }
+			}
+		}
+	}
 
 	/**
 	 * The int-based bounded-int generator now returns the same results, but uses a little more math.
@@ -188,7 +188,7 @@ public class RangedTest {
 	 */
 	@Ignore
 	@Test
-	public void testProcessUnsigned32(){
+	public void testProcessUnsigned32() {
 		for (int bound : new int[]{2, 3, 5, 16, 31, 42, 65, 255, 3421, 33421, 333421, 0x8000001, 0x7FFFFFFF}) {
 			System.out.println("Testing bound: " + bound);
 			long discrepancies = 0;
@@ -200,7 +200,7 @@ public class RangedTest {
 				Assert.assertTrue(p < bound && p >= 0);
 				int u = (int) ((bound & 0xFFFFFFFFL) * (i & 0xFFFFFFFFL) >>> 32);
 				averageU += u;
-				if(u != p) {
+				if (u != p) {
 					++discrepancies;
 					totalOff += Math.abs(u - p);
 				}
@@ -213,7 +213,7 @@ public class RangedTest {
 				Assert.assertTrue(p < bound && p >= 0);
 				int u = (int) ((bound & 0xFFFFFFFFL) * (i & 0xFFFFFFFFL) >>> 32);
 				averageU += u;
-				if(u != p) {
+				if (u != p) {
 					++discrepancies;
 					totalOff += Math.abs(u - p);
 				}
@@ -317,7 +317,7 @@ public class RangedTest {
 	 */
 	@Ignore
 	@Test
-	public void testProcessSigned32(){
+	public void testProcessSigned32() {
 		for (int bound : new int[]{-3, 2, 5, -16, 31, -42, 65, -255, 3421, -33421, 333421, -0x8000001, 0x7FFFFFFF, 0x80000000}) {
 			System.out.println("Testing bound: " + bound);
 			long discrepancies = 0;
@@ -330,7 +330,7 @@ public class RangedTest {
 				int u = (int) ((bound) * (i & 0xFFFFFFFFL) >> 32);
 				u += u >>> 31;
 				averageU += u;
-				if(u != p) {
+				if (u != p) {
 					++discrepancies;
 					totalOff += Math.abs(u - p);
 				}
@@ -344,7 +344,7 @@ public class RangedTest {
 				int u = (int) ((bound) * (i & 0xFFFFFFFFL) >> 32);
 				u += u >>> 31;
 				averageU += u;
-				if(u != p) {
+				if (u != p) {
 					++discrepancies;
 					totalOff += Math.abs(u - p);
 				}

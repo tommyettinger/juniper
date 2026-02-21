@@ -64,8 +64,8 @@ public class Eclat32Random extends EnhancedRandom {
 	 */
 	public Eclat32Random() {
 		super();
-		stateA = (int)EnhancedRandom.seedFromMath();
-		stateB = (int)EnhancedRandom.seedFromMath();
+		stateA = (int) EnhancedRandom.seedFromMath();
+		stateB = (int) EnhancedRandom.seedFromMath();
 	}
 
 	/**
@@ -98,12 +98,14 @@ public class Eclat32Random extends EnhancedRandom {
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
 
 	/**
 	 * (2 to the 64).
+	 *
 	 * @return (2 to the 64)
 	 */
 	@Override
@@ -117,12 +119,13 @@ public class Eclat32Random extends EnhancedRandom {
 	 * @return 2 (two)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 2;
 	}
 
 	/**
 	 * Eclat32Random mainly generates int values.
+	 *
 	 * @return true
 	 */
 	@Override
@@ -138,12 +141,12 @@ public class Eclat32Random extends EnhancedRandom {
 	 * @return the value of the selected state, treated as long but internally an int
 	 */
 	@Override
-	public long getSelectedState (int selection) {
-        if (selection == 0) {
-            return stateA;
-        }
-        return stateB;
-    }
+	public long getSelectedState(int selection) {
+		if (selection == 0) {
+			return stateA;
+		}
+		return stateB;
+	}
 
 	/**
 	 * Sets one of the states, determined by {@code selection}, to {@code value}, cast to int.
@@ -154,12 +157,12 @@ public class Eclat32Random extends EnhancedRandom {
 	 * @param value     the value to use for the selected state, which will be cast to int
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
-        if (selection == 0) {
-            stateA = (int)value;
-        } else {
-            stateB = (int)value;
-        }
+	public void setSelectedState(int selection, long value) {
+		if (selection == 0) {
+			stateA = (int) value;
+		} else {
+			stateB = (int) value;
+		}
 	}
 
 	/**
@@ -169,16 +172,16 @@ public class Eclat32Random extends EnhancedRandom {
 	 * @param seed the initial seed; may be any long
 	 */
 	@Override
-	public void setSeed (long seed) {
-		stateA = (int)(seed >>> 32);
-		stateB = (int)seed;
+	public void setSeed(long seed) {
+		stateA = (int) (seed >>> 32);
+		stateB = (int) seed;
 		int a = nextInt();
 		int b = nextInt();
 		stateA = a;
 		stateB = b;
 	}
 
-	public long getStateA () {
+	public long getStateA() {
 		return stateA;
 	}
 
@@ -187,11 +190,11 @@ public class Eclat32Random extends EnhancedRandom {
 	 *
 	 * @param stateA can be any int
 	 */
-	public void setStateA (long stateA) {
-		this.stateA = (int)stateA;
+	public void setStateA(long stateA) {
+		this.stateA = (int) stateA;
 	}
 
-	public long getStateB () {
+	public long getStateB() {
 		return stateB;
 	}
 
@@ -200,8 +203,8 @@ public class Eclat32Random extends EnhancedRandom {
 	 *
 	 * @param stateB can be any int
 	 */
-	public void setStateB (long stateB) {
-		this.stateB = (int)stateB;
+	public void setStateB(long stateB) {
+		this.stateB = (int) stateB;
 	}
 
 	/**
@@ -213,13 +216,13 @@ public class Eclat32Random extends EnhancedRandom {
 	 * @param stateB the second state; can be any int
 	 */
 	@Override
-	public void setState (long stateA, long stateB) {
-		this.stateA = (int)stateA;
-		this.stateB = (int)stateB;
+	public void setState(long stateA, long stateB) {
+		this.stateA = (int) stateA;
+		this.stateB = (int) stateB;
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		return (long) nextInt() << 32 ^ nextInt();
 	}
 
@@ -242,7 +245,7 @@ public class Eclat32Random extends EnhancedRandom {
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		int z = (stateA ^ (stateB << 15 | stateB >>> -15));
 		stateA = BitConversion.imul(stateA + BitConversion.countLeadingZeros(stateB), 777777777);
 		stateB = BitConversion.imul(stateB + 555555555, 333333333);
@@ -250,14 +253,15 @@ public class Eclat32Random extends EnhancedRandom {
 	}
 
 	@Override
-	public long previousLong () {
-		return previousInt() ^ (long)previousInt() << 32;
+	public long previousLong() {
+		return previousInt() ^ (long) previousInt() << 32;
 	}
 
 	/**
 	 * Jumps extremely far in the generator's sequence, such that it requires {@code Math.pow(2, 32)} calls to leap() to
 	 * complete a cycle through the generator's entire sequence. This can be used to create over 4 billion
 	 * substreams of this generator's sequence, each with a period of {@code Math.pow(2, 32)}.
+	 *
 	 * @return the result of what nextLong() would return if it was called at the state this jumped to
 	 */
 	public long leap() {
@@ -273,23 +277,23 @@ public class Eclat32Random extends EnhancedRandom {
 	}
 
 	@Override
-	public int nextInt (int bound) {
-		return (int)(bound * (nextInt() & 0xFFFFFFFFL) >> 32) & ~(bound >> 31);
+	public int nextInt(int bound) {
+		return (int) (bound * (nextInt() & 0xFFFFFFFFL) >> 32) & ~(bound >> 31);
 	}
 
 	@Override
-	public int nextSignedInt (int outerBound) {
-		outerBound = (int)(outerBound * (nextInt() & 0xFFFFFFFFL) >> 32);
+	public int nextSignedInt(int outerBound) {
+		outerBound = (int) (outerBound * (nextInt() & 0xFFFFFFFFL) >> 32);
 		return outerBound + (outerBound >>> 31);
 	}
 
 	@Override
 	public int nextUnsignedInt(int bound) {
-		return (int)((bound & 0xFFFFFFFFL) * (nextInt() & 0xFFFFFFFFL) >>> 32);
+		return (int) ((bound & 0xFFFFFFFFL) * (nextInt() & 0xFFFFFFFFL) >>> 32);
 	}
 
 	@Override
-	public void nextBytes (byte[] bytes) {
+	public void nextBytes(byte[] bytes) {
 		if (bytes != null) {
 			for (int i = 0; i < bytes.length; ) {
 				int r = nextInt();
@@ -302,12 +306,12 @@ public class Eclat32Random extends EnhancedRandom {
 
 	@Override
 	public int nextInt(int innerBound, int outerBound) {
-		return (int)(innerBound + ((((outerBound - innerBound) & 0xFFFFFFFFL) * (nextInt() & 0xFFFFFFFFL) >>> 32) & ~((long)outerBound - (long)innerBound >> 63)));
+		return (int) (innerBound + ((((outerBound - innerBound) & 0xFFFFFFFFL) * (nextInt() & 0xFFFFFFFFL) >>> 32) & ~((long) outerBound - (long) innerBound >> 63)));
 	}
 
 	@Override
 	public int nextSignedInt(int innerBound, int outerBound) {
-		return innerBound + (int)(((outerBound - innerBound) & 0xFFFFFFFFL) * (nextInt() & 0xFFFFFFFFL) >>> 32);
+		return innerBound + (int) (((outerBound - innerBound) & 0xFFFFFFFFL) * (nextInt() & 0xFFFFFFFFL) >>> 32);
 	}
 
 	@Override
@@ -340,7 +344,7 @@ public class Eclat32Random extends EnhancedRandom {
 	}
 
 	@Override
-	public long nextLong (long inner, long outer) {
+	public long nextLong(long inner, long outer) {
 		final long randLow = nextInt() & 0xFFFFFFFFL;
 		final long randHigh = nextInt() & 0xFFFFFFFFL;
 		if (inner >= outer)
@@ -352,7 +356,7 @@ public class Eclat32Random extends EnhancedRandom {
 	}
 
 	@Override
-	public long nextSignedLong (long inner, long outer) {
+	public long nextSignedLong(long inner, long outer) {
 		if (outer < inner) {
 			long t = outer;
 			outer = inner + 1L;
@@ -367,41 +371,40 @@ public class Eclat32Random extends EnhancedRandom {
 	}
 
 	@Override
-	public boolean nextBoolean ()
-	{
+	public boolean nextBoolean() {
 		return nextInt() < 0;
 	}
 
 	@Override
-	public float nextFloat () {
+	public float nextFloat() {
 		return (nextInt() >>> 8) * 0x1p-24f;
 	}
 
 	@Override
-	public float nextInclusiveFloat () {
+	public float nextInclusiveFloat() {
 		return (0x1000001L * (nextInt() & 0xFFFFFFFFL) >> 32) * 0x1p-24f;
 	}
 
 	@Override
-	public Eclat32Random copy () {
+	public Eclat32Random copy() {
 		return new Eclat32Random(stateA, stateB);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		Eclat32Random that = (Eclat32Random)o;
+		Eclat32Random that = (Eclat32Random) o;
 
 		if (stateA != that.stateA)
 			return false;
 		return stateB == that.stateB;
 	}
 
-	public String toString () {
+	public String toString() {
 		return "Eclat32Random{" + "stateA=" + (stateA) + ", stateB=" + (stateB) + "}";
 	}
 

@@ -13,25 +13,25 @@ public class LaserRandomTest {
 		int upperBound = 5;
 		System.out.println("Consecutive seeds:");
 		System.out.println("\nRandom");
-		for(int i = 0; i < 50; i++) System.out.print(new Random(i).nextInt(upperBound) + " ");
+		for (int i = 0; i < 50; i++) System.out.print(new Random(i).nextInt(upperBound) + " ");
 		System.out.println("\nLaserRandom");
-		for(int i = 0; i < 50; i++) System.out.print(new LaserRandom(i).nextInt(upperBound) + " ");
+		for (int i = 0; i < 50; i++) System.out.print(new LaserRandom(i).nextInt(upperBound) + " ");
 
 		System.out.println("\n\nNormal usage");
 		System.out.println("\nRandom");
 		Random jur = new Random(10);
-		for(int i = 0; i < 50; i++) System.out.print(jur.nextInt(upperBound) + " ");
+		for (int i = 0; i < 50; i++) System.out.print(jur.nextInt(upperBound) + " ");
 		System.out.println("\nLaserRandom");
 		LaserRandom lr = new LaserRandom(10);
-		for(int i = 0; i < 50; i++) System.out.print(lr.nextInt(upperBound) + " ");
+		for (int i = 0; i < 50; i++) System.out.print(lr.nextInt(upperBound) + " ");
 
 		System.out.println("\n\nWeird usage");
 		System.out.println("\nRandom");
 		jur = new Random(50);
 		lr.setState(50);
-		for(int i = 0; i < 50; i++) System.out.print((((jur.nextInt() & 0xFFFFFFFFL) * -2 >> 32) - (-2 >> 31)) + " ");
+		for (int i = 0; i < 50; i++) System.out.print((((jur.nextInt() & 0xFFFFFFFFL) * -2 >> 32) - (-2 >> 31)) + " ");
 		System.out.println("\nLaserRandom");
-		for(int i = 0; i < 50; i++) System.out.print(lr.nextSignedLong(-2L) + " ");
+		for (int i = 0; i < 50; i++) System.out.print(lr.nextSignedLong(-2L) + " ");
 
 		System.out.println("\n\nRepeat count:");
 		jur = new Random(100);
@@ -40,13 +40,13 @@ public class LaserRandomTest {
 		prev = -1;
 		count = 0;
 		for (int i = upperBound * 1000; i >= 0; i--) {
-			if(prev == (prev = jur.nextInt(upperBound))) ++count;
+			if (prev == (prev = jur.nextInt(upperBound))) ++count;
 		}
 		System.out.println("\nRandom: " + count);
 		prev = -1;
 		count = 0;
 		for (int i = upperBound * 1000; i >= 0; i--) {
-			if(prev == (prev = lr.nextInt(upperBound))) ++count;
+			if (prev == (prev = lr.nextInt(upperBound))) ++count;
 		}
 		System.out.println("\nLaserRandom: " + count);
 
@@ -55,8 +55,8 @@ public class LaserRandomTest {
 		long res;
 		for (int i = 0; i < 0x40000; i++) {
 			for (int j = 0; j < 0x20000; j++) {
-				if((res = lr.nextSignedLong(-1L, 1L)) > 0) {
-					System.out.println("nextSignedLong(-1L, 1L) had an incorrect result: "+ res + "\nFAILURE!");
+				if ((res = lr.nextSignedLong(-1L, 1L)) > 0) {
+					System.out.println("nextSignedLong(-1L, 1L) had an incorrect result: " + res + "\nFAILURE!");
 					System.out.printf("0x%016XL, 0x%016XL", lr.getStateA(), lr.getStateB());
 					return;
 				}

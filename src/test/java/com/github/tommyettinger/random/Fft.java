@@ -34,7 +34,7 @@ public final class Fft {
 
 	public static final int[] histogram = new int[256];
 
-	/* 
+	/*
 	 * Computes the discrete Fourier transform (DFT) of the given complex vector, storing the result back into the vector.
 	 * The vector can have any length. This is a wrapper function.
 	 */
@@ -49,9 +49,9 @@ public final class Fft {
 				transformBluestein(real, imag);
 		}
 	}
-	
-	
-	/* 
+
+
+	/*
 	 * Computes the inverse discrete Fourier transform (IDFT) of the given complex vector, storing the result back into the vector.
 	 * The vector can have any length. This is a wrapper function. This transform does not perform scaling, so the inverse is not a true inverse.
 	 */
@@ -69,8 +69,8 @@ public final class Fft {
 			}
 		}
 	}
-	
-	public static void loadTablesBluestein(final int n){
+
+	public static void loadTablesBluestein(final int n) {
 		if (cosTable == null || sinTable == null || cosTable.length != n || sinTable.length != n) {
 			cosTable = new double[n];
 			sinTable = new double[n];
@@ -81,7 +81,8 @@ public final class Fft {
 			}
 		}
 	}
-	/* 
+
+	/*
 	 * Computes the discrete Fourier transform (DFT) of the given complex vector, storing the result back into the vector.
 	 * The vector's length must be a power of 2. Uses the Cooley-Tukey decimation-in-time radix-2 algorithm.
 	 */
@@ -94,7 +95,7 @@ public final class Fft {
 		if (1 << levels != n)
 			throw new IllegalArgumentException("Length is not a power of 2");
 		loadTables(n);
-		
+
 		// Bit-reversed addressing permutation
 		for (int i = 0; i < n; i++) {
 			int j = Integer.reverse(i) >>> (32 - levels);
@@ -107,7 +108,7 @@ public final class Fft {
 				imag[j] = temp;
 			}
 		}
-		
+
 		// Cooley-Tukey decimation-in-time radix-2 FFT
 		for (int size = 2; size <= n; size *= 2) {
 			int halfsize = size / 2;
@@ -115,7 +116,7 @@ public final class Fft {
 			for (int i = 0; i < n; i += size) {
 				for (int j = i, k = 0; j < i + halfsize; j++, k += tablestep) {
 					int l = j + halfsize;
-					double tpre =  real[l] * cosTable[k] + imag[l] * sinTable[k];
+					double tpre = real[l] * cosTable[k] + imag[l] * sinTable[k];
 					double tpim = -real[l] * sinTable[k] + imag[l] * cosTable[k];
 					real[l] = real[j] - tpre;
 					imag[l] = imag[j] - tpim;
@@ -127,8 +128,8 @@ public final class Fft {
 				break;
 		}
 	}
-	
-	public static void transform2D(double[][] real, double[][] imag){
+
+	public static void transform2D(double[][] real, double[][] imag) {
 		final int n = real.length;
 		loadTables(n);
 		// window function
@@ -143,7 +144,7 @@ public final class Fft {
 		transformWindowless2D(real, imag);
 	}
 
-	public static void transformWindowless2D(double[][] real, double[][] imag){
+	public static void transformWindowless2D(double[][] real, double[][] imag) {
 		final int n = real.length;
 		for (int x = 0; x < n; x++) {
 			transform(real[x], imag[x]);
@@ -166,11 +167,11 @@ public final class Fft {
 
 	/**
 	 *
-	 * @param real must be square and have side length that is a power of two
-	 * @param imag must have the same dimensions as {@code real}
+	 * @param real       must be square and have side length that is a power of two
+	 * @param imag       must have the same dimensions as {@code real}
 	 * @param background will contain ABGR packed float colors;  must have the same dimensions as {@code real}
 	 */
-	public static void getColors(double[][] real, double[][] imag, float[][] background, boolean offset){
+	public static void getColors(double[][] real, double[][] imag, float[][] background, boolean offset) {
 		final int n = real.length, half = offset ? n >>> 1 : 0, lim = real[0].length, halfLim = offset ? lim >>> 1 : 0;
 		double max = 0.0, mag, r, i;
 		for (int x = 0; x < n; x++) {
@@ -187,14 +188,14 @@ public final class Fft {
 		Arrays.fill(histogram, 0);
 		for (int x = 0; x < n; x++) {
 			for (int y = 0; y < lim; y++) {
-				cb = Math.min(255, (int)(c * Math.log1p(background[x][y])));
+				cb = Math.min(255, (int) (c * Math.log1p(background[x][y])));
 				histogram[cb]++;
 				background[x][y] = Float.intBitsToFloat(cb * 0x010101 | 0xFE000000);
 			}
 		}
 	}
 
-	public static void getColorsThreshold(double[][] real, double[][] imag, float[][] background, float threshold){
+	public static void getColorsThreshold(double[][] real, double[][] imag, float[][] background, float threshold) {
 		final int n = real.length, mask = n - 1, half = n >>> 1;
 		double max = 0.0, mag, r, i;
 		for (int x = 0; x < n; x++) {
@@ -217,7 +218,7 @@ public final class Fft {
 		}
 	}
 
-	public static int[] getHistogram(double[][] real, double[][] imag){
+	public static int[] getHistogram(double[][] real, double[][] imag) {
 		final int n = real.length;
 		double max = 0.0, mag, r, i;
 		for (int x = 0; x < n; x++) {
@@ -233,7 +234,7 @@ public final class Fft {
 		Arrays.fill(histogram, 0);
 		for (int x = 0; x < n; x++) {
 			for (int y = 0; y < n; y++) {
-				histogram[(int)(c * Math.log1p(imag[x][y]))]++;
+				histogram[(int) (c * Math.log1p(imag[x][y]))]++;
 			}
 		}
 		return histogram;
@@ -262,13 +263,13 @@ public final class Fft {
 		if (n >= 0x20000000)
 			throw new IllegalArgumentException("Array too large");
 		int m = Integer.highestOneBit(n) * 4;
-		
+
 		loadTablesBluestein(n);
 		// Temporary vectors and preprocessing
 		double[] areal = new double[m];
 		double[] aimag = new double[m];
 		for (int i = 0; i < n; i++) {
-			areal[i] =  real[i] * cosTable[i] + imag[i] * sinTable[i];
+			areal[i] = real[i] * cosTable[i] + imag[i] * sinTable[i];
 			aimag[i] = -real[i] * sinTable[i] + imag[i] * cosTable[i];
 		}
 		double[] breal = new double[m];
@@ -279,21 +280,21 @@ public final class Fft {
 			breal[i] = breal[m - i] = cosTable[i];
 			bimag[i] = bimag[m - i] = sinTable[i];
 		}
-		
+
 		// Convolution
 		double[] creal = new double[m];
 		double[] cimag = new double[m];
 		convolve(areal, aimag, breal, bimag, creal, cimag);
-		
+
 		// Postprocessing
 		for (int i = 0; i < n; i++) {
-			real[i] = ( creal[i] * cosTable[i] + cimag[i] * sinTable[i]);
+			real[i] = (creal[i] * cosTable[i] + cimag[i] * sinTable[i]);
 			imag[i] = (-creal[i] * sinTable[i] + cimag[i] * cosTable[i]);
 		}
 	}
-	
-	
-	/* 
+
+
+	/*
 	 * Computes the circular convolution of the given real vectors. Each vector's length must be the same.
 	 */
 	public static void convolve(double[] x, double[] y, double[] out) {
@@ -302,19 +303,19 @@ public final class Fft {
 			throw new IllegalArgumentException("Mismatched lengths");
 		convolve(x, new double[n], y, new double[n], out, new double[n]);
 	}
-	
-	
-	/* 
+
+
+	/*
 	 * Computes the circular convolution of the given complex vectors. Each vector's length must be the same.
 	 */
 	public static void convolve(double[] xreal, double[] ximag,
-			double[] yreal, double[] yimag, double[] outreal, double[] outimag) {
-		
+								double[] yreal, double[] yimag, double[] outreal, double[] outimag) {
+
 		int n = xreal.length;
 		if (n != ximag.length || n != yreal.length || n != yimag.length
-				|| n != outreal.length || n != outimag.length)
+			|| n != outreal.length || n != outimag.length)
 			throw new IllegalArgumentException("Mismatched lengths");
-		
+
 		xreal = xreal.clone();
 		ximag = ximag.clone();
 		yreal = yreal.clone();
@@ -334,5 +335,5 @@ public final class Fft {
 			outimag[i] = ximag[i] / n;
 		}
 	}
-	
+
 }

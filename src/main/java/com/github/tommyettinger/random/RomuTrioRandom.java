@@ -53,7 +53,7 @@ public class RomuTrioRandom extends EnhancedRandom {
 	/**
 	 * Creates a new RomuTrioRandom with a random state.
 	 */
-	public RomuTrioRandom () {
+	public RomuTrioRandom() {
 		super();
 		stateA = EnhancedRandom.seedFromMath();
 		stateB = EnhancedRandom.seedFromMath();
@@ -68,7 +68,7 @@ public class RomuTrioRandom extends EnhancedRandom {
 	 *
 	 * @param seed any {@code long} value
 	 */
-	public RomuTrioRandom (long seed) {
+	public RomuTrioRandom(long seed) {
 		super(seed);
 		setSeed(seed);
 	}
@@ -81,7 +81,7 @@ public class RomuTrioRandom extends EnhancedRandom {
 	 * @param stateB any {@code long} value
 	 * @param stateC any {@code long} value
 	 */
-	public RomuTrioRandom (long stateA, long stateB, long stateC) {
+	public RomuTrioRandom(long stateA, long stateB, long stateC) {
 		super(stateA);
 		if ((stateA | stateB | stateC) == 0L)
 			stateC = -1L;
@@ -101,7 +101,7 @@ public class RomuTrioRandom extends EnhancedRandom {
 	 * @return 3 (three)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 3;
 	}
 
@@ -112,14 +112,14 @@ public class RomuTrioRandom extends EnhancedRandom {
 	 * @return the value of the selected state
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		switch (selection & 3) {
-		case 0:
-			return stateA;
-		case 1:
-			return stateB;
-		default:
-			return stateC;
+			case 0:
+				return stateA;
+			case 1:
+				return stateB;
+			default:
+				return stateC;
 		}
 	}
 
@@ -132,17 +132,17 @@ public class RomuTrioRandom extends EnhancedRandom {
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		switch (selection & 3) {
-		case 0:
-			stateA = value;
-			break;
-		case 1:
-			stateB = value;
-			break;
-		default:
-			stateC = value;
-			break;
+			case 0:
+				stateA = value;
+				break;
+			case 1:
+				stateB = value;
+				break;
+			default:
+				stateC = value;
+				break;
 		}
 	}
 
@@ -155,7 +155,7 @@ public class RomuTrioRandom extends EnhancedRandom {
 	 * @param seed the initial seed; may be any long
 	 */
 	@Override
-	public void setSeed (long seed) {
+	public void setSeed(long seed) {
 		long x = (seed += 0x9E3779B97F4A7C15L);
 		x ^= x >>> 27;
 		x *= 0x3C79AC492BA7B653L;
@@ -176,7 +176,7 @@ public class RomuTrioRandom extends EnhancedRandom {
 		stateC = x ^ x >>> 27;
 	}
 
-	public long getStateA () {
+	public long getStateA() {
 		return stateA;
 	}
 
@@ -188,11 +188,11 @@ public class RomuTrioRandom extends EnhancedRandom {
 	 *
 	 * @param stateA can be any long
 	 */
-	public void setStateA (long stateA) {
+	public void setStateA(long stateA) {
 		this.stateA = stateA;
 	}
 
-	public long getStateB () {
+	public long getStateB() {
 		return stateB;
 	}
 
@@ -201,11 +201,11 @@ public class RomuTrioRandom extends EnhancedRandom {
 	 *
 	 * @param stateB can be any long
 	 */
-	public void setStateB (long stateB) {
+	public void setStateB(long stateB) {
 		this.stateB = stateB;
 	}
 
-	public long getStateC () {
+	public long getStateC() {
 		return stateC;
 	}
 
@@ -214,7 +214,7 @@ public class RomuTrioRandom extends EnhancedRandom {
 	 *
 	 * @param stateC can be any long
 	 */
-	public void setStateC (long stateC) {
+	public void setStateC(long stateC) {
 		if ((stateA | stateB | stateC) == 0L)
 			this.stateC = -1L;
 		else
@@ -234,7 +234,7 @@ public class RomuTrioRandom extends EnhancedRandom {
 	 * @param stateC the third state; can be any long
 	 */
 	@Override
-	public void setState (long stateA, long stateB, long stateC) {
+	public void setState(long stateA, long stateB, long stateC) {
 		this.stateA = stateA;
 		this.stateB = stateB;
 		this.stateC = stateC;
@@ -243,7 +243,7 @@ public class RomuTrioRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		final long fa = stateA;
 		stateA = 0xD3833E804F4C574BL * stateC;
 		stateC -= stateB;
@@ -264,29 +264,29 @@ public class RomuTrioRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		final long fa = stateA;
 		stateA = 0xD3833E804F4C574BL * stateC;
 		stateC -= stateB;
 		stateB -= fa;
 		stateB = (stateB << 12 | stateB >>> 52);
 		stateC = (stateC << 44 | stateC >>> 20);
-		return (int)fa >>> (32 - bits);
+		return (int) fa >>> (32 - bits);
 	}
 
 	@Override
-	public RomuTrioRandom copy () {
+	public RomuTrioRandom copy() {
 		return new RomuTrioRandom(stateA, stateB, stateC);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		RomuTrioRandom that = (RomuTrioRandom)o;
+		RomuTrioRandom that = (RomuTrioRandom) o;
 
 		if (stateA != that.stateA)
 			return false;
@@ -295,7 +295,7 @@ public class RomuTrioRandom extends EnhancedRandom {
 		return stateC == that.stateC;
 	}
 
-	public String toString () {
+	public String toString() {
 		return "RomuTrioRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L}";
 	}
 }

@@ -80,12 +80,14 @@ public class VanDerCorputQuasiRandom extends EnhancedRandom {
 
 	/**
 	 * Returned by {@link #getMinimumPeriod()}.
+	 *
 	 * @see #getMinimumPeriod()
 	 */
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
 
 	/**
 	 * 2 to the 64.
+	 *
 	 * @return 2 to the 64
 	 */
 	@Override
@@ -99,7 +101,7 @@ public class VanDerCorputQuasiRandom extends EnhancedRandom {
 	 * @return 1 (one)
 	 */
 	@Override
-	public int getStateCount () {
+	public int getStateCount() {
 		return 1;
 	}
 
@@ -110,7 +112,7 @@ public class VanDerCorputQuasiRandom extends EnhancedRandom {
 	 * @return the only state's exact value
 	 */
 	@Override
-	public long getSelectedState (int selection) {
+	public long getSelectedState(int selection) {
 		return state;
 	}
 
@@ -122,7 +124,7 @@ public class VanDerCorputQuasiRandom extends EnhancedRandom {
 	 * @param value     the exact value to use for the state; all longs are valid
 	 */
 	@Override
-	public void setSelectedState (int selection, long value) {
+	public void setSelectedState(int selection, long value) {
 		state = value;
 	}
 
@@ -134,7 +136,7 @@ public class VanDerCorputQuasiRandom extends EnhancedRandom {
 	 * @param seed the exact value to use for the state; all longs are valid
 	 */
 	@Override
-	public void setSeed (long seed) {
+	public void setSeed(long seed) {
 		state = seed;
 	}
 
@@ -144,7 +146,7 @@ public class VanDerCorputQuasiRandom extends EnhancedRandom {
 	 *
 	 * @return the current state, as a long
 	 */
-	public long getState () {
+	public long getState() {
 		return state;
 	}
 
@@ -155,12 +157,12 @@ public class VanDerCorputQuasiRandom extends EnhancedRandom {
 	 * @param state the long value to use for the state variable
 	 */
 	@Override
-	public void setState (long state) {
+	public void setState(long state) {
 		this.state = state;
 	}
 
 	@Override
-	public long nextLong () {
+	public long nextLong() {
 		return Long.reverse(++state);
 	}
 
@@ -176,17 +178,17 @@ public class VanDerCorputQuasiRandom extends EnhancedRandom {
 	 * @return a random {@code long} by the same algorithm as {@link #nextLong()}, using the appropriately-advanced state
 	 */
 	@Override
-	public long skip (long advance) {
+	public long skip(long advance) {
 		return Long.reverse(state += advance);
 	}
 
 	@Override
-	public long previousLong () {
+	public long previousLong() {
 		return Long.reverse(state--);
 	}
 
 	@Override
-	public int next (int bits) {
+	public int next(int bits) {
 		return (int) (Long.reverse(++state) >>> 64 - bits);
 	}
 
@@ -197,17 +199,17 @@ public class VanDerCorputQuasiRandom extends EnhancedRandom {
 
 	@Override
 	public int nextInt(int bound) {
-		return (int)(bound * (Long.reverse(++state) >>> 32) >> 32) & ~(bound >> 31);
+		return (int) (bound * (Long.reverse(++state) >>> 32) >> 32) & ~(bound >> 31);
 	}
 
 	@Override
 	public int nextSignedInt(int outerBound) {
-		outerBound = (int)(outerBound * (Long.reverse(++state) >>> 32) >> 32);
+		outerBound = (int) (outerBound * (Long.reverse(++state) >>> 32) >> 32);
 		return outerBound + (outerBound >>> 31);
 	}
 
 	@Override
-	public double nextExclusiveDouble () {
+	public double nextExclusiveDouble() {
 		/* 1.1102230246251565E-16 is 0x1p-53, 5.551115123125782E-17 is 0x1.fffffffffffffp-55 */
 		return (Long.reverse(++state) >>> 11) * 1.1102230246251565E-16 + 5.551115123125782E-17;
 	}
@@ -223,7 +225,7 @@ public class VanDerCorputQuasiRandom extends EnhancedRandom {
 	@Override
 	public float nextExclusiveFloat() {
 		/* 5.9604645E-8f is 0x1p-24f, 2.980232E-8f is 0x1.FFFFFEp-26f */
-		return  (Long.reverse(++state) >>> 40) * 5.9604645E-8f + 2.980232E-8f;
+		return (Long.reverse(++state) >>> 40) * 5.9604645E-8f + 2.980232E-8f;
 	}
 
 	@Override
@@ -247,24 +249,24 @@ public class VanDerCorputQuasiRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public VanDerCorputQuasiRandom copy () {
+	public VanDerCorputQuasiRandom copy() {
 		return new VanDerCorputQuasiRandom(state);
 	}
 
 	@Override
-	public boolean equals (Object o) {
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		VanDerCorputQuasiRandom that = (VanDerCorputQuasiRandom)o;
+		VanDerCorputQuasiRandom that = (VanDerCorputQuasiRandom) o;
 
 		return state == that.state;
 	}
 
 	@Override
-	public String toString () {
+	public String toString() {
 		return "VanDerCorputQuasiRandom{state=" + (state) + "L}";
 	}
 }
