@@ -278,7 +278,8 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 
 	/**
 	 * Sets each state variable to {@code stateA}, {@code stateB}, {@code stateC},
-	 * {@code stateD}, or {@code stateE}, alternating. This uses {@link #setSelectedState(int, long)} to
+	 * {@code stateD}, or {@code stateE}, alternating.
+	 * This uses {@link #setSelectedState(int, long)} to
 	 * set the values. If there is one state variable ({@link #getStateCount()} is 1),
 	 * then this only sets that state variable to stateA. If there are two state
 	 * variables, the first is set to stateA, and the second to stateB. With three
@@ -315,7 +316,8 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 
 	/**
 	 * Sets each state variable to {@code stateA}, {@code stateB}, {@code stateC},
-	 * {@code stateD}, or {@code stateE}, alternating. This uses {@link #setSelectedState(int, long)} to
+	 * {@code stateD}, {@code stateE}, or {@code stateF}, alternating.
+	 * This uses {@link #setSelectedState(int, long)} to
 	 * set the values. If there is one state variable ({@link #getStateCount()} is 1),
 	 * then this only sets that state variable to stateA. If there are two state
 	 * variables, the first is set to stateA, and the second to stateB. With three

@@ -65,7 +65,7 @@ public class Xoshiro128PlusPlusRandom extends Enhanced32Random {
 	 */
 	protected int stateC;
 	/**
-	 * The fourth state; can be any int.
+	 * The fourth state; can be any int as long as all states are not 0 .
 	 */
 	protected int stateD;
 
