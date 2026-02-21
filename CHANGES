@@ -1,3 +1,11 @@
+[0.10.0]
+- [BREAKING] InterpolatedRandom is now named InterpolatorWrapper, matching the convention for other wrappers. Its tag is now `InrW` .
+- [BREAKING] DistributedRandom is now named DistributionWrapper, matching the convention for other wrappers. Its tag is now `DsrW` .
+- DeckWrapper is new. It is meant to make random results seem "more fair" for users who believe the Gambler's Fallacy, or just to eliminate the possibility of too many repeated low or high results.
+- CompositeWrapper is new. It runs two EnhancedRandom generators at once and XORs their output on core generation methods. It works best with two generators with different algorithms and relatively coprime periods. Doing that can be used to dramatically extend the period length of the wrapped generators.
+- EnhancedRandom allows setState() to work on up to 10 states without allocating an array for varargs. This may be useful for CompositeWrapper.
+- The dependency on digital has been updated to 0.10.0 . This mostly updates Interpolations and its nested classes, and this may affect InterpolatorWrapper.
+
 [0.9.0]
 - [BREAKING] The leap() methods in Xoshiro128PlusPlusRandom and Xoshiro160RoadroxoRandom now return long and behave similarly to each other, both differently from before.
 - [SEED BREAKING] Generators that now extend Enhanced32Random may return slightly different results from nextInt(int), nextSignedInt(int), nextUnsignedInt(int), nextInclusiveFloat(), nextExclusiveDouble(), and methods that call these. Any given result is expected to be on average less than 1/100 of a percent different from before.
