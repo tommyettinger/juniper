@@ -1,9 +1,13 @@
+[0.10.1]
+- Fixed a bug in CompositeWrapper.stringSerialize(), which also affected its Externalizable serialization.
+
 [0.10.0]
 - [BREAKING] InterpolatedRandom is now named InterpolatorWrapper, matching the convention for other wrappers. Its tag is now `InrW` .
 - [BREAKING] DistributedRandom is now named DistributionWrapper, matching the convention for other wrappers. Its tag is now `DsrW` .
 - DeckWrapper is new. It is meant to make random results seem "more fair" for users who believe the Gambler's Fallacy, or just to eliminate the possibility of too many repeated low or high results.
 - CompositeWrapper is new. It runs two EnhancedRandom generators at once and XORs their output on core generation methods. It works best with two generators with different algorithms and relatively coprime periods. Doing that can be used to dramatically extend the period length of the wrapped generators.
 - EnhancedRandom allows setState() to work on up to 10 states without allocating an array for varargs. This may be useful for CompositeWrapper.
+- Wrapper types now implement Externalizable using stringSerialize() to allow changing the concrete type of EnhancedRandom they use to another registered type.
 - The dependency on digital has been updated to 0.10.0 . This mostly updates Interpolations and its nested classes, and this may affect InterpolatorWrapper.
 
 [0.9.0]
