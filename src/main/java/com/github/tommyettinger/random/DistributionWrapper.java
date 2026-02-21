@@ -321,6 +321,22 @@ public class DistributionWrapper extends EnhancedRandom {
         distribution.generator.setState(stateA, stateB, stateC, stateD, stateE, stateF);
     }
     @Override
+    public void setState(long stateA, long stateB, long stateC, long stateD, long stateE, long stateF, long stateG) {
+        distribution.generator.setState(stateA, stateB, stateC, stateD, stateE, stateF, stateG);
+    }
+    @Override
+    public void setState(long stateA, long stateB, long stateC, long stateD, long stateE, long stateF, long stateG, long stateH) {
+        distribution.generator.setState(stateA, stateB, stateC, stateD, stateE, stateF, stateG, stateH);
+    }
+    @Override
+    public void setState(long stateA, long stateB, long stateC, long stateD, long stateE, long stateF, long stateG, long stateH, long stateI) {
+        distribution.generator.setState(stateA, stateB, stateC, stateD, stateE, stateF, stateG, stateH, stateI);
+    }
+    @Override
+    public void setState(long stateA, long stateB, long stateC, long stateD, long stateE, long stateF, long stateG, long stateH, long stateI, long stateJ) {
+        distribution.generator.setState(stateA, stateB, stateC, stateD, stateE, stateF, stateG, stateH, stateI, stateJ);
+    }
+    @Override
     public void setState(long... state) {
         distribution.generator.setState(state);
     }

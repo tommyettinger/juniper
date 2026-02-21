@@ -166,99 +166,99 @@ public class ReverseWrapper extends EnhancedRandom {
         wrapped.setSelectedState(selection, value);
     }
 
-    /**
-     * Sets each state variable to the given {@code state}. If {@link #getStateCount()} is
-     * 1, then this should set the whole state to the given value using
-     * {@link #setSelectedState(int, long)}. If getStateCount() is more than 1, then all
-     * states will be set in the same way (using setSelectedState(), all to {@code state}).
-     *
-     * @param state the long value to use for each state variable
-     */
-    @Override
-    public void setState(long state) {
-        wrapped.setState(state);
-    }
+	/**
+	 * Sets each state variable to the given {@code state}. If {@link #getStateCount()} is
+	 * 1, then this should set the whole state to the given value using
+	 * {@link #setSelectedState(int, long)}. If getStateCount() is more than 1, then all
+	 * states will be set in the same way (using setSelectedState(), all to {@code state}).
+	 *
+	 * @param state the long value to use for each state variable
+	 */
+	@Override
+	public void setState(long state) {
+		wrapped.setState(state);
+	}
 
-    /**
-     * Sets each state variable to either {@code stateA} or {@code stateB}, alternating.
-     * This uses {@link #setSelectedState(int, long)} to set the values. If there is one
-     * state variable ({@link #getStateCount()} is 1), then this only sets that state
-     * variable to stateA. If there are two state variables, the first is set to stateA,
-     * and the second to stateB. If there are more, it reuses stateA, then stateB, then
-     * stateA, and so on until all variables are set.
-     *
-     * @param stateA the long value to use for states at index 0, 2, 4, 6...
-     * @param stateB the long value to use for states at index 1, 3, 5, 7...
-     */
-    @Override
-    public void setState(long stateA, long stateB) {
-        wrapped.setState(stateA, stateB);
-    }
+	/**
+	 * Sets each state variable to either {@code stateA} or {@code stateB}, alternating.
+	 * This uses {@link #setSelectedState(int, long)} to set the values. If there is one
+	 * state variable ({@link #getStateCount()} is 1), then this only sets that state
+	 * variable to stateA. If there are two state variables, the first is set to stateA,
+	 * and the second to stateB. If there are more, it reuses stateA, then stateB, then
+	 * stateA, and so on until all variables are set.
+	 *
+	 * @param stateA the long value to use for states at index 0, 2, 4, 6...
+	 * @param stateB the long value to use for states at index 1, 3, 5, 7...
+	 */
+	@Override
+	public void setState(long stateA, long stateB) {
+		wrapped.setState(stateA, stateB);
+	}
 
-    /**
-     * Sets each state variable to {@code stateA}, {@code stateB}, or {@code stateC},
-     * alternating. This uses {@link #setSelectedState(int, long)} to set the values.
-     * If there is one state variable ({@link #getStateCount()} is 1), then this only
-     * sets that state variable to stateA. If there are two state variables, the first
-     * is set to stateA, and the second to stateB. With three state variables, the
-     * first is set to stateA, the second to stateB, and the third to stateC. If there
-     * are more, it reuses stateA, then stateB, then stateC, then stateA, and so on
-     * until all variables are set.
-     *
-     * @param stateA the long value to use for states at index 0, 3, 6, 9...
-     * @param stateB the long value to use for states at index 1, 4, 7, 10...
-     * @param stateC the long value to use for states at index 2, 5, 8, 11...
-     */
-    @Override
-    public void setState(long stateA, long stateB, long stateC) {
-        wrapped.setState(stateA, stateB, stateC);
-    }
+	/**
+	 * Sets each state variable to {@code stateA}, {@code stateB}, or {@code stateC},
+	 * alternating. This uses {@link #setSelectedState(int, long)} to set the values.
+	 * If there is one state variable ({@link #getStateCount()} is 1), then this only
+	 * sets that state variable to stateA. If there are two state variables, the first
+	 * is set to stateA, and the second to stateB. With three state variables, the
+	 * first is set to stateA, the second to stateB, and the third to stateC. If there
+	 * are more, it reuses stateA, then stateB, then stateC, then stateA, and so on
+	 * until all variables are set.
+	 *
+	 * @param stateA the long value to use for states at index 0, 3, 6, 9...
+	 * @param stateB the long value to use for states at index 1, 4, 7, 10...
+	 * @param stateC the long value to use for states at index 2, 5, 8, 11...
+	 */
+	@Override
+	public void setState(long stateA, long stateB, long stateC) {
+		wrapped.setState(stateA, stateB, stateC);
+	}
 
-    /**
-     * Sets each state variable to {@code stateA}, {@code stateB}, {@code stateC}, or
-     * {@code stateD}, alternating. This uses {@link #setSelectedState(int, long)} to
-     * set the values. If there is one state variable ({@link #getStateCount()} is 1),
-     * then this only sets that state variable to stateA. If there are two state
-     * variables, the first is set to stateA, and the second to stateB. With three
-     * state variables, the first is set to stateA, the second to stateB, and the third
-     * to stateC. With four state variables, the first is set to stateA, the second to
-     * stateB, the third to stateC, and the fourth to stateD. If there are more, it
-     * reuses stateA, then stateB, then stateC, then stateD, then stateA, and so on
-     * until all variables are set.
-     *
-     * @param stateA the long value to use for states at index 0, 4, 8, 12...
-     * @param stateB the long value to use for states at index 1, 5, 9, 13...
-     * @param stateC the long value to use for states at index 2, 6, 10, 14...
-     * @param stateD the long value to use for states at index 3, 7, 11, 15...
-     */
-    @Override
-    public void setState(long stateA, long stateB, long stateC, long stateD) {
-        wrapped.setState(stateA, stateB, stateC, stateD);
-    }
+	/**
+	 * Sets each state variable to {@code stateA}, {@code stateB}, {@code stateC}, or
+	 * {@code stateD}, alternating. This uses {@link #setSelectedState(int, long)} to
+	 * set the values. If there is one state variable ({@link #getStateCount()} is 1),
+	 * then this only sets that state variable to stateA. If there are two state
+	 * variables, the first is set to stateA, and the second to stateB. With three
+	 * state variables, the first is set to stateA, the second to stateB, and the third
+	 * to stateC. With four state variables, the first is set to stateA, the second to
+	 * stateB, the third to stateC, and the fourth to stateD. If there are more, it
+	 * reuses stateA, then stateB, then stateC, then stateD, then stateA, and so on
+	 * until all variables are set.
+	 *
+	 * @param stateA the long value to use for states at index 0, 4, 8, 12...
+	 * @param stateB the long value to use for states at index 1, 5, 9, 13...
+	 * @param stateC the long value to use for states at index 2, 6, 10, 14...
+	 * @param stateD the long value to use for states at index 3, 7, 11, 15...
+	 */
+	@Override
+	public void setState(long stateA, long stateB, long stateC, long stateD) {
+		wrapped.setState(stateA, stateB, stateC, stateD);
+	}
 
-    /**
-     * Sets each state variable to {@code stateA}, {@code stateB}, {@code stateC},
-     * {@code stateD}, or {@code stateE}, alternating.
+	/**
+	 * Sets each state variable to {@code stateA}, {@code stateB}, {@code stateC},
+	 * {@code stateD}, or {@code stateE}, alternating.
 	 * This uses {@link #setSelectedState(int, long)} to
-     * set the values. If there is one state variable ({@link #getStateCount()} is 1),
-     * then this only sets that state variable to stateA. If there are two state
-     * variables, the first is set to stateA, and the second to stateB. With three
-     * state variables, the first is set to stateA, the second to stateB, and the third
-     * to stateC. With four state variables, the first is set to stateA, the second to
-     * stateB, the third to stateC, and the fourth to stateD. If there are more, it
-     * reuses stateA, then stateB, then stateC, then stateD, then stateA, and so on
-     * until all variables are set.
-     *
-     * @param stateA the long value to use for states at index 0, 5, 10, 15...
-     * @param stateB the long value to use for states at index 1, 6, 11, 16...
-     * @param stateC the long value to use for states at index 2, 7, 12, 17...
-     * @param stateD the long value to use for states at index 3, 8, 13, 18...
-     * @param stateE the long value to use for states at index 4, 9, 14, 19...
-     */
-    @Override
-    public void setState(long stateA, long stateB, long stateC, long stateD, long stateE) {
-        wrapped.setState(stateA, stateB, stateC, stateD, stateE);
-    }
+	 * set the values. If there is one state variable ({@link #getStateCount()} is 1),
+	 * then this only sets that state variable to stateA. If there are two state
+	 * variables, the first is set to stateA, and the second to stateB. With three
+	 * state variables, the first is set to stateA, the second to stateB, and the third
+	 * to stateC. With four state variables, the first is set to stateA, the second to
+	 * stateB, the third to stateC, and the fourth to stateD. If there are more, it
+	 * reuses stateA, then stateB, then stateC, then stateD, then stateA, and so on
+	 * until all variables are set.
+	 *
+	 * @param stateA the long value to use for states at index 0, 5, 10, 15...
+	 * @param stateB the long value to use for states at index 1, 6, 11, 16...
+	 * @param stateC the long value to use for states at index 2, 7, 12, 17...
+	 * @param stateD the long value to use for states at index 3, 8, 13, 18...
+	 * @param stateE the long value to use for states at index 4, 9, 14, 19...
+	 */
+	@Override
+	public void setState(long stateA, long stateB, long stateC, long stateD, long stateE) {
+		wrapped.setState(stateA, stateB, stateC, stateD, stateE);
+	}
 
 	/**
 	 * Sets each state variable to {@code stateA}, {@code stateB}, {@code stateC},
@@ -283,6 +283,117 @@ public class ReverseWrapper extends EnhancedRandom {
 	public void setState(long stateA, long stateB, long stateC, long stateD, long stateE, long stateF) {
 		wrapped.setState(stateA, stateB, stateC, stateD, stateE, stateF);
 	}
+
+	/**
+	 * Sets each state variable to {@code stateA}, {@code stateB}, {@code stateC},
+	 * {@code stateD}, {@code stateE}, {@code stateF}, or {@code stateG}, alternating.
+	 * This uses {@link #setSelectedState(int, long)} to
+	 * set the values. If there is one state variable ({@link #getStateCount()} is 1),
+	 * then this only sets that state variable to stateA. If there are two state
+	 * variables, the first is set to stateA, and the second to stateB. With three
+	 * state variables, the first is set to stateA, the second to stateB, and the third
+	 * to stateC. With four state variables, the first is set to stateA, the second to
+	 * stateB, the third to stateC, and the fourth to stateD. If there are more, it
+	 * reuses stateA, then stateB, then stateC, then stateD, then stateE, then stateF,
+	 * then stateG, then stateA, and so on until all variables are set.
+	 *
+	 * @param stateA the long value to use for states at index 0,  7, 14, 21...
+	 * @param stateB the long value to use for states at index 1,  8, 15, 22...
+	 * @param stateC the long value to use for states at index 2,  9, 16, 23...
+	 * @param stateD the long value to use for states at index 3, 10, 17, 24...
+	 * @param stateE the long value to use for states at index 4, 11, 18, 25...
+	 * @param stateF the long value to use for states at index 5, 12, 19, 26...
+	 * @param stateG the long value to use for states at index 6, 13, 20, 27...
+	 */
+	@Override
+	public void setState(long stateA, long stateB, long stateC, long stateD, long stateE, long stateF, long stateG) {
+		wrapped.setState(stateA, stateB, stateC, stateD, stateE, stateF, stateG);
+	}
+
+	/**
+	 * Sets each state variable to {@code stateA}, {@code stateB}, {@code stateC},
+	 * {@code stateD}, {@code stateE}, {@code stateF}, {@code stateG}, or {@code stateH}, alternating.
+	 * This uses {@link #setSelectedState(int, long)} to
+	 * set the values. If there is one state variable ({@link #getStateCount()} is 1),
+	 * then this only sets that state variable to stateA. If there are two state
+	 * variables, the first is set to stateA, and the second to stateB. With three
+	 * state variables, the first is set to stateA, the second to stateB, and the third
+	 * to stateC. With four state variables, the first is set to stateA, the second to
+	 * stateB, the third to stateC, and the fourth to stateD. If there are more, it
+	 * reuses stateA, then stateB, then stateC, then stateD, then stateE, then stateF,
+	 * then stateG, then stateH, then stateA, and so on until all variables are set.
+	 *
+	 * @param stateA the long value to use for states at index 0,  8, 16, 24...
+	 * @param stateB the long value to use for states at index 1,  9, 17, 25...
+	 * @param stateC the long value to use for states at index 2, 10, 18, 26...
+	 * @param stateD the long value to use for states at index 3, 11, 19, 27...
+	 * @param stateE the long value to use for states at index 4, 12, 20, 28...
+	 * @param stateF the long value to use for states at index 5, 13, 21, 29...
+	 * @param stateG the long value to use for states at index 6, 14, 22, 30...
+	 * @param stateH the long value to use for states at index 7, 15, 23, 31...
+	 */
+	@Override
+	public void setState(long stateA, long stateB, long stateC, long stateD, long stateE, long stateF, long stateG, long stateH) {
+		wrapped.setState(stateA, stateB, stateC, stateD, stateE, stateF, stateG, stateH);
+	}
+
+	/**
+	 * Sets each state variable to {@code stateA}, {@code stateB}, {@code stateC}, {@code stateD}, {@code stateE},
+	 * {@code stateF}, {@code stateG}, {@code stateH}, or {@code stateI}, alternating.
+	 * This uses {@link #setSelectedState(int, long)} to
+	 * set the values. If there is one state variable ({@link #getStateCount()} is 1),
+	 * then this only sets that state variable to stateA. If there are two state
+	 * variables, the first is set to stateA, and the second to stateB. With three
+	 * state variables, the first is set to stateA, the second to stateB, and the third
+	 * to stateC. With four state variables, the first is set to stateA, the second to
+	 * stateB, the third to stateC, and the fourth to stateD. If there are more, it
+	 * reuses stateA, then stateB, then stateC, then stateD, then stateE, then stateF,
+	 * then stateG, then stateH, then stateI, then stateA, and so on until all variables are set.
+	 *
+	 * @param stateA the long value to use for states at index 0,  9, 18, 27...
+	 * @param stateB the long value to use for states at index 1, 10, 19, 28...
+	 * @param stateC the long value to use for states at index 2, 11, 20, 29...
+	 * @param stateD the long value to use for states at index 3, 12, 21, 30...
+	 * @param stateE the long value to use for states at index 4, 13, 22, 31...
+	 * @param stateF the long value to use for states at index 5, 14, 23, 32...
+	 * @param stateG the long value to use for states at index 6, 15, 24, 33...
+	 * @param stateH the long value to use for states at index 7, 16, 25, 34...
+	 * @param stateI the long value to use for states at index 8, 17, 26, 35...
+	 */
+	@Override
+	public void setState(long stateA, long stateB, long stateC, long stateD, long stateE, long stateF, long stateG, long stateH, long stateI) {
+		wrapped.setState(stateA, stateB, stateC, stateD, stateE, stateF, stateG, stateH, stateI);
+	}
+
+	/**
+	 * Sets each state variable to {@code stateA}, {@code stateB}, {@code stateC}, {@code stateD}, {@code stateE},
+	 * {@code stateF}, {@code stateG}, {@code stateH}, {@code stateI}, or {@code stateJ}, alternating.
+	 * This uses {@link #setSelectedState(int, long)} to
+	 * set the values. If there is one state variable ({@link #getStateCount()} is 1),
+	 * then this only sets that state variable to stateA. If there are two state
+	 * variables, the first is set to stateA, and the second to stateB. With three
+	 * state variables, the first is set to stateA, the second to stateB, and the third
+	 * to stateC. With four state variables, the first is set to stateA, the second to
+	 * stateB, the third to stateC, and the fourth to stateD. If there are more, it
+	 * reuses stateA, then stateB, then stateC, then stateD, then stateE, then stateF,
+	 * then stateG, then stateH, then stateI, then stateJ, then stateA, and so on until all variables are set.
+	 *
+	 * @param stateA the long value to use for states at index 0, 10, 20, 30...
+	 * @param stateB the long value to use for states at index 1, 11, 21, 31...
+	 * @param stateC the long value to use for states at index 2, 12, 22, 32...
+	 * @param stateD the long value to use for states at index 3, 13, 23, 33...
+	 * @param stateE the long value to use for states at index 4, 14, 24, 34...
+	 * @param stateF the long value to use for states at index 5, 15, 25, 35...
+	 * @param stateG the long value to use for states at index 6, 16, 26, 36...
+	 * @param stateH the long value to use for states at index 7, 17, 27, 37...
+	 * @param stateI the long value to use for states at index 8, 18, 28, 38...
+	 * @param stateJ the long value to use for states at index 9, 19, 29, 39...
+	 */
+	@Override
+	public void setState(long stateA, long stateB, long stateC, long stateD, long stateE, long stateF, long stateG, long stateH, long stateI, long stateJ) {
+		wrapped.setState(stateA, stateB, stateC, stateD, stateE, stateF, stateG, stateH, stateI, stateJ);
+	}
+
 
 	/**
      * Sets all state variables to alternating values chosen from {@code states}. If states is empty,

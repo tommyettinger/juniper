@@ -263,6 +263,22 @@ public class InterpolatorWrapper extends EnhancedRandom {
     public void setState(long stateA, long stateB, long stateC, long stateD, long stateE, long stateF) {
         random.setState(stateA, stateB, stateC, stateD, stateE, stateF);
     }
+	@Override
+	public void setState(long stateA, long stateB, long stateC, long stateD, long stateE, long stateF, long stateG) {
+		random.setState(stateA, stateB, stateC, stateD, stateE, stateF, stateG);
+	}
+	@Override
+	public void setState(long stateA, long stateB, long stateC, long stateD, long stateE, long stateF, long stateG, long stateH) {
+		random.setState(stateA, stateB, stateC, stateD, stateE, stateF, stateG, stateH);
+	}
+	@Override
+	public void setState(long stateA, long stateB, long stateC, long stateD, long stateE, long stateF, long stateG, long stateH, long stateI) {
+		random.setState(stateA, stateB, stateC, stateD, stateE, stateF, stateG, stateH, stateI);
+	}
+	@Override
+	public void setState(long stateA, long stateB, long stateC, long stateD, long stateE, long stateF, long stateG, long stateH, long stateI, long stateJ) {
+		random.setState(stateA, stateB, stateC, stateD, stateE, stateF, stateG, stateH, stateI, stateJ);
+	}
     @Override
     public void setState(long... state) {
         random.setState(state);
