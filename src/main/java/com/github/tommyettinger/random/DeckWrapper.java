@@ -10,8 +10,22 @@ import java.io.ObjectOutput;
 import java.math.BigInteger;
 import java.util.Arrays;
 
+/**
+ * A wrapper around another EnhancedRandom instance that stores an array of 16 {@code long} results that it generates in
+ * batches, and modifies so that the most significant 4 bits of each result are each distinct. This shuffles the 16
+ * different results when it starts and whenever 16 results have been generated. This is meant for cases where
+ * independent random results are undesirable, and any sequence of "bad luck" (low results) can be followed in short
+ * order by "good luck" (high results), and vice versa. This allows an uninformed expectation of how randomness works
+ * (the "Gambler's Fallacy") to be closer to how it actually works in practice.
+ * <br>
+ * This doesn't generate more results with its wrapped generator's {@link #nextLong()} than it has to; because 4 bits of
+ * each result are replaced by distinct nybbles, those bits are reused to shuffle the 16 results. This works best with
+ * any generator that has an efficient {@link #nextLong()} implementation, so preferably one where
+ * {@link #mainlyGeneratesInt()} is false. The most-significant 4 bits of each nextLong() call to the wrapped generator
+ * are used to shuffle the results, and the rest are left as-is.
+ */
 public class DeckWrapper extends EnhancedRandom {
-	public EnhancedRandom wrapped;
+	protected EnhancedRandom wrapped;
 	protected int index;
 	protected long[] buffer;
 

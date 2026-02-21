@@ -31,6 +31,8 @@ import java.math.BigInteger;
 /**
  * An EnhancedRandom wrapper that delegates to a {@link Distribution} to distribute any floats, ints, or doubles as by
  * that distribution.
+ * <br>
+ * This changed its name from {@code DistributedRandom} to {@code DistributionWrapper} in version 0.10.0 .
  */
 public class DistributionWrapper extends EnhancedRandom {
 	/**

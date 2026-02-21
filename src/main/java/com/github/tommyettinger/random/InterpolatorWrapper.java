@@ -30,7 +30,12 @@ import java.math.BigInteger;
 
 /**
  * An EnhancedRandom wrapper that delegates to an {@link Interpolator} to distribute output in the same way the
- * Interpolator does from the 0 to 1 range, but for any requested range.
+ * Interpolator does from the 0 to 1 range, but for any requested range. Interpolator operates on {@code float} values
+ * only, so anything with double-precision here isn't actually that precise. Some Interpolator kinds, such as
+ * {@link Interpolations#back} and {@link Interpolations#elastic}, are meant to exceed the normal bounds of
+ * {@link #nextFloat()} or {@link #nextDouble()}, and they will do that here as well.
+ * <br>
+ * This changed its name from {@code InterpolatedRandom} to {@code InterpolatorWrapper} in version 0.10.0 .
  */
 public class InterpolatorWrapper extends EnhancedRandom {
 	@Override
