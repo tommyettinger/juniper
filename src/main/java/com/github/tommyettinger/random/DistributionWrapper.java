@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.math.BigInteger;
+import java.util.Objects;
 
 /**
  * An EnhancedRandom wrapper that delegates to a {@link Distribution} to distribute any floats, ints, or doubles as by
@@ -400,6 +401,21 @@ public class DistributionWrapper extends EnhancedRandom {
 		this.distribution.generator = random;
 	}
 
+	@Override
+	public final boolean equals(Object o) {
+		if (!(o instanceof DistributionWrapper)) return false;
+
+		DistributionWrapper that = (DistributionWrapper) o;
+		return Objects.equals(distribution, that.distribution) && reduction == that.reduction;
+	}
+
+	@Override
+	public int hashCode() {
+		int result = Objects.hashCode(distribution);
+		result = 31 * result + Objects.hashCode(reduction);
+		return result;
+	}
+
 	/**
 	 * @param base which Base to use, from the "digital" library, such as {@link Base#BASE10}
 	 * @return this, for chaining
@@ -408,7 +424,6 @@ public class DistributionWrapper extends EnhancedRandom {
 	public String stringSerialize(Base base) {
 		return getTag() + base.paddingChar + base.signed(reduction.ordinal()) + base.positiveSign + distribution.stringSerialize(base);
 	}
-
 
 	@Override
 	public <T extends CharSequence & Appendable> T appendSerialized(T sb, Base base) {
@@ -423,7 +438,6 @@ public class DistributionWrapper extends EnhancedRandom {
 		}
 		return sb;
 	}
-
 
 	/**
 	 * @param data a String probably produced by {@link #stringSerialize(Base)}

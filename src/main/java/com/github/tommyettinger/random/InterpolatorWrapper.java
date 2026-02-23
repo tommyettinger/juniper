@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.math.BigInteger;
+import java.util.Objects;
 
 /**
  * An EnhancedRandom wrapper that delegates to an {@link Interpolator} to distribute output in the same way the
@@ -344,6 +345,21 @@ public class InterpolatorWrapper extends EnhancedRandom {
 
 	public void setRandom(EnhancedRandom random) {
 		this.random = random;
+	}
+
+	@Override
+	public final boolean equals(Object o) {
+		if (!(o instanceof InterpolatorWrapper)) return false;
+
+		InterpolatorWrapper that = (InterpolatorWrapper) o;
+		return Objects.equals(interpolator, that.interpolator) && Objects.equals(random, that.random);
+	}
+
+	@Override
+	public int hashCode() {
+		int result = Objects.hashCode(interpolator);
+		result = 31 * result + Objects.hashCode(random);
+		return result;
 	}
 
 	/**
