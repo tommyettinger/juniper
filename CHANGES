@@ -1,3 +1,7 @@
+[0.10.2]
+- Fixed a bug in DeckWrapper.stringDeserialize(), which also affected its Externalizable serialization.
+- Fixed the return types for DeckWrapper.copy() and CompositeWrapper.copy(), which now return their actual class instead of EnhancedRandom.
+
 [0.10.1]
 - Fixed a bug in CompositeWrapper.stringSerialize(), which also affected its Externalizable serialization.
 
