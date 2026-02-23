@@ -169,7 +169,7 @@ public class CompositeWrapper extends EnhancedRandom {
 	}
 
 	@Override
-	public EnhancedRandom copy() {
+	public CompositeWrapper copy() {
 		return new CompositeWrapper(randomA.copy(), randomB.copy());
 	}
 

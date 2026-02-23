@@ -171,7 +171,7 @@ public class DeckWrapper extends EnhancedRandom {
 	}
 
 	@Override
-	public EnhancedRandom copy() {
+	public DeckWrapper copy() {
 		return new DeckWrapper(this);
 	}
 
