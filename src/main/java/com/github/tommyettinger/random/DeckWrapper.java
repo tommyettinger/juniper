@@ -637,8 +637,8 @@ public class DeckWrapper extends EnhancedRandom {
 	public DeckWrapper stringDeserialize(String data, Base base) {
 		int start = data.indexOf(base.paddingChar) + 1;
 		int len = base.readInt(data, start, start = data.indexOf(base.paddingChar, start));
-		setWrapped(Deserializer.deserialize(data.substring(start + 1, start += len), base));
-		index = base.readInt(data, start + 1, start = data.indexOf(base.paddingChar, start + 1));
+		setWrapped(Deserializer.deserialize(data.substring(start + 1, start += len + 1), base));
+		index = base.readInt(data, start, start = data.indexOf(base.paddingChar, start));
 		long[] longs = base.longSplit(data, String.valueOf(base.positiveSign), start + 1, data.indexOf(base.paddingChar, start + 1));
 		System.arraycopy(longs,
 			0, buffer, 0, 16);
