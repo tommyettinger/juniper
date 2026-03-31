@@ -26,10 +26,10 @@ public class ForySerializationTest {
 			fory.register(c);
 		}
 		for (EnhancedRandom r : all) {
-			byte[] bytes = fory.serializeJavaObject(r);
+			byte[] bytes = fory.serialize(r);
 			r.nextLong();
 			long rl = r.nextLong();
-			EnhancedRandom de = fory.deserializeJavaObject(bytes, r.getClass());
+			EnhancedRandom de = fory.deserialize(bytes, r.getClass());
 			System.out.println(de.stringSerialize());
 			de.nextLong();
 			long dl = de.nextLong();
@@ -60,10 +60,10 @@ public class ForySerializationTest {
 		for (Distribution r : all) {
 			r.generator = rand.randomElement(randoms).copy();
 			r.generator.setSeed(rand.nextLong());
-			byte[] s = fory.serializeJavaObject(r);
+			byte[] s = fory.serialize(r);
 			r.nextDouble();
 			double rl = r.nextDouble();
-			Distribution de = fory.deserializeJavaObject(s, r.getClass());
+			Distribution de = fory.deserialize(s, r.getClass());
 			System.out.println(r.stringSerialize() + "   " + de.stringSerialize());
 			de.nextDouble();
 			double dl = de.nextDouble();
@@ -95,10 +95,10 @@ public class ForySerializationTest {
 			EnhancedRandom er = rand.randomElement(randoms).copy();
 			er.setSeed(rand.nextLong());
 			DistributionWrapper dr = new DistributionWrapper(r, DistributionWrapper.ReductionMode.FRACTION, er);
-			byte[] s = fory.serializeJavaObject(dr);
+			byte[] s = fory.serialize(dr);
 			dr.nextDouble();
 			double rl = dr.nextDouble();
-			DistributionWrapper de = fory.deserializeJavaObject(s, DistributionWrapper.class);
+			DistributionWrapper de = fory.deserialize(s, DistributionWrapper.class);
 			de.nextDouble();
 			double dl = de.nextDouble();
 			System.out.println(dr.stringSerialize() + "   " + de.stringSerialize());
@@ -115,20 +115,20 @@ public class ForySerializationTest {
 		fory.register(DistinctRandom.class);
 
 		DeckWrapper random = new DeckWrapper(new DistinctRandom(123));
-		byte[] randomSer = fory.serializeJavaObject(random);
+		byte[] randomSer = fory.serialize(random);
 		long output0 = random.nextLong();
 		int output1 = random.nextInt(100);
 		float output2 = random.nextExclusiveFloat();
 		DeckWrapper random2 = new DeckWrapper(new DistinctRandom(123));
-		byte[] randomSer2 = fory.serializeJavaObject(random2);
+		byte[] randomSer2 = fory.serialize(random2);
 		long duplicate0 = random2.nextLong();
 		int duplicate1 = random2.nextInt(100);
 		float duplicate2 = random2.nextExclusiveFloat();
 		Assert.assertEquals(output0, duplicate0);
 		Assert.assertEquals(output1, duplicate1);
 		Assert.assertEquals(output2, duplicate2, Float.MIN_NORMAL);
-		random = fory.deserializeJavaObject(randomSer, DeckWrapper.class);
-		random2 = fory.deserializeJavaObject(randomSer2, DeckWrapper.class);
+		random = fory.deserialize(randomSer, DeckWrapper.class);
+		random2 = fory.deserialize(randomSer2, DeckWrapper.class);
 		output0 = random.nextLong();
 		output1 = random.nextInt(100);
 		output2 = random.nextExclusiveFloat();
@@ -150,20 +150,20 @@ public class ForySerializationTest {
 		fory.register(LFSR64QuasiRandom.class);
 
 		CompositeWrapper random = new CompositeWrapper(new DistinctRandom(123), new LFSR64QuasiRandom(456));
-		byte[] randomSer = fory.serializeJavaObject(random);
+		byte[] randomSer = fory.serialize(random);
 		long output0 = random.nextLong();
 		int output1 = random.nextInt(100);
 		float output2 = random.nextExclusiveFloat();
 		CompositeWrapper random2 = new CompositeWrapper(new DistinctRandom(123), new LFSR64QuasiRandom(456));
-		byte[] randomSer2 = fory.serializeJavaObject(random2);
+		byte[] randomSer2 = fory.serialize(random2);
 		long duplicate0 = random2.nextLong();
 		int duplicate1 = random2.nextInt(100);
 		float duplicate2 = random2.nextExclusiveFloat();
 		Assert.assertEquals(output0, duplicate0);
 		Assert.assertEquals(output1, duplicate1);
 		Assert.assertEquals(output2, duplicate2, Float.MIN_NORMAL);
-		random = fory.deserializeJavaObject(randomSer, CompositeWrapper.class);
-		random2 = fory.deserializeJavaObject(randomSer2, CompositeWrapper.class);
+		random = fory.deserialize(randomSer, CompositeWrapper.class);
+		random2 = fory.deserialize(randomSer2, CompositeWrapper.class);
 		output0 = random.nextLong();
 		output1 = random.nextInt(100);
 		output2 = random.nextExclusiveFloat();
@@ -184,20 +184,20 @@ public class ForySerializationTest {
 		fory.register(AceRandom.class);
 
 		AceRandom random = new AceRandom(123);
-		byte[] randomSer = fory.serializeJavaObject(random);
+		byte[] randomSer = fory.serialize(random);
 		long output0 = random.nextLong();
 		int output1 = random.nextInt(100);
 		float output2 = random.nextExclusiveFloat();
 		ReverseWrapper reverse = new ReverseWrapper(random);
-		byte[] reverseSer = fory.serializeJavaObject(reverse);
+		byte[] reverseSer = fory.serialize(reverse);
 		float back2 = reverse.nextExclusiveFloat();
 		int back1 = reverse.nextInt(100);
 		long back0 = reverse.nextLong();
 		Assert.assertEquals(output0, back0);
 		Assert.assertEquals(output1, back1);
 		Assert.assertEquals(output2, back2, Float.MIN_NORMAL);
-		random = fory.deserializeJavaObject(randomSer, AceRandom.class);
-		reverse = fory.deserializeJavaObject(reverseSer, ReverseWrapper.class);
+		random = fory.deserialize(randomSer, AceRandom.class);
+		reverse = fory.deserialize(reverseSer, ReverseWrapper.class);
 		output0 = random.nextLong();
 		output1 = random.nextInt(100);
 		output2 = random.nextExclusiveFloat();
@@ -226,9 +226,9 @@ public class ForySerializationTest {
 		for (int i = 0; i < 100; i++) {
 			output.add(archive.nextLong(1000000));
 		}
-		byte[] arcSer = fory.serializeJavaObject(archive);
+		byte[] arcSer = fory.serialize(archive);
 		KnownSequenceRandom ksr = archive.getRepeatableRandom();
-		ArchivalWrapper archive2 = fory.deserializeJavaObject(arcSer, ArchivalWrapper.class);
+		ArchivalWrapper archive2 = fory.deserialize(arcSer, ArchivalWrapper.class);
 		Assert.assertEquals(archive, archive2);
 		KnownSequenceRandom ksr2 = archive2.getRepeatableRandom();
 		for (int i = 0; i < 100; i++) {
@@ -247,9 +247,9 @@ public class ForySerializationTest {
 
 		ArchivalWrapper archive = new ArchivalWrapper(new DistinctRandom(-12345L));
 
-		byte[] arcSer = fory.serializeJavaObject(archive);
+		byte[] arcSer = fory.serialize(archive);
 
-		ArchivalWrapper data2 = fory.deserializeJavaObject(arcSer, ArchivalWrapper.class);
+		ArchivalWrapper data2 = fory.deserialize(arcSer, ArchivalWrapper.class);
 //        System.out.println("data...");
 //        System.out.println(archive);
 //        System.out.println("vs. data2...");

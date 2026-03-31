@@ -64,8 +64,8 @@ public final class Fft {
 			cosTable = new double[n];
 			sinTable = new double[n];
 			for (int i = 0; i < n; i++) {
-				cosTable[i] = Math.cos(i * Math.PI * 2.0 / n);
-				sinTable[i] = Math.sin(i * Math.PI * 2.0 / n);
+				cosTable[i] = Math.cos(i * (Math.PI * 2.0) / n);
+				sinTable[i] = Math.sin(i * (Math.PI * 2.0) / n);
 			}
 		}
 	}
@@ -216,6 +216,24 @@ public final class Fft {
 //				real[x][y] = (cb < threshold) ? 0.0 : 1.0;
 			}
 		}
+	}
+
+	public static int[] getHistogram(double[] real, double[] imag) {
+		final int n = real.length;
+		double max = 0.0, mag, r, i;
+		for (int x = 0; x < n; x++) {
+			r = real[x];
+			i = imag[x];
+			mag = Math.sqrt(r * r + i * i);
+			max = Math.max(mag, max);
+			imag[x] = mag;
+		}
+		double c = 255.9999 / Math.log1p(Math.max(0.001, max));
+		Arrays.fill(histogram, 0);
+		for (int x = 0; x < n; x++) {
+			histogram[(int) (c * Math.log1p(imag[x]))]++;
+		}
+		return histogram;
 	}
 
 	public static int[] getHistogram(double[][] real, double[][] imag) {
