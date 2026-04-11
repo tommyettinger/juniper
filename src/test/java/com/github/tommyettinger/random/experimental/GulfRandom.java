@@ -24,7 +24,7 @@ import java.math.BigInteger;
 
 /**
  * A 64-bit generator that uses just one multiplication per result, and lots of bitwise rotation. Its multiplier is also
- * its second state, and is determined by {@link #fixGamma(long)}.
+ * its second state, and is determined by {@link #fixGamma(long, int)}.
  * <br>
  * This always has a period of 2 to the 64, and there are many possible sequences that result from changing the
  * stream value. GulfRandom implements all optional methods in EnhancedRandom, including {@link #skip(long)} and
@@ -49,7 +49,7 @@ public class GulfRandom extends EnhancedRandom {
 	public GulfRandom() {
 		super();
 		stateA = EnhancedRandom.seedFromMath();
-		stateB = fixGamma(EnhancedRandom.seedFromMath());
+		stateB = fixGamma(EnhancedRandom.seedFromMath(), 1);
 	}
 
 	/**
@@ -74,7 +74,7 @@ public class GulfRandom extends EnhancedRandom {
 	public GulfRandom(long stateA, long stateB) {
 		super(stateA);
 		this.stateA = stateA;
-		this.stateB = fixGamma(stateB);
+		this.stateB = fixGamma(stateB, 1);
 	}
 
 	@Override
@@ -129,12 +129,12 @@ public class GulfRandom extends EnhancedRandom {
 	 * Selections 0 (or any even number) and 1 (or any odd number) refer to states A and B.
 	 *
 	 * @param selection used to select which state variable to set; generally 0 or 1
-	 * @param value     the exact value to use for the selected state, if valid
+	 * @param value     the value to use for the selected state, if valid; may be changed if selection is an odd number
 	 */
 	@Override
 	public void setSelectedState(int selection, long value) {
 		if ((selection & 1) == 1) {
-			stateB = fixGamma(value);
+			stateB = fixGamma(value, 1);
 		} else {
 			stateA = value;
 		}
@@ -154,7 +154,7 @@ public class GulfRandom extends EnhancedRandom {
 		x ^= x >>> 33;
 		x *= 0x1C69B3F74AC4AE35L;
 		stateA = x ^ x >>> 27;
-		stateB = fixGamma(seed);
+		stateB = fixGamma(seed, 1);
 	}
 
 	public long getStateA() {
@@ -175,13 +175,15 @@ public class GulfRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Sets the second part of the state (the stream). This must be odd, otherwise this will add 1 to make it odd; it
-	 * will then be run through {@link #fixGamma(long)}, which may change it if it isn't already a "good gamma."
+	 * Sets the stream using the given long, and changing it using {@link EnhancedRandom#fixGamma(long, int)} (with
+	 * threshold 1) if it isn't already considered a good gamma value. The stream should always be an odd number; if
+	 * an even one is given, 1 will be added to make it odd. If only odd numbers between 1 and 536870912 are given, all
+	 * streams will be unique; if larger or even numbers are given, there can be duplicates.
 	 *
-	 * @param stateB will be passed to {@link #fixGamma(long)}
+	 * @param stateB any odd long; if only odd numbers less than 536870912 are given, all streams will be unique
 	 */
 	public void setStateB(long stateB) {
-		this.stateB = fixGamma(stateB);
+		this.stateB = fixGamma(stateB, 1);
 	}
 
 	/**
@@ -195,7 +197,7 @@ public class GulfRandom extends EnhancedRandom {
 	@Override
 	public void setState(long stateA, long stateB) {
 		this.stateA = stateA;
-		this.stateB = fixGamma(stateB);
+		this.stateB = fixGamma(stateB, 1);
 	}
 
 	@Override
