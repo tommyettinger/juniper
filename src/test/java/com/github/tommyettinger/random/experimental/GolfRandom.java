@@ -18,23 +18,22 @@
 package com.github.tommyettinger.random.experimental;
 
 import com.github.tommyettinger.random.EnhancedRandom;
-import com.github.tommyettinger.random.LaserRandom;
 
 import java.math.BigInteger;
 
 /**
- * A 64-bit generator that uses just one multiplication per result, and lots of bitwise rotation. Its multiplier is also
- * its second state, and is determined by {@link #fixGamma(long, int)}.
+ * A 64-bit generator that uses just one multiplication per result, and lots of bitwise rotation. It uses a counter with
+ * its second state (its stream) as the increment, where that stream is determined by {@link #fixGamma(long, int)}.
  * <br>
  * This always has a period of 2 to the 64, and there are many possible sequences that result from changing the
- * stream value. GulfRandom implements all optional methods in EnhancedRandom, including {@link #skip(long)} and
+ * stream value. GolfRandom implements all optional methods in EnhancedRandom, including {@link #skip(long)} and
  * {@link #previousLong()}.
  * <br>
  * This generator passes 128TB of PractRand with no anomalies.
  * <br>
- * The name is vaguely related to streams reaching the sea.
+ * The name is because it's very close to GulfRandom, and also because there was a golf tournament on TV.
  */
-public class GulfRandom extends EnhancedRandom {
+public class GolfRandom extends EnhancedRandom {
 
 	/**
 	 * The first state, also called the changing state; can be any long.
@@ -46,34 +45,34 @@ public class GulfRandom extends EnhancedRandom {
 	protected long stateB;
 
 	/**
-	 * Creates a new GulfRandom with a random state.
+	 * Creates a new GolfRandom with a random state.
 	 */
-	public GulfRandom() {
+	public GolfRandom() {
 		super();
 		stateA = EnhancedRandom.seedFromMath();
 		stateB = fixGamma(EnhancedRandom.seedFromMath(), 1);
 	}
 
 	/**
-	 * Creates a new GulfRandom with the given seed; all {@code long} values are permitted.
+	 * Creates a new GolfRandom with the given seed; all {@code long} values are permitted.
 	 * The seed will be passed to {@link #setSeed(long)} to attempt to adequately distribute the seed randomly.
 	 *
 	 * @param seed any {@code long} value
 	 */
-	public GulfRandom(long seed) {
+	public GolfRandom(long seed) {
 		super(seed);
 		setSeed(seed);
 	}
 
 	/**
-	 * Creates a new GulfRandom with the given two states; all {@code long} values are permitted for
+	 * Creates a new GolfRandom with the given two states; all {@code long} values are permitted for
 	 * stateA, and all odd-number {@code long} values are permitted for stateB. These states are not
 	 * changed as long as they are permitted values.
 	 *
 	 * @param stateA any {@code long} value
 	 * @param stateB any {@code long} value; should be odd, otherwise this will add 1 to make it odd
 	 */
-	public GulfRandom(long stateA, long stateB) {
+	public GolfRandom(long stateA, long stateB) {
 		super(stateA);
 		this.stateA = stateA;
 		this.stateB = fixGamma(stateB, 1);
@@ -81,7 +80,7 @@ public class GulfRandom extends EnhancedRandom {
 
 	@Override
 	public String getTag() {
-		return "GulR";
+		return "GolR";
 	}
 
 	/**
@@ -206,17 +205,17 @@ public class GulfRandom extends EnhancedRandom {
 	public long nextLong() {
 		long x = stateA;
 		x ^= (x << 13 | x >>> 51) ^ (x << 47 | x >>> 17);
-		x *= stateB;
+		x *= 0xD1342543DE82EF95L;
 		x ^= (x << 23 | x >>> 41) ^ (x << 51 | x >>> 13);
-		stateA += 0xD1342543DE82EF95L;
+		stateA += stateB;
 		return x;
 	}
 
 	@Override
 	public long previousLong() {
-		long x = stateA -= 0xD1342543DE82EF95L;
+		long x = stateA -= stateB;
 		x ^= (x << 13 | x >>> 51) ^ (x << 47 | x >>> 17);
-		x *= stateB;
+		x *= 0xD1342543DE82EF95L;
 		x ^= (x << 23 | x >>> 41) ^ (x << 51 | x >>> 13);;
 		return x;
 
@@ -226,9 +225,9 @@ public class GulfRandom extends EnhancedRandom {
 	public int next(int bits) {
 		long x = stateA;
 		x ^= (x << 13 | x >>> 51) ^ (x << 47 | x >>> 17);
-		x *= stateB;
+		x *= 0xD1342543DE82EF95L;
 		x ^= (x << 23 | x >>> 41) ^ (x << 51 | x >>> 13);
-		stateA += 0xD1342543DE82EF95L;
+		stateA += stateB;
 		return (int) x >>> (32 - bits);
 	}
 
@@ -243,18 +242,18 @@ public class GulfRandom extends EnhancedRandom {
 	 */
 	@Override
 	public long skip(long advance) {
-		long x = stateA + advance * (0xD1342543DE82EF95L - 1L);
+		long x = stateA + advance * (stateB - 1L);
 		x ^= (x << 13 | x >>> 51) ^ (x << 47 | x >>> 17);
-		x *= stateB;
+		x *= 0xD1342543DE82EF95L;
 		x ^= (x << 23 | x >>> 41) ^ (x << 51 | x >>> 13);
-		stateA += 0xD1342543DE82EF95L;
+		stateA += stateB;
 		return x;
 
 	}
 
 	@Override
-	public GulfRandom copy() {
-		return new GulfRandom(stateA, stateB);
+	public GolfRandom copy() {
+		return new GolfRandom(stateA, stateB);
 	}
 
 	@Override
@@ -264,7 +263,7 @@ public class GulfRandom extends EnhancedRandom {
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		GulfRandom that = (GulfRandom) o;
+		GolfRandom that = (GolfRandom) o;
 
 		if (stateA != that.stateA)
 			return false;
@@ -272,6 +271,6 @@ public class GulfRandom extends EnhancedRandom {
 	}
 
 	public String toString() {
-		return "GulfRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L}";
+		return "GolfRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L}";
 	}
 }
