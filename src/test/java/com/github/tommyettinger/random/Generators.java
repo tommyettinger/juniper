@@ -125,6 +125,7 @@ public final class Generators {
 		randomList.add(new Lamb32Random(1, 1));
 		randomList.add(new Lambeau32Random(1, 1, 1));
 		randomList.add(new GulfRandom(1, 1));
+		randomList.add(new GolfRandom(1, 1));
 	}
 
 	public static int randomCount = randomList.size();
