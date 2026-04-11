@@ -29,8 +29,6 @@ import java.math.BigInteger;
  * stream value. GolfRandom implements all optional methods in EnhancedRandom, including {@link #skip(long)} and
  * {@link #previousLong()}.
  * <br>
- * This generator passes 128TB of PractRand with no anomalies.
- * <br>
  * The name is because it's very close to GulfRandom, and also because there was a golf tournament on TV.
  */
 public class GolfRandom extends EnhancedRandom {
@@ -204,7 +202,7 @@ public class GolfRandom extends EnhancedRandom {
 	@Override
 	public long nextLong() {
 		long x = stateA;
-		x ^= (x << 13 | x >>> 51) ^ (x << 47 | x >>> 17);
+		x ^= (x << 11 | x >>> 53) ^ (x << 47 | x >>> 17);
 		x *= 0xD1342543DE82EF95L;
 		x ^= (x << 23 | x >>> 41) ^ (x << 51 | x >>> 13);
 		stateA += stateB;
@@ -214,7 +212,7 @@ public class GolfRandom extends EnhancedRandom {
 	@Override
 	public long previousLong() {
 		long x = stateA -= stateB;
-		x ^= (x << 13 | x >>> 51) ^ (x << 47 | x >>> 17);
+		x ^= (x << 11 | x >>> 53) ^ (x << 47 | x >>> 17);
 		x *= 0xD1342543DE82EF95L;
 		x ^= (x << 23 | x >>> 41) ^ (x << 51 | x >>> 13);;
 		return x;
@@ -224,7 +222,7 @@ public class GolfRandom extends EnhancedRandom {
 	@Override
 	public int next(int bits) {
 		long x = stateA;
-		x ^= (x << 13 | x >>> 51) ^ (x << 47 | x >>> 17);
+		x ^= (x << 11 | x >>> 53) ^ (x << 47 | x >>> 17);
 		x *= 0xD1342543DE82EF95L;
 		x ^= (x << 23 | x >>> 41) ^ (x << 51 | x >>> 13);
 		stateA += stateB;
@@ -243,7 +241,7 @@ public class GolfRandom extends EnhancedRandom {
 	@Override
 	public long skip(long advance) {
 		long x = stateA + advance * (stateB - 1L);
-		x ^= (x << 13 | x >>> 51) ^ (x << 47 | x >>> 17);
+		x ^= (x << 11 | x >>> 53) ^ (x << 47 | x >>> 17);
 		x *= 0xD1342543DE82EF95L;
 		x ^= (x << 23 | x >>> 41) ^ (x << 51 | x >>> 13);
 		stateA += stateB;
