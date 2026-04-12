@@ -201,17 +201,17 @@ public class GolfRandom extends EnhancedRandom {
 
 	@Override
 	public long nextLong() {
-		long x = stateA;
+		long x = stateA += stateB;
 		x ^= (x << 11 | x >>> 53) ^ (x << 47 | x >>> 17);
 		x *= 0xD1342543DE82EF95L;
 		x ^= (x << 23 | x >>> 41) ^ (x << 51 | x >>> 13);
-		stateA += stateB;
 		return x;
 	}
 
 	@Override
 	public long previousLong() {
-		long x = stateA -= stateB;
+		long x = stateA;
+		stateA -= stateB;
 		x ^= (x << 11 | x >>> 53) ^ (x << 47 | x >>> 17);
 		x *= 0xD1342543DE82EF95L;
 		x ^= (x << 23 | x >>> 41) ^ (x << 51 | x >>> 13);;
@@ -221,11 +221,10 @@ public class GolfRandom extends EnhancedRandom {
 
 	@Override
 	public int next(int bits) {
-		long x = stateA;
+		long x = stateA += stateB;
 		x ^= (x << 11 | x >>> 53) ^ (x << 47 | x >>> 17);
 		x *= 0xD1342543DE82EF95L;
 		x ^= (x << 23 | x >>> 41) ^ (x << 51 | x >>> 13);
-		stateA += stateB;
 		return (int) x >>> (32 - bits);
 	}
 
@@ -240,11 +239,10 @@ public class GolfRandom extends EnhancedRandom {
 	 */
 	@Override
 	public long skip(long advance) {
-		long x = stateA + advance * (stateB - 1L);
+		long x = stateA + advance * stateB;
 		x ^= (x << 11 | x >>> 53) ^ (x << 47 | x >>> 17);
 		x *= 0xD1342543DE82EF95L;
 		x ^= (x << 23 | x >>> 41) ^ (x << 51 | x >>> 13);
-		stateA += stateB;
 		return x;
 
 	}
