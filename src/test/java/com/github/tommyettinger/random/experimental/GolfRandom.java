@@ -269,4 +269,62 @@ public class GolfRandom extends EnhancedRandom {
 	public String toString() {
 		return "GolfRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L}";
 	}
+
+	public static void main(String[] args) {
+		GolfRandom random = new GolfRandom(1L);
+		{
+			int n0 = random.nextInt();
+			int n1 = random.nextInt();
+			int n2 = random.nextInt();
+			int n3 = random.nextInt();
+			int n4 = random.nextInt();
+			int n5 = random.nextInt();
+			int p5 = random.previousInt();
+			int p4 = random.previousInt();
+			int p3 = random.previousInt();
+			int p2 = random.previousInt();
+			int p1 = random.previousInt();
+			int p0 = random.previousInt();
+			System.out.println(n0 == p0);
+			System.out.println(n1 == p1);
+			System.out.println(n2 == p2);
+			System.out.println(n3 == p3);
+			System.out.println(n4 == p4);
+			System.out.println(n5 == p5);
+			System.out.printf("%08X vs. %08X\n", p0, n0);
+			System.out.printf("%08X vs. %08X\n", p1, n1);
+			System.out.printf("%08X vs. %08X\n", p2, n2);
+			System.out.printf("%08X vs. %08X\n", p3, n3);
+			System.out.printf("%08X vs. %08X\n", p4, n4);
+			System.out.printf("%08X vs. %08X\n", p5, n5);
+		}
+		random.setSeed(1L);
+		{
+			long n0 = random.nextLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL\n", random.stateA, random.stateB);
+			long n1 = random.nextLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL\n", random.stateA, random.stateB);
+			long n2 = random.nextLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL\n", random.stateA, random.stateB);
+			long n3 = random.nextLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL\n", random.stateA, random.stateB);
+			long n4 = random.nextLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL\n", random.stateA, random.stateB);
+			long n5 = random.nextLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL\n", random.stateA, random.stateB);
+			System.out.println("Going back...");
+			long p5 = random.previousLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL\n", random.stateA, random.stateB);
+			long p4 = random.previousLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL\n", random.stateA, random.stateB);
+			long p3 = random.previousLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL\n", random.stateA, random.stateB);
+			long p2 = random.previousLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL\n", random.stateA, random.stateB);
+			long p1 = random.previousLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL\n", random.stateA, random.stateB);
+			long p0 = random.previousLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL\n", random.stateA, random.stateB);
+			System.out.println(n0 == p0);
+			System.out.println(n1 == p1);
+			System.out.println(n2 == p2);
+			System.out.println(n3 == p3);
+			System.out.println(n4 == p4);
+			System.out.println(n5 == p5);
+			System.out.printf("%016X vs. %016X", n0, p0);
+			System.out.printf("%016X vs. %016X", n1, p1);
+			System.out.printf("%016X vs. %016X", n2, p2);
+			System.out.printf("%016X vs. %016X", n3, p3);
+			System.out.printf("%016X vs. %016X", n4, p4);
+			System.out.printf("%016X vs. %016X", n5, p5);
+		}
+	}
 }
