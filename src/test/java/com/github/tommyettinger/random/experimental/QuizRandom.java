@@ -204,13 +204,13 @@ public class QuizRandom extends EnhancedRandom {
 		x += x * x + stateB | 257;
 		x ^= (x << 23 | x >>> 41) ^ (x << 51 | x >>> 13);
 		stateA += 0xD1342543DE82EF95L;
-		stateB += BitConversion.countLeadingZeros(stateA);
+		stateB += 0x9E3779B97F4A7C15L + BitConversion.countLeadingZeros(stateA);
 		return x;
 	}
 
 	@Override
 	public long previousLong() {
-		stateB -= BitConversion.countLeadingZeros(stateA);
+		stateB -= 0x9E3779B97F4A7C15L + BitConversion.countLeadingZeros(stateA);
 		long x = (stateA -= 0xD1342543DE82EF95L);
 		x ^= (x << 11 | x >>> 53) ^ (x << 47 | x >>> 17);
 		x += x * x + stateB | 257;
@@ -226,7 +226,7 @@ public class QuizRandom extends EnhancedRandom {
 		x += x * x + stateB | 257;
 		x ^= (x << 23 | x >>> 41) ^ (x << 51 | x >>> 13);
 		stateA += 0xD1342543DE82EF95L;
-		stateB += BitConversion.countLeadingZeros(stateA);
+		stateB += 0x9E3779B97F4A7C15L + BitConversion.countLeadingZeros(stateA);
 		return (int) x >>> (32 - bits);
 	}
 

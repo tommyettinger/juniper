@@ -1,0 +1,1 @@
+Lowest mode: 44.00000 has mean amount 0.5299663618  FAIL 💀 for QuizRandom
