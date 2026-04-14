@@ -17,71 +17,64 @@
 
 package com.github.tommyettinger.random.experimental;
 
+import com.github.tommyettinger.digital.BitConversion;
 import com.github.tommyettinger.random.EnhancedRandom;
-import com.github.tommyettinger.random.LaserRandom;
 
 import java.math.BigInteger;
 
 /**
- * A 64-bit generator that uses just one multiplication per result, and lots of bitwise rotation. Its multiplier is also
- * its second state, and is determined by {@link #fixGamma(long, int)}.
+ * A 64-bit generator that uses just one multiplication per result, and lots of bitwise rotation. It uses two counters
+ * and has a period of 2 to the 128. It is perfectly 1D-equidistributed.
  * <br>
- * This always has a period of 2 to the 64, and there are many possible sequences that result from changing the
- * stream value. GulfRandom implements all optional methods in EnhancedRandom, including {@link #skip(long)} and
- * {@link #previousLong()}.
- * <br>
- * This generator passes 128TB of PractRand with no anomalies.
- * <br>
- * The name is vaguely related to streams reaching the sea.
+ * The name is because it involves squaring (Q) and count-leading-zeros (Z) operations.
  */
-public class GulfRandom extends EnhancedRandom {
+public class QuizRandom extends EnhancedRandom {
 
 	/**
-	 * The first state, also called the changing state; can be any long.
+	 * The first state; can be any long.
 	 */
 	protected long stateA;
 	/**
-	 * The second state, also called the stream; can be any odd-number long.
+	 * The second state; can be any long.
 	 */
 	protected long stateB;
 
 	/**
-	 * Creates a new GulfRandom with a random state.
+	 * Creates a new QuizRandom with a random state.
 	 */
-	public GulfRandom() {
+	public QuizRandom() {
 		super();
 		stateA = EnhancedRandom.seedFromMath();
-		stateB = fixGamma(EnhancedRandom.seedFromMath(), 1);
+		stateB = EnhancedRandom.seedFromMath();
 	}
 
 	/**
-	 * Creates a new GulfRandom with the given seed; all {@code long} values are permitted.
+	 * Creates a new QuizRandom with the given seed; all {@code long} values are permitted.
 	 * The seed will be passed to {@link #setSeed(long)} to attempt to adequately distribute the seed randomly.
 	 *
 	 * @param seed any {@code long} value
 	 */
-	public GulfRandom(long seed) {
+	public QuizRandom(long seed) {
 		super(seed);
 		setSeed(seed);
 	}
 
 	/**
-	 * Creates a new GulfRandom with the given two states; all {@code long} values are permitted for
-	 * stateA, and all odd-number {@code long} values are permitted for stateB. These states are not
-	 * changed as long as they are permitted values.
+	 * Creates a new QuizRandom with the given two states; all {@code long} values are permitted for
+	 * stateA and for stateB. These states are not changed.
 	 *
 	 * @param stateA any {@code long} value
-	 * @param stateB any {@code long} value; should be odd, otherwise this will add 1 to make it odd
+	 * @param stateB any {@code long} value
 	 */
-	public GulfRandom(long stateA, long stateB) {
+	public QuizRandom(long stateA, long stateB) {
 		super(stateA);
 		this.stateA = stateA;
-		this.stateB = fixGamma(stateB, 1);
+		this.stateB = stateB;
 	}
 
 	@Override
 	public String getTag() {
-		return "GulR";
+		return "QuzR";
 	}
 
 	/**
@@ -89,12 +82,12 @@ public class GulfRandom extends EnhancedRandom {
 	 *
 	 * @see #getMinimumPeriod()
 	 */
-	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000", 16);
+	private static final BigInteger MINIMUM_PERIOD = new BigInteger("100000000000000000000000000000000", 16);
 
 	/**
-	 * 2 to the 64.
+	 * 2 to the 128.
 	 *
-	 * @return 2 to the 64
+	 * @return 2 to the 128
 	 */
 	@Override
 	public BigInteger getMinimumPeriod() {
@@ -131,12 +124,12 @@ public class GulfRandom extends EnhancedRandom {
 	 * Selections 0 (or any even number) and 1 (or any odd number) refer to states A and B.
 	 *
 	 * @param selection used to select which state variable to set; generally 0 or 1
-	 * @param value     the value to use for the selected state, if valid; may be changed if selection is an odd number
+	 * @param value     the value to use for the selected state; used verbatim
 	 */
 	@Override
 	public void setSelectedState(int selection, long value) {
 		if ((selection & 1) == 1) {
-			stateB = fixGamma(value, 1);
+			stateB = value;
 		} else {
 			stateA = value;
 		}
@@ -155,8 +148,13 @@ public class GulfRandom extends EnhancedRandom {
 		x *= 0x3C79AC492BA7B653L;
 		x ^= x >>> 33;
 		x *= 0x1C69B3F74AC4AE35L;
-		stateA = x ^ x >>> 27;
-		stateB = fixGamma(seed, 1);
+		stateA = x ^= x >>> 27;
+		x += 0x9E3779B97F4A7C15L;
+		x ^= x >>> 27;
+		x *= 0x3C79AC492BA7B653L;
+		x ^= x >>> 33;
+		x *= 0x1C69B3F74AC4AE35L;
+		stateB = x ^ x >>> 27;
 	}
 
 	public long getStateA() {
@@ -164,7 +162,7 @@ public class GulfRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Sets the first part of the state (the changing state).
+	 * Sets the first part of the state.
 	 *
 	 * @param stateA can be any long
 	 */
@@ -177,15 +175,12 @@ public class GulfRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Sets the stream using the given long, and changing it using {@link EnhancedRandom#fixGamma(long, int)} (with
-	 * threshold 1) if it isn't already considered a good gamma value. The stream should always be an odd number; if
-	 * an even one is given, 1 will be added to make it odd. If only odd numbers between 1 and 536870912 are given, all
-	 * streams will be unique; if larger or even numbers are given, there can be duplicates.
+	 * Sets the second part of the state.
 	 *
-	 * @param stateB any odd long; if only odd numbers less than 536870912 are given, all streams will be unique
+	 * @param stateB can be any long
 	 */
 	public void setStateB(long stateB) {
-		this.stateB = fixGamma(stateB, 1);
+		this.stateB = stateB;
 	}
 
 	/**
@@ -194,30 +189,32 @@ public class GulfRandom extends EnhancedRandom {
 	 * as a group.
 	 *
 	 * @param stateA the first state; can be any long
-	 * @param stateB the second state; can be any odd-number long
+	 * @param stateB the second state; can be any long
 	 */
 	@Override
 	public void setState(long stateA, long stateB) {
 		this.stateA = stateA;
-		this.stateB = fixGamma(stateB, 1);
+		this.stateB = stateB;
 	}
 
 	@Override
 	public long nextLong() {
 		long x = stateA;
-		x ^= (x << 13 | x >>> 51) ^ (x << 47 | x >>> 17);
-		x *= stateB;
+		x ^= (x << 11 | x >>> 53) ^ (x << 47 | x >>> 17);
+		x += x * x + stateB | 257;
 		x ^= (x << 23 | x >>> 41) ^ (x << 51 | x >>> 13);
 		stateA += 0xD1342543DE82EF95L;
+		stateB += BitConversion.countLeadingZeros(stateA);
 		return x;
 	}
 
 	@Override
 	public long previousLong() {
-		long x = stateA -= 0xD1342543DE82EF95L;
-		x ^= (x << 13 | x >>> 51) ^ (x << 47 | x >>> 17);
-		x *= stateB;
-		x ^= (x << 23 | x >>> 41) ^ (x << 51 | x >>> 13);;
+		stateB -= BitConversion.countLeadingZeros(stateA);
+		long x = (stateA -= 0xD1342543DE82EF95L);
+		x ^= (x << 11 | x >>> 53) ^ (x << 47 | x >>> 17);
+		x += x * x + stateB | 257;
+		x ^= (x << 23 | x >>> 41) ^ (x << 51 | x >>> 13);
 		return x;
 
 	}
@@ -225,36 +222,17 @@ public class GulfRandom extends EnhancedRandom {
 	@Override
 	public int next(int bits) {
 		long x = stateA;
-		x ^= (x << 13 | x >>> 51) ^ (x << 47 | x >>> 17);
-		x *= stateB;
+		x ^= (x << 11 | x >>> 53) ^ (x << 47 | x >>> 17);
+		x += x * x + stateB | 257;
 		x ^= (x << 23 | x >>> 41) ^ (x << 51 | x >>> 13);
 		stateA += 0xD1342543DE82EF95L;
+		stateB += BitConversion.countLeadingZeros(stateA);
 		return (int) x >>> (32 - bits);
 	}
 
-	/**
-	 * Advances or rolls back the {@code EnhancedRandom}' state without actually generating each number.
-	 * Skips forward or backward a number of steps specified by advance, where a step is equal to one call to
-	 * {@link #nextLong()}, and returns the random number produced at that step. Negative numbers can be used to
-	 * step backward, or 0 can be given to get the most-recently-generated long from {@link #nextLong()}.
-	 *
-	 * @param advance Number of future generations to skip over; can be negative to backtrack, 0 gets the most-recently-generated number
-	 * @return the random long generated after skipping forward or backwards by {@code advance} numbers
-	 */
 	@Override
-	public long skip(long advance) {
-		long x = stateA + advance * (0xD1342543DE82EF95L - 1L);
-		x ^= (x << 13 | x >>> 51) ^ (x << 47 | x >>> 17);
-		x *= stateB;
-		x ^= (x << 23 | x >>> 41) ^ (x << 51 | x >>> 13);
-		stateA += 0xD1342543DE82EF95L;
-		return x;
-
-	}
-
-	@Override
-	public GulfRandom copy() {
-		return new GulfRandom(stateA, stateB);
+	public QuizRandom copy() {
+		return new QuizRandom(stateA, stateB);
 	}
 
 	@Override
@@ -264,7 +242,7 @@ public class GulfRandom extends EnhancedRandom {
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		GulfRandom that = (GulfRandom) o;
+		QuizRandom that = (QuizRandom) o;
 
 		if (stateA != that.stateA)
 			return false;
@@ -272,11 +250,11 @@ public class GulfRandom extends EnhancedRandom {
 	}
 
 	public String toString() {
-		return "GulfRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L}";
+		return "QuizRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L}";
 	}
 
 	public static void main(String[] args) {
-		GulfRandom random = new GulfRandom(1L);
+		QuizRandom random = new QuizRandom(1L);
 		{
 			int n0 = random.nextInt();
 			int n1 = random.nextInt();
