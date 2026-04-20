@@ -199,7 +199,7 @@ public class QuizRandom extends EnhancedRandom {
 
 	@Override
 	public long nextLong() {
-		long x = stateA ^ stateB;
+		long x = stateA;
 		x ^= (x << 11 | x >>> 53) ^ (x << 47 | x >>> 17);
 		x += x * x + stateB | 257;
 		x ^= (x << 23 | x >>> 41) ^ (x << 51 | x >>> 13);
@@ -211,7 +211,7 @@ public class QuizRandom extends EnhancedRandom {
 	@Override
 	public long previousLong() {
 		stateB -= BitConversion.countLeadingZeros(stateA);
-		long x = (stateA -= 0xD1342543DE82EF95L) ^ stateB;
+		long x = (stateA -= 0xD1342543DE82EF95L);
 		x ^= (x << 11 | x >>> 53) ^ (x << 47 | x >>> 17);
 		x += x * x + stateB | 257;
 		x ^= (x << 23 | x >>> 41) ^ (x << 51 | x >>> 13);
@@ -221,7 +221,7 @@ public class QuizRandom extends EnhancedRandom {
 
 	@Override
 	public int next(int bits) {
-		long x = stateA ^ stateB;
+		long x = stateA;
 		x ^= (x << 11 | x >>> 53) ^ (x << 47 | x >>> 17);
 		x += x * x + stateB | 257;
 		x ^= (x << 23 | x >>> 41) ^ (x << 51 | x >>> 13);
@@ -302,12 +302,12 @@ public class QuizRandom extends EnhancedRandom {
 			System.out.println(n3 == p3);
 			System.out.println(n4 == p4);
 			System.out.println(n5 == p5);
-			System.out.printf("%016X vs. %016X", n0, p0);
-			System.out.printf("%016X vs. %016X", n1, p1);
-			System.out.printf("%016X vs. %016X", n2, p2);
-			System.out.printf("%016X vs. %016X", n3, p3);
-			System.out.printf("%016X vs. %016X", n4, p4);
-			System.out.printf("%016X vs. %016X", n5, p5);
+			System.out.printf("%016X vs. %016X\n", n0, p0);
+			System.out.printf("%016X vs. %016X\n", n1, p1);
+			System.out.printf("%016X vs. %016X\n", n2, p2);
+			System.out.printf("%016X vs. %016X\n", n3, p3);
+			System.out.printf("%016X vs. %016X\n", n4, p4);
+			System.out.printf("%016X vs. %016X\n", n5, p5);
 		}
 	}
 }

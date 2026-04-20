@@ -203,8 +203,8 @@ public class GolfRandom extends EnhancedRandom {
 	public long nextLong() {
 		long x = stateA += stateB;
 		x ^= (x << 11 | x >>> 53) ^ (x << 47 | x >>> 17);
-		x *= 0xD1342543DE82EF95L;
-		x ^= (x << 23 | x >>> 41) ^ (x << 51 | x >>> 13);
+		x *= 0xF1357AEA2E62A9C5L;
+		x ^= (x << 25 | x >>> 39) ^ (x << 50 | x >>> 14);
 		return x;
 	}
 
@@ -213,8 +213,8 @@ public class GolfRandom extends EnhancedRandom {
 		long x = stateA;
 		stateA -= stateB;
 		x ^= (x << 11 | x >>> 53) ^ (x << 47 | x >>> 17);
-		x *= 0xD1342543DE82EF95L;
-		x ^= (x << 23 | x >>> 41) ^ (x << 51 | x >>> 13);;
+		x *= 0xF1357AEA2E62A9C5L;
+		x ^= (x << 25 | x >>> 39) ^ (x << 50 | x >>> 14);
 		return x;
 
 	}
@@ -223,8 +223,8 @@ public class GolfRandom extends EnhancedRandom {
 	public int next(int bits) {
 		long x = stateA += stateB;
 		x ^= (x << 11 | x >>> 53) ^ (x << 47 | x >>> 17);
-		x *= 0xD1342543DE82EF95L;
-		x ^= (x << 23 | x >>> 41) ^ (x << 51 | x >>> 13);
+		x *= 0xF1357AEA2E62A9C5L;
+		x ^= (x << 25 | x >>> 39) ^ (x << 50 | x >>> 14);
 		return (int) x >>> (32 - bits);
 	}
 
@@ -241,8 +241,8 @@ public class GolfRandom extends EnhancedRandom {
 	public long skip(long advance) {
 		long x = stateA + advance * stateB;
 		x ^= (x << 11 | x >>> 53) ^ (x << 47 | x >>> 17);
-		x *= 0xD1342543DE82EF95L;
-		x ^= (x << 23 | x >>> 41) ^ (x << 51 | x >>> 13);
+		x *= 0xF1357AEA2E62A9C5L;
+		x ^= (x << 25 | x >>> 39) ^ (x << 50 | x >>> 14);
 		return x;
 
 	}
@@ -319,12 +319,12 @@ public class GolfRandom extends EnhancedRandom {
 			System.out.println(n3 == p3);
 			System.out.println(n4 == p4);
 			System.out.println(n5 == p5);
-			System.out.printf("%016X vs. %016X", n0, p0);
-			System.out.printf("%016X vs. %016X", n1, p1);
-			System.out.printf("%016X vs. %016X", n2, p2);
-			System.out.printf("%016X vs. %016X", n3, p3);
-			System.out.printf("%016X vs. %016X", n4, p4);
-			System.out.printf("%016X vs. %016X", n5, p5);
+			System.out.printf("%016X vs. %016X\n", n0, p0);
+			System.out.printf("%016X vs. %016X\n", n1, p1);
+			System.out.printf("%016X vs. %016X\n", n2, p2);
+			System.out.printf("%016X vs. %016X\n", n3, p3);
+			System.out.printf("%016X vs. %016X\n", n4, p4);
+			System.out.printf("%016X vs. %016X\n", n5, p5);
 		}
 	}
 }
