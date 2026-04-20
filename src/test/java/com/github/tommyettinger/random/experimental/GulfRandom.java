@@ -324,12 +324,12 @@ public class GulfRandom extends EnhancedRandom {
 			System.out.println(n3 == p3);
 			System.out.println(n4 == p4);
 			System.out.println(n5 == p5);
-			System.out.printf("%016X vs. %016X", n0, p0);
-			System.out.printf("%016X vs. %016X", n1, p1);
-			System.out.printf("%016X vs. %016X", n2, p2);
-			System.out.printf("%016X vs. %016X", n3, p3);
-			System.out.printf("%016X vs. %016X", n4, p4);
-			System.out.printf("%016X vs. %016X", n5, p5);
+			System.out.printf("%016X vs. %016X\n", n0, p0);
+			System.out.printf("%016X vs. %016X\n", n1, p1);
+			System.out.printf("%016X vs. %016X\n", n2, p2);
+			System.out.printf("%016X vs. %016X\n", n3, p3);
+			System.out.printf("%016X vs. %016X\n", n4, p4);
+			System.out.printf("%016X vs. %016X\n", n5, p5);
 		}
 	}
 }
