@@ -24,6 +24,7 @@ import java.math.BigInteger;
 /**
  * A 64-bit generator that uses just one multiplication per result, and lots of bitwise rotation. It uses a counter with
  * its second state (its stream) as the increment, where that stream is determined by {@link #fixGamma(long, int)}.
+ * The stream is also used as a multiplier internally. This passes 128TB of PractRand without any anomalies.
  * <br>
  * This always has a period of 2 to the 64, and there are many possible sequences that result from changing the
  * stream value. GolfRandom implements all optional methods in EnhancedRandom, including {@link #skip(long)} and
@@ -201,18 +202,18 @@ public class GolfRandom extends EnhancedRandom {
 
 	@Override
 	public long nextLong() {
-		long x = stateA += stateB;
-		x ^= (x << 11 | x >>> 53) ^ (x << 41 | x >>> 23);
+		long x = stateA;
+		x ^= (x << 19 | x >>> 45) ^ (x << 41 | x >>> 23);
 		x *= stateB;
 		x ^= (x << 25 | x >>> 39) ^ (x << 50 | x >>> 14);
+		stateA += stateB;
 		return x;
 	}
 
 	@Override
 	public long previousLong() {
-		long x = stateA;
-		stateA -= stateB;
-		x ^= (x << 11 | x >>> 53) ^ (x << 41 | x >>> 23);
+		long x = stateA -= stateB;
+		x ^= (x << 19 | x >>> 45) ^ (x << 41 | x >>> 23);
 		x *= stateB;
 		x ^= (x << 25 | x >>> 39) ^ (x << 50 | x >>> 14);
 		return x;
@@ -221,10 +222,11 @@ public class GolfRandom extends EnhancedRandom {
 
 	@Override
 	public int next(int bits) {
-		long x = stateA += stateB;
-		x ^= (x << 11 | x >>> 53) ^ (x << 41 | x >>> 23);
+		long x = stateA;
+		x ^= (x << 19 | x >>> 45) ^ (x << 41 | x >>> 23);
 		x *= stateB;
 		x ^= (x << 25 | x >>> 39) ^ (x << 50 | x >>> 14);
+		stateA += stateB;
 		return (int) x >>> (32 - bits);
 	}
 
@@ -239,10 +241,11 @@ public class GolfRandom extends EnhancedRandom {
 	 */
 	@Override
 	public long skip(long advance) {
-		long x = stateA + advance * stateB;
-		x ^= (x << 11 | x >>> 53) ^ (x << 41 | x >>> 23);
+		long x = stateA + (advance - 1) * stateB;
+		x ^= (x << 19 | x >>> 45) ^ (x << 41 | x >>> 23);
 		x *= stateB;
 		x ^= (x << 25 | x >>> 39) ^ (x << 50 | x >>> 14);
+		stateA += advance * stateB;
 		return x;
 
 	}
