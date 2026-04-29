@@ -2,7 +2,6 @@ package com.github.tommyettinger.random.experimental;
 
 import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.random.EnhancedRandom;
-import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.math.BigInteger;
 
@@ -227,7 +226,6 @@ public class Silk32Random extends EnhancedRandom {
 	 *
 	 * @return a copy of this SilkRNG
 	 */
-	@NonNull
 	@Override
 	public Silk32Random copy() {
 		return new Silk32Random(stateA, stateB);

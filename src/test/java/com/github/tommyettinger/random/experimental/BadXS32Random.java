@@ -1,7 +1,6 @@
 package com.github.tommyettinger.random.experimental;
 
 import com.github.tommyettinger.random.EnhancedRandom;
-import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.math.BigInteger;
 
@@ -134,7 +133,6 @@ public class BadXS32Random extends EnhancedRandom {
 	 *
 	 * @return a copy of this BadXS32Random
 	 */
-	@NonNull
 	@Override
 	public BadXS32Random copy() {
 		return new BadXS32Random(state);
