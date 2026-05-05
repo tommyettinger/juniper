@@ -583,6 +583,36 @@ public abstract class EnhancedRandom extends Random implements Externalizable {
 	}
 
 	/**
+	 * Simply calls {@link #setSeed(long, CharSequence)} with {@code hashSeed = 1234567890L}.
+	 *
+	 * @param text a CharSequence, such as a String, that can be of any length (or even null)
+	 * @see #setSeed(long, CharSequence) This delegates to a different setSeed() method.
+	 */
+	public void setSeed(CharSequence text) {
+		setSeed(1234567890L, text);
+	}
+
+	/**
+	 * Sets all state variables to differently-seeded hashes of {@code text}, using the given {@code hashSeed} as a
+	 * starting point for each hash's seed. This calls {@link Hasher#hashBulk64(long, CharSequence)} on text, with a
+	 * different first parameter each time (starting at hashSeed and incrementing per-state).
+	 * <br>
+	 * This can be useful for taking user-provided seeds as Strings, while still providing an option to change the
+	 * seed (via hashSeed) without changing the text. This can also help because a CharSequence can be extremely long,
+	 * which could allow very large state sequences to be randomized without needing to know the amount of state you
+	 * want beforehand.
+	 *
+	 * @param hashSeed a long that will be used for the hash seed for the first state and incremented for later states
+	 * @param text a CharSequence, such as a String, that can be of any length (or even null)
+	 */
+	public void setSeed(long hashSeed, CharSequence text) {
+		final int c = getStateCount();
+		for (int i = 0; i < c; i++) {
+			setSelectedState(i, Hasher.hashBulk64(hashSeed + i, text));
+		}
+	}
+
+	/**
 	 * Generates the next pseudorandom number with a specific maximum size in bits (not a max number).
 	 * If you want to get a random number in a range, you should usually use {@link #nextInt(int)} instead.
 	 * For some specific cases, this method is more efficient and less biased than {@link #nextInt(int)}.
