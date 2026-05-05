@@ -307,6 +307,16 @@ public class InterpolatorWrapper extends EnhancedRandom {
 	}
 
 	@Override
+	public void setSeed(CharSequence text) {
+		random.setSeed(text);
+	}
+
+	@Override
+	public void setSeed(long hashSeed, CharSequence text) {
+		random.setSeed(hashSeed, text);
+	}
+
+	@Override
 	public int getStateCount() {
 		return random.getStateCount();
 	}

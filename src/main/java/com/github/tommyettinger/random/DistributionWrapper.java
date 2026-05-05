@@ -365,6 +365,16 @@ public class DistributionWrapper extends EnhancedRandom {
 	}
 
 	@Override
+	public void setSeed(CharSequence text) {
+		distribution.generator.setSeed(text);
+	}
+
+	@Override
+	public void setSeed(long hashSeed, CharSequence text) {
+		distribution.generator.setSeed(hashSeed, text);
+	}
+
+	@Override
 	public int getStateCount() {
 		return distribution.generator.getStateCount();
 	}

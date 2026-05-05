@@ -478,6 +478,20 @@ public class DeckWrapper extends EnhancedRandom {
 		index = 0;
 	}
 
+	@Override
+	public void setSeed(CharSequence text) {
+		wrapped.setSeed(text);
+		refill();
+		index = 0;
+	}
+
+	@Override
+	public void setSeed(long hashSeed, CharSequence text) {
+		wrapped.setSeed(hashSeed, text);
+		refill();
+		index = 0;
+	}
+
 	/**
 	 * Gets the current index into the "deck" of 16 long results this shuffles.
 	 *

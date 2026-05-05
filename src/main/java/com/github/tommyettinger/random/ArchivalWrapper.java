@@ -451,6 +451,16 @@ public class ArchivalWrapper extends EnhancedRandom {
 		wrapped.setState(states);
 	}
 
+	@Override
+	public void setSeed(CharSequence text) {
+		wrapped.setSeed(text);
+	}
+
+	@Override
+	public void setSeed(long hashSeed, CharSequence text) {
+		wrapped.setSeed(hashSeed, text);
+	}
+
 	public <T extends CharSequence & Appendable> T appendSerialized(T sb, Base base) {
 		try {
 			sb.append(getTag()).append(base.paddingChar);

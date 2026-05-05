@@ -414,6 +414,16 @@ public class ReverseWrapper extends EnhancedRandom {
 		wrapped.setState(states);
 	}
 
+	@Override
+	public void setSeed(CharSequence text) {
+		wrapped.setSeed(text);
+	}
+
+	@Override
+	public void setSeed(long hashSeed, CharSequence text) {
+		wrapped.setSeed(hashSeed, text);
+	}
+
 	/**
 	 * Returns the previous pseudorandom, uniformly distributed {@code long}
 	 * value from the wrapped random number generator's sequence. The general
