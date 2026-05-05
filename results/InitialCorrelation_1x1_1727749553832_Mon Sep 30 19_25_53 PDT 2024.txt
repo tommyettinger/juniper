@@ -1,2 +1,0 @@
-Lowest mode: 0.000000 has mean amount 0.9960950016  FAIL 💀 for Silk32Random
-Lowest mode: 115.0000 has mean amount 0.0311234742  PASS 👍 for Taxon32Random

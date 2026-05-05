@@ -1,1 +1,0 @@
-Lowest mode: 116.0000 has mean amount 0.0311276167  PASS 👍 for QomStage0Random

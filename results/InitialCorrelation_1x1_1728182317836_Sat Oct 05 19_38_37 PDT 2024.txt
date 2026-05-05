@@ -1,2 +1,0 @@
-Lowest mode: 116.0000 has mean amount 0.0311319828  PASS 👍 for Choo32Random
-Lowest mode: 115.0000 has mean amount 0.0306325405  PASS 👍 for Taupe32Random

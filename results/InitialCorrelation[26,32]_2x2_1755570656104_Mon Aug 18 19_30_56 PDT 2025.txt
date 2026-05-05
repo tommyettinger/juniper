@@ -1,1 +1,0 @@
-Lowest mode: 50.00000 has mean amount 0.0427633225  FAIL 💀 for WumpusRandom

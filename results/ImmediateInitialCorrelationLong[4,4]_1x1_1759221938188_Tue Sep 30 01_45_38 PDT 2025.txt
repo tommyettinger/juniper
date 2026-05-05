@@ -1,1 +1,0 @@
-[Immediate] Lowest mode: 119.0000 has mean amount 0.0311038494  PASS 👍 for Amp2XsRandom

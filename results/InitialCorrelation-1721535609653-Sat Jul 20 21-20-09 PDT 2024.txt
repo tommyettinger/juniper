@@ -1,2 +1,0 @@
-Lowest mode: 116.0000 has mean amount 0.0304649323  PASS 👍 for CupolaRandom
-Lowest mode: 111.0000 has mean amount 0.0303064733  FAIL 💀 for TwingeRandom

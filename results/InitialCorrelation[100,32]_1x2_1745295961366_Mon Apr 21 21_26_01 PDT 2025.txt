@@ -1,2 +1,0 @@
-Lowest mode: 116.0000 has mean amount 0.0310753881  PASS 👍 for Xoshiro160GrittyRandom
-Lowest mode: 116.0000 has mean amount 0.0306156128  PASS 👍 for Xoshiro160RoadroxoRandom

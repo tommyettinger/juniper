@@ -1,6 +1,0 @@
-Lowest mode: 116.0000 has mean amount 0.0208108276  PASS 👍 for PcgBoostedRandom
-Lowest mode: 112.0000 has mean amount 0.0208030045  FAIL 💀 for PcgRXSMXSRandom
-Lowest mode: 91.00000 has mean amount 0.0184032917  FAIL 💀 for Xoroshiro128StarStarRandom
-Lowest mode: 95.00000 has mean amount 0.0219694375  FAIL 💀 for Xoshiro128PlusPlusRandom
-Lowest mode: 116.0000 has mean amount 0.0311094224  PASS 👍 for Xoshiro256MX3Random
-Lowest mode: 86.00000 has mean amount 0.0185390412  FAIL 💀 for Xoshiro256StarStarRandom

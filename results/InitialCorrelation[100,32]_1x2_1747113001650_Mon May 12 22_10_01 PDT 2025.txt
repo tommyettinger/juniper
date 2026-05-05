@@ -1,2 +1,0 @@
-Lowest mode: 0.000000 has mean amount 0.2617230266  FAIL 💀 for MaceRandom
-Lowest mode: 115.0000 has mean amount 0.0311037153  PASS 👍 for OC128X256LowMixRandom

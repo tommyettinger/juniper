@@ -1,3 +1,0 @@
-Lowest mode: 0.000000 has mean amount 0.1728952080  FAIL 💀 for O128X256LowMixRandom
-Lowest mode: 116.0000 has mean amount 0.0310753881  PASS 👍 for Xoshiro160GrittyRandom
-Lowest mode: 116.0000 has mean amount 0.0306156128  PASS 👍 for Xoshiro160RoadroxoRandom

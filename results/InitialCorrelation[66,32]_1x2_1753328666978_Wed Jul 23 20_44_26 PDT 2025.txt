@@ -1,1 +1,0 @@
-Lowest mode: 115.0000 has mean amount 0.0311223566  PASS 👍 for I64LFSR64MX3Random
