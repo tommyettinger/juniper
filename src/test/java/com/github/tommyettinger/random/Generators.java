@@ -128,6 +128,7 @@ public final class Generators {
 		randomList.add(new QuizRandom(1, 1));
 		randomList.add(new GolfRandom(1, 1));
 		randomList.add(new SizzleRandom(1, 1));
+		randomList.add(new FlamencoRandom(1, 1));
 	}
 
 	public static int randomCount = randomList.size();

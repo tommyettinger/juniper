@@ -1,0 +1,1 @@
+[Immediate] Lowest mode: 54.00000 has mean amount 0.0238757133  FAIL 💀 for FlamencoRandom
