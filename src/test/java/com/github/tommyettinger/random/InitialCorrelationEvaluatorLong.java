@@ -119,8 +119,8 @@ public class InitialCorrelationEvaluatorLong {
 //                new DistinctRandom(1));
 
 		List<EnhancedRandom> rs =
-			Generators.randomList;
-//			Generators.randomList.subList(Generators.randomCount - 1, Generators.randomCount);
+//			Generators.randomList;
+			Generators.randomList.subList(Generators.randomCount - 1, Generators.randomCount);
 
 //        List<EnhancedRandom> rs = ObjectList.with(
 //                new I64LFSR64MX3Random(1, 1)
@@ -180,7 +180,7 @@ public class InitialCorrelationEvaluatorLong {
 				.append(r.getClass().getSimpleName()).append('\n');
 		}
 		Date date = new Date();
-		FileHandle loc = new FileHandle(new File("results/").getAbsoluteFile());
+		FileHandle loc = new FileHandle(new File((rs.size() >= 10 ? "results/" : "temporaryResults/")).getAbsoluteFile());
 		loc.mkdirs();
 		loc = loc.child("InitialCorrelationLong[" + STEPS_BEFORE + "," + STEP_LIMIT + "]_" + INTERVAL_X + "x" + INTERVAL_Y + "_" + date.getTime() + '_' +
 			date.toString().replace(':', '_') + ".txt");
