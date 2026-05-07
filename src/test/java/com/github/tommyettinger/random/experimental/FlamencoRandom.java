@@ -208,7 +208,6 @@ public class FlamencoRandom extends EnhancedRandom {
 		x ^= (x << 19 | x >>> 35) ^ (x << 41 | x >>> 23);
 		x += (y << 53 | y >>> 11);
 		x ^= (x << 25 | x >>> 39) ^ (x << 50 | x >>> 14);
-		x = (x << 31 | x >>> 33) + y;
 		y ^= y << 7;
 		stateA = y ^ y >>> 9;
 		stateB += 0xC13FA9A902A6328FL;
@@ -222,7 +221,6 @@ public class FlamencoRandom extends EnhancedRandom {
 		x ^= (x << 19 | x >>> 35) ^ (x << 41 | x >>> 23);
 		x += (y << 53 | y >>> 11);
 		x ^= (x << 25 | x >>> 39) ^ (x << 50 | x >>> 14);
-		x = (x << 31 | x >>> 33) + y;
 		y ^= y << 7;
 		stateA = y ^ y >>> 9;
 		stateB += 0xC13FA9A902A6328FL;
@@ -243,7 +241,6 @@ public class FlamencoRandom extends EnhancedRandom {
 		x ^= (x << 19 | x >>> 35) ^ (x << 41 | x >>> 23);
 		x += (y << 53 | y >>> 11);
 		x ^= (x << 25 | x >>> 39) ^ (x << 50 | x >>> 14);
-		x = (x << 31 | x >>> 33) + y;
 		return x;
 	}
 
@@ -263,7 +260,6 @@ public class FlamencoRandom extends EnhancedRandom {
 		x ^= (x << 19 | x >>> 35) ^ (x << 41 | x >>> 23);
 		x += (y << 53 | y >>> 11);
 		x ^= (x << 25 | x >>> 39) ^ (x << 50 | x >>> 14);
-		x = (x << 31 | x >>> 33) + y;
 		y ^= y << 7;
 		stateA = y ^ y >>> 9;
 		return x;
