@@ -197,9 +197,9 @@ public class Spiral2Random extends EnhancedRandom {
 	public long nextLong() {
 		final long y = stateB;
 		long x = stateA;
-		x ^= (x << 19 | x >>> 45) ^ (x << 47 | x >>> 17) ^ y;
-		x = x * 0xD1342543DE82EF95L + y;
-		x ^= (x << 25 | x >>> 39) ^ (x << 50 | x >>> 14) ^ y;
+		x ^= (x << 19 | x >>> 45) ^ (x << 47 | x >>> 17) ^ (y << 53 | y >>> 11);
+		x = x * 0xD1342543DE82EF95L;
+		x ^= (x << 25 | x >>> 39) ^ (x << 50 | x >>> 14);
 		stateA += 0xC13FA9A902A6328FL;
 		stateB += 0x91E10DA5C79E7B1DL;
 		return x;
@@ -209,9 +209,9 @@ public class Spiral2Random extends EnhancedRandom {
 	public long previousLong() {
 		final long y = (stateB -= 0x91E10DA5C79E7B1DL);
 		long x = (stateA -= 0xC13FA9A902A6328FL);
-		x ^= (x << 19 | x >>> 45) ^ (x << 47 | x >>> 17) ^ y;
-		x = x * 0xD1342543DE82EF95L + y;
-		x ^= (x << 25 | x >>> 39) ^ (x << 50 | x >>> 14) ^ y;
+		x ^= (x << 19 | x >>> 45) ^ (x << 47 | x >>> 17) ^ (y << 53 | y >>> 11);
+		x = x * 0xD1342543DE82EF95L;
+		x ^= (x << 25 | x >>> 39) ^ (x << 50 | x >>> 14);
 		return x;
 	}
 
@@ -219,9 +219,9 @@ public class Spiral2Random extends EnhancedRandom {
 	public int next(int bits) {
 		final long y = stateB;
 		long x = stateA;
-		x ^= (x << 19 | x >>> 45) ^ (x << 47 | x >>> 17) ^ y;
-		x = x * 0xD1342543DE82EF95L + y;
-		x ^= (x << 25 | x >>> 39) ^ (x << 50 | x >>> 14) ^ y;
+		x ^= (x << 19 | x >>> 45) ^ (x << 47 | x >>> 17) ^ (y << 53 | y >>> 11);
+		x = x * 0xD1342543DE82EF95L;
+		x ^= (x << 25 | x >>> 39) ^ (x << 50 | x >>> 14);
 		stateA += 0xC13FA9A902A6328FL;
 		stateB += 0x91E10DA5C79E7B1DL;
 		return (int) x >>> (32 - bits);
@@ -231,9 +231,9 @@ public class Spiral2Random extends EnhancedRandom {
 	public long skip(final long advance) {
 		final long y = (stateB += 0x91E10DA5C79E7B1DL * (advance - 1));
 		long x = (stateA += 0xC13FA9A902A6328FL * (advance - 1));
-		x ^= (x << 19 | x >>> 45) ^ (x << 47 | x >>> 17) ^ y;
-		x = x * 0xD1342543DE82EF95L + y;
-		x ^= (x << 25 | x >>> 39) ^ (x << 50 | x >>> 14) ^ y;
+		x ^= (x << 19 | x >>> 45) ^ (x << 47 | x >>> 17) ^ (y << 53 | y >>> 11);
+		x = x * 0xD1342543DE82EF95L;
+		x ^= (x << 25 | x >>> 39) ^ (x << 50 | x >>> 14);
 		stateA += 0xC13FA9A902A6328FL;
 		stateB += 0x91E10DA5C79E7B1DL;
 		return x;
