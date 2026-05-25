@@ -130,6 +130,7 @@ public final class Generators {
 		randomList.add(new SizzleRandom(1, 1));
 		randomList.add(new FlamencoRandom(1, 1));
 		randomList.add(new FlambergeRandom(1, 1));
+		randomList.add(new SpiralRandom(1, 1));
 	}
 
 	public static int randomCount = randomList.size();
