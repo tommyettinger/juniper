@@ -361,5 +361,16 @@ public class SpiralRandom extends EnhancedRandom {
 			System.out.println(Base.BASE16.unsigned(n4) + " vs. " + Base.BASE16.unsigned(p4));
 			System.out.println(Base.BASE16.unsigned(n5) + " vs. " + Base.BASE16.unsigned(p5));
 		}
+		random.setSeed(random.nextLong());
+		System.out.println("Stream is 0x" + Base.BASE16.unsigned(random.getStream()));
+		random.nextLong();
+		random.nextLong();
+		System.out.println("Stream is 0x" + Base.BASE16.unsigned(random.getStream()) + " (after generating two longs, the stream shouldn't change)");
+		random.shiftStream(0x111L);
+		System.out.println("Stream is 0x" + Base.BASE16.unsigned(random.getStream()) + " (shifted up by 0x111)");
+		random.shiftStream(-0x111L);
+		System.out.println("Stream is 0x" + Base.BASE16.unsigned(random.getStream()) + " (shifted back)");
+		random.setStream(0x12345L);
+		System.out.println("Stream is 0x" + Base.BASE16.unsigned(random.getStream()) + " (set to 0x12345)");
 	}
 }
