@@ -247,42 +247,42 @@ public class SpiralRandom extends EnhancedRandom {
 		return x;
 	}
 
-//	/**
-//	 * Gets a long that identifies which of the 2 to the 64 possible streams this is on.
-//	 * This takes constant time.
-//	 *
-//	 * @return a long that identifies which stream the main state of the generator is on
-//	 */
-//	public long getStream() {
-//		return stateB * 0xC83D0A80F9B4B5E7L - stateA * 0x06106CCFA448E5ABL;
-//	}
-//
-//	/**
-//	 * Changes the generator's stream to any of the 2 to the 64 possible streams this can be on.
-//	 * The {@code stream} this takes uses the same numbering convention used by {@link #getStream()} and
-//	 * {@link #shiftStream(long)}. This makes an absolute change to the stream, while shiftStream() is relative.
-//	 * <br>
-//	 * This takes constant time.
-//	 *
-//	 * @param stream the number of the stream to change to; may be any long
-//	 */
-//	public void setStream(long stream) {
-//		stateB += 0x8CB92BA72F3D8DD7L * (stream - (stateB * 0xC83D0A80F9B4B5E7L - stateA * 0x06106CCFA448E5ABL));
-//	}
-//
-//	/**
-//	 * Adjusts the generator's stream "up" or "down" to any of the 2 to the 64 possible streams this can be on.
-//	 * The {@code difference} this takes will be the difference between the result of
-//	 * {@link #getStream()} before the shift, and after the shift. This makes a relative change to the stream, while
-//	 * setStream() is absolute.
-//	 * <br>
-//	 * This takes constant time.
-//	 *
-//	 * @param difference how much to change the stream by; may be any long
-//	 */
-//	public void shiftStream(long difference) {
-//		stateB += 0x8CB92BA72F3D8DD7L * difference;
-//	}
+	/**
+	 * Gets a long that identifies which of the 2 to the 64 possible streams this is on.
+	 * This takes constant time.
+	 *
+	 * @return a long that identifies which stream the main state of the generator is on
+	 */
+	public long getStream() {
+		return stateB * 0xD3A8D6FC3DE81F35L - stateA * 0xACB6731F6C88AC6FL;
+	}
+
+	/**
+	 * Changes the generator's stream to any of the 2 to the 64 possible streams this can be on.
+	 * The {@code stream} this takes uses the same numbering convention used by {@link #getStream()} and
+	 * {@link #shiftStream(long)}. This makes an absolute change to the stream, while shiftStream() is relative.
+	 * <br>
+	 * This takes constant time.
+	 *
+	 * @param stream the number of the stream to change to; may be any long
+	 */
+	public void setStream(long stream) {
+		stateB += 0x91E10DA5C79E7B1DL * (stream - (stateB * 0xD3A8D6FC3DE81F35L - stateA * 0xACB6731F6C88AC6FL));
+	}
+
+	/**
+	 * Adjusts the generator's stream "up" or "down" to any of the 2 to the 64 possible streams this can be on.
+	 * The {@code difference} this takes will be the difference between the result of
+	 * {@link #getStream()} before the shift, and after the shift. This makes a relative change to the stream, while
+	 * setStream() is absolute.
+	 * <br>
+	 * This takes constant time.
+	 *
+	 * @param difference how much to change the stream by; may be any long
+	 */
+	public void shiftStream(long difference) {
+		stateB += 0x91E10DA5C79E7B1DL * difference;
+	}
 
 	@Override
 	public SpiralRandom copy() {
