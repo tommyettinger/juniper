@@ -199,7 +199,7 @@ public class Spiral2Random extends EnhancedRandom {
 		long x = stateA;
 		x ^= (x << 19 | x >>> 45) ^ (x << 47 | x >>> 17) ^ y;
 		x = x * 0xD1342543DE82EF95L + y;
-		x ^= (x << 25 | x >>> 39) ^ (x << 50 | x >>> 14);
+		x ^= (x << 25 | x >>> 39) ^ (x << 50 | x >>> 14) ^ y;
 		stateA += 0xC13FA9A902A6328FL;
 		stateB += 0x91E10DA5C79E7B1DL;
 		return x;
@@ -211,7 +211,7 @@ public class Spiral2Random extends EnhancedRandom {
 		long x = (stateA -= 0xC13FA9A902A6328FL);
 		x ^= (x << 19 | x >>> 45) ^ (x << 47 | x >>> 17) ^ y;
 		x = x * 0xD1342543DE82EF95L + y;
-		x ^= (x << 25 | x >>> 39) ^ (x << 50 | x >>> 14);
+		x ^= (x << 25 | x >>> 39) ^ (x << 50 | x >>> 14) ^ y;
 		return x;
 	}
 
@@ -221,7 +221,7 @@ public class Spiral2Random extends EnhancedRandom {
 		long x = stateA;
 		x ^= (x << 19 | x >>> 45) ^ (x << 47 | x >>> 17) ^ y;
 		x = x * 0xD1342543DE82EF95L + y;
-		x ^= (x << 25 | x >>> 39) ^ (x << 50 | x >>> 14);
+		x ^= (x << 25 | x >>> 39) ^ (x << 50 | x >>> 14) ^ y;
 		stateA += 0xC13FA9A902A6328FL;
 		stateB += 0x91E10DA5C79E7B1DL;
 		return (int) x >>> (32 - bits);
@@ -233,7 +233,7 @@ public class Spiral2Random extends EnhancedRandom {
 		long x = (stateA += 0xC13FA9A902A6328FL * (advance - 1));
 		x ^= (x << 19 | x >>> 45) ^ (x << 47 | x >>> 17) ^ y;
 		x = x * 0xD1342543DE82EF95L + y;
-		x ^= (x << 25 | x >>> 39) ^ (x << 50 | x >>> 14);
+		x ^= (x << 25 | x >>> 39) ^ (x << 50 | x >>> 14) ^ y;
 		stateA += 0xC13FA9A902A6328FL;
 		stateB += 0x91E10DA5C79E7B1DL;
 		return x;

@@ -1,0 +1,1 @@
+Lowest mode: 104.0000 has mean amount 0.0252252668  FAIL 💀 for Spiral2Random
