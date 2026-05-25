@@ -33,6 +33,8 @@ public class InitialCorrelationEvaluator {
 	 */
 	public static int STEPS_BEFORE = 100;
 	public static int STEP_LIMIT = 32;
+	public static final int X_INDEX = 2;
+	public static final int Y_INDEX = 3;
 	//    public static long INTERVAL_X = 0x9E3779B97F4A7C15L;//1;//2;//4;//8;//16;//0xC13FA9A902A6328FL;//
 	public static long INTERVAL_X = 2;//2;//4;//8;//16;//0xC13FA9A902A6328FL;//
 	// We use 2 here because several generators use only odd numbers for stateB.
@@ -165,7 +167,10 @@ public class InitialCorrelationEvaluator {
 ////                        g[x][y].setState(y + ((x + y) * (x + y + 1L) >> 1)); // Cantor pairing function
 					else
 ////                        g[x][y].setState((long)x<<1|1L, (long)y<<1|1L, 1L, 1L, 1L);
-						g[x][y].setState(x * INTERVAL_X, y * INTERVAL_Y, 1L, 1L, 1L, 1L);
+					{
+						g[x][y].setSelectedState(X_INDEX, x * INTERVAL_X);
+						g[x][y].setSelectedState(Y_INDEX, y * INTERVAL_Y);
+					}
 				}
 			}
 			InitialCorrelationEvaluator evaluator = new InitialCorrelationEvaluator();

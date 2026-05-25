@@ -24,8 +24,7 @@ import java.io.File;
 import java.util.Date;
 import java.util.List;
 
-import static com.github.tommyettinger.random.InitialCorrelationEvaluator.INTERVAL_X;
-import static com.github.tommyettinger.random.InitialCorrelationEvaluator.INTERVAL_Y;
+import static com.github.tommyettinger.random.InitialCorrelationEvaluator.*;
 
 /**
  *
@@ -163,7 +162,10 @@ public class InitialCorrelationEvaluatorLong {
 ////                        g[x][y].setState(y + ((x + y) * (x + y + 1L) >> 1)); // Cantor pairing function
 					else
 ////                        g[x][y].setState((long)x<<1|1L, (long)y<<1|1L, 1L, 1L, 1L);
-						g[x][y].setState(x * INTERVAL_X, y * INTERVAL_Y, 1L, 1L, 1L, 1L);
+					{
+						g[x][y].setSelectedState(X_INDEX, x * INTERVAL_X);
+						g[x][y].setSelectedState(Y_INDEX, y * INTERVAL_Y);
+					}
 				}
 			}
 			InitialCorrelationEvaluatorLong evaluator = new InitialCorrelationEvaluatorLong();
