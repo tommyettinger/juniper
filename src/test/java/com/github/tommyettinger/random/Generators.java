@@ -132,6 +132,7 @@ public final class Generators {
 		randomList.add(new SpiralRandom(1, 1));
 		randomList.add(new Spiral2Random(1, 1));
 		randomList.add(new MorbitalRandom(1, 1));
+		randomList.add(new ExtendoRandom(1, 1));
 	}
 
 	public static int randomCount = randomList.size();

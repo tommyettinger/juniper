@@ -58,6 +58,10 @@ public final class ExtendoRandom extends EnhancedRandom {
 	 */
 	private long stateB;
 
+	/**
+	 * The extended state; generation takes longer the longer this array is, but it allows creating arbitrarily-many
+	 * streams. This has length 1 or greater in usage.
+	 */
 	private final long[] extend;
 
 	/**
@@ -80,8 +84,9 @@ public final class ExtendoRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Creates a new ExtendoRandom with the given two states; all {@code long} values are permitted for
-	 * stateA and for stateB. These states are not changed during assignment.
+	 * Creates a new ExtendoRandom with the given two or more states; all {@code long} values are permitted for
+	 * stateA, for stateB, and for each item of extend. States A and B are not changed during assignment.
+	 * If extend is null or empty, a long array containing only 0 is used instead, otherwise it is copied exactly.
 	 *
 	 * @param stateA any {@code long} value
 	 * @param stateB any {@code long} value
@@ -90,7 +95,7 @@ public final class ExtendoRandom extends EnhancedRandom {
 		super(stateA);
 		this.stateA = stateA;
 		this.stateB = stateB;
-		if(extend != null) this.extend = Arrays.copyOf(extend, extend.length);
+		if(extend != null && extend.length > 0) this.extend = Arrays.copyOf(extend, extend.length);
 		else this.extend = new long[1];
 	}
 
