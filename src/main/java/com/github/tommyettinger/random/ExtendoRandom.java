@@ -20,7 +20,10 @@ package com.github.tommyettinger.random;
 import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.digital.BitConversion;
 import com.github.tommyettinger.digital.Hasher;
+import com.github.tommyettinger.digital.TextTools;
 
+import java.io.IOException;
+import java.io.ObjectInput;
 import java.math.BigInteger;
 import java.util.Arrays;
 
@@ -65,7 +68,7 @@ public final class ExtendoRandom extends EnhancedRandom {
 	 * The extended state; generation takes longer the longer this array is, but it allows creating arbitrarily-many
 	 * streams. This has length 1 or greater in usage.
 	 */
-	private final long[] extend;
+	private long[] extend;
 
 	/**
 	 * Creates a new ExtendoRandom with a random state.
@@ -214,6 +217,12 @@ public final class ExtendoRandom extends EnhancedRandom {
 	public long[] getExtendedState() {
 		return extend;
 	}
+
+	public void setExtendedState(long[] extend){
+		if(extend != null && extend.length > 0) this.extend = Arrays.copyOf(extend, extend.length);
+		else this.extend = new long[1];
+
+	}
 	/**
 	 * Sets the state completely to the given two state variables.
 	 * This is the same as calling {@link #setStateA(long)} and {@link #setStateB(long)}
@@ -279,6 +288,34 @@ public final class ExtendoRandom extends EnhancedRandom {
 		return new ExtendoRandom(stateA, stateB, extend);
 	}
 
+	/**
+	 * Given a String in the format produced by {@link #stringSerialize(Base)}, and the same {@link Base} used by
+	 * the serialization, this will attempt to set this EnhancedRandom object to match the state in the serialized
+	 * data. This only works if this EnhancedRandom is the same implementation that was serialized, and also needs
+	 * the Bases to be identical. Returns this EnhancedRandom, after possibly changing its state.
+	 *
+	 * @param data a String probably produced by {@link #stringSerialize(Base)}
+	 * @param base which Base to use, from the "digital" library, such as {@link Base#BASE10}
+	 * @return this, after setting its state
+	 * @see Deserializer You can deserialize a serialized EnhancedRandom String to its correct type using Deserializer.
+	 */
+	@Override
+	public ExtendoRandom stringDeserialize(String data, Base base) {
+		int idx = data.indexOf(base.paddingChar);
+		int end = data.indexOf(base.paddingChar, idx + 1);
+		int extendSize = TextTools.count(data, base.positiveSign, idx, end) - 1;
+		if(extendSize > 0) {
+			stateA = base.readLong(data, idx + 1, (idx = data.indexOf(base.positiveSign, idx + 1)));
+			stateB = base.readLong(data, idx + 1, (idx = data.indexOf(base.positiveSign, idx + 1)));
+			long[] extend = new long[extendSize];
+			for (int i = 0; i < extendSize - 1; i++) {
+				extend[i] = base.readLong(data, idx + 1, (idx = data.indexOf(base.positiveSign, idx + 1)));
+			}
+			extend[extendSize - 1] = base.readLong(data, idx + 1, end);
+			setExtendedState(extend);
+		}
+		return this;
+	}
 
 	/**
 	 * The object implements the readExternal method to restore its
@@ -291,7 +328,7 @@ public final class ExtendoRandom extends EnhancedRandom {
 	 * @throws IOException if I/O errors occur
 	 */
 	@Override
-	public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+	public void readExternal(ObjectInput in) throws IOException {
 		final int states = in.readInt();
 		stateA = in.readLong();
 		stateB = in.readLong();

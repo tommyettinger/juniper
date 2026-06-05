@@ -110,6 +110,7 @@ public final class Deserializer {
 		register(new AceRandom(1, 2, 3, 4, 5));
 		register(new Xoshiro160RoadroxoRandom(1, 2, 3, 4, 5));
 		register(new TraceRandom(1, 2, 3, 4, 5, 6));
+		register(new ExtendoRandom(1, 2, 3));
 		register(new KnownSequenceRandom(LongSequence.with(1337L, 42L, 23L, 666L)));
 
 		register(new DeckWrapper(1));
