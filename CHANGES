@@ -1,3 +1,7 @@
+[0.10.3]
+- EnhancedRandom now allows the option for setSeed() to take either a CharSequence, or a long and a CharSequence, to help the common usage of user-submitted seeds as text for procedural generation.
+- ExtendoRandom is new, and allows arbitrarily-large streams to alter its sequence of 2 to the 128 longs.
+
 [0.10.2]
 - Fixed a bug in DeckWrapper.stringDeserialize(), which also affected its Externalizable serialization.
 - Fixed the return types for DeckWrapper.copy() and CompositeWrapper.copy(), which now return their actual class instead of EnhancedRandom.
