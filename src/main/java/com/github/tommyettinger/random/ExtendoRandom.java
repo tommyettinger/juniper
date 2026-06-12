@@ -327,7 +327,7 @@ public final class ExtendoRandom extends EnhancedRandom {
 	 * @param in the stream to read data from in order to restore the object
 	 * @throws IOException if I/O errors occur
 	 */
-	@Override
+	@GwtIncompatible
 	public void readExternal(ObjectInput in) throws IOException {
 		final int states = in.readInt();
 		stateA = in.readLong();
