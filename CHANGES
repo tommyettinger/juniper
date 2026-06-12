@@ -1,3 +1,7 @@
+[0.10.4]
+- ExtendoRandom broke GWT because I forgot to annotate one method as GwtIncompatible. This has been fixed.
+- The dependency on digital has been updated to 0.10.1 . This fixes the Hasher.hash() and Hasher.hash64() methods that take start and length, adds Adze hashes for ByteBuffer data, and improves precision for MathTools.cbrt().
+
 [0.10.3]
 - EnhancedRandom now allows the option for setSeed() to take either a CharSequence, or a long and a CharSequence, to help the common usage of user-submitted seeds as text for procedural generation.
 - ExtendoRandom is new, and allows arbitrarily-large streams to alter its sequence of 2 to the 128 longs.
