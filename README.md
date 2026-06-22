@@ -3,24 +3,24 @@ Java pseudo-random number generation code with minimal dependencies.
 
 ![Juniper the Dog](docs/Juniper_Dog.png)
 
-## JavaDocs
+## Javadocs
 
-[JavaDocs are hosted here](https://tommyettinger.github.io/juniper/apidocs/).
+[Javadocs are hosted here](https://tommyettinger.github.io/juniper/apidocs/).
 
 ## How to get it?
 
 With Gradle, the dependency (of the core module, if you have multiple) is:
 
 ```
-api "com.github.tommyettinger:juniper:0.10.4"
+api "com.github.tommyettinger:juniper:0.10.5"
 ```
 
 In a libGDX project that has a GWT/HTML backend, the `html/build.gradle` file
 should additionally have:
 
 ```
-implementation "com.github.tommyettinger:digital:0.10.0:sources"
-implementation "com.github.tommyettinger:juniper:0.10.4:sources"
+implementation "com.github.tommyettinger:digital:0.10.2:sources"
+implementation "com.github.tommyettinger:juniper:0.10.5:sources"
 ```
 
 And the `GdxDefinition.gwt.xml` file should have:
@@ -36,9 +36,16 @@ If you don't use Gradle, then with Maven, the dependency is:
 <dependency>
   <groupId>com.github.tommyettinger</groupId>
   <artifactId>juniper</artifactId>
-  <version>0.10.4</version>
+  <version>0.10.5</version>
 </dependency>
 ```
+
+These dependencies use JitPack.io as a repo. For the reasons why, see
+[my extended rant in the digital project](https://github.com/tommyettinger/digital#rant).
+In practice, all gdx-liftoff projects already depend on JitPack.io, so they don't
+need any changes. If you're creating a project yourself, see JitPack's instructions
+[here](https://jitpack.io/#tommyettinger/juniper). JitPack provides instructions for
+Maven, Gradle, and several other build tools.
 
 There are also releases here on GitHub if you don't use any project management tool. You will need to obtain digital as
 well, of the appropriate version for the juniper release you picked.
@@ -318,7 +325,7 @@ mark Externalizable method implementations as`GwtIncompatible` with an annotatio
 with GWT. When used with Fory, you typically register any `EnhancedRandom` class or `Distribution` class you use, though
 generally you don't need to register `EnhancedRandom` or `Distribution` itself. In some cases you may need to register
 other classes, such as how `ArchivalWrapper` needs `LongSequence` registered. If a class has special requirements for
-Fory to serialize it, the `writeExternal()` JavaDocs will mention them. If you're writing a custom serializer, it may
+Fory to serialize it, the `writeExternal()` Javadocs will mention them. If you're writing a custom serializer, it may
 make the most sense to just get the result of `stringSerialize()` and store that, since that won't need other classes
 to be registered. No `Distribution` types are `Externalizable`, since they wouldn't really gain anything from it; they
 do need the `EnhancedRandom` they use registered with Fory, but otherwise can just be registered themselves normally.
