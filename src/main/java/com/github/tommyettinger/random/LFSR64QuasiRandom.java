@@ -120,7 +120,7 @@ public class LFSR64QuasiRandom extends EnhancedRandom {
 	/**
 	 * This is the same as {@link #setState(long)}.
 	 *
-	 * @param seed the initial seed; may be any long
+	 * @param seed the initial seed; may be any long except 0
 	 */
 	@Override
 	public void setSeed(long seed) {
@@ -132,9 +132,9 @@ public class LFSR64QuasiRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Sets the state completely to the given four state variables.
+	 * Sets the state completely to the given state variable.
 	 *
-	 * @param state the first state; can be any long
+	 * @param state the only state; can be any long except 0
 	 */
 	@Override
 	public void setState(long state) {

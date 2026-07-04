@@ -224,7 +224,7 @@ public final class ExtendoRandom extends EnhancedRandom {
 
 	}
 	/**
-	 * Sets the state completely to the given two state variables.
+	 * Sets the non-extended state completely to the given two state variables.
 	 * This is the same as calling {@link #setStateA(long)} and {@link #setStateB(long)}
 	 * as a group.
 	 *

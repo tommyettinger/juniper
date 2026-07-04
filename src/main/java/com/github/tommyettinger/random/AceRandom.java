@@ -338,7 +338,7 @@ public class AceRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Sets the state completely to the given two state variables.
+	 * Sets the state completely using the given two state variables.
 	 * The third state variable will be set as if you had called {@code setStateE(stateA + stateB)}.
 	 * The fourth state variable will be set as if you had called {@code setStateE(stateA ^ stateB)}.
 	 * The fifth state variable will be set as if you had called {@code setStateE(stateB - stateA)}.
@@ -358,7 +358,7 @@ public class AceRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Sets the state completely to the given three state variables.
+	 * Sets the state completely using the given three state variables.
 	 * The fourth state variable will be set as if you had called {@code setStateE(stateA + stateC)}.
 	 * The fifth state variable will be set as if you had called {@code setStateE(stateB ^ stateC)}.
 	 * This is the same as calling {@link #setStateA(long)}, {@link #setStateB(long)},
@@ -378,7 +378,7 @@ public class AceRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Sets the state completely to the given four state variables. The fifth state variable will be set as if you had
+	 * Sets the state completely using the given four state variables. The fifth state variable will be set as if you had
 	 * called {@code setStateE(stateA + stateC ^ stateB + stateD)}.
 	 * This is the same as calling {@link #setStateA(long)}, {@link #setStateB(long)},
 	 * {@link #setStateC(long)}, {@link #setStateD(long)}, and {@link #setStateE(long)} (as mentioned) as a group.

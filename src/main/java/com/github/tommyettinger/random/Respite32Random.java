@@ -242,7 +242,7 @@ public class Respite32Random extends Enhanced32Random {
 	}
 
 	/**
-	 * Sets the state completely to the given four state variables, casting each to an int.
+	 * Sets the state completely to the given three state variables, casting each to an int.
 	 * This is the same as calling {@link #setStateA(int)}, {@link #setStateB(int)},
 	 * and {@link #setStateC(int)} as a group.
 	 *

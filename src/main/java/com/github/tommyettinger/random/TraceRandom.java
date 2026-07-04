@@ -378,7 +378,7 @@ public class TraceRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Sets the state completely to the given six state variables.
+	 * Sets the state completely to the given six state/stream variables.
 	 * This is the same as calling {@link #setStream(long)}, {@link #setStateA(long)},
 	 * {@link #setStateB(long)}, {@link #setStateC(long)}, {@link #setStateD(long)}, and {@link #setStateE(long)}
 	 * as a group.

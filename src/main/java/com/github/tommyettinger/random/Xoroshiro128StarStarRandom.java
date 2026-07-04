@@ -209,7 +209,7 @@ public class Xoroshiro128StarStarRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Sets the state completely to the given four state variables.
+	 * Sets the state completely to the given two state variables.
 	 * This is the same as calling {@link #setStateA(long)} and
 	 * {@link #setStateB(long)} as a group.
 	 *

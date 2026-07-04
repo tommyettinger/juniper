@@ -201,7 +201,7 @@ public class MizuchiRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Sets the state completely to the given three state variables.
+	 * Sets the state completely to the given two state variables.
 	 * This is the same as calling {@link #setStateA(long)} and {@link #setStateB(long)}
 	 * as a group.
 	 *
