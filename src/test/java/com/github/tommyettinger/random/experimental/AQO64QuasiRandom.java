@@ -17,6 +17,7 @@
 
 package com.github.tommyettinger.random.experimental;
 
+import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.digital.Distributor;
 import com.github.tommyettinger.digital.Hasher;
 import com.github.tommyettinger.random.EnhancedRandom;
@@ -167,39 +168,76 @@ public class AQO64QuasiRandom extends EnhancedRandom {
 
 	@Override
 	public long nextLong() {
-		return (state = state * state | 7L);
+		return (state += state * state | 7L);
+	}
+
+	@Override
+	public long previousLong() {
+		final long s = state;
+		long r = 0L;
+		for (int b = 0; b < 64; b++) {
+			final long test = (((r + (r * r | 7L)) ^ s) & (-1L >>> ~b));
+			r ^= ((test | -test) >>> 63) << b;
+		}
+		state = r;
+		return s;
+	}
+
+	/**
+	 * Optional; moves the state to its previous value and returns the previous int that would have been produced by
+	 * {@link #nextInt()}. This can be equivalent to calling {@link #previousLong()} and casting to int, but not always;
+	 * generators that natively generate {@code int} results typically move the state once in nextInt() and twice in
+	 * nextLong(), and should move the state back once here.
+	 * <br>
+	 * If {@link #nextInt()} is implemented using a call to {@link #nextLong()}, the implementation in this class is
+	 * almost always sufficient and correct. If nextInt() changes state differently from nextLong(), then this should be
+	 * implemented, if feasible, and {@link #previousLong()} can be implemented using this method.
+	 * If you know how to implement the reverse of a particular random number generator, it is recommended you do so
+	 * here, rather than rely on skip(). This isn't always easy, but should always be possible for any decent PRNG (some
+	 * historical PRNGs, such as the Middle-Square PRNG, cannot be reversed at all). If a generator cannot be reversed
+	 * because multiple initial states can transition to the same subsequent state, it is known to have statistical
+	 * problems that are not necessarily present in a generator that matches one initial state to one subsequent state.
+	 * <br>
+	 * The public implementation calls {@link #previousLong()} and casts it to int, and if previousLong() and skip()
+	 * have not been implemented differently, then it will throw an UnsupportedOperationException.
+	 *
+	 * @return the previous number this would have produced with {@link #nextInt()}
+	 */
+	@Override
+	public int previousInt() {
+		return (int)(previousLong() >>> 32);
 	}
 
 	@Override
 	public int next(int bits) {
-		return (int) ((state = state * state | 7L) >>> 64 - bits);
+		return (int) ((state += state * state | 7L) >>> 64 - bits);
 	}
 
 	@Override
 	public int nextInt() {
-		return (int) ((state = state * state | 7L) >>> 32);
+		return (int) ((state += state * state | 7L) >>> 32);
 	}
 
 	@Override
 	public int nextInt(int bound) {
-		return (int) (bound * ((state = state * state | 7L) >>> 32) >> 32) & ~(bound >> 31);
+		return (int) (bound * ((state += state * state | 7L) >>> 32) >> 32) & ~(bound >> 31);
 	}
 
 	@Override
 	public int nextSignedInt(int outerBound) {
-		outerBound = (int) (outerBound * ((state = state * state | 7L) >>> 32) >> 32);
+		outerBound = (int) (outerBound * ((state += state * state | 7L) >>> 32) >> 32);
 		return outerBound + (outerBound >>> 31);
 	}
 
 	@Override
 	public double nextExclusiveDouble() {
 		/* 1.1102230246251565E-16 is 0x1p-53, 5.551115123125782E-17 is 0x1.fffffffffffffp-55 */
-		return ((state = state * state | 7L) >>> 11) * 1.1102230246251565E-16 + 5.551115123125782E-17;
+		return ((state += state * state | 7L) >>> 11) * 1.1102230246251565E-16 + 5.551115123125782E-17;
 	}
 
 	@Override
 	public double nextExclusiveSignedDouble() {
-		final long bits = (state = state * state | 7L);
+		final long bits = (state += state * state | 7L);
 		/* 1.1102230246251565E-16 is 0x1p-53, 5.551115123125782E-17 is 0x1.fffffffffffffp-55 */
 		final double n = (bits >>> 11) * 1.1102230246251565E-16 + 5.551115123125782E-17;
 		return Math.copySign(n, bits << 53);
@@ -208,12 +246,12 @@ public class AQO64QuasiRandom extends EnhancedRandom {
 	@Override
 	public float nextExclusiveFloat() {
 		/* 5.9604645E-8f is 0x1p-24f, 2.980232E-8f is 0x1.FFFFFEp-26f */
-		return ((state = state * state | 7L) >>> 40) * 5.9604645E-8f + 2.980232E-8f;
+		return ((state += state * state | 7L) >>> 40) * 5.9604645E-8f + 2.980232E-8f;
 	}
 
 	@Override
 	public float nextExclusiveSignedFloat() {
-		final long bits = (state = state * state | 7L);
+		final long bits = (state += state * state | 7L);
 		/* 5.9604645E-8f is 0x1p-24f, 2.980232E-8f is 0x1.FFFFFEp-26f */
 		final float n = (bits >>> 40) * 5.9604645E-8f + 2.980232E-8f;
 		return Math.copySign(n, bits << 24);
@@ -221,12 +259,12 @@ public class AQO64QuasiRandom extends EnhancedRandom {
 
 	@Override
 	public double nextGaussian() {
-		return Distributor.probitL(state = state * state | 7L);
+		return Distributor.probitL(state += state * state | 7L);
 	}
 
 	@Override
 	public float nextGaussianFloat() {
-		return Distributor.probitI((int) ((state = state * state | 7L) >>> 32));
+		return Distributor.probitI((int) ((state += state * state | 7L) >>> 32));
 	}
 
 	@Override
@@ -249,5 +287,63 @@ public class AQO64QuasiRandom extends EnhancedRandom {
 	@Override
 	public String toString() {
 		return "AQO64QuasiRandom{state=" + (state) + "L}";
+	}
+
+	public static void main(String[] args) {
+		AQO64QuasiRandom random = new AQO64QuasiRandom(-1L);
+		{
+			int n0 = random.nextInt();
+			int n1 = random.nextInt();
+			int n2 = random.nextInt();
+			int n3 = random.nextInt();
+			int n4 = random.nextInt();
+			int n5 = random.nextInt();
+			int p5 = random.previousInt();
+			int p4 = random.previousInt();
+			int p3 = random.previousInt();
+			int p2 = random.previousInt();
+			int p1 = random.previousInt();
+			int p0 = random.previousInt();
+			System.out.println(n0 == p0);
+			System.out.println(n1 == p1);
+			System.out.println(n2 == p2);
+			System.out.println(n3 == p3);
+			System.out.println(n4 == p4);
+			System.out.println(n5 == p5);
+			System.out.println(Base.BASE16.unsigned(n0) + " vs. " + Base.BASE16.unsigned(p0));
+			System.out.println(Base.BASE16.unsigned(n1) + " vs. " + Base.BASE16.unsigned(p1));
+			System.out.println(Base.BASE16.unsigned(n2) + " vs. " + Base.BASE16.unsigned(p2));
+			System.out.println(Base.BASE16.unsigned(n3) + " vs. " + Base.BASE16.unsigned(p3));
+			System.out.println(Base.BASE16.unsigned(n4) + " vs. " + Base.BASE16.unsigned(p4));
+			System.out.println(Base.BASE16.unsigned(n5) + " vs. " + Base.BASE16.unsigned(p5));
+		}
+		random = new AQO64QuasiRandom(-1L);
+		{
+			long n0 = random.nextLong(); System.out.printf("state: 0x%016XL\n", random.state);
+			long n1 = random.nextLong(); System.out.printf("state: 0x%016XL\n", random.state);
+			long n2 = random.nextLong(); System.out.printf("state: 0x%016XL\n", random.state);
+			long n3 = random.nextLong(); System.out.printf("state: 0x%016XL\n", random.state);
+			long n4 = random.nextLong(); System.out.printf("state: 0x%016XL\n", random.state);
+			long n5 = random.nextLong(); System.out.printf("state: 0x%016XL\n", random.state);
+			System.out.println("Going back...");
+			long p5 = random.previousLong(); System.out.printf("state: 0x%016XL\n", random.state);
+			long p4 = random.previousLong(); System.out.printf("state: 0x%016XL\n", random.state);
+			long p3 = random.previousLong(); System.out.printf("state: 0x%016XL\n", random.state);
+			long p2 = random.previousLong(); System.out.printf("state: 0x%016XL\n", random.state);
+			long p1 = random.previousLong(); System.out.printf("state: 0x%016XL\n", random.state);
+			long p0 = random.previousLong(); System.out.printf("state: 0x%016XL\n", random.state);
+			System.out.println(n0 == p0);
+			System.out.println(n1 == p1);
+			System.out.println(n2 == p2);
+			System.out.println(n3 == p3);
+			System.out.println(n4 == p4);
+			System.out.println(n5 == p5);
+			System.out.println(Base.BASE16.unsigned(n0) + " vs. " + Base.BASE16.unsigned(p0));
+			System.out.println(Base.BASE16.unsigned(n1) + " vs. " + Base.BASE16.unsigned(p1));
+			System.out.println(Base.BASE16.unsigned(n2) + " vs. " + Base.BASE16.unsigned(p2));
+			System.out.println(Base.BASE16.unsigned(n3) + " vs. " + Base.BASE16.unsigned(p3));
+			System.out.println(Base.BASE16.unsigned(n4) + " vs. " + Base.BASE16.unsigned(p4));
+			System.out.println(Base.BASE16.unsigned(n5) + " vs. " + Base.BASE16.unsigned(p5));
+		}
 	}
 }
