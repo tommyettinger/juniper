@@ -132,6 +132,12 @@ public final class Generators {
 		randomList.add(new SpiralRandom(1, 1));
 		randomList.add(new Spiral2Random(1, 1));
 		randomList.add(new MorbitalRandom(1, 1));
+		randomList.add(new CompositeWrapper(new XorShift64QuasiRandom(1), new LCG64Random(1)));
+		randomList.add(new CompositeWrapper(new LFSR64QuasiRandom(1), new LCG64Random(1)));
+		randomList.add(new CompositeWrapper(new LCG64Random(1), new Xoroshiro128StarStarRandom(1)));
+		randomList.add(new CompositeWrapper(new XorShift64QuasiRandom(1), new LaserRandom(1)));
+		randomList.add(new CompositeWrapper(new LFSR64QuasiRandom(1), new LaserRandom(1)));
+		randomList.add(new CompositeWrapper(new LFSR64QuasiRandom(1), new WhiskerRandom(1)));
 	}
 
 	public static int randomCount = randomList.size();
