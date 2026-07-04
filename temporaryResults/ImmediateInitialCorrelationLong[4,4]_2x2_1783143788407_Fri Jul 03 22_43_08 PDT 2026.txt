@@ -1,0 +1,1 @@
+[Immediate] Lowest mode: 0.000000 has mean amount 0.9097965955  FAIL 💀 for XorShift64QuasiRandom
