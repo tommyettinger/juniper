@@ -185,6 +185,11 @@ public class LCG64Random extends EnhancedRandom {
 	}
 
 	@Override
+	public int previousInt() {
+		return (int) (previousLong() >>> 32);
+	}
+
+	@Override
 	public int next(int bits) {
 		return (int) ((state = state * 0xD1342543DE82EF95L + 1L) >>> 64 - bits);
 	}

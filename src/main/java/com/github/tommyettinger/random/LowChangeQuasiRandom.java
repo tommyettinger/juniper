@@ -125,6 +125,11 @@ public class LowChangeQuasiRandom extends EnhancedRandom {
 	}
 
 	@Override
+	public int next(int bits) {
+		return (int)(state ^= 1L << ((choice += 0x9E3779B97F4A7C15L) >>> 58)) >>> 32 - bits;
+	}
+
+	@Override
 	public long previousLong() {
 		final long s = state;
 		state ^= 1L << (choice >>> 58);

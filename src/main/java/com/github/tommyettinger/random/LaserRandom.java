@@ -887,6 +887,10 @@ public class LaserRandom extends EnhancedRandom {
 		return z ^ z >>> 26 ^ z >>> 6;
 	}
 
+	public int previousInt() {
+		return (int)(previousLong());
+	}
+
 	/**
 	 * Creates a new {@code LaserRandom} with identical states to this one, so if the same LaserRandom methods are
 	 * called on this object and its copy (in the same order), the same outputs will be produced. This is not

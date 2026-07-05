@@ -189,6 +189,11 @@ public class GoldenQuasiRandom extends EnhancedRandom {
 	}
 
 	@Override
+	public int previousInt() {
+		return (int) (previousLong() >>> 32);
+	}
+
+	@Override
 	public int next(int bits) {
 		return (int) ((state += 0x9E3779B97F4A7C15L) >>> 64 - bits);
 	}
