@@ -247,6 +247,16 @@ public class Xoroshiro128StarStarRandom extends EnhancedRandom {
 	}
 
 	@Override
+	public int nextInt() {
+		return (int) (nextLong() >>> 32);
+	}
+
+	@Override
+	public int previousInt() {
+		return (int) (previousLong() >>> 32);
+	}
+
+	@Override
 	public int next(int bits) {
 		final long s0 = stateA;
 		long s1 = stateB;

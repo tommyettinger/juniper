@@ -341,6 +341,16 @@ public class Xoshiro256StarStarRandom extends EnhancedRandom {
 		return (pb << 7 | pb >>> 57) * 9;
 	}
 
+	@Override
+	public int nextInt() {
+		return (int) (nextLong() >>> 32);
+	}
+
+	@Override
+	public int previousInt() {
+		return (int) (previousLong() >>> 32);
+	}
+
 	/**
 	 * Jumps extremely far in the generator's sequence, such that it requires {@code Math.pow(2, 64)} calls to leap() to
 	 * complete a cycle through the generator's entire sequence. This can be used to create over 18 quintillion
