@@ -54,7 +54,7 @@ import java.util.Random;
  * This implements all methods from {@link EnhancedRandom}, except the optional {@link #skip(long)} method. It
  * implements {@link #previousLong()} without using skip().
  */
-public class AQO64QuasiRandom extends EnhancedRandom {
+public class Qoa64QuasiRandom extends EnhancedRandom {
 
 	/**
 	 * The only long state variable; can be any {@code long}.
@@ -62,25 +62,25 @@ public class AQO64QuasiRandom extends EnhancedRandom {
 	public long state;
 
 	/**
-	 * Creates a new AQO64QuasiRandom with a random state.
+	 * Creates a new Qoa64QuasiRandom with a random state.
 	 */
-	public AQO64QuasiRandom() {
+	public Qoa64QuasiRandom() {
 		this(EnhancedRandom.seedFromMath());
 	}
 
 	/**
-	 * Creates a new AQO64QuasiRandom with the given state; all {@code long} values are permitted.
+	 * Creates a new Qoa64QuasiRandom with the given state; all {@code long} values are permitted.
 	 *
 	 * @param state any {@code long} value
 	 */
-	public AQO64QuasiRandom(long state) {
+	public Qoa64QuasiRandom(long state) {
 		super(state);
 		this.state = state;
 	}
 
 	@Override
 	public String getTag() {
-		return "AQOR";
+		return "QoQR";
 	}
 
 	/**
@@ -268,8 +268,8 @@ public class AQO64QuasiRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public AQO64QuasiRandom copy() {
-		return new AQO64QuasiRandom(state);
+	public Qoa64QuasiRandom copy() {
+		return new Qoa64QuasiRandom(state);
 	}
 
 	@Override
@@ -279,18 +279,18 @@ public class AQO64QuasiRandom extends EnhancedRandom {
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		AQO64QuasiRandom that = (AQO64QuasiRandom) o;
+		Qoa64QuasiRandom that = (Qoa64QuasiRandom) o;
 
 		return state == that.state;
 	}
 
 	@Override
 	public String toString() {
-		return "AQO64QuasiRandom{state=" + (state) + "L}";
+		return "Qoa64QuasiRandom{state=" + (state) + "L}";
 	}
 
 	public static void main(String[] args) {
-		AQO64QuasiRandom random = new AQO64QuasiRandom(-1L);
+		Qoa64QuasiRandom random = new Qoa64QuasiRandom(-1L);
 		{
 			int n0 = random.nextInt();
 			int n1 = random.nextInt();
@@ -317,7 +317,7 @@ public class AQO64QuasiRandom extends EnhancedRandom {
 			System.out.println(Base.BASE16.unsigned(n4) + " vs. " + Base.BASE16.unsigned(p4));
 			System.out.println(Base.BASE16.unsigned(n5) + " vs. " + Base.BASE16.unsigned(p5));
 		}
-		random = new AQO64QuasiRandom(-1L);
+		random = new Qoa64QuasiRandom(-1L);
 		{
 			long n0 = random.nextLong(); System.out.printf("state: 0x%016XL\n", random.state);
 			long n1 = random.nextLong(); System.out.printf("state: 0x%016XL\n", random.state);

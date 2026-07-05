@@ -138,7 +138,8 @@ public final class Generators {
 		randomList.add(new CompositeWrapper(new XorShift64QuasiRandom(1), new LaserRandom(1)));
 		randomList.add(new CompositeWrapper(new LFSR64QuasiRandom(1), new LaserRandom(1)));
 		randomList.add(new CompositeWrapper(new LFSR64QuasiRandom(1), new WhiskerRandom(1)));
-		randomList.add(new AQO64QuasiRandom(1));
+		randomList.add(new Qoa64QuasiRandom(1));
+		randomList.add(new LCG64Random(1));
 	}
 
 	public static int randomCount = randomList.size();

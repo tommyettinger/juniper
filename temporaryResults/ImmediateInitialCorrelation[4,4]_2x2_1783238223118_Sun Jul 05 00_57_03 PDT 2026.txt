@@ -1,0 +1,1 @@
+[Immediate] Lowest mode: 67.00000 has mean amount 0.0192940235  FAIL 💀 for LCG64Random
