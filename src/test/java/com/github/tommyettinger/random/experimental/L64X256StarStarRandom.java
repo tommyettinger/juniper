@@ -99,7 +99,7 @@ public class L64X256StarStarRandom extends EnhancedRandom {
 
 	@Override
 	public String getTag() {
-		return "LXSR";
+		return "LxSR";
 	}
 
 	/**
@@ -331,6 +331,16 @@ public class L64X256StarStarRandom extends EnhancedRandom {
 		stateC ^= t;
 		stateD = (stateD << 45 | stateD >>> 19);
 		return (int) (((res << 17 | res >>> 47) * 31) >>> 64 - bits);
+	}
+
+	@Override
+	public int nextInt() {
+		return (int) (nextLong() >>> 32);
+	}
+
+	@Override
+	public int previousInt() {
+		return (int) (previousLong() >>> 32);
 	}
 
 	@Override

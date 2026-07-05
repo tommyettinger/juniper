@@ -335,6 +335,16 @@ public class C64X256MoremurRandom extends EnhancedRandom {
 	}
 
 	@Override
+	public int nextInt() {
+		return (int) (nextLong() >>> 32);
+	}
+
+	@Override
+	public int previousInt() {
+		return (int) (previousLong() >>> 32);
+	}
+
+	@Override
 	public long previousLong() {
 		stateD = (stateD << 19 | stateD >>> 45); // stateD has d ^ b
 		stateA ^= stateD; // StateA has a

@@ -98,7 +98,7 @@ public class L64X256NoMixRandom extends EnhancedRandom {
 
 	@Override
 	public String getTag() {
-		return "LXNR";
+		return "LxNR";
 	}
 
 	/**
@@ -330,6 +330,16 @@ public class L64X256NoMixRandom extends EnhancedRandom {
 		stateC ^= t;
 		stateD = (stateD << 45 | stateD >>> 19);
 		return (int) (result >>> 64 - bits);
+	}
+
+	@Override
+	public int nextInt() {
+		return (int) (nextLong() >>> 32);
+	}
+
+	@Override
+	public int previousInt() {
+		return (int) (previousLong() >>> 32);
 	}
 
 	@Override

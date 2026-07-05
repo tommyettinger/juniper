@@ -100,7 +100,7 @@ public class I64X256MoremurRandom extends EnhancedRandom {
 
 	@Override
 	public String getTag() {
-		return "CXUR";
+		return "IXUR";
 	}
 
 	/**
@@ -332,6 +332,16 @@ public class I64X256MoremurRandom extends EnhancedRandom {
 		stateC ^= t;
 		stateD = (stateD << 45 | stateD >>> 19);
 		return (int) (res >>> 64 - bits);
+	}
+
+	@Override
+	public int nextInt() {
+		return (int) (nextLong() >>> 32);
+	}
+
+	@Override
+	public int previousInt() {
+		return (int) (previousLong() >>> 32);
 	}
 
 	@Override

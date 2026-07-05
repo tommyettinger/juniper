@@ -223,6 +223,16 @@ public class L64X64PcgRandom extends EnhancedRandom {
 	}
 
 	@Override
+	public int nextInt() {
+		return (int) (nextLong() >>> 32);
+	}
+
+	@Override
+	public int previousInt() {
+		return (int) (previousLong() >>> 32);
+	}
+
+	@Override
 	public long previousLong() {
 		stateA ^= stateA >>> 9;
 		stateA ^= stateA >>> 18;
