@@ -1093,7 +1093,6 @@ public class EnhancedRandomTest {
 		}
 	}
 
-
 	@Test
 	public void testAllPreviousInt() {
 		for (EnhancedRandom r : Generators.randomList) {
@@ -1131,6 +1130,43 @@ public class EnhancedRandomTest {
 				System.out.println(random.getTag() + " does not support a required operation.");
 			} catch (AssertionError ex) {
 				System.out.println(random.getTag() + " failed: " + ex.getLocalizedMessage());
+			}
+		}
+	}
+
+
+	@Test
+	public void testAllNextVsNextInt() {
+		for (EnhancedRandom r : Deserializer.copyRandoms()) {
+//		for (EnhancedRandom r : Generators.randomList) {
+			EnhancedRandom r1 = r.copy();
+			EnhancedRandom r2 = r.copy();
+			try {
+				int i0 = r1.nextInt();
+				int i1 = r1.nextInt();
+				int i2 = r1.nextInt();
+				int i3 = r1.nextInt();
+				int i4 = r1.nextInt();
+				int i5 = r1.nextInt();
+				int i6 = r1.nextInt();
+				int n0 = r2.next(32);
+				int n1 = r2.next(32);
+				int n2 = r2.next(32);
+				int n3 = r2.next(32);
+				int n4 = r2.next(32);
+				int n5 = r2.next(32);
+				int n6 = r2.next(32);
+				Assert.assertEquals(r1.getTag(), n0, i0);
+				Assert.assertEquals(r1.getTag(), n1, i1);
+				Assert.assertEquals(r1.getTag(), n2, i2);
+				Assert.assertEquals(r1.getTag(), n3, i3);
+				Assert.assertEquals(r1.getTag(), n4, i4);
+				Assert.assertEquals(r1.getTag(), n5, i5);
+				Assert.assertEquals(r1.getTag(), n6, i6);
+			} catch (UnsupportedOperationException ex) {
+				System.out.println(r1.getTag() + " does not support a required operation.");
+			} catch (AssertionError ex) {
+				System.out.println(r1.getTag() + " failed: " + ex.getLocalizedMessage());
 			}
 		}
 	}
