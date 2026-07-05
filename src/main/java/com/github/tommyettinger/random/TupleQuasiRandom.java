@@ -202,6 +202,11 @@ public class TupleQuasiRandom extends EnhancedRandom {
 	}
 
 	@Override
+	public int previousInt() {
+		return (int) (previousLong() >>> 32);
+	}
+
+	@Override
 	public int nextInt(int bound) {
 		return (int) (bound * ((((state += 0x9E3779B97F4A7C15L) >>> shift) * MathTools.GOLDEN_LONGS[(int) (state & MASK)]) >>> 32) >> 32) & ~(bound >> 31);
 	}

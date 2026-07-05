@@ -1093,6 +1093,48 @@ public class EnhancedRandomTest {
 		}
 	}
 
+
+	@Test
+	public void testAllPreviousInt() {
+		for (EnhancedRandom r : Generators.randomList) {
+			EnhancedRandom random = r.copy();
+			try {
+				int n0 = random.nextInt();
+				int n1 = random.nextInt();
+				int n2 = random.nextInt();
+				int n3 = random.nextInt();
+				int n4 = random.nextInt();
+				int n5 = random.nextInt();
+				int n6 = random.nextInt();
+				int p6 = random.previousInt();
+				int p5 = random.previousInt();
+				int p4 = random.previousInt();
+				int p3 = random.previousInt();
+				int p2 = random.previousInt();
+				int p1 = random.previousInt();
+				int p0 = random.previousInt();
+				Assert.assertEquals(random.getTag(), n0, p0);
+				Assert.assertEquals(random.getTag(), n1, p1);
+				Assert.assertEquals(random.getTag(), n2, p2);
+				Assert.assertEquals(random.getTag(), n3, p3);
+				Assert.assertEquals(random.getTag(), n4, p4);
+				Assert.assertEquals(random.getTag(), n5, p5);
+				Assert.assertEquals(random.getTag(), n6, p6);
+				int n = random.nextInt();
+				int np = random.previousInt();
+				int npn = random.nextInt();
+				int npnp = random.previousInt();
+				Assert.assertEquals(random.getTag(), n, np);
+				Assert.assertEquals(random.getTag(), np, npn);
+				Assert.assertEquals(random.getTag(), npn, npnp);
+			} catch (UnsupportedOperationException ex) {
+				System.out.println(random.getTag() + " does not support a required operation.");
+			} catch (AssertionError ex) {
+				System.out.println(random.getTag() + " failed: " + ex.getLocalizedMessage());
+			}
+		}
+	}
+
 	@Test
 	public void testBoundedInt() {
 		DistinctRandom random = new DistinctRandom(12345L);

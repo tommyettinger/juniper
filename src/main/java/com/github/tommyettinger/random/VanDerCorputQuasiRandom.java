@@ -198,6 +198,11 @@ public class VanDerCorputQuasiRandom extends EnhancedRandom {
 	}
 
 	@Override
+	public int previousInt() {
+		return (int) (previousLong() >>> 32);
+	}
+
+	@Override
 	public int nextInt(int bound) {
 		return (int) (bound * (Long.reverse(++state) >>> 32) >> 32) & ~(bound >> 31);
 	}
