@@ -273,9 +273,18 @@ public class SpurRandom extends EnhancedRandom {
 		long c = (stateC = stateC * 0x369DEA0F31A53F85L + BitConversion.countLeadingZeros(a & b)); // L'Ecuyer 1999, errata 2005
 //		b = ((b << 56 | b >>> 8) + a ^ c); // Speck cipher round function, https://en.wikipedia.org/wiki/Speck_(cipher)
 //		a = ((a << 3 | a >>> 61) ^ b);
-		return (int) ((a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ c) >>> 64 - bits);
+		return (int) (((a << 3 | a >>> 61) ^ ((b << 56 | b >>> 8) + a ^ c)) >>> 64 - bits);
 	}
 
+	@Override
+	public int nextInt() {
+		return (int) (nextLong() >>> 32);
+	}
+
+	@Override
+	public int previousInt() {
+		return (int) (previousLong() >>> 32);
+	}
 
 	@Override
 	public SpurRandom copy() {

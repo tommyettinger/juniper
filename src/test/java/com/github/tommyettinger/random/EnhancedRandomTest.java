@@ -1137,8 +1137,8 @@ public class EnhancedRandomTest {
 
 	@Test
 	public void testAllNextVsNextInt() {
-		for (EnhancedRandom r : Deserializer.copyRandoms()) {
-//		for (EnhancedRandom r : Generators.randomList) {
+//		for (EnhancedRandom r : Deserializer.copyRandoms()) {
+		for (EnhancedRandom r : Generators.randomList) {
 			EnhancedRandom r1 = r.copy();
 			EnhancedRandom r2 = r.copy();
 			try {

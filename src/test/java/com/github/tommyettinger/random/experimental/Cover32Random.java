@@ -292,7 +292,7 @@ public class Cover32Random extends EnhancedRandom {
 		int x = (stateA = stateA + 0xD192ED03 ^ 0xBEA225FA);
 		int y = (stateB = stateB + BitConversion.countLeadingZeros(x) ^ 0xA62B82F6);
 		int z = (stateC = stateC + BitConversion.countLeadingZeros(x & y) ^ 0x9E3779BA);
-		int w = (stateD = imul((stateD << 12 | stateD >>> 20), 0xD747A13B) ^ z);
+		int w = (stateD = imul((stateD << 12 | stateD >>> 20) ^ z, 0xD747A13B));
 		int res = (x << 17 | x >>> 15) + z ^ (w << 5 | w >>> 27) ^ (y = (y << 11 | y >>> 21) + x ^ w + (z << 25 | z >>> 7)) + (y << 23 | y >>> 9);
 		res = imul(res ^ res >>> 15, 0x735a2d97);
 		return (res ^ res >>> 16) >>> (32 - bits);

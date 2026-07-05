@@ -79,7 +79,7 @@ public class Xoroshiro128Speck1Random extends EnhancedRandom {
 
 	@Override
 	public String getTag() {
-		return "XRSR";
+		return "XRsR";
 	}
 
 	/**
@@ -238,6 +238,16 @@ public class Xoroshiro128Speck1Random extends EnhancedRandom {
 		stateA = (s0 << 24 | s0 >>> 40) ^ s1 ^ (s1 << 16);
 		stateB = (s1 << 37 | s1 >>> 27);
 		return (int) (result >>> 64 - bits);
+	}
+
+	@Override
+	public int nextInt() {
+		return (int) (nextLong() >>> 32);
+	}
+
+	@Override
+	public int previousInt() {
+		return (int) (previousLong() >>> 32);
 	}
 
 	/**

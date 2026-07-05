@@ -76,7 +76,7 @@ public class TwingeRandom extends EnhancedRandom {
 
 	@Override
 	public String getTag() {
-		return "CupR";
+		return "TngR";
 	}
 
 	/**
@@ -224,6 +224,16 @@ public class TwingeRandom extends EnhancedRandom {
 		stateA = stateA * 0x369DEA0F31A53F85L + 0x2C6FE96EE78B6955L;
 		stateB = stateB * 0xD1342543DE82EF95L + 0x9E3779B97F4A7C15L;
 		return (int) ((x ^ x >>> (int) (x >>> 59) + 6) >>> (64 - bits));
+	}
+
+	@Override
+	public int nextInt() {
+		return (int) (nextLong() >>> 32);
+	}
+
+	@Override
+	public int previousInt() {
+		return (int) (previousLong() >>> 32);
 	}
 
 	@Override
