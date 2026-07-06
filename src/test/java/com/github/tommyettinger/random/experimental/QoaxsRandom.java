@@ -18,8 +18,6 @@
 package com.github.tommyettinger.random.experimental;
 
 import com.github.tommyettinger.digital.Base;
-import com.github.tommyettinger.digital.Distributor;
-import com.github.tommyettinger.digital.Hasher;
 import com.github.tommyettinger.random.EnhancedRandom;
 
 import java.math.BigInteger;
@@ -27,29 +25,33 @@ import java.util.Random;
 
 /**
  * Somewhere between a pseudo-random number generator and a quasi-random number generator, this is a simple additive
- * generator that adds a less-simple value. This has a period of 2 to the 64. Only the highest bits might pass any tests
- * for randomness. This changes the state by adding ((state times state) OR 7); it returns the current state at every
- * call to {@link #nextLong()}.
+ * generator that adds a less-simple value, and does minimal mixing on the result. This has a period of 2 to the 64.
+ * This changes the state by adding ((state times state) OR 123456789); it takes the current state and returns it
+ * XOR-shifted right by 29 at every call to {@link #nextLong()}.
  * <br>
  * Useful traits of this generator are that it has exactly one {@code long} of state, and that all values are
- * permitted for that state. The lowest bits of this generator are not random at all. Every result of
- * {@link #nextLong()} alternates between an even number and an odd number. Bits close to the lowest-order aren't much
- * better. This is mostly here as a way of testing how lower-quality low-order bits affect the quality of other methods
- * that transform the output of an EnhancedRandom. You should not rely on this generator (without significant changes)
- * on its own, <em>for anything that matters</em>.
+ * permitted for that state. This generator is currently untested for quality except on Initial Correlation Evaluator
+ * and Immediate Initial Correlation Evaluator tests, which it, surprisingly, passes.
  * <br>
- * This is decently fast, but not as fast as most generators here that can operate using instruction-level parallelism.
- * It implements {@link #nextGaussian()} and its overload specially; because the default implementation of nextGaussian
- * needs all bits to be moderately random, and the lowest-order bits of this are anything but random, implementing
- * nextGaussian with {@link Distributor#normal(long)} would produce many artifacts. Instead, this uses
- * {@link Distributor#probitL(long)}, which is a little slower usually, but mostly has its quality depend on the
- * highest-order bits, which are of good quality.
+ * This is decently fast, but not as fast as most generators here that can operate using instruction-level parallelism
+ * and don't use multiplication. A notable feature is how small the code is; the entire {@link #nextLong()} method looks
+ * like: {@code final long s = (state += state * state | 123456789L); return s ^ s >>> 29;} . Another notable feature is
+ * that it passes ICE/IICE tests, unmixed, on its high bits, when an LCG does not and only uses one less operation.
+ * <br>
+ * The constant 123456789 can be changed to any long where the low 3 bits are equal to 5 or equal to 7. The binary
+ * representation of 123456789 is {@code 0b111010110111100110100010101L}; the last three bits can be 0b101 or 0b111.
+ * This initially used 7 as the constant in the same place, but the high bits change more quickly for constants that are
+ * larger than just 5 or 7. 123456789 is a 27-bit number, and using a mid-size constant like that makes the low 27 bits
+ * of the result, before mixing, more predictable. However, after mixing with a right XOR-shift, the low-order bits
+ * improve dramatically.
+ * <br>
+ * The name Qoaxs is an abbreviation of the operations it uses: Quad (squaring state), OR, Add, XOR-Shift. The suggested
+ * pronunciation is "quack-sis."
  * <br>
  * This class is an {@link EnhancedRandom} from juniper and is also a JDK {@link Random} as a result.
  * <br>
- * This doesn't randomize the seed when given one with {@link #setSeed(long)}, and it doesn't do anything else to
- * randomize the output, so sequential seeds will produce extremely similar sequences. You can randomize sequential
- * seeds using something like {@link Hasher#randomize3(long)}, if you want random starting points.
+ * This doesn't randomize the seed when given one with {@link #setSeed(long)}, but after just one generated number, the
+ * results are decorrelated well even for sequential seeds.
  * <br>
  * This implements all methods from {@link EnhancedRandom}, except the optional {@link #skip(long)} method. It
  * implements {@link #previousLong()} without using skip().
