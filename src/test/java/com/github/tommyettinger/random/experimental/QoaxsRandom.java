@@ -80,7 +80,7 @@ public class QoaxsRandom extends EnhancedRandom {
 
 	@Override
 	public String getTag() {
-		return "AQOR";
+		return "QoxR";
 	}
 
 	/**
@@ -244,19 +244,6 @@ public class QoaxsRandom extends EnhancedRandom {
 		/* 5.9604645E-8f is 0x1p-24f, 2.980232E-8f is 0x1.FFFFFEp-26f */
 		final float n = (bits >>> 40) * 5.9604645E-8f + 2.980232E-8f;
 		return Math.copySign(n, bits << 24);
-	}
-
-	@Override
-	public double nextGaussian() {
-		final long s = (state += state * state | 123456789L);
-		return Distributor.probitL(s ^ s >>> 29);
-	}
-
-	@Override
-	public float nextGaussianFloat() {
-		final long s = (state += state * state | 123456789L);
-
-		return Distributor.probitI((int) ((s ^ s >>> 29) >>> 32));
 	}
 
 	@Override
