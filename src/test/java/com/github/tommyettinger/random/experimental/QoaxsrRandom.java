@@ -24,39 +24,38 @@ import java.math.BigInteger;
 import java.util.Random;
 
 /**
- * Somewhere between a pseudo-random number generator and a quasi-random number generator, this is a simple additive
- * generator that adds a less-simple value, and does minimal mixing on the result. This has a period of 2 to the 64.
- * This changes the state by adding ((state times state) OR 123456789); it takes the current state and returns it
- * XOR-shifted right by 29 at every call to {@link #nextLong()}.
+ * A good generator with 64 bits of state, meant to avoid large "magic numbers." This has a period of 2 to the 64.
+ * This changes the state by adding ((state times state) OR 123456789); this is a "QOA" operation and is full-period.
+ * It takes the current state and performs some mixing on it at every call to {@link #nextLong()}. The mixing is a
+ * XOR-shift right by 29, then another identical QOA operation on the currently mixed value, then returning that
+ * XOR-shifted right by 27.
  * <br>
  * Useful traits of this generator are that it has exactly one {@code long} of state, and that all values are
- * permitted for that state. This generator fails tests for quality except on Initial Correlation Evaluator
- * and Immediate Initial Correlation Evaluator tests, which it, surprisingly, passes.
+ * permitted for that state. This generator passes 128TB of PractRand tests for quality, without any anomalies. It also
+ * passes Initial Correlation Evaluator and Immediate Initial Correlation Evaluator tests.
  * <br>
  * This is decently fast, but not as fast as most generators here that can operate using instruction-level parallelism
- * and don't use multiplication. A notable feature is how small the code is; the entire {@link #nextLong()} method looks
- * like: {@code final long s = (state += state * state | 123456789L); return s ^ s >>> 29;} . Another notable feature is
- * that it passes ICE/IICE tests, unmixed, on its high bits, when an LCG does not and only uses one less operation.
+ * and don't use multiplication. Having such a small state may allow it to run faster on GraalVM.
  * <br>
  * The constant 123456789 can be changed to any long where the low 3 bits are equal to 5 or equal to 7. The binary
  * representation of 123456789 is {@code 0b111010110111100110100010101L}; the last three bits can be 0b101 or 0b111.
  * This initially used 7 as the constant in the same place, but the high bits change more quickly for constants that are
  * larger than just 5 or 7. 123456789 is a 27-bit number, and using a mid-size constant like that makes the low 27 bits
  * of the result, before mixing, more predictable. However, after mixing with a right XOR-shift, the low-order bits
- * improve dramatically.
+ * improve dramatically. Using other constants might not pass PractRand (or might pass with anomalies).
  * <br>
- * The name Qoaxs is an abbreviation of the operations it uses: Quad (squaring state), OR, Add, XOR-Shift. The suggested
- * pronunciation is "quack-sis."
+ * The name Qoaxsr is an abbreviation of the operations it uses: Quad (squaring state), OR, Add, XOR-Shift, Repeat. The
+ * suggested pronunciation is "quack-scissor."
  * <br>
  * This class is an {@link EnhancedRandom} from juniper and is also a JDK {@link Random} as a result.
  * <br>
- * This doesn't randomize the seed when given one with {@link #setSeed(long)}, but after just one generated number, the
+ * This doesn't randomize the seed when given one with {@link #setSeed(long)}, but the
  * results are decorrelated well even for sequential seeds.
  * <br>
  * This implements all methods from {@link EnhancedRandom}, except the optional {@link #skip(long)} method. It
  * implements {@link #previousLong()} without using skip().
  */
-public class QoaxsRandom extends EnhancedRandom {
+public class QoaxsrRandom extends EnhancedRandom {
 
 	/**
 	 * The only long state variable; can be any {@code long}.
@@ -64,25 +63,25 @@ public class QoaxsRandom extends EnhancedRandom {
 	public long state;
 
 	/**
-	 * Creates a new QoaxsRandom with a random state.
+	 * Creates a new QoaxsrRandom with a random state.
 	 */
-	public QoaxsRandom() {
+	public QoaxsrRandom() {
 		this(EnhancedRandom.seedFromMath());
 	}
 
 	/**
-	 * Creates a new QoaxsRandom with the given state; all {@code long} values are permitted.
+	 * Creates a new QoaxsrRandom with the given state; all {@code long} values are permitted.
 	 *
 	 * @param state any {@code long} value
 	 */
-	public QoaxsRandom(long state) {
+	public QoaxsrRandom(long state) {
 		super(state);
 		this.state = state;
 	}
 
 	@Override
 	public String getTag() {
-		return "QoxR";
+		return "QxrR";
 	}
 
 	/**
@@ -170,87 +169,38 @@ public class QoaxsRandom extends EnhancedRandom {
 
 	@Override
 	public long nextLong() {
-		final long s = (state += state * state | 123456789L);
-		return s ^ s >>> 29;
+		long s = (state += state * state | 123456789L);
+		s ^= s >>> 29;
+		s += s * s | 123456789L;
+		return s ^ s >>> 27;
 	}
 
 	@Override
 	public long previousLong() {
-		final long s = state;
+		long s = state;
 		long r = 0L;
 		for (int b = 0; b < 64; b++) {
 			final long test = (((r + (r * r | 123456789L)) ^ s) & (-1L >>> ~b));
 			r ^= ((test | -test) >>> 63) << b;
 		}
 		state = r;
-		return s ^ s >>> 29;
-	}
-
-	@Override
-	public int previousInt() {
-		return (int)(previousLong() >>> 32);
+		s ^= s >>> 29;
+		s += s * s | 123456789L;
+		return s ^ s >>> 27;
 	}
 
 	@Override
 	public int next(int bits) {
-		final long s = (state += state * state | 123456789L);
-		return (int) ((s ^ s >>> 29) >>> 64 - bits);
+		long s = (state += state * state | 123456789L);
+		s ^= s >>> 29;
+		s += s * s | 123456789L;
+		return (int) (s ^ s >>> 27) >>> 32 - bits;
 	}
 
-	@Override
-	public int nextInt() {
-		final long s = (state += state * state | 123456789L);
-		return (int) ((s ^ s >>> 29) >>> 32);
-	}
 
 	@Override
-	public int nextInt(int bound) {
-		final long s = (state += state * state | 123456789L);
-		return (int) (bound * ((s ^ s >>> 29) >>> 32) >> 32) & ~(bound >> 31);
-	}
-
-	@Override
-	public int nextSignedInt(int outerBound) {
-		final long s = (state += state * state | 123456789L);
-		outerBound = (int) (outerBound * ((s ^ s >>> 29) >>> 32) >> 32);
-		return outerBound + (outerBound >>> 31);
-	}
-
-	@Override
-	public double nextExclusiveDouble() {
-		final long s = (state += state * state | 123456789L);
-		/* 1.1102230246251565E-16 is 0x1p-53, 5.551115123125782E-17 is 0x1.fffffffffffffp-55 */
-		return ((s ^ s >>> 29) >>> 11) * 1.1102230246251565E-16 + 5.551115123125782E-17;
-	}
-
-	@Override
-	public double nextExclusiveSignedDouble() {
-		final long s = (state += state * state | 123456789L);
-		final long bits = (s ^ s >>> 29);
-		/* 1.1102230246251565E-16 is 0x1p-53, 5.551115123125782E-17 is 0x1.fffffffffffffp-55 */
-		final double n = (bits >>> 11) * 1.1102230246251565E-16 + 5.551115123125782E-17;
-		return Math.copySign(n, bits << 53);
-	}
-
-	@Override
-	public float nextExclusiveFloat() {
-		final long s = (state += state * state | 123456789L);
-		/* 5.9604645E-8f is 0x1p-24f, 2.980232E-8f is 0x1.FFFFFEp-26f */
-		return ((s ^ s >>> 29) >>> 40) * 5.9604645E-8f + 2.980232E-8f;
-	}
-
-	@Override
-	public float nextExclusiveSignedFloat() {
-		final long s = (state += state * state | 123456789L);
-		final long bits = (s ^ s >>> 29);
-		/* 5.9604645E-8f is 0x1p-24f, 2.980232E-8f is 0x1.FFFFFEp-26f */
-		final float n = (bits >>> 40) * 5.9604645E-8f + 2.980232E-8f;
-		return Math.copySign(n, bits << 24);
-	}
-
-	@Override
-	public QoaxsRandom copy() {
-		return new QoaxsRandom(state);
+	public QoaxsrRandom copy() {
+		return new QoaxsrRandom(state);
 	}
 
 	@Override
@@ -260,18 +210,18 @@ public class QoaxsRandom extends EnhancedRandom {
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		QoaxsRandom that = (QoaxsRandom) o;
+		QoaxsrRandom that = (QoaxsrRandom) o;
 
 		return state == that.state;
 	}
 
 	@Override
 	public String toString() {
-		return "QoaxsRandom{state=" + (state) + "L}";
+		return "QoaxsrRandom{state=" + (state) + "L}";
 	}
 
 	public static void main(String[] args) {
-		QoaxsRandom random = new QoaxsRandom(-1L);
+		QoaxsrRandom random = new QoaxsrRandom(-1L);
 		{
 			int n0 = random.nextInt();
 			int n1 = random.nextInt();
@@ -298,7 +248,7 @@ public class QoaxsRandom extends EnhancedRandom {
 			System.out.println(Base.BASE16.unsigned(n4) + " vs. " + Base.BASE16.unsigned(p4));
 			System.out.println(Base.BASE16.unsigned(n5) + " vs. " + Base.BASE16.unsigned(p5));
 		}
-		random = new QoaxsRandom(-1L);
+		random = new QoaxsrRandom(-1L);
 		{
 			long n0 = random.nextLong(); System.out.printf("state: 0x%016XL\n", random.state);
 			long n1 = random.nextLong(); System.out.printf("state: 0x%016XL\n", random.state);
