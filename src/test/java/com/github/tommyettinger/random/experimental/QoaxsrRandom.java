@@ -17,7 +17,6 @@
 
 package com.github.tommyettinger.random.experimental;
 
-import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.random.EnhancedRandom;
 
 import java.math.BigInteger;
@@ -42,10 +41,14 @@ import java.util.Random;
  * This initially used 7 as the constant in the same place, but the high bits change more quickly for constants that are
  * larger than just 5 or 7. 123456789 is a 27-bit number, and using a mid-size constant like that makes the low 27 bits
  * of the result, before mixing, more predictable. However, after mixing with a right XOR-shift, the low-order bits
- * improve dramatically. Using other constants might not pass PractRand (or might pass with anomalies).
+ * improve dramatically. Using other constants might not pass PractRand (or might pass with anomalies). If the low 3
+ * bits aren't 0b101 or 0b111, this won't be a full-period generator.
  * <br>
  * The name Qoaxsr is an abbreviation of the operations it uses: Quad (squaring state), OR, Add, XOR-Shift, Repeat. The
- * suggested pronunciation is "quack-scissor."
+ * suggested pronunciation is "quack-scissor." The QOA operation is a direct descendant of the XQO operation found in
+ * <a href="https://github.com/skeeto/hash-prospector/issues/23">this hash-prospector issue</a> by fp64 and Marc B.
+ * Reynolds, among others. It is also related to the formula for the nth triangular number, {@code (n + n * n) / 2},
+ * which is a bijection mod n if you can compute it without overflow.
  * <br>
  * This class is an {@link EnhancedRandom} from juniper and is also a JDK {@link Random} as a result.
  * <br>
@@ -53,7 +56,8 @@ import java.util.Random;
  * results are decorrelated well even for sequential seeds.
  * <br>
  * This implements all methods from {@link EnhancedRandom}, except the optional {@link #skip(long)} method. It
- * implements {@link #previousLong()} without using skip().
+ * implements {@link #previousLong()} without using skip(). Notably, previousLong() is significantly slower than
+ * nextLong(), requiring 64 loop iterations in addition to the work nextLong() performs.
  */
 public class QoaxsrRandom extends EnhancedRandom {
 
@@ -220,61 +224,61 @@ public class QoaxsrRandom extends EnhancedRandom {
 		return "QoaxsrRandom{state=" + (state) + "L}";
 	}
 
-	public static void main(String[] args) {
-		QoaxsrRandom random = new QoaxsrRandom(-1L);
-		{
-			int n0 = random.nextInt();
-			int n1 = random.nextInt();
-			int n2 = random.nextInt();
-			int n3 = random.nextInt();
-			int n4 = random.nextInt();
-			int n5 = random.nextInt();
-			int p5 = random.previousInt();
-			int p4 = random.previousInt();
-			int p3 = random.previousInt();
-			int p2 = random.previousInt();
-			int p1 = random.previousInt();
-			int p0 = random.previousInt();
-			System.out.println(n0 == p0);
-			System.out.println(n1 == p1);
-			System.out.println(n2 == p2);
-			System.out.println(n3 == p3);
-			System.out.println(n4 == p4);
-			System.out.println(n5 == p5);
-			System.out.println(Base.BASE16.unsigned(n0) + " vs. " + Base.BASE16.unsigned(p0));
-			System.out.println(Base.BASE16.unsigned(n1) + " vs. " + Base.BASE16.unsigned(p1));
-			System.out.println(Base.BASE16.unsigned(n2) + " vs. " + Base.BASE16.unsigned(p2));
-			System.out.println(Base.BASE16.unsigned(n3) + " vs. " + Base.BASE16.unsigned(p3));
-			System.out.println(Base.BASE16.unsigned(n4) + " vs. " + Base.BASE16.unsigned(p4));
-			System.out.println(Base.BASE16.unsigned(n5) + " vs. " + Base.BASE16.unsigned(p5));
-		}
-		random = new QoaxsrRandom(-1L);
-		{
-			long n0 = random.nextLong(); System.out.printf("state: 0x%016XL\n", random.state);
-			long n1 = random.nextLong(); System.out.printf("state: 0x%016XL\n", random.state);
-			long n2 = random.nextLong(); System.out.printf("state: 0x%016XL\n", random.state);
-			long n3 = random.nextLong(); System.out.printf("state: 0x%016XL\n", random.state);
-			long n4 = random.nextLong(); System.out.printf("state: 0x%016XL\n", random.state);
-			long n5 = random.nextLong(); System.out.printf("state: 0x%016XL\n", random.state);
-			System.out.println("Going back...");
-			long p5 = random.previousLong(); System.out.printf("state: 0x%016XL\n", random.state);
-			long p4 = random.previousLong(); System.out.printf("state: 0x%016XL\n", random.state);
-			long p3 = random.previousLong(); System.out.printf("state: 0x%016XL\n", random.state);
-			long p2 = random.previousLong(); System.out.printf("state: 0x%016XL\n", random.state);
-			long p1 = random.previousLong(); System.out.printf("state: 0x%016XL\n", random.state);
-			long p0 = random.previousLong(); System.out.printf("state: 0x%016XL\n", random.state);
-			System.out.println(n0 == p0);
-			System.out.println(n1 == p1);
-			System.out.println(n2 == p2);
-			System.out.println(n3 == p3);
-			System.out.println(n4 == p4);
-			System.out.println(n5 == p5);
-			System.out.println(Base.BASE16.unsigned(n0) + " vs. " + Base.BASE16.unsigned(p0));
-			System.out.println(Base.BASE16.unsigned(n1) + " vs. " + Base.BASE16.unsigned(p1));
-			System.out.println(Base.BASE16.unsigned(n2) + " vs. " + Base.BASE16.unsigned(p2));
-			System.out.println(Base.BASE16.unsigned(n3) + " vs. " + Base.BASE16.unsigned(p3));
-			System.out.println(Base.BASE16.unsigned(n4) + " vs. " + Base.BASE16.unsigned(p4));
-			System.out.println(Base.BASE16.unsigned(n5) + " vs. " + Base.BASE16.unsigned(p5));
-		}
-	}
+//	public static void main(String[] args) {
+//		QoaxsrRandom random = new QoaxsrRandom(-1L);
+//		{
+//			int n0 = random.nextInt();
+//			int n1 = random.nextInt();
+//			int n2 = random.nextInt();
+//			int n3 = random.nextInt();
+//			int n4 = random.nextInt();
+//			int n5 = random.nextInt();
+//			int p5 = random.previousInt();
+//			int p4 = random.previousInt();
+//			int p3 = random.previousInt();
+//			int p2 = random.previousInt();
+//			int p1 = random.previousInt();
+//			int p0 = random.previousInt();
+//			System.out.println(n0 == p0);
+//			System.out.println(n1 == p1);
+//			System.out.println(n2 == p2);
+//			System.out.println(n3 == p3);
+//			System.out.println(n4 == p4);
+//			System.out.println(n5 == p5);
+//			System.out.println(Base.BASE16.unsigned(n0) + " vs. " + Base.BASE16.unsigned(p0));
+//			System.out.println(Base.BASE16.unsigned(n1) + " vs. " + Base.BASE16.unsigned(p1));
+//			System.out.println(Base.BASE16.unsigned(n2) + " vs. " + Base.BASE16.unsigned(p2));
+//			System.out.println(Base.BASE16.unsigned(n3) + " vs. " + Base.BASE16.unsigned(p3));
+//			System.out.println(Base.BASE16.unsigned(n4) + " vs. " + Base.BASE16.unsigned(p4));
+//			System.out.println(Base.BASE16.unsigned(n5) + " vs. " + Base.BASE16.unsigned(p5));
+//		}
+//		random = new QoaxsrRandom(-1L);
+//		{
+//			long n0 = random.nextLong(); System.out.printf("state: 0x%016XL\n", random.state);
+//			long n1 = random.nextLong(); System.out.printf("state: 0x%016XL\n", random.state);
+//			long n2 = random.nextLong(); System.out.printf("state: 0x%016XL\n", random.state);
+//			long n3 = random.nextLong(); System.out.printf("state: 0x%016XL\n", random.state);
+//			long n4 = random.nextLong(); System.out.printf("state: 0x%016XL\n", random.state);
+//			long n5 = random.nextLong(); System.out.printf("state: 0x%016XL\n", random.state);
+//			System.out.println("Going back...");
+//			long p5 = random.previousLong(); System.out.printf("state: 0x%016XL\n", random.state);
+//			long p4 = random.previousLong(); System.out.printf("state: 0x%016XL\n", random.state);
+//			long p3 = random.previousLong(); System.out.printf("state: 0x%016XL\n", random.state);
+//			long p2 = random.previousLong(); System.out.printf("state: 0x%016XL\n", random.state);
+//			long p1 = random.previousLong(); System.out.printf("state: 0x%016XL\n", random.state);
+//			long p0 = random.previousLong(); System.out.printf("state: 0x%016XL\n", random.state);
+//			System.out.println(n0 == p0);
+//			System.out.println(n1 == p1);
+//			System.out.println(n2 == p2);
+//			System.out.println(n3 == p3);
+//			System.out.println(n4 == p4);
+//			System.out.println(n5 == p5);
+//			System.out.println(Base.BASE16.unsigned(n0) + " vs. " + Base.BASE16.unsigned(p0));
+//			System.out.println(Base.BASE16.unsigned(n1) + " vs. " + Base.BASE16.unsigned(p1));
+//			System.out.println(Base.BASE16.unsigned(n2) + " vs. " + Base.BASE16.unsigned(p2));
+//			System.out.println(Base.BASE16.unsigned(n3) + " vs. " + Base.BASE16.unsigned(p3));
+//			System.out.println(Base.BASE16.unsigned(n4) + " vs. " + Base.BASE16.unsigned(p4));
+//			System.out.println(Base.BASE16.unsigned(n5) + " vs. " + Base.BASE16.unsigned(p5));
+//		}
+//	}
 }
