@@ -15,9 +15,7 @@
  *
  */
 
-package com.github.tommyettinger.random.experimental;
-
-import com.github.tommyettinger.random.EnhancedRandom;
+package com.github.tommyettinger.random;
 
 import java.math.BigInteger;
 import java.util.Random;
@@ -53,7 +51,7 @@ import java.util.Random;
  * This class is an {@link EnhancedRandom} from juniper and is also a JDK {@link Random} as a result.
  * <br>
  * This doesn't randomize the seed when given one with {@link #setSeed(long)}, but the
- * results are decorrelated well even for sequential seeds.
+ * results are decorrelated well even for sequential seeds after one generation.
  * <br>
  * This implements all methods from {@link EnhancedRandom}, except the optional {@link #skip(long)} method. It
  * implements {@link #previousLong()} without using skip(). Notably, previousLong() is significantly slower than
