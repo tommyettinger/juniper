@@ -1,0 +1,1 @@
+Lowest mode: 115.0000 has mean amount 0.0310887768  PASS 👍 for YarnRandom
