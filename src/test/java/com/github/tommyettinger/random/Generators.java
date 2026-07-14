@@ -142,6 +142,7 @@ public final class Generators {
 		randomList.add(new LCG64Random(1));
 		randomList.add(new QoaxsRandom(1));
 		randomList.add(new WoolRandom(1));
+		randomList.add(new YarnRandom(1));
 	}
 
 	public static int randomCount = randomList.size();
