@@ -140,7 +140,7 @@ public class YarnRandom extends EnhancedRandom {
 	@Override
 	public long nextLong() {
 		long x = (state += 5555555555555555555L);
-		x ^= x >>> 29;
+		x += x * x | 123456789L;
 		x += x * x | 123456789L;
 		return x ^ x >>> 27;
 	}
@@ -159,7 +159,7 @@ public class YarnRandom extends EnhancedRandom {
 	@Override
 	public long skip(long advance) {
 		long x = (state += advance * 5555555555555555555L);
-		x ^= x >>> 29;
+		x += x * x | 123456789L;
 		x += x * x | 123456789L;
 		return x ^ x >>> 27;
 	}
@@ -168,7 +168,7 @@ public class YarnRandom extends EnhancedRandom {
 	public long previousLong() {
 		long x = state;
 		state -= 5555555555555555555L;
-		x ^= x >>> 29;
+		x += x * x | 123456789L;
 		x += x * x | 123456789L;
 		return x ^ x >>> 27;
 	}
@@ -176,7 +176,7 @@ public class YarnRandom extends EnhancedRandom {
 	@Override
 	public int next(int bits) {
 		long x = (state += 5555555555555555555L);
-		x ^= x >>> 29;
+		x += x * x | 123456789L;
 		x += x * x | 123456789L;
 		return (int) (x ^ x >>> 27) >>> (32 - bits);
 	}
