@@ -178,11 +178,12 @@ public class WoolRandom extends EnhancedRandom {
 
 	@Override
 	public long nextLong() {
-		long x = (state += 5555555555555555555L);
-		x += x * x | 123456789L;
-		x ^= x >>> 29;
-		x += x * x | 123456789L;
-		return x ^ x >>> 27;
+		long x = (state += 5555555555555555555L); // nineteen 5's in decimal
+		x += x * x | 0x65535L; // this constant is a memorable number in decimal, but here is those digits in hex.
+		x ^= x >>> 29; // these shifts need to be slightly different, and larger than the constant above in bits.
+		x += x * x | 0x65535L; // in decimal, this is 415029L, which isn't as memorable as the largest 16-bit number.
+		x ^= x >>> 27;
+		return x;
 	}
 
 	/**
@@ -199,9 +200,9 @@ public class WoolRandom extends EnhancedRandom {
 	@Override
 	public long skip(long advance) {
 		long x = (state += advance * 5555555555555555555L);
-		x += x * x | 123456789L;
+		x += x * x | 0x65535L;
 		x ^= x >>> 29;
-		x += x * x | 123456789L;
+		x += x * x | 0x65535L;
 		return x ^ x >>> 27;
 	}
 
@@ -209,18 +210,18 @@ public class WoolRandom extends EnhancedRandom {
 	public long previousLong() {
 		long x = state;
 		state -= 5555555555555555555L;
-		x += x * x | 123456789L;
+		x += x * x | 0x65535L;
 		x ^= x >>> 29;
-		x += x * x | 123456789L;
+		x += x * x | 0x65535L;
 		return x ^ x >>> 27;
 	}
 
 	@Override
 	public int next(int bits) {
 		long x = (state += 5555555555555555555L);
-		x += x * x | 123456789L;
+		x += x * x | 0x65535L;
 		x ^= x >>> 29;
-		x += x * x | 123456789L;
+		x += x * x | 0x65535L;
 		return (int) (x ^ x >>> 27) >>> (32 - bits);
 	}
 
