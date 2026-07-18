@@ -22,8 +22,8 @@ import com.github.tommyettinger.random.EnhancedRandom;
 import java.math.BigInteger;
 
 /**
- * Another attempt at a no-big-magic-numbers generator; very experimental.
- * This is a simplified version of {@link WoolRandom}.
+ * Another attempt at a no-hard-to-remember-numbers generator; very experimental.
+ * This is a modified version of {@link WoolRandom} meant to work in GDScript.
  */
 public class YarnRandom extends EnhancedRandom {
 
@@ -51,7 +51,7 @@ public class YarnRandom extends EnhancedRandom {
 
 	@Override
 	public String getTag() {
-		return "WolR";
+		return "YarR";
 	}
 
 	/**
@@ -148,10 +148,10 @@ public class YarnRandom extends EnhancedRandom {
 	public long mix(long x) {
 		x ^= 7L; // Optional, can be used to break up patterns when x is incremented by specific numbers.
 		x *= 5555555555555555555L; // Nineteen 5's; could also be 3's or 7's, or almost any big odd number, really.
-		x += x * x | 123456789L; // The 123456789L constant can be any number of comparable size, ORed with 5L.
+		x += x * x | 0x65535; // The 0x65535 constant can be any number of comparable size (5 hex digits), ORed with 5.
 		x ^= x >> 29 ^ x >> 63; // Signed right shifts because that's all GDScript has.
-		x += x * x | 123456789L; // This can use the same or a different constant as above.
-		x ^= x >> 27 ^ x >> 63; // One different shift; this matters for unclear reasons.
+		x += x * x | 0x65535; // This can use the same or a different constant as above.
+		x ^= x >> 27 ^ x >> 63; // One different shift; that it is different matters for unclear reasons.
 		return x;
 	}
 
