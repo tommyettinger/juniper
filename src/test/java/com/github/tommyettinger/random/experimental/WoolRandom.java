@@ -23,31 +23,32 @@ import java.math.BigInteger;
 
 /**
  * A tiny hash-on-counter generator that has been designed specifically to use only constants that a human can remember.
- * Uses two bijective Xor-Square-Or operations along with a bitwise rotation and a xor-shift. Allows all states, and
+ * Uses two bijective Quad-Or-Add operations, each followed by a different xor-shift. Allows all states, and
  * will eventually produce every 64-bit output from {@link #nextLong()} (it is 1D-equidistributed exactly). This
  * generator passes 64TB of PractRand testing with no anomalies. It also passes Initial Correlation Evaluator (ICE)
  * tests, including Immediate Initial Correlation Evaluator (IICE) tests, which mostly means the unary hash function
  * used is high-quality when given sufficiently-different inputs. The large odd-number counter used here guarantees all
  * inputs to the hash will be quite different when used as a PRNG.
  * <br>
- * The constants used here are {@code 5555555555555555555L} for the counter increment (nineteen decimal digits, all of
- * them {@code 5}; if you try using twenty repetitions of {@code 5}, that won't fit in a {@code long}), bitwise OR with
- * 7, and bitwise unsigned right shifts by 27 (with a left shift by -27 to make one a bitwise rotation).
+ * The constants used here include:
+ * <ul>
+ *     <li>{@code 5555555555555555555L} for the counter increment (nineteen decimal digits, all of them {@code 5}; if
+ *     you try using twenty repetitions of {@code 5}, that won't fit in a {@code long}),</li>
+ *     <li>QOA constant 0x65535, which was initially selected as a joke but turns out to perform very well in testing;
+ *     it has the same decimal digits as the largest (unsigned) 16-bit number, but is given as a hex constant with 0x,</li>
+ *     <li>and the unsigned right shifts 29 and 27, which must be larger than the number of bits in the QOA constants.</li>
  * <br>
- * The most complicated operation here is xor-square-or, which unlike most math involving multiplying
- * a number by itself, is possible to invert (it is bijective), which is a critical property to ensure equidistribution.
- * <a href="https://github.com/skeeto/hash-prospector/issues/23#issuecomment-1288120841">The inverse can be found here</a>
- * along with the thread that discovered the pattern is bijective in the first place. Xor-square-or, or XQO, looks like
- * {@code x ^= (x * x) | 1;}, with some variations possible; any odd number can be used instead of 1. In the
- * most extreme case, 1 can be replaced with -1, which makes the entire step equivalent to `x ^= -1;` or `x = ~x;`,
- * which is also a bijection (every input {@code x} corresponds to exactly one different output {@code ~x}). The reason
- * squaring is preferable to a multiplication by a constant is simply performance; according to
- * <a href="https://godbolt.org/z/h8Eb1sE9e">Godbolt Compiler Explorer</a>, squaring a 64-bit variable requires only two
- * expensive {@code vpmuludq} operations, while multiplying a 64-bit variable by a 64-bit constant requires three. This
- * is also the reason why a bitwise rotation is used directly instead of a more-typical xor-shift in the third line;
- * xor-shift requires two operations (a XOR and an unsigned right shift), while in theory a bitwise rotation can be only
- * one operation. It isn't a single operation in Compiler Explorer's output (for whatever reason, Clang performs a left
- * and a right shift and bitwise ORs them, which may be faster for AVX vectors), but it might be in the JVM's output.
+ * The most complicated operation here is QOA, or quad-or-add. This performs two identical QOA operations and uses right
+ * XOR-shifts after each. A QOA operation looks like {@code x = ((x * x) | CONSTANT) + x;}, or more simply if you know
+ * the order of operations, {@code x += x * x | CONSTANT;}. CONSTANT can be any number if it equals 5 or 7 after running
+ * {@code CONSTANT % 8} or {@code CONSTANT & 7}. It should probably be positive and its scale shouldn't be too large.
+ * This last part is important; the XOR-shifts here are by 29 and 27, and if you were to change a CONSTANT to be larger
+ * than 27 bits in size, the generator would fail tests. We use 0x65535 here, which is 23 bits in size, and that works.
+ * Curiously, if you were to run a QOA operation with the same constant over and over again, it wouldn't repeat a value
+ * for {@code x} until it had produced every possible value for {@code x} exactly once. QOA is related to the formula
+ * for the nth triangular number, which is {@code ((n * n) + n) / 2}. If you can compute triangular numbers without
+ * overflow, and as a final step limit them to 64 bits, then every 64-bit n will have a different nth triangular number
+ * masked to fit in 64 bits.
  * <br>
  * This generator is strongly inspired by the design (and memorability) of the
  * <a href="https://arxiv.org/abs/2004.06278">Squares generator</a>, but unlike Squares, this generator is
@@ -60,8 +61,10 @@ import java.math.BigInteger;
  * You can use a very similar algorithm as a stateless hash function with
  * {@link com.github.tommyettinger.digital.Hasher#randomizeH(long)}. There are sometimes advantages to using a stateless
  * function, such as in massively-parallel contexts, that individual random number generator objects can't beat.
+ * Hasher's randomizeH function uses a similar style of function with smaller constants and XQO rather than QOA
+ * operations, which are similar and still bijective, but lack some of the aforementioned properties.
  * <br>
- * The name comes from how a horn fits on a ram, and this generator should fit in a person's random-access memory.
+ * The name comes from how wool fits on a ram, and this generator could fit in a person's RAM (memory).
  */
 @SuppressWarnings("ShiftOutOfRange")
 public class WoolRandom extends EnhancedRandom {
