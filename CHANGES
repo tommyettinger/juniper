@@ -1,3 +1,10 @@
+[0.10.6]
+- QoaxsrRandom added to official generators; this uses a complex state update that is still full-period.
+- WoolRandom added to official generators; this is like QoaxsrRandom but uses a large-increment counter instead of a complex update to its state.
+
+[0.10.5]
+- Releases moved to JitPack and digital updated to 0.10.2 (also a JitPack move release); no API changes.
+
 [0.10.4]
 - ExtendoRandom broke GWT because I forgot to annotate one method as GwtIncompatible. This has been fixed.
 - The dependency on digital has been updated to 0.10.1 . This fixes the Hasher.hash() and Hasher.hash64() methods that take start and length, adds Adze hashes for ByteBuffer data, and improves precision for MathTools.cbrt().
