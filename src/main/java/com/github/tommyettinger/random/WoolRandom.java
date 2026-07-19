@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022-2025 See AUTHORS file.
+ * Copyright (c) 2022-2026 See AUTHORS file.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,7 @@
  *
  */
 
-package com.github.tommyettinger.random.experimental;
-
-import com.github.tommyettinger.random.EnhancedRandom;
+package com.github.tommyettinger.random;
 
 import java.math.BigInteger;
 
@@ -25,7 +23,7 @@ import java.math.BigInteger;
  * A tiny hash-on-counter generator that has been designed specifically to use only constants that a human can remember.
  * Uses two bijective Quad-Or-Add operations, each followed by a different xor-shift. Allows all states, and
  * will eventually produce every 64-bit output from {@link #nextLong()} (it is 1D-equidistributed exactly). This
- * generator passes 64TB of PractRand testing with no anomalies. It also passes Initial Correlation Evaluator (ICE)
+ * generator passes 128TB of PractRand testing with no anomalies. It also passes Initial Correlation Evaluator (ICE)
  * tests, including Immediate Initial Correlation Evaluator (IICE) tests, which mostly means the unary hash function
  * used is high-quality when given sufficiently-different inputs. The large odd-number counter used here guarantees all
  * inputs to the hash will be quite different when used as a PRNG.
@@ -63,6 +61,10 @@ import java.math.BigInteger;
  * function, such as in massively-parallel contexts, that individual random number generator objects can't beat.
  * Hasher's randomizeH function uses a similar style of function with smaller constants and XQO rather than QOA
  * operations, which are similar and still bijective, but lack some of the aforementioned properties.
+ * <br>
+ * This is very similar in code to {@link QoaxsrRandom}, but this generator updates its state with a simple counter,
+ * where QoaxsrRandom updates its state using a QOA operation. The counter appears to be slightly faster in some cases,
+ * because loops that only update a counter (instead of the more complex QOA operation) may be more easily optimized.
  * <br>
  * The name comes from how wool fits on a ram, and this generator could fit in a person's RAM (memory).
  */

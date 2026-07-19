@@ -23,7 +23,7 @@ import java.math.BigInteger;
 
 /**
  * Another attempt at a no-hard-to-remember-numbers generator; very experimental.
- * This is a modified version of {@link WoolRandom} meant to work in GDScript.
+ * This is a modified version of {@link com.github.tommyettinger.random.WoolRandom} meant to work in GDScript.
  */
 public class YarnRandom extends EnhancedRandom {
 
