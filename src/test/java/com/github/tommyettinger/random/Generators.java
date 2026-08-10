@@ -145,6 +145,7 @@ public final class Generators {
 		randomList.add(new CompositeWrapper(new LFSR64QuasiRandom(1), new QoaxsRandom(1)));
 		randomList.add(new TriQoaRandom(1, 1, 1));
 		randomList.add(new WoolRandom(1));
+		randomList.add(new CelloRandom(1, 1, 1, 1));
 	}
 
 	public static int randomCount = randomList.size();
