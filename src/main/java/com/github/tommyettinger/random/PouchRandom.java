@@ -47,7 +47,9 @@ import java.math.BigInteger;
  * This passes at least 64TB of PractRand testing without anomalies. It also passes 179 PB of ReMort testing without
  * anomalies. This passes Initial Correlation Evaluator tests, but not Immediate Initial Correlation Evaluator tests.
  * That means it isn't suitable as a hashing function given its states as input unless many (over 25) results are
- * collected before being used.
+ * collected before being used. Some other four-state generators in this library never pass ICE or IICE tests, like
+ * WhiskerRandom, ScruffRandom, and StrangerRandom. Others are like this one, failing IICE but passing ICE, such as
+ * Sfc64Random, FourWheelRandom, and TrimRandom.
  * <br>
  * This implements all optional methods in EnhancedRandom except {@link #skip(long)}; it does implement
  * {@link #previousLong()} without using skip().

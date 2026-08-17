@@ -18,16 +18,25 @@
 package com.github.tommyettinger.random;
 
 /**
- * A random number generator that is extremely fast on Java 16, and has a very large probable period.
+ * A random number generator that is very fast on Java 16, and has a very large probable period.
+ * This is not the fastest generator with the same state size and period guarantee here; that would be
+ * {@link WhiskerRandom} or {@link PouchRandom} (which has a larger minimum guaranteed period).
  * This generator is measurably faster than {@link TricycleRandom} on Java 16 but slightly slower than it on Java 8.
- * It can be considered stable, like the other EnhancedRandom implementations here. Testing performed should be sufficient,
- * but more can always be done; this passes at least 64TB of PractRand and 2PB of hwd without issues. The second test, hwd,
- * only checks for a specific type of quality issue, but also fails if the period is exhausted; going through 2 to the 52
- * bytes of data (taking over a week to do so) without exhausting the period should be a strong sign that it will have
- * enough period for most tasks. While this is known to fail one test ("remortality," a check for how long it takes for the
- * bitwise AND/OR of sequential results to reach all 0 bits or all 1 bits), it takes 300PB of data processed to reach
- * a failure point, which is astronomically more than most apps will ever produce. {@link StrangerRandom} is probably
- * stronger, but not as fast; {@link TrimRandom} is much stronger but also not quite as fast as this class (it is close).
+ * It can be considered stable, like the other EnhancedRandom implementations here.
+ * <br>
+ * Testing performed should be sufficient, but more can always be done; this passes at least 64TB of PractRand and 2PB
+ * of hwd without issues. The second test, hwd, only checks for a specific type of quality issue, but also fails if the
+ * period is exhausted; going through 2 to the 52 bytes of data (taking over a week to do so) without exhausting the
+ * period should be a strong sign that it will have enough period for most tasks. While this is known to fail one test
+ * ("remortality," a check for how long it takes for the bitwise AND/OR of sequential results to reach all 0 bits or all
+ * 1 bits), it takes 300PB of data processed to reach a failure point, which is astronomically more than most apps will
+ * ever produce.
+ * <br>
+ * This passes Initial Correlation Evaluator tests, but not Immediate Initial Correlation Evaluator tests.
+ * That means it isn't suitable as a hashing function given its states as input unless many (over 25) results are
+ * collected before being used. Some other four-state generators in this library never pass ICE or IICE tests, like
+ * WhiskerRandom, ScruffRandom, and StrangerRandom. Others are like this one, failing IICE but passing ICE, such as
+ * Sfc64Random, PouchRandom, and TrimRandom.
  * <br>
  * The algorithm used here has four states purely to exploit instruction-level parallelism; it isn't trying to extend the
  * period of the generator beyond about 2 to the 64 (the expected bare minimum, though some cycles will likely be much

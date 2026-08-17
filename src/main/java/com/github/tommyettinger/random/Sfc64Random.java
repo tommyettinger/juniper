@@ -24,6 +24,12 @@ import java.math.BigInteger;
  * It has a guaranteed minimum period of 2 to the 64, but an expected period that is drastically larger. Using
  * {@link #nextLong()} does not use multiplication, but using {@link #previousLong()} does.
  * <br>
+ * This passes Initial Correlation Evaluator tests, but not Immediate Initial Correlation Evaluator tests.
+ * That means it isn't suitable as a hashing function given its states as input unless many (over 25) results are
+ * collected before being used. Some other four-state generators in this library never pass ICE or IICE tests, like
+ * WhiskerRandom, ScruffRandom, and StrangerRandom. Others are like this one, failing IICE but passing ICE, such as
+ * FourWheelRandom, PouchRandom, and TrimRandom.
+ * <br>
  * The algorithm and implementation here can be considered stable.
  * <br>
  * This implements all optional methods in EnhancedRandom except {@link #skip(long)}; it does implement

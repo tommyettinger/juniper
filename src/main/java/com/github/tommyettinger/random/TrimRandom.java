@@ -22,12 +22,9 @@ import java.math.BigInteger;
 /**
  * A random number generator that is very fast on Java 16+, has both a very large probable period and a large guaranteed
  * minimum period, and uses only add, bitwise-rotate, and XOR operations (no multiplication). This generator is not as
- * fast as {@link FourWheelRandom} or {@link WhiskerRandom} on machines that can multiply {@code long} values quickly,
- * but is faster than just about everything else (except {@link TricycleRandom} and {@link DistinctRandom} on Java 8
- * with HotSpot, or DistinctRandom on most OpenJ9 versions). If this algorithm is run on a GPU, on most hardware it will
- * be significantly faster than FourWheelRandom (indeed, it was faster than any other algorithm I tested on a low-end
- * GPU, though it's been reported that it performs the same as FourWheelRandom on a much better GPU, hitting some
- * bottleneck other than calculation speed).
+ * fast as {@link PouchRandom} or {@link WhiskerRandom} on machines that can multiply {@code long} values quickly,
+ * but is faster than many other generators. If this algorithm is run on a GPU, on most hardware it will
+ * be significantly faster than WhiskerRandom.
  * <br>
  * This can now be considered stable, like the other EnhancedRandom subclasses here. Testing performed should be
  * sufficient, but more can always be done; this passes at least 64TB of PractRand without issues, and passes a much more
@@ -39,6 +36,12 @@ import java.math.BigInteger;
  * is even more sizeable. Unfortunately, some initial states appear to be statistically weaker than others, and some may
  * have suspect results on or fail a Remortality test after a few PB. {@link WhiskerRandom} seems stronger and faster on
  * desktop CPUs, but could be slower instead if you use its algorithm on a GPU.
+ * <br>
+ * This passes Initial Correlation Evaluator tests, but not Immediate Initial Correlation Evaluator tests.
+ * That means it isn't suitable as a hashing function given its states as input unless many (over 40) results are
+ * collected before being used. Some other four-state generators in this library never pass ICE or IICE tests, like
+ * WhiskerRandom, ScruffRandom, and StrangerRandom. Others are like this one, failing IICE but passing ICE, such as
+ * Sfc64Random, PouchRandom, and FourWheelRandom.
  * <br>
  * This was changed a few times; when the algorithm could be strengthened, I took the chance to do so. The most recent
  * change made the first number returned a little more robust; where before it was always the incoming value of
