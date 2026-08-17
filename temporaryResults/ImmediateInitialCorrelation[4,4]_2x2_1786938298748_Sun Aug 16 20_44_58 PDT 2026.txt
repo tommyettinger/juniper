@@ -1,0 +1,1 @@
+[Immediate] Lowest mode: 22.00000 has mean amount 0.2081978321  FAIL 💀 for TrimRandom

@@ -145,7 +145,15 @@ public final class Generators {
 		randomList.add(new CompositeWrapper(new LFSR64QuasiRandom(1), new QoaxsRandom(1)));
 		randomList.add(new TriQoaRandom(1, 1, 1));
 		randomList.add(new WoolRandom(1));
+		randomList.add(new WhiskerRandom(1, 1, 1, 1));
 		randomList.add(new CelloRandom(1, 1, 1, 1));
+		randomList.add(new PouchRandom(1, 1, 1, 1));
+		randomList.add(new TrimRandom(1, 1, 1, 1));
+		randomList.add(new ScruffRandom(1, 1, 1, 1));
+		randomList.add(new Sfc64Random(1, 1, 1, 1));
+		randomList.add(new ThrooshRandom(1, 1, 1, 1));
+		randomList.add(new StrangerRandom(1, 1, 1, 1));
+		randomList.add(new FourWheelRandom(1, 1, 1, 1));
 	}
 
 	public static int randomCount = randomList.size();

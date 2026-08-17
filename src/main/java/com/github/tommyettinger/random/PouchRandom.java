@@ -45,7 +45,9 @@ import java.math.BigInteger;
  * about 18 for AceRandom.
  * <br>
  * This passes at least 64TB of PractRand testing without anomalies. It also passes 179 PB of ReMort testing without
- * anomalies.
+ * anomalies. This passes Initial Correlation Evaluator tests, but not Immediate Initial Correlation Evaluator tests.
+ * That means it isn't suitable as a hashing function given its states as input unless many (over 25) results are
+ * collected before being used.
  * <br>
  * This implements all optional methods in EnhancedRandom except {@link #skip(long)}; it does implement
  * {@link #previousLong()} without using skip().

@@ -1,0 +1,1 @@
+Lowest mode: 0.000000 has mean amount 0.6931692808  FAIL 💀 for ScruffRandom
