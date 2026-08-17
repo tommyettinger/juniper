@@ -36,6 +36,11 @@ import java.math.BigInteger;
  * 2 to the 64 (which currently takes longer than a month to exhaust on one machine, though if you attacked a generator
  * using a top-notch GPU, you could get close... if you happened to find a cycle with an incredibly low multiple).
  * <br>
+ * This fails Initial Correlation Evaluator and Immediate Initial Correlation Evaluator tests.
+ * That means it isn't suitable as a hashing function given its states as input. Some other four-state generators in
+ * this library never pass ICE or IICE tests, like WhiskerRandom and StrangerRandom. Others fail IICE but
+ * pass ICE, such as Sfc64Random, PouchRandom, TrimRandom, and FourWheelRandom.
+ * <br>
  * The name continues the theme of WhiskerRandom, naming generators after where my cats like to get scratched.
  */
 public class ScruffRandom extends EnhancedRandom {

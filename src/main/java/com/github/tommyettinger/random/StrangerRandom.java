@@ -45,6 +45,11 @@ import java.math.BigInteger;
  * not easy. This generator is meant in particular to optimize well for GPU computations, even though Java doesn't have much
  * ability to do this currently. Some uncommon platforms may also optimize this better than FourWheelRandom.
  * <br>
+ * This fails Initial Correlation Evaluator and Immediate Initial Correlation Evaluator tests.
+ * That means it isn't suitable as a hashing function given its states as input. Some other four-state generators in
+ * this library never pass ICE or IICE tests, like WhiskerRandom and ScruffRandom. Others fail IICE but
+ * pass ICE, such as Sfc64Random, PouchRandom, TrimRandom, and FourWheelRandom.
+ * <br>
  * It is strongly recommended that you seed this with {@link #setSeed(long)} instead of
  * {@link #setState(long, long, long, long)}, because if you give sequential seeds to both setSeed() and setState(), the
  * former will start off random, while the latter will start off repeating the seed sequence. After about 20-40 random

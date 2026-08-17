@@ -25,6 +25,7 @@ import java.math.BigInteger;
  * fast as generators like {@link AceRandom} and {@link TraceRandom} on the JVM.)
  * Passes Initial Correlation Evaluator (ICE) testing with 75 steps; passes 64TB of PractRand with no anomalies.
  * The ICE test indicates whether similar initial states decorrelate over time, and they do here, but not immediately.
+ * That means this fails IICE tests, and so isn't suitable as a hash function given its states as inputs.
  * The PractRand test suite tests for a wide array of quality issues, but only uses one initial state per run, and runs
  * for a very long time.
  * <br>

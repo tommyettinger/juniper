@@ -20,7 +20,7 @@ package com.github.tommyettinger.random;
 import java.math.BigInteger;
 
 /**
- * The second-fastest generator here on recent JDKs, with a huge probable period but no minimum period guarantee.
+ * One of the fastest generator here on recent JDKs, with a huge probable period but no minimum period guarantee.
  * This generator is extremely similar to {@link FourWheelRandom}; they use the same operations except for an additional
  * subtraction that FourWheelRandom uses. Removing this one operation, and changing the order of and constants used by
  * the other operations, improves both quality and speed here. This can be considered stable, like the other
@@ -43,6 +43,11 @@ import java.math.BigInteger;
  * issues. This has been tested with Remortality, and it passes over 179 PB of that test without any suspect results.
  * {@link StrangerRandom} is not as fast; {@link TrimRandom} offers a guaranteed minimum period of 2 to the 64, but
  * isn't as fast, and may have statistical issues with some initial seeds sooner than it would with others.
+ * <br>
+ * This fails Initial Correlation Evaluator and Immediate Initial Correlation Evaluator tests.
+ * That means it isn't suitable as a hashing function given its states as input. Some other four-state generators in
+ * this library never pass ICE or IICE tests, like ScruffRandom and StrangerRandom. Others fail IICE but
+ * pass ICE, such as Sfc64Random, PouchRandom, TrimRandom, and FourWheelRandom.
  * <br>
  * The algorithm used here has four states just to exploit instruction-level parallelism; it isn't trying to extend the
  * period of the generator beyond about 2 to the 64 (the expected bare minimum, though some cycles will likely be much
