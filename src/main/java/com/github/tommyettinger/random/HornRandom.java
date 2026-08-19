@@ -59,6 +59,10 @@ import java.math.BigInteger;
  * {@link com.github.tommyettinger.digital.Hasher#randomizeH(long)}. There are sometimes advantages to using a stateless
  * function, such as in massively-parallel contexts, that individual random number generator objects can't beat.
  * <br>
+ * Some other generators in juniper have the "distinct" quality this generator has:
+ * DistinctRandom, Mx3Random, QoaxsrRandom, WoolRandom, LCG64Random, GoldenQuasiRandom, and VanDerCorputQuasiRandom
+ * all will also output every long value exactly once over their period, each of which has the same period as this.
+ * <br>
  * The name comes from how a horn fits on a ram, and this generator should fit in a person's random-access memory.
  */
 @SuppressWarnings("ShiftOutOfRange")

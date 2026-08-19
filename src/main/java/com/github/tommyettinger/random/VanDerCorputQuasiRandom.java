@@ -42,6 +42,10 @@ import java.util.Random;
  * <br>
  * This class is an {@link EnhancedRandom} from juniper and is also a JDK {@link Random} as a result.
  * <br>
+ * Some other generators in juniper have the "distinct" quality this generator has:
+ * DistinctRandom, HornRandom, QoaxsrRandom, WoolRandom, LCG64Random, Mx3Random, and GoldenQuasiRandom
+ * all will also output every long value exactly once over their period, each of which has the same period as this.
+ * <br>
  * This doesn't randomize the seed when given one with {@link #setSeed(long)}, and it doesn't do anything else to
  * randomize the output, so sequential seeds will produce extremely similar sequences. You can randomize sequential
  * seeds using something like {@link Hasher#randomize3(long)}, if you want random starting points.

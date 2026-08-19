@@ -34,8 +34,10 @@ import java.util.Random;
  * It is also fairly fast.
  * <br>
  * This class is an {@link EnhancedRandom} from juniper and is also a JDK {@link Random} as a result.
- * Besides DistinctRandom, no other PRNGS in juniper have the "distinct" quality, but most of the "Quasi-Random"
- * generators do have it as well.
+ * <br>
+ * Some other generators in juniper have the "distinct" quality this generator has:
+ * DistinctRandom, HornRandom, QoaxsrRandom, WoolRandom, LCG64Random, GoldenQuasiRandom, and VanDerCorputQuasiRandom
+ * all will also output every long value exactly once over their period, each of which has the same period as this.
  * <br>
  * Unlike the multiple-state generators here, DistinctRandom tolerates being given sequential seeds and/or states, and
  * in fact doesn't randomize the seed when given one with {@link #setSeed(long)}.

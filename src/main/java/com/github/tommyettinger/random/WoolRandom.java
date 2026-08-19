@@ -66,6 +66,10 @@ import java.math.BigInteger;
  * where QoaxsrRandom updates its state using a QOA operation. The counter appears to be slightly faster in some cases,
  * because loops that only update a counter (instead of the more complex QOA operation) may be more easily optimized.
  * <br>
+ * Some other generators in juniper have the "distinct" quality this generator has:
+ * DistinctRandom, HornRandom, QoaxsrRandom, Mx3Random, LCG64Random, GoldenQuasiRandom, and VanDerCorputQuasiRandom
+ * all will also output every long value exactly once over their period, each of which has the same period as this.
+ * <br>
  * The name comes from how wool fits on a ram, and this generator could fit in a person's RAM (memory).
  */
 @SuppressWarnings("ShiftOutOfRange")

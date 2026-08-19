@@ -50,6 +50,10 @@ import java.util.Random;
  * <br>
  * This class is an {@link EnhancedRandom} from juniper and is also a JDK {@link Random} as a result.
  * <br>
+ * Some other generators in juniper have the "distinct" quality this generator has:
+ * DistinctRandom, HornRandom, Mx3Random, WoolRandom, LCG64Random, GoldenQuasiRandom, and VanDerCorputQuasiRandom
+ * all will also output every long value exactly once over their period, each of which has the same period as this.
+ * <br>
  * This doesn't randomize the seed when given one with {@link #setSeed(long)}, but the
  * results are decorrelated well even for sequential seeds after one generation.
  * <br>

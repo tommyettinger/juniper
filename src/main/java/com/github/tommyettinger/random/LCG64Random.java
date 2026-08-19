@@ -52,6 +52,10 @@ import java.util.Random;
  * randomize the output, so sequential seeds will produce extremely similar sequences. You can randomize sequential
  * seeds using something like {@link Hasher#randomize3(long)}, if you want random starting points.
  * <br>
+ * Some other generators in juniper have the "distinct" quality this generator has:
+ * DistinctRandom, HornRandom, QoaxsrRandom, WoolRandom, Mx3Random, GoldenQuasiRandom, and VanDerCorputQuasiRandom
+ * all will also output every long value exactly once over their period, each of which has the same period as this.
+ * <br>
  * This implements all methods from {@link EnhancedRandom}, except the optional {@link #skip(long)} method. It
  * implements {@link #previousLong()} without using skip().
  * <br>
