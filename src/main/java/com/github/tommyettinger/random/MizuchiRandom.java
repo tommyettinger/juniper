@@ -33,6 +33,10 @@ import java.math.BigInteger;
  * MizuchiRandom passes 64TB of testing with PractRand, which uses a suite of tests to look for a variety of potential
  * problems. It has not been tested with hwd or remortality. All the generators here are considered stable.
  * <br>
+ * This generator passes Initial Correlation Evaluator (ICE) and Immediate Initial Correlation Evaluator (IICE) tests,
+ * meaning it is at least potentially suitable as a hashing algorithm for two long inputs entered as its states. It has
+ * only been tested with every-other a and b state because it only permits odd states for stateB.
+ * <br>
  * The name comes from combining the concept of a dragon, with streams. A mythological theme was carried throughout some
  * generators that I designed and that were designed by others, such as Fortuna. Mizuchi allows many possible streams, so
  * the mizuchi, a (by some versions of the story) river dragon from Japanese mythology, seemed fitting.
@@ -41,8 +45,6 @@ import java.math.BigInteger;
  * given to a two-state generator like LaserRandom (visible patterns are obviously correlated with LaserRandom but are
  * not at all correlated with MizuchiRandom). Second, MizuchiRandom is often the fastest 64-bit generator available in
  * the closely-related C# library ShaiRandom, and for compatibility purposes it makes sense to support this in both.
- * This generator is not especially fast here compared to LaserRandom, especially on OpenJ9, nor is it fast compared to
- * FourWheelRandom on HotSpot JDKs, but it does maintain its quality well.
  */
 public class MizuchiRandom extends EnhancedRandom {
 

@@ -57,6 +57,9 @@ import java.math.BigInteger;
  * and never uses unknown or untested sequences. The relationship between the
  * two sequences is what determines the current stream.
  * <br>
+ * This generator passes Initial Correlation Evaluator (ICE) and Immediate Initial Correlation Evaluator (IICE) tests,
+ * meaning it is at least potentially suitable as a hashing algorithm for two long inputs entered as its states.
+ * <br>
  * All streams, in time, flow to the sea...
  */
 public class FlowRandom extends EnhancedRandom {

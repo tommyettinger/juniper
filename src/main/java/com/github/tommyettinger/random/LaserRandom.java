@@ -84,6 +84,10 @@ import java.util.Random;
  * better if you use its setSeed(long) method. We do implement Xoshiro256** here, because it provides
  * 4-dimensional equidistribution, and that is hard to find.
  * <br>
+ * This generator fails Initial Correlation Evaluator (ICE) and Immediate Initial Correlation Evaluator (IICE) tests,
+ * meaning that its streams are correlated if their initial values are similar. In this case, different streams are
+ * likely correlated even if initial values are not similar.
+ * <br>
  * You can copy this class independently of the library it's part of; it's meant as a general replacement for
  * Random and also RandomXS128. LaserRandom is generally faster than RandomXS128, and can be over 3x faster
  * when running on OpenJ9 (generating over 3 billion random long values per second). If you copy this, the

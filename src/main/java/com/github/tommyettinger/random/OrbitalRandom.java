@@ -50,6 +50,9 @@ import java.math.BigInteger;
  * it can't be seeded with all 0 states, which could be a burden, and it's slower than this. Both
  * of those generators offer 4-dimensional equidistribution, whereas this only offers
  * 1-dimensional, and that might be a deciding factor.
+ * <br>
+ * This generator passes Initial Correlation Evaluator (ICE) and Immediate Initial Correlation Evaluator (IICE) tests,
+ * meaning it is at least potentially suitable as a hashing algorithm for two long inputs entered as its states.
  */
 public class OrbitalRandom extends EnhancedRandom {
 
