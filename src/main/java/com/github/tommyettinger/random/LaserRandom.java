@@ -21,9 +21,13 @@ import java.math.BigInteger;
 import java.util.Random;
 
 /**
- * A faster and much-higher-quality substitute for {@link Random}. This allows many different random number
+ * A multiple-stream generator that can substitute in for {@link Random}. This allows many different random number
  * streams that don't overlap, and offers a more substantial API for commonly-used functions. This is not a
- * cryptographic random number generator, and should not be used in place of one.
+ * cryptographic random number generator, and should not be used in place of one. While it has many streams, those
+ * streams are badly correlated with each other, though it is possible randomly initializing streams avoids
+ * correlation. A better choice in most cases is {@link FlowRandom}, which has the same period but more streams.
+ * If you have to copy and paste a generator, this is a decent choice, but it's best to depend on Juniper as an entire
+ * library (along with its dependency, digital) so all the parts it uses are present.
  * <br>
  * This fills in much of the functionality of MathUtils in libGDX, though with all code as instance methods
  * instead of static methods, and some things renamed (randomTriangular() became {@link #nextTriangular()},

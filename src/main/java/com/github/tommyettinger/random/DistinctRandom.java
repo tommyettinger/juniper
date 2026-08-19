@@ -42,11 +42,15 @@ import java.util.Random;
  * It is also quite fast, though not as fast as {@link TricycleRandom} or {@link WhiskerRandom} on Java 16 or newer.
  * <br>
  * This class is an {@link EnhancedRandom} from juniper and is also a JDK {@link Random} as a result.
- * It can often be used as a substitute for {@link LaserRandom}. LaserRandom has comparable speed, and supports many
- * streams, but if you want just one {@code long} of state, DistinctRandom is a better fit. For higher speed on Java
- * 16 or higher, HotSpot, you can use {@link TricycleRandom} or {@link WhiskerRandom} (WhiskerRandom is preferred
- * if you only target Java 16+). Those generators also should have a longer period than DistinctRandom except in
- * infinitesimally-rare cases. No other generators in juniper have the "distinct" quality this generator has.
+ * If you need a longer period while still maintaining a guarantee of equidistribution, you can use OrbitRandom, which
+ * acts like DistinctRandom's mixer used on a pair of states that update over a cycle of 2 to the 128 long outputs.
+ * If you need a much longer period and are fine with 0 being returned once less-often, you can use Xoshiro256MX3Random.
+ * If you need an even faster generator that avoids multiplication, you can use AceRandom. If multiplication is expected
+ * to be fast, you can use PouchRandom.
+ * <br>
+ * Some other generators in juniper have the "distinct" quality this generator has:
+ * HornRandom, Mx3Random, QoaxsrRandom, WoolRandom, LCG64Random, GoldenQuasiRandom, and VanDerCorputQuasiRandom all will
+ * also output every long value exactly once over their period, each of which has the same period as this.
  * <br>
  * Unlike the multiple-state generators here, DistinctRandom tolerates being given sequential seeds and/or states, and
  * in fact doesn't randomize the seed when given one with {@link #setSeed(long)}. This is the only generator here that
