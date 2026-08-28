@@ -1,6 +1,8 @@
 [0.10.6]
 - QoaxsrRandom added to official generators; this uses a complex state update that is still full-period.
 - WoolRandom added to official generators; this is like QoaxsrRandom but uses a large-increment counter instead of a complex update to its state.
+- XorShiftBasic64QuasiRandom added to official (quasi-random) generators; this is the simplest Marsaglia-style xorshift generator, with two taps. This type is possible for 64-bit word sizes, but not 32-bit.
+- XorShift64QuasiRandom added to official (quasi-random) generators; this is a less-simple Marsaglia-style xorshift generator, and unlike the above generator, was actually discovered by George Marsaglia in his paper about xorshift generators.
 
 [0.10.5]
 - Releases moved to JitPack and digital updated to 0.10.2 (also a JitPack move release); no API changes.
