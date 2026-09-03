@@ -1,0 +1,1 @@
+[Immediate] Lowest mode: 107.0000 has mean amount 0.0244805216  FAIL 💀 for GyozaRandom
