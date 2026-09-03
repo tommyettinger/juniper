@@ -37,7 +37,7 @@ import java.math.BigInteger;
  * generated numbers to break initial correlations. It has a period of (2 to the 128) minus (2 to the 64). It is
  * 1D-equidistributed over its period, producing each {@code long} output exactly (2 to the 64) minus 1 times.
  */
-public class GyozaRandom extends EnhancedRandom {
+public class LowGyo1Random extends EnhancedRandom {
 
 	/**
 	 * The first (LFSR) state; can be any long except 0.
@@ -49,9 +49,9 @@ public class GyozaRandom extends EnhancedRandom {
 	protected long stateB;
 
 	/**
-	 * Creates a new GyozaRandom with a random state.
+	 * Creates a new LowGyo1Random with a random state.
 	 */
-	public GyozaRandom() {
+	public LowGyo1Random() {
 		super();
 		stateA = EnhancedRandom.seedFromMath();
 		stateB = EnhancedRandom.seedFromMath();
@@ -60,24 +60,24 @@ public class GyozaRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Creates a new GyozaRandom with the given seed; all {@code long} values are permitted.
+	 * Creates a new LowGyo1Random with the given seed; all {@code long} values are permitted.
 	 * The seed will be passed to {@link #setSeed(long)} to attempt to adequately distribute the seed randomly.
 	 *
 	 * @param seed any {@code long} value
 	 */
-	public GyozaRandom(long seed) {
+	public LowGyo1Random(long seed) {
 		super(seed);
 		setSeed(seed);
 	}
 
 	/**
-	 * Creates a new GyozaRandom with the given two states; all {@code long} values are permitted except 0 for
+	 * Creates a new LowGyo1Random with the given two states; all {@code long} values are permitted except 0 for
 	 * stateA. If stateA is given as 0, {@code 1234567890987654321L} is used instead.
 	 *
 	 * @param stateA any {@code long} value except 0
 	 * @param stateB any {@code long} value
 	 */
-	public GyozaRandom(long stateA, long stateB) {
+	public LowGyo1Random(long stateA, long stateB) {
 		super(stateA);
 		this.stateA = stateA;
 		this.stateB = stateB;
@@ -87,7 +87,7 @@ public class GyozaRandom extends EnhancedRandom {
 
 	@Override
 	public String getTag() {
-		return "GyzR";
+		return "LG1R";
 	}
 
 	/**
@@ -213,7 +213,7 @@ public class GyozaRandom extends EnhancedRandom {
 	public long nextLong() {
 		long lfsr = stateA, x = stateB ^ lfsr;
 
-		x ^= x >> 29 & (1L << 29) - 1L; // Signed right shifts because that's all GDScript has.
+//		x ^= x >> 29 & (1L << 29) - 1L; // Signed right shifts because that's all GDScript has.
 		x *= 5555555555555555555L; // Nineteen base-10 digits.
 		x ^= x >> 28 & (1L << 28) - 1L; // Using the mask makes the signed shift act like an unsigned one, for known amounts.
 		x *= 3333333333333333333L; // Nineteen base-10 digits.
@@ -228,7 +228,7 @@ public class GyozaRandom extends EnhancedRandom {
 	public int next(int bits) {
 		long lfsr = stateA, x = stateB ^ lfsr;
 
-		x ^= x >> 29 & (1L << 29) - 1L; // Signed right shifts because that's all GDScript has.
+//		x ^= x >> 29 & (1L << 29) - 1L; // Signed right shifts because that's all GDScript has.
 		x *= 5555555555555555555L; // Nineteen base-10 digits.
 		x ^= x >> 28 & (1L << 28) - 1L; // Using the mask makes the signed shift act like an unsigned one, for known amounts.
 		x *= 3333333333333333333L; // Nineteen base-10 digits.
@@ -246,7 +246,7 @@ public class GyozaRandom extends EnhancedRandom {
 		stateA = (stateA >>> 1) ^ lsb << 63;
 		stateB -= 7777777777777777777L;
 		long x = stateA ^ stateB;
-		x ^= x >> 29 & (1L << 29) - 1L;
+//		x ^= x >> 29 & (1L << 29) - 1L;
 		x *= 5555555555555555555L;
 		x ^= x >> 28 & (1L << 28) - 1L;
 		x *= 3333333333333333333L;
@@ -264,7 +264,7 @@ public class GyozaRandom extends EnhancedRandom {
 	public long leap() {
 		long lfsr = stateA, x = stateB ^ lfsr;
 
-		x ^= x >> 29 & (1L << 29) - 1L; // Signed right shifts because that's all GDScript has.
+//		x ^= x >> 29 & (1L << 29) - 1L; // Signed right shifts because that's all GDScript has.
 		x *= 5555555555555555555L; // Nineteen base-10 digits.
 		x ^= x >> 28 & (1L << 28) - 1L; // Using the mask makes the signed shift act like an unsigned one, for known amounts.
 		x *= 3333333333333333333L; // Nineteen base-10 digits.
@@ -275,8 +275,8 @@ public class GyozaRandom extends EnhancedRandom {
 	}
 
 	@Override
-	public GyozaRandom copy() {
-		return new GyozaRandom(stateA, stateB);
+	public LowGyo1Random copy() {
+		return new LowGyo1Random(stateA, stateB);
 	}
 
 	@Override
@@ -286,7 +286,7 @@ public class GyozaRandom extends EnhancedRandom {
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		GyozaRandom that = (GyozaRandom) o;
+		LowGyo1Random that = (LowGyo1Random) o;
 
 		if (stateA != that.stateA)
 			return false;
@@ -294,11 +294,11 @@ public class GyozaRandom extends EnhancedRandom {
 	}
 
 	public String toString() {
-		return "GyozaRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L}";
+		return "LowGyo1Random{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L}";
 	}
 
 //	public static void main(String[] args) {
-//		GyozaRandom random = new GyozaRandom(1L);
+//		LowGyo1Random random = new LowGyo1Random(1L);
 //		{
 //			int n0 = random.nextInt();
 //			int n1 = random.nextInt();
@@ -325,7 +325,7 @@ public class GyozaRandom extends EnhancedRandom {
 //			System.out.println(BASE16.unsigned(n4) + " vs. " + BASE16.unsigned(p4));
 //			System.out.println(BASE16.unsigned(n5) + " vs. " + BASE16.unsigned(p5));
 //		}
-//		random = new GyozaRandom(1L);
+//		random = new LowGyo1Random(1L);
 //		{
 //			long n0 = random.nextLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL\n", random.stateA, random.stateB);
 //			long n1 = random.nextLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL\n", random.stateA, random.stateB);
