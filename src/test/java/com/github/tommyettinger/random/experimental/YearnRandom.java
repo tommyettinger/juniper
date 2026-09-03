@@ -147,7 +147,7 @@ public class YearnRandom extends EnhancedRandom {
 	 */
 	public long mix(long x) {
 		x ^= x >> 29 ^ x >> 63; // Signed right shifts because that's all GDScript has.
-		x *= 7777777777777777777L; // Nineteen base-10 digits.
+		x *= 5555555555555555555L; // Nineteen base-10 digits.
 		x ^= x >> 28 ^ x >> 63; // Different shift amounts are needed.
 		x *= 3333333333333333333L; // Nineteen base-10 digits.
 		x ^= x >> 27 ^ x >> 63; // Another different shift amount.
@@ -156,7 +156,7 @@ public class YearnRandom extends EnhancedRandom {
 
 	@Override
 	public long nextLong() {
-		state += 5555555555555555555L;
+		state += 7777777777777777777L;
 		return mix(state);
 	}
 
@@ -173,20 +173,20 @@ public class YearnRandom extends EnhancedRandom {
 	 */
 	@Override
 	public long skip(long advance) {
-		state += 5555555555555555555L * advance;
+		state += 7777777777777777777L * advance;
 		return mix(state);
 	}
 
 	@Override
 	public long previousLong() {
 		final long result = mix(state);
-		state -= 5555555555555555555L;
+		state -= 7777777777777777777L;
 		return result;
 	}
 
 	@Override
 	public int next(int bits) {
-		state += 5555555555555555555L;
+		state += 7777777777777777777L;
 		return (int) (mix(state)) >>> (32 - bits);
 	}
 

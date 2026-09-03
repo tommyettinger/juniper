@@ -139,7 +139,6 @@ public final class Generators {
 		randomList.add(new CompositeWrapper(new LFSR64QuasiRandom(1), new LaserRandom(1)));
 		randomList.add(new CompositeWrapper(new LFSR64QuasiRandom(1), new WhiskerRandom(1)));
 		randomList.add(new Qoa64QuasiRandom(1));
-		randomList.add(new LCG64Random(1));
 		randomList.add(new QoaxsRandom(1));
 		randomList.add(new CompositeWrapper(new LFSR64QuasiRandom(1), new QoaxsRandom(1)));
 		randomList.add(new TriQoaRandom(1, 1, 1));
