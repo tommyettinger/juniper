@@ -152,6 +152,7 @@ public final class Generators {
 		randomList.add(new YearnRandom(1));
 		randomList.add(new GyozaRandom(1, 1));
 		randomList.add(new LowGyo1Random(1, 1));
+		randomList.add(new LowGyo2Random(1, 1));
 	}
 
 	public static int randomCount = randomList.size();
