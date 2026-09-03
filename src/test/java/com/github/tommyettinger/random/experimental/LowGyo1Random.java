@@ -161,12 +161,12 @@ public class LowGyo1Random extends EnhancedRandom {
 		long x = (seed + 1234567890987654321L);
 		x ^= x >> 32 & ((1L << 32) - 1L);
 		x *= 3333333333333333333L;
-		x ^= x >> 29 & ((1L << 29) - 1L);
+		x ^= x >> 29 & ((1L << 35) - 1L);
 		x *= 5555555555555555555L;
 		stateA = (x == 0L) ? 1234567890987654321L : x;
 		x ^= x >> 32 & ((1L << 32) - 1L);
 		x *= 7777777777777777777L;
-		stateB = x ^ (x >> 29 & ((1L << 29) - 1L));
+		stateB = x ^ (x >> 29 & ((1L << 35) - 1L));
 	}
 
 	public long getStateA() {
@@ -219,7 +219,7 @@ public class LowGyo1Random extends EnhancedRandom {
 		x ^= x >> 32 & (1L << 32) - 1L; // The mask can be pre-computed, but then we need magic numbers.
 		x ^= lfsr;
 		lfsr ^= lfsr << 7;
-		stateA = lfsr ^ (lfsr >> 9 & ((1L << 9) - 1L));
+		stateA = lfsr ^ (lfsr >> 9 & ((1L << 55) - 1L));
 		stateB = stateB * 3333333333333333333L + 5555555555555555555L;
 		return x;
 	}
@@ -234,7 +234,7 @@ public class LowGyo1Random extends EnhancedRandom {
 		x ^= x >> 32 & (1L << 32) - 1L; // The mask can be pre-computed, but then we need magic numbers.
 		x ^= lfsr;
 		lfsr ^= lfsr << 7;
-		stateA = lfsr ^ (lfsr >> 9 & ((1L << 9) - 1L));
+		stateA = lfsr ^ (lfsr >> 9 & ((1L << 55) - 1L));
 		stateB = stateB * 3333333333333333333L + 5555555555555555555L;
 		return (int)x >>> 32 - bits;
 	}
@@ -245,9 +245,9 @@ public class LowGyo1Random extends EnhancedRandom {
 		stateA ^= stateA << 14;
 		stateA ^= stateA << 28;
 		stateA ^= stateA << 56;
-		stateA ^= stateA >> 9  & ((1L << 9 ) - 1L);
-		stateA ^= stateA >> 18 & ((1L << 18) - 1L);
-		stateA ^= stateA >> 36 & ((1L << 36) - 1L);
+		stateA ^= stateA >> 9  & ((1L << 55) - 1L);
+		stateA ^= stateA >> 18 & ((1L << 46) - 1L);
+		stateA ^= stateA >> 36 & ((1L << 28) - 1L);
 		stateB = (stateB - 5555555555555555555L) * 7281247690506633213L;
 		long x = stateA ^ stateB;
 		x *= 5555555555555555555L; // Nineteen base-10 digits.
@@ -274,7 +274,7 @@ public class LowGyo1Random extends EnhancedRandom {
 
 		x ^= lfsr;
 		lfsr ^= lfsr << 7;
-		stateA = lfsr ^ (lfsr >> 9 & ((1L << 9) - 1L));
+		stateA = lfsr ^ (lfsr >> 9 & ((1L << 55) - 1L));
 		return x;
 	}
 
