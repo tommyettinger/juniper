@@ -22,14 +22,17 @@ import com.github.tommyettinger.random.EnhancedRandom;
 import java.math.BigInteger;
 
 /**
- * A generator that tries to avoid magic constants except for a particularly fun one, and is compatible with GDScript's
- * limitation of no unsigned right bitwise shifts.
+ * A generator that tries to avoid magic constants while having a long-enough period for anything in a game.
+ * It is compatible with GDScript's limitation of no unsigned right bitwise shifts.
+ * This uses a XEX (XOR-Encrypt-XOR) step to mix an LFSR into what is otherwise a MurmurHash-like mixer on a counter.
  * <br>
- * The 64-bit LFSR was found by <a href="https://github.com/hayguen/mlpolygen">mlpolygen</a>.
+ * The 64-bit LFSR was found on
+ * <a href="https://spreadsheets.google.com/ccc?key=0AvYtZsho-JTldFRYZnJLRFFaSWtUcVNXc1Y3M2VWd1E&hl=en">this spreadsheet</a>
+ * linked from <a href="https://en.wikipedia.org/wiki/Linear-feedback_shift_register">Wikipedia's LFSR article</a>.
  * <br>
- * This is largely an excuse to use the hex constant {@code 0xfeedbabedeadbeefL} in production, since it is somehow made
- * of real words and is also still a full-period LFSR polynomial. The other reason it exists is to compare Moremur
- * against the PCG-Random-based step used by {@link LCG64LFSR64PcgRandom}, which doesn't randomize that well sometimes.
+ * This passes Initial Correlation Evaluator tests, but not Immediate Initial Correlation Evaluator tests. It needs 8
+ * generated numbers to break initial correlations. It has a period of (2 to the 128) minus (2 to the 64). It is
+ * 1D-equidistributed over its period, producing each {@code long} output exactly (2 to the 64) minus 1 times.
  */
 public class GyozaRandom extends EnhancedRandom {
 
@@ -213,7 +216,7 @@ public class GyozaRandom extends EnhancedRandom {
 		x *= 3333333333333333333L; // Nineteen base-10 digits.
 		x ^= x >> 27 & (-1L >>> 27); // Another different shift amount.
 
-		stateA = (lfsr << 1) ^ (lfsr >> 63 & 0xfeedbabedeadbeefL);
+		stateA = (lfsr << 1) ^ (lfsr >> 63 & 27L); // 27 is a maximal-length LFSR polynomial for 64 bits.
 		stateB += 7777777777777777777L;
 		return lfsr ^ x;
 	}
@@ -228,7 +231,7 @@ public class GyozaRandom extends EnhancedRandom {
 		x *= 3333333333333333333L; // Nineteen base-10 digits.
 		x ^= x >> 27 & (-1L >>> 27); // Another different shift amount.
 
-		stateA = (lfsr << 1) ^ (lfsr >> 63 & 0xfeedbabedeadbeefL);
+		stateA = (lfsr << 1) ^ (lfsr >> 63 & 27L); // 27 is a maximal-length LFSR polynomial for 64 bits.
 		stateB += 7777777777777777777L;
 		return (int) (lfsr ^ x) >>> 32 - bits;
 	}
@@ -236,7 +239,7 @@ public class GyozaRandom extends EnhancedRandom {
 	@Override
 	public long previousLong() {
 		long lsb = (stateA & 1L);
-		stateA ^= (-lsb & 0xfeedbabedeadbeefL);
+		stateA ^= (-lsb & 27L);
 		stateA = (stateA >>> 1) ^ lsb << 63;
 		stateB -= 7777777777777777777L;
 		long x = stateA ^ stateB;
@@ -264,7 +267,7 @@ public class GyozaRandom extends EnhancedRandom {
 		x *= 3333333333333333333L; // Nineteen base-10 digits.
 		x ^= x >> 27 & (-1L >>> 27); // Another different shift amount.
 
-		stateA = (lfsr << 1) ^ (lfsr >> 63 & 0xfeedbabedeadbeefL);
+		stateA = (lfsr << 1) ^ (lfsr >> 63 & 27L); // 27 is a maximal-length LFSR polynomial for 64 bits.
 		return lfsr ^ x;
 	}
 
