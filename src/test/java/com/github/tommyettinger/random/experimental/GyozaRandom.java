@@ -26,9 +26,10 @@ import java.math.BigInteger;
  * It is compatible with GDScript's limitation of no unsigned right bitwise shifts.
  * This uses a XEX (XOR-Encrypt-XOR) step to mix an LFSR into what is otherwise a MurmurHash-like mixer on a counter.
  * <br>
- * The 64-bit LFSR was found on
+ * The 64-bit LFSR with the polynomial 27 was found on
  * <a href="https://spreadsheets.google.com/ccc?key=0AvYtZsho-JTldFRYZnJLRFFaSWtUcVNXc1Y3M2VWd1E&hl=en">this spreadsheet</a>
- * linked from <a href="https://en.wikipedia.org/wiki/Linear-feedback_shift_register">Wikipedia's LFSR article</a>.
+ * linked from <a href="https://en.wikipedia.org/wiki/Linear-feedback_shift_register">Wikipedia's LFSR article</a>. It
+ * had to have its tap order reversed because this LFSR uses a left shift where the table assumes a right shift.
  * <br>
  * This passes Initial Correlation Evaluator tests, but not Immediate Initial Correlation Evaluator tests. It needs 8
  * generated numbers to break initial correlations. It has a period of (2 to the 128) minus (2 to the 64). It is
@@ -53,7 +54,7 @@ public class GyozaRandom extends EnhancedRandom {
 		stateA = EnhancedRandom.seedFromMath();
 		stateB = EnhancedRandom.seedFromMath();
 		if ((stateA) == 0L)
-			stateA = 0x9E3779B97F4A7C15L;
+			stateA = 1234567890987654321L;
 	}
 
 	/**
@@ -69,7 +70,7 @@ public class GyozaRandom extends EnhancedRandom {
 
 	/**
 	 * Creates a new GyozaRandom with the given two states; all {@code long} values are permitted except 0 for
-	 * stateA. If stateA is given as 0, {@code 0x9E3779B97F4A7C15L} (or {@code -7046029254386353131L}) is used instead.
+	 * stateA. If stateA is given as 0, {@code 1234567890987654321L} is used instead.
 	 *
 	 * @param stateA any {@code long} value except 0
 	 * @param stateB any {@code long} value
@@ -79,7 +80,7 @@ public class GyozaRandom extends EnhancedRandom {
 		this.stateA = stateA;
 		this.stateB = stateB;
 		if (stateA == 0L)
-			this.stateA = 0x9E3779B97F4A7C15L;
+			this.stateA = 1234567890987654321L;
 	}
 
 	@Override
@@ -133,7 +134,7 @@ public class GyozaRandom extends EnhancedRandom {
 	 * Sets one of the states, determined by {@code selection}, to {@code value}, as-is.
 	 * Selections 0 and 1 refer to states A and B, and if the selection is anything
 	 * else, this treats it as 1 and sets stateB. If this would cause stateA to be 0, it
-	 * instead sets stateA to 0x9E3779B97F4A7C15L.
+	 * instead sets stateA to 1234567890987654321L.
 	 *
 	 * @param selection used to select which state variable to set; generally 0 or 1
 	 * @param value     the exact value to use for the selected state, if valid
@@ -141,7 +142,7 @@ public class GyozaRandom extends EnhancedRandom {
 	@Override
 	public void setSelectedState(int selection, long value) {
 		if (selection == 0) {
-			stateA = (value == 0L) ? 0x9E3779B97F4A7C15L : value;
+			stateA = (value == 0L) ? 1234567890987654321L : value;
 		} else {
 			stateB = value;
 		}
@@ -155,15 +156,15 @@ public class GyozaRandom extends EnhancedRandom {
 	 */
 	@Override
 	public void setSeed(long seed) {
-		long x = (seed + 0x9E3779B97F4A7C15L);
-		x ^= x >>> 32;
-		x *= 0xBEA225F9EB34556DL;
-		x ^= x >>> 29;
-		x *= 0xBEA225F9EB34556DL;
-		stateA = (x == 0L) ? 0x9E3779B97F4A7C15L : x;
-		x ^= x >>> 32;
-		x *= 0xBEA225F9EB34556DL;
-		stateB = x ^ x >>> 29;
+		long x = (seed + 1234567890987654321L);
+		x ^= x >> 32 & ((1L << 32) - 1L);
+		x *= 3333333333333333333L;
+		x ^= x >> 29 & ((1L << 29) - 1L);
+		x *= 5555555555555555555L;
+		stateA = (x == 0L) ? 1234567890987654321L : x;
+		x ^= x >> 32 & ((1L << 32) - 1L);
+		x *= 7777777777777777777L;
+		stateB = x ^ (x >> 29 & ((1L << 29) - 1L));
 	}
 
 	public long getStateA() {
@@ -176,7 +177,7 @@ public class GyozaRandom extends EnhancedRandom {
 	 * @param stateA can be any long except 0
 	 */
 	public void setStateA(long stateA) {
-		this.stateA = (stateA == 0L) ? 0x9E3779B97F4A7C15L : stateA;
+		this.stateA = (stateA == 0L) ? 1234567890987654321L : stateA;
 	}
 
 	public long getStateB() {
@@ -202,7 +203,7 @@ public class GyozaRandom extends EnhancedRandom {
 	 */
 	@Override
 	public void setState(long stateA, long stateB) {
-		this.stateA = (stateA == 0L) ? 0x9E3779B97F4A7C15L : stateA;
+		this.stateA = (stateA == 0L) ? 1234567890987654321L : stateA;
 		this.stateB = stateB;
 	}
 
@@ -210,14 +211,14 @@ public class GyozaRandom extends EnhancedRandom {
 	public long nextLong() {
 		long lfsr = stateA, x = stateB ^ lfsr;
 
-		x ^= x >> 29 & (-1L >>> 29); // Signed right shifts because that's all GDScript has.
+		x ^= x >> 29 & (1L << 29) - 1L; // Signed right shifts because that's all GDScript has.
 		x *= 5555555555555555555L; // Nineteen base-10 digits.
-		x ^= x >> 28 & (-1L >>> 28); // Using the mask makes the signed shift act like an unsigned one, for known amounts.
+		x ^= x >> 28 & (1L << 28) - 1L; // Using the mask makes the signed shift act like an unsigned one, for known amounts.
 		x *= 3333333333333333333L; // Nineteen base-10 digits.
-		x ^= x >> 27 & (-1L >>> 27); // Another different shift amount.
+		x ^= x >> 27 & (1L << 27) - 1L; // The mask can be pre-computed, but then we need magic numbers.
 
 		stateA = (lfsr << 1) ^ (lfsr >> 63 & 27L); // 27 is a maximal-length LFSR polynomial for 64 bits.
-		stateB += 7777777777777777777L;
+		stateB += 7777777777777777777L; // Nineteen base-10 digits.
 		return lfsr ^ x;
 	}
 
@@ -225,14 +226,14 @@ public class GyozaRandom extends EnhancedRandom {
 	public int next(int bits) {
 		long lfsr = stateA, x = stateB ^ lfsr;
 
-		x ^= x >> 29 & (-1L >>> 29); // Signed right shifts because that's all GDScript has.
+		x ^= x >> 29 & (1L << 29) - 1L; // Signed right shifts because that's all GDScript has.
 		x *= 5555555555555555555L; // Nineteen base-10 digits.
-		x ^= x >> 28 & (-1L >>> 28); // Using the mask makes the signed shift act like an unsigned one, for known amounts.
+		x ^= x >> 28 & (1L << 28) - 1L; // Using the mask makes the signed shift act like an unsigned one, for known amounts.
 		x *= 3333333333333333333L; // Nineteen base-10 digits.
-		x ^= x >> 27 & (-1L >>> 27); // Another different shift amount.
+		x ^= x >> 27 & (1L << 27) - 1L; // The mask can be pre-computed, but then we need magic numbers.
 
 		stateA = (lfsr << 1) ^ (lfsr >> 63 & 27L); // 27 is a maximal-length LFSR polynomial for 64 bits.
-		stateB += 7777777777777777777L;
+		stateB += 7777777777777777777L; // Nineteen base-10 digits.
 		return (int) (lfsr ^ x) >>> 32 - bits;
 	}
 
@@ -243,11 +244,11 @@ public class GyozaRandom extends EnhancedRandom {
 		stateA = (stateA >>> 1) ^ lsb << 63;
 		stateB -= 7777777777777777777L;
 		long x = stateA ^ stateB;
-		x ^= x >> 29 & (-1L >>> 29);
+		x ^= x >> 29 & (1L << 29) - 1L;
 		x *= 5555555555555555555L;
-		x ^= x >> 28 & (-1L >>> 28);
+		x ^= x >> 28 & (1L << 28) - 1L;
 		x *= 3333333333333333333L;
-		x ^= x >> 27 & (-1L >>> 27);
+		x ^= x >> 27 & (1L << 27) - 1L;
 		return stateA ^ x;
 	}
 
@@ -261,11 +262,11 @@ public class GyozaRandom extends EnhancedRandom {
 	public long leap() {
 		long lfsr = stateA, x = stateB ^ lfsr;
 
-		x ^= x >> 29 & (-1L >>> 29); // Signed right shifts because that's all GDScript has.
+		x ^= x >> 29 & (1L << 29) - 1L; // Signed right shifts because that's all GDScript has.
 		x *= 5555555555555555555L; // Nineteen base-10 digits.
-		x ^= x >> 28 & (-1L >>> 28); // Using the mask makes the signed shift act like an unsigned one, for known amounts.
+		x ^= x >> 28 & (1L << 28) - 1L; // Using the mask makes the signed shift act like an unsigned one, for known amounts.
 		x *= 3333333333333333333L; // Nineteen base-10 digits.
-		x ^= x >> 27 & (-1L >>> 27); // Another different shift amount.
+		x ^= x >> 27 & (1L << 27) - 1L; // The mask can be pre-computed, but then we need magic numbers.
 
 		stateA = (lfsr << 1) ^ (lfsr >> 63 & 27L); // 27 is a maximal-length LFSR polynomial for 64 bits.
 		return lfsr ^ x;
