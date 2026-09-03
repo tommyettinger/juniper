@@ -150,6 +150,7 @@ public final class Generators {
 		randomList.add(new MizuchiRandom(1, 1));
 		randomList.add(new YarnRandom(1));
 		randomList.add(new YearnRandom(1));
+		randomList.add(new GyozaRandom(1, 1));
 	}
 
 	public static int randomCount = randomList.size();
