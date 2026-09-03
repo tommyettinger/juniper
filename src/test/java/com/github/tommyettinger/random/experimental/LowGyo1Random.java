@@ -221,7 +221,7 @@ public class LowGyo1Random extends EnhancedRandom {
 		x ^= lfsr;
 		lfsr ^= lfsr << 7;
 		stateA = lfsr ^ (lfsr >> 9 & ((1L << 9) - 1L));
-		stateB += 7777777777777777777L;
+		stateB = stateB * 3333333333333333333L + 5555555555555555555L;
 		return x;
 	}
 
@@ -237,7 +237,7 @@ public class LowGyo1Random extends EnhancedRandom {
 		x ^= lfsr;
 		lfsr ^= lfsr << 7;
 		stateA = lfsr ^ (lfsr >> 9 & ((1L << 9) - 1L));
-		stateB += 7777777777777777777L;
+		stateB = stateB * 3333333333333333333L + 5555555555555555555L;
 		return (int)x >>> 32 - bits;
 	}
 
@@ -250,7 +250,7 @@ public class LowGyo1Random extends EnhancedRandom {
 		stateA ^= stateA >> 9  & ((1L << 9 ) - 1L);
 		stateA ^= stateA >> 18 & ((1L << 18) - 1L);
 		stateA ^= stateA >> 36 & ((1L << 36) - 1L);
-		stateB -= 7777777777777777777L;
+		stateB = (stateB - 5555555555555555555L) * 7281247690506633213L;
 		long x = stateA ^ stateB;
 //		x ^= x >> 29 & (1L << 35) - 1L; // Signed right shifts because that's all GDScript has.
 		x *= 5555555555555555555L; // Nineteen base-10 digits.
