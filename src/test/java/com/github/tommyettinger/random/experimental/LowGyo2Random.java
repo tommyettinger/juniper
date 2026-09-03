@@ -161,12 +161,12 @@ public class LowGyo2Random extends EnhancedRandom {
 		long x = (seed + 1234567890987654321L);
 		x ^= x >> 32 & ((1L << 32) - 1L);
 		x *= 3333333333333333333L;
-		x ^= x >> 29 & ((1L << 29) - 1L);
+		x ^= x >> 29 & ((1L << 35) - 1L);
 		x *= 5555555555555555555L;
 		stateA = (x == 0L) ? 1234567890987654321L : x;
 		x ^= x >> 32 & ((1L << 32) - 1L);
 		x *= 7777777777777777777L;
-		stateB = x ^ (x >> 29 & ((1L << 29) - 1L));
+		stateB = x ^ (x >> 29 & ((1L << 35) - 1L));
 	}
 
 	public long getStateA() {
@@ -215,12 +215,12 @@ public class LowGyo2Random extends EnhancedRandom {
 
 //		x ^= x >> 29 & (1L << 35) - 1L; // Signed right shifts because that's all GDScript has.
 //		x *= 5555555555555555555L; // Nineteen base-10 digits.
-		x ^= x >> 28 & (1L << 36) - 1L; // Using the mask makes the signed shift act like an unsigned one, for known amounts.
+		x ^= x >> 32 & (1L << 32) - 1L; // Using the mask makes the signed shift act like an unsigned one, for known amounts.
 		x *= 3333333333333333333L; // Nineteen base-10 digits.
-		x ^= x >> 27 & (1L << 37) - 1L; // The mask can be pre-computed, but then we need magic numbers.
+		x ^= x >> 32 & (1L << 32) - 1L; // The mask can be pre-computed, but then we need magic numbers.
 		x += lfsr;
 		lfsr ^= lfsr << 7;
-		stateA = lfsr ^ (lfsr >> 9 & ((1L << 9) - 1L));
+		stateA = lfsr ^ (lfsr >> 9 & ((1L << 55) - 1L));
 		stateB += stateB * stateB | 77L;
 		return x;
 	}
@@ -231,12 +231,12 @@ public class LowGyo2Random extends EnhancedRandom {
 
 //		x ^= x >> 29 & (1L << 35) - 1L; // Signed right shifts because that's all GDScript has.
 //		x *= 5555555555555555555L; // Nineteen base-10 digits.
-		x ^= x >> 28 & (1L << 36) - 1L; // Using the mask makes the signed shift act like an unsigned one, for known amounts.
+		x ^= x >> 32 & (1L << 32) - 1L; // Using the mask makes the signed shift act like an unsigned one, for known amounts.
 		x *= 3333333333333333333L; // Nineteen base-10 digits.
-		x ^= x >> 27 & (1L << 37) - 1L; // The mask can be pre-computed, but then we need magic numbers.
+		x ^= x >> 32 & (1L << 32) - 1L; // The mask can be pre-computed, but then we need magic numbers.
 		x += lfsr;
 		lfsr ^= lfsr << 7;
-		stateA = lfsr ^ (lfsr >> 9 & ((1L << 9) - 1L));
+		stateA = lfsr ^ (lfsr >> 9 & ((1L << 55) - 1L));
 		stateB += stateB * stateB | 77L;
 		return (int)x >>> 32 - bits;
 	}
@@ -247,9 +247,9 @@ public class LowGyo2Random extends EnhancedRandom {
 		stateA ^= stateA << 14;
 		stateA ^= stateA << 28;
 		stateA ^= stateA << 56;
-		stateA ^= stateA >> 9  & ((1L << 9 ) - 1L);
-		stateA ^= stateA >> 18 & ((1L << 18) - 1L);
-		stateA ^= stateA >> 36 & ((1L << 36) - 1L);
+		stateA ^= stateA >> 9  & ((1L << 55) - 1L);
+		stateA ^= stateA >> 18 & ((1L << 46) - 1L);
+		stateA ^= stateA >> 36 & ((1L << 28) - 1L);
 		final long s = stateB;
 		long r = 0L;
 		for (int b = 0; b < 64; b++) {
@@ -260,9 +260,9 @@ public class LowGyo2Random extends EnhancedRandom {
 		long x = stateA + stateB;
 //		x ^= x >> 29 & (1L << 35) - 1L; // Signed right shifts because that's all GDScript has.
 //		x *= 5555555555555555555L; // Nineteen base-10 digits.
-		x ^= x >> 28 & (1L << 36) - 1L; // Using the mask makes the signed shift act like an unsigned one, for known amounts.
+		x ^= x >> 32 & (1L << 32) - 1L; // Using the mask makes the signed shift act like an unsigned one, for known amounts.
 		x *= 3333333333333333333L; // Nineteen base-10 digits.
-		x ^= x >> 27 & (1L << 37) - 1L; // The mask can be pre-computed, but then we need magic numbers.
+		x ^= x >> 32 & (1L << 32) - 1L; // The mask can be pre-computed, but then we need magic numbers.
 		return stateA + x;
 	}
 
@@ -278,13 +278,13 @@ public class LowGyo2Random extends EnhancedRandom {
 
 //		x ^= x >> 29 & (1L << 35) - 1L; // Signed right shifts because that's all GDScript has.
 //		x *= 5555555555555555555L; // Nineteen base-10 digits.
-		x ^= x >> 28 & (1L << 36) - 1L; // Using the mask makes the signed shift act like an unsigned one, for known amounts.
+		x ^= x >> 32 & (1L << 32) - 1L; // Using the mask makes the signed shift act like an unsigned one, for known amounts.
 		x *= 3333333333333333333L; // Nineteen base-10 digits.
-		x ^= x >> 27 & (1L << 37) - 1L; // The mask can be pre-computed, but then we need magic numbers.
+		x ^= x >> 32 & (1L << 32) - 1L; // The mask can be pre-computed, but then we need magic numbers.
 
 		x += lfsr;
 		lfsr ^= lfsr << 7;
-		stateA = lfsr ^ (lfsr >> 9 & ((1L << 9) - 1L));
+		stateA = lfsr ^ (lfsr >> 9 & ((1L << 55) - 1L));
 		return x;
 	}
 
