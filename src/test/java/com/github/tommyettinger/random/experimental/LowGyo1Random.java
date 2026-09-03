@@ -219,7 +219,7 @@ public class LowGyo1Random extends EnhancedRandom {
 		x *= 3333333333333333333L; // Nineteen base-10 digits.
 		x ^= x >> 27 & (1L << 27) - 1L; // The mask can be pre-computed, but then we need magic numbers.
 
-		stateA = (lfsr << 1) ^ (lfsr >> 63 & 27L); // 27 is a maximal-length LFSR polynomial for 64 bits.
+		stateA = (lfsr << 1) ^ (lfsr >> 63 & 0xfeedbabedeadbeefL); // 0xfeedbabedeadbeefL is a maximal-length LFSR polynomial for 64 bits.
 		stateB += 7777777777777777777L; // Nineteen base-10 digits.
 		return lfsr ^ x;
 	}
@@ -234,7 +234,7 @@ public class LowGyo1Random extends EnhancedRandom {
 		x *= 3333333333333333333L; // Nineteen base-10 digits.
 		x ^= x >> 27 & (1L << 27) - 1L; // The mask can be pre-computed, but then we need magic numbers.
 
-		stateA = (lfsr << 1) ^ (lfsr >> 63 & 27L); // 27 is a maximal-length LFSR polynomial for 64 bits.
+		stateA = (lfsr << 1) ^ (lfsr >> 63 & 0xfeedbabedeadbeefL); // 0xfeedbabedeadbeefL is a maximal-length LFSR polynomial for 64 bits.
 		stateB += 7777777777777777777L; // Nineteen base-10 digits.
 		return (int) (lfsr ^ x) >>> 32 - bits;
 	}
@@ -242,7 +242,7 @@ public class LowGyo1Random extends EnhancedRandom {
 	@Override
 	public long previousLong() {
 		long lsb = (stateA & 1L);
-		stateA ^= (-lsb & 27L);
+		stateA ^= (-lsb & 0xfeedbabedeadbeefL);
 		stateA = (stateA >>> 1) ^ lsb << 63;
 		stateB -= 7777777777777777777L;
 		long x = stateA ^ stateB;
@@ -270,7 +270,7 @@ public class LowGyo1Random extends EnhancedRandom {
 		x *= 3333333333333333333L; // Nineteen base-10 digits.
 		x ^= x >> 27 & (1L << 27) - 1L; // The mask can be pre-computed, but then we need magic numbers.
 
-		stateA = (lfsr << 1) ^ (lfsr >> 63 & 27L); // 27 is a maximal-length LFSR polynomial for 64 bits.
+		stateA = (lfsr << 1) ^ (lfsr >> 63 & 0xfeedbabedeadbeefL); // 0xfeedbabedeadbeefL is a maximal-length LFSR polynomial for 64 bits.
 		return lfsr ^ x;
 	}
 
