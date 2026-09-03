@@ -1,0 +1,1 @@
+[Immediate] Lowest mode: 115.0000 has mean amount 0.0310621261  PASS 👍 for LowGyo2Random

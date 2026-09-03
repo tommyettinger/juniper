@@ -1,0 +1,1 @@
+Lowest mode: 111.0000 has mean amount 0.0307801365  FAIL 💀 for LowGyo2Random
