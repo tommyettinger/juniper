@@ -33,8 +33,8 @@ public class InitialCorrelationEvaluator {
 	 */
 	public static int STEPS_BEFORE = 100;
 	public static int STEP_LIMIT = 32;
-	public static final int X_INDEX = 2;
-	public static final int Y_INDEX = 3;
+	public static final int X_INDEX = 0;
+	public static final int Y_INDEX = 1;
 	//    public static long INTERVAL_X = 0x9E3779B97F4A7C15L;//1;//2;//4;//8;//16;//0xC13FA9A902A6328FL;//
 	public static long INTERVAL_X = 2;//2;//4;//8;//16;//0xC13FA9A902A6328FL;//
 	// We use 2 here because several generators use only odd numbers for stateB.

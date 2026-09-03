@@ -33,8 +33,8 @@ public class InitialCorrelationEvaluatorLong {
 	/**
 	 * How many steps to run before measurement starts.
 	 */
-	public static int STEPS_BEFORE = 26;
-	public static int STEP_LIMIT = 32;
+	public static int STEPS_BEFORE = InitialCorrelationEvaluator.STEPS_BEFORE;
+	public static int STEP_LIMIT = InitialCorrelationEvaluator.STEP_LIMIT;
 	public double steps = 0;
 	public int mode = 0;
 	public double amount = 0;
