@@ -221,7 +221,7 @@ public class LowGyo1Random extends EnhancedRandom {
 		x ^= lfsr;
 		lfsr ^= lfsr << 7;
 		stateA = lfsr ^ (lfsr >> 9 & ((1L << 9) - 1L));
-		stateB += 7777777777777777777L; // Nineteen base-10 digits.
+		stateB += stateB * stateB | 77L;
 		return x;
 	}
 
@@ -237,7 +237,7 @@ public class LowGyo1Random extends EnhancedRandom {
 		x ^= lfsr;
 		lfsr ^= lfsr << 7;
 		stateA = lfsr ^ (lfsr >> 9 & ((1L << 9) - 1L));
-		stateB += 7777777777777777777L; // Nineteen base-10 digits.
+		stateB += stateB * stateB | 77L;
 		return (int)x >>> 32 - bits;
 	}
 
@@ -250,7 +250,13 @@ public class LowGyo1Random extends EnhancedRandom {
 		stateA ^= stateA >> 9  & ((1L << 9 ) - 1L);
 		stateA ^= stateA >> 18 & ((1L << 18) - 1L);
 		stateA ^= stateA >> 36 & ((1L << 36) - 1L);
-		stateB -= 7777777777777777777L;
+		long s = stateB;
+		long r = 0L;
+		for (int b = 0; b < 64; b++) {
+			final long test = (((r + (r * r | 77L)) ^ s) & (-1L >>> ~b));
+			r ^= ((test | -test) >>> 63) << b;
+		}
+		stateB = r;
 		long x = stateA ^ stateB;
 //		x ^= x >> 29 & (1L << 29) - 1L;
 		x *= 5555555555555555555L;
