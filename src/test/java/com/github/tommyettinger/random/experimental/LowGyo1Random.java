@@ -218,10 +218,11 @@ public class LowGyo1Random extends EnhancedRandom {
 		x ^= x >> 28 & (1L << 28) - 1L; // Using the mask makes the signed shift act like an unsigned one, for known amounts.
 		x *= 3333333333333333333L; // Nineteen base-10 digits.
 		x ^= x >> 27 & (1L << 27) - 1L; // The mask can be pre-computed, but then we need magic numbers.
-
-		stateA = (lfsr << 1) ^ (lfsr >> 63 & 0xfeedbabedeadbeefL); // 0xfeedbabedeadbeefL is a maximal-length LFSR polynomial for 64 bits.
+		x ^= lfsr;
+		lfsr ^= lfsr << 7;
+		stateA = lfsr ^ (lfsr >> 9 & ((1L << 9) - 1L));
 		stateB += 7777777777777777777L; // Nineteen base-10 digits.
-		return lfsr ^ x;
+		return x;
 	}
 
 	@Override
@@ -233,17 +234,22 @@ public class LowGyo1Random extends EnhancedRandom {
 		x ^= x >> 28 & (1L << 28) - 1L; // Using the mask makes the signed shift act like an unsigned one, for known amounts.
 		x *= 3333333333333333333L; // Nineteen base-10 digits.
 		x ^= x >> 27 & (1L << 27) - 1L; // The mask can be pre-computed, but then we need magic numbers.
-
-		stateA = (lfsr << 1) ^ (lfsr >> 63 & 0xfeedbabedeadbeefL); // 0xfeedbabedeadbeefL is a maximal-length LFSR polynomial for 64 bits.
+		x ^= lfsr;
+		lfsr ^= lfsr << 7;
+		stateA = lfsr ^ (lfsr >> 9 & ((1L << 9) - 1L));
 		stateB += 7777777777777777777L; // Nineteen base-10 digits.
-		return (int) (lfsr ^ x) >>> 32 - bits;
+		return (int)x >>> 32 - bits;
 	}
 
 	@Override
 	public long previousLong() {
-		long lsb = (stateA & 1L);
-		stateA ^= (-lsb & 0xfeedbabedeadbeefL);
-		stateA = (stateA >>> 1) ^ lsb << 63;
+		stateA ^= stateA << 7;
+		stateA ^= stateA << 14;
+		stateA ^= stateA << 28;
+		stateA ^= stateA << 56;
+		stateA ^= stateA >> 9  & ((1L << 9 ) - 1L);
+		stateA ^= stateA >> 18 & ((1L << 18) - 1L);
+		stateA ^= stateA >> 36 & ((1L << 36) - 1L);
 		stateB -= 7777777777777777777L;
 		long x = stateA ^ stateB;
 //		x ^= x >> 29 & (1L << 29) - 1L;
@@ -270,8 +276,10 @@ public class LowGyo1Random extends EnhancedRandom {
 		x *= 3333333333333333333L; // Nineteen base-10 digits.
 		x ^= x >> 27 & (1L << 27) - 1L; // The mask can be pre-computed, but then we need magic numbers.
 
-		stateA = (lfsr << 1) ^ (lfsr >> 63 & 0xfeedbabedeadbeefL); // 0xfeedbabedeadbeefL is a maximal-length LFSR polynomial for 64 bits.
-		return lfsr ^ x;
+		x ^= lfsr;
+		lfsr ^= lfsr << 7;
+		stateA = lfsr ^ (lfsr >> 9 & ((1L << 9) - 1L));
+		return x;
 	}
 
 	@Override
