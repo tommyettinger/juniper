@@ -26,7 +26,13 @@ import java.math.BigInteger;
 /**
  * A generator that tries to avoid magic constants while having a long-enough period for anything in a game.
  * It is compatible with GDScript's limitation of no unsigned right bitwise shifts.
- * This uses a XEX (XOR-Encrypt-XOR) step to mix an LFSR into what is otherwise a MurmurHash-like mixer on a counter.
+ * This uses a XEX (XOR-Encrypt-XOR) step to mix a XorShift generator into what is otherwise a MurmurHash-like mixer on
+ * an LCG (like what PCG-Random does).
+ * <br>
+ * NOTE: This doesn't use an LFSR currently. There were strange issues where the output would appear decorrelated, then
+ * would correlate after 40-60 generations, then decorrelate again. It could also sometimes correlate after that.
+ * This currently uses a 7-9 XorShift, the same as in {@link com.github.tommyettinger.random.XorShiftBasic64QuasiRandom}
+ * but with reversed directions to reduce the amount of work needed in GDScript to get the previous result.
  * <br>
  * The 64-bit LFSR with the polynomial 27 was found on
  * <a href="https://spreadsheets.google.com/ccc?key=0AvYtZsho-JTldFRYZnJLRFFaSWtUcVNXc1Y3M2VWd1E&hl=en">this spreadsheet</a>
@@ -36,11 +42,13 @@ import java.math.BigInteger;
  * This passes Initial Correlation Evaluator tests, but not Immediate Initial Correlation Evaluator tests. It needs 8
  * generated numbers to break initial correlations. It has a period of (2 to the 128) minus (2 to the 64). It is
  * 1D-equidistributed over its period, producing each {@code long} output exactly (2 to the 64) minus 1 times.
+ * This fails PractRand's TMFn test after only 32GB of output. TMFn (the Triple Mirror Frequency test) is meant to find
+ * patterns that occur in insufficiently-mixed LCGs.
  */
 public class LowGyo2Random extends EnhancedRandom {
 
 	/**
-	 * The first (LFSR) state; can be any long except 0.
+	 * The first (XorShift) state; can be any long except 0.
 	 */
 	protected long stateA;
 	/**
@@ -174,7 +182,7 @@ public class LowGyo2Random extends EnhancedRandom {
 	}
 
 	/**
-	 * Sets the first (LFSR) part of the state.
+	 * Sets the first (XorShift) part of the state.
 	 *
 	 * @param stateA can be any long except 0
 	 */
