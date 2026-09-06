@@ -25,14 +25,14 @@ import com.github.tommyettinger.random.EnhancedRandom;
 import java.math.BigInteger;
 
 /**
- * 256 bits of state. Period is 2 to the 256.
+ * 320 bits of state. Period is 2 to the 320.
  * <br>
- * This is the 4-long-state version of the Goblin generator.
+ * This is the 5-long-state version of the Goblin generator.
  */
-public class Goblin4Random extends EnhancedRandom {
+public class Goblin5Random extends EnhancedRandom {
 	@Override
 	public String getTag() {
-		return "Gb4R";
+		return "Gb5R";
 	}
 
 	/**
@@ -40,12 +40,12 @@ public class Goblin4Random extends EnhancedRandom {
 	 *
 	 * @see #getMinimumPeriod()
 	 */
-	private static final BigInteger MINIMUM_PERIOD = new BigInteger("10000000000000000000000000000000000000000000000000000000000000000", 16);
+	private static final BigInteger MINIMUM_PERIOD = new BigInteger("100000000000000000000000000000000000000000000000000000000000000000000000000000000", 16);
 
 	/**
-	 * 2 to the 256.
+	 * 2 to the 320.
 	 *
-	 * @return 2 to the 256
+	 * @return 2 to the 320
 	 */
 	@Override
 	public BigInteger getMinimumPeriod() {
@@ -68,87 +68,113 @@ public class Goblin4Random extends EnhancedRandom {
 	 * The fourth state; can be any long.
 	 */
 	protected long stateD;
+	/**
+	 * The fifth state; can be any long.
+	 */
+	protected long stateE;
 
 	/**
-	 * Creates a new Goblin4Random with a random state.
+	 * Creates a new Goblin5Random with a random state.
 	 */
-	public Goblin4Random() {
+	public Goblin5Random() {
 		stateA = EnhancedRandom.seedFromMath();
 		stateB = EnhancedRandom.seedFromMath();
 		stateC = EnhancedRandom.seedFromMath();
 		stateD = EnhancedRandom.seedFromMath();
+		stateE = EnhancedRandom.seedFromMath();
 	}
 
 	/**
-	 * Creates a new Goblin4Random with the given seed; all {@code long} values are permitted.
+	 * Creates a new Goblin5Random with the given seed; all {@code long} values are permitted.
 	 * The seed will be passed to {@link #setSeed(long)} to attempt to adequately distribute the seed randomly.
 	 *
 	 * @param seed any {@code long} value
 	 */
-	public Goblin4Random(long seed) {
+	public Goblin5Random(long seed) {
 		setSeed(seed);
 	}
 
 	/**
-	 * Creates a new Goblin4Random with the given two states; all {@code long} values are permitted.
-	 * These states will be used verbatim for stateA and stateB. stateC and stateD will be assigned 1.
+	 * Creates a new Goblin5Random with the given two states; all {@code long} values are permitted.
+	 * These states will be used verbatim for stateA and stateB. stateC, stateD, and stateE will be assigned 1.
 	 *
 	 * @param stateA any {@code long} value
 	 * @param stateB any {@code long} value
 	 */
-	public Goblin4Random(long stateA, long stateB) {
+	public Goblin5Random(long stateA, long stateB) {
 		this.stateA = stateA;
 		this.stateB = stateB;
 		this.stateC = 1L;
 		this.stateD = 1L;
+		this.stateE = 1L;
 	}
 
 	/**
-	 * Creates a new Goblin4Random with the given three states; all {@code long} values are permitted.
-	 * These states will be used verbatim for stateA, stateB, and stateC. stateD will be assigned 1.
+	 * Creates a new Goblin5Random with the given three states; all {@code long} values are permitted.
+	 * These states will be used verbatim for stateA, stateB, and stateC. stateD and stateE will be assigned 1.
 	 *
 	 * @param stateA any {@code long} value
 	 * @param stateB any {@code long} value
 	 * @param stateC any {@code long} value
 	 */
-	public Goblin4Random(long stateA, long stateB, long stateC) {
+	public Goblin5Random(long stateA, long stateB, long stateC) {
 		this.stateA = stateA;
 		this.stateB = stateB;
 		this.stateC = stateC;
 		this.stateD = 1L;
+		this.stateE = 1L;
 	}
 
 	/**
-	 * Creates a new Goblin4Random with the given four states; all {@code long} values are permitted.
-	 * These states will be used verbatim.
+	 * Creates a new Goblin5Random with the given four states; all {@code long} values are permitted.
+	 * These states will be used verbatim for stateA, stateB, stateC, and stateD. stateE will be assigned 1.
 	 *
 	 * @param stateA any {@code long} value
 	 * @param stateB any {@code long} value
 	 * @param stateC any {@code long} value
 	 * @param stateD any {@code long} value
 	 */
-	public Goblin4Random(long stateA, long stateB, long stateC, long stateD) {
+	public Goblin5Random(long stateA, long stateB, long stateC, long stateD) {
 		this.stateA = stateA;
 		this.stateB = stateB;
 		this.stateC = stateC;
 		this.stateD = stateD;
+		this.stateE = 1L;
 	}
 
 	/**
-	 * This generator has 4 {@code long} states, so this returns 4.
+	 * Creates a new Goblin5Random with the given five states; all {@code long} values are permitted.
+	 * These states will be used verbatim.
 	 *
-	 * @return 4 (four)
+	 * @param stateA any {@code long} value
+	 * @param stateB any {@code long} value
+	 * @param stateC any {@code long} value
+	 * @param stateD any {@code long} value
+	 * @param stateE any {@code long} value
+	 */
+	public Goblin5Random(long stateA, long stateB, long stateC, long stateD, long stateE) {
+		this.stateA = stateA;
+		this.stateB = stateB;
+		this.stateC = stateC;
+		this.stateD = stateD;
+		this.stateE = stateE;
+	}
+
+	/**
+	 * This generator has 5 {@code long} states, so this returns 5.
+	 *
+	 * @return 5 (five)
 	 */
 	@Override
 	public int getStateCount() {
-		return 4;
+		return 5;
 	}
 
 	/**
 	 * Gets the state determined by {@code selection}, as-is. The value for selection should be
-	 * between 0 and 3, inclusive; if it is any other value this gets state D as if 3 was given.
+	 * between 0 and 4, inclusive; if it is any other value this gets state E as if 4 was given.
 	 *
-	 * @param selection used to select which state variable to get; generally 0, 1, 2, or 3
+	 * @param selection used to select which state variable to get; generally 0, 1, 2, 3, or 4
 	 * @return the value of the selected state
 	 */
 	@Override
@@ -160,17 +186,19 @@ public class Goblin4Random extends EnhancedRandom {
 				return stateB;
 			case 2:
 				return stateC;
-			default:
+			case 3:
 				return stateD;
+			default:
+				return stateE;
 		}
 	}
 
 	/**
 	 * Sets one of the states, determined by {@code selection}, to {@code value}, as-is.
-	 * Selections 0, 1, 2, and 3 refer to states A, B, C, and D, and if the selection is anything
+	 * Selections 0, 1, 2, 3, and 4 refer to states A, B, C, D, and E, and if the selection is anything
 	 * else, this ignores it and sets nothing.
 	 *
-	 * @param selection used to select which state variable to set; generally 0, 1, 2, or 3
+	 * @param selection used to select which state variable to set; generally 0, 1, 2, 3, or 4
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
@@ -188,13 +216,16 @@ public class Goblin4Random extends EnhancedRandom {
 			case 3:
 				stateD = value;
 				break;
+			case 4:
+				stateE = value;
+				break;
 		}
 	}
 
 	/**
-	 * This initializes all 4 states of the generator to random values based on the given seed.
+	 * This initializes all 5 states of the generator to random values based on the given seed.
 	 * (2 to the 64) possible initial generator states can be produced here, though there are
-	 * (2 to the 256) possible states in total.
+	 * (2 to the 320) possible states in total.
 	 *
 	 * @param seed the initial seed; may be any long
 	 */
@@ -204,6 +235,7 @@ public class Goblin4Random extends EnhancedRandom {
 		stateB = Hasher.randomize3(seed+1L);
 		stateC = Hasher.randomize3(seed+2L);
 		stateD = Hasher.randomize3(seed+3L);
+		stateE = Hasher.randomize3(seed+4L);
 	}
 
 	public long getStateA() {
@@ -258,19 +290,32 @@ public class Goblin4Random extends EnhancedRandom {
 		this.stateD = stateD;
 	}
 
+	public long getStateE() {
+		return stateE;
+	}
+
 	/**
-	 * Equivalent to {@code setState(stateA, stateB, 1L, 1L)}.
+	 * Sets the fifth part of the state.
+	 *
+	 * @param stateE can be any long
+	 */
+	public void setStateE(long stateE) {
+		this.stateE = stateE;
+	}
+
+	/**
+	 * Equivalent to {@code setState(stateA, stateB, 1L, 1L, 1L)}.
 	 *
 	 * @param stateA the long value to use for stateA
 	 * @param stateB the long value to use for stateB
 	 */
 	@Override
 	public void setState(long stateA, long stateB) {
-		setState(stateA, stateB, 1L, 1L);
+		setState(stateA, stateB, 1L, 1L, 1L);
 	}
 
 	/**
-	 * Equivalent to {@code setState(stateA, stateB, stateC, 1L)}.
+	 * Equivalent to {@code setState(stateA, stateB, stateC, 1L, 1L)}.
 	 *
 	 * @param stateA the long value to use for stateA
 	 * @param stateB the long value to use for stateB
@@ -278,25 +323,40 @@ public class Goblin4Random extends EnhancedRandom {
 	 */
 	@Override
 	public void setState(long stateA, long stateB, long stateC) {
-		setState(stateA, stateB, stateC, 1L);
+		setState(stateA, stateB, stateC, 1L, 1L);
 	}
 
 	/**
-	 * Sets the state completely to the given four state variables.
+	 * Equivalent to {@code setState(stateA, stateB, stateC, stateD, 1L)}.
+	 *
+	 * @param stateA the long value to use for stateA
+	 * @param stateB the long value to use for stateB
+	 * @param stateC the long value to use for stateC
+	 * @param stateD the long value to use for stateD
+	 */
+	@Override
+	public void setState(long stateA, long stateB, long stateC, long stateD) {
+		setState(stateA, stateB, stateC, stateD, 1L);
+	}
+
+	/**
+	 * Sets the state completely to the given five state variables.
 	 * This is the same as calling {@link #setStateA(long)}, {@link #setStateB(long)},
-	 * {@link #setStateC(long)}, and {@link #setStateD(long)} as a group.
+	 * {@link #setStateC(long)}, {@link #setStateD(long)}, and {@link #setStateE(long)} as a group.
 	 *
 	 * @param stateA the first state; can be any long
 	 * @param stateB the second state; can be any long
 	 * @param stateC the third state; can be any long
 	 * @param stateD the fourth state; can be any long
+	 * @param stateE the fifth state; can be any long
 	 */
 	@Override
-	public void setState(long stateA, long stateB, long stateC, long stateD) {
+	public void setState(long stateA, long stateB, long stateC, long stateD, long stateE) {
 		this.stateA = stateA;
 		this.stateB = stateB;
 		this.stateC = stateC;
 		this.stateD = stateD;
+		this.stateE = stateE;
 	}
 
 	@Override
@@ -304,7 +364,8 @@ public class Goblin4Random extends EnhancedRandom {
 		long a = (stateA += 0x9E3779B97F4A7C15L);
 		long b = (stateB += a + BitConversion.countLeadingZeros(a));
 		long c = (stateC += b + BitConversion.countLeadingZeros(a &= b));
-		long x = (stateD += c + BitConversion.countLeadingZeros(a &= c));
+		long d = (stateD += c + BitConversion.countLeadingZeros(a &= c));
+		long x = (stateE += d + BitConversion.countLeadingZeros(a &= d));
 		x += a;
 		x ^= x >>> 27;
 		x *= 0x3C79AC492BA7B653L;
@@ -319,11 +380,13 @@ public class Goblin4Random extends EnhancedRandom {
 		long a = stateA;
 		long b = stateB;
 		long c = stateC;
-		long x = stateD;
+		long d = stateD;
+		long x = stateE;
 		stateA -= 0x9E3779B97F4A7C15L;
 		stateB -= a + BitConversion.countLeadingZeros(a);
 		stateC -= b + BitConversion.countLeadingZeros(a &= b);
 		stateD -= c + BitConversion.countLeadingZeros(a &= c);
+		stateE -= d + BitConversion.countLeadingZeros(a &= d);
 		x += a;
 		x ^= x >>> 27;
 		x *= 0x3C79AC492BA7B653L;
@@ -338,7 +401,8 @@ public class Goblin4Random extends EnhancedRandom {
 		long a = (stateA += 0x9E3779B97F4A7C15L);
 		long b = (stateB += a + BitConversion.countLeadingZeros(a));
 		long c = (stateC += b + BitConversion.countLeadingZeros(a &= b));
-		long x = (stateD += c + BitConversion.countLeadingZeros(a &= c));
+		long d = (stateD += c + BitConversion.countLeadingZeros(a &= c));
+		long x = (stateE += d + BitConversion.countLeadingZeros(a &= d));
 		x += a;
 		x ^= x >>> 27;
 		x *= 0x3C79AC492BA7B653L;
@@ -350,8 +414,8 @@ public class Goblin4Random extends EnhancedRandom {
 
 
 	@Override
-	public Goblin4Random copy() {
-		return new Goblin4Random(stateA, stateB, stateC, stateD);
+	public Goblin5Random copy() {
+		return new Goblin5Random(stateA, stateB, stateC, stateD, stateE);
 	}
 
 	@Override
@@ -361,17 +425,17 @@ public class Goblin4Random extends EnhancedRandom {
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		Goblin4Random that = (Goblin4Random) o;
+		Goblin5Random that = (Goblin5Random) o;
 
-		return stateA == that.stateA && stateB == that.stateB && stateC == that.stateC && stateD == that.stateD;
+		return stateA == that.stateA && stateB == that.stateB && stateC == that.stateC && stateD == that.stateD && stateE == that.stateE;
 	}
 
 	public String toString() {
-		return "Goblin4Random{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L, stateD=" + (stateD) + "L}";
+		return "Goblin5Random{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L, stateD=" + (stateD) + "L, stateE=" + (stateE) + "L}";
 	}
 
 	public static void main(String[] args) {
-		EnhancedRandom random = new Goblin4Random(1L);
+		EnhancedRandom random = new Goblin5Random(1L);
 		{
 			int n0 = random.nextInt();
 			int n1 = random.nextInt();
