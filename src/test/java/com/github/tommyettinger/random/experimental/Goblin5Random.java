@@ -364,7 +364,7 @@ public class Goblin5Random extends EnhancedRandom {
 		long a = (stateA += 0x9E3779B97F4A7C15L);
 		long b = (stateB += a + BitConversion.countLeadingZeros(a));
 		long c = (stateC += b + BitConversion.countLeadingZeros(a &= b));
-		long d = (stateD += c + BitConversion.countLeadingZeros(a &= c));
+		long d = (stateD += c + BitConversion.countLeadingZeros(a |= c));
 		long x = (stateE += d + BitConversion.countLeadingZeros(a &= d));
 		x += a;
 		x ^= x >>> 27;
@@ -385,7 +385,7 @@ public class Goblin5Random extends EnhancedRandom {
 		stateA -= 0x9E3779B97F4A7C15L;
 		stateB -= a + BitConversion.countLeadingZeros(a);
 		stateC -= b + BitConversion.countLeadingZeros(a &= b);
-		stateD -= c + BitConversion.countLeadingZeros(a &= c);
+		stateD -= c + BitConversion.countLeadingZeros(a |= c);
 		stateE -= d + BitConversion.countLeadingZeros(a &= d);
 		x += a;
 		x ^= x >>> 27;
@@ -401,7 +401,7 @@ public class Goblin5Random extends EnhancedRandom {
 		long a = (stateA += 0x9E3779B97F4A7C15L);
 		long b = (stateB += a + BitConversion.countLeadingZeros(a));
 		long c = (stateC += b + BitConversion.countLeadingZeros(a &= b));
-		long d = (stateD += c + BitConversion.countLeadingZeros(a &= c));
+		long d = (stateD += c + BitConversion.countLeadingZeros(a |= c));
 		long x = (stateE += d + BitConversion.countLeadingZeros(a &= d));
 		x += a;
 		x ^= x >>> 27;
