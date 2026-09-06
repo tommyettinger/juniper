@@ -1,0 +1,1 @@
+[Immediate] Lowest mode: 65.00000 has mean amount 0.0231733322  FAIL 💀 for Goblin4Random
