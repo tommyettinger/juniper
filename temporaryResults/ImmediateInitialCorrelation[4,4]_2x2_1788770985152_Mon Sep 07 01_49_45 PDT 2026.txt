@@ -1,0 +1,1 @@
+[Immediate] Lowest mode: 118.0000 has mean amount 0.0309990644  PASS 👍 for Goblin3Random

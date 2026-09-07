@@ -426,16 +426,16 @@ public class Goblin6Random extends EnhancedRandom {
 
 	@Override
 	public long nextLong() {
-		long a = (stateA += 0x9E3779B97F4A7C15L);
+		long a = (stateA += 7777777777777777777L);
 		long b = (stateB += a + BitConversion.countLeadingZeros(a));
 		long c = (stateC += b + BitConversion.countLeadingZeros(a &= b));
 		long d = (stateD += c + BitConversion.countLeadingZeros(a |= c));
 		long e = (stateE += d + BitConversion.countLeadingZeros(a &= d));
 		long x = (stateF += e + BitConversion.countLeadingZeros(a |= e));
 		x ^= x >>> 27 ^ a;
-		x *= 0x3C79AC492BA7B653L;
+		x *= 5555555555555555555L;
 		x ^= x >>> 33 ^ b ^ c ^ d ^ e;
-		x *= 0x1C69B3F74AC4AE35L;
+		x *= 3333333333333333333L;
 		x ^= x >>> 27;
 		return x;
 	}
@@ -448,32 +448,32 @@ public class Goblin6Random extends EnhancedRandom {
 		long d = stateD;
 		long e = stateE;
 		long x = stateF;
-		stateA -= 0x9E3779B97F4A7C15L;
+		stateA -= 7777777777777777777L;
 		stateB -= a + BitConversion.countLeadingZeros(a);
 		stateC -= b + BitConversion.countLeadingZeros(a &= b);
 		stateD -= c + BitConversion.countLeadingZeros(a |= c);
 		stateE -= d + BitConversion.countLeadingZeros(a &= d);
 		stateF -= e + BitConversion.countLeadingZeros(a |= e);
 		x ^= x >>> 27 ^ a;
-		x *= 0x3C79AC492BA7B653L;
+		x *= 5555555555555555555L;
 		x ^= x >>> 33 ^ b ^ c ^ d ^ e;
-		x *= 0x1C69B3F74AC4AE35L;
+		x *= 3333333333333333333L;
 		x ^= x >>> 27;
 		return x;
 	}
 
 	@Override
 	public int next(int bits) {
-		long a = (stateA += 0x9E3779B97F4A7C15L);
+		long a = (stateA += 7777777777777777777L);
 		long b = (stateB += a + BitConversion.countLeadingZeros(a));
 		long c = (stateC += b + BitConversion.countLeadingZeros(a &= b));
 		long d = (stateD += c + BitConversion.countLeadingZeros(a |= c));
 		long e = (stateE += d + BitConversion.countLeadingZeros(a &= d));
 		long x = (stateF += e + BitConversion.countLeadingZeros(a |= e));
 		x ^= x >>> 27 ^ a;
-		x *= 0x3C79AC492BA7B653L;
+		x *= 5555555555555555555L;
 		x ^= x >>> 33 ^ b ^ c ^ d ^ e;
-		x *= 0x1C69B3F74AC4AE35L;
+		x *= 3333333333333333333L;
 		x ^= x >>> 27;
 		return (int) x >>> (32 - bits);
 	}
