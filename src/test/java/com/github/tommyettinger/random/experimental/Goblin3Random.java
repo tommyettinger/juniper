@@ -248,13 +248,14 @@ public class Goblin3Random extends EnhancedRandom {
 		long a = (stateA += 0x9E3779B97F4A7C15L);
 		long b = (stateB += a + BitConversion.countLeadingZeros(a));
 		long x = (stateC += b + BitConversion.countLeadingZeros(a &= b));
-		x ^= a;
-		x ^= x >>> 27;
-		x *= 0x3C79AC492BA7B653L;
-		x ^= x >>> 33;
-		x *= 0x1C69B3F74AC4AE35L;
-		x ^= x >>> 27;
-		return x;
+//		x ^= a;
+//		x ^= x >>> 27;
+//		x *= 0x3C79AC492BA7B653L;
+//		x ^= x >>> 33;
+//		x *= 0x1C69B3F74AC4AE35L;
+//		x ^= x >>> 27;
+//		return x;
+		return Hasher.randomizeH(x ^ a);
 	}
 
 	@Override
@@ -265,13 +266,14 @@ public class Goblin3Random extends EnhancedRandom {
 		stateA -= 0x9E3779B97F4A7C15L;
 		stateB -= a + BitConversion.countLeadingZeros(a);
 		stateC -= b + BitConversion.countLeadingZeros(a &= b);
-		x ^= a;
-		x ^= x >>> 27;
-		x *= 0x3C79AC492BA7B653L;
-		x ^= x >>> 33;
-		x *= 0x1C69B3F74AC4AE35L;
-		x ^= x >>> 27;
-		return x;
+//		x ^= a;
+//		x ^= x >>> 27;
+//		x *= 0x3C79AC492BA7B653L;
+//		x ^= x >>> 33;
+//		x *= 0x1C69B3F74AC4AE35L;
+//		x ^= x >>> 27;
+//		return x;
+		return Hasher.randomizeH(x ^ a);
 	}
 
 	@Override
@@ -279,13 +281,14 @@ public class Goblin3Random extends EnhancedRandom {
 		long a = (stateA += 0x9E3779B97F4A7C15L);
 		long b = (stateB += a + BitConversion.countLeadingZeros(a));
 		long x = (stateC += b + BitConversion.countLeadingZeros(a &= b));
-		x ^= a;
-		x ^= x >>> 27;
-		x *= 0x3C79AC492BA7B653L;
-		x ^= x >>> 33;
-		x *= 0x1C69B3F74AC4AE35L;
-		x ^= x >>> 27;
-		return (int) x >>> (32 - bits);
+//		x ^= a;
+//		x ^= x >>> 27;
+//		x *= 0x3C79AC492BA7B653L;
+//		x ^= x >>> 33;
+//		x *= 0x1C69B3F74AC4AE35L;
+//		x ^= x >>> 27;
+//		return x;
+		return (int) Hasher.randomizeH(x ^ a) >>> (32 - bits);
 	}
 
 
