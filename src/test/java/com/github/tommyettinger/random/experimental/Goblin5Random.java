@@ -362,14 +362,13 @@ public class Goblin5Random extends EnhancedRandom {
 	@Override
 	public long nextLong() {
 		long a = (stateA += 0x9E3779B97F4A7C15L);
-		long b = (stateB += a ^ BitConversion.countLeadingZeros(a));
-		long c = (stateC += b ^ BitConversion.countLeadingZeros(a &= b));
-		long d = (stateD += c ^ BitConversion.countLeadingZeros(a |= c));
-		long x = (stateE += d ^ BitConversion.countLeadingZeros(a &= d));
-		x += a + b + c + d;
-		x ^= x >>> 27;
+		long b = (stateB += a + BitConversion.countLeadingZeros(a));
+		long c = (stateC += b + BitConversion.countLeadingZeros(a &= b));
+		long d = (stateD += c + BitConversion.countLeadingZeros(a |= c));
+		long x = (stateE += d + BitConversion.countLeadingZeros(a &= d));
+		x ^= x >>> 27 ^ a;
 		x *= 0x3C79AC492BA7B653L;
-		x ^= x >>> 33;
+		x ^= x >>> 33 ^ b ^ c ^ d;
 		x *= 0x1C69B3F74AC4AE35L;
 		x ^= x >>> 27;
 		return x;
@@ -383,14 +382,13 @@ public class Goblin5Random extends EnhancedRandom {
 		long d = stateD;
 		long x = stateE;
 		stateA -= 0x9E3779B97F4A7C15L;
-		stateB -= a ^ BitConversion.countLeadingZeros(a);
-		stateC -= b ^ BitConversion.countLeadingZeros(a &= b);
-		stateD -= c ^ BitConversion.countLeadingZeros(a |= c);
-		stateE -= d ^ BitConversion.countLeadingZeros(a &= d);
-		x += a + b + c + d;
-		x ^= x >>> 27;
+		stateB -= a + BitConversion.countLeadingZeros(a);
+		stateC -= b + BitConversion.countLeadingZeros(a &= b);
+		stateD -= c + BitConversion.countLeadingZeros(a |= c);
+		stateE -= d + BitConversion.countLeadingZeros(a &= d);
+		x ^= x >>> 27 ^ a;
 		x *= 0x3C79AC492BA7B653L;
-		x ^= x >>> 33;
+		x ^= x >>> 33 ^ b ^ c ^ d;
 		x *= 0x1C69B3F74AC4AE35L;
 		x ^= x >>> 27;
 		return x;
@@ -399,14 +397,13 @@ public class Goblin5Random extends EnhancedRandom {
 	@Override
 	public int next(int bits) {
 		long a = (stateA += 0x9E3779B97F4A7C15L);
-		long b = (stateB += a ^ BitConversion.countLeadingZeros(a));
-		long c = (stateC += b ^ BitConversion.countLeadingZeros(a &= b));
-		long d = (stateD += c ^ BitConversion.countLeadingZeros(a |= c));
-		long x = (stateE += d ^ BitConversion.countLeadingZeros(a &= d));
-		x += a + b + c + d;
-		x ^= x >>> 27;
+		long b = (stateB += a + BitConversion.countLeadingZeros(a));
+		long c = (stateC += b + BitConversion.countLeadingZeros(a &= b));
+		long d = (stateD += c + BitConversion.countLeadingZeros(a |= c));
+		long x = (stateE += d + BitConversion.countLeadingZeros(a &= d));
+		x ^= x >>> 27 ^ a;
 		x *= 0x3C79AC492BA7B653L;
-		x ^= x >>> 33;
+		x ^= x >>> 33 ^ b ^ c ^ d;
 		x *= 0x1C69B3F74AC4AE35L;
 		x ^= x >>> 27;
 		return (int) x >>> (32 - bits);
