@@ -246,12 +246,11 @@ public class Goblin3Random extends EnhancedRandom {
 	@Override
 	public long nextLong() {
 		long a = (stateA += 0x9E3779B97F4A7C15L);
-		long b = (stateB += a ^ BitConversion.countLeadingZeros(a));
-		long x = (stateC += b ^ BitConversion.countLeadingZeros(a &= b));
-		x += a + b;
-		x ^= x >>> 27;
+		long b = (stateB += a + BitConversion.countLeadingZeros(a));
+		long x = (stateC += b + BitConversion.countLeadingZeros(a &= b));
+		x ^= x >>> 27 ^ a;
 		x *= 0x3C79AC492BA7B653L;
-		x ^= x >>> 33;
+		x ^= x >>> 33 ^ b;
 		x *= 0x1C69B3F74AC4AE35L;
 		x ^= x >>> 27;
 		return x;
@@ -263,12 +262,11 @@ public class Goblin3Random extends EnhancedRandom {
 		long b = stateB;
 		long x = stateC;
 		stateA -= 0x9E3779B97F4A7C15L;
-		stateB -= a ^ BitConversion.countLeadingZeros(a);
-		stateC -= b ^ BitConversion.countLeadingZeros(a &= b);
-		x += a + b;
-		x ^= x >>> 27;
+		stateB -= a + BitConversion.countLeadingZeros(a);
+		stateC -= b + BitConversion.countLeadingZeros(a &= b);
+		x ^= x >>> 27 ^ a;
 		x *= 0x3C79AC492BA7B653L;
-		x ^= x >>> 33;
+		x ^= x >>> 33 ^ b;
 		x *= 0x1C69B3F74AC4AE35L;
 		x ^= x >>> 27;
 		return x;
@@ -277,12 +275,11 @@ public class Goblin3Random extends EnhancedRandom {
 	@Override
 	public int next(int bits) {
 		long a = (stateA += 0x9E3779B97F4A7C15L);
-		long b = (stateB += a ^ BitConversion.countLeadingZeros(a));
-		long x = (stateC += b ^ BitConversion.countLeadingZeros(a &= b));
-		x += a + b;
-		x ^= x >>> 27;
+		long b = (stateB += a + BitConversion.countLeadingZeros(a));
+		long x = (stateC += b + BitConversion.countLeadingZeros(a &= b));
+		x ^= x >>> 27 ^ a;
 		x *= 0x3C79AC492BA7B653L;
-		x ^= x >>> 33;
+		x ^= x >>> 33 ^ b;
 		x *= 0x1C69B3F74AC4AE35L;
 		x ^= x >>> 27;
 		return (int) x >>> (32 - bits);
