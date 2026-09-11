@@ -25,7 +25,17 @@ import com.github.tommyettinger.random.EnhancedRandom;
 import java.math.BigInteger;
 
 /**
- * 256 bits of state. Period is 2 to the 256.
+ * A long-period generator with 256 bits of state. Period is 2 to the 256. This is exactly 1D-equidistributed.
+ * <br>
+ * This operates like an extended version of {@link com.github.tommyettinger.random.OrbitalRandom}, making use of
+ * {@link BitConversion#countLeadingZeros(long)} to produce longer cycles. It runs its last state's value through a
+ * mixer that is like Moremur (which is what {@link com.github.tommyettinger.random.DistinctRandom} uses), but also XORs
+ * in the other states at two points in the Moremur mixer. It also uses "non-magic" constants, which actually work fine
+ * here: stateA uses 7777777777777777777L as its increment for a counter, and the complicated hex constants used by
+ * Moremur are replaced by 5555555555555555555L and 3333333333333333333L.
+ * <br>
+ * This passes 128TB of PractRand with no anomalies. It also passes Initial Correlation Evaluator tests (and their
+ * Immediate variants).
  * <br>
  * This is the 4-long-state version of the Goblin generator.
  */
