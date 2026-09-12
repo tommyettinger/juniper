@@ -80,6 +80,21 @@ public class CorrelationVisualizer extends ApplicationAdapter {
 					case 5:
 						g[x][y].setState((long) x * INTERVAL_X, (long) y * INTERVAL_Y, 1L, 1L, 1L);
 						break;
+					case 6:
+						g[x][y].setState((long) x * INTERVAL_X, (long) y * INTERVAL_Y, 1L, 1L, 1L, 1L);
+						break;
+					case 7:
+						g[x][y].setState((long) x * INTERVAL_X, (long) y * INTERVAL_Y, 1L, 1L, 1L, 1L, 1L);
+						break;
+					case 8:
+						g[x][y].setState((long) x * INTERVAL_X, (long) y * INTERVAL_Y, 1L, 1L, 1L, 1L, 1L, 1L);
+						break;
+					case 9:
+						g[x][y].setState((long) x * INTERVAL_X, (long) y * INTERVAL_Y, 1L, 1L, 1L, 1L, 1L, 1L, 1L);
+						break;
+					case 10:
+						g[x][y].setState((long) x * INTERVAL_X, (long) y * INTERVAL_Y, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L);
+						break;
 				}
 			}
 		}
@@ -109,6 +124,18 @@ public class CorrelationVisualizer extends ApplicationAdapter {
 							break;
 						case 6:
 							g[x][y].setState((long) x * INTERVAL_X, (long) y * INTERVAL_Y, 1L, 1L, 1L, 1L);
+							break;
+						case 7:
+							g[x][y].setState((long) x * INTERVAL_X, (long) y * INTERVAL_Y, 1L, 1L, 1L, 1L, 1L);
+							break;
+						case 8:
+							g[x][y].setState((long) x * INTERVAL_X, (long) y * INTERVAL_Y, 1L, 1L, 1L, 1L, 1L, 1L);
+							break;
+						case 9:
+							g[x][y].setState((long) x * INTERVAL_X, (long) y * INTERVAL_Y, 1L, 1L, 1L, 1L, 1L, 1L, 1L);
+							break;
+						case 10:
+							g[x][y].setState((long) x * INTERVAL_X, (long) y * INTERVAL_Y, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L);
 							break;
 					}
 				}

@@ -35,70 +35,14 @@ import com.github.tommyettinger.digital.BitConversion;
 
 import static com.badlogic.gdx.Input.Keys.*;
 import static com.badlogic.gdx.graphics.GL20.GL_POINTS;
+import static com.github.tommyettinger.random.CorrelationVisualizer.makeGrid;
+import static com.github.tommyettinger.random.CorrelationVisualizer.refreshGrid;
 import static com.github.tommyettinger.random.Generators.randomList;
 
 public class CorrelationAnalyst extends ApplicationAdapter {
 	public static String title = "";
 	private static final int width = 459, height = 816;
 
-	public static EnhancedRandom[][] makeGrid(EnhancedRandom base, int width, int height) {
-		EnhancedRandom[][] g = new EnhancedRandom[width][height];
-		for (int x = 0; x < width; x++) {
-			for (int y = 0; y < height; y++) {
-				g[x][y] = base.copy();
-				switch (g[x][y].getStateCount()) {
-					case 1:
-						g[x][y].setState(x << 16 ^ y);
-						break;
-					case 2:
-						g[x][y].setState(x, y << 1);
-						break;
-					case 3:
-						g[x][y].setState(x, y, 1L);
-						break;
-					case 4:
-						g[x][y].setState(x, y, 1L, 1L);
-						break;
-					case 5:
-						g[x][y].setState(x, y, 1L, 1L, 1L);
-						break;
-					case 6:
-						g[x][y].setState(x, y, 1L, 1L, 1L, 1L);
-						break;
-				}
-			}
-		}
-		return g;
-	}
-
-	public static void refreshGrid() {
-		for (int i = 0, n = randoms.length; i < n; i++) {
-			for (int x = 0; x < width; x++) {
-				for (int y = 0; y < height; y++) {
-					switch (randoms[i][x][y].getStateCount()) {
-						case 1:
-							randoms[i][x][y].setState(x << 16 ^ y);
-							break;
-						case 2:
-							randoms[i][x][y].setState(x, y);
-							break;
-						case 3:
-							randoms[i][x][y].setState(x, y, 1L);
-							break;
-						case 4:
-							randoms[i][x][y].setState(x, y, 1L, 1L);
-							break;
-						case 5:
-							randoms[i][x][y].setState(x, y, 1L, 1L, 1L);
-							break;
-						case 6:
-							randoms[i][x][y].setState(x, y, 1L, 1L, 1L, 1L);
-							break;
-					}
-				}
-			}
-		}
-	}
 
 	public static void seedGrid() {
 		for (int i = 0, n = randoms.length; i < n; i++) {
