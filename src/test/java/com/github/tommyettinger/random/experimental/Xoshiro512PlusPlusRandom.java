@@ -523,7 +523,7 @@ public class Xoshiro512PlusPlusRandom extends EnhancedRandom {
 
 		stateG ^= stateB << 11; // stateG has g
 		stateA ^= stateG; // stateA has a
-		stateC ^= stateA;
+		stateC ^= stateA; // stateC has c
 
 		long result = stateA + stateC;
 		return  (result << 17 | result >>> 47) + stateC;
@@ -539,74 +539,157 @@ public class Xoshiro512PlusPlusRandom extends EnhancedRandom {
 		return (int) (previousLong() >>> 32);
 	}
 
-//	/**
-//	 * Jumps extremely far in the generator's sequence, such that it requires {@code Math.pow(2, 64)} calls to leap() to
-//	 * complete a cycle through the generator's entire sequence. This can be used to create over 18 quintillion
-//	 * substreams of this generator's sequence, each with a period of {@code Math.pow(2, 192)}.
-//	 *
-//	 * @return the result of what nextLong() would return if it was called at the state this jumped to
-//	 */
-//	public long leap() {
-//		long s0 = 0L;
-//		long s1 = 0L;
-//		long s2 = 0L;
-//		long s3 = 0L;
-//		for (long b = 0x76e15d3efefdcbbfL; b != 0L; b >>>= 1) {
-//			if ((1L & b) != 0L) {
-//				s0 ^= stateA;
-//				s1 ^= stateB;
-//				s2 ^= stateC;
-//				s3 ^= stateD;
-//			}
-//			nextLong();
-//		}
-//		for (long b = 0xc5004e441c522fb3L; b != 0L; b >>>= 1) {
-//			if ((1L & b) != 0L) {
-//				s0 ^= stateA;
-//				s1 ^= stateB;
-//				s2 ^= stateC;
-//				s3 ^= stateD;
-//			}
-//			nextLong();
-//		}
-//		for (long b = 0x77710069854ee241L; b != 0L; b >>>= 1) {
-//			if ((1L & b) != 0L) {
-//				s0 ^= stateA;
-//				s1 ^= stateB;
-//				s2 ^= stateC;
-//				s3 ^= stateD;
-//			}
-//			nextLong();
-//		}
-//		for (long b = 0x39109bb02acbe635L; b != 0L; b >>>= 1) {
-//			if ((1L & b) != 0L) {
-//				s0 ^= stateA;
-//				s1 ^= stateB;
-//				s2 ^= stateC;
-//				s3 ^= stateD;
-//			}
-//			nextLong();
-//		}
-//
-//		stateA = s0;
-//		stateB = s1;
-//		stateC = s2;
-//		stateD = s3;
-//
-//
-//		s3 = (s3 << 19 | s3 >>> 45); // s3 has d ^ b
-//		s0 ^= s3; // s0 has a
-//		s2 ^= s1; // s2 has b ^ b << 17;
-//		s2 ^= s2 << 17;
-//		s2 ^= s2 << 34; // s2 has b
-//		s1 ^= s0; // s1 has b ^ c
-//		s2 ^= s1; // s2 has c;
-//		s1 ^= s2; // StateB has b;
-//
-//		s1 *= 5;
-//		return (s1 << 7 | s1 >>> 57) * 9;
-//	}
+	/**
+	 * Jumps extremely far in the generator's sequence, such that it requires {@code Math.pow(2, 128)} calls to leap()
+	 * to complete a cycle through the generator's entire sequence. This can be used to create as many as (2 to the 128)
+	 * substreams of this generator's sequence, each with a period of {@code Math.pow(2, 384)}.
+	 * <br>
+	 * This is called {@code long_jump()} in
+	 * <a href="https://prng.di.unimi.it/xoshiro512plusplus.c">the xoshiro512++ sources</a>.
+	 *
+	 * @return the result of what nextLong() would return if it was called at the state this jumped to
+	 */
+	public long leap() {
+		long s0 = 0L;
+		long s1 = 0L;
+		long s2 = 0L;
+		long s3 = 0L;
+		long s4 = 0L;
+		long s5 = 0L;
+		long s6 = 0L;
+		long s7 = 0L;
+		for (long b = 0x11467fef8f921d28L; b != 0L; b >>>= 1) {
+			if ((1L & b) != 0L) {
+				s0 ^= stateA;
+				s1 ^= stateB;
+				s2 ^= stateC;
+				s3 ^= stateD;
+				s4 ^= stateE;
+				s5 ^= stateF;
+				s6 ^= stateG;
+				s7 ^= stateH;
+			}
+			nextLong();
+		}
+		for (long b = 0xa2a819f2e79c8ea8L; b != 0L; b >>>= 1) {
+			if ((1L & b) != 0L) {
+				s0 ^= stateA;
+				s1 ^= stateB;
+				s2 ^= stateC;
+				s3 ^= stateD;
+				s4 ^= stateE;
+				s5 ^= stateF;
+				s6 ^= stateG;
+				s7 ^= stateH;
+			}
+			nextLong();
+		}
+		for (long b = 0xa8299fc284b3959aL; b != 0L; b >>>= 1) {
+			if ((1L & b) != 0L) {
+				s0 ^= stateA;
+				s1 ^= stateB;
+				s2 ^= stateC;
+				s3 ^= stateD;
+				s4 ^= stateE;
+				s5 ^= stateF;
+				s6 ^= stateG;
+				s7 ^= stateH;
+			}
+			nextLong();
+		}
+		for (long b = 0xb4d347340ca63ee1L; b != 0L; b >>>= 1) {
+			if ((1L & b) != 0L) {
+				s0 ^= stateA;
+				s1 ^= stateB;
+				s2 ^= stateC;
+				s3 ^= stateD;
+				s4 ^= stateE;
+				s5 ^= stateF;
+				s6 ^= stateG;
+				s7 ^= stateH;
+			}
+			nextLong();
+		}
+		for (long b = 0x1cb0940bedbff6ceL; b != 0L; b >>>= 1) {
+			if ((1L & b) != 0L) {
+				s0 ^= stateA;
+				s1 ^= stateB;
+				s2 ^= stateC;
+				s3 ^= stateD;
+				s4 ^= stateE;
+				s5 ^= stateF;
+				s6 ^= stateG;
+				s7 ^= stateH;
+			}
+			nextLong();
+		}
+		for (long b = 0xd956c5c4fa1f8e17L; b != 0L; b >>>= 1) {
+			if ((1L & b) != 0L) {
+				s0 ^= stateA;
+				s1 ^= stateB;
+				s2 ^= stateC;
+				s3 ^= stateD;
+				s4 ^= stateE;
+				s5 ^= stateF;
+				s6 ^= stateG;
+				s7 ^= stateH;
+			}
+			nextLong();
+		}
+		for (long b = 0x915e38fd4eda93bcL; b != 0L; b >>>= 1) {
+			if ((1L & b) != 0L) {
+				s0 ^= stateA;
+				s1 ^= stateB;
+				s2 ^= stateC;
+				s3 ^= stateD;
+				s4 ^= stateE;
+				s5 ^= stateF;
+				s6 ^= stateG;
+				s7 ^= stateH;
+			}
+			nextLong();
+		}
+		for (long b = 0x5b3ccdfa5d7daca5L; b != 0L; b >>>= 1) {
+			if ((1L & b) != 0L) {
+				s0 ^= stateA;
+				s1 ^= stateB;
+				s2 ^= stateC;
+				s3 ^= stateD;
+				s4 ^= stateE;
+				s5 ^= stateF;
+				s6 ^= stateG;
+				s7 ^= stateH;
+			}
+			nextLong();
+		}
 
+		stateA = s0;
+		stateB = s1;
+		stateC = s2;
+		stateD = s3;
+		stateE = s4;
+		stateF = s5;
+		stateG = s6;
+		stateH = s7;
+
+
+		s7 = (s7 << 43 | s7 >>> 21); // s7 has h ^ d
+
+		s6 ^= s7; // s6 has g ^ b << 11
+
+		s1 ^= s2; // s1 has b
+//		s4 ^= s5; // s4 has e
+//		s3 ^= s4; // s3 has d
+//		s5 ^= s1; // s5 has f
+//		s7 ^= s3; // s7 has h
+
+		s6 ^= s1 << 11; // s6 has g
+		s0 ^= s6; // s0 has a
+		s2 ^= s0; // s2 has c
+
+		s0 += s2;
+		return (s0 << 17 | s0 >>> 47) + s2;
+	}
 
 	@Override
 	public Xoshiro512PlusPlusRandom copy() {
