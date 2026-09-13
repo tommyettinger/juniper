@@ -1,0 +1,1 @@
+[Immediate] Lowest mode: 0.000000 has mean amount 0.8254042863  FAIL 💀 for Xoshiro512PlusPlusRandom

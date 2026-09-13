@@ -158,6 +158,7 @@ public final class Generators {
 		randomList.add(new Goblin5Random(1, 1, 1, 1, 1));
 		randomList.add(new Goblin6Random(1, 1, 1, 1, 1, 1));
 		randomList.add(new Goblin7Random(1, 1, 1, 1, 1, 1, 1));
+		randomList.add(new Xoshiro512PlusPlusRandom(1, 1, 1, 1, 1, 1, 1, 1));
 	}
 
 	public static int randomCount = randomList.size();
