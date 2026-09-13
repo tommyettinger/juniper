@@ -304,7 +304,8 @@ public class Xoshiro512PlusPlusRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Sets the first part of the state.
+	 * Sets the first part of the state. This cannot set the state to 0 if all other states are already 0;
+	 * in that case, it sets this state to 0x9E3779B97F4A7C15L instead.
 	 *
 	 * @param stateA can be any long
 	 */
@@ -318,7 +319,8 @@ public class Xoshiro512PlusPlusRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Sets the second part of the state.
+	 * Sets the second part of the state. This cannot set the state to 0 if all other states are already 0;
+	 * in that case, it sets this state to 0x9E3779B97F4A7C15L instead.
 	 *
 	 * @param stateB can be any long
 	 */
@@ -331,7 +333,8 @@ public class Xoshiro512PlusPlusRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Sets the third part of the state.
+	 * Sets the third part of the state. This cannot set the state to 0 if all other states are already 0;
+	 * in that case, it sets this state to 0x9E3779B97F4A7C15L instead.
 	 *
 	 * @param stateC can be any long
 	 */
@@ -344,7 +347,8 @@ public class Xoshiro512PlusPlusRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Sets the fourth part of the state.
+	 * Sets the fourth part of the state. This cannot set the state to 0 if all other states are already 0;
+	 * in that case, it sets this state to 0x9E3779B97F4A7C15L instead.
 	 *
 	 * @param stateD can be any long
 	 */
@@ -357,7 +361,8 @@ public class Xoshiro512PlusPlusRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Sets the fifth part of the state.
+	 * Sets the fifth part of the state. This cannot set the state to 0 if all other states are already 0;
+	 * in that case, it sets this state to 0x9E3779B97F4A7C15L instead.
 	 *
 	 * @param stateE can be any long
 	 */
@@ -370,7 +375,8 @@ public class Xoshiro512PlusPlusRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Sets the sixth part of the state.
+	 * Sets the sixth part of the state. This cannot set the state to 0 if all other states are already 0;
+	 * in that case, it sets this state to 0x9E3779B97F4A7C15L instead.
 	 *
 	 * @param stateF can be any long
 	 */
@@ -383,7 +389,8 @@ public class Xoshiro512PlusPlusRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Sets the seventh part of the state.
+	 * Sets the seventh part of the state. This cannot set the state to 0 if all other states are already 0;
+	 * in that case, it sets this state to 0x9E3779B97F4A7C15L instead.
 	 *
 	 * @param stateG can be any long
 	 */
@@ -396,7 +403,8 @@ public class Xoshiro512PlusPlusRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Sets the eighth part of the state.
+	 * Sets the eighth part of the state. This cannot set the state to 0 if all other states are already 0;
+	 * in that case, it sets this state to 0x9E3779B97F4A7C15L instead.
 	 *
 	 * @param stateH can be any long
 	 */

@@ -229,12 +229,13 @@ public class Xoshiro256StarStarRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Sets the first part of the state.
+	 * Sets the first part of the state. This cannot set the state to 0 if all other states are already 0;
+	 * in that case, it sets this state to 0x9E3779B97F4A7C15L instead.
 	 *
 	 * @param stateA can be any long
 	 */
 	public void setStateA(long stateA) {
-		this.stateA = stateA;
+		this.stateA = ((stateA | stateB | stateC | stateD) == 0L) ? 0x9E3779B97F4A7C15L : stateA;
 	}
 
 	public long getStateB() {
@@ -243,12 +244,14 @@ public class Xoshiro256StarStarRandom extends EnhancedRandom {
 
 	/**
 	 * Sets the second part of the state. Note that if you set this state to 0, the next random long (or most other types)
-	 * will be 0, regardless of the other states.
+	 * will be 0, unless all states would have been set to 0 as a result of this call. This cannot assign the all-zero
+	 * state; if stateB would be assigned 0 and the other states were already 0, this will assign 0x9E3779B97F4A7C15L to
+	 * stateB instead.
 	 *
 	 * @param stateB can be any long
 	 */
 	public void setStateB(long stateB) {
-		this.stateB = stateB;
+		this.stateB = ((stateA | stateB | stateC | stateD) == 0L) ? 0x9E3779B97F4A7C15L : stateB;
 	}
 
 	public long getStateC() {
@@ -256,12 +259,13 @@ public class Xoshiro256StarStarRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Sets the third part of the state.
+	 * Sets the third part of the state. This cannot set the state to 0 if all other states are already 0;
+	 * in that case, it sets this state to 0x9E3779B97F4A7C15L instead.
 	 *
 	 * @param stateC can be any long
 	 */
 	public void setStateC(long stateC) {
-		this.stateC = stateC;
+		this.stateC = ((stateA | stateB | stateC | stateD) == 0L) ? 0x9E3779B97F4A7C15L : stateC;
 	}
 
 	public long getStateD() {
@@ -269,18 +273,20 @@ public class Xoshiro256StarStarRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Sets the fourth part of the state.
+	 * Sets the fourth part of the state. This cannot set the state to 0 if all other states are already 0;
+	 * in that case, it sets this state to 0x9E3779B97F4A7C15L instead.
 	 *
 	 * @param stateD can be any long
 	 */
 	public void setStateD(long stateD) {
-		this.stateD = stateD;
+		this.stateD = ((stateA | stateB | stateC | stateD) == 0L) ? 0x9E3779B97F4A7C15L : stateD;
 	}
 
 	/**
 	 * Sets the state completely to the given four state variables.
 	 * This is the same as calling {@link #setStateA(long)}, {@link #setStateB(long)},
-	 * {@link #setStateC(long)}, and {@link #setStateD(long)} as a group.
+	 * {@link #setStateC(long)}, and {@link #setStateD(long)} as a group, except in the case where a state of all zeros
+	 * could be assigned.
 	 *
 	 * @param stateA the first state; can be any long
 	 * @param stateB the second state; can be any long
