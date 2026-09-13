@@ -17,6 +17,7 @@
 
 package com.github.tommyettinger.random.experimental;
 
+import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.random.AceRandom;
 import com.github.tommyettinger.random.EnhancedRandom;
 import com.github.tommyettinger.random.WhiskerRandom;
@@ -500,14 +501,43 @@ public class Xoshiro512PlusPlusRandom extends EnhancedRandom {
 //	}
 
 	@Override
+	public long previousLong() {
+		// stateA is made of ag
+		// stateB is made of abc
+		// stateC is made of ac
+		// stateD is made of de
+		// stateE is made of bef
+		// stateF is made of bf
+		// stateG is made of dgh(b<<11)
+		// stateH is made of rotl(dh)
+
+		stateH = (stateH << 43 | stateH >>> 21); // stateH has h ^ d
+
+		stateG ^= stateH; // stateG has g ^ b << 11
+
+		stateB ^= stateC; // stateB has b
+		stateE ^= stateF; // stateE has e
+		stateD ^= stateE; // stateD has d
+		stateF ^= stateB; // stateF has f
+		stateH ^= stateD; // stateH has h
+
+		stateG ^= stateB << 11; // stateG has g
+		stateA ^= stateG; // stateA has a
+		stateC ^= stateA;
+
+		long result = stateA + stateC;
+		return  (result << 17 | result >>> 47) + stateC;
+	}
+
+	@Override
 	public int nextInt() {
 		return (int) (nextLong() >>> 32);
 	}
 
-//	@Override
-//	public int previousInt() {
-//		return (int) (previousLong() >>> 32);
-//	}
+	@Override
+	public int previousInt() {
+		return (int) (previousLong() >>> 32);
+	}
 
 //	/**
 //	 * Jumps extremely far in the generator's sequence, such that it requires {@code Math.pow(2, 64)} calls to leap() to
@@ -599,5 +629,61 @@ public class Xoshiro512PlusPlusRandom extends EnhancedRandom {
 	public String toString() {
 		return "Xoshiro512PlusPlusRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L, stateD=" + (stateD)
 			+ "L, stateE=" + (stateE) + "L, stateF=" + (stateF) + "L, stateG=" + (stateG) + "L, stateH=" + (stateH) + "L}";
+	}
+
+	public static void main(String[] args) {
+		EnhancedRandom random = new Xoshiro512PlusPlusRandom(1L);
+		{
+			int n0 = random.nextInt();
+			int n1 = random.nextInt();
+			int n2 = random.nextInt();
+			int n3 = random.nextInt();
+			int n4 = random.nextInt();
+			int n5 = random.nextInt();
+			int p5 = random.previousInt();
+			int p4 = random.previousInt();
+			int p3 = random.previousInt();
+			int p2 = random.previousInt();
+			int p1 = random.previousInt();
+			int p0 = random.previousInt();
+			System.out.println(n0 == p0);
+			System.out.println(n1 == p1);
+			System.out.println(n2 == p2);
+			System.out.println(n3 == p3);
+			System.out.println(n4 == p4);
+			System.out.println(n5 == p5);
+			System.out.println(Base.BASE16.unsigned(n0) + " vs. " + Base.BASE16.unsigned(p0));
+			System.out.println(Base.BASE16.unsigned(n1) + " vs. " + Base.BASE16.unsigned(p1));
+			System.out.println(Base.BASE16.unsigned(n2) + " vs. " + Base.BASE16.unsigned(p2));
+			System.out.println(Base.BASE16.unsigned(n3) + " vs. " + Base.BASE16.unsigned(p3));
+			System.out.println(Base.BASE16.unsigned(n4) + " vs. " + Base.BASE16.unsigned(p4));
+			System.out.println(Base.BASE16.unsigned(n5) + " vs. " + Base.BASE16.unsigned(p5));
+		}
+		{
+			long n0 = random.nextLong();
+			long n1 = random.nextLong();
+			long n2 = random.nextLong();
+			long n3 = random.nextLong();
+			long n4 = random.nextLong();
+			long n5 = random.nextLong();
+			long p5 = random.previousLong();
+			long p4 = random.previousLong();
+			long p3 = random.previousLong();
+			long p2 = random.previousLong();
+			long p1 = random.previousLong();
+			long p0 = random.previousLong();
+			System.out.println(n0 == p0);
+			System.out.println(n1 == p1);
+			System.out.println(n2 == p2);
+			System.out.println(n3 == p3);
+			System.out.println(n4 == p4);
+			System.out.println(n5 == p5);
+			System.out.println(Base.BASE16.unsigned(n0) + " vs. " + Base.BASE16.unsigned(p0));
+			System.out.println(Base.BASE16.unsigned(n1) + " vs. " + Base.BASE16.unsigned(p1));
+			System.out.println(Base.BASE16.unsigned(n2) + " vs. " + Base.BASE16.unsigned(p2));
+			System.out.println(Base.BASE16.unsigned(n3) + " vs. " + Base.BASE16.unsigned(p3));
+			System.out.println(Base.BASE16.unsigned(n4) + " vs. " + Base.BASE16.unsigned(p4));
+			System.out.println(Base.BASE16.unsigned(n5) + " vs. " + Base.BASE16.unsigned(p5));
+		}
 	}
 }
