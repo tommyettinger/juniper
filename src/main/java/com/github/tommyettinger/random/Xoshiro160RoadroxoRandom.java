@@ -149,9 +149,9 @@ public class Xoshiro160RoadroxoRandom extends Enhanced32Random {
 	private static final BigInteger MINIMUM_PERIOD = new BigInteger("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000", 16);
 
 	/**
-	 * (2 to the 160) - (2 to the 64).
+	 * (2 to the 160) - (2 to the 32).
 	 *
-	 * @return (2 to the 160) - (2 to the 64)
+	 * @return (2 to the 160) - (2 to the 32)
 	 */
 	@Override
 	public BigInteger getMinimumPeriod() {
@@ -279,6 +279,8 @@ public class Xoshiro160RoadroxoRandom extends Enhanced32Random {
 
 	/**
 	 * Sets the first part of the state to the given int.
+	 * This cannot set the state to 0 if the first four states would all be 0;
+	 * in that case, it sets stateD to 1 instead.
 	 *
 	 * @param stateA can be any int
 	 */
@@ -293,6 +295,8 @@ public class Xoshiro160RoadroxoRandom extends Enhanced32Random {
 
 	/**
 	 * Sets the second part of the state to the given int.
+	 * This cannot set the state to 0 if the first four states would all be 0;
+	 * in that case, it sets stateD to 1 instead.
 	 *
 	 * @param stateB can be any int
 	 */
@@ -307,6 +311,8 @@ public class Xoshiro160RoadroxoRandom extends Enhanced32Random {
 
 	/**
 	 * Sets the third part of the state to the given int.
+	 * This cannot set the state to 0 if the first four states would all be 0;
+	 * in that case, it sets stateD to 1 instead.
 	 *
 	 * @param stateC can be any int
 	 */
@@ -321,8 +327,8 @@ public class Xoshiro160RoadroxoRandom extends Enhanced32Random {
 
 	/**
 	 * Sets the fourth part of the state to the given int.
-	 * If all four states would be 0 as a result of this call, it instead sets
-	 * the fourth part of the state to 1.
+	 * This cannot set the state to 0 if the first four states would all be 0;
+	 * in that case, it sets stateD to 1 instead.
 	 *
 	 * @param stateD can be any int
 	 */

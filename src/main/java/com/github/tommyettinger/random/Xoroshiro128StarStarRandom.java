@@ -186,13 +186,17 @@ public class Xoroshiro128StarStarRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Sets the first part of the state. Note that if you set this state to 0, the next random long (or most other types)
-	 * will be 0, regardless of the other states.
+	 * Sets the first part of the state. Note that if you set this state to 0, the next random long (or most other
+	 * types) will be 0, regardless of the other states.
+	 * If both states would become 0 as a result of this call, this sets
+	 * the second part of the state to 0x9E3779B97F4A7C15L .
 	 *
 	 * @param stateA can be any long
 	 */
 	public void setStateA(long stateA) {
 		this.stateA = stateA;
+		if((this.stateA | this.stateB) == 0L) this.stateB = 0x9E3779B97F4A7C15L;
+
 	}
 
 	public long getStateB() {
@@ -201,11 +205,14 @@ public class Xoroshiro128StarStarRandom extends EnhancedRandom {
 
 	/**
 	 * Sets the second part of the state.
+	 * If both states would become 0 as a result of this call, this sets
+	 * the second part of the state to 0x9E3779B97F4A7C15L .
 	 *
 	 * @param stateB can be any long
 	 */
 	public void setStateB(long stateB) {
 		this.stateB = stateB;
+		if((this.stateA | this.stateB) == 0L) this.stateB = 0x9E3779B97F4A7C15L;
 	}
 
 	/**
@@ -213,8 +220,8 @@ public class Xoroshiro128StarStarRandom extends EnhancedRandom {
 	 * This is the same as calling {@link #setStateA(long)} and
 	 * {@link #setStateB(long)} as a group.
 	 *
-	 * @param stateA the first state; this will be returned as-is if the next call is to {@link #nextLong()}
-	 * @param stateB the second state; can be any long
+	 * @param stateA the first state; can be any long unless all states are 0
+	 * @param stateB the second state; can be any long unless all states are 0
 	 */
 	@Override
 	public void setState(long stateA, long stateB) {
@@ -316,9 +323,7 @@ public class Xoroshiro128StarStarRandom extends EnhancedRandom {
 
 		Xoroshiro128StarStarRandom that = (Xoroshiro128StarStarRandom) o;
 
-		if (stateA != that.stateA)
-			return false;
-		return stateB == that.stateB;
+		return stateA == that.stateA && stateB == that.stateB;
 	}
 
 	public String toString() {

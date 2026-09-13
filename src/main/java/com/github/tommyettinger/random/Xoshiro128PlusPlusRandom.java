@@ -227,11 +227,14 @@ public class Xoshiro128PlusPlusRandom extends Enhanced32Random {
 
 	/**
 	 * Sets the first part of the state to the given int.
+	 * If all four states would be 0 as a result of this call, it sets
+	 * the fourth part of the state to 1.
 	 *
 	 * @param stateA can be any int
 	 */
 	public void setStateA(int stateA) {
 		this.stateA = stateA;
+		if ((this.stateA | this.stateB | this.stateC | this.stateD) == 0) this.stateD = 1;
 	}
 
 	public int getStateB() {
@@ -240,11 +243,15 @@ public class Xoshiro128PlusPlusRandom extends Enhanced32Random {
 
 	/**
 	 * Sets the second part of the state to the given int.
+	 * If all four states would be 0 as a result of this call, it sets
+	 * the fourth part of the state to 1.
 	 *
 	 * @param stateB can be any int
 	 */
 	public void setStateB(int stateB) {
 		this.stateB = stateB;
+		if ((this.stateA | this.stateB | this.stateC | this.stateD) == 0) this.stateD = 1;
+
 	}
 
 	public int getStateC() {
@@ -253,11 +260,15 @@ public class Xoshiro128PlusPlusRandom extends Enhanced32Random {
 
 	/**
 	 * Sets the third part of the state to the given int.
+	 * If all four states would be 0 as a result of this call, it sets
+	 * the fourth part of the state to 1.
 	 *
 	 * @param stateC can be any int
 	 */
 	public void setStateC(int stateC) {
 		this.stateC = stateC;
+		if ((this.stateA | this.stateB | this.stateC | this.stateD) == 0) this.stateD = 1;
+
 	}
 
 	public int getStateD() {
