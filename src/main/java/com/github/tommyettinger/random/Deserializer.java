@@ -114,6 +114,12 @@ public final class Deserializer {
 		register(new AceRandom(1, 2, 3, 4, 5));
 		register(new Xoshiro160RoadroxoRandom(1, 2, 3, 4, 5));
 		register(new TraceRandom(1, 2, 3, 4, 5, 6));
+		register(new Goblin3Random(1, 2, 3));
+		register(new Goblin4Random(1, 2, 3, 4));
+		register(new Goblin5Random(1, 2, 3, 4, 5));
+		register(new Goblin6Random(1, 2, 3, 4, 5, 6));
+		register(new Goblin7Random(1, 2, 3, 4, 5, 6, 7));
+		register(new Xoshiro512PlusPlusRandom(1, 2, 3, 4, 5, 6, 7, 8));
 		register(new ExtendoRandom(1, 2, 3));
 		register(new KnownSequenceRandom(LongSequence.with(1337L, 42L, 23L, 666L)));
 

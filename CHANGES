@@ -1,3 +1,6 @@
+[0.10.8]
+- The new generators in 0.10.7 weren't registered with Deserializer.
+
 [0.10.7]
 - Xoshiro512PlusPlusRandom is new here, and is our first generator with such a large period ((2 to the 512) minus 1). It is 7D-equidistributed. It has one disallowed value, where every state is 0, but otherwise allows all longs for states.
 - The suite of Goblin generators, from Goblin3Random to Goblin7Random, is new, and each has between 3 and 7 long states that it will explore fully before cycling. Every Goblin generator is exactly 1D-equidistributed and has the maximum period for its state size, with no disallowed values.
