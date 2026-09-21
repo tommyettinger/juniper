@@ -222,16 +222,16 @@ public class Xoshiro512PlusPlusRandom extends EnhancedRandom {
 				stateC = ((stateA | stateB | value | stateD | stateE | stateF | stateG | stateH) == 0L) ? 0x9E3779B97F4A7C15L : value;
 				break;
 			case 3:
-				stateC = ((stateA | stateB | stateC | value | stateE | stateF | stateG | stateH) == 0L) ? 0x9E3779B97F4A7C15L : value;
+				stateD = ((stateA | stateB | stateC | value | stateE | stateF | stateG | stateH) == 0L) ? 0x9E3779B97F4A7C15L : value;
 				break;
 			case 4:
-				stateC = ((stateA | stateB | stateC | stateD | value | stateF | stateG | stateH) == 0L) ? 0x9E3779B97F4A7C15L : value;
+				stateE = ((stateA | stateB | stateC | stateD | value | stateF | stateG | stateH) == 0L) ? 0x9E3779B97F4A7C15L : value;
 				break;
 			case 5:
-				stateC = ((stateA | stateB | stateC | stateD | stateE | value | stateG | stateH) == 0L) ? 0x9E3779B97F4A7C15L : value;
+				stateF = ((stateA | stateB | stateC | stateD | stateE | value | stateG | stateH) == 0L) ? 0x9E3779B97F4A7C15L : value;
 				break;
 			case 6:
-				stateC = ((stateA | stateB | stateC | stateD | stateE | stateF | value | stateH) == 0L) ? 0x9E3779B97F4A7C15L : value;
+				stateG = ((stateA | stateB | stateC | stateD | stateE | stateF | value | stateH) == 0L) ? 0x9E3779B97F4A7C15L : value;
 				break;
 			default:
 				stateH = ((stateA | stateB | stateC | stateD | stateE | stateF | stateG | value) == 0L) ? 0x9E3779B97F4A7C15L : value;
