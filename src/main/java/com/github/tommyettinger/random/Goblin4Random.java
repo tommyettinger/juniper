@@ -15,21 +15,19 @@
  *
  */
 
-package com.github.tommyettinger.random.experimental;
+package com.github.tommyettinger.random;
 
-import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.digital.BitConversion;
 import com.github.tommyettinger.digital.Hasher;
-import com.github.tommyettinger.random.EnhancedRandom;
 
 import java.math.BigInteger;
 
 /**
- * A long-period generator with 256 bits of state. Period is 2 to the 256. This is exactly 1D-equidistributed.
+ * A 64-bit-native generator with 256 bits of state. Period is 2 to the 256. This is exactly 1D-equidistributed.
  * <br>
- * This operates like an extended version of {@link com.github.tommyettinger.random.OrbitalRandom}, making use of
+ * This operates like an extended version of {@link OrbitalRandom}, making use of
  * {@link BitConversion#countLeadingZeros(long)} to produce longer cycles. It runs its last state's value through a
- * mixer that is like Moremur (which is what {@link com.github.tommyettinger.random.DistinctRandom} uses), but also XORs
+ * mixer that is like Moremur (which is what {@link DistinctRandom} uses), but also XORs
  * in the other states at two points in the Moremur mixer. It also uses "non-magic" constants, which actually work fine
  * here: stateA uses 7777777777777777777L as its increment for a counter, and the complicated hex constants used by
  * Moremur are replaced by 5555555555555555555L and 3333333333333333333L.
@@ -375,61 +373,5 @@ public class Goblin4Random extends EnhancedRandom {
 
 	public String toString() {
 		return "Goblin4Random{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L, stateD=" + (stateD) + "L}";
-	}
-
-	public static void main(String[] args) {
-		EnhancedRandom random = new Goblin4Random(1L);
-		{
-			int n0 = random.nextInt();
-			int n1 = random.nextInt();
-			int n2 = random.nextInt();
-			int n3 = random.nextInt();
-			int n4 = random.nextInt();
-			int n5 = random.nextInt();
-			int p5 = random.previousInt();
-			int p4 = random.previousInt();
-			int p3 = random.previousInt();
-			int p2 = random.previousInt();
-			int p1 = random.previousInt();
-			int p0 = random.previousInt();
-			System.out.println(n0 == p0);
-			System.out.println(n1 == p1);
-			System.out.println(n2 == p2);
-			System.out.println(n3 == p3);
-			System.out.println(n4 == p4);
-			System.out.println(n5 == p5);
-			System.out.println(Base.BASE16.unsigned(n0) + " vs. " + Base.BASE16.unsigned(p0));
-			System.out.println(Base.BASE16.unsigned(n1) + " vs. " + Base.BASE16.unsigned(p1));
-			System.out.println(Base.BASE16.unsigned(n2) + " vs. " + Base.BASE16.unsigned(p2));
-			System.out.println(Base.BASE16.unsigned(n3) + " vs. " + Base.BASE16.unsigned(p3));
-			System.out.println(Base.BASE16.unsigned(n4) + " vs. " + Base.BASE16.unsigned(p4));
-			System.out.println(Base.BASE16.unsigned(n5) + " vs. " + Base.BASE16.unsigned(p5));
-		}
-		{
-			long n0 = random.nextLong();
-			long n1 = random.nextLong();
-			long n2 = random.nextLong();
-			long n3 = random.nextLong();
-			long n4 = random.nextLong();
-			long n5 = random.nextLong();
-			long p5 = random.previousLong();
-			long p4 = random.previousLong();
-			long p3 = random.previousLong();
-			long p2 = random.previousLong();
-			long p1 = random.previousLong();
-			long p0 = random.previousLong();
-			System.out.println(n0 == p0);
-			System.out.println(n1 == p1);
-			System.out.println(n2 == p2);
-			System.out.println(n3 == p3);
-			System.out.println(n4 == p4);
-			System.out.println(n5 == p5);
-			System.out.println(Base.BASE16.unsigned(n0) + " vs. " + Base.BASE16.unsigned(p0));
-			System.out.println(Base.BASE16.unsigned(n1) + " vs. " + Base.BASE16.unsigned(p1));
-			System.out.println(Base.BASE16.unsigned(n2) + " vs. " + Base.BASE16.unsigned(p2));
-			System.out.println(Base.BASE16.unsigned(n3) + " vs. " + Base.BASE16.unsigned(p3));
-			System.out.println(Base.BASE16.unsigned(n4) + " vs. " + Base.BASE16.unsigned(p4));
-			System.out.println(Base.BASE16.unsigned(n5) + " vs. " + Base.BASE16.unsigned(p5));
-		}
 	}
 }
