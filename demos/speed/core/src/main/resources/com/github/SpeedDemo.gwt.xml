@@ -2,7 +2,7 @@
 <!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.11.0//EN" "http://www.gwtproject.org/doctype/2.11.0/gwt-module.dtd">
 <module>
 	<source path="tommyettinger">
-		<exclude name="random/*"/>
+		<exclude name="tommyettinger/random/*"/>
 	</source>
 	<super-source path="emu" />
 </module>

@@ -221,8 +221,8 @@ public class LCGRandom {
    * number sequence.
    *
    * @return a uniformly distributed {@code int} value.
-   * @see java.lang.Integer#MAX_VALUE
-   * @see java.lang.Integer#MIN_VALUE
+   * @see Integer#MAX_VALUE
+   * @see Integer#MIN_VALUE
    * @see #next
    * @see #nextLong
    */
@@ -255,8 +255,8 @@ public class LCGRandom {
    * number sequence.
    *
    * @return 64-bit random integer.
-   * @see java.lang.Integer#MAX_VALUE
-   * @see java.lang.Integer#MIN_VALUE
+   * @see Integer#MAX_VALUE
+   * @see Integer#MIN_VALUE
    * @see #next
    * @see #nextInt()
    * @see #nextInt(int)

@@ -2,11 +2,15 @@
 eclipse.project.name = appName + '-core'
 
 dependencies {
-	api "com.badlogicgames.gdx:gdx:$gdxVersion"
-	api "com.github.tommyettinger:digital:$digitalVersion"
-	api "com.github.tommyettinger:juniper:$juniperVersion"
-	testImplementation "junit:junit:4.13.2"
+  api "com.badlogicgames.gdx:gdx:$gdxVersion"
+  api "com.github.tommyettinger:digital:$digitalVersion"
+  api "com.github.tommyettinger:juniper:$juniperVersion"
+  testImplementation "junit:junit:4.13.2"
 }
 
 idea.module.excludeDirs += [file("src/main/java/com/github/emu/")]
 [compileJava, compileTestJava, javadoc]*.exclude("com/github/emu")
+
+jar {
+  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}

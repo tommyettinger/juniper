@@ -10,7 +10,7 @@
 
   <!-- "Inherits" lines are how GWT knows where to look for code and configuration in other projects or libraries. -->
   <inherits name="com.badlogic.gdx.backends.gdx_backends_gwt" />
-  <inherits name="com.github.tommyettinger.DistributorDemo" />
+  <inherits name="com.github.DistributorDemo" />
   <inherits name="com.github.tommyettinger.digital" />
   <inherits name="com.github.tommyettinger.juniper" />
 

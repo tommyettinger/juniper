@@ -17,6 +17,8 @@
 
 package com.github.tommyettinger.random;
 
+import com.github.tommyettinger.random.EnhancedRandom;
+
 import static com.github.tommyettinger.digital.BitConversion.imul;
 
 /**
