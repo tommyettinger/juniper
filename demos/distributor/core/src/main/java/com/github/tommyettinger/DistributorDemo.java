@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.UIUtils;
 import com.badlogic.gdx.utils.Align;
 import com.github.tommyettinger.random.*;
 
-/** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
+/** {@link ApplicationListener} implementation shared by all platforms. */
 public class DistributorDemo extends Game {
     public static final int SCREEN_WIDTH = 512;
     public static final int SCREEN_HEIGHT = 520;
