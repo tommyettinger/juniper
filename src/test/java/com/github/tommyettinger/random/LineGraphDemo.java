@@ -86,8 +86,9 @@ public class LineGraphDemo extends ApplicationAdapter {
 			h += (BitConversion.imul(h, h) | 999) + start;
 			return Interpolations.smoother.apply(BitConversion.imul(h ^ 333333333, 555555555), BitConversion.imul(h + 1 ^ 333333333, 555555555), f - start) * 0x1p-31f;
 		},
+		(i, f) -> TrigTools.sin(f + TrigTools.sin(f * (1.5f + Hasher.randomize1Float(i)))),        //19
 	};
-	public int currentWobble = 18;
+	public int currentWobble = 19;
 	public int wobbleCount = wobbles.length;
 	public int octaves = 1;
 
