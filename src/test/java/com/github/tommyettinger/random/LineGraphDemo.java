@@ -30,6 +30,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.github.tommyettinger.digital.Hasher;
+import com.github.tommyettinger.digital.Interpolations;
 import com.github.tommyettinger.digital.MathTools;
 import com.github.tommyettinger.digital.TrigTools;
 
@@ -72,9 +73,14 @@ public class LineGraphDemo extends ApplicationAdapter {
 			float s = TrigTools.sinTurns(0.25f * (f - start));
 			s *= s;
 			return (Hasher.randomize3(i) * (1f - s) + Hasher.randomize3(1L + i) * s) * 0x1p-63f;
-		}
+		},
+		(h, f) -> {                                                                                //16
+			final long start = MathTools.longFloor(f);
+			long i = h * 3333333333333333333L + start;
+			return Interpolations.smoother.apply(Hasher.randomizeH(i), Hasher.randomizeH(1L + i), f - start) * 0x1p-63f;
+		},
 	};
-	public int currentWobble = 1;
+	public int currentWobble = 16;
 	public int wobbleCount = wobbles.length;
 	public int octaves = 1;
 
