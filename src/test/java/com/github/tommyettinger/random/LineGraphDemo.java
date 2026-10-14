@@ -29,10 +29,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.UIUtils;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.github.tommyettinger.digital.Hasher;
-import com.github.tommyettinger.digital.Interpolations;
-import com.github.tommyettinger.digital.MathTools;
-import com.github.tommyettinger.digital.TrigTools;
+import com.github.tommyettinger.digital.*;
 
 import static com.badlogic.gdx.Input.Keys.*;
 
@@ -78,6 +75,11 @@ public class LineGraphDemo extends ApplicationAdapter {
 			final long start = MathTools.longFloor(f);
 			long i = h * 3333333333333333333L + start;
 			return Interpolations.smoother.apply(Hasher.randomizeH(i), Hasher.randomizeH(1L + i), f - start) * 0x1p-63f;
+		},
+		(h, f) -> {                                                                                //17
+			final long start = MathTools.longFloor(f);
+			long i = (h ^ 1111111111111111111L) * 7777777777777777777L + start;
+			return Interpolations.smoother.apply((i ^ 3333333333333333333L) * 5555555555555555555L, (i + 1L ^ 3333333333333333333L) * 5555555555555555555L, f - start) * 0x1p-63f;
 		},
 	};
 	public int currentWobble = 16;
