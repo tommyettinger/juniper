@@ -81,8 +81,13 @@ public class LineGraphDemo extends ApplicationAdapter {
 			long i = (h ^ 1111111111111111111L) * 7777777777777777777L + start;
 			return Interpolations.smoother.apply((i ^ 3333333333333333333L) * 5555555555555555555L, (i + 1L ^ 3333333333333333333L) * 5555555555555555555L, f - start) * 0x1p-63f;
 		},
+		(h, f) -> {                                                                                //18
+			final int start = MathTools.floor(f);
+			h += (BitConversion.imul(h, h) | 999) + start;
+			return Interpolations.smoother.apply(BitConversion.imul(h ^ 333333333, 555555555), BitConversion.imul(h + 1 ^ 333333333, 555555555), f - start) * 0x1p-31f;
+		},
 	};
-	public int currentWobble = 16;
+	public int currentWobble = 18;
 	public int wobbleCount = wobbles.length;
 	public int octaves = 1;
 
