@@ -82,15 +82,21 @@ public class LineGraphDemo extends ApplicationAdapter {
 			return Interpolations.smoother.apply((i ^ 3333333333333333333L) * 5555555555555555555L, (i + 1L ^ 3333333333333333333L) * 5555555555555555555L, f - start) * 0x1p-63f;
 		},
 		(h, f) -> {                                                                                //18
-			final int start = MathTools.floor(f);
-			h += (BitConversion.imul(h, h) | 999) + start;
+			final int start = MathTools.fastFloor(f);
+			h = BitConversion.imul(h ^ 333333333, 555555555) + start;
 			return Interpolations.smoother.apply(BitConversion.imul(h ^ 333333333, 555555555), BitConversion.imul(h + 1 ^ 333333333, 555555555), f - start) * 0x1p-31f;
 		},
 		(i, f) -> TrigTools.sin(f + TrigTools.sin(f * (1.5f + Hasher.randomize1Float(i)))),        //19
 		(i, f) -> TrigTools.sin(f +                                                                //20
 			TrigTools.sinDeg(f * BitConversion.intBitsToFloat(0x43000000 | (BitConversion.imul(i ^ 333333333, 555555555) >>> 9)))),
+		(h, f) -> {                                                                                //21
+			f += LineWobble.bicubicWobble(h, f);
+			final int start = MathTools.fastFloor(f);
+			h = BitConversion.imul(h ^ 333333333, 555555555) + start;
+			return Interpolations.smoother.apply(BitConversion.imul(h ^ 333333333, 555555555), BitConversion.imul(h + 1 ^ 333333333, 555555555), f - start) * 0x1p-31f;
+		},
 	};
-	public int currentWobble = 20;
+	public int currentWobble = 21;
 	public int wobbleCount = wobbles.length;
 	public int octaves = 1;
 
