@@ -98,7 +98,7 @@ public class LineGraphDemo extends ApplicationAdapter {
 		(i, f) -> LineWobble.wobble(i, f + LineWobble.bicubicWobble(i, f * 0.618f)),               //22
 		(i, f) -> TrigTools.sin(f + 2f * LineWobble.bicubicWobble(i, f)),                          //23
 		(i, f) ->                                                                                  //24
-			TrigTools.sin(f + LineWobble.wobble(i, f * 1.618f) + 2f * LineWobble.bicubicWobble(~i, f * 1.417f)),
+			TrigTools.sin(f + LineWobble.wobble(i, f * 1.618f) + 2f * LineWobble.bicubicWobble(~i, f * 1.414f)),
 	};
 	public int currentWobble = 24;
 	public int wobbleCount = wobbles.length;
