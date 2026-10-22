@@ -1,0 +1,1 @@
+Lowest mode: 114.0000 has mean amount 0.0310939252  PASS 👍 for L64X128MixRandom
