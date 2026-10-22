@@ -15,13 +15,9 @@
  *
  */
 
-package com.github.tommyettinger.random.experimental;
-
-import com.github.tommyettinger.random.EnhancedRandom;
+package com.github.tommyettinger.random;
 
 import java.math.BigInteger;
-
-import static com.github.tommyettinger.digital.Base.BASE16;
 
 /**
  * An EnhancedRandom version of L64X128MixRandom in JDK 17 and newer, or more specifically, the Apache-licensed version
@@ -32,6 +28,9 @@ import static com.github.tommyettinger.digital.Base.BASE16;
  * <a href="https://docs.oracle.com/en/java/javase/27/docs/api/java.base/java/util/random/package-summary.html">The java.util.random package docs are useful.</a>
  * <br>
  * This implements all optional methods in EnhancedRandom except {@link #skip(long)}.
+ * This is 2-dimensionally equidistributed and exactly equidistributed, with each {@code long} result occurring exactly
+ * as often as any other. It hasn't been tested with PractRand, but is included in the JDK, which says good things. It
+ * passes Initial Correlation Evaluator tests and their Immediate variants.
  *
  * @see <a href="https://doi.org/10.1145/3485525">Steele &amp; Vigna (2021) Proc. ACM Programming Languages 5, 1-31</a>
  */
@@ -79,11 +78,14 @@ public class L64X128MixRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * Creates a new L64X128MixRandom with the given two states; all {@code long} values are permitted.
+	 * Creates a new L64X128MixRandom with the given four states; all {@code long} values are permitted.
 	 * These states will be used verbatim, as long as they are not all 0. In that case, stateB is changed.
+	 * The last state must also be an odd number; if an even one is provided, this adds 1 to it.
 	 *
-	 * @param stateA any {@code long} value
-	 * @param stateB any {@code long} value
+	 * @param stateA any {@code long} value, as long as stateA and stateB are not both 0
+	 * @param stateB any {@code long} value, as long as stateA and stateB are not both 0
+	 * @param stateC any {@code long} value
+	 * @param stateD any odd-number {@code long} value
 	 */
 	public L64X128MixRandom(long stateA, long stateB, long stateC, long stateD) {
 		super(stateA);
@@ -150,7 +152,7 @@ public class L64X128MixRandom extends EnhancedRandom {
 	 * Selections 0, 1, 2, and 3 refer to states A, B, C, and D. If this
 	 * would cause the first two states to be 0, it instead sets the selected state to 0x9E3779B97F4A7C15L.
 	 *
-	 * @param selection used to select which state variable to set; generally 0 or 1
+	 * @param selection used to select which state variable to set; generally 0, 1, 2, or 3
 	 * @param value     the exact value to use for the selected state, if valid
 	 */
 	@Override
@@ -247,6 +249,8 @@ public class L64X128MixRandom extends EnhancedRandom {
 	/**
 	 * Sets the fourth part of the state, which must be an odd number.
 	 * If an even number is given, this adds 1 to it before using it.
+	 * This part usually does not change during generation, because
+	 * it determines the distinct stream the generator will produce.
 	 *
 	 * @param stateD any odd-number long
 	 */
@@ -383,62 +387,5 @@ public class L64X128MixRandom extends EnhancedRandom {
 
 	public String toString() {
 		return "L64X128MixRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L, stateD=" + (stateD) + "L}";
-	}
-	public static void main(String[] args) {
-		L64X128MixRandom random = new L64X128MixRandom(1L);
-		{
-			int n0 = random.nextInt();
-			int n1 = random.nextInt();
-			int n2 = random.nextInt();
-			int n3 = random.nextInt();
-			int n4 = random.nextInt();
-			int n5 = random.nextInt();
-			int p5 = random.previousInt();
-			int p4 = random.previousInt();
-			int p3 = random.previousInt();
-			int p2 = random.previousInt();
-			int p1 = random.previousInt();
-			int p0 = random.previousInt();
-			System.out.println(n0 == p0);
-			System.out.println(n1 == p1);
-			System.out.println(n2 == p2);
-			System.out.println(n3 == p3);
-			System.out.println(n4 == p4);
-			System.out.println(n5 == p5);
-			System.out.println(BASE16.unsigned(n0) + " vs. " + BASE16.unsigned(p0));
-			System.out.println(BASE16.unsigned(n1) + " vs. " + BASE16.unsigned(p1));
-			System.out.println(BASE16.unsigned(n2) + " vs. " + BASE16.unsigned(p2));
-			System.out.println(BASE16.unsigned(n3) + " vs. " + BASE16.unsigned(p3));
-			System.out.println(BASE16.unsigned(n4) + " vs. " + BASE16.unsigned(p4));
-			System.out.println(BASE16.unsigned(n5) + " vs. " + BASE16.unsigned(p5));
-		}
-		random = new L64X128MixRandom(1L);
-		{
-			long n0 = random.nextLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL\n", random.stateA, random.stateB);
-			long n1 = random.nextLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL\n", random.stateA, random.stateB);
-			long n2 = random.nextLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL\n", random.stateA, random.stateB);
-			long n3 = random.nextLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL\n", random.stateA, random.stateB);
-			long n4 = random.nextLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL\n", random.stateA, random.stateB);
-			long n5 = random.nextLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL\n", random.stateA, random.stateB);
-			System.out.println("Going back...");
-			long p5 = random.previousLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL\n", random.stateA, random.stateB);
-			long p4 = random.previousLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL\n", random.stateA, random.stateB);
-			long p3 = random.previousLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL\n", random.stateA, random.stateB);
-			long p2 = random.previousLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL\n", random.stateA, random.stateB);
-			long p1 = random.previousLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL\n", random.stateA, random.stateB);
-			long p0 = random.previousLong(); System.out.printf("a: 0x%016XL, b: 0x%016XL\n", random.stateA, random.stateB);
-			System.out.println(n0 == p0);
-			System.out.println(n1 == p1);
-			System.out.println(n2 == p2);
-			System.out.println(n3 == p3);
-			System.out.println(n4 == p4);
-			System.out.println(n5 == p5);
-			System.out.println(BASE16.unsigned(n0) + " vs. " + BASE16.unsigned(p0));
-			System.out.println(BASE16.unsigned(n1) + " vs. " + BASE16.unsigned(p1));
-			System.out.println(BASE16.unsigned(n2) + " vs. " + BASE16.unsigned(p2));
-			System.out.println(BASE16.unsigned(n3) + " vs. " + BASE16.unsigned(p3));
-			System.out.println(BASE16.unsigned(n4) + " vs. " + BASE16.unsigned(p4));
-			System.out.println(BASE16.unsigned(n5) + " vs. " + BASE16.unsigned(p5));
-		}
 	}
 }
