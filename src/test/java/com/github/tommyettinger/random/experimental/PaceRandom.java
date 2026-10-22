@@ -313,7 +313,7 @@ public class PaceRandom extends EnhancedRandom {
 		final long fc = stateC;
 		final long fd = stateD;
 		final long fe = stateE;
-		stateA = fa + 0x3E94C4F905E9E465L;
+		stateA = fa + 0xB65443A313F8BED1L;
 		stateB = fa ^ fe;
 		stateC = fb + fd;
 		stateD = (fc << 44 | fc >>> 20);
@@ -327,7 +327,7 @@ public class PaceRandom extends EnhancedRandom {
 		final long fc = stateC;
 		final long fd = stateD;
 		final long fe = stateE;
-		stateA -= 0x3E94C4F905E9E465L;
+		stateA -= 0xB65443A313F8BED1L;
 		stateC = (fd >>> 44 | fd << 20);
 		stateB = fe - stateC;
 		stateD = fc - stateB;
@@ -342,7 +342,7 @@ public class PaceRandom extends EnhancedRandom {
 		final long fc = stateC;
 		final long fd = stateD;
 		final long fe = stateE;
-		stateA = fa + 0x3E94C4F905E9E465L;
+		stateA = fa + 0xB65443A313F8BED1L;
 		stateB = fa ^ fe;
 		stateC = fb + fd;
 		stateD = (fc << 44 | fc >>> 20);
