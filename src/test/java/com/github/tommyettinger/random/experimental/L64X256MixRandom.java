@@ -30,6 +30,8 @@ import static com.github.tommyettinger.digital.Base.BASE16;
  * <a href="https://github.com/apache/commons-rng/blob/rel/commons-rng-1.7/commons-rng-core/src/main/java/org/apache/commons/rng/core/source64/L64X256Mix.java">Apache Commons RNG's L64X256Mix</a>.
  * <br>
  * <a href="https://docs.oracle.com/en/java/javase/27/docs/api/java.base/java/util/random/package-summary.html">The java.util.random package docs are useful.</a>
+ * <br>
+ * This implements all optional methods in EnhancedRandom except {@link #skip(long)}.
  *
  * @see <a href="https://doi.org/10.1145/3485525">Steele &amp; Vigna (2021) Proc. ACM Programming Languages 5, 1-31</a>
  */
@@ -468,7 +470,6 @@ public class L64X256MixRandom extends EnhancedRandom {
 	public L64X256MixRandom copy() {
 		return new L64X256MixRandom(stateA, stateB, stateC, stateD, stateE, stateF);
 	}
-
 
 	/**
 	 * Perform a 64-bit mixing function using Doug Lea's 64-bit mix constants and shifts.

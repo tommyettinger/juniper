@@ -20,14 +20,14 @@ package com.github.tommyettinger.random;
 import java.math.BigInteger;
 
 /**
- * A random number generator that is fairly fast and guarantees 2-dimensional equidistribution (with the exception of the
+ * A random number generator that is fairly fast and guarantees 2-dimensional equidistribution (except the
  * pair with two zeroes in a row, every pair of long results is produced exactly once over the period). It has a
  * period of (2 to the 128) - 1, which would take millennia to exhaust on current-generation hardware (at least).
  * It can be considered stable, like the other EnhancedRandom implementations here. This passes heavy testing, but isn't a
  * cryptographic generator, and it does have known issues when its output is multiplied by certain specific constants (any
  * of a lot) and tests are then run. The only invalid state is the one with 0 in each state variable, and this won't ever
  * occur in the normal period of that contains all other states. You should generally seed this with {@link #setSeed(long)},
- * rather than {@link #setState(long, long, long, long)}, because if you give similar states to the latter, it tends to
+ * rather than {@link #setState(long, long)}, because if you give similar states to the latter, it tends to
  * produce severely flawed output on at least the low-order bits. This can't happen with setSeed().
  * <br>
  * The main reasons you could prefer this generator to other, typically-faster generators in this library are:
@@ -38,7 +38,7 @@ import java.math.BigInteger;
  *     <li>You need a regular structure to the generated numbers, with guarantees about that structure.</li>
  * </ul>
  * <br>
- * This implements all optional methods in EnhancedRandom except {@link #skip(long)} and {@link #previousLong()}.
+ * This implements all optional methods in EnhancedRandom except {@link #skip(long)}.
  * <br>
  * Xoroshiro128** was written in 2018 by David Blackman and Sebastiano Vigna. You can consult their paper for technical details:
  * <a href="https://vigna.di.unimi.it/ftp/papers/ScrambledLinear.pdf">PDF link here</a>.
@@ -158,9 +158,9 @@ public class Xoroshiro128StarStarRandom extends EnhancedRandom {
 	}
 
 	/**
-	 * This initializes all 4 states of the generator to random values based on the given seed.
+	 * This initializes both states of the generator to random values based on the given seed.
 	 * (2 to the 64) possible initial generator states can be produced here, all with a different
-	 * first value returned by {@link #nextLong()} (because {@code stateB} is guaranteed to be
+	 * first value returned by {@link #nextLong()} (because {@code stateA} is guaranteed to be
 	 * different for every different {@code seed}).
 	 *
 	 * @param seed the initial seed; may be any long
