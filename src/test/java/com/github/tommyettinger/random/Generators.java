@@ -155,6 +155,7 @@ public final class Generators {
 		randomList.add(new LowGyo2Random(1, 1));
 		randomList.add(new Xoshiro512PlusPlusRandom(1, 1, 1, 1, 1, 1, 1, 1));
 		randomList.add(new PaceRandom(1, 1, 1, 1, 1));
+		randomList.add(new L64X256MixRandom(1, 1, 1, 1, 1, 1));
 	}
 
 	public static int randomCount = randomList.size();
