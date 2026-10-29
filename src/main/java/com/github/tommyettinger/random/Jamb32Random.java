@@ -100,8 +100,8 @@ public class Jamb32Random extends Enhanced32Random {
 	 */
 	public Jamb32Random(int stateA, int stateB) {
 		super(stateA);
-		this.stateA = stateA;
-		this.stateB = stateB;
+		this.stateA = stateA | 0;
+		this.stateB = stateB | 0;
 	}
 
 	@Override
