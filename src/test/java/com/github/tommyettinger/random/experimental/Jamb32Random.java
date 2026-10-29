@@ -255,15 +255,15 @@ public class Jamb32Random extends Enhanced32Random {
 		return z ^ z >>> 23;
 	}
 
-//	@Override
-//	public int previousInt() {
-//		/* -976291125 is modularMultiplicativeInverse(555555555) */
-//		stateB = BitConversion.imul(stateB ^ 333333333, -976291125);
-//		/* -83784047 is modularMultiplicativeInverse(777777777) */
-//		stateA = BitConversion.imul(stateA, -83784047) - BitConversion.countLeadingZeros(stateB) | 0;
-//		int z = BitConversion.imul(stateA ^ (stateB << 12 | stateB >>> -12), 999999999);
-//		return z ^ z >>> 23;
-//	}
+	@Override
+	public int previousInt() {
+		/* -1952381557 is modularMultiplicativeInverse(555555) */
+		stateB = BitConversion.imul(stateB ^ 333333333, -1952381557);
+		/* -1394558255 is modularMultiplicativeInverse(777777) */
+		stateA = BitConversion.imul(stateA, -1394558255) - BitConversion.countLeadingZeros(stateB) | 0;
+		final int z = (stateA ^ (stateB << 12 | stateB >>> -12)) * 999999;
+		return z ^ z >>> 23;
+	}
 
 	@Override
 	public int next(int bits) {
@@ -273,10 +273,10 @@ public class Jamb32Random extends Enhanced32Random {
 		return (z ^ z >>> 23) >>> -bits;
 	}
 
-//	@Override
-//	public long previousLong() {
-//		return previousInt() ^ (long) previousInt() << 32;
-//	}
+	@Override
+	public long previousLong() {
+		return previousInt() ^ (long) previousInt() << 32;
+	}
 
 	/**
 	 * Jumps extremely far in the generator's sequence, such that it requires {@code Math.pow(2, 32)} calls to leap() to
@@ -316,5 +316,74 @@ public class Jamb32Random extends Enhanced32Random {
 
 	public String toString() {
 		return "Jamb32Random{" + "stateA=" + (stateA) + ", stateB=" + (stateB) + "}";
+	}
+	public static void main(String[] args) {
+		Jamb32Random random = new Jamb32Random(1L);
+		{
+			int n0 = random.nextInt();
+			int n1 = random.nextInt();
+			int n2 = random.nextInt();
+			int n3 = random.nextInt();
+			int n4 = random.nextInt();
+			int n5 = random.nextInt();
+			int p5 = random.previousInt();
+			int p4 = random.previousInt();
+			int p3 = random.previousInt();
+			int p2 = random.previousInt();
+			int p1 = random.previousInt();
+			int p0 = random.previousInt();
+			System.out.println(n0 == p0);
+			System.out.println(n1 == p1);
+			System.out.println(n2 == p2);
+			System.out.println(n3 == p3);
+			System.out.println(n4 == p4);
+			System.out.println(n5 == p5);
+			System.out.printf("%08X vs. %08X\n", p0, n0);
+			System.out.printf("%08X vs. %08X\n", p1, n1);
+			System.out.printf("%08X vs. %08X\n", p2, n2);
+			System.out.printf("%08X vs. %08X\n", p3, n3);
+			System.out.printf("%08X vs. %08X\n", p4, n4);
+			System.out.printf("%08X vs. %08X\n", p5, n5);
+		}
+		random.setSeed(1L);
+		{
+			long n0 = random.nextLong();
+			System.out.printf("a: 0x%08X, b: 0x%08X\n", random.stateA, random.stateB);
+			long n1 = random.nextLong();
+			System.out.printf("a: 0x%08X, b: 0x%08X\n", random.stateA, random.stateB);
+			long n2 = random.nextLong();
+			System.out.printf("a: 0x%08X, b: 0x%08X\n", random.stateA, random.stateB);
+			long n3 = random.nextLong();
+			System.out.printf("a: 0x%08X, b: 0x%08X\n", random.stateA, random.stateB);
+			long n4 = random.nextLong();
+			System.out.printf("a: 0x%08X, b: 0x%08X\n", random.stateA, random.stateB);
+			long n5 = random.nextLong();
+			System.out.printf("a: 0x%08X, b: 0x%08X\n", random.stateA, random.stateB);
+			System.out.println("Going back...");
+			long p5 = random.previousLong();
+			System.out.printf("a: 0x%08X, b: 0x%08X\n", random.stateA, random.stateB);
+			long p4 = random.previousLong();
+			System.out.printf("a: 0x%08X, b: 0x%08X\n", random.stateA, random.stateB);
+			long p3 = random.previousLong();
+			System.out.printf("a: 0x%08X, b: 0x%08X\n", random.stateA, random.stateB);
+			long p2 = random.previousLong();
+			System.out.printf("a: 0x%08X, b: 0x%08X\n", random.stateA, random.stateB);
+			long p1 = random.previousLong();
+			System.out.printf("a: 0x%08X, b: 0x%08X\n", random.stateA, random.stateB);
+			long p0 = random.previousLong();
+			System.out.printf("a: 0x%08X, b: 0x%08X\n", random.stateA, random.stateB);
+			System.out.println(n0 == p0);
+			System.out.println(n1 == p1);
+			System.out.println(n2 == p2);
+			System.out.println(n3 == p3);
+			System.out.println(n4 == p4);
+			System.out.println(n5 == p5);
+			System.out.printf("%016X vs. %016X\n", p0, n0);
+			System.out.printf("%016X vs. %016X\n", p1, n1);
+			System.out.printf("%016X vs. %016X\n", p2, n2);
+			System.out.printf("%016X vs. %016X\n", p3, n3);
+			System.out.printf("%016X vs. %016X\n", p4, n4);
+			System.out.printf("%016X vs. %016X\n", p5, n5);
+		}
 	}
 }
