@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022-2025 See AUTHORS file.
+ * Copyright (c) 2022-2026 See AUTHORS file.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -155,7 +155,7 @@ public class Lamb32Random extends Enhanced32Random {
 	 * Selections 0 refers to state A, and if the selection is anything
 	 * else, this treats it as 1 and sets stateB.
 	 *
-	 * @param selection used to select which state variable to set; generally 0, 1, 2, or 3
+	 * @param selection used to select which state variable to set; generally 0 or 1
 	 * @param value     the value to use for the selected state, which will be cast to int
 	 */
 	@Override
