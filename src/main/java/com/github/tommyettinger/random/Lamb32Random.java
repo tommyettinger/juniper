@@ -48,6 +48,11 @@ import java.math.BigInteger;
  * which the arithmetic runs matters; executing imul() last ensures that its output will be a 32-bit integer, and that
  * if either input was outside 32-bit int bounds, it would be corrected before use. Any modifications to the states for
  * producing an output use bitwise math, so they won't exceed int bounds, either, on JS.
+ * <br>
+ * If you're wondering, "Where would I want to use this?" the answer is probably not in pure Java code.
+ * {@link ChopRandom} is faster on GWT, {@link Chip32Random} is about as fast as ChopRandom and offers a minimum period
+ * guarantee, and {@link Xoshiro160RoadroxoRandom} offers a much longer period guarantee while being faster than Lamb32.
+ * This is, however, portable to JavaScript and should produce identical results to properly-ported JS code.
  */
 @SuppressWarnings({"ShiftOutOfRange", "PointlessBitwiseExpression"})
 public class Lamb32Random extends Enhanced32Random {

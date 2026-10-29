@@ -15,13 +15,9 @@
  *
  */
 
-package com.github.tommyettinger.random.experimental;
+package com.github.tommyettinger.random;
 
 import com.github.tommyettinger.digital.BitConversion;
-import com.github.tommyettinger.random.Enhanced32Random;
-import com.github.tommyettinger.random.EnhancedRandom;
-import com.github.tommyettinger.random.HornRandom;
-import com.github.tommyettinger.random.Lamb32Random;
 
 import java.math.BigInteger;
 
@@ -57,6 +53,12 @@ import java.math.BigInteger;
  * stay under 53 bits in magnitude, there's no precision lost multiplying any 32-bit int by a constant like 999999. As
  * long as something bitwise is done after that, it will stay in-range. Any modifications to the states for
  * producing an output use bitwise math, so they won't exceed int bounds, either, on JS.
+ * <br>
+ * If you're wondering, "Where would I want to use this?" the answer is probably not in pure Java code.
+ * {@link ChopRandom} is faster on GWT, {@link Chip32Random} is about as fast as ChopRandom and offers a minimum period
+ * guarantee, and {@link Xoshiro160RoadroxoRandom} offers a much longer period guarantee while being faster than Jamb32.
+ * This is, however, portable to JavaScript and should produce identical results to properly-ported JS code. This is
+ * also meant to be slightly easier to port than {@link Lamb32Random}, which is very similar.
  */
 @SuppressWarnings({"ShiftOutOfRange", "PointlessBitwiseExpression"})
 public class Jamb32Random extends Enhanced32Random {
