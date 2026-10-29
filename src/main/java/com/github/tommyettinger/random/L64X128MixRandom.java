@@ -363,6 +363,12 @@ public class L64X128MixRandom extends EnhancedRandom {
 	 * <br>
 	 * This version was copied from Apache Commons RNG 1.7.
 	 * <a href="https://github.com/apache/commons-rng/blob/rel/commons-rng-1.7/commons-rng-core/src/main/java/org/apache/commons/rng/core/source64/LXMSupport.java">Original source here.</a>
+	 * <br>
+	 * It should be noted that while the documentation for the java.util.random package mentions a "lea32" mixer, it is
+	 * never given in Steele and Vigna's paper, or as far as I can tell, any sources with an Apache-compatible license.
+	 * A "degski32" mixer is given in the paper, with slightly worse results than "lea32", but only "lea32" is
+	 * documented as being used by LXM generators supplied with OpenJDK. Without equivalent mixer code available,
+	 * we cannot reproduce the results of L32X64MixRandom from OpenJDK.
 	 *
 	 * @param x the input value
 	 * @return the output value
