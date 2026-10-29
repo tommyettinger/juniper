@@ -157,6 +157,7 @@ public final class Generators {
 		randomList.add(new PaceRandom(1, 1, 1, 1, 1));
 		randomList.add(new L64X256MixRandom(1, 1, 1, 1, 1, 1));
 		randomList.add(new L64X128MixRandom(1, 1, 1, 1));
+		randomList.add(new Jamb32Random(1, 1));
 	}
 
 	public static int randomCount = randomList.size();
