@@ -1,3 +1,7 @@
+[0.10.9]
+- Two of the LXM family of generators added in Java 17 have been ported here based on work in Apache Commons RNG 1.7: L64X128MixRandom and L64X256MixRandom. The versions here are extended with previousLong() implementations, but don't offer the same jumping capabilities as in the Apache library. The nextLong() results from juniper should be identical to the next() results in Apache Commons RNG.
+- Jamb32Random added to official generators, mostly to make porting Lamb32Random to JavaScript slightly easier. It does pass 128TB of PractRand, which is more than Lamb32Random was tested for.
+
 [0.10.8]
 - The new generators in 0.10.7 weren't registered with Deserializer.
 - Xoshiro512PlusPlusRandom.setSelectedState() was implemented incorrectly, leading to further ser/deser errors.
