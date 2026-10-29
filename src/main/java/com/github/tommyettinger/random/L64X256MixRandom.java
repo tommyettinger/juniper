@@ -196,6 +196,7 @@ public class L64X256MixRandom extends EnhancedRandom {
 				break;
 			case 5:
 				stateF = value | 1L;
+				break;
 			default:
 				stateE = value;
 		}
