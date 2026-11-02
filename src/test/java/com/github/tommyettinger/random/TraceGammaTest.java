@@ -540,6 +540,8 @@ import com.github.tommyettinger.digital.MathTools;
  * </pre>
  *
  * <pre>
+ * Limit 256.0:
+ * -------------------------------------------------------
  * Threshold 8:
  * Total rating      : 1300
  * Average rating    : 5.0781250000
@@ -587,6 +589,56 @@ import com.github.tommyettinger.digital.MathTools;
  * Average rating    : 1.0000000000
  * Average iterations: 83.8867187500
  * Max iterations    : 485
+ *
+ * Limit 2048.0:
+ * -------------------------------------------------------
+ * Threshold 8:
+ * Total rating      : 10522
+ * Average rating    : 5.1376953125
+ * Average iterations: 1.1704101563
+ * Max iterations    : 4
+ * -------------------------------------------------------
+ * Threshold 7:
+ * Total rating      : 10194
+ * Average rating    : 4.9775390625
+ * Average iterations: 1.2333984375
+ * Max iterations    : 5
+ * -------------------------------------------------------
+ * Threshold 6:
+ * Total rating      : 8943
+ * Average rating    : 4.3666992188
+ * Average iterations: 1.6254882813
+ * Max iterations    : 9
+ * -------------------------------------------------------
+ * Threshold 5:
+ * Total rating      : 8337
+ * Average rating    : 4.0708007813
+ * Average iterations: 1.9375000000
+ * Max iterations    : 12
+ * -------------------------------------------------------
+ * Threshold 4:
+ * Total rating      : 6437
+ * Average rating    : 3.1430664063
+ * Average iterations: 3.8911132813
+ * Max iterations    : 28
+ * -------------------------------------------------------
+ * Threshold 3:
+ * Total rating      : 5651
+ * Average rating    : 2.7592773438
+ * Average iterations: 5.6313476563
+ * Max iterations    : 47
+ * -------------------------------------------------------
+ * Threshold 2:
+ * Total rating      : 3329
+ * Average rating    : 1.6254882813
+ * Average iterations: 31.1835937500
+ * Max iterations    : 224
+ * -------------------------------------------------------
+ * Threshold 1:
+ * Total rating      : 2048
+ * Average rating    : 1.0000000000
+ * Average iterations: 79.4384765625
+ * Max iterations    : 763
  * </pre>
  */
 public class TraceGammaTest {
@@ -609,11 +661,13 @@ public class TraceGammaTest {
 
 	public static void main(String[] args) {
 
+		double limit = 2048.0;
+		System.out.println("Limit " + limit + ":");
 		for (int threshold = 8; threshold >= 1; threshold--) {
 
 
 			int totalRating = 0, totalIterations = 0, maxIterations = 0;
-			for (int index = 0; index < 256; index++) {
+			for (int index = 0; index < limit; index++) {
 				long c = fixGamma((index & 0xFFFFFFFL) << 1, threshold);
 //				long c = fixGamma((index & 0xFFFFFFFL) << 1, 8);
 //			    long c = fixGamma((index & 0xFFFFFFFL) << 1, 1);
@@ -628,7 +682,7 @@ public class TraceGammaTest {
 					"Average rating    : %2.10f\n" +
 					"Average iterations: %2.10f\n" +
 					"Max iterations    : %d\n",
-				threshold, totalRating, totalRating / 256.0, totalIterations / 256.0, maxIterations);
+				threshold, totalRating, totalRating / limit, totalIterations / limit, maxIterations);
 		}
 	}
 }
