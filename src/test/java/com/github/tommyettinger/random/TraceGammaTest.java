@@ -538,6 +538,56 @@ import com.github.tommyettinger.digital.MathTools;
  * Average iterations: 83.8867187500
  * Max iterations    : 485
  * </pre>
+ *
+ * <pre>
+ * Threshold 8:
+ * Total rating      : 1300
+ * Average rating    : 5.0781250000
+ * Average iterations: 1.1835937500
+ * Max iterations    : 3
+ * -------------------------------------------------------
+ * Threshold 7:
+ * Total rating      : 1266
+ * Average rating    : 4.9453125000
+ * Average iterations: 1.2460937500
+ * Max iterations    : 4
+ * -------------------------------------------------------
+ * Threshold 6:
+ * Total rating      : 1114
+ * Average rating    : 4.3515625000
+ * Average iterations: 1.6445312500
+ * Max iterations    : 7
+ * -------------------------------------------------------
+ * Threshold 5:
+ * Total rating      : 1034
+ * Average rating    : 4.0390625000
+ * Average iterations: 1.9492187500
+ * Max iterations    : 9
+ * -------------------------------------------------------
+ * Threshold 4:
+ * Total rating      : 814
+ * Average rating    : 3.1796875000
+ * Average iterations: 4.0898437500
+ * Max iterations    : 21
+ * -------------------------------------------------------
+ * Threshold 3:
+ * Total rating      : 718
+ * Average rating    : 2.8046875000
+ * Average iterations: 5.6953125000
+ * Max iterations    : 47
+ * -------------------------------------------------------
+ * Threshold 2:
+ * Total rating      : 430
+ * Average rating    : 1.6796875000
+ * Average iterations: 32.0312500000
+ * Max iterations    : 195
+ * -------------------------------------------------------
+ * Threshold 1:
+ * Total rating      : 256
+ * Average rating    : 1.0000000000
+ * Average iterations: 83.8867187500
+ * Max iterations    : 485
+ * </pre>
  */
 public class TraceGammaTest {
 
@@ -559,21 +609,26 @@ public class TraceGammaTest {
 
 	public static void main(String[] args) {
 
-		int totalRating = 0, totalIterations = 0, maxIterations = 0;
-		for (int index = 0; index < 256; index++) {
-			long c = fixGamma((index & 0xFFFFFFFL) << 1, 8);
-//			long c = fixGamma((index & 0xFFFFFFFL) << 1, 1);
-			int rating = EnhancedRandom.rateGamma(c);
-			System.out.printf("%20dL or 0x%016XL rating: %d in %d iterations\n", c, c, rating, iterations);
-			totalRating += rating;
-			totalIterations += iterations;
-			maxIterations = Math.max(maxIterations, iterations);
+		for (int threshold = 8; threshold >= 1; threshold--) {
+
+
+			int totalRating = 0, totalIterations = 0, maxIterations = 0;
+			for (int index = 0; index < 256; index++) {
+				long c = fixGamma((index & 0xFFFFFFFL) << 1, threshold);
+//				long c = fixGamma((index & 0xFFFFFFFL) << 1, 8);
+//			    long c = fixGamma((index & 0xFFFFFFFL) << 1, 1);
+				int rating = EnhancedRandom.rateGamma(c);
+//		    	System.out.printf("%20dL or 0x%016XL rating: %d in %d iterations\n", c, c, rating, iterations);
+				totalRating += rating;
+				totalIterations += iterations;
+				maxIterations = Math.max(maxIterations, iterations);
+			}
+			System.out.printf("-------------------------------------------------------\nThreshold %d:\n" +
+					"Total rating      : %d\n" +
+					"Average rating    : %2.10f\n" +
+					"Average iterations: %2.10f\n" +
+					"Max iterations    : %d\n",
+				threshold, totalRating, totalRating / 256.0, totalIterations / 256.0, maxIterations);
 		}
-		System.out.printf("\n-------------------------------------------------------\n" +
-			"Total rating      : %d\n" +
-			"Average rating    : %2.10f\n" +
-			"Average iterations: %2.10f\n" +
-			"Max iterations    : %d\n",
-			totalRating, totalRating / 256.0, totalIterations / 256.0, maxIterations);
 	}
 }
