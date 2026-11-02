@@ -1,5 +1,7 @@
 package com.github.tommyettinger.random;
 
+import com.github.tommyettinger.digital.MathTools;
+
 /**
  * Tests gamma values generated for use by TraceRandom.
  * <br>
@@ -267,6 +269,8 @@ package com.github.tommyettinger.random;
  * -------------------------------------------------------
  * Total rating  : 1300
  * Average rating: 5.0781250000
+ * Average iterations: 1.1835937500
+ * Max iterations    : 3
  * </pre>
  * <br>
  * Or, using fixGamma() with a threshold of 1 as the second parameter:
@@ -531,21 +535,45 @@ package com.github.tommyettinger.random;
  * -------------------------------------------------------
  * Total rating  : 256
  * Average rating: 1.0000000000
+ * Average iterations: 83.8867187500
+ * Max iterations    : 485
  * </pre>
  */
 public class TraceGammaTest {
+
+	private static int iterations = 0;
+	public static long fixGamma(long gamma, int threshold) {
+		gamma |= 1L;
+		long inverse, add = 0L;
+		iterations = 0;
+		while (Math.abs(Long.bitCount(gamma) - 32) > threshold
+			|| Math.abs(Long.bitCount(gamma ^ gamma >>> 1) - 32) > threshold
+			|| Math.abs(Long.bitCount(inverse = MathTools.modularMultiplicativeInverse(gamma)) - 32) > threshold
+			|| Math.abs(Long.bitCount(inverse ^ inverse >>> 1) - 32) > threshold) {
+			gamma = gamma * 0xD1342543DE82EF95L + (add += 2L);
+			++iterations;
+		}
+		return gamma;
+	}
+
+
 	public static void main(String[] args) {
 
-		int totalRating = 0;
+		int totalRating = 0, totalIterations = 0, maxIterations = 0;
 		for (int index = 0; index < 256; index++) {
-//			long c = EnhancedRandom.fixGamma((index & 0xFFFFFFFL) << 1);
-			long c = EnhancedRandom.fixGamma((index & 0xFFFFFFFL) << 1, 1);
+			long c = fixGamma((index & 0xFFFFFFFL) << 1, 8);
+//			long c = fixGamma((index & 0xFFFFFFFL) << 1, 1);
 			int rating = EnhancedRandom.rateGamma(c);
-			System.out.printf("%20dL or 0x%016XL rating: %d\n", c, c, rating);
+			System.out.printf("%20dL or 0x%016XL rating: %d in %d iterations\n", c, c, rating, iterations);
 			totalRating += rating;
+			totalIterations += iterations;
+			maxIterations = Math.max(maxIterations, iterations);
 		}
 		System.out.printf("\n-------------------------------------------------------\n" +
-			"Total rating  : %d\n" +
-			"Average rating: %2.10f\n", totalRating, totalRating / 256.0);
+			"Total rating      : %d\n" +
+			"Average rating    : %2.10f\n" +
+			"Average iterations: %2.10f\n" +
+			"Max iterations    : %d\n",
+			totalRating, totalRating / 256.0, totalIterations / 256.0, maxIterations);
 	}
 }
