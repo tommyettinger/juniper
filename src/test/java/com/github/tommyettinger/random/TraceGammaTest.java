@@ -640,19 +640,342 @@ import com.github.tommyettinger.digital.MathTools;
  * Average iterations: 79.4384765625
  * Max iterations    : 763
  * </pre>
+ * <br>
+ * With a tighter fixGamma() restriction that requires gammas to have alternating top-2 MSBs:
+ * <br>
+ * <pre>
+ * Limit 2048.0:
+ * -------------------------------------------------------
+ * Threshold 8:
+ * Total rating      : 10547
+ * Average rating    : 5.1499023438
+ * Average iterations: 1.1718750000
+ * Max iterations    : 4
+ * -------------------------------------------------------
+ * Threshold 7:
+ * Total rating      : 10231
+ * Average rating    : 4.9956054688
+ * Average iterations: 1.2436523438
+ * Max iterations    : 6
+ * -------------------------------------------------------
+ * Threshold 6:
+ * Total rating      : 8905
+ * Average rating    : 4.3481445313
+ * Average iterations: 1.6298828125
+ * Max iterations    : 8
+ * -------------------------------------------------------
+ * Threshold 5:
+ * Total rating      : 8353
+ * Average rating    : 4.0786132813
+ * Average iterations: 1.9038085938
+ * Max iterations    : 12
+ * -------------------------------------------------------
+ * Threshold 4:
+ * Total rating      : 6391
+ * Average rating    : 3.1206054688
+ * Average iterations: 3.8349609375
+ * Max iterations    : 26
+ * -------------------------------------------------------
+ * Threshold 3:
+ * Total rating      : 5639
+ * Average rating    : 2.7534179688
+ * Average iterations: 5.4838867188
+ * Max iterations    : 40
+ * -------------------------------------------------------
+ * Threshold 2:
+ * Total rating      : 3300
+ * Average rating    : 1.6113281250
+ * Average iterations: 30.3637695313
+ * Max iterations    : 197
+ * -------------------------------------------------------
+ * Threshold 1:
+ * Total rating      : 2048
+ * Average rating    : 1.0000000000
+ * Average iterations: 78.8540039063
+ * Max iterations    : 647
+ * </pre>
+ * <br>
+ * For just threshold 1, 256 good gammas:
+ * <pre>
+ *  6556143834083249469L or 0x5AFC1A14C6E64D3DL rating: 1 in 63 iterations
+ *  7766894076355056655L or 0x6BC98D02FD3A940FL rating: 1 in 44 iterations
+ * -5870304624243271439L or 0xAE887D0BE4A598F1L rating: 1 in 75 iterations
+ * -7001672262216287877L or 0x9ED5102C88E4797BL rating: 1 in 66 iterations
+ *  5161037420722365641L or 0x479FB03096A7A4C9L rating: 1 in 22 iterations
+ * -5421623420226089453L or 0xB4C286396B7C4E13L rating: 1 in 46 iterations
+ *  5541417441415234875L or 0x4CE711CDA3B5853BL rating: 1 in 5 iterations
+ *  4855991154537646917L or 0x4363F23A16A7CB45L rating: 1 in 133 iterations
+ * -7431231686904766361L or 0x98DEF627326A2067L rating: 1 in 121 iterations
+ * -5394849579925675257L or 0xB521A4E3E3DD6307L rating: 1 in 59 iterations
+ *  5137241801469605731L or 0x474B26333DE23763L rating: 1 in 245 iterations
+ * -6784159264560765045L or 0xA1D9D317C82E278BL rating: 1 in 103 iterations
+ *  7409026442774675095L or 0x66D2264B850F7E97L rating: 1 in 45 iterations
+ * -9052586231205266889L or 0x825EC0C90E6AFA37L rating: 1 in 92 iterations
+ * -8013608997423702311L or 0x90C9F11323AF9ED9L rating: 1 in 87 iterations
+ * -4680318889935484557L or 0xBF0C2AC459D84973L rating: 1 in 98 iterations
+ *  6811067604875788829L or 0x5E85C5E669CAC21DL rating: 1 in 31 iterations
+ * -5114031548696816537L or 0xB9074F66D9C91467L rating: 1 in 52 iterations
+ * -9015322559785013343L or 0x82E323E5A872EFA1L rating: 1 in 28 iterations
+ * -8386332792961785739L or 0x8B9DC2C1EB4DA075L rating: 1 in 89 iterations
+ *  5466634515743268645L or 0x4BDD6320EBC45F25L rating: 1 in 90 iterations
+ * -6013461059220512943L or 0xAC8BE506FE845F51L rating: 1 in 245 iterations
+ *  8647634552668467805L or 0x780291CEFB32B25DL rating: 1 in 80 iterations
+ * -6073962750323300899L or 0xABB4F30F500665DDL rating: 1 in 97 iterations
+ *  7401755695572973361L or 0x66B85196C4D9F731L rating: 1 in 22 iterations
+ *  5540137549721279153L or 0x4CE285BFA1F09AB1L rating: 1 in 9 iterations
+ *  6901547718318835745L or 0x5FC7391576CD4821L rating: 1 in 43 iterations
+ *  6725018211472350999L or 0x5D54106EC2D79F17L rating: 1 in 32 iterations
+ *  9163570437093090021L or 0x7F2B8AC3093462E5L rating: 1 in 236 iterations
+ * -4749121943392791655L or 0xBE17BAC1210F5399L rating: 1 in 49 iterations
+ *  8999081018903324491L or 0x7CE32881ECB1674BL rating: 1 in 157 iterations
+ * -7810687780192972883L or 0x939ADCD8C21D0FADL rating: 1 in 41 iterations
+ * -8955922581187651539L or 0x83B62BDCE869182DL rating: 1 in 19 iterations
+ *  7217543495763892009L or 0x6429DD91B7F01729L rating: 1 in 157 iterations
+ * -7008462037354124527L or 0x9EBCF0E8D1B26B11L rating: 1 in 12 iterations
+ *  6373513099084613565L or 0x58734465323CC7BDL rating: 1 in 205 iterations
+ *  6882121689009557863L or 0x5F8235368E6D1167L rating: 1 in 37 iterations
+ * -7815912156684015649L or 0x93884D4DD13127DFL rating: 1 in 63 iterations
+ * -8826262880662664421L or 0x8582D0AC6FE2CB1BL rating: 1 in 77 iterations
+ * -8530764040537780345L or 0x899CA34D9511CF87L rating: 1 in 62 iterations
+ * -8362382979733252471L or 0x8BF2D8FC593A1689L rating: 1 in 40 iterations
+ * -8640598719689818381L or 0x88166D3E8A317EF3L rating: 1 in 96 iterations
+ * -8602885835248953503L or 0x889C68E9B2BF1761L rating: 1 in 47 iterations
+ *  5795361064649483627L or 0x506D422EE38FE56BL rating: 1 in 3 iterations
+ *  4928089071408657591L or 0x446416E67ACC34B7L rating: 1 in 69 iterations
+ * -6614642367473665297L or 0xA43411D00A7BBAEFL rating: 1 in 91 iterations
+ *  4861004791796917229L or 0x4375C21A7A86E3EDL rating: 1 in 198 iterations
+ *  6858844329184348323L or 0x5F2F8293E2BC48A3L rating: 1 in 155 iterations
+ *  7565431999428077005L or 0x68FDD051F248A5CDL rating: 1 in 19 iterations
+ *  6500269820968804447L or 0x5A3598F65709A05FL rating: 1 in 124 iterations
+ *  7338495789247556913L or 0x65D7930A0FCCED31L rating: 1 in 12 iterations
+ *  6572107057060330591L or 0x5B34D08C41EB3C5FL rating: 1 in 62 iterations
+ *  5345192604141314953L or 0x4A2DF05A79E36389L rating: 1 in 118 iterations
+ *  6560595806072986505L or 0x5B0BEB2047E5DB89L rating: 1 in 49 iterations
+ *  7495886826311500275L or 0x6806BD5A86D3C1F3L rating: 1 in 25 iterations
+ *  8531940077308108967L or 0x76678A4BD0DE60A7L rating: 1 in 62 iterations
+ *  6453524145946930805L or 0x598F8604BC92AE75L rating: 1 in 34 iterations
+ *  5258863623174855193L or 0x48FB3C9A458F9A19L rating: 1 in 45 iterations
+ * -6095733824803031325L or 0xAB679A62074836E3L rating: 1 in 109 iterations
+ *  6577674226789051725L or 0x5B4897DBF800ED4DL rating: 1 in 5 iterations
+ * -7093439516143023035L or 0x9D8F0A57BC938C45L rating: 1 in 51 iterations
+ *  5986203086348858393L or 0x531343FDA32BB419L rating: 1 in 97 iterations
+ *  9094664223658919053L or 0x7E36BCED02A4C48DL rating: 1 in 112 iterations
+ *  8024693537418525283L or 0x6F5D704171343A63L rating: 1 in 107 iterations
+ *  8224562761014654935L or 0x722384416B2F37D7L rating: 1 in 177 iterations
+ * -8387472199709814725L or 0x8B99B6791CD5103BL rating: 1 in 30 iterations
+ * -5243482459725954367L or 0xB73B687BEA0B02C1L rating: 1 in 7 iterations
+ * -8591265609755231275L or 0x88C5B17247827BD5L rating: 1 in 113 iterations
+ * -8178916917766057671L or 0x8E7EA665A51F1139L rating: 1 in 6 iterations
+ * -9174926990422987277L or 0x80AC1C8357B1ADF3L rating: 1 in 142 iterations
+ *  6095881817671758469L or 0x5498EC373F167285L rating: 1 in 142 iterations
+ *  5952156427987658493L or 0x529A4EBC41C326FDL rating: 1 in 25 iterations
+ *  7557192470970052327L or 0x68E08A833B6D2EE7L rating: 1 in 33 iterations
+ * -6562350458625486481L or 0xA4EDD906D601916FL rating: 1 in 10 iterations
+ *  8783249502676502649L or 0x79E45EE314A8C879L rating: 1 in 116 iterations
+ * -8513922356261758899L or 0x89D878B9C5C2D84DL rating: 1 in 45 iterations
+ *  5462124095898390997L or 0x4BCD5CECF72011D5L rating: 1 in 15 iterations
+ * -7367509226759066589L or 0x99C159649B9CEC23L rating: 1 in 24 iterations
+ * -4846603856715561949L or 0xBCBD6778816E4423L rating: 1 in 113 iterations
+ * -4914153712667772141L or 0xBBCD6B3C10C53B13L rating: 1 in 131 iterations
+ *  7513953509822783365L or 0x6846ECE813C95F85L rating: 1 in 2 iterations
+ *  7989882799430758167L or 0x6EE1C412E912EF17L rating: 1 in 196 iterations
+ *  4850076731141907019L or 0x434EEF171519E24BL rating: 1 in 105 iterations
+ *  5083024740195609499L or 0x468A8811F7E1AB9BL rating: 1 in 19 iterations
+ * -5029249751936856379L or 0xBA3483FF29150EC5L rating: 1 in 267 iterations
+ * -6899714119428280527L or 0xA03F4A908BBAEF31L rating: 1 in 141 iterations
+ *  5124610310755081485L or 0x471E45ED20DC5D0DL rating: 1 in 22 iterations
+ * -8598411830784551841L or 0x88AC4DFF0992145FL rating: 1 in 22 iterations
+ *  8559661429856422905L or 0x76CA06B82C344BF9L rating: 1 in 62 iterations
+ *  6253139106540857927L or 0x56C79CE30878AA47L rating: 1 in 36 iterations
+ * -7132469954552140517L or 0x9D04605DA3C5ED1BL rating: 1 in 49 iterations
+ *  5518156219078887367L or 0x4C946DD8454F47C7L rating: 1 in 54 iterations
+ *  5711851437337049573L or 0x4F44929E9C4779E5L rating: 1 in 108 iterations
+ *  7021517384012229273L or 0x617170DBF2476A99L rating: 1 in 121 iterations
+ * -5540081941756500167L or 0xB31DACD39B0C2739L rating: 1 in 51 iterations
+ * -8108193979546676141L or 0x8F79E888DF28D453L rating: 1 in 83 iterations
+ * -8212534298143668163L or 0x8E073791556F483DL rating: 1 in 31 iterations
+ * -8501164610753981239L or 0x8A05CBD3DEE314C9L rating: 1 in 229 iterations
+ * -8128098840844442773L or 0x8F33312B3433E36BL rating: 1 in 9 iterations
+ *  8883412946671451459L or 0x7B48390237753D43L rating: 1 in 60 iterations
+ * -6728857471401552235L or 0xA29E4BC7E0E09695L rating: 1 in 83 iterations
+ *  6378183469519450955L or 0x5883DC128CF9B34BL rating: 1 in 384 iterations
+ * -6089297098246639341L or 0xAB7E788D37313113L rating: 1 in 49 iterations
+ *  6602818290897524221L or 0x5BA1EC40996615FDL rating: 1 in 9 iterations
+ *  8947680925972134093L or 0x7C2C8C65341B78CDL rating: 1 in 92 iterations
+ *  6795030360587205287L or 0x5E4CCC1C80CB7AA7L rating: 1 in 228 iterations
+ *  5042826159745746177L or 0x45FBB7AC9BB14501L rating: 1 in 44 iterations
+ * -6421036580278829477L or 0xA6E3E54016B0FE5BL rating: 1 in 18 iterations
+ *  9189894672047861517L or 0x7F8910839AAAEF0DL rating: 1 in 210 iterations
+ *  6472783120291375759L or 0x59D3F1F4211CAA8FL rating: 1 in 43 iterations
+ *  6765487532272259285L or 0x5DE3D710C56C10D5L rating: 1 in 14 iterations
+ *  7085112430672955555L or 0x6253603797F748A3L rating: 1 in 127 iterations
+ *  5122620333060198989L or 0x4717340D573F124DL rating: 1 in 55 iterations
+ *  4728521712342523113L or 0x419F1571D0E5DCE9L rating: 1 in 149 iterations
+ * -7912368262327786063L or 0x92319EFCA7E0A5B1L rating: 1 in 47 iterations
+ * -8564126739939490955L or 0x89261C1ACE7B8375L rating: 1 in 105 iterations
+ * -5553827838907936601L or 0xB2ECD701863790A7L rating: 1 in 45 iterations
+ *  5459760110901165193L or 0x4BC4F6E4D11C7C89L rating: 1 in 121 iterations
+ * -4802930668291362887L or 0xBD58900113A9EFB9L rating: 1 in 140 iterations
+ *  7863126354512462251L or 0x6D1F6FC240BA41ABL rating: 1 in 74 iterations
+ *  8177414861836298829L or 0x717C037DB4C0AA4DL rating: 1 in 79 iterations
+ * -5547386811645599849L or 0xB303B9160C2D5F97L rating: 1 in 18 iterations
+ * -8492868658425894207L or 0x8A2344F3CA79EAC1L rating: 1 in 15 iterations
+ * -6835378256045266533L or 0xA123DBB106FE299BL rating: 1 in 59 iterations
+ *  6693619111855598885L or 0x5CE4831E2FEB2D25L rating: 1 in 35 iterations
+ *  6455964947752866463L or 0x599831EA312ED29FL rating: 1 in 51 iterations
+ * -4730443783953924587L or 0xBE5A16710378BE15L rating: 1 in 46 iterations
+ *  7647447585577692973L or 0x6A21310FA8C6EF2DL rating: 1 in 209 iterations
+ * -7006876570432458209L or 0x9EC292E21A5DB21FL rating: 1 in 237 iterations
+ *  6440255677531612043L or 0x5960626AB1F6E38BL rating: 1 in 238 iterations
+ *  6707055636330754545L or 0x5D143F90D446B1F1L rating: 1 in 95 iterations
+ * -9122178574027797379L or 0x816782EB1564CC7DL rating: 1 in 125 iterations
+ * -8168481730798072375L or 0x8EA3B924F1834DC9L rating: 1 in 22 iterations
+ *  5993770998603766351L or 0x532E26F784D0DA4FL rating: 1 in 215 iterations
+ * -5369332060842755751L or 0xB57C4CF04859F959L rating: 1 in 10 iterations
+ *  8761881272124144709L or 0x79987498351B7C45L rating: 1 in 37 iterations
+ *  4929201440068720429L or 0x44680A97FDA3D72DL rating: 1 in 27 iterations
+ *  7553740714172434931L or 0x68D4472879A749F3L rating: 1 in 32 iterations
+ *  5038671268255642875L or 0x45ECF4D28C5834FBL rating: 1 in 73 iterations
+ *  4718596737506325051L or 0x417BD2BB8961B23BL rating: 1 in 95 iterations
+ * -5811400595075099611L or 0xAF59C1F2EB0E1425L rating: 1 in 19 iterations
+ * -5449473788221845925L or 0xB45F9476503C0E5BL rating: 1 in 70 iterations
+ *  7390803695443670861L or 0x669168CD8790774DL rating: 1 in 80 iterations
+ * -6413955604241047965L or 0xA6FD0D5C4C161E63L rating: 1 in 116 iterations
+ *  7317749956644214007L or 0x658DDED080E894F7L rating: 1 in 105 iterations
+ *  8360288048395211215L or 0x7405B5AF708A51CFL rating: 1 in 12 iterations
+ *  5896286102407506867L or 0x51D3D0F864126BB3L rating: 1 in 37 iterations
+ *  7027737829214322515L or 0x61878A5234E4FF53L rating: 1 in 186 iterations
+ *  8616568388063726773L or 0x7794334BE1660CB5L rating: 1 in 42 iterations
+ * -5447347650511995761L or 0xB467222C532C7C8FL rating: 1 in 7 iterations
+ *  7196134953418827457L or 0x63DDCE9D064D26C1L rating: 1 in 210 iterations
+ *  6050050772625089605L or 0x53F6191F87656445L rating: 1 in 61 iterations
+ *  7681878817295382445L or 0x6A9B8415807D37ADL rating: 1 in 11 iterations
+ * -4728266231057925689L or 0xBE61D2EA0E5139C7L rating: 1 in 175 iterations
+ * -8104373442807224831L or 0x8F877B4AE65DA601L rating: 1 in 27 iterations
+ * -8283742538503886597L or 0x8D0A3C0CE5AEE8FBL rating: 1 in 82 iterations
+ * -6317980772293886185L or 0xA85205F631ACBF17L rating: 1 in 5 iterations
+ *  7270303767247566081L or 0x64E54EC1AFF9B501L rating: 1 in 173 iterations
+ * -7968842606994141053L or 0x9168FBDEA31DD083L rating: 1 in 121 iterations
+ * -8268413559268386221L or 0x8D40B1ACFFC8DA53L rating: 1 in 71 iterations
+ *  7418519394792027141L or 0x66F3E015A5ECB405L rating: 1 in 98 iterations
+ * -4978127418189918993L or 0xBAEA237D08284CEFL rating: 1 in 26 iterations
+ * -7682614435062884143L or 0x9561DEE023C9D8D1L rating: 1 in 76 iterations
+ * -7259733978953935429L or 0x9B403E68EC9E15BBL rating: 1 in 7 iterations
+ *  8531151415598297881L or 0x7664BD0333CEB319L rating: 1 in 38 iterations
+ * -7906893898810943249L or 0x924511E43CAB98EFL rating: 1 in 39 iterations
+ * -5479734215215446695L or 0xB3F412C39E878559L rating: 1 in 191 iterations
+ *  4865387987274871567L or 0x43855498B3F8B30FL rating: 1 in 64 iterations
+ *  7612623182887664269L or 0x69A5787390EC3A8DL rating: 1 in 43 iterations
+ * -8634838940751835997L or 0x882AE3BB93C6CCA3L rating: 1 in 22 iterations
+ * -4963156990351917791L or 0xBB1F53036193BD21L rating: 1 in 12 iterations
+ *  4636778552005677819L or 0x40592586BE72D2FBL rating: 1 in 123 iterations
+ *  4709969575752758789L or 0x415D2C5FE9A3F605L rating: 1 in 74 iterations
+ * -6677932385256976959L or 0xA35337E076AE4DC1L rating: 1 in 133 iterations
+ * -7936578603062307031L or 0x91DB9BCF70815729L rating: 1 in 140 iterations
+ *  5017379915641414477L or 0x45A1507336FC634DL rating: 1 in 41 iterations
+ * -5050482177283129139L or 0xB9E91537E69900CDL rating: 1 in 55 iterations
+ *  7749002312204069345L or 0x6B89FC8C069AA9E1L rating: 1 in 89 iterations
+ * -8237859942613921423L or 0x8DAD3E073B13D171L rating: 1 in 15 iterations
+ *  6773771505008916123L or 0x5E01454B79B8369BL rating: 1 in 2 iterations
+ *  5868555598972452577L or 0x51714C396D61FEE1L rating: 1 in 46 iterations
+ * -5664463235254734749L or 0xB163C8B2FB61B063L rating: 1 in 30 iterations
+ *  7247500309258210297L or 0x64944B21E2DE8BF9L rating: 1 in 74 iterations
+ *  5196629326687032275L or 0x481E22D6F68ED3D3L rating: 1 in 11 iterations
+ *  5034679363412744605L or 0x45DEC634C634D99DL rating: 1 in 19 iterations
+ * -6389611432398676367L or 0xA7538A417F1A1E71L rating: 1 in 41 iterations
+ * -7429456706327343331L or 0x98E5447D11370F1DL rating: 1 in 56 iterations
+ * -6592558091856291873L or 0xA482875825C757DFL rating: 1 in 46 iterations
+ * -6814978936605310883L or 0xA16C54C3B3DF005DL rating: 1 in 52 iterations
+ * -7015310499946620905L or 0x9EA49C44DD9D1817L rating: 1 in 10 iterations
+ *  6966780541473459465L or 0x60AEF9FDAAA10D09L rating: 1 in 203 iterations
+ *  4858338514699586879L or 0x436C492377448D3FL rating: 1 in 38 iterations
+ * -5798469873736563059L or 0xAF87B25F1720C68DL rating: 1 in 106 iterations
+ * -6347620531836309367L or 0xA7E8B8C1E6EBB089L rating: 1 in 37 iterations
+ *  8964119187491225873L or 0x7C66F2E836AD8111L rating: 1 in 15 iterations
+ * -6849733328205733949L or 0xA0F0DBD456249FC3L rating: 1 in 138 iterations
+ * -7152576458669543007L or 0x9CBCF19B582E31A1L rating: 1 in 72 iterations
+ *  7601099051673557527L or 0x697C8750AD8F9A17L rating: 1 in 44 iterations
+ *  8449260613063708909L or 0x7541CDC2F05C90EDL rating: 1 in 22 iterations
+ *  5657033284759614935L or 0x4E81D1CCDCA875D7L rating: 1 in 78 iterations
+ *  8500001218118956093L or 0x75F61212AC5E343DL rating: 1 in 108 iterations
+ * -5452352851214465825L or 0xB45559F8394604DFL rating: 1 in 186 iterations
+ * -5305118535255429011L or 0xB6606ECCC6C2706DL rating: 1 in 8 iterations
+ *  7975121500065285869L or 0x6EAD52C013F8C6EDL rating: 1 in 101 iterations
+ *  5012895322818365335L or 0x459161BC94CE4797L rating: 1 in 29 iterations
+ * -8862915662181393153L or 0x85009929B96E9CFFL rating: 1 in 167 iterations
+ * -7430304248971670131L or 0x98E241A72AF7CD8DL rating: 1 in 38 iterations
+ *  5771682288609154287L or 0x5019227638F654EFL rating: 1 in 54 iterations
+ *  8135134129693594237L or 0x70E5CD63A08B127DL rating: 1 in 27 iterations
+ *  8851850245956574799L or 0x7AD816E64B321E4FL rating: 1 in 26 iterations
+ * -8777556343882716575L or 0x862FDB02BEE4EA61L rating: 1 in 135 iterations
+ *  5996062711403892341L or 0x53364B447C31CE75L rating: 1 in 57 iterations
+ *  7064341967256888301L or 0x620995973A3B23EDL rating: 1 in 34 iterations
+ *  5409582981967001551L or 0x4B12B30F972437CFL rating: 1 in 82 iterations
+ *  7196159440820423219L or 0x63DDE4E2712CCA33L rating: 1 in 33 iterations
+ * -5580117870319648529L or 0xB28F705C96C9C0EFL rating: 1 in 38 iterations
+ * -9192109797597407751L or 0x806F10D749D195F9L rating: 1 in 24 iterations
+ * -8307632423399487641L or 0x8CB55C539EC18767L rating: 1 in 98 iterations
+ *  7056503451558270449L or 0x61EDBC809272D5F1L rating: 1 in 3 iterations
+ *  5155236616767565371L or 0x478B1463AB846E3BL rating: 1 in 180 iterations
+ *  5743296362500116021L or 0x4FB4499CC69CCE35L rating: 1 in 92 iterations
+ *  6044257219251222195L or 0x53E183EAC48F36B3L rating: 1 in 40 iterations
+ * -4880940572046403389L or 0xBC436A68F961D8C3L rating: 1 in 49 iterations
+ * -4946633695987441165L or 0xBB5A06DCA4B0E1F3L rating: 1 in 68 iterations
+ *  8332539619186214205L or 0x73A320A2CE76853DL rating: 1 in 31 iterations
+ * -8284847029279137097L or 0x8D064F85995DE2B7L rating: 1 in 159 iterations
+ *  7011046932006453917L or 0x614C3E09DDD6429DL rating: 1 in 8 iterations
+ * -5262455435227175609L or 0xB6F800A9D0F5E547L rating: 1 in 128 iterations
+ * -6476468692761398809L or 0xA61EF609A904B1E7L rating: 1 in 5 iterations
+ *  6566817973736938111L or 0x5B220627953D9A7FL rating: 1 in 11 iterations
+ *  4789827436655803513L or 0x4278E2AD1149FC79L rating: 1 in 111 iterations
+ *  8534192038186501311L or 0x766F8A715112C4BFL rating: 1 in 272 iterations
+ *  6711551922290704585L or 0x5D2438E9FBBA40C9L rating: 1 in 110 iterations
+ * -6008313778965443561L or 0xAC9E2E7391AE0C17L rating: 1 in 50 iterations
+ *  5604803375386049857L or 0x4DC842F971CBBD41L rating: 1 in 43 iterations
+ *  9029103076369379467L or 0x7D4DD168E362308BL rating: 1 in 211 iterations
+ *  5723144966171588453L or 0x4F6CB20632B8F765L rating: 1 in 140 iterations
+ * -5895739152383050815L or 0xAE2E207A55D87BC1L rating: 1 in 149 iterations
+ *  4800522678604307837L or 0x429EE1F1226A9D7DL rating: 1 in 96 iterations
+ *  4975248899279712211L or 0x450BA2838EB86FD3L rating: 1 in 130 iterations
+ *  6239043213508982285L or 0x569588BF2F83B60DL rating: 1 in 115 iterations
+ * -7074130518322165317L or 0x9DD3A3C620A849BBL rating: 1 in 72 iterations
+ * -7260468612217304335L or 0x9B3DA243C9EA0AF1L rating: 1 in 27 iterations
+ * -6417151122776355833L or 0xA6F1B30DA8EA8C07L rating: 1 in 70 iterations
+ * -7162079500357098593L or 0x9C9B2EA4081BA39FL rating: 1 in 1 iterations
+ *  4911453779264300711L or 0x4428FD30B3CC66A7L rating: 1 in 42 iterations
+ * -8230200346781111839L or 0x8DC87463DBD0A9E1L rating: 1 in 164 iterations
+ * -7253145992563145485L or 0x9B57A6260939C4F3L rating: 1 in 338 iterations
+ * -9208936182283002659L or 0x803349554FC79CDDL rating: 1 in 74 iterations
+ *  9199118545559897657L or 0x7FA9D59402CE4639L rating: 1 in 21 iterations
+ * -6765289653469449599L or 0xA21CDCE77A53F281L rating: 1 in 138 iterations
+ *  8463426505150878975L or 0x75742190B624D4FFL rating: 1 in 24 iterations
+ *  9059293914404531529L or 0x7DB913D123F0AD49L rating: 1 in 48 iterations
+ *  7743725535406694455L or 0x6B773D58B009A037L rating: 1 in 42 iterations
+ *  4730553565440800581L or 0x41A64D677B0E7745L rating: 1 in 152 iterations
+ *  5803925129418904659L or 0x508BAF2799FA1453L rating: 1 in 98 iterations
+ * -------------------------------------------------------
+ * Threshold 1:
+ * Total rating      : 256
+ * Average rating    : 1.0000000000
+ * Average iterations: 79.3398437500
+ * Max iterations    : 384
+ * </pre>
  */
 public class TraceGammaTest {
 
 	private static int iterations = 0;
 	public static long fixGamma(long gamma, int threshold) {
-		gamma |= 1L;
+		// forces LSB to 1 and MSB to NOT its neighbor, the second-most-significant bit.
+		gamma = (gamma & 0x7FFFFFFFFFFFFFFFL) | (~(gamma << 1) & 0x8000000000000001L);
 		long inverse, add = 0L;
 		iterations = 0;
 		while (Math.abs(Long.bitCount(gamma) - 32) > threshold
 			|| Math.abs(Long.bitCount(gamma ^ gamma >>> 1) - 32) > threshold
 			|| Math.abs(Long.bitCount(inverse = MathTools.modularMultiplicativeInverse(gamma)) - 32) > threshold
 			|| Math.abs(Long.bitCount(inverse ^ inverse >>> 1) - 32) > threshold) {
-			gamma = gamma * 0xD1342543DE82EF95L + (add += 2L);
+			gamma = gamma * 0xD1342543DE82EF95L + (++add);
+			gamma = (gamma & 0x7FFFFFFFFFFFFFFFL) | (~(gamma << 1) & 0x8000000000000001L);
+
 			++iterations;
 		}
 		return gamma;
@@ -661,26 +984,25 @@ public class TraceGammaTest {
 
 	public static void main(String[] args) {
 
-		double limit = 2048.0;
+		double limit = 256;
 		System.out.println("Limit " + limit + ":");
-		for (int threshold = 8; threshold >= 1; threshold--) {
-
-
-			int totalRating = 0, totalIterations = 0, maxIterations = 0;
+//		for (int threshold = 8; threshold >= 1; threshold--) {
+		int threshold = 1; {
+			long totalRating = 0, totalIterations = 0, maxIterations = 0;
 			for (int index = 0; index < limit; index++) {
 				long c = fixGamma((index & 0xFFFFFFFL) << 1, threshold);
 //				long c = fixGamma((index & 0xFFFFFFFL) << 1, 8);
 //			    long c = fixGamma((index & 0xFFFFFFFL) << 1, 1);
 				int rating = EnhancedRandom.rateGamma(c);
-//		    	System.out.printf("%20dL or 0x%016XL rating: %d in %d iterations\n", c, c, rating, iterations);
+		    	System.out.printf("%20dL or 0x%016XL rating: %d in %d iterations\n", c, c, rating, iterations);
 				totalRating += rating;
 				totalIterations += iterations;
 				maxIterations = Math.max(maxIterations, iterations);
 			}
 			System.out.printf("-------------------------------------------------------\nThreshold %d:\n" +
 					"Total rating      : %d\n" +
-					"Average rating    : %2.10f\n" +
-					"Average iterations: %2.10f\n" +
+					"Average rating    : %3.10f\n" +
+					"Average iterations: %3.10f\n" +
 					"Max iterations    : %d\n",
 				threshold, totalRating, totalRating / limit, totalIterations / limit, maxIterations);
 		}
