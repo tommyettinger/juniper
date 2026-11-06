@@ -965,6 +965,48 @@ import com.github.tommyettinger.digital.MathTools;
  * <pre>
  * Limit 5.36870912E8:
  * -------------------------------------------------------
+ * Threshold 8:
+ * Total rating      : 2771186315
+ * Average rating    : 5.1617367472
+ * Average iterations: 1.1612236351
+ * Max iterations    : 10
+ * -------------------------------------------------------
+ * Threshold 7:
+ * Total rating      : 2684198074
+ * Average rating    : 4.9997085221
+ * Average iterations: 1.2275521345
+ * Max iterations    : 12
+ * -------------------------------------------------------
+ * Threshold 6:
+ * Total rating      : 2334546290
+ * Average rating    : 4.3484313227
+ * Average iterations: 1.6269698571
+ * Max iterations    : 21
+ * -------------------------------------------------------
+ * Threshold 5:
+ * Total rating      : 2190181278
+ * Average rating    : 4.0795305334
+ * Average iterations: 1.8917624988
+ * Max iterations    : 28
+ * -------------------------------------------------------
+ * Threshold 4:
+ * Total rating      : 1680392017
+ * Average rating    : 3.1299740393
+ * Average iterations: 3.8419823498
+ * Max iterations    : 68
+ * -------------------------------------------------------
+ * Threshold 3:
+ * Total rating      : 1477086188
+ * Average rating    : 2.7512874231
+ * Average iterations: 5.5146218762
+ * Max iterations    : 118
+ * -------------------------------------------------------
+ * Threshold 2:
+ * Total rating      : 865256475
+ * Average rating    : 1.6116657760
+ * Average iterations: 30.7926351689
+ * Max iterations    : 590
+ * -------------------------------------------------------
  * Threshold 1:
  * Total rating      : 536870912
  * Average rating    : 1.0000000000
@@ -997,8 +1039,8 @@ public class TraceGammaTest {
 
 		double limit = 0x1p29;
 		System.out.println("Limit " + limit + ":");
-//		for (int threshold = 8; threshold >= 1; threshold--) {
-		int threshold = 1; {
+		for (int threshold = 8; threshold >= 1; threshold--) {
+//		int threshold = 1; {
 			long totalRating = 0, totalIterations = 0, maxIterations = 0;
 			for (int index = 0; index < limit; index++) {
 				long c = fixGamma((index & 0x1FFFFFFFL) << 1, threshold);
