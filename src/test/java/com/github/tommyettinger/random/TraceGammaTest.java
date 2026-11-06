@@ -960,6 +960,17 @@ import com.github.tommyettinger.digital.MathTools;
  * Average iterations: 79.3398437500
  * Max iterations    : 384
  * </pre>
+ * <br>
+ * Changing how the gamma gets adjusted on retries to use (add += 2), we can test up to 2 to the 29 gammas:
+ * <pre>
+ * Limit 5.36870912E8:
+ * -------------------------------------------------------
+ * Threshold 1:
+ * Total rating      : 536870912
+ * Average rating    : 1.0000000000
+ * Average iterations: 79.3030517865
+ * Max iterations    : 1644
+ * </pre>
  */
 public class TraceGammaTest {
 
@@ -973,7 +984,7 @@ public class TraceGammaTest {
 			|| Math.abs(Long.bitCount(gamma ^ gamma >>> 1) - 32) > threshold
 			|| Math.abs(Long.bitCount(inverse = MathTools.modularMultiplicativeInverse(gamma)) - 32) > threshold
 			|| Math.abs(Long.bitCount(inverse ^ inverse >>> 1) - 32) > threshold) {
-			gamma = gamma * 0xD1342543DE82EF95L + (++add);
+			gamma = gamma * 0xD1342543DE82EF95L + (add += 2);
 			gamma = (gamma & 0x7FFFFFFFFFFFFFFFL) | (~(gamma << 1) & 0x8000000000000001L);
 
 			++iterations;
@@ -984,17 +995,17 @@ public class TraceGammaTest {
 
 	public static void main(String[] args) {
 
-		double limit = 256;
+		double limit = 0x1p29;
 		System.out.println("Limit " + limit + ":");
 //		for (int threshold = 8; threshold >= 1; threshold--) {
 		int threshold = 1; {
 			long totalRating = 0, totalIterations = 0, maxIterations = 0;
 			for (int index = 0; index < limit; index++) {
-				long c = fixGamma((index & 0xFFFFFFFL) << 1, threshold);
-//				long c = fixGamma((index & 0xFFFFFFFL) << 1, 8);
-//			    long c = fixGamma((index & 0xFFFFFFFL) << 1, 1);
+				long c = fixGamma((index & 0x1FFFFFFFL) << 1, threshold);
+//				long c = fixGamma((index & 0x1FFFFFFFL) << 1, 8);
+//			    long c = fixGamma((index & 0x1FFFFFFFL) << 1, 1);
 				int rating = EnhancedRandom.rateGamma(c);
-		    	System.out.printf("%20dL or 0x%016XL rating: %d in %d iterations\n", c, c, rating, iterations);
+//		    	System.out.printf("%20dL or 0x%016XL rating: %d in %d iterations\n", c, c, rating, iterations);
 				totalRating += rating;
 				totalIterations += iterations;
 				maxIterations = Math.max(maxIterations, iterations);
