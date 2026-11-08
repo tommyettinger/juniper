@@ -1008,10 +1008,12 @@ import com.github.tommyettinger.digital.MathTools;
  * Max iterations    : 590
  * -------------------------------------------------------
  * Threshold 1:
- * Total rating      : 536870912
- * Average rating    : 1.0000000000
- * Average iterations: 79.3030517865
- * Max iterations    : 1644
+ * Time taken (total)  : 249819 milliseconds
+ * Time taken (average): 0.0004653241 milliseconds
+ * Total rating        : 536870912
+ * Average rating      : 1.0000000000
+ * Average iterations  : 79.3030517865
+ * Max iterations      : 1644
  * </pre>
  */
 public class TraceGammaTest {
@@ -1021,7 +1023,7 @@ public class TraceGammaTest {
 		// forces LSB to 1 and MSB to NOT its neighbor, the second-most-significant bit.
 		gamma = (gamma & 0x7FFFFFFFFFFFFFFFL) | (~(gamma << 1) & 0x8000000000000001L);
 		long inverse, add = 0L;
-		iterations = 0;
+//		iterations = 0; // comment out when testing timing
 		while (Math.abs(Long.bitCount(gamma) - 32) > threshold
 			|| Math.abs(Long.bitCount(gamma ^ gamma >>> 1) - 32) > threshold
 			|| Math.abs(Long.bitCount(inverse = MathTools.modularMultiplicativeInverse(gamma)) - 32) > threshold
@@ -1029,7 +1031,7 @@ public class TraceGammaTest {
 			gamma = gamma * 0xD1342543DE82EF95L + (add += 2);
 			gamma = (gamma & 0x7FFFFFFFFFFFFFFFL) | (~(gamma << 1) & 0x8000000000000001L);
 
-			++iterations;
+//			++iterations; // comment out when testing timing
 		}
 		return gamma;
 	}
@@ -1039,25 +1041,33 @@ public class TraceGammaTest {
 
 		double limit = 0x1p29;
 		System.out.println("Limit " + limit + ":");
-		for (int threshold = 8; threshold >= 1; threshold--) {
-//		int threshold = 1; {
+//		for (int threshold = 8; threshold >= 1; threshold--) {
+		int threshold = 1; {
 			long totalRating = 0, totalIterations = 0, maxIterations = 0;
+			long time = System.currentTimeMillis();
 			for (int index = 0; index < limit; index++) {
 				long c = fixGamma((index & 0x1FFFFFFFL) << 1, threshold);
-//				long c = fixGamma((index & 0x1FFFFFFFL) << 1, 8);
-//			    long c = fixGamma((index & 0x1FFFFFFFL) << 1, 1);
-				int rating = EnhancedRandom.rateGamma(c);
+				// comment out when testing timing
+//				int rating = EnhancedRandom.rateGamma(c);
 //		    	System.out.printf("%20dL or 0x%016XL rating: %d in %d iterations\n", c, c, rating, iterations);
-				totalRating += rating;
-				totalIterations += iterations;
-				maxIterations = Math.max(maxIterations, iterations);
+//				totalRating += rating;
+//				totalIterations += iterations;
+//				maxIterations = Math.max(maxIterations, iterations);
+				// uncomment when testing timing
+				totalRating += c;
 			}
+			time = (System.currentTimeMillis() - time);
 			System.out.printf("-------------------------------------------------------\nThreshold %d:\n" +
-					"Total rating      : %d\n" +
-					"Average rating    : %3.10f\n" +
-					"Average iterations: %3.10f\n" +
-					"Max iterations    : %d\n",
-				threshold, totalRating, totalRating / limit, totalIterations / limit, maxIterations);
+					"Time taken (total)  : %d milliseconds\n" +
+					"Time taken (average): %10.10f milliseconds\n" +
+					"Total rating        : %d\n" +
+					"Average rating      : %3.10f\n" +
+					"Average iterations  : %3.10f\n" +
+					"Max iterations      : %d\n",
+				threshold,
+				time, time / limit,
+				totalRating, totalRating / limit,
+				totalIterations / limit, maxIterations);
 		}
 	}
 }
