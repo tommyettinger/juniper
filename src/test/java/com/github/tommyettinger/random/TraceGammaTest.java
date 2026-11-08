@@ -966,54 +966,68 @@ import com.github.tommyettinger.digital.MathTools;
  * Limit 5.36870912E8:
  * -------------------------------------------------------
  * Threshold 8:
+ * Time taken (total)  : 3737 milliseconds
+ * Time taken (average): 0.0000069607 milliseconds
  * Total rating      : 2771186315
  * Average rating    : 5.1617367472
  * Average iterations: 1.1612236351
  * Max iterations    : 10
  * -------------------------------------------------------
  * Threshold 7:
+ * Time taken (total)  : 4280 milliseconds
+ * Time taken (average): 0.0000079721 milliseconds
  * Total rating      : 2684198074
  * Average rating    : 4.9997085221
  * Average iterations: 1.2275521345
  * Max iterations    : 12
  * -------------------------------------------------------
  * Threshold 6:
+ * Time taken (total)  : 6641 milliseconds
+ * Time taken (average): 0.0000123698 milliseconds
  * Total rating      : 2334546290
  * Average rating    : 4.3484313227
  * Average iterations: 1.6269698571
  * Max iterations    : 21
  * -------------------------------------------------------
  * Threshold 5:
+ * Time taken (total)  : 8595 milliseconds
+ * Time taken (average): 0.0000160094 milliseconds
  * Total rating      : 2190181278
  * Average rating    : 4.0795305334
  * Average iterations: 1.8917624988
  * Max iterations    : 28
  * -------------------------------------------------------
  * Threshold 4:
+ * Time taken (total)  : 20117 milliseconds
+ * Time taken (average): 0.0000374708 milliseconds
  * Total rating      : 1680392017
  * Average rating    : 3.1299740393
  * Average iterations: 3.8419823498
  * Max iterations    : 68
  * -------------------------------------------------------
  * Threshold 3:
+ * Time taken (total)  : 29546 milliseconds
+ * Time taken (average): 0.0000550337 milliseconds
  * Total rating      : 1477086188
  * Average rating    : 2.7512874231
  * Average iterations: 5.5146218762
  * Max iterations    : 118
  * -------------------------------------------------------
  * Threshold 2:
+ * Time taken (total)  : 137501 milliseconds
+ * Time taken (average): 0.0002561156 milliseconds
  * Total rating      : 865256475
  * Average rating    : 1.6116657760
  * Average iterations: 30.7926351689
  * Max iterations    : 590
  * -------------------------------------------------------
  * Threshold 1:
- * Time taken (total)  : 249819 milliseconds
- * Time taken (average): 0.0004653241 milliseconds
- * Total rating        : 536870912
- * Average rating      : 1.0000000000
- * Average iterations  : 79.3030517865
- * Max iterations      : 1644
+ * Time taken (total)  : 244290 milliseconds
+ * Time taken (average): 0.0004550256 milliseconds
+ * Total rating      : 536870912
+ * Average rating    : 1.0000000000
+ * Average iterations: 79.3030517865
+ * Max iterations    : 1644
  * </pre>
  */
 public class TraceGammaTest {
@@ -1041,8 +1055,8 @@ public class TraceGammaTest {
 
 		double limit = 0x1p29;
 		System.out.println("Limit " + limit + ":");
-//		for (int threshold = 8; threshold >= 1; threshold--) {
-		int threshold = 1; {
+		for (int threshold = 8; threshold >= 1; threshold--) {
+//		int threshold = 1; {
 			long totalRating = 0, totalIterations = 0, maxIterations = 0;
 			long time = System.currentTimeMillis();
 			for (int index = 0; index < limit; index++) {
@@ -1060,10 +1074,10 @@ public class TraceGammaTest {
 			System.out.printf("-------------------------------------------------------\nThreshold %d:\n" +
 					"Time taken (total)  : %d milliseconds\n" +
 					"Time taken (average): %10.10f milliseconds\n" +
-					"Total rating        : %d\n" +
-					"Average rating      : %3.10f\n" +
-					"Average iterations  : %3.10f\n" +
-					"Max iterations      : %d\n",
+					"Total rating      : %d\n" +
+					"Average rating    : %3.10f\n" +
+					"Average iterations: %3.10f\n" +
+					"Max iterations    : %d\n",
 				threshold,
 				time, time / limit,
 				totalRating, totalRating / limit,
