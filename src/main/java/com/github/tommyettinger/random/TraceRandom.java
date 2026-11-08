@@ -17,6 +17,8 @@
 
 package com.github.tommyettinger.random;
 
+import com.github.tommyettinger.digital.MathTools;
+
 import java.math.BigInteger;
 
 /**
@@ -49,7 +51,7 @@ import java.math.BigInteger;
  * this uses (and so returns with getStream()) will be a "good" gamma, and so won't need changing. Also note that there
  * are two 6-argument constructors; one takes an int for the stream and is meant to accept any int less than 2 to the
  * 28, while the other takes a long for the stream and simply feeds it to {@link #setStream(long)} to "fix" it if it
- * needs that (using {@link EnhancedRandom#fixGamma(long, int)} with threshold 1).
+ * needs that (using {@link #fixGammaCompatible(long, int)} with threshold 1).
  */
 public class TraceRandom extends EnhancedRandom {
 
@@ -78,7 +80,7 @@ public class TraceRandom extends EnhancedRandom {
 	/**
 	 * The unchanging stream; cannot be set directly, but can be obtained directly with {@link #getStream()} or get/set
 	 * indirectly via {@link #setStream(long)}, which only changes the input if it isn't already a usable gamma (as
-	 * determined by {@link EnhancedRandom#fixGamma(long, int)} with threshold 1).
+	 * determined by {@link #fixGammaCompatible(long, int)} with threshold 1).
 	 */
 	protected long stream;
 	/**
@@ -150,11 +152,11 @@ public class TraceRandom extends EnhancedRandom {
 	/**
 	 * Creates a new TraceRandom with the given stream identifier and five states; all {@code long} values are permitted
 	 * for states, and while all longs are permitted for stream, if it is an even number or in any way not considered a
-	 * suitable gamma value by {@link EnhancedRandom#fixGamma(long, int)} (with threshold 1), the stream will be changed
+	 * suitable gamma value by {@link #fixGammaCompatible(long, int)} (with threshold 1), the stream will be changed
 	 * before it can be used. You can get the actual stream this uses with {@link #getStream()}. If only odd numbers
 	 * less than 536870912 are given for the stream, all possible streams will be unique.
 	 *
-	 * @param stream any odd {@code long}, but will be passed to {@link EnhancedRandom#fixGamma(long, int)} with threshold 1, so it may change
+	 * @param stream any odd {@code long}, but will be passed to {@link #fixGammaCompatible(long, int)} with threshold 1, so it may change
 	 * @param stateA any {@code long} value
 	 * @param stateB any {@code long} value
 	 * @param stateC any {@code long} value
@@ -209,7 +211,7 @@ public class TraceRandom extends EnhancedRandom {
 	 * Sets one of the states, determined by {@code selection}, to {@code value}, as-is.
 	 * Selections 1, 2, 3, 4, and 5 refer to states A, B, C, D, and E, while selection 0 is the stream.
 	 * If the selection is anything else, this treats it as 0 and sets the stream. If this would try to set the stream
-	 * to an even number or any lower-quality value (as determined by {@link EnhancedRandom#fixGamma(long, int)} with a
+	 * to an even number or any lower-quality value (as determined by {@link #fixGammaCompatible(long, int)} with a
 	 * threshold of 1), it may change the stream until it has a high-quality gamma.
 	 *
 	 * @param selection used to select which state variable to set; generally 0, 1, 2, 3, 4, or 5
@@ -291,17 +293,17 @@ public class TraceRandom extends EnhancedRandom {
 
 	/**
 	 * Sets the stream using the low-order 28 bits of the given int, changing it using
-	 * {@link EnhancedRandom#fixGamma(long, int)} (with threshold 1) if it isn't already considered a good gamma value
+	 * {@link #fixGammaCompatible(long, int)} (with threshold 1) if it isn't already considered a good gamma value
 	 * (which it never will be initially). All streams this can produce given up-to-28-bit inputs will be unique.
 	 *
 	 * @param streamID can be any int, but only the lowest-order 28 bits matter
 	 */
 	public void setStreamIdentifier(int streamID) {
-		this.stream = EnhancedRandom.fixGamma((streamID & 0xFFFFFFF) << 1, 1);
+		this.stream = fixGammaCompatible((streamID & 0xFFFFFFF) << 1, 1);
 	}
 
 	/**
-	 * Sets the stream using the given long, and changing it using {@link EnhancedRandom#fixGamma(long, int)} (with
+	 * Sets the stream using the given long, and changing it using {@link #fixGammaCompatible(long, int)} (with
 	 * threshold 1) if it isn't already considered a good gamma value. The stream should always be an odd number; if
 	 * an even one is given, 1 will be added to make it odd. If only odd numbers between 1 and 536870912 are given, all
 	 * streams will be unique; if larger or even numbers are given, there can be duplicates.
@@ -309,7 +311,7 @@ public class TraceRandom extends EnhancedRandom {
 	 * @param stream any odd long; if only odd numbers less than 536870912 are given, all streams will be unique
 	 */
 	public void setStream(long stream) {
-		this.stream = EnhancedRandom.fixGamma(stream, 1);
+		this.stream = fixGammaCompatible(stream, 1);
 	}
 
 	public long getStateA() {
@@ -464,5 +466,43 @@ public class TraceRandom extends EnhancedRandom {
 
 	public String toString() {
 		return "TraceRandom{" + "stream=" + stream + ", stateA=" + (stateA) + "L, stateB=" + (stateB) + "L, stateC=" + (stateC) + "L, stateD=" + (stateD) + "L, stateE=" + (stateE) + "L}";
+	}
+
+	/**
+	 * Exactly the same as {@link EnhancedRandom#fixGamma(long, int)} in juniper 0.10.9 and earlier. That method became
+	 * stricter in later versions, which would change how this class was serialized in backwards-incompatible ways, so
+	 * now TraceRandom uses this "Compatible" method.
+	 * <br>
+	 * Attempts to improve the quality of a "gamma" increment for an additive sequence. This is stricter than the checks
+	 * in Java 8's SplittableRandom. The goal here is to make sure the gamma is "sufficiently random" to avoid patterns
+	 * when used as an increment. Examples of gamma values that aren't random enough include {@code 1L}, {@code 3L},
+	 * {@code 0xFFFFFFFFFFFFFFFFL}, {@code 0xAAAAAAAAAAAAAAABL}, and so on. It rejects any gamma value where any of four
+	 * bit counts are less than {@code 32 - threshold} or greater than {@code 32 + threshold}. The values that have
+	 * their bits counted are:
+	 * <ul>
+	 *     <li>The gamma itself,</li>
+	 *     <li>The Gray code of the gamma, defined as {@code (gamma ^ (gamma >>> 1))},</li>
+	 *     <li>The {@link MathTools#modularMultiplicativeInverse(long)} of the gamma,</li>
+	 *     <li>And the Gray code of the above inverse of the gamma.</li>
+	 * </ul>
+	 * If a gamma is rejected, this multiplies it by an LCG constant, 0xD1342543DE82EF95L, adds an increasing even
+	 * number (first 2, then 4, then 6, and so on) and tries again repeatedly. It returns the first gamma that wasn't
+	 * rejected, which could be the original gamma.
+	 *
+	 * @param gamma     any long, though almost always an odd number, that would be added as an increment in a sequence
+	 * @param threshold the maximum acceptable "score" as evaluated by {@link #rateGamma(long)}
+	 * @return gamma or a modification upon it such that its bits are "sufficiently random" to be a good increment
+	 * @see <a href="https://www.pcg-random.org/posts/bugs-in-splitmix.html">This was informed by O'Neill's blog post about SplittableRandom's gamma.</a>
+	 */
+	public static long fixGammaCompatible(long gamma, int threshold) {
+		gamma |= 1L;
+		long inverse, add = 0L;
+		while (Math.abs(Long.bitCount(gamma) - 32) > threshold
+			|| Math.abs(Long.bitCount(gamma ^ gamma >>> 1) - 32) > threshold
+			|| Math.abs(Long.bitCount(inverse = MathTools.modularMultiplicativeInverse(gamma)) - 32) > threshold
+			|| Math.abs(Long.bitCount(inverse ^ inverse >>> 1) - 32) > threshold) {
+			gamma = gamma * 0xD1342543DE82EF95L + (add += 2L);
+		}
+		return gamma;
 	}
 }
