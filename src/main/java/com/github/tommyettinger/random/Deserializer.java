@@ -116,6 +116,7 @@ public final class Deserializer {
 		register(new AceRandom(1, 2, 3, 4, 5));
 		register(new Xoshiro160RoadroxoRandom(1, 2, 3, 4, 5));
 		register(new TraceRandom(1, 2, 3, 4, 5, 6));
+		register(new GraceRandom(1, 2, 3, 4, 5, 6));
 		register(new L64X256MixRandom(1, 2, 3, 4, 5, 6));
 		register(new Goblin3Random(1, 2, 3));
 		register(new Goblin4Random(1, 2, 3, 4));

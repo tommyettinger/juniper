@@ -32,8 +32,8 @@ import java.math.BigInteger;
  * over 268 million possible streams, on top of that.
  * <br>
  * At least one stream passes 64TB with no anomalies. All total streams are virtually impossible to test in a mortal
- * lifespan, but each stream does rate as optimal (score 1, with score 0 impossible, when evaluated by
- * {@link EnhancedRandom#rateGamma(long)}). This is usually a tiny amount slower than {@link AceRandom} (about 5%
+ * lifespan, but each stream does rate as optimal (score 1, with score 0 impossible, when evaluated by (an older version
+ * of) {@link EnhancedRandom#rateGamma(long)}). This is usually a tiny amount slower than {@link AceRandom} (about 5%
  * lower throughput), but strangely is slightly faster than AceRandom when run on GraalVM 24. This passes Initial
  * Correlation Evaluator tests after 26 generations or more.
  * <br>
@@ -52,6 +52,8 @@ import java.math.BigInteger;
  * are two 6-argument constructors; one takes an int for the stream and is meant to accept any int less than 2 to the
  * 28, while the other takes a long for the stream and simply feeds it to {@link #setStream(long)} to "fix" it if it
  * needs that (using {@link #fixGammaCompatible(long, int)} with threshold 1).
+ *
+ * @see GraceRandom GraceRandom is almost exactly the same as this, but uses a different way of selecting streams.
  */
 public class TraceRandom extends EnhancedRandom {
 
