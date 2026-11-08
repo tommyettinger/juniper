@@ -30,6 +30,11 @@ import java.math.BigInteger;
  * over 536 million possible streams, on top of that.
  * <br>
  * Each stream rates as optimal (score 1, with score 0 impossible, when evaluated by
+ * {@link EnhancedRandom#rateGamma(long)}). This passes Initial Correlation Evaluator tests, but not Immediate ones.
+ * How it does in PractRand isn't known for sure, but the very similar generator TraceRandom passes 64TB of PractRand
+ * testing without anomalies.
+ * <br>
+ * After about 30 calls to {@link #nextLong()}, any two different streams with otherwise identical states should have no
  * correlations to each other. This avoids the issue with SplitMix64 where "gamma" receives problem values, because it
  * uses several criteria to evaluate each gamma and rejects most attempts at a gamma until it finds one of
  * relatively-few near-perfect gamma values possible. This does also use quite a lot more state than SplitMix64, and
