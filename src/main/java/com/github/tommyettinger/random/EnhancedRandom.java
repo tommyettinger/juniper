@@ -1672,8 +1672,15 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 * Attempts to improve the quality of a "gamma" increment for an additive sequence. This is stricter than the checks
 	 * in Java 8's SplittableRandom. The goal here is to make sure the gamma is "sufficiently random" to avoid patterns
 	 * when used as an increment. Examples of gamma values that aren't random enough include {@code 1L}, {@code 3L},
-	 * {@code 0xFFFFFFFFFFFFFFFFL}, {@code 0xAAAAAAAAAAAAAAABL}, and so on. It rejects any gamma value where any of four
-	 * bit counts are less than 24 or greater than 40. The values that have their bits counted are:
+	 * {@code 0xFFFFFFFFFFFFFFFFL}, {@code 0xAAAAAAAAAAAAAAABL}, and so on. This also forces the
+	 * least-significant bit to 1 (making the number always odd) and the most-significant two bits to either 01 or 10,
+	 * keeping the existing less-significant of the two and discarding the existing sign bit. The last step means the
+	 * magnitude of gammas will always be far from 0, over 4611686018427387905 away minimum (for signed longs). Without
+	 * the last step, some gammas can be too small to quickly change the upper bits when used as a counter. This last
+	 * part is a change in behavior from earlier versions (juniper 0.10.9 and earlier didn't check the two top bits).
+	 * <br>
+	 * This rejects any gamma value where any of four bit counts are less than 24 or greater than 40. The values that
+	 * have their bits counted are:
 	 * <ul>
 	 *     <li>The gamma itself,</li>
 	 *     <li>The Gray code of the gamma, defined as {@code (gamma ^ (gamma >>> 1))},</li>
@@ -1681,14 +1688,22 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 *     <li>And the Gray code of the above inverse of the gamma.</li>
 	 * </ul>
 	 * If a gamma is rejected, this multiplies it by an LCG constant, 0xD1342543DE82EF95L, adds an increasing even
-	 * number (first 2, then 4, then 6, and so on) and tries again repeatedly. It returns the first gamma that wasn't
-	 * rejected, which could be the original gamma.
+	 * number (first 2, then 4, then 6, and so on) and tries again repeatedly. It also ensures the most-significant two
+	 * bits are different, as it does at the start.
+	 * It returns the first gamma that wasn't rejected, which could be the original gamma.
 	 * <br>
 	 * This simply calls {@link #fixGamma(long, int)} with the given gamma and a threshold of 8.
+	 * The threshold of 8 this defaults to is quite permissive; you may want a tighter threshold depending on how many
+	 * retries are acceptable. Given the first (2 to the 29) odd numbers as inputs, this requires at most 10 retries to
+	 * find an acceptable gamma, and on average just 1.1612236351 retries are needed. Because none of the first (2 to
+	 * the 29) odd inputs are valid already (they are all too close to 0), at least 1 retry is needed. If you use
+	 * {@link #fixGamma(long, int)} with a threshold of 1, the most retries needed is 1644, and the average is
+	 * 79.3030517865 retries.
 	 *
 	 * @param gamma any long, though almost always an odd number, that would be added as an increment in a sequence
 	 * @return gamma or a modification upon it such that its bits are "sufficiently random" to be a good increment
 	 * @see <a href="https://www.pcg-random.org/posts/bugs-in-splitmix.html">This was informed by O'Neill's blog post about SplittableRandom's gamma.</a>
+	 * @see <a href="https://marc-b-reynolds.github.io/math/2024/12/11/LCGAddConst.html">Marc B. Reynolds also explored ways to improve gammas, and the alternating top 2 bits were his idea.</a>
 	 */
 	public static long fixGamma(long gamma) {
 		return fixGamma(gamma, 8);
@@ -1699,8 +1714,14 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 * in Java 8's SplittableRandom. The goal here is to make sure the gamma is "sufficiently random" to avoid patterns
 	 * when used as an increment. Examples of gamma values that aren't random enough include {@code 1L}, {@code 3L},
 	 * {@code 0xFFFFFFFFFFFFFFFFL}, {@code 0xAAAAAAAAAAAAAAABL}, and so on. It rejects any gamma value where any of four
-	 * bit counts are less than {@code 32 - threshold} or greater than {@code 32 + threshold}. The values that have
-	 * their bits counted are:
+	 * bit counts are less than {@code 32 - threshold} or greater than {@code 32 + threshold}. This also forces the
+	 * least-significant bit to 1 (making the number always odd) and the most-significant two bits to either 01 or 10,
+	 * keeping the existing less-significant of the two and discarding the existing sign bit. The last step means the
+	 * magnitude of gammas will always be far from 0, over 4611686018427387905 away minimum (for signed longs). Without
+	 * the last step, some gammas can be too small to quickly change the upper bits when used as a counter. This last
+	 * part is a change in behavior from earlier versions (juniper 0.10.9 and earlier didn't check the two top bits).
+	 * <br>
+	 * The values that have their bits counted are:
 	 * <ul>
 	 *     <li>The gamma itself,</li>
 	 *     <li>The Gray code of the gamma, defined as {@code (gamma ^ (gamma >>> 1))},</li>
@@ -1708,22 +1729,39 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 *     <li>And the Gray code of the above inverse of the gamma.</li>
 	 * </ul>
 	 * If a gamma is rejected, this multiplies it by an LCG constant, 0xD1342543DE82EF95L, adds an increasing even
-	 * number (first 2, then 4, then 6, and so on) and tries again repeatedly. It returns the first gamma that wasn't
-	 * rejected, which could be the original gamma.
+	 * number (first 2, then 4, then 6, and so on) and tries again repeatedly. It also ensures the most-significant two
+	 * bits are different, as it does at the start.
+	 * It returns the first gamma that wasn't rejected, which could be the original gamma.
+	 * <br>
+	 * Normal usage of this function gives it only odd numbers between 1 and (2 to the 30), which ensures that every
+	 * gamma this returns will be different for different inputs. While you can supply this even inputs, you can't mix
+	 * even and odd inputs while getting distinct outputs, because an even gamma will produce the same result as that
+	 * gamma + 1. There are over half a billion unique gammas that can be returned given inputs that follow this
+	 * restriction even with a threshold of 1, the strictest.
+	 * <br>
+	 * The tighter the threshold (with 1 the tightest), the more retries this has to attempt to find a good gamma.
+	 * Given the above "normal usage" testing on the first (2 to the 29) odd numbers, a threshold of 8 requires at most
+	 * 10 retries, and on average 1.1612236351 retries. A threshold of 1 requires at most 1644 retries, and on average
+	 * 79.3030517865 retries. Both are very quick to compute; threshold 8 takes on average 7 nanoseconds on a struggling
+	 * laptop to compute, while threshold 1 takes on average 455 nanoseconds. These can also be computed in parallel by
+	 * choosing different ranges of inputs to use for different threads.
 	 *
 	 * @param gamma     any long, though almost always an odd number, that would be added as an increment in a sequence
-	 * @param threshold the maximum acceptable "score" as evaluated by {@link #rateGamma(long)}
+	 * @param threshold the maximum acceptable "score" as evaluated by {@link #rateGamma(long)}; between 1 (strictest) and 32 (allow any valid gamma)
 	 * @return gamma or a modification upon it such that its bits are "sufficiently random" to be a good increment
 	 * @see <a href="https://www.pcg-random.org/posts/bugs-in-splitmix.html">This was informed by O'Neill's blog post about SplittableRandom's gamma.</a>
+	 * @see <a href="https://marc-b-reynolds.github.io/math/2024/12/11/LCGAddConst.html">Marc B. Reynolds also explored ways to improve gammas, and the alternating top 2 bits were his idea.</a>
 	 */
 	public static long fixGamma(long gamma, int threshold) {
-		gamma |= 1L;
+		// forces LSB to 1 and MSB to NOT its neighbor, the second-most-significant bit.
+		gamma = (gamma & 0x7FFFFFFFFFFFFFFFL) | (~(gamma << 1) & 0x8000000000000001L);
 		long inverse, add = 0L;
 		while (Math.abs(Long.bitCount(gamma) - 32) > threshold
 			|| Math.abs(Long.bitCount(gamma ^ gamma >>> 1) - 32) > threshold
 			|| Math.abs(Long.bitCount(inverse = MathTools.modularMultiplicativeInverse(gamma)) - 32) > threshold
 			|| Math.abs(Long.bitCount(inverse ^ inverse >>> 1) - 32) > threshold) {
-			gamma = gamma * 0xD1342543DE82EF95L + (add += 2L);
+			gamma = gamma * 0xD1342543DE82EF95L + (add += 2);
+			gamma = (gamma & 0x7FFFFFFFFFFFFFFFL) | (~(gamma << 1) & 0x8000000000000001L);
 		}
 		return gamma;
 	}
@@ -1746,14 +1784,18 @@ Double.longBitsToDouble(1023L - Long.numberOfLeadingZeros(bits & 0x7FFFFFFFFFFFF
 	 * considered more "problematic," and scores less than 9 are probably fine for SplitMix gammas.
 	 * <br>
 	 * If the given gamma is even, it is not suitable as a SplitMix gamma automatically, and the maximum (worst) rating
-	 * is returned, 32.
+	 * is returned, 32. This also returns 32 if the most-significant two bits are the same, which indicates the gamma is
+	 * too close to 0 to change upper bits often enough. This last part is a change in behavior from earlier versions
+	 * (juniper 0.10.9 and earlier didn't check the two top bits).
 	 *
 	 * @param gamma any long, though almost always an odd number, that would be added as an increment in a sequence
-	 * @return how far the given gamma is from an optimal score of 0
+	 * @return how far the given gamma is from an optimal score of 0; the lowest actual result possible is 1
 	 * @see <a href="https://www.pcg-random.org/posts/bugs-in-splitmix.html">This was informed by O'Neill's blog post about SplittableRandom's gamma.</a>
+	 * @see <a href="https://marc-b-reynolds.github.io/math/2024/12/11/LCGAddConst.html">Marc B. Reynolds also explored ways to improve gammas, and the alternating top 2 bits were his idea.</a>
 	 */
 	public static int rateGamma(long gamma) {
-		if ((gamma & 1L) == 0L) return 32;
+		// If the gamma is even or its top two bits are the same, return 32 (worst).
+		if (gamma != ((gamma & 0x7FFFFFFFFFFFFFFFL) | (~(gamma << 1) & 0x8000000000000001L))) return 32;
 		final long inverse = MathTools.modularMultiplicativeInverse(gamma);
 		return Math.max(Math.max(Math.max(
 					Math.abs(Long.bitCount(gamma) - 32),
