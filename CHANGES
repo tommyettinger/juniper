@@ -1,3 +1,8 @@
+[0.11.0]
+- [SEED BREAKING, POTENTIALLY] EnhancedRandom.fixGamma() and rateGamma() now have stricter criteria for gammas, and treat gammas that are too close to 0 either as rejected candidates or the worst rating.
+- TraceRandom is unaffected by the above seed breaking change because it uses a backwards-compatible variant on fixGamma().
+- GraceRandom is a new generator that is exactly like TraceRandom except that it uses the new, stricter fixGamma(). It also allows twice as many unique streams. It passes at least 128TB of PractRand without anomalies (TraceRandom was only tested to 64TB, also without anomalies).
+
 [0.10.9]
 - Two of the LXM family of generators added in Java 17 have been ported here based on work in Apache Commons RNG 1.7: L64X128MixRandom and L64X256MixRandom. The versions here are extended with previousLong() implementations, but don't offer the same jumping capabilities as in the Apache library. The nextLong() results from juniper should be identical to the next() results in Apache Commons RNG.
 - Jamb32Random added to official generators, mostly to make porting Lamb32Random to JavaScript slightly easier. It does pass 128TB of PractRand, which is more than Lamb32Random was tested for.
