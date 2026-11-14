@@ -17,6 +17,8 @@
 
 package com.github.tommyettinger.random;
 
+import java.math.BigInteger;
+
 /**
  * A random number generator that is optimized for performance on 32-bit machines and with Google Web Toolkit, this uses
  * only add, bitwise-rotate, and XOR operations (no multiplication). This generator is nearly identical to
@@ -113,6 +115,23 @@ public class ChopRandom extends Enhanced32Random {
 	@Override
 	public boolean mainlyGeneratesInt() {
 		return true;
+	}
+
+	/**
+	 * Returned by {@link #getMinimumPeriod()}.
+	 *
+	 * @see #getMinimumPeriod()
+	 */
+	private static final BigInteger MINIMUM_PERIOD = new BigInteger("100000000", 16);
+
+	/**
+	 * 2 to the 32.
+	 *
+	 * @return 2 to the 32
+	 */
+	@Override
+	public BigInteger getMinimumPeriod() {
+		return MINIMUM_PERIOD;
 	}
 
 	/**
