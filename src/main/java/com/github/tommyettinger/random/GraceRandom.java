@@ -29,7 +29,7 @@ import java.math.BigInteger;
  * "bad." That's over 45,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000 calls to {@link #nextLong()}. With
  * over 536 million possible streams, on top of that.
  * <br>
- * This passes 128TB of PractRand testing with no anomalies.
+ * This passes 256TB of PractRand testing without anomalies.
  * Each stream rates as optimal (score 1, with score 0 impossible) when evaluated by
  * {@link EnhancedRandom#rateGamma(long)}. This passes Initial Correlation Evaluator tests, but not Immediate ones.
  * <br>
