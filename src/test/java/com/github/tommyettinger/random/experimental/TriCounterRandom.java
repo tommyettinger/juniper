@@ -248,44 +248,32 @@ public class TriCounterRandom extends EnhancedRandom {
 
 	@Override
 	public long nextLong() {
-		long a = stateA;
-		long b = stateB;
-		long c = stateC;
+		long s = (stateA ^ (stateB << 47 | stateB >>> 17) ^ (stateC << 23 | stateC >>> 41)) * 0xF1357AEA2E62A9C5L;
+		s = (s ^ (s << 41 | s >>> 23) ^ (s << 18 | s >>> 46)) * 0xF1357AEA2E62A9C5L;
 		stateA += 0xB492F903DF242A79L;
 		stateB += 0x9EF49B69C6820771L;
 		stateC += 0x83A9A7D23771CD09L;
-		b = (b << 56 | b >>> 8) + a ^ c;
-		a = (a << 3 | a >>> 61) ^ b;
-		b = (b << 51 | b >>> 13) + a ^ c;
-		a = (a << 5 | a >>> 59) ^ b;
-		return a;
+		return s ^ (s << 39 | s >>> 25) ^ (s << 14 | s >>> 50);
 	}
 
 	@Override
 	public long previousLong() {
-		long a = stateA -= 0xB492F903DF242A79L;
-		long b = stateB -= 0x9EF49B69C6820771L;
-		long c = stateC -= 0x83A9A7D23771CD09L;
-		b = (b << 56 | b >>> 8) + a ^ c;
-		a = (a << 3 | a >>> 61) ^ b;
-		b = (b << 51 | b >>> 13) + a ^ c;
-		a = (a << 5 | a >>> 59) ^ b;
-		return a;
+		stateA -= 0xB492F903DF242A79L;
+		stateB -= 0x9EF49B69C6820771L;
+		stateC -= 0x83A9A7D23771CD09L;
+		long s = (stateA ^ (stateB << 47 | stateB >>> 17) ^ (stateC << 23 | stateC >>> 41)) * 0xF1357AEA2E62A9C5L;
+		s = (s ^ (s << 41 | s >>> 23) ^ (s << 18 | s >>> 46)) * 0xF1357AEA2E62A9C5L;
+		return s ^ (s << 39 | s >>> 25) ^ (s << 14 | s >>> 50);
 	}
 
 	@Override
 	public int next(int bits) {
-		long a = stateA;
-		long b = stateB;
-		long c = stateC;
+		long s = (stateA ^ (stateB << 47 | stateB >>> 17) ^ (stateC << 23 | stateC >>> 41)) * 0xF1357AEA2E62A9C5L;
+		s = (s ^ (s << 41 | s >>> 23) ^ (s << 18 | s >>> 46)) * 0xF1357AEA2E62A9C5L;
 		stateA += 0xB492F903DF242A79L;
 		stateB += 0x9EF49B69C6820771L;
 		stateC += 0x83A9A7D23771CD09L;
-		b = (b << 56 | b >>> 8) + a ^ c;
-		a = (a << 3 | a >>> 61) ^ b;
-		b = (b << 51 | b >>> 13) + a ^ c;
-		a = (a << 5 | a >>> 59) ^ b;
-		return (int) a >>> (32 - bits);
+		return (int) (s ^ (s << 39 | s >>> 25) ^ (s << 14 | s >>> 50)) >>> (32 - bits);
 	}
 
 	@Override
