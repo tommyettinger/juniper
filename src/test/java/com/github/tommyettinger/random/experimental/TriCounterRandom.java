@@ -255,9 +255,9 @@ public class TriCounterRandom extends EnhancedRandom {
 		stateB += 0x9EF49B69C6820771L;
 		stateC += 0x83A9A7D23771CD09L;
 		b = (b << 56 | b >>> 8) + a ^ c;
-		a = ((a << 3 | a >>> 61) ^ b);
+		a = (a << 3 | a >>> 61) ^ b;
 		b = (b << 51 | b >>> 13) + a ^ c;
-		a = ((a << 5 | a >>> 59) ^ b);
+		a = (a << 5 | a >>> 59) ^ b;
 		return a;
 	}
 
@@ -267,9 +267,9 @@ public class TriCounterRandom extends EnhancedRandom {
 		long b = stateB -= 0x9EF49B69C6820771L;
 		long c = stateC -= 0x83A9A7D23771CD09L;
 		b = (b << 56 | b >>> 8) + a ^ c;
-		a = ((a << 3 | a >>> 61) ^ b);
+		a = (a << 3 | a >>> 61) ^ b;
 		b = (b << 51 | b >>> 13) + a ^ c;
-		a = ((a << 5 | a >>> 59) ^ b);
+		a = (a << 5 | a >>> 59) ^ b;
 		return a;
 	}
 
@@ -282,9 +282,9 @@ public class TriCounterRandom extends EnhancedRandom {
 		stateB += 0x9EF49B69C6820771L;
 		stateC += 0x83A9A7D23771CD09L;
 		b = (b << 56 | b >>> 8) + a ^ c;
-		a = ((a << 3 | a >>> 61) ^ b);
+		a = (a << 3 | a >>> 61) ^ b;
 		b = (b << 51 | b >>> 13) + a ^ c;
-		a = ((a << 5 | a >>> 59) ^ b);
+		a = (a << 5 | a >>> 59) ^ b;
 		return (int) a >>> (32 - bits);
 	}
 
