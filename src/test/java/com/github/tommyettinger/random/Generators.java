@@ -141,7 +141,6 @@ public final class Generators {
 		randomList.add(new Qoa64QuasiRandom(1));
 		randomList.add(new QoaxsRandom(1));
 		randomList.add(new CompositeWrapper(new LFSR64QuasiRandom(1), new QoaxsRandom(1)));
-		randomList.add(new TriQoaRandom(1, 1, 1));
 		randomList.add(new WoolRandom(1));
 		randomList.add(new CelloRandom(1, 1, 1, 1));
 		randomList.add(new FlowRandom(1, 1));
@@ -159,6 +158,7 @@ public final class Generators {
 		randomList.add(new L64X128MixRandom(1, 1, 1, 1));
 		randomList.add(new Jamb32Random(1, 1));
 		randomList.add(new GraceRandom(1, 1, 1, 1, 1, 1));
+		randomList.add(new TriQoaRandom(1, 1, 1));
 	}
 
 	public static int randomCount = randomList.size();

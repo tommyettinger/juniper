@@ -248,45 +248,62 @@ public class TriQoaRandom extends EnhancedRandom {
 
 	@Override
 	public long nextLong() {
-		long a = (stateA += stateA * stateA | 999999111L);
-		long b = (stateB += stateB * stateB | 919919919L);
-		long c = (stateC += stateC * stateC | 111999999L);
-		return a ^ (b << 32 | b >>> 32) ^ (c << 16 | c >>> 48);
+		long a = stateA;
+		long b = stateB;
+		long c = stateC;
+		stateA += a * a | 999999111L;
+		stateB += b * b | 919919919L;
+		stateC += c * c | 111999999L;
+		b = (b << 56 | b >>> 8) + a ^ c;
+		a = ((a << 3 | a >>> 61) ^ b);
+		b = (b << 51 | b >>> 13) + a ^ c;
+		a = ((a << 5 | a >>> 59) ^ b);
+		return a;
 	}
 
 	@Override
 	public long previousLong() {
-		long a = stateA;
-		long b = stateB;
-		long c = stateC;
 		long r = 0L;
 		for (int bit = 0; bit < 64; bit++) {
-			final long test = (((r + (r * r | 999999111L)) ^ a) & (-1L >>> ~bit));
+			final long test = (((r + (r * r | 999999111L)) ^ stateA) & (-1L >>> ~bit));
 			r ^= ((test | -test) >>> 63) << bit;
 		}
 		stateA = r;
 		r = 0L;
 		for (int bit = 0; bit < 64; bit++) {
-			final long test = (((r + (r * r | 919919919L)) ^ b) & (-1L >>> ~bit));
+			final long test = (((r + (r * r | 919919919L)) ^ stateB) & (-1L >>> ~bit));
 			r ^= ((test | -test) >>> 63) << bit;
 		}
 		stateB = r;
 		r = 0L;
 		for (int bit = 0; bit < 64; bit++) {
-			final long test = (((r + (r * r | 111999999L)) ^ c) & (-1L >>> ~bit));
+			final long test = (((r + (r * r | 111999999L)) ^ stateC) & (-1L >>> ~bit));
 			r ^= ((test | -test) >>> 63) << bit;
 		}
 		stateC = r;
-
-		return a ^ (b << 32 | b >>> 32) ^ (c << 16 | c >>> 48);
+		long a = stateA;
+		long b = stateB;
+		long c = stateC;
+		b = (b << 56 | b >>> 8) + a ^ c;
+		a = ((a << 3 | a >>> 61) ^ b);
+		b = (b << 51 | b >>> 13) + a ^ c;
+		a = ((a << 5 | a >>> 59) ^ b);
+		return a;
 	}
 
 	@Override
 	public int next(int bits) {
-		long a = (stateA += stateA * stateA | 999999111L);
-		long b = (stateB += stateB * stateB | 919919919L);
-		long c = (stateC += stateC * stateC | 111999999L);
-		return (int) (a ^ (b << 32 | b >>> 32) ^ (c << 16 | c >>> 48)) >>> (32 - bits);
+		long a = stateA;
+		long b = stateB;
+		long c = stateC;
+		stateA += a * a | 999999111L;
+		stateB += b * b | 919919919L;
+		stateC += c * c | 111999999L;
+		b = (b << 56 | b >>> 8) + a ^ c;
+		a = ((a << 3 | a >>> 61) ^ b);
+		b = (b << 51 | b >>> 13) + a ^ c;
+		a = ((a << 5 | a >>> 59) ^ b);
+		return (int) a >>> (32 - bits);
 	}
 
 	@Override
