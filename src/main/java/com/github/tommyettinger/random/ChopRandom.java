@@ -30,7 +30,10 @@ import java.math.BigInteger;
  * half the speed of FourWheelRandom when generating long values on Java 17 HotSpot). ChopRandom has a guaranteed
  * minimum period of 2 to the 32, and is very likely to have a much longer period for almost all initial states.
  * <br>
- * This generator can be considered stable. It passes 64TB of PractRand testing without anomalies.
+ * This generator can be considered stable. It passes 256TB of PractRand testing without anomalies. This passes Initial
+ * Correlation Evaluator testing (which ignores the first 100 generated ints or longs). It passes Immediate Initial
+ * Correlation testing on longs (which ignores the first 4 generated longs), but fails it on ints because this takes at
+ * least 8 generated ints to break correlations, and that only ignores 4 generated ints.
  * <br>
  * The algorithm used here has four states purely to exploit instruction-level parallelism; one state is a counter (this
  * gives the guaranteed minimum period of 2 to the 32), and the others combine the values of the four states across three
@@ -39,7 +42,7 @@ import java.math.BigInteger;
  * <br>
  * It is strongly recommended that you seed this with {@link #setSeed(long)} instead of
  * {@link #setState(long, long, long, long)}, because if you give sequential seeds to both setSeed() and setState(), the
- * former will start off random, while the latter will start off repeating the seed sequence. After about 20-40 random
+ * former will start off random, while the latter will start off repeating the seed sequence. After about 8-10 random
  * numbers generated, any correlation between similarly seeded generators will probably be completely gone, though.
  * <br>
  * This implements all optional methods in EnhancedRandom except {@link #skip(long)}; it does implement

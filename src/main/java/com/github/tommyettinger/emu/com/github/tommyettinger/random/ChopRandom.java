@@ -17,6 +17,8 @@
 
 package com.github.tommyettinger.random;
 
+import java.math.BigInteger;
+
 public class ChopRandom extends Enhanced32Random {
 
     /**
@@ -92,6 +94,23 @@ public class ChopRandom extends Enhanced32Random {
 	@Override
 	public boolean mainlyGeneratesInt() {
 		return true;
+	}
+
+	/**
+	 * Returned by {@link #getMinimumPeriod()}.
+	 *
+	 * @see #getMinimumPeriod()
+	 */
+	private static final BigInteger MINIMUM_PERIOD = new BigInteger("100000000", 16);
+
+	/**
+	 * 2 to the 32.
+	 *
+	 * @return 2 to the 32
+	 */
+	@Override
+	public BigInteger getMinimumPeriod() {
+		return MINIMUM_PERIOD;
 	}
 
     /**
