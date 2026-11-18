@@ -160,6 +160,7 @@ public final class Generators {
 		randomList.add(new GraceRandom(1, 1, 1, 1, 1, 1));
 		randomList.add(new TriQoaRandom(1, 1, 1));
 		randomList.add(new TriCounterRandom(1, 1, 1));
+		randomList.add(new TriopsRandom(1, 1, 1));
 	}
 
 	public static int randomCount = randomList.size();
