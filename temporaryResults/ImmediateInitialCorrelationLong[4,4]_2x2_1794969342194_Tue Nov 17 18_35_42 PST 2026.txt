@@ -1,0 +1,1 @@
+[Immediate] Lowest mode: 96.00000 has mean amount 0.5849622488  FAIL 💀 for TriCounterRandom
