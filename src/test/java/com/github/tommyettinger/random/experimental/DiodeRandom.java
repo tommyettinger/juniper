@@ -1,0 +1,297 @@
+/*
+ * Copyright (c) 2022 See AUTHORS file.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+package com.github.tommyettinger.random.experimental;
+
+import com.github.tommyettinger.digital.Base;
+import com.github.tommyettinger.digital.BitConversion;
+import com.github.tommyettinger.random.EnhancedRandom;
+
+import java.math.BigInteger;
+
+/**
+ */
+public class DiodeRandom extends EnhancedRandom {
+	@Override
+	public String getTag() {
+		return "DioR";
+	}
+
+	/**
+	 * Returned by {@link #getMinimumPeriod()}.
+	 *
+	 * @see #getMinimumPeriod()
+	 */
+	private static final BigInteger MINIMUM_PERIOD = new BigInteger("100000000000000000000000000000000", 16);
+
+	/**
+	 * 2 to the 128.
+	 *
+	 * @return 2 to the 128
+	 */
+	@Override
+	public BigInteger getMinimumPeriod() {
+		return MINIMUM_PERIOD;
+	}
+
+	/**
+	 * The first state; can be any long.
+	 */
+	protected long stateA;
+	/**
+	 * The second state; can be any long.
+	 */
+	protected long stateB;
+
+	/**
+	 * Creates a new DiodeRandom with a random state.
+	 */
+	public DiodeRandom() {
+		stateA = EnhancedRandom.seedFromMath();
+		stateB = EnhancedRandom.seedFromMath();
+	}
+
+	/**
+	 * Creates a new DiodeRandom with the given seed; all {@code long} values are permitted.
+	 * The seed will be passed to {@link #setSeed(long)} to attempt to adequately distribute the seed randomly.
+	 *
+	 * @param seed any {@code long} value
+	 */
+	public DiodeRandom(long seed) {
+		setSeed(seed);
+	}
+
+	/**
+	 * Creates a new DiodeRandom with the given two states; all {@code long} values are permitted.
+	 * These states will be used verbatim .
+	 *
+	 * @param stateA any {@code long} value
+	 * @param stateB any {@code long} value
+	 */
+	public DiodeRandom(long stateA, long stateB) {
+		this.stateA = stateA;
+		this.stateB = stateB;
+	}
+
+	/**
+	 * This generator has 2 {@code long} states, so this returns 2.
+	 *
+	 * @return 2 (two)
+	 */
+	@Override
+	public int getStateCount() {
+		return 2;
+	}
+
+	/**
+	 * Gets the state determined by {@code selection}, as-is. The value for selection should be
+	 * between 0 (stateA) or 1 (stateB), inclusive; if it is any other value this gets state B as if 1 was given.
+	 *
+	 * @param selection used to select which state variable to get; generally 0 or 1
+	 * @return the value of the selected state
+	 */
+	@Override
+	public long getSelectedState(int selection) {
+		if (selection == 0) {
+			return stateA;
+		}
+		return stateB;
+	}
+
+	/**
+	 * Sets one of the states, determined by {@code selection}, to {@code value}, as-is.
+	 * Selections 0 and 1 refer to states A and B, and if the selection is anything
+	 * else, this ignores it and sets nothing.
+	 *
+	 * @param selection used to select which state variable to set; generally 0 or 1
+	 * @param value     the exact value to use for the selected state, if valid
+	 */
+	@Override
+	public void setSelectedState(int selection, long value) {
+		switch (selection) {
+			case 0:
+				stateA = value;
+				break;
+			case 1:
+				stateB = value;
+				break;
+		}
+	}
+
+	/**
+	 * This initializes all three states of the generator to random values based on the given seed.
+	 * (2 to the 64) possible initial generator states can be produced here, though there are
+	 * (2 to the 128) possible states in total.
+	 *
+	 * @param seed the initial seed; may be any long
+	 */
+	@Override
+	public void setSeed(long seed) {
+		// This is based on MX3, but pulls out values and assigns them to states mid-way, sometimes XORing them.
+		seed ^= seed >>> 32;
+		seed *= 0xbea225f9eb34556dL;
+		seed ^= seed >>> 29;
+		stateA = seed;
+		seed *= 0xbea225f9eb34556dL;
+		seed ^= seed >>> 32;
+		stateB = (seed ^ 0xC6BC279692B5C323L);
+	}
+
+	public long getStateA() {
+		return stateA;
+	}
+
+	/**
+	 * Sets the first part of the state.
+	 *
+	 * @param stateA can be any long
+	 */
+	public void setStateA(long stateA) {
+		this.stateA = stateA;
+	}
+
+	public long getStateB() {
+		return stateB;
+	}
+
+	/**
+	 * Sets the second part of the state.
+	 *
+	 * @param stateB can be any long
+	 */
+	public void setStateB(long stateB) {
+		this.stateB = stateB;
+	}
+
+	/**
+	 * Sets the state completely to the given two state variables.
+	 * This is the same as calling {@link #setStateA(long)} and {@link #setStateB(long)}
+	 * as a group.
+	 *
+	 * @param stateA the first state; can be any long
+	 * @param stateB the second state; can be any long
+	 */
+	@Override
+	public void setState(long stateA, long stateB) {
+		this.stateA = stateA;
+		this.stateB = stateB;
+	}
+
+	@Override
+	public long nextLong() {
+		long a = (stateA ^ stateA >>> 31) * 0x3C79AC492BA7B653L;
+		long b = (stateB ^ stateB >>> 29) * 0x1C69B3F74AC4AE35L;
+		stateA += 0xB492F903DF242A79L;
+		stateB += 0x9EF49B69C6820771L + a + BitConversion.countLeadingZeros(a);
+		return b ^ (b << 39 | b >>> 25) ^ (b << 14 | b >>> 50);
+	}
+
+	@Override
+	public long previousLong() {
+		stateA -= 0xB492F903DF242A79L;
+		long a = (stateA ^ stateA >>> 31) * 0x3C79AC492BA7B653L;
+		stateB -= 0x9EF49B69C6820771L + a + BitConversion.countLeadingZeros(a);
+		long b = (stateB ^ stateB >>> 29) * 0x1C69B3F74AC4AE35L;
+		return b ^ (b << 39 | b >>> 25) ^ (b << 14 | b >>> 50);
+	}
+
+	@Override
+	public int next(int bits) {
+		long a = (stateA ^ stateA >>> 31) * 0x3C79AC492BA7B653L;
+		long b = (stateB ^ stateB >>> 29) * 0x1C69B3F74AC4AE35L;
+		stateA += 0xB492F903DF242A79L;
+		stateB += 0x9EF49B69C6820771L + a + BitConversion.countLeadingZeros(a);
+		return (int) (b ^ (b << 39 | b >>> 25) ^ (b << 14 | b >>> 50)) >>> (32 - bits);
+	}
+
+	@Override
+	public DiodeRandom copy() {
+		return new DiodeRandom(stateA, stateB);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
+
+		DiodeRandom that = (DiodeRandom) o;
+
+		return stateA == that.stateA && stateB == that.stateB;
+	}
+
+	public String toString() {
+		return "DiodeRandom{" + "stateA=" + (stateA) + "L, stateB=" + (stateB) + "L}";
+	}
+
+	public static void main(String[] args) {
+		EnhancedRandom random = new DiodeRandom(1L);
+		{
+			int n0 = random.nextInt();
+			int n1 = random.nextInt();
+			int n2 = random.nextInt();
+			int n3 = random.nextInt();
+			int n4 = random.nextInt();
+			int n5 = random.nextInt();
+			int p5 = random.previousInt();
+			int p4 = random.previousInt();
+			int p3 = random.previousInt();
+			int p2 = random.previousInt();
+			int p1 = random.previousInt();
+			int p0 = random.previousInt();
+			System.out.println(n0 == p0);
+			System.out.println(n1 == p1);
+			System.out.println(n2 == p2);
+			System.out.println(n3 == p3);
+			System.out.println(n4 == p4);
+			System.out.println(n5 == p5);
+			System.out.println(Base.BASE16.unsigned(n0) + " vs. " + Base.BASE16.unsigned(p0));
+			System.out.println(Base.BASE16.unsigned(n1) + " vs. " + Base.BASE16.unsigned(p1));
+			System.out.println(Base.BASE16.unsigned(n2) + " vs. " + Base.BASE16.unsigned(p2));
+			System.out.println(Base.BASE16.unsigned(n3) + " vs. " + Base.BASE16.unsigned(p3));
+			System.out.println(Base.BASE16.unsigned(n4) + " vs. " + Base.BASE16.unsigned(p4));
+			System.out.println(Base.BASE16.unsigned(n5) + " vs. " + Base.BASE16.unsigned(p5));
+		}
+		{
+			long n0 = random.nextLong();
+			long n1 = random.nextLong();
+			long n2 = random.nextLong();
+			long n3 = random.nextLong();
+			long n4 = random.nextLong();
+			long n5 = random.nextLong();
+			long p5 = random.previousLong();
+			long p4 = random.previousLong();
+			long p3 = random.previousLong();
+			long p2 = random.previousLong();
+			long p1 = random.previousLong();
+			long p0 = random.previousLong();
+			System.out.println(n0 == p0);
+			System.out.println(n1 == p1);
+			System.out.println(n2 == p2);
+			System.out.println(n3 == p3);
+			System.out.println(n4 == p4);
+			System.out.println(n5 == p5);
+			System.out.println(Base.BASE16.unsigned(n0) + " vs. " + Base.BASE16.unsigned(p0));
+			System.out.println(Base.BASE16.unsigned(n1) + " vs. " + Base.BASE16.unsigned(p1));
+			System.out.println(Base.BASE16.unsigned(n2) + " vs. " + Base.BASE16.unsigned(p2));
+			System.out.println(Base.BASE16.unsigned(n3) + " vs. " + Base.BASE16.unsigned(p3));
+			System.out.println(Base.BASE16.unsigned(n4) + " vs. " + Base.BASE16.unsigned(p4));
+			System.out.println(Base.BASE16.unsigned(n5) + " vs. " + Base.BASE16.unsigned(p5));
+		}
+	}
+}
