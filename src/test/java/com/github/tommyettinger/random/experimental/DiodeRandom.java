@@ -193,29 +193,29 @@ public class DiodeRandom extends EnhancedRandom {
 
 	@Override
 	public long nextLong() {
-		long a = (stateA ^ stateA >>> 31) * 0x3C79AC492BA7B653L;
-		long b = (stateB ^ stateB >>> 29) * 0x1C69B3F74AC4AE35L;
+		long a = (stateA ^ (stateA << 13 | stateA >>> 51) ^ (stateA << 43 | stateA >>> 21)) * 0x3C79AC492BA7B653L;
+		long b = (stateB ^ (stateB << 35 | stateB >>> 29) ^ (stateB << 23 | stateB >>> 41)) * 0x1C69B3F74AC4AE35L;
 		stateA += 0xB492F903DF242A79L;
 		stateB += 0x9EF49B69C6820771L + a + BitConversion.countLeadingZeros(a);
-		return b ^ (b << 39 | b >>> 25) ^ (b << 14 | b >>> 50);
+		return b ^ (b << 39 | b >>> 25) ^ (b << 17 | b >>> 47);
 	}
 
 	@Override
 	public long previousLong() {
 		stateA -= 0xB492F903DF242A79L;
-		long a = (stateA ^ stateA >>> 31) * 0x3C79AC492BA7B653L;
+		long a = (stateA ^ (stateA << 13 | stateA >>> 51) ^ (stateA << 43 | stateA >>> 21)) * 0x3C79AC492BA7B653L;
 		stateB -= 0x9EF49B69C6820771L + a + BitConversion.countLeadingZeros(a);
-		long b = (stateB ^ stateB >>> 29) * 0x1C69B3F74AC4AE35L;
-		return b ^ (b << 39 | b >>> 25) ^ (b << 14 | b >>> 50);
+		long b = (stateB ^ (stateB << 35 | stateB >>> 29) ^ (stateB << 23 | stateB >>> 41)) * 0x1C69B3F74AC4AE35L;
+		return b ^ (b << 39 | b >>> 25) ^ (b << 17 | b >>> 47);
 	}
 
 	@Override
 	public int next(int bits) {
-		long a = (stateA ^ stateA >>> 31) * 0x3C79AC492BA7B653L;
-		long b = (stateB ^ stateB >>> 29) * 0x1C69B3F74AC4AE35L;
+		long a = (stateA ^ (stateA << 13 | stateA >>> 51) ^ (stateA << 43 | stateA >>> 21)) * 0x3C79AC492BA7B653L;
+		long b = (stateB ^ (stateB << 35 | stateB >>> 29) ^ (stateB << 23 | stateB >>> 41)) * 0x1C69B3F74AC4AE35L;
 		stateA += 0xB492F903DF242A79L;
 		stateB += 0x9EF49B69C6820771L + a + BitConversion.countLeadingZeros(a);
-		return (int) (b ^ (b << 39 | b >>> 25) ^ (b << 14 | b >>> 50)) >>> (32 - bits);
+		return (int) (b ^ (b << 39 | b >>> 25) ^ (b << 17 | b >>> 47)) >>> (32 - bits);
 	}
 
 	@Override
