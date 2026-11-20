@@ -159,10 +159,10 @@ public final class Generators {
 		randomList.add(new Jamb32Random(1, 1));
 		randomList.add(new GraceRandom(1, 1, 1, 1, 1, 1));
 		randomList.add(new TriQoaRandom(1, 1, 1));
-		randomList.add(new TriCounterRandom(1, 1, 1));
 		randomList.add(new TriopsRandom(1, 1, 1));
 		randomList.add(new ChopRandom(1, 1, 1, 1));
 		randomList.add(new DiodeRandom(1, 1));
+		randomList.add(new TriCounterRandom(1, 1, 1));
 	}
 
 	public static int randomCount = randomList.size();
