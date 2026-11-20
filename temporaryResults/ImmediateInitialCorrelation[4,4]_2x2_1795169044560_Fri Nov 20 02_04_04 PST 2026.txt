@@ -1,0 +1,1 @@
+[Immediate] Lowest mode: 78.00000 has mean amount 0.0250362157  FAIL 💀 for TriopsRandom
