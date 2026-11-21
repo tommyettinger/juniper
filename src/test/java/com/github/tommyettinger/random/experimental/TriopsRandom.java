@@ -249,9 +249,13 @@ public class TriopsRandom extends EnhancedRandom {
 
 	@Override
 	public long nextLong() {
-		long a = (stateA ^ (stateA << 19 | stateA >>> 45) ^ (stateA << 42 | stateA >>> 22));
-		long b = (stateB ^ (stateB << 33 | stateB >>> 31) ^ (stateB << 28 | stateB >>> 36));
-		long c = (stateC ^ (stateC << 59 | stateC >>>  5) ^ (stateC << 14 | stateC >>> 50));
+//		long a = (stateA ^ (stateA << 19 | stateA >>> 45) ^ (stateA << 42 | stateA >>> 22));
+//		long b = (stateB ^ (stateB << 33 | stateB >>> 31) ^ (stateB << 28 | stateB >>> 36));
+//		long c = (stateC ^ (stateC << 59 | stateC >>>  5) ^ (stateC << 14 | stateC >>> 50));
+
+		long a = (stateA ^ stateA >>> 31) * 0x3C79AC492BA7B653L;
+		long b = (stateB ^ stateB >>> 29) * 0x1C69B3F74AC4AE35L;
+		long c = (stateC ^ stateC >>> 30) * 0xBEA225F9EB34556DL;
 		stateA += 0xB492F903DF242A79L;
 		stateB += 0x9EF49B69C6820771L + a + BitConversion.countLeadingZeros(a);
 		stateC += 0x83A9A7D23771CD09L + b + BitConversion.countLeadingZeros(a | b);
@@ -262,20 +266,20 @@ public class TriopsRandom extends EnhancedRandom {
 	@Override
 	public long previousLong() {
 		stateA -= 0xB492F903DF242A79L;
-		long a = (stateA ^ (stateA << 19 | stateA >>> 45) ^ (stateA << 42 | stateA >>> 22));
+		long a = (stateA ^ stateA >>> 31) * 0x3C79AC492BA7B653L;
 		stateB -= 0x9EF49B69C6820771L + a + BitConversion.countLeadingZeros(a);
-		long b = (stateB ^ (stateB << 33 | stateB >>> 31) ^ (stateB << 28 | stateB >>> 36));
+		long b = (stateB ^ stateB >>> 29) * 0x1C69B3F74AC4AE35L;
 		stateC -= 0x83A9A7D23771CD09L + b + BitConversion.countLeadingZeros(a | b);
-		long c = (stateC ^ (stateC << 59 | stateC >>>  5) ^ (stateC << 14 | stateC >>> 50));
+		long c = (stateC ^ stateC >>> 30) * 0xBEA225F9EB34556DL;
 //		return c ^ (a << 39 | a >>> 25) ^ (b << 14 | b >>> 50);
 		return a + b + c;
 	}
 
 	@Override
 	public int next(int bits) {
-		long a = (stateA ^ (stateA << 19 | stateA >>> 45) ^ (stateA << 42 | stateA >>> 22));
-		long b = (stateB ^ (stateB << 33 | stateB >>> 31) ^ (stateB << 28 | stateB >>> 36));
-		long c = (stateC ^ (stateC << 59 | stateC >>>  5) ^ (stateC << 14 | stateC >>> 50));
+		long a = (stateA ^ stateA >>> 31) * 0x3C79AC492BA7B653L;
+		long b = (stateB ^ stateB >>> 29) * 0x1C69B3F74AC4AE35L;
+		long c = (stateC ^ stateC >>> 30) * 0xBEA225F9EB34556DL;
 		stateA += 0xB492F903DF242A79L;
 		stateB += 0x9EF49B69C6820771L + a + BitConversion.countLeadingZeros(a);
 		stateC += 0x83A9A7D23771CD09L + b + BitConversion.countLeadingZeros(a | b);
